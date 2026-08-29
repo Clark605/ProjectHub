@@ -1,0 +1,29 @@
+{
+  "@@locale": "en",
+  "appTitle": "ProjectHub",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "login": "Login",
+  "register": "Register",
+  "email": "Email",
+  "password": "Password",
+  "name": "Name",
+  "logout": "Logout",
+  "workspaces": "Workspaces",
+  "projects": "Projects",
+  "tasks": "Tasks",
+  "settings": "Settings",
+  "profile": "Profile",
+  "create": "Create",
+  "edit": "Edit",
+  "delete": "Delete",
+  "save": "Save",
+  "cancel": "Cancel",
+  "search": "Search",
+  "noResults": "No results found",
+  "error": "An error occurred",
+  "retry": "Retry",
+  "loading": "Loading..."
+}
+
