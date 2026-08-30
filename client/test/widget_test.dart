@@ -4,7 +4,8 @@ import 'package:client/app.dart';
 
 void main() {
   testWidgets('ProjectHubApp renders', (WidgetTester tester) async {
-    await tester.pumpWidget(const ProjectHubApp());
+    await tester.pumpWidget(const ProjectHubApp(initialRoute: '/onboarding'));
+    await tester.pumpAndSettle();
     // App should build without errors
     expect(find.byType(ProjectHubApp), findsOneWidget);
   });
