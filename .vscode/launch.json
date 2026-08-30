@@ -3,20 +3,14 @@
   "configurations": [
     {
       "name": ".NET API (Server)",
-      "type": "coreclr",
+      "type": "dotnet",
       "request": "launch",
       "preLaunchTask": "build-server",
-      "program": "${workspaceFolder}/server/ProjectHub.Api/bin/Debug/net10.0/ProjectHub.Api.dll",
-      "args": [],
-      "cwd": "${workspaceFolder}/server/ProjectHub.Api",
-      "stopAtEntry": false,
+      "projectPath": "${workspaceFolder}/server/ProjectHub.Api/ProjectHub.Api.csproj",
+      "launchSettingsProfile": "http",
       "serverReadyAction": {
-        "action": "openExternally",
-        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-        "uriFormat": "%s/swagger"
-      },
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "action": "openIntegratedBrowser",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       }
     },
     {

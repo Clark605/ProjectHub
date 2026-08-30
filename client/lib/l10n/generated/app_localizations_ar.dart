@@ -100,4 +100,134 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get next => 'التالي';
+
+  @override
+  String get signIn => 'تسجيل الدخول';
+
+  @override
+  String get signUp => 'إنشاء حساب جديد';
+
+  @override
+  String get welcomeBack => 'مرحباً بعودتك';
+
+  @override
+  String get welcomeBackSubtitle =>
+      'أدخل بياناتك للوصول إلى مساحة العمل الخاصة بك';
+
+  @override
+  String get dontHaveAccount => 'ليس لديك حساب؟';
+
+  @override
+  String get alreadyHaveAccount => 'هل لديك حساب بالفعل؟';
+
+  @override
+  String get forgotPassword => 'هل نسيت كلمة المرور؟';
+
+  @override
+  String get rememberMe => 'تذكرني';
+
+  @override
+  String get orContinueWith => 'أو المتابعة عبر';
+
+  @override
+  String get createAccount => 'إنشاء حساب جديد';
+
+  @override
+  String get createAccountSubtitle => 'ابدأ التعاون مع فريقك ومشاريعك اليوم';
+
+  @override
+  String get fullName => 'الاسم الكامل';
+
+  @override
+  String get fullNamePlaceholder => 'محمد أحمد';
+
+  @override
+  String get emailPlaceholder => 'name@example.com';
+
+  @override
+  String get passwordPlaceholder => '••••••••';
+
+  @override
+  String get confirmPassword => 'تأكيد كلمة المرور';
+
+  @override
+  String get termsAndPrivacyPrefix => 'أوافق على ';
+
+  @override
+  String get termsOfService => 'شروط الخدمة';
+
+  @override
+  String get and => ' و ';
+
+  @override
+  String get privacyPolicy => 'سياسة الخصوصية';
+
+  @override
+  String get forgotPasswordTitle => 'استعادة كلمة المرور';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'لا تقلق! أدخل بريدك الإلكتروني وسنرسل لك رمزاً لإعادة تعيين كلمة المرور.';
+
+  @override
+  String get sendResetCode => 'إرسال رمز الاستعادة';
+
+  @override
+  String get backToSignIn => 'العودة لتسجيل الدخول';
+
+  @override
+  String get haveResetCode => 'هل لديك رمز الاستعادة بالفعل؟';
+
+  @override
+  String get resetPasswordTitle => 'تعيين كلمة مرور جديدة';
+
+  @override
+  String get resetPasswordSubtitle =>
+      'أدخل الرمز المرسل إلى بريدك الإلكتروني واختر كلمة مرور جديدة.';
+
+  @override
+  String get resetToken => 'رمز / توكن الاستعادة';
+
+  @override
+  String get resetTokenPlaceholder => 'ألصق الرمز هنا';
+
+  @override
+  String get newPassword => 'كلمة المرور الجديدة';
+
+  @override
+  String get confirmNewPassword => 'تأكيد كلمة المرور الجديدة';
+
+  @override
+  String get resetPasswordButton => 'إعادة تعيين كلمة المرور';
+
+  @override
+  String get passwordResetSuccess =>
+      'تمت إعادة تعيين كلمة المرور بنجاح! يرجى تسجيل الدخول بكلمة المرور الجديدة.';
+
+  @override
+  String get emailRequired => 'يرجى إدخال البريد الإلكتروني';
+
+  @override
+  String get invalidEmail => 'يرجى إدخال بريد إلكتروني صحيح';
+
+  @override
+  String get passwordRequired => 'يرجى إدخال كلمة المرور';
+
+  @override
+  String get passwordTooShort => 'يجب أن تتكون كلمة المرور من 8 أحرف على الأقل';
+
+  @override
+  String get nameRequired => 'يرجى إدخال الاسم الكامل';
+
+  @override
+  String get confirmPasswordRequired => 'يرجى تأكيد كلمة المرور';
+
+  @override
+  String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين';
+
+  @override
+  String get tokenRequired => 'يرجى إدخال رمز الاستعادة';
+
+  @override
+  String get termsRequired => 'يجب الموافقة على شروط الخدمة وسياسة الخصوصية';
 }

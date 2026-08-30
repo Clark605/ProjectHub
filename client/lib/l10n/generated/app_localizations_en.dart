@@ -100,4 +100,135 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get next => 'Next';
+
+  @override
+  String get signIn => 'Sign In';
+
+  @override
+  String get signUp => 'Sign Up';
+
+  @override
+  String get welcomeBack => 'Welcome back';
+
+  @override
+  String get welcomeBackSubtitle =>
+      'Enter your credentials to access your workspace';
+
+  @override
+  String get dontHaveAccount => 'Don\'t have an account?';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get forgotPassword => 'Forgot password?';
+
+  @override
+  String get rememberMe => 'Remember me';
+
+  @override
+  String get orContinueWith => 'or continue with';
+
+  @override
+  String get createAccount => 'Create an account';
+
+  @override
+  String get createAccountSubtitle =>
+      'Get started with your team and projects today';
+
+  @override
+  String get fullName => 'Full Name';
+
+  @override
+  String get fullNamePlaceholder => 'John Doe';
+
+  @override
+  String get emailPlaceholder => 'name@example.com';
+
+  @override
+  String get passwordPlaceholder => '••••••••';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get termsAndPrivacyPrefix => 'I agree to the ';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get and => ' and ';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get forgotPasswordTitle => 'Forgot Password';
+
+  @override
+  String get forgotPasswordSubtitle =>
+      'Don\'t worry! Enter your email address and we\'ll send you a password reset code.';
+
+  @override
+  String get sendResetCode => 'Send Reset Code';
+
+  @override
+  String get backToSignIn => 'Back to Sign In';
+
+  @override
+  String get haveResetCode => 'Already have a reset code?';
+
+  @override
+  String get resetPasswordTitle => 'Set New Password';
+
+  @override
+  String get resetPasswordSubtitle =>
+      'Enter the code sent to your email and choose your new password.';
+
+  @override
+  String get resetToken => 'Reset Code / Token';
+
+  @override
+  String get resetTokenPlaceholder => 'Paste code or token';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get confirmNewPassword => 'Confirm New Password';
+
+  @override
+  String get resetPasswordButton => 'Reset Password';
+
+  @override
+  String get passwordResetSuccess =>
+      'Password reset successfully! Please sign in with your new password.';
+
+  @override
+  String get emailRequired => 'Please enter your email';
+
+  @override
+  String get invalidEmail => 'Please enter a valid email address';
+
+  @override
+  String get passwordRequired => 'Please enter your password';
+
+  @override
+  String get passwordTooShort => 'Password must be at least 8 characters';
+
+  @override
+  String get nameRequired => 'Please enter your full name';
+
+  @override
+  String get confirmPasswordRequired => 'Please confirm your password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get tokenRequired => 'Please enter the reset code';
+
+  @override
+  String get termsRequired => 'You must agree to the Terms and Privacy Policy';
 }

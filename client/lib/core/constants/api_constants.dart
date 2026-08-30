@@ -1,7 +1,15 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+
 class ApiConstants {
   ApiConstants._();
 
-  static const String baseUrl = 'http://localhost:5259';
+  static String get baseUrl {
+    if (kIsWeb) return 'http://127.0.0.1:5259';
+    if (Platform.isAndroid) return 'http://192.168.1.4:5259';
+    return 'http://127.0.0.1:5259'; // iOS simulator / Desktop
+  }
 
   // Auth
   static const String register = '/auth/register';
