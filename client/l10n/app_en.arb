@@ -24,6 +24,14 @@
   "noResults": "No results found",
   "error": "An error occurred",
   "retry": "Retry",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "onboardingWelcomeTitle": "Welcome to ProjectHub",
+  "onboardingWelcomeDesc": "Manage your projects, organize your tasks, and collaborate with your team in one place.",
+  "onboardingKanbanTitle": "Visualize with Kanban",
+  "onboardingKanbanDesc": "Keep track of progress seamlessly with our intuitive Kanban boards.",
+  "onboardingCollabTitle": "Collaborate in Real-Time",
+  "onboardingCollabDesc": "Stay connected with your team and achieve your goals faster.",
+  "getStarted": "Get Started",
+  "next": "Next"
 }
 

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 import 'package:client/core/routes/app_router.dart';
-import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/theme/app_theme.dart';
 
 class ProjectHubApp extends StatelessWidget {
-  const ProjectHubApp({super.key});
+  final String initialRoute;
+
+  const ProjectHubApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class ProjectHubApp extends StatelessWidget {
       supportedLocales: AppLocalizations.supportedLocales,
 
       // Routing
-      initialRoute: RouteNames.login,
+      initialRoute: initialRoute,
       onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }

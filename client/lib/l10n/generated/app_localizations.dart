@@ -229,6 +229,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading...'**
   String get loading;
+
+  /// No description provided for @onboardingWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to ProjectHub'**
+  String get onboardingWelcomeTitle;
+
+  /// No description provided for @onboardingWelcomeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your projects, organize your tasks, and collaborate with your team in one place.'**
+  String get onboardingWelcomeDesc;
+
+  /// No description provided for @onboardingKanbanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Visualize with Kanban'**
+  String get onboardingKanbanTitle;
+
+  /// No description provided for @onboardingKanbanDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep track of progress seamlessly with our intuitive Kanban boards.'**
+  String get onboardingKanbanDesc;
+
+  /// No description provided for @onboardingCollabTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Collaborate in Real-Time'**
+  String get onboardingCollabTitle;
+
+  /// No description provided for @onboardingCollabDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay connected with your team and achieve your goals faster.'**
+  String get onboardingCollabDesc;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
 }
 
 class _AppLocalizationsDelegate

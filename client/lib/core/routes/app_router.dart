@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/features/onboarding/ui/onboarding_screen.dart';
 
 class AppRouter {
   AppRouter._();
@@ -8,10 +9,7 @@ class AppRouter {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.onboarding:
-        return _fadeRoute(
-          const Scaffold(body: Center(child: Text('Onboarding'))),
-          settings,
-        );
+        return _fadeRoute(const OnboardingScreen(), settings);
       case RouteNames.login:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(body: Center(child: Text('Login'))),

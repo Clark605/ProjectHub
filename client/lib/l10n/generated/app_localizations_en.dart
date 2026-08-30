@@ -73,4 +73,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loading => 'Loading...';
+
+  @override
+  String get onboardingWelcomeTitle => 'Welcome to ProjectHub';
+
+  @override
+  String get onboardingWelcomeDesc =>
+      'Manage your projects, organize your tasks, and collaborate with your team in one place.';
+
+  @override
+  String get onboardingKanbanTitle => 'Visualize with Kanban';
+
+  @override
+  String get onboardingKanbanDesc =>
+      'Keep track of progress seamlessly with our intuitive Kanban boards.';
+
+  @override
+  String get onboardingCollabTitle => 'Collaborate in Real-Time';
+
+  @override
+  String get onboardingCollabDesc =>
+      'Stay connected with your team and achieve your goals faster.';
+
+  @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get next => 'Next';
 }

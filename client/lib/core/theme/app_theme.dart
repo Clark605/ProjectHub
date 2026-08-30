@@ -12,6 +12,16 @@ class AppTheme {
     brightness: Brightness.dark,
     fontFamily: AppTypography.fontFamily,
     scaffoldBackgroundColor: AppColors.background,
+    splashFactory: NoSplash.splashFactory,
+    splashColor: AppColors.primary.withValues(alpha: 0.05),
+    highlightColor: AppColors.primary.withValues(alpha: 0.05),
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
     textTheme: AppTypography.textTheme.apply(
       bodyColor: AppColors.textPrimary,
       displayColor: AppColors.textPrimary,
@@ -40,7 +50,9 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.background,
       foregroundColor: AppColors.textPrimary,
+      surfaceTintColor: Colors.transparent,
       elevation: 0,
+      scrolledUnderElevation: 0,
       centerTitle: false,
     ),
     inputDecorationTheme: InputDecorationTheme(
@@ -64,6 +76,7 @@ class AppTheme {
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.textOnPrimary,
+        elevation: 0,
         minimumSize: const Size(double.infinity, 52),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         textStyle: const TextStyle(
@@ -93,6 +106,16 @@ class AppTheme {
     brightness: Brightness.light,
     fontFamily: AppTypography.fontFamily,
     scaffoldBackgroundColor: AppColors.lightBackground,
+    splashFactory: NoSplash.splashFactory,
+    splashColor: AppColors.primary.withValues(alpha: 0.05),
+    highlightColor: AppColors.primary.withValues(alpha: 0.05),
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
     textTheme: AppTypography.textTheme.apply(
       bodyColor: AppColors.lightTextPrimary,
       displayColor: AppColors.lightTextPrimary,
@@ -121,7 +144,9 @@ class AppTheme {
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.lightBackground,
       foregroundColor: AppColors.lightTextPrimary,
+      surfaceTintColor: Colors.transparent,
       elevation: 0,
+      scrolledUnderElevation: 0,
       centerTitle: false,
     ),
     inputDecorationTheme: InputDecorationTheme(
@@ -145,6 +170,7 @@ class AppTheme {
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.textOnPrimary,
+        elevation: 0,
         minimumSize: const Size(double.infinity, 52),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         textStyle: const TextStyle(

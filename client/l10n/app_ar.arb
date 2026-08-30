@@ -21,6 +21,14 @@
   "noResults": "لا توجد نتائج",
   "error": "حدث خطأ",
   "retry": "إعادة المحاولة",
-  "loading": "جاري التحميل..."
+  "loading": "جاري التحميل...",
+  "onboardingWelcomeTitle": "مرحباً بك في بروجكت هب",
+  "onboardingWelcomeDesc": "أدر مشاريعك، نظّم مهامك، وتعاون مع فريقك في مكان واحد.",
+  "onboardingKanbanTitle": "تتبع العمل عبر كانبان",
+  "onboardingKanbanDesc": "تتبع التقدم بسلاسة من خلال لوحات كانبان البديهية.",
+  "onboardingCollabTitle": "تعاون في الوقت الفعلي",
+  "onboardingCollabDesc": "ابق على تواصل مع فريقك وحقق أهدافك بشكل أسرع.",
+  "getStarted": "ابدأ الآن",
+  "next": "التالي"
 }
 

@@ -73,4 +73,31 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get loading => 'جاري التحميل...';
+
+  @override
+  String get onboardingWelcomeTitle => 'مرحباً بك في بروجكت هب';
+
+  @override
+  String get onboardingWelcomeDesc =>
+      'أدر مشاريعك، نظّم مهامك، وتعاون مع فريقك في مكان واحد.';
+
+  @override
+  String get onboardingKanbanTitle => 'تتبع العمل عبر كانبان';
+
+  @override
+  String get onboardingKanbanDesc =>
+      'تتبع التقدم بسلاسة من خلال لوحات كانبان البديهية.';
+
+  @override
+  String get onboardingCollabTitle => 'تعاون في الوقت الفعلي';
+
+  @override
+  String get onboardingCollabDesc =>
+      'ابق على تواصل مع فريقك وحقق أهدافك بشكل أسرع.';
+
+  @override
+  String get getStarted => 'ابدأ الآن';
+
+  @override
+  String get next => 'التالي';
 }
