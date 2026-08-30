@@ -13,6 +13,7 @@ class AppButton extends StatelessWidget {
     this.isLoading = false,
     this.isExpanded = true,
     this.icon,
+    this.borderRadius = 12.0,
   });
 
   final String label;
@@ -21,16 +22,22 @@ class AppButton extends StatelessWidget {
   final bool isLoading;
   final bool isExpanded;
   final IconData? icon;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     final child = isLoading
-        ? const SizedBox(
+        ? SizedBox(
             height: 20,
             width: 20,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              color: AppColors.textOnPrimary,
+              color: variant == AppButtonVariant.primary
+                  ? AppColors.textOnPrimary
+                  : AppColors.primary,
             ),
           )
         : Row(
@@ -41,37 +48,57 @@ class AppButton extends StatelessWidget {
                 Icon(icon, size: 20),
                 const SizedBox(width: 8),
               ],
-              Text(label),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 15,
+                  letterSpacing: 0.2,
+                ),
+              ),
             ],
           );
 
+    final radius = BorderRadius.circular(borderRadius);
+
     final buttonStyle = switch (variant) {
       AppButtonVariant.primary => ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.electricViolet,
         foregroundColor: AppColors.textOnPrimary,
+        elevation: 0,
         minimumSize: isExpanded
             ? const Size(double.infinity, 52)
             : const Size(0, 52),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: radius),
       ),
       AppButtonVariant.secondary => ElevatedButton.styleFrom(
-        backgroundColor: AppColors.surfaceContainer,
-        foregroundColor: AppColors.textPrimary,
+        backgroundColor: isDark
+            ? AppColors.surfaceContainer
+            : AppColors.lightSurfaceContainer,
+        foregroundColor: isDark
+            ? AppColors.textPrimary
+            : AppColors.lightTextPrimary,
+        elevation: 0,
         minimumSize: isExpanded
             ? const Size(double.infinity, 52)
             : const Size(0, 52),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(
+          borderRadius: radius,
+          side: BorderSide(
+            color: isDark ? AppColors.border : AppColors.lightBorder,
+          ),
+        ),
       ),
       AppButtonVariant.outline => OutlinedButton.styleFrom(
-        foregroundColor: AppColors.primary,
+        foregroundColor: AppColors.electricViolet,
         minimumSize: isExpanded
             ? const Size(double.infinity, 52)
             : const Size(0, 52),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        side: const BorderSide(color: AppColors.primary),
+        shape: RoundedRectangleBorder(borderRadius: radius),
+        side: const BorderSide(color: AppColors.electricViolet),
       ),
       AppButtonVariant.text => TextButton.styleFrom(
-        foregroundColor: AppColors.primary,
+        foregroundColor: AppColors.electricViolet,
         minimumSize: isExpanded
             ? const Size(double.infinity, 52)
             : const Size(0, 52),
