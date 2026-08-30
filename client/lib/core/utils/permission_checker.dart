@@ -19,16 +19,14 @@ class PermissionChecker {
     required WorkspaceRole role,
     required String projectCreatorId,
     required String currentUserId,
-  }) =>
-      role == WorkspaceRole.owner || projectCreatorId == currentUserId;
+  }) => role == WorkspaceRole.owner || projectCreatorId == currentUserId;
 
   /// Can delete a project
   static bool canDeleteProject({
     required WorkspaceRole role,
     required String projectCreatorId,
     required String currentUserId,
-  }) =>
-      role == WorkspaceRole.owner || projectCreatorId == currentUserId;
+  }) => role == WorkspaceRole.owner || projectCreatorId == currentUserId;
 
   /// Can edit a task or move its status
   static bool canEditTask({
@@ -45,6 +43,5 @@ class PermissionChecker {
     required WorkspaceRole role,
     required TaskItem task,
     required String currentUserId,
-  }) =>
-      role == WorkspaceRole.owner || task.createdBy == currentUserId;
+  }) => role == WorkspaceRole.owner || task.createdBy == currentUserId;
 }

@@ -31,8 +31,7 @@ class PrefsService {
       _prefs.setBool(StorageKeys.onboardingSeen, true);
 
   // Active Workspace
-  int? get activeWorkspaceId =>
-      _prefs.getInt(StorageKeys.activeWorkspaceId);
+  int? get activeWorkspaceId => _prefs.getInt(StorageKeys.activeWorkspaceId);
 
   Future<void> setActiveWorkspaceId(int id) =>
       _prefs.setInt(StorageKeys.activeWorkspaceId, id);

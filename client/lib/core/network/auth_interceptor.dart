@@ -11,7 +11,8 @@ class AuthInterceptor extends Interceptor {
   final SecureStorageService _secureStorage;
 
   bool _isRefreshing = false;
-  final List<({RequestOptions options, ErrorInterceptorHandler handler})> _pendingRequests = [];
+  final List<({RequestOptions options, ErrorInterceptorHandler handler})>
+  _pendingRequests = [];
 
   AuthInterceptor(this._secureStorage);
 
@@ -67,9 +68,7 @@ class AuthInterceptor extends Interceptor {
       }
 
       // Use a fresh Dio instance to avoid interceptor loop
-      final refreshDio = Dio(
-        BaseOptions(baseUrl: ApiConstants.baseUrl),
-      );
+      final refreshDio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
 
       final response = await refreshDio.post(
         ApiConstants.refresh,
@@ -86,9 +85,7 @@ class AuthInterceptor extends Interceptor {
 
       // Retry the original failed request
       err.requestOptions.headers['Authorization'] = 'Bearer $newToken';
-      final retryDio = Dio(
-        BaseOptions(baseUrl: ApiConstants.baseUrl),
-      );
+      final retryDio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
       final retryResponse = await retryDio.fetch(err.requestOptions);
       handler.resolve(retryResponse);
 
@@ -108,10 +105,12 @@ class AuthInterceptor extends Interceptor {
     for (final pending in _pendingRequests) {
       pending.options.headers['Authorization'] = 'Bearer $newToken';
       final dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
-      dio.fetch(pending.options).then(
-        (response) => pending.handler.resolve(response),
-        onError: (error) => pending.handler.reject(error as DioException),
-      );
+      dio
+          .fetch(pending.options)
+          .then(
+            (response) => pending.handler.resolve(response),
+            onError: (error) => pending.handler.reject(error as DioException),
+          );
     }
     _pendingRequests.clear();
   }

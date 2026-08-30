@@ -65,9 +65,7 @@ class AppTheme {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.textOnPrimary,
         minimumSize: const Size(double.infinity, 52),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         textStyle: const TextStyle(
           fontFamily: AppTypography.fontFamily,
           fontSize: 16,
@@ -75,10 +73,7 @@ class AppTheme {
         ),
       ),
     ),
-    dividerTheme: const DividerThemeData(
-      color: AppColors.border,
-      thickness: 1,
-    ),
+    dividerTheme: const DividerThemeData(color: AppColors.border, thickness: 1),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.surface,
       selectedItemColor: AppColors.primary,
@@ -88,9 +83,7 @@ class AppTheme {
       backgroundColor: AppColors.surfaceContainer,
       selectedColor: AppColors.primary.withAlpha(51),
       side: const BorderSide(color: AppColors.border),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     ),
   );
 
@@ -153,9 +146,7 @@ class AppTheme {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.textOnPrimary,
         minimumSize: const Size(double.infinity, 52),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         textStyle: const TextStyle(
           fontFamily: AppTypography.fontFamily,
           fontSize: 16,
@@ -176,9 +167,7 @@ class AppTheme {
       backgroundColor: AppColors.lightSurfaceContainer,
       selectedColor: AppColors.primary.withAlpha(51),
       side: const BorderSide(color: AppColors.lightBorder),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     ),
   );
 }

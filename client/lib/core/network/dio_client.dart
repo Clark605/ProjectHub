@@ -23,10 +23,7 @@ abstract class DioModule {
 
     dio.interceptors.addAll([
       authInterceptor,
-      LogInterceptor(
-        requestBody: true,
-        responseBody: true,
-      ),
+      LogInterceptor(requestBody: true, responseBody: true),
     ]);
 
     return dio;

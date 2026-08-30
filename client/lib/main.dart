@@ -13,5 +13,8 @@ void main() async {
   // Initialize dependency injection
   await configureDependencies();
 
+  // Remove native splash screen to show the initial route
+  FlutterNativeSplash.remove();
+
   runApp(const ProjectHubApp());
 }

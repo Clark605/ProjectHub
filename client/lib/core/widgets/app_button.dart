@@ -47,45 +47,53 @@ class AppButton extends StatelessWidget {
 
     final buttonStyle = switch (variant) {
       AppButtonVariant.primary => ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.textOnPrimary,
-          minimumSize: isExpanded ? const Size(double.infinity, 52) : const Size(0, 52),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.textOnPrimary,
+        minimumSize: isExpanded
+            ? const Size(double.infinity, 52)
+            : const Size(0, 52),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
       AppButtonVariant.secondary => ElevatedButton.styleFrom(
-          backgroundColor: AppColors.surfaceContainer,
-          foregroundColor: AppColors.textPrimary,
-          minimumSize: isExpanded ? const Size(double.infinity, 52) : const Size(0, 52),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        ),
+        backgroundColor: AppColors.surfaceContainer,
+        foregroundColor: AppColors.textPrimary,
+        minimumSize: isExpanded
+            ? const Size(double.infinity, 52)
+            : const Size(0, 52),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
       AppButtonVariant.outline => OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          minimumSize: isExpanded ? const Size(double.infinity, 52) : const Size(0, 52),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          side: const BorderSide(color: AppColors.primary),
-        ),
+        foregroundColor: AppColors.primary,
+        minimumSize: isExpanded
+            ? const Size(double.infinity, 52)
+            : const Size(0, 52),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        side: const BorderSide(color: AppColors.primary),
+      ),
       AppButtonVariant.text => TextButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          minimumSize: isExpanded ? const Size(double.infinity, 52) : const Size(0, 52),
-        ),
+        foregroundColor: AppColors.primary,
+        minimumSize: isExpanded
+            ? const Size(double.infinity, 52)
+            : const Size(0, 52),
+      ),
     };
 
     return switch (variant) {
       AppButtonVariant.outline => OutlinedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: buttonStyle,
-          child: child,
-        ),
+        onPressed: isLoading ? null : onPressed,
+        style: buttonStyle,
+        child: child,
+      ),
       AppButtonVariant.text => TextButton(
-          onPressed: isLoading ? null : onPressed,
-          style: buttonStyle,
-          child: child,
-        ),
+        onPressed: isLoading ? null : onPressed,
+        style: buttonStyle,
+        child: child,
+      ),
       _ => ElevatedButton(
-          onPressed: isLoading ? null : onPressed,
-          style: buttonStyle,
-          child: child,
-        ),
+        onPressed: isLoading ? null : onPressed,
+        style: buttonStyle,
+        child: child,
+      ),
     };
   }
 }
