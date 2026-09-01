@@ -47,8 +47,16 @@ class AuthInterceptor extends Interceptor {
       return handler.next(err);
     }
 
-    // Don't retry refresh endpoint itself
-    if (err.requestOptions.path == ApiConstants.refresh) {
+    final publicPaths = [
+      ApiConstants.login,
+      ApiConstants.register,
+      ApiConstants.refresh,
+      ApiConstants.forgotPassword,
+      ApiConstants.resetPassword,
+    ];
+
+    // Don't retry public auth endpoints
+    if (publicPaths.contains(err.requestOptions.path)) {
       return handler.next(err);
     }
 

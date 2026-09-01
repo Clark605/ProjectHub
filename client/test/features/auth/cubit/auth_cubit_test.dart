@@ -1,4 +1,6 @@
+import 'package:client/core/storage/prefs_service.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/storage/secure_storage_service.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
@@ -68,15 +70,21 @@ class FakeSecureStorageService extends SecureStorageService {
 }
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('AppAuthCubit', () {
     late FakeAuthRepository repository;
     late FakeSecureStorageService storage;
+    late PrefsService prefs;
     late AppAuthCubit cubit;
 
-    setUp(() {
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      final sp = await SharedPreferences.getInstance();
       repository = FakeAuthRepository();
       storage = FakeSecureStorageService();
-      cubit = AppAuthCubit(repository, storage);
+      prefs = PrefsService(sp);
+      cubit = AppAuthCubit(repository, storage, prefs);
     });
 
     test('initial state is AppAuthState.initial()', () {
@@ -89,37 +97,86 @@ void main() {
       expect(cubit.state, const AppAuthState.unauthenticated());
     });
 
-    test('checkAuthStatus emits authenticated when user found', () async {
+    test('checkAuthStatus emits authenticated immediately from cache', () async {
       storage.tokensExist = true;
-      repository.currentUser = const User(
-        name: 'Clark',
-        email: 'clark@example.com',
+      await prefs.cacheUser(
+        const User(name: 'Cached Clark', email: 'cached@example.com'),
       );
+      // Repository throws if called, ensuring it is NOT called when cache exists
+      repository.shouldThrow = true;
+
       await cubit.checkAuthStatus();
       expect(
         cubit.state,
         const AppAuthState.authenticated(
-          User(name: 'Clark', email: 'clark@example.com'),
+          User(name: 'Cached Clark', email: 'cached@example.com'),
         ),
       );
     });
 
-    test('logout emits unauthenticated', () async {
+    test(
+      'checkAuthStatus migrates and caches user when tokens exist but cache is empty',
+      () async {
+        storage.tokensExist = true;
+        await prefs.clearCachedUser();
+        repository.currentUser = const User(
+          name: 'Clark',
+          email: 'clark@example.com',
+        );
+
+        await cubit.checkAuthStatus();
+
+        expect(
+          cubit.state,
+          const AppAuthState.authenticated(
+            User(name: 'Clark', email: 'clark@example.com'),
+          ),
+        );
+        expect(prefs.getCachedUser(), repository.currentUser);
+      },
+    );
+
+    test('syncUser updates cache and emits authenticated', () async {
+      repository.currentUser = const User(
+        name: 'Updated Clark',
+        email: 'updated@example.com',
+      );
+
+      await cubit.syncUser();
+
+      expect(
+        cubit.state,
+        const AppAuthState.authenticated(
+          User(name: 'Updated Clark', email: 'updated@example.com'),
+        ),
+      );
+      expect(prefs.getCachedUser(), repository.currentUser);
+    });
+
+    test('logout emits unauthenticated and clears cache', () async {
+      await prefs.cacheUser(
+        const User(name: 'Clark', email: 'clark@example.com'),
+      );
       await cubit.logout();
       expect(cubit.state, const AppAuthState.unauthenticated());
+      expect(prefs.getCachedUser(), isNull);
     });
   });
 
   group('LoginCubit', () {
     late FakeAuthRepository repository;
     late FakeSecureStorageService storage;
+    late PrefsService prefs;
     late AppAuthCubit appAuthCubit;
     late LoginCubit loginCubit;
 
-    setUp(() {
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      final sp = await SharedPreferences.getInstance();
       repository = FakeAuthRepository();
       storage = FakeSecureStorageService();
-      appAuthCubit = AppAuthCubit(repository, storage);
+      prefs = PrefsService(sp);
+      appAuthCubit = AppAuthCubit(repository, storage, prefs);
       loginCubit = LoginCubit(repository, appAuthCubit);
     });
 
@@ -143,6 +200,7 @@ void main() {
           const LoginState.success(user),
         ]);
         expect(appAuthCubit.state, const AppAuthState.authenticated(user));
+        expect(prefs.getCachedUser(), user);
       },
     );
 

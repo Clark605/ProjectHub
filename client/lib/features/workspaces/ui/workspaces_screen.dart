@@ -30,7 +30,18 @@ class WorkspacesScreen extends StatelessWidget {
 
     return BlocProvider.value(
       value: getIt<AppAuthCubit>(),
-      child: BlocBuilder<AppAuthCubit, AppAuthState>(
+      child: BlocConsumer<AppAuthCubit, AppAuthState>(
+        listener: (context, state) {
+          state.whenOrNull(
+            unauthenticated: () {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                RouteNames.login,
+                (route) => false,
+              );
+            },
+          );
+        },
         builder: (context, state) {
           final user = state.whenOrNull(authenticated: (u) => u);
 

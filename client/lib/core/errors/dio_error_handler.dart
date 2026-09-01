@@ -43,26 +43,53 @@ class DioErrorHandler {
     final statusCode = response?.statusCode;
     final data = response?.data;
 
-    String message = 'Server error';
+    String? message;
     String? details;
 
-    if (data is Map<String, dynamic>) {
-      message = data['message'] as String? ?? message;
+    if (data is String && data.trim().isNotEmpty) {
+      message = data.trim();
+    } else if (data is Map<String, dynamic>) {
+      message =
+          data['message'] as String? ??
+          data['title'] as String? ??
+          data['detail'] as String?;
       details = data['details'] as String?;
+
+      final errors = data['errors'];
+      if (errors is Map<String, dynamic>) {
+        final firstList = errors.values.firstOrNull;
+        if (firstList is List && firstList.isNotEmpty) {
+          message = firstList.first.toString();
+        }
+      }
     }
+
+    final defaultMessage = switch (statusCode) {
+      400 => 'Bad request',
+      401 => 'Invalid email or password',
+      403 => 'You do not have permission to perform this action',
+      404 => 'Requested resource not found',
+      409 => 'A conflict occurred',
+      500 => 'Internal server error',
+      _ => 'Server error (${statusCode ?? 'unknown'})',
+    };
+
+    final finalMessage = (message != null && message.isNotEmpty)
+        ? message
+        : defaultMessage;
 
     switch (statusCode) {
       case 400:
-        return ValidationException(message: message, details: details);
+        return ValidationException(message: finalMessage, details: details);
       case 401:
-        return UnauthorizedException(message: message, details: details);
+        return UnauthorizedException(message: finalMessage, details: details);
       case 403:
-        return ForbiddenException(message: message, details: details);
+        return ForbiddenException(message: finalMessage, details: details);
       case 404:
-        return NotFoundException(message: message, details: details);
+        return NotFoundException(message: finalMessage, details: details);
       default:
         return ServerException(
-          message: message,
+          message: finalMessage,
           details: details,
           statusCode: statusCode,
         );
