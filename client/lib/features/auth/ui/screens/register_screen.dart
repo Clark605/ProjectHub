@@ -13,6 +13,7 @@ import 'package:client/features/auth/cubit/register_state.dart';
 import 'package:client/features/auth/ui/widgets/auth_error_banner.dart';
 import 'package:client/features/auth/ui/widgets/auth_footer_link.dart';
 import 'package:client/features/auth/ui/widgets/auth_header.dart';
+import 'package:client/features/auth/ui/widgets/social_auth_buttons.dart';
 import 'package:client/features/auth/ui/widgets/terms_checkbox.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -47,10 +48,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (!_formKey.currentState!.validate() || !_agreeToTerms) return;
 
     context.read<RegisterCubit>().register(
-          name: _nameController.text.trim(),
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        );
+      name: _nameController.text.trim(),
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+    );
   }
 
   @override
@@ -76,9 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             loading: () => true,
             orElse: () => false,
           );
-          final errorMessage = state.whenOrNull(
-            failure: (msg) => msg,
-          );
+          final errorMessage = state.whenOrNull(failure: (msg) => msg);
 
           return AbsorbPointer(
             absorbing: isLoading,
@@ -108,59 +107,61 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               AuthErrorBanner(errorMessage: errorMessage),
                               const SizedBox(height: 12),
                               AppTextField(
-                                label: l10n.fullName,
-                                hintText: l10n.fullNamePlaceholder,
-                                controller: _nameController,
-                                keyboardType: TextInputType.name,
-                                textInputAction: TextInputAction.next,
-                                validator: (val) => FormValidators.requiredField(
-                                  val,
-                                  l10n.nameRequired,
-                                ),
-                              )
+                                    label: l10n.fullName,
+                                    hintText: l10n.fullNamePlaceholder,
+                                    controller: _nameController,
+                                    keyboardType: TextInputType.name,
+                                    textInputAction: TextInputAction.next,
+                                    validator: (val) =>
+                                        FormValidators.requiredField(
+                                          val,
+                                          l10n.nameRequired,
+                                        ),
+                                  )
                                   .animate()
                                   .fadeIn(duration: 400.ms, delay: 200.ms)
                                   .slideY(begin: 0.1, end: 0),
                               const SizedBox(height: 18),
                               AppTextField(
-                                label: l10n.email,
-                                hintText: l10n.emailPlaceholder,
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.next,
-                                validator: (val) =>
-                                    FormValidators.email(val, l10n),
-                              )
+                                    label: l10n.email,
+                                    hintText: l10n.emailPlaceholder,
+                                    controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.next,
+                                    validator: (val) =>
+                                        FormValidators.email(val, l10n),
+                                  )
                                   .animate()
                                   .fadeIn(duration: 400.ms, delay: 250.ms)
                                   .slideY(begin: 0.1, end: 0),
                               const SizedBox(height: 18),
                               AppTextField(
-                                label: l10n.password,
-                                hintText: l10n.passwordPlaceholder,
-                                controller: _passwordController,
-                                isPassword: true,
-                                textInputAction: TextInputAction.next,
-                                validator: (val) =>
-                                    FormValidators.password(val, l10n),
-                              )
+                                    label: l10n.password,
+                                    hintText: l10n.passwordPlaceholder,
+                                    controller: _passwordController,
+                                    isPassword: true,
+                                    textInputAction: TextInputAction.next,
+                                    validator: (val) =>
+                                        FormValidators.password(val, l10n),
+                                  )
                                   .animate()
                                   .fadeIn(duration: 400.ms, delay: 300.ms)
                                   .slideY(begin: 0.1, end: 0),
                               const SizedBox(height: 18),
                               AppTextField(
-                                label: l10n.confirmPassword,
-                                hintText: l10n.passwordPlaceholder,
-                                controller: _confirmPasswordController,
-                                isPassword: true,
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (_) => _onSignUp(context),
-                                validator: (val) => FormValidators.confirmPassword(
-                                  val,
-                                  _passwordController.text,
-                                  l10n,
-                                ),
-                              )
+                                    label: l10n.confirmPassword,
+                                    hintText: l10n.passwordPlaceholder,
+                                    controller: _confirmPasswordController,
+                                    isPassword: true,
+                                    textInputAction: TextInputAction.done,
+                                    onFieldSubmitted: (_) => _onSignUp(context),
+                                    validator: (val) =>
+                                        FormValidators.confirmPassword(
+                                          val,
+                                          _passwordController.text,
+                                          l10n,
+                                        ),
+                                  )
                                   .animate()
                                   .fadeIn(duration: 400.ms, delay: 350.ms)
                                   .slideY(begin: 0.1, end: 0),
@@ -177,15 +178,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               const SizedBox(height: 24),
                               AppButton(
-                                label: l10n.signUp,
-                                variant: AppButtonVariant.primary,
-                                isLoading: isLoading,
-                                onPressed: () => _onSignUp(context),
-                              )
+                                    label: l10n.signUp,
+                                    variant: AppButtonVariant.primary,
+                                    isLoading: isLoading,
+                                    onPressed: () => _onSignUp(context),
+                                  )
                                   .animate()
                                   .fadeIn(duration: 400.ms, delay: 450.ms)
                                   .slideY(begin: 0.1, end: 0),
-                              const SizedBox(height: 36),
+                              const SizedBox(height: 24),
+                              SocialAuthSection(
+                                    onGooglePressed: () {
+                                      // TODO: Implement Google Auth
+                                    },
+                                    onGithubPressed: () {
+                                      // TODO: Implement GitHub Auth
+                                    },
+                                  )
+                                  .animate()
+                                  .fadeIn(duration: 400.ms, delay: 500.ms)
+                                  .slideY(begin: 0.1, end: 0),
+                              const SizedBox(height: 32),
                               AuthFooterLink(
                                 promptText: l10n.alreadyHaveAccount,
                                 actionText: l10n.signIn,
@@ -195,7 +208,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     RouteNames.login,
                                   );
                                 },
-                                delayMs: 500,
+                                delayMs: 550,
                               ),
                             ],
                           ),

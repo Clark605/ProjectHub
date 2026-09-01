@@ -230,6 +230,12 @@ abstract class AppLocalizations {
   /// **'Loading...'**
   String get loading;
 
+  /// No description provided for @onboardingTagWorkspaces.
+  ///
+  /// In en, this message translates to:
+  /// **'WORKSPACE & ROADMAPS'**
+  String get onboardingTagWorkspaces;
+
   /// No description provided for @onboardingWelcomeTitle.
   ///
   /// In en, this message translates to:
@@ -239,8 +245,14 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingWelcomeDesc.
   ///
   /// In en, this message translates to:
-  /// **'Manage your projects, organize your tasks, and collaborate with your team in one place.'**
+  /// **'Manage your projects, organize your tasks, and collaborate with your team in one unified space.'**
   String get onboardingWelcomeDesc;
+
+  /// No description provided for @onboardingTagKanban.
+  ///
+  /// In en, this message translates to:
+  /// **'AGILE WORKFLOWS'**
+  String get onboardingTagKanban;
 
   /// No description provided for @onboardingKanbanTitle.
   ///
@@ -251,8 +263,14 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingKanbanDesc.
   ///
   /// In en, this message translates to:
-  /// **'Keep track of progress seamlessly with our intuitive Kanban boards.'**
+  /// **'Keep track of progress seamlessly with interactive Kanban boards and live velocity tracking.'**
   String get onboardingKanbanDesc;
+
+  /// No description provided for @onboardingTagCollab.
+  ///
+  /// In en, this message translates to:
+  /// **'REAL-TIME SYNC'**
+  String get onboardingTagCollab;
 
   /// No description provided for @onboardingCollabTitle.
   ///
@@ -263,7 +281,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingCollabDesc.
   ///
   /// In en, this message translates to:
-  /// **'Stay connected with your team and achieve your goals faster.'**
+  /// **'Stay connected with your team, sync activity instantly, and achieve your goals faster.'**
   String get onboardingCollabDesc;
 
   /// No description provided for @getStarted.
@@ -277,6 +295,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next'**
   String get next;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
 
   /// No description provided for @signIn.
   ///

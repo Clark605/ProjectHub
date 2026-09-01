@@ -14,6 +14,7 @@ import 'package:client/features/auth/cubit/login_state.dart';
 import 'package:client/features/auth/ui/widgets/auth_error_banner.dart';
 import 'package:client/features/auth/ui/widgets/auth_footer_link.dart';
 import 'package:client/features/auth/ui/widgets/auth_header.dart';
+import 'package:client/features/auth/ui/widgets/social_auth_buttons.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -161,7 +162,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                   .animate()
                                   .fadeIn(duration: 400.ms, delay: 350.ms)
                                   .slideY(begin: 0.1, end: 0),
-                              const SizedBox(height: 40),
+                              const SizedBox(height: 24),
+                              SocialAuthSection(
+                                onGooglePressed: () {
+                                  // TODO: Implement Google Auth
+                                },
+                                onGithubPressed: () {
+                                  // TODO: Implement GitHub Auth
+                                },
+                              )
+                                  .animate()
+                                  .fadeIn(duration: 400.ms, delay: 400.ms)
+                                  .slideY(begin: 0.1, end: 0),
+                              const SizedBox(height: 32),
                               AuthFooterLink(
                                 promptText: l10n.dontHaveAccount,
                                 actionText: l10n.signUp,

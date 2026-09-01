@@ -75,31 +75,43 @@ class AppLocalizationsAr extends AppLocalizations {
   String get loading => 'جاري التحميل...';
 
   @override
+  String get onboardingTagWorkspaces => 'مساحات العمل والمشاريع';
+
+  @override
   String get onboardingWelcomeTitle => 'مرحباً بك في بروجكت هب';
 
   @override
   String get onboardingWelcomeDesc =>
-      'أدر مشاريعك، نظّم مهامك، وتعاون مع فريقك في مكان واحد.';
+      'أدر مشاريعك، نظّم مهامك، وتعاون مع فريقك في مساحة عمل موحدة وذكية.';
+
+  @override
+  String get onboardingTagKanban => 'سير عمل أجايل وكانبان';
 
   @override
   String get onboardingKanbanTitle => 'تتبع العمل عبر كانبان';
 
   @override
   String get onboardingKanbanDesc =>
-      'تتبع التقدم بسلاسة من خلال لوحات كانبان البديهية.';
+      'تتبع التقدم بسلاسة من خلال لوحات كانبان تفاعلية ومؤشرات إنجاز مباشرة.';
+
+  @override
+  String get onboardingTagCollab => 'مزامنة فورية وتعاون حي';
 
   @override
   String get onboardingCollabTitle => 'تعاون في الوقت الفعلي';
 
   @override
   String get onboardingCollabDesc =>
-      'ابق على تواصل مع فريقك وحقق أهدافك بشكل أسرع.';
+      'ابق على تواصل دائم مع فريقك، شارك التحديثات لحظياً، وحقق أهدافك أسرع.';
 
   @override
   String get getStarted => 'ابدأ الآن';
 
   @override
   String get next => 'التالي';
+
+  @override
+  String get skip => 'تخطي';
 
   @override
   String get signIn => 'تسجيل الدخول';

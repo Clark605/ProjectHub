@@ -22,7 +22,10 @@ void main() async {
 
   // Initialize API constants (device / emulator detection)
   await ApiConstants.init();
-  AppLogger.debug('Base URL configured: ${ApiConstants.baseUrl}', tag: 'Startup');
+  AppLogger.debug(
+    'Base URL configured: ${ApiConstants.baseUrl}',
+    tag: 'Startup',
+  );
 
   // Initialize dependency injection
   await configureDependencies();
