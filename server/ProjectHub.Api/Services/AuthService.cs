@@ -14,7 +14,7 @@ namespace ProjectHub.Api.Services;
 
 public class AuthService : IAuthService
 {
-    private const int AccessTokenMinutes = 30;
+    private const int DefaultAccessTokenMinutes = 60;
     private const int RefreshTokenDays = 14;
 
     private readonly UserManager<AppUser> _userManager;
@@ -264,11 +264,17 @@ public class AuthService : IAuthService
         jwtClaims.AddRange(claims);
         jwtClaims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
+        var accessTokenMinutes = _configuration.GetValue<int>("Jwt:AccessTokenExpirationMinutes", DefaultAccessTokenMinutes);
+        if (accessTokenMinutes <= 0)
+        {
+            accessTokenMinutes = DefaultAccessTokenMinutes;
+        }
+
         var token = new JwtSecurityToken(
             issuer: issuer,
             audience: audience,
             claims: jwtClaims,
-            expires: DateTime.UtcNow.AddMinutes(AccessTokenMinutes),
+            expires: DateTime.UtcNow.AddMinutes(accessTokenMinutes),
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
