@@ -58,17 +58,18 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i666.SecureStorageService>(),
       ),
     );
+    gh.lazySingleton<_i784.AppAuthCubit>(
+      () => _i784.AppAuthCubit(
+        gh<_i726.AuthRepository>(),
+        gh<_i666.SecureStorageService>(),
+        gh<_i415.PrefsService>(),
+      ),
+    );
     gh.factory<_i1.ForgotPasswordCubit>(
       () => _i1.ForgotPasswordCubit(gh<_i726.AuthRepository>()),
     );
     gh.factory<_i835.ResetPasswordCubit>(
       () => _i835.ResetPasswordCubit(gh<_i726.AuthRepository>()),
-    );
-    gh.lazySingleton<_i784.AppAuthCubit>(
-      () => _i784.AppAuthCubit(
-        gh<_i726.AuthRepository>(),
-        gh<_i666.SecureStorageService>(),
-      ),
     );
     gh.factory<_i796.LoginCubit>(
       () => _i796.LoginCubit(

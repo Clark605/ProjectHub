@@ -1,13 +1,32 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 
 class ApiConstants {
   ApiConstants._();
 
+  static bool isPhysicalDevice = false;
+
+  /// Initializes device-specific configuration (e.g., emulator vs physical device detection).
+  static Future<void> init() async {
+    if (!kIsWeb && Platform.isAndroid) {
+      try {
+        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        isPhysicalDevice = androidInfo.isPhysicalDevice;
+      } catch (_) {
+        // Fallback gracefully if device info cannot be retrieved
+      }
+    }
+  }
+
   static String get baseUrl {
     if (kIsWeb) return 'http://127.0.0.1:5259';
-    if (Platform.isAndroid) return 'http://192.168.1.4:5259';
+    if (Platform.isAndroid) {
+      return isPhysicalDevice
+          ? 'http://192.168.1.4:5259' // Real Android device (LAN IP)
+          : 'http://10.0.2.2:5259'; // Android emulator (host loopback)
+    }
     return 'http://127.0.0.1:5259'; // iOS simulator / Desktop
   }
 

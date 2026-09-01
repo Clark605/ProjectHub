@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/constants/storage_keys.dart';
+import 'package:client/features/auth/data/models/user.dart';
 
 @lazySingleton
 class PrefsService {
@@ -44,6 +47,23 @@ class PrefsService {
 
   Future<void> setLocale(String locale) =>
       _prefs.setString(StorageKeys.locale, locale);
+
+  // Cached User Profile
+  User? getCachedUser() {
+    final jsonStr = _prefs.getString(StorageKeys.cachedUser);
+    if (jsonStr == null || jsonStr.isEmpty) return null;
+    try {
+      final jsonMap = jsonDecode(jsonStr) as Map<String, dynamic>;
+      return User.fromJson(jsonMap);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> cacheUser(User user) =>
+      _prefs.setString(StorageKeys.cachedUser, jsonEncode(user.toJson()));
+
+  Future<void> clearCachedUser() => _prefs.remove(StorageKeys.cachedUser);
 }
 
 @module
