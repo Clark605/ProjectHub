@@ -64,6 +64,7 @@ public class WorkspaceService : IWorkspaceService
             Id = workspace.Id,
             Name = workspace.Name,
             Description = workspace.Description,
+            Membership = new WorkspaceMembershipDto(workspaceMember.Role, workspaceMember.CreatedAt)
         };
     }
 
@@ -80,6 +81,7 @@ public class WorkspaceService : IWorkspaceService
                     Id = wm.Workspace.Id,
                     Name = wm.Workspace.Name,
                     Description = wm.Workspace.Description,
+                    Membership = new WorkspaceMembershipDto(wm.Role, wm.CreatedAt)
                 })
                 .ToListAsync(token),
             tags: [$"user:{userId}:workspaces"]
@@ -88,35 +90,27 @@ public class WorkspaceService : IWorkspaceService
 
     public async Task<WorkspaceResponseDto> GetWorkspaceByIdAsync(string userId, int workspaceId)
     {
-        var isMember = await _context.WorkspaceMembers
-            .AnyAsync(wm => wm.UserId == userId && wm.Workspace.Id == workspaceId);
-
-        if (!isMember)
-        {
-            _logger.LogWarning("Workspace with ID {WorkspaceId} not found for user {UserId}", workspaceId, userId);
-            throw new KeyNotFoundException($"Workspace with ID {workspaceId} not found for user {userId}");
-        }
-
-        string cacheKey = $"workspace:{workspaceId}:details";
+        string cacheKey = $"workspace:{workspaceId}:user:{userId}:details";
 
         var workspace = await _cache.GetOrCreateAsync(
             cacheKey,
-            async token => await _context.WorkSpaces
-                .Where(w => w.Id == workspaceId)
-                .Select(w => new WorkspaceResponseDto
+            async token => await _context.WorkspaceMembers
+                .Where(wm => wm.UserId == userId && wm.Workspace.Id == workspaceId)
+                .Select(wm => new WorkspaceResponseDto
                 {
-                    Id = w.Id,
-                    Name = w.Name,
-                    Description = w.Description,
+                    Id = wm.Workspace.Id,
+                    Name = wm.Workspace.Name,
+                    Description = wm.Workspace.Description,
+                    Membership = new WorkspaceMembershipDto(wm.Role, wm.CreatedAt)
                 })
                 .FirstOrDefaultAsync(token),
-            tags: [$"workspace:{workspaceId}"]
+            tags: [$"workspace:{workspaceId}", $"user:{userId}:workspaces"]
         );
 
         if (workspace == null)
         {
-            _logger.LogWarning("Workspace with ID {WorkspaceId} not found", workspaceId);
-            throw new KeyNotFoundException($"Workspace with ID {workspaceId} not found");
+            _logger.LogWarning("Workspace with ID {WorkspaceId} not found for user {UserId}", workspaceId, userId);
+            throw new KeyNotFoundException($"Workspace with ID {workspaceId} not found for user {userId}");
         }
 
         return workspace;
@@ -163,6 +157,7 @@ public class WorkspaceService : IWorkspaceService
             Id = workspaceMember.Workspace.Id,
             Name = workspaceMember.Workspace.Name,
             Description = workspaceMember.Workspace.Description,
+            Membership = new WorkspaceMembershipDto(workspaceMember.Role, workspaceMember.CreatedAt)
         };
     }
 
