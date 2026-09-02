@@ -242,4 +242,57 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get termsRequired => 'يجب الموافقة على شروط الخدمة وسياسة الخصوصية';
+
+  @override
+  String get switchWorkspace => 'تبديل مساحة العمل';
+
+  @override
+  String get createNewWorkspace => 'إنشاء مساحة عمل جديدة';
+
+  @override
+  String get workspaceName => 'اسم مساحة العمل';
+
+  @override
+  String get workspaceNamePlaceholder => 'مثال: فريق منتجات أكمي';
+
+  @override
+  String get workspaceDescription => 'الوصف';
+
+  @override
+  String get workspaceDescriptionPlaceholder =>
+      'ما هو الهدف من مساحة العمل هذه؟ (اختياري)';
+
+  @override
+  String get workspaceNameRequired => 'يرجى إدخال اسم مساحة العمل';
+
+  @override
+  String get workspaceNameTooLong => 'يجب ألا يتجاوز اسم مساحة العمل 100 حرف';
+
+  @override
+  String get activeWorkspace => 'مساحة العمل الحالية';
+
+  @override
+  String get otherWorkspaces => 'مساحات عمل أخرى';
+
+  @override
+  String get noWorkspacesFound => 'لم يتم العثور على مساحات عمل';
+
+  @override
+  String get quickStartWelcome => 'مرحباً بك في بروجكت هب';
+
+  @override
+  String get quickStartSubtitle =>
+      'أنشئ مساحة عملك الأولى للبدء في إدارة المشاريع مع فريقك.';
+
+  @override
+  String get roleOwner => 'مالك';
+
+  @override
+  String get roleMember => 'عضو';
+
+  @override
+  String get searchWorkspaces => 'ابحث في مساحات العمل...';
+
+  @override
+  String get creatingWorkspace => 'جاري إنشاء مساحة العمل...';
 }

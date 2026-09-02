@@ -80,5 +80,23 @@
   "confirmPasswordRequired": "يرجى تأكيد كلمة المرور",
   "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
   "tokenRequired": "يرجى إدخال رمز الاستعادة",
-  "termsRequired": "يجب الموافقة على شروط الخدمة وسياسة الخصوصية"
+  "termsRequired": "يجب الموافقة على شروط الخدمة وسياسة الخصوصية",
+
+  "switchWorkspace": "تبديل مساحة العمل",
+  "createNewWorkspace": "إنشاء مساحة عمل جديدة",
+  "workspaceName": "اسم مساحة العمل",
+  "workspaceNamePlaceholder": "مثال: فريق منتجات أكمي",
+  "workspaceDescription": "الوصف",
+  "workspaceDescriptionPlaceholder": "ما هو الهدف من مساحة العمل هذه؟ (اختياري)",
+  "workspaceNameRequired": "يرجى إدخال اسم مساحة العمل",
+  "workspaceNameTooLong": "يجب ألا يتجاوز اسم مساحة العمل 100 حرف",
+  "activeWorkspace": "مساحة العمل الحالية",
+  "otherWorkspaces": "مساحات عمل أخرى",
+  "noWorkspacesFound": "لم يتم العثور على مساحات عمل",
+  "quickStartWelcome": "مرحباً بك في بروجكت هب",
+  "quickStartSubtitle": "أنشئ مساحة عملك الأولى للبدء في إدارة المشاريع مع فريقك.",
+  "roleOwner": "مالك",
+  "roleMember": "عضو",
+  "searchWorkspaces": "ابحث في مساحات العمل...",
+  "creatingWorkspace": "جاري إنشاء مساحة العمل..."
 }

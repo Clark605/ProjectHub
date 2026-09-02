@@ -83,5 +83,23 @@
   "confirmPasswordRequired": "Please confirm your password",
   "passwordsDoNotMatch": "Passwords do not match",
   "tokenRequired": "Please enter the reset code",
-  "termsRequired": "You must agree to the Terms and Privacy Policy"
+  "termsRequired": "You must agree to the Terms and Privacy Policy",
+
+  "switchWorkspace": "Switch Workspace",
+  "createNewWorkspace": "Create New Workspace",
+  "workspaceName": "Workspace Name",
+  "workspaceNamePlaceholder": "e.g. Acme Product Team",
+  "workspaceDescription": "Description",
+  "workspaceDescriptionPlaceholder": "What is this workspace for? (optional)",
+  "workspaceNameRequired": "Please enter a workspace name",
+  "workspaceNameTooLong": "Workspace name must be 100 characters or less",
+  "activeWorkspace": "Active Workspace",
+  "otherWorkspaces": "Other Workspaces",
+  "noWorkspacesFound": "No workspaces found",
+  "quickStartWelcome": "Welcome to ProjectHub",
+  "quickStartSubtitle": "Create your first workspace to get started with your team.",
+  "roleOwner": "Owner",
+  "roleMember": "Member",
+  "searchWorkspaces": "Search workspaces...",
+  "creatingWorkspace": "Creating workspace..."
 }

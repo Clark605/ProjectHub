@@ -243,4 +243,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get termsRequired => 'You must agree to the Terms and Privacy Policy';
+
+  @override
+  String get switchWorkspace => 'Switch Workspace';
+
+  @override
+  String get createNewWorkspace => 'Create New Workspace';
+
+  @override
+  String get workspaceName => 'Workspace Name';
+
+  @override
+  String get workspaceNamePlaceholder => 'e.g. Acme Product Team';
+
+  @override
+  String get workspaceDescription => 'Description';
+
+  @override
+  String get workspaceDescriptionPlaceholder =>
+      'What is this workspace for? (optional)';
+
+  @override
+  String get workspaceNameRequired => 'Please enter a workspace name';
+
+  @override
+  String get workspaceNameTooLong =>
+      'Workspace name must be 100 characters or less';
+
+  @override
+  String get activeWorkspace => 'Active Workspace';
+
+  @override
+  String get otherWorkspaces => 'Other Workspaces';
+
+  @override
+  String get noWorkspacesFound => 'No workspaces found';
+
+  @override
+  String get quickStartWelcome => 'Welcome to ProjectHub';
+
+  @override
+  String get quickStartSubtitle =>
+      'Create your first workspace to get started with your team.';
+
+  @override
+  String get roleOwner => 'Owner';
+
+  @override
+  String get roleMember => 'Member';
+
+  @override
+  String get searchWorkspaces => 'Search workspaces...';
+
+  @override
+  String get creatingWorkspace => 'Creating workspace...';
 }

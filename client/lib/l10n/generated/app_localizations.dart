@@ -553,6 +553,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You must agree to the Terms and Privacy Policy'**
   String get termsRequired;
+
+  /// No description provided for @switchWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch Workspace'**
+  String get switchWorkspace;
+
+  /// No description provided for @createNewWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Workspace'**
+  String get createNewWorkspace;
+
+  /// No description provided for @workspaceName.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace Name'**
+  String get workspaceName;
+
+  /// No description provided for @workspaceNamePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Acme Product Team'**
+  String get workspaceNamePlaceholder;
+
+  /// No description provided for @workspaceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get workspaceDescription;
+
+  /// No description provided for @workspaceDescriptionPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'What is this workspace for? (optional)'**
+  String get workspaceDescriptionPlaceholder;
+
+  /// No description provided for @workspaceNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a workspace name'**
+  String get workspaceNameRequired;
+
+  /// No description provided for @workspaceNameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace name must be 100 characters or less'**
+  String get workspaceNameTooLong;
+
+  /// No description provided for @activeWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Workspace'**
+  String get activeWorkspace;
+
+  /// No description provided for @otherWorkspaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Other Workspaces'**
+  String get otherWorkspaces;
+
+  /// No description provided for @noWorkspacesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No workspaces found'**
+  String get noWorkspacesFound;
+
+  /// No description provided for @quickStartWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to ProjectHub'**
+  String get quickStartWelcome;
+
+  /// No description provided for @quickStartSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first workspace to get started with your team.'**
+  String get quickStartSubtitle;
+
+  /// No description provided for @roleOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner'**
+  String get roleOwner;
+
+  /// No description provided for @roleMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Member'**
+  String get roleMember;
+
+  /// No description provided for @searchWorkspaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Search workspaces...'**
+  String get searchWorkspaces;
+
+  /// No description provided for @creatingWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating workspace...'**
+  String get creatingWorkspace;
 }
 
 class _AppLocalizationsDelegate
