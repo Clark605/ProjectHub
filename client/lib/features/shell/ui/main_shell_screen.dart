@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/di/injection.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:client/features/dashboard/ui/dashboard_screen.dart';
@@ -10,6 +12,9 @@ import 'package:client/features/shell/ui/widgets/mobile_bottom_nav.dart';
 import 'package:client/features/shell/ui/widgets/shell_top_bar.dart';
 import 'package:client/features/shell/ui/widgets/tablet_navigation_rail.dart';
 import 'package:client/features/tasks/ui/my_tasks_screen.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
+import 'package:client/features/workspaces/ui/widgets/workspace_switcher_sheet.dart';
 
 class MainShellScreen extends StatefulWidget {
   final int initialIndex;
@@ -28,6 +33,11 @@ class _MainShellScreenState extends State<MainShellScreen> {
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
+    final cubit = getIt<WorkspaceContextCubit>();
+    cubit.state.maybeWhen(
+      initial: () => cubit.loadWorkspaces(),
+      orElse: () {},
+    );
   }
 
   void _onSelectTab(int index) {
@@ -35,6 +45,10 @@ class _MainShellScreenState extends State<MainShellScreen> {
     if (_scaffoldKey.currentState?.isDrawerOpen == true) {
       Navigator.of(context).pop();
     }
+  }
+
+  void _onWorkspaceTap() {
+    WorkspaceSwitcherSheet.show(context);
   }
 
   Widget _buildBody() {
@@ -60,83 +74,102 @@ class _MainShellScreenState extends State<MainShellScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return AmbientGlowBackground(
-      child: ResponsiveLayout(
-        // ── Desktop Layout: 240px Sidebar + Top Bar + Content ──
-        desktop: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Row(
-            children: [
-              DesktopSidebar(
-                selectedIndex: _selectedIndex,
-                onItemSelected: _onSelectTab,
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    ShellTopBar(
-                      onProfileTap: () => _onSelectTab(3),
+    return BlocProvider.value(
+      value: getIt<WorkspaceContextCubit>(),
+      child: BlocBuilder<WorkspaceContextCubit, WorkspaceContextState>(
+        builder: (context, workspaceState) {
+          final activeWorkspace = workspaceState.whenOrNull(
+            loaded: (_, active) => active,
+          );
+          final wsName = activeWorkspace?.name ?? 'Workspace';
+          final wsRole = activeWorkspace?.membership?.role ?? 'Member';
+
+          return SafeArea(
+            child: AmbientGlowBackground(
+              child: ResponsiveLayout(
+                desktop: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  body: Row(
+                    children: [
+                      DesktopSidebar(
+                        selectedIndex: _selectedIndex,
+                        onItemSelected: _onSelectTab,
+                      ),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            ShellTopBar(
+                              activeWorkspaceName: wsName,
+                              activeWorkspaceRole: wsRole,
+                              onWorkspaceTap: _onWorkspaceTap,
+                              onProfileTap: () => _onSelectTab(3),
+                            ),
+                            Expanded(child: _buildBody()),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                tablet: Scaffold(
+                  key: _scaffoldKey,
+                  backgroundColor: Colors.transparent,
+                  drawer: Drawer(
+                    child: DesktopSidebar(
+                      selectedIndex: _selectedIndex,
+                      onItemSelected: _onSelectTab,
                     ),
-                    Expanded(child: _buildBody()),
-                  ],
+                  ),
+                  body: Row(
+                    children: [
+                      TabletNavigationRail(
+                        selectedIndex: _selectedIndex,
+                        onItemSelected: _onSelectTab,
+                      ),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            ShellTopBar(
+                              activeWorkspaceName: wsName,
+                              activeWorkspaceRole: wsRole,
+                              onWorkspaceTap: _onWorkspaceTap,
+                              onOpenDrawer: () =>
+                                  _scaffoldKey.currentState?.openDrawer(),
+                              onProfileTap: () => _onSelectTab(3),
+                            ),
+                            Expanded(child: _buildBody()),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                mobile: Scaffold(
+                  key: _scaffoldKey,
+                  backgroundColor: Colors.transparent,
+                  drawer: Drawer(
+                    child: DesktopSidebar(
+                      selectedIndex: _selectedIndex,
+                      onItemSelected: _onSelectTab,
+                    ),
+                  ),
+                  appBar: ShellTopBar(
+                    activeWorkspaceName: wsName,
+                    activeWorkspaceRole: wsRole,
+                    onWorkspaceTap: _onWorkspaceTap,
+                    onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
+                    onProfileTap: () => _onSelectTab(3),
+                  ),
+                  body: _buildBody(),
+                  bottomNavigationBar: MobileBottomNav(
+                    selectedIndex: _selectedIndex,
+                    onItemSelected: _onSelectTab,
+                  ),
                 ),
               ),
-            ],
-          ),
-        ),
-
-        // ── Tablet Layout: 72px Navigation Rail + Top Bar + Content ──
-        tablet: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: Colors.transparent,
-          drawer: Drawer(
-            child: DesktopSidebar(
-              selectedIndex: _selectedIndex,
-              onItemSelected: _onSelectTab,
             ),
-          ),
-          body: Row(
-            children: [
-              TabletNavigationRail(
-                selectedIndex: _selectedIndex,
-                onItemSelected: _onSelectTab,
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    ShellTopBar(
-                      onOpenDrawer: () =>
-                          _scaffoldKey.currentState?.openDrawer(),
-                      onProfileTap: () => _onSelectTab(3),
-                    ),
-                    Expanded(child: _buildBody()),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // ── Mobile Layout: Top Bar + Content + Bottom Nav + Drawer ──
-        mobile: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: Colors.transparent,
-          drawer: Drawer(
-            child: DesktopSidebar(
-              selectedIndex: _selectedIndex,
-              onItemSelected: _onSelectTab,
-            ),
-          ),
-          appBar: ShellTopBar(
-            onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
-            onProfileTap: () => _onSelectTab(3),
-          ),
-          body: _buildBody(),
-          bottomNavigationBar: MobileBottomNav(
-            selectedIndex: _selectedIndex,
-            onItemSelected: _onSelectTab,
-          ),
-        ),
+          );
+        },
       ),
     );
   }
