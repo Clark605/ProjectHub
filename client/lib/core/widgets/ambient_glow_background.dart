@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 
@@ -91,44 +90,42 @@ class _AmbientGlowBackgroundState extends State<AmbientGlowBackground>
               fit: StackFit.expand,
               children: [
                 Container(color: AppColors.background),
-                AnimatedBuilder(
-                  animation: _ticker,
-                  builder: (context, _) {
-                    final progress = _state.getCycleProgress(
-                      widget.cycleDuration.inMilliseconds,
-                    );
-                    final t = progress * 2 * math.pi;
+                RepaintBoundary(
+                  child: AnimatedBuilder(
+                    animation: _ticker,
+                    builder: (context, _) {
+                      final progress = _state.getCycleProgress(
+                        widget.cycleDuration.inMilliseconds,
+                      );
+                      final t = progress * 2 * math.pi;
 
-                    _state.smoothedPointerOffset = Offset(
-                      _state.smoothedPointerOffset.dx +
-                          (_state.pointerOffset.dx -
-                                  _state.smoothedPointerOffset.dx) *
-                              0.08,
-                      _state.smoothedPointerOffset.dy +
-                          (_state.pointerOffset.dy -
-                                  _state.smoothedPointerOffset.dy) *
-                              0.08,
-                    );
+                      _state.smoothedPointerOffset = Offset(
+                        _state.smoothedPointerOffset.dx +
+                            (_state.pointerOffset.dx -
+                                    _state.smoothedPointerOffset.dx) *
+                                0.08,
+                        _state.smoothedPointerOffset.dy +
+                            (_state.pointerOffset.dy -
+                                    _state.smoothedPointerOffset.dy) *
+                                0.08,
+                      );
 
-                    // Clockwise orbital trajectory (Top -> Right -> Bottom -> Left)
-                    final orbitX = math.sin(t);
-                    final orbitY = -math.cos(t);
+                      // Clockwise orbital trajectory (Top -> Right -> Bottom -> Left)
+                      final orbitX = math.sin(t);
+                      final orbitY = -math.cos(t);
 
-                    return CustomPaint(
-                      painter: _AmbientGlowPainter(
-                        orbitVector: Offset(orbitX, orbitY),
-                        pointerOffset: _state.smoothedPointerOffset,
-                        primaryColor: widget.primaryGlowColor,
-                        secondaryColor: widget.secondaryGlowColor,
-                        opacity: widget.glowOpacity,
-                      ),
-                      size: Size.infinite,
-                    );
-                  },
-                ),
-                BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 70, sigmaY: 70),
-                  child: const SizedBox.expand(),
+                      return CustomPaint(
+                        painter: _AmbientGlowPainter(
+                          orbitVector: Offset(orbitX, orbitY),
+                          pointerOffset: _state.smoothedPointerOffset,
+                          primaryColor: widget.primaryGlowColor,
+                          secondaryColor: widget.secondaryGlowColor,
+                          opacity: widget.glowOpacity,
+                        ),
+                        size: Size.infinite,
+                      );
+                    },
+                  ),
                 ),
                 widget.child,
               ],
@@ -172,20 +169,21 @@ class _AmbientGlowPainter extends CustomPainter {
       baseCenter.dy + orbitVector.dy * orbitRadiusY + interactiveY,
     );
 
-    // Orb 1: Electric Violet (#c0c1ff)
+    // Orb 1: Electric Violet (#c0c1ff) with smooth diffuse multi-stop falloff
     final violetCenter =
         movingGlowCenter + Offset(-width * 0.12, -height * 0.04);
-    final violetRadius = math.max(width * 0.85, 340.0);
+    final violetRadius = math.max(width * 0.95, 380.0);
     final violetPaint = Paint()
       ..shader =
           RadialGradient(
             colors: [
-              primaryColor.withValues(alpha: opacity * 0.85),
-              primaryColor.withValues(alpha: opacity * 0.4),
-              primaryColor.withValues(alpha: opacity * 0.1),
-              Colors.transparent,
+              primaryColor.withValues(alpha: opacity * 0.50),
+              primaryColor.withValues(alpha: opacity * 0.35),
+              primaryColor.withValues(alpha: opacity * 0.18),
+              primaryColor.withValues(alpha: opacity * 0.05),
+              primaryColor.withValues(alpha: 0.0),
             ],
-            stops: const [0.0, 0.35, 0.65, 1.0],
+            stops: const [0.0, 0.25, 0.55, 0.80, 1.0],
           ).createShader(
             Rect.fromCircle(center: violetCenter, radius: violetRadius),
           );
@@ -194,16 +192,17 @@ class _AmbientGlowPainter extends CustomPainter {
 
     // Orb 2: Sky Blue (#89ceff) trailing in the clockwise orbit
     final skyCenter = movingGlowCenter + Offset(width * 0.14, height * 0.04);
-    final skyRadius = math.max(width * 0.8, 320.0);
+    final skyRadius = math.max(width * 0.90, 360.0);
     final skyPaint = Paint()
       ..shader = RadialGradient(
         colors: [
-          secondaryColor.withValues(alpha: opacity * 0.75),
-          secondaryColor.withValues(alpha: opacity * 0.35),
-          secondaryColor.withValues(alpha: opacity * 0.08),
-          Colors.transparent,
+          secondaryColor.withValues(alpha: opacity * 0.45),
+          secondaryColor.withValues(alpha: opacity * 0.30),
+          secondaryColor.withValues(alpha: opacity * 0.14),
+          secondaryColor.withValues(alpha: opacity * 0.04),
+          secondaryColor.withValues(alpha: 0.0),
         ],
-        stops: const [0.0, 0.3, 0.6, 1.0],
+        stops: const [0.0, 0.25, 0.55, 0.80, 1.0],
       ).createShader(Rect.fromCircle(center: skyCenter, radius: skyRadius));
 
     canvas.drawCircle(skyCenter, skyRadius, skyPaint);
@@ -214,16 +213,17 @@ class _AmbientGlowPainter extends CustomPainter {
         width * 0.5 + pointerOffset.dx * (width * 0.38),
         height * 0.4 + pointerOffset.dy * (height * 0.28),
       );
-      final followRadius = math.max(width * 0.45, 180.0);
+      final followRadius = math.max(width * 0.55, 220.0);
       final followPaint = Paint()
         ..shader =
             RadialGradient(
               colors: [
                 primaryColor.withValues(alpha: opacity * 0.25),
-                secondaryColor.withValues(alpha: opacity * 0.1),
-                Colors.transparent,
+                secondaryColor.withValues(alpha: opacity * 0.12),
+                secondaryColor.withValues(alpha: opacity * 0.03),
+                secondaryColor.withValues(alpha: 0.0),
               ],
-              stops: const [0.0, 0.5, 1.0],
+              stops: const [0.0, 0.35, 0.70, 1.0],
             ).createShader(
               Rect.fromCircle(center: followCenter, radius: followRadius),
             );

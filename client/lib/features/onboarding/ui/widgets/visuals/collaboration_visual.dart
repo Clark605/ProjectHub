@@ -49,17 +49,19 @@ class _CollaborationVisualState extends State<CollaborationVisual>
         clipBehavior: Clip.none,
         children: [
           // ── Background Animated Sync Waves & Connection Lines ──
-          AnimatedBuilder(
-            animation: _motionController,
-            builder: (context, _) {
-              return CustomPaint(
-                painter: _ConnectionWavePainter(
-                  progress: _motionController.value,
-                  isDark: isDark,
-                ),
-                size: Size.infinite,
-              );
-            },
+          RepaintBoundary(
+            child: AnimatedBuilder(
+              animation: _motionController,
+              builder: (context, _) {
+                return CustomPaint(
+                  painter: _ConnectionWavePainter(
+                    progress: _motionController.value,
+                    isDark: isDark,
+                  ),
+                  size: Size.infinite,
+                );
+              },
+            ),
           ),
 
           // ── Top Presence Bar ──
@@ -243,10 +245,12 @@ class _CollaborationVisualState extends State<CollaborationVisual>
               return Positioned(
                 left: dx,
                 top: dy,
-                child: _buildLiveCursor(
-                  name: 'Alex · Lead',
-                  color: AppColors.electricViolet,
-                  isTyping: false,
+                child: RepaintBoundary(
+                  child: _buildLiveCursor(
+                    name: 'Alex · Lead',
+                    color: AppColors.electricViolet,
+                    isTyping: false,
+                  ),
                 ),
               );
             },
@@ -263,10 +267,12 @@ class _CollaborationVisualState extends State<CollaborationVisual>
               return Positioned(
                 left: dx,
                 top: dy,
-                child: _buildLiveCursor(
-                  name: 'Sarah · Dev',
-                  color: AppColors.skyBlue,
-                  isTyping: true,
+                child: RepaintBoundary(
+                  child: _buildLiveCursor(
+                    name: 'Sarah · Dev',
+                    color: AppColors.skyBlue,
+                    isTyping: true,
+                  ),
                 ),
               );
             },

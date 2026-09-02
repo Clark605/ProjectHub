@@ -13,6 +13,7 @@ Welcome to the centralized documentation hub for **ProjectHub** — a modern, co
 | **[Backend Architecture (.NET 10)](./backend-architecture.md)** | Deep dive into ASP.NET Core API design, EF Core data model, JWT security, and caching. |
 | **[Frontend Architecture (Flutter)](./frontend-architecture.md)** | Deep dive into Flutter Feature-First structure, Cubit state management, DI, and UI tokens. |
 | **[Design System Specification](./design-system.md)** | Stitch Deep Slate token architecture, color maps, typography, and component specs. |
+| **[User Flows & Journeys](./user-flow.md)** | Post-login user journeys, routing logic, navigation architecture, and responsive UX states. |
 | **[REST API Reference](./api-reference.md)** | Complete endpoint specifications, request/response schemas, and authentication flow. |
 | **[Full-Stack Setup Guide](./setup-guide.md)** | Step-by-step developer onboarding, database migrations, secrets, and debugging. |
 

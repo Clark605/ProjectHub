@@ -103,74 +103,73 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       children: [
                         // Brand Logo Pill
                         Row(
-                          children: [
-                            Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                color: AppColors.electricViolet.withValues(
-                                  alpha: 0.18,
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: AppColors.electricViolet.withValues(
-                                    alpha: 0.35,
+                              children: [
+                                Container(
+                                  width: 32,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.electricViolet.withValues(
+                                      alpha: 0.18,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: AppColors.electricViolet
+                                          .withValues(alpha: 0.35),
+                                    ),
+                                  ),
+                                  child: const Icon(
+                                    Icons.hub_rounded,
+                                    size: 18,
+                                    color: AppColors.electricViolet,
                                   ),
                                 ),
-                              ),
-                              child: const Icon(
-                                Icons.hub_rounded,
-                                size: 18,
-                                color: AppColors.electricViolet,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              l10n.appTitle,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.w800,
-                                letterSpacing: -0.3,
-                                color: isDark
-                                    ? AppColors.textPrimary
-                                    : AppColors.lightTextPrimary,
-                              ),
-                            ),
-                          ],
-                        )
+                                const SizedBox(width: 10),
+                                Text(
+                                  l10n.appTitle,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: -0.3,
+                                    color: isDark
+                                        ? AppColors.textPrimary
+                                        : AppColors.lightTextPrimary,
+                                  ),
+                                ),
+                              ],
+                            )
                             .animate()
                             .fadeIn(duration: 400.ms)
                             .slideX(begin: -0.1, end: 0),
 
                         // Skip Action Button
                         AnimatedOpacity(
-                          opacity: isLastPage ? 0.0 : 1.0,
-                          duration: const Duration(milliseconds: 250),
-                          child: IgnorePointer(
-                            ignoring: isLastPage,
-                            child: TextButton(
-                              onPressed: _onSkip,
-                              style: TextButton.styleFrom(
-                                foregroundColor: isDark
-                                    ? AppColors.textSecondary
-                                    : AppColors.lightTextSecondary,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 8,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                              opacity: isLastPage ? 0.0 : 1.0,
+                              duration: const Duration(milliseconds: 250),
+                              child: IgnorePointer(
+                                ignoring: isLastPage,
+                                child: TextButton(
+                                  onPressed: _onSkip,
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: isDark
+                                        ? AppColors.textSecondary
+                                        : AppColors.lightTextSecondary,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 14,
+                                      vertical: 8,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    l10n.skip,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              child: Text(
-                                l10n.skip,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
+                            )
                             .animate()
                             .fadeIn(duration: 400.ms)
                             .slideX(begin: 0.1, end: 0),
@@ -189,11 +188,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       itemCount: onboardingData.length,
                       itemBuilder: (context, index) {
                         final data = onboardingData[index];
-                        return OnboardingPageItem(
-                          tag: data['tag'] as String,
-                          title: data['title'] as String,
-                          description: data['description'] as String,
-                          visual: data['visual'] as Widget,
+                        return RepaintBoundary(
+                          child: OnboardingPageItem(
+                            tag: data['tag'] as String,
+                            title: data['title'] as String,
+                            description: data['description'] as String,
+                            visual: data['visual'] as Widget,
+                          ),
                         );
                       },
                     ),

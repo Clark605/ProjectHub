@@ -358,67 +358,69 @@ class WorkspaceVisual extends StatelessWidget {
               Positioned(
                 top: -12,
                 right: 8,
-                child:
-                    Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                AppColors.electricVioletContainer,
-                                AppColors.skyBlueContainer,
+                child: RepaintBoundary(
+                  child:
+                      Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 5,
+                            ),
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  AppColors.electricVioletContainer,
+                                  AppColors.skyBlueContainer,
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.electricViolet.withValues(
+                                    alpha: 0.4,
+                                  ),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
                               ],
                             ),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.electricViolet.withValues(
-                                  alpha: 0.4,
-                                ),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.bolt_rounded,
-                                size: 14,
-                                color: Colors.white,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                '+42% Velocity',
-                                style: theme.textTheme.labelSmall?.copyWith(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.bolt_rounded,
+                                  size: 14,
                                   color: Colors.white,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 10,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: 4),
+                                Text(
+                                  '+42% Velocity',
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                          .animate(
+                            onPlay: (controller) =>
+                                controller.repeat(reverse: true),
+                          )
+                          .moveY(
+                            begin: 0,
+                            end: -4,
+                            duration: 1500.ms,
+                            curve: Curves.easeInOut,
+                          )
+                          .animate()
+                          .fadeIn(duration: 400.ms, delay: 400.ms)
+                          .scale(
+                            duration: 400.ms,
+                            delay: 400.ms,
+                            curve: Curves.easeOutBack,
                           ),
-                        )
-                        .animate(
-                          onPlay: (controller) =>
-                              controller.repeat(reverse: true),
-                        )
-                        .moveY(
-                          begin: 0,
-                          end: -4,
-                          duration: 1500.ms,
-                          curve: Curves.easeInOut,
-                        )
-                        .animate()
-                        .fadeIn(duration: 400.ms, delay: 400.ms)
-                        .scale(
-                          duration: 400.ms,
-                          delay: 400.ms,
-                          curve: Curves.easeOutBack,
-                        ),
+                ),
               ),
             ],
           ),

@@ -51,7 +51,7 @@ void main() async {
   // Remove native splash screen to show the initial route
   FlutterNativeSplash.remove();
   startupTimer.stop(note: 'initial route: $initialRoute');
-
+  debugProfileBuildsEnabled = true;
   runApp(ProjectHubApp(initialRoute: initialRoute));
 
   // Silently validate session and refresh cached user in background

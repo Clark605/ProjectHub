@@ -198,116 +198,121 @@ class _KanbanVisualState extends State<KanbanVisual>
               return Positioned(
                 bottom: 22,
                 left: 125 + (slideT * 120),
-                child: Opacity(
-                  opacity: opacity.clamp(0.0, 1.0),
-                  child: Transform.rotate(
-                    angle: (slideT * 0.04) * (slideT < 1.0 ? 1 : 0),
-                    child: Container(
-                      width: 105,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 7,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isDoneState
-                            ? (isDark
-                                  ? const Color(0xFF132E22)
-                                  : const Color(0xFFEBFDF2))
-                            : cardBg,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: isDoneState
-                              ? AppColors.success
-                              : AppColors.electricViolet,
-                          width: 1.2,
+                child: RepaintBoundary(
+                  child: Opacity(
+                    opacity: opacity.clamp(0.0, 1.0),
+                    child: Transform.rotate(
+                      angle: (slideT * 0.04) * (slideT < 1.0 ? 1 : 0),
+                      child: Container(
+                        width: 105,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 7,
                         ),
-                        boxShadow: [
-                          BoxShadow(
+                        decoration: BoxDecoration(
+                          color: isDoneState
+                              ? (isDark
+                                    ? const Color(0xFF132E22)
+                                    : const Color(0xFFEBFDF2))
+                              : cardBg,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
                             color: isDoneState
-                                ? AppColors.success.withValues(alpha: 0.35)
-                                : AppColors.electricViolet.withValues(
-                                    alpha: 0.25,
+                                ? AppColors.success
+                                : AppColors.electricViolet,
+                            width: 1.2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: isDoneState
+                                  ? AppColors.success.withValues(alpha: 0.35)
+                                  : AppColors.electricViolet.withValues(
+                                      alpha: 0.25,
+                                    ),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Telemetry',
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 10,
                                   ),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Telemetry',
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 10,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Icon(
-                                isDoneState
-                                    ? Icons.check_circle_rounded
-                                    : Icons.swap_horiz_rounded,
-                                size: 12,
-                                color: isDoneState
-                                    ? AppColors.success
-                                    : AppColors.electricViolet,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                  vertical: 1,
-                                ),
-                                decoration: BoxDecoration(
+                                Icon(
+                                  isDoneState
+                                      ? Icons.check_circle_rounded
+                                      : Icons.swap_horiz_rounded,
+                                  size: 12,
                                   color: isDoneState
-                                      ? AppColors.success.withValues(alpha: 0.2)
-                                      : AppColors.electricViolet.withValues(
-                                          alpha: 0.15,
-                                        ),
-                                  borderRadius: BorderRadius.circular(4),
+                                      ? AppColors.success
+                                      : AppColors.electricViolet,
                                 ),
-                                child: Text(
-                                  isDoneState ? 'DONE' : 'SYNC',
-                                  style: TextStyle(
-                                    color: isDoneState
-                                        ? AppColors.success
-                                        : AppColors.electricViolet,
-                                    fontSize: 8,
-                                    fontWeight: FontWeight.w800,
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                    vertical: 1,
                                   ),
-                                ),
-                              ),
-                              Container(
-                                width: 14,
-                                height: 14,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.skyBlue,
-                                ),
-                                child: const Center(
+                                  decoration: BoxDecoration(
+                                    color: isDoneState
+                                        ? AppColors.success.withValues(
+                                            alpha: 0.2,
+                                          )
+                                        : AppColors.electricViolet.withValues(
+                                            alpha: 0.15,
+                                          ),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
                                   child: Text(
-                                    'JD',
+                                    isDoneState ? 'DONE' : 'SYNC',
                                     style: TextStyle(
-                                      fontSize: 7,
+                                      color: isDoneState
+                                          ? AppColors.success
+                                          : AppColors.electricViolet,
+                                      fontSize: 8,
                                       fontWeight: FontWeight.w800,
-                                      color: Color(0xFF0F172A),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                                Container(
+                                  width: 14,
+                                  height: 14,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.skyBlue,
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'JD',
+                                      style: TextStyle(
+                                        fontSize: 7,
+                                        fontWeight: FontWeight.w800,
+                                        color: Color(0xFF0F172A),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -320,61 +325,64 @@ class _KanbanVisualState extends State<KanbanVisual>
           Positioned(
             top: -10,
             right: 4,
-            child:
-                Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF0284C7), Color(0xFF22C55E)],
+            child: RepaintBoundary(
+              child:
+                  Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
                         ),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.success.withValues(alpha: 0.35),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF0284C7), Color(0xFF22C55E)],
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.trending_up_rounded,
-                            size: 14,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            'Sprint 14 · 92% Done',
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 10,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.success.withValues(alpha: 0.35),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.trending_up_rounded,
+                              size: 14,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Sprint 14 · 92% Done',
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                      .animate(
+                        onPlay: (controller) =>
+                            controller.repeat(reverse: true),
+                      )
+                      .moveY(
+                        begin: 0,
+                        end: -4,
+                        duration: 1600.ms,
+                        curve: Curves.easeInOut,
+                      )
+                      .animate()
+                      .fadeIn(duration: 400.ms, delay: 350.ms)
+                      .scale(
+                        duration: 400.ms,
+                        delay: 350.ms,
+                        curve: Curves.easeOutBack,
                       ),
-                    )
-                    .animate(
-                      onPlay: (controller) => controller.repeat(reverse: true),
-                    )
-                    .moveY(
-                      begin: 0,
-                      end: -4,
-                      duration: 1600.ms,
-                      curve: Curves.easeInOut,
-                    )
-                    .animate()
-                    .fadeIn(duration: 400.ms, delay: 350.ms)
-                    .scale(
-                      duration: 400.ms,
-                      delay: 350.ms,
-                      curve: Curves.easeOutBack,
-                    ),
+            ),
           ),
         ],
       ),

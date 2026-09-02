@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 
@@ -32,8 +31,8 @@ class VisualCanvasCard extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: isDark
               ? [
-                  AppColors.surfaceContainerHigh.withValues(alpha: 0.7),
-                  AppColors.surfaceContainerLow.withValues(alpha: 0.85),
+                  AppColors.surfaceContainerHigh.withValues(alpha: 0.85),
+                  AppColors.surfaceContainerLow.withValues(alpha: 0.95),
                 ]
               : [AppColors.lightSurface, AppColors.lightSurfaceContainer],
         ),
@@ -56,66 +55,60 @@ class VisualCanvasCard extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(27),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              // Subtle background blueprint grid
-              CustomPaint(
-                painter: _GridBackgroundPainter(
-                  gridColor: isDark
-                      ? Colors.white.withValues(alpha: 0.035)
-                      : Colors.black.withValues(alpha: 0.03),
-                ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // Subtle background blueprint grid
+            CustomPaint(
+              painter: _GridBackgroundPainter(
+                gridColor: isDark
+                    ? Colors.white.withValues(alpha: 0.035)
+                    : Colors.black.withValues(alpha: 0.03),
               ),
+            ),
 
-              // Ambient soft radial gradient behind content
-              Positioned(
-                top: -40,
-                right: -40,
-                child: Container(
-                  width: 180,
-                  height: 180,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        primaryGlow.withValues(alpha: isDark ? 0.22 : 0.12),
-                        Colors.transparent,
-                      ],
-                    ),
+            // Ambient soft radial gradient behind content
+            Positioned(
+              top: -40,
+              right: -40,
+              child: Container(
+                width: 180,
+                height: 180,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      primaryGlow.withValues(alpha: isDark ? 0.22 : 0.12),
+                      Colors.transparent,
+                    ],
                   ),
                 ),
               ),
-              Positioned(
-                bottom: -40,
-                left: -40,
-                child: Container(
-                  width: 160,
-                  height: 160,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: RadialGradient(
-                      colors: [
-                        secondaryGlow.withValues(alpha: isDark ? 0.18 : 0.10),
-                        Colors.transparent,
-                      ],
-                    ),
+            ),
+            Positioned(
+              bottom: -40,
+              left: -40,
+              child: Container(
+                width: 160,
+                height: 160,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      secondaryGlow.withValues(alpha: isDark ? 0.18 : 0.10),
+                      Colors.transparent,
+                    ],
                   ),
                 ),
               ),
+            ),
 
-              // Foreground content
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
-                  vertical: 16,
-                ),
-                child: child,
-              ),
-            ],
-          ),
+            // Foreground content
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+              child: child,
+            ),
+          ],
         ),
       ),
     );
