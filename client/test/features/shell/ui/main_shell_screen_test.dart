@@ -14,6 +14,10 @@ import 'package:client/features/projects/ui/projects_screen.dart';
 import 'package:client/features/shell/ui/main_shell_screen.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar.dart';
 import 'package:client/features/shell/ui/widgets/mobile_bottom_nav.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
+import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
+import 'package:client/features/workspaces/data/models/workspace_dto.dart';
+import 'package:client/features/workspaces/data/workspace_repository.dart';
 
 class _FakeAuthRepository implements AuthRepository {
   @override
@@ -53,6 +57,35 @@ class _FakeSecureStorageService extends SecureStorageService {
   Future<void> clearTokens() async {}
 }
 
+class _FakeWorkspaceRepository implements WorkspaceRepository {
+  @override
+  Future<List<WorkspaceDto>> getWorkspaces() async => [
+        const WorkspaceDto(
+          id: 1,
+          name: 'Engineering Team',
+          description: 'Core dev',
+          membership: WorkspaceMembershipDto(role: 'Owner'),
+        ),
+      ];
+
+  @override
+  Future<WorkspaceDto> getWorkspace(int id) async => const WorkspaceDto(
+        id: 1,
+        name: 'Engineering Team',
+        description: 'Core dev',
+        membership: WorkspaceMembershipDto(role: 'Owner'),
+      );
+
+  @override
+  Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async =>
+      WorkspaceDto(
+        id: 2,
+        name: request.name,
+        description: request.description,
+        membership: const WorkspaceMembershipDto(role: 'Owner'),
+      );
+}
+
 void main() {
   setUp(() async {
     await getIt.reset();
@@ -65,6 +98,10 @@ void main() {
     final secureStorage = _FakeSecureStorageService();
     final authCubit = AppAuthCubit(authRepo, secureStorage, prefs);
     getIt.registerSingleton<AppAuthCubit>(authCubit);
+
+    final workspaceRepo = _FakeWorkspaceRepository();
+    final workspaceCubit = WorkspaceContextCubit(workspaceRepo, prefs);
+    getIt.registerSingleton<WorkspaceContextCubit>(workspaceCubit);
   });
 
   tearDown(() async {

@@ -14,7 +14,7 @@ class WorkspaceContextCubit extends Cubit<WorkspaceContextState> {
   final PrefsService _prefs;
 
   WorkspaceContextCubit(this._repository, this._prefs)
-      : super(const WorkspaceContextState.initial());
+    : super(const WorkspaceContextState.initial());
 
   Future<void> loadWorkspaces() async {
     emit(const WorkspaceContextState.loading());
@@ -29,10 +29,12 @@ class WorkspaceContextCubit extends Cubit<WorkspaceContextState> {
       if (workspaces.length == 1) {
         final single = workspaces.first;
         await _prefs.setActiveWorkspaceId(single.id);
-        emit(WorkspaceContextState.loaded(
-          workspaces: workspaces,
-          activeWorkspace: single,
-        ));
+        emit(
+          WorkspaceContextState.loaded(
+            workspaces: workspaces,
+            activeWorkspace: single,
+          ),
+        );
         return;
       }
 
@@ -45,10 +47,12 @@ class WorkspaceContextCubit extends Cubit<WorkspaceContextState> {
       final active = matched ?? workspaces.first;
       await _prefs.setActiveWorkspaceId(active.id);
 
-      emit(WorkspaceContextState.loaded(
-        workspaces: workspaces,
-        activeWorkspace: active,
-      ));
+      emit(
+        WorkspaceContextState.loaded(
+          workspaces: workspaces,
+          activeWorkspace: active,
+        ),
+      );
     } on AppException catch (e) {
       emit(WorkspaceContextState.error(e.message));
     } catch (_) {
@@ -64,10 +68,12 @@ class WorkspaceContextCubit extends Cubit<WorkspaceContextState> {
     if (currentWorkspaces == null) return;
 
     await _prefs.setActiveWorkspaceId(workspace.id);
-    emit(WorkspaceContextState.loaded(
-      workspaces: currentWorkspaces,
-      activeWorkspace: workspace,
-    ));
+    emit(
+      WorkspaceContextState.loaded(
+        workspaces: currentWorkspaces,
+        activeWorkspace: workspace,
+      ),
+    );
   }
 
   Future<void> createWorkspace(CreateWorkspaceRequest request) async {
@@ -82,10 +88,12 @@ class WorkspaceContextCubit extends Cubit<WorkspaceContextState> {
       final updatedList = [...currentWorkspaces, created];
       await _prefs.setActiveWorkspaceId(created.id);
 
-      emit(WorkspaceContextState.loaded(
-        workspaces: updatedList,
-        activeWorkspace: created,
-      ));
+      emit(
+        WorkspaceContextState.loaded(
+          workspaces: updatedList,
+          activeWorkspace: created,
+        ),
+      );
     } on AppException catch (e) {
       emit(WorkspaceContextState.error(e.message));
     } catch (_) {
