@@ -7,8 +7,6 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
-import 'package:client/features/profile/ui/widgets/profile_identity_card.dart';
-import 'package:client/features/profile/ui/widgets/session_security_card.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -41,7 +39,7 @@ class ProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'User Profile & Settings',
+                  'Profile & Settings',
                   style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                     letterSpacing: -0.5,
@@ -49,29 +47,79 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Manage your account credentials, security sessions, and preferences.',
+                  'Account credentials, session security, and preferences.',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: AppColors.textSecondary,
                   ),
                 ),
-                const SizedBox(height: 24),
-
-                // ── Profile Identity Card ──
-                ProfileIdentityCard(user: user),
-                const SizedBox(height: 24),
-
-                // ── Session & Security Details ──
-                const SessionSecurityCard(),
                 const SizedBox(height: 32),
 
-                // ── Logout Action ──
-                ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 240),
-                  child: AppButton(
-                    label: 'Log Out',
-                    icon: Icons.logout_rounded,
-                    variant: AppButtonVariant.outline,
-                    onPressed: () => _onLogout(context),
+                // ── Centered Profile Placeholder Card ──
+                Center(
+                  child: Container(
+                    constraints: const BoxConstraints(maxWidth: 480),
+                    padding: const EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                      color:
+                          AppColors.surfaceContainerLow.withValues(alpha: 0.85),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: AppColors.border.withValues(alpha: 0.6),
+                        width: 1,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.primary.withValues(alpha: 0.15),
+                            border: Border.all(
+                              color: AppColors.primary.withValues(alpha: 0.5),
+                              width: 2,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              (user?.name.isNotEmpty == true)
+                                  ? user!.name[0].toUpperCase()
+                                  : 'U',
+                              style: theme.textTheme.headlineSmall?.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          user?.name ?? 'ProjectHub User',
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          user?.email ?? '',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 28),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 200),
+                          child: AppButton(
+                            label: 'Log Out',
+                            icon: Icons.logout_rounded,
+                            variant: AppButtonVariant.outline,
+                            onPressed: () => _onLogout(context),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

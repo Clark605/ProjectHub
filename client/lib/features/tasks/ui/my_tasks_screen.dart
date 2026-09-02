@@ -1,21 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/widgets/app_button.dart';
-import 'package:client/features/tasks/ui/widgets/task_card_widget.dart';
-import 'package:client/features/tasks/ui/widgets/task_section_widget.dart';
-import 'package:client/features/tasks/ui/widgets/tasks_tab_switcher.dart';
 
-class MyTasksScreen extends StatefulWidget {
+class MyTasksScreen extends StatelessWidget {
   const MyTasksScreen({super.key});
-
-  @override
-  State<MyTasksScreen> createState() => _MyTasksScreenState();
-}
-
-class _MyTasksScreenState extends State<MyTasksScreen> {
-  String _activeTab = 'Assigned to Me';
-  final List<String> _tabs = ['Assigned to Me', 'Created by Me', 'Completed'];
 
   @override
   Widget build(BuildContext context) {
@@ -26,121 +14,93 @@ class _MyTasksScreenState extends State<MyTasksScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Header & Action ──
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'My Tasks',
-                      style: theme.textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Daily focus, urgent blockers, and sprint deliverables assigned to you.',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
+          Text(
+            'My Tasks',
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.5,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Personal sprint backlog and assigned deliverables.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // ── Placeholder Card ──
+          Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 480),
+              padding: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceContainerLow.withValues(alpha: 0.8),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: AppColors.border.withValues(alpha: 0.6),
+                  width: 1,
                 ),
               ),
-              const SizedBox(width: 16),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 140),
-                child: AppButton(
-                  label: 'Add Task',
-                  icon: Icons.add_task_rounded,
-                  onPressed: () {},
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: AppColors.skyBlue.withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.skyBlue.withValues(alpha: 0.4),
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.task_alt_rounded,
+                      color: AppColors.skyBlue,
+                      size: 32,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    'Personal Task Focus',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Aggregated task assignment triage and drag-to-complete workflows will be active in Milestone 4.',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textSecondary,
+                      height: 1.4,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceContainerHigh,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: AppColors.border,
+                      ),
+                    ),
+                    child: const Text(
+                      'Milestone 4 Feature',
+                      style: TextStyle(
+                        color: AppColors.skyBlue,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // ── Tab Switcher ──
-          TasksTabSwitcher(
-            activeTab: _activeTab,
-            tabs: _tabs,
-            onTabSelected: (tab) => setState(() => _activeTab = tab),
-          ),
-          const SizedBox(height: 24),
-
-          // ── Section 1: Urgent & Blocker Items ──
-          const TaskSectionWidget(
-            title: '🚨 Urgent & High Priority',
-            color: AppColors.priorityUrgent,
-            tasks: [
-              UserTaskItem(
-                title: 'Implement Refresh Token Queue Interceptor',
-                project: 'Mobile Client v1',
-                status: 'In Progress',
-                statusColor: AppColors.skyBlue,
-                priority: 'Urgent',
-                priorityColor: AppColors.priorityUrgent,
-                dueDate: 'Due Today',
-              ),
-              UserTaskItem(
-                title: 'Resolve Multi-Session Refresh Token Cascade',
-                project: 'Backend API 10',
-                status: 'Todo',
-                statusColor: AppColors.electricViolet,
-                priority: 'High',
-                priorityColor: AppColors.priorityHigh,
-                dueDate: 'Tomorrow',
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-
-          // ── Section 2: In Progress & Active Tasks ──
-          const TaskSectionWidget(
-            title: '⚡ In Progress',
-            color: AppColors.skyBlue,
-            tasks: [
-              UserTaskItem(
-                title: 'Build Responsive Shell with Fixed 240px Sidebar',
-                project: 'Mobile Client v1',
-                status: 'In Progress',
-                statusColor: AppColors.skyBlue,
-                priority: 'Medium',
-                priorityColor: AppColors.priorityMedium,
-                dueDate: 'Sep 04',
-              ),
-              UserTaskItem(
-                title: 'Draft Workspace Switcher & 2-Step Quickstart Modal',
-                project: 'Design Systems',
-                status: 'In Progress',
-                statusColor: AppColors.skyBlue,
-                priority: 'Medium',
-                priorityColor: AppColors.priorityMedium,
-                dueDate: 'Sep 05',
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-
-          // ── Section 3: Up Next (Todo) ──
-          const TaskSectionWidget(
-            title: '📋 Up Next in Sprint',
-            color: AppColors.electricViolet,
-            tasks: [
-              UserTaskItem(
-                title: 'Integrate PostgreSQL Migration Health Check',
-                project: 'Backend API 10',
-                status: 'Todo',
-                statusColor: AppColors.electricViolet,
-                priority: 'Low',
-                priorityColor: AppColors.priorityLow,
-                dueDate: 'Sep 10',
-              ),
-            ],
+            ),
           ),
         ],
       ),

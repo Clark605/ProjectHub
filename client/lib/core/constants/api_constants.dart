@@ -24,7 +24,7 @@ class ApiConstants {
     if (kIsWeb) return 'http://127.0.0.1:5259';
     if (Platform.isAndroid) {
       return isPhysicalDevice
-          ? 'http://192.168.1.8:5259' // Real Android device (LAN IP)
+          ? 'http://192.168.116.1:5259' // Real Android device (LAN IP)
           : 'http://10.0.2.2:5259'; // Android emulator (host loopback)
     }
     return 'http://127.0.0.1:5259'; // iOS simulator / Desktop
