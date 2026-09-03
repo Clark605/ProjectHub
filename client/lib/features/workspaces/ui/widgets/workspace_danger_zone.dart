@@ -100,9 +100,7 @@ class WorkspaceDangerZone extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.surfaceContainer,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.error.withValues(alpha: 0.4),
-            ),
+            border: Border.all(color: AppColors.error.withValues(alpha: 0.4)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

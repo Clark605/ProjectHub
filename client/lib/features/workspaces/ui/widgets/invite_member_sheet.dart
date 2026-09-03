@@ -15,10 +15,8 @@ class InviteMemberSheet extends StatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => BlocProvider.value(
-        value: cubit,
-        child: const InviteMemberSheet(),
-      ),
+      builder: (_) =>
+          BlocProvider.value(value: cubit, child: const InviteMemberSheet()),
     );
   }
 
@@ -51,12 +49,14 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
       child: BlocConsumer<WorkspaceSettingsCubit, WorkspaceSettingsState>(
         listener: (context, state) {
           if (state is WorkspaceSettingsLoaded &&
-              state.actionSuccessMessage == 'memberAdded') {
+              (state.actionSuccessMessage?.startsWith('memberAdded') ??
+                  false)) {
             Navigator.of(context).pop();
           }
         },
         builder: (context, state) {
-          final isInviting = state is WorkspaceSettingsLoaded && state.isInviting;
+          final isInviting =
+              state is WorkspaceSettingsLoaded && state.isInviting;
 
           return Form(
             key: _formKey,
@@ -96,7 +96,10 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
                   decoration: InputDecoration(
                     labelText: l10n.email,
                     hintText: l10n.emailPlaceholder,
-                    prefixIcon: const Icon(Icons.mail_outline_rounded, size: 20),
+                    prefixIcon: const Icon(
+                      Icons.mail_outline_rounded,
+                      size: 20,
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -117,9 +120,9 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
                         ? null
                         : () {
                             if (_formKey.currentState?.validate() ?? false) {
-                              context.read<WorkspaceSettingsCubit>().inviteMember(
-                                    _emailController.text.trim(),
-                                  );
+                              context
+                                  .read<WorkspaceSettingsCubit>()
+                                  .inviteMember(_emailController.text.trim());
                             }
                           },
                     child: isInviting

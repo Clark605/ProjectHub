@@ -61,9 +61,7 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
           decoration: BoxDecoration(
             color: AppColors.surfaceContainer,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.border.withValues(alpha: 0.6),
-            ),
+            border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
           ),
           child: Form(
             key: _formKey,
@@ -116,7 +114,9 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                         ? null
                         : () {
                             if (_formKey.currentState?.validate() ?? false) {
-                              context.read<WorkspaceSettingsCubit>().updateDetails(
+                              context
+                                  .read<WorkspaceSettingsCubit>()
+                                  .updateDetails(
                                     _nameController.text.trim(),
                                     _descController.text.trim(),
                                   );

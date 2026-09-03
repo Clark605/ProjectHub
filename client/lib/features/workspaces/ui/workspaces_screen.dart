@@ -3,31 +3,64 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/routes/route_names.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_danger_zone.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_details_card.dart';
+import 'package:client/features/workspaces/ui/widgets/workspace_error_banner.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_members_card.dart';
+import 'package:client/features/workspaces/ui/widgets/workspace_settings_skeleton.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class WorkspacesScreen extends StatelessWidget {
   final WorkspaceSettingsCubit? cubit;
-  const WorkspacesScreen({super.key, this.cubit});
+  final WorkspaceContextCubit? contextCubit;
+
+  const WorkspacesScreen({super.key, this.cubit, this.contextCubit});
+
+  static WorkspaceContextCubit? _findContextCubit(BuildContext context) {
+    try {
+      return context.read<WorkspaceContextCubit>();
+    } catch (_) {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    Widget content = const _WorkspaceSettingsView();
+
     if (cubit != null) {
-      return BlocProvider<WorkspaceSettingsCubit>.value(
+      content = BlocProvider<WorkspaceSettingsCubit>.value(
         value: cubit!,
-        child: const _WorkspaceSettingsView(),
+        child: content,
+      );
+    } else {
+      content = BlocProvider<WorkspaceSettingsCubit>(
+        create: (_) => getIt<WorkspaceSettingsCubit>(),
+        child: content,
       );
     }
-    return BlocProvider(
-      create: (_) => getIt<WorkspaceSettingsCubit>(),
-      child: const _WorkspaceSettingsView(),
-    );
+
+    final effectiveContextCubit =
+        contextCubit ??
+        _findContextCubit(context) ??
+        (getIt.isRegistered<WorkspaceContextCubit>()
+            ? getIt<WorkspaceContextCubit>()
+            : null);
+
+    if (effectiveContextCubit != null) {
+      content = BlocProvider<WorkspaceContextCubit>.value(
+        value: effectiveContextCubit,
+        child: content,
+      );
+    }
+
+    return content;
   }
 }
 
@@ -45,8 +78,8 @@ class _WorkspaceSettingsViewState extends State<_WorkspaceSettingsView> {
     final cubit = context.read<WorkspaceSettingsCubit>();
     if (cubit.state is WorkspaceSettingsInitial) {
       final active = context.read<WorkspaceContextCubit>().state.mapOrNull(
-            loaded: (s) => s.activeWorkspace,
-          );
+        loaded: (s) => s.activeWorkspace,
+      );
       if (active != null) {
         cubit.loadSettings(active.id);
       }
@@ -57,10 +90,10 @@ class _WorkspaceSettingsViewState extends State<_WorkspaceSettingsView> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final activeWorkspace =
-        context.watch<WorkspaceContextCubit>().state.mapOrNull(
-              loaded: (s) => s.activeWorkspace,
-            );
+    final activeWorkspace = context
+        .watch<WorkspaceContextCubit>()
+        .state
+        .mapOrNull(loaded: (s) => s.activeWorkspace);
 
     final isOwner = activeWorkspace?.membership?.role.toLowerCase() == 'owner';
 
@@ -73,8 +106,10 @@ class _WorkspaceSettingsViewState extends State<_WorkspaceSettingsView> {
               padding: const EdgeInsets.only(right: 16),
               child: Center(
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
@@ -128,35 +163,37 @@ class _WorkspaceSettingsViewState extends State<_WorkspaceSettingsView> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(l10n.workspaceDeleted)),
                   );
-                  Navigator.of(context).pop();
+                  Navigator.of(
+                    context,
+                  ).pushNamedAndRemoveUntil(RouteNames.shell, (route) => false);
                 } else if (state is WorkspaceSettingsLoaded) {
                   if (state.actionSuccessMessage != null) {
-                    final msg = state.actionSuccessMessage == 'detailsUpdated'
-                        ? l10n.detailsUpdated
-                        : state.actionSuccessMessage == 'memberAdded'
-                            ? l10n.memberAdded
-                            : state.actionSuccessMessage == 'memberRemoved'
-                                ? l10n.memberRemoved
-                                : state.actionSuccessMessage!;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(msg)),
-                    );
-                    context.read<WorkspaceSettingsCubit>().clearMessages();
-                  }
-                  if (state.errorMessage != null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.errorMessage!),
-                        backgroundColor: AppColors.error,
-                      ),
-                    );
+                    final raw = state.actionSuccessMessage!;
+                    final String msg;
+                    if (raw.startsWith('memberAddedWithEmail:')) {
+                      final email = raw.substring(
+                        'memberAddedWithEmail:'.length,
+                      );
+                      msg = l10n.memberAddedWithEmail(email);
+                    } else if (raw == 'detailsUpdated') {
+                      msg = l10n.detailsUpdated;
+                    } else if (raw == 'memberAdded') {
+                      msg = l10n.memberAdded;
+                    } else if (raw == 'memberRemoved') {
+                      msg = l10n.memberRemoved;
+                    } else {
+                      msg = raw;
+                    }
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(msg)));
                     context.read<WorkspaceSettingsCubit>().clearMessages();
                   }
                 }
               },
               builder: (context, state) {
                 if (state is WorkspaceSettingsLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const WorkspaceSettingsSkeleton();
                 }
                 if (state is WorkspaceSettingsError) {
                   return Center(
@@ -170,7 +207,10 @@ class _WorkspaceSettingsViewState extends State<_WorkspaceSettingsView> {
                             if (activeWorkspace != null) {
                               context
                                   .read<WorkspaceSettingsCubit>()
-                                  .loadSettings(activeWorkspace.id);
+                                  .loadSettings(
+                                    activeWorkspace.id,
+                                    forceRefresh: true,
+                                  );
                             }
                           },
                           child: Text(l10n.retry),
@@ -180,22 +220,35 @@ class _WorkspaceSettingsViewState extends State<_WorkspaceSettingsView> {
                   );
                 }
 
-                return SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-                  child: Center(
-                    child: Container(
-                      constraints: const BoxConstraints(maxWidth: 800),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          WorkspaceDetailsCard(),
-                          SizedBox(height: 24),
-                          WorkspaceMembersCard(),
-                          SizedBox(height: 24),
-                          WorkspaceDangerZone(),
-                          SizedBox(height: 40),
-                        ],
+                final isRevalidating =
+                    state is WorkspaceSettingsLoaded && state.isRevalidating;
+                final errorMessage = state is WorkspaceSettingsLoaded
+                    ? state.errorMessage
+                    : null;
+
+                return Skeletonizer(
+                  enabled: isRevalidating,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 24,
+                    ),
+                    child: Center(
+                      child: Container(
+                        constraints: const BoxConstraints(maxWidth: 800),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (errorMessage != null)
+                              WorkspaceErrorBanner(message: errorMessage),
+                            const WorkspaceDetailsCard(),
+                            const SizedBox(height: 24),
+                            const WorkspaceMembersCard(),
+                            const SizedBox(height: 24),
+                            const WorkspaceDangerZone(),
+                            const SizedBox(height: 40),
+                          ],
+                        ),
                       ),
                     ),
                   ),

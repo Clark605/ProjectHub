@@ -24,25 +24,18 @@ class WorkspaceMembersCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.surfaceContainer,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.border.withValues(alpha: 0.6),
-            ),
+            border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    Text(
-                      l10n.teamMembers,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isNarrow = constraints.maxWidth < 400;
+
+                    final badge = Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
                         vertical: 2,
@@ -59,14 +52,57 @@ class WorkspaceMembersCard extends StatelessWidget {
                           color: AppColors.textSecondary,
                         ),
                       ),
-                    ),
-                    const Spacer(),
-                    TextButton.icon(
+                    );
+
+                    final actionButton = TextButton.icon(
                       onPressed: () => InviteMemberSheet.show(context),
                       icon: const Icon(Icons.person_add_outlined, size: 18),
                       label: Text(l10n.addMember),
-                    ),
-                  ],
+                    );
+
+                    if (isNarrow) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  l10n.teamMembers,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              badge,
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          actionButton,
+                        ],
+                      );
+                    }
+
+                    return Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            l10n.teamMembers,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        badge,
+                        const Spacer(),
+                        actionButton,
+                      ],
+                    );
+                  },
                 ),
               ),
               const Divider(height: 1, color: AppColors.border),
@@ -99,7 +135,9 @@ class _MemberTile extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final isOwner = member.role.toLowerCase() == 'owner';
     final initials = member.name.isNotEmpty
-        ? member.name.substring(0, member.name.length >= 2 ? 2 : 1).toUpperCase()
+        ? member.name
+              .substring(0, member.name.length >= 2 ? 2 : 1)
+              .toUpperCase()
         : 'U';
 
     return ListTile(
@@ -121,10 +159,14 @@ class _MemberTile extends StatelessWidget {
       title: Text(
         member.name,
         style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
       subtitle: Text(
         member.email,
         style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -158,7 +200,9 @@ class _MemberTile extends StatelessWidget {
               color: AppColors.error,
               tooltip: l10n.removeMember,
               onPressed: () {
-                context.read<WorkspaceSettingsCubit>().removeMember(member.userId);
+                context.read<WorkspaceSettingsCubit>().removeMember(
+                  member.userId,
+                );
               },
             ),
           ],

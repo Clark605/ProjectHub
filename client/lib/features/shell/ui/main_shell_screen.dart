@@ -54,7 +54,15 @@ class _MainShellScreenState extends State<MainShellScreen> {
   }
 
   void _onWorkspaceTap() {
-    WorkspaceSwitcherSheet.show(context);
+    final hasWorkspaces = getIt<WorkspaceContextCubit>().state.maybeWhen(
+      loaded: (workspaces, _) => workspaces.isNotEmpty,
+      orElse: () => false,
+    );
+    if (hasWorkspaces) {
+      WorkspaceSwitcherSheet.show(context);
+    } else {
+      QuickStartDialog.show(context);
+    }
   }
 
   void _onSettingsTap() {
@@ -80,16 +88,14 @@ class _MainShellScreenState extends State<MainShellScreen> {
       value: getIt<WorkspaceContextCubit>(),
       child: BlocConsumer<WorkspaceContextCubit, WorkspaceContextState>(
         listener: (context, state) {
-          state.whenOrNull(
-            empty: () => QuickStartDialog.show(context),
-          );
+          state.whenOrNull(empty: () => QuickStartDialog.show(context));
         },
         builder: (context, workspaceState) {
           final activeWorkspace = workspaceState.whenOrNull(
             loaded: (_, active) => active,
           );
-          final wsName = activeWorkspace?.name ?? 'Workspace';
-          final wsRole = activeWorkspace?.membership?.role ?? 'Member';
+          final wsName = activeWorkspace?.name;
+          final wsRole = activeWorkspace?.membership?.role;
 
           return SafeArea(
             child: AmbientGlowBackground(
