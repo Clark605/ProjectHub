@@ -98,65 +98,12 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Icon Header
-                Center(
-                  child: Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.15),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.hub_rounded,
-                      color: AppColors.primary,
-                      size: 26,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Welcome Header
-                Text(
-                  l10n.quickStartWelcome,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  l10n.quickStartSubtitle,
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                _buildHeader(theme, l10n),
                 const SizedBox(height: 24),
-
-                // Error Message if any
                 if (_errorMessage != null) ...[
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: AppColors.error.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppColors.error),
-                    ),
-                    child: Text(
-                      _errorMessage!,
-                      style: const TextStyle(
-                        color: AppColors.error,
-                        fontSize: 13,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  _buildErrorBanner(),
                   const SizedBox(height: 16),
                 ],
-
-                // Workspace Name Input
                 AppTextField(
                   label: l10n.workspaceName,
                   hintText: l10n.workspaceNamePlaceholder,
@@ -174,8 +121,6 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
                   },
                 ),
                 const SizedBox(height: 16),
-
-                // Description Input
                 AppTextField(
                   label: l10n.workspaceDescription,
                   hintText: l10n.workspaceDescriptionPlaceholder,
@@ -185,8 +130,6 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
                   textInputAction: TextInputAction.done,
                 ),
                 const SizedBox(height: 28),
-
-                // CTA Button
                 AppButton(
                   label: l10n.getStarted,
                   isLoading: _isLoading,
@@ -197,6 +140,59 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildHeader(ThemeData theme, AppLocalizations l10n) {
+    return Column(
+      children: [
+        Container(
+          width: 52,
+          height: 52,
+          decoration: BoxDecoration(
+            color: AppColors.primary.withValues(alpha: 0.15),
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(
+            Icons.hub_rounded,
+            color: AppColors.primary,
+            size: 26,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          l10n.quickStartWelcome,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w800,
+            color: AppColors.textPrimary,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 6),
+        Text(
+          l10n.quickStartSubtitle,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: AppColors.textSecondary,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildErrorBanner() {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: AppColors.error.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.error),
+      ),
+      child: Text(
+        _errorMessage!,
+        style: const TextStyle(color: AppColors.error, fontSize: 13),
+        textAlign: TextAlign.center,
       ),
     );
   }

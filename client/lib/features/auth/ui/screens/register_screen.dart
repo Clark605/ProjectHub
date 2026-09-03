@@ -66,7 +66,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             success: (_) {
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                RouteNames.workspaces,
+                RouteNames.shell,
                 (route) => false,
               );
             },

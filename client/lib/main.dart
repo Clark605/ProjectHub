@@ -41,7 +41,7 @@ void main() async {
 
   final String initialRoute;
   if (isAuthenticated) {
-    initialRoute = RouteNames.workspaces;
+    initialRoute = RouteNames.shell;
   } else if (prefs.hasSeenOnboarding) {
     initialRoute = RouteNames.login;
   } else {

@@ -9,8 +9,8 @@ import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
 import 'package:client/features/auth/data/models/user.dart';
-import 'package:client/features/dashboard/ui/dashboard_screen.dart';
 import 'package:client/features/projects/ui/projects_screen.dart';
+import 'package:client/features/tasks/ui/my_tasks_screen.dart';
 import 'package:client/features/shell/ui/main_shell_screen.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar.dart';
 import 'package:client/features/shell/ui/widgets/mobile_bottom_nav.dart';
@@ -38,8 +38,7 @@ class _FakeAuthRepository implements AuthRepository {
   @override
   Future<ForgotPasswordResponseDto> forgotPassword(
     ForgotPasswordDto dto,
-  ) async =>
-      const ForgotPasswordResponseDto(message: 'Reset sent');
+  ) async => const ForgotPasswordResponseDto(message: 'Reset sent');
 
   @override
   Future<void> resetPassword(ResetPasswordDto dto) async {}
@@ -51,8 +50,10 @@ class _FakeSecureStorageService extends SecureStorageService {
   @override
   Future<String?> getRefreshToken() async => 'fake-refresh';
   @override
-  Future<void> saveTokens(
-          {required String accessToken, required String refreshToken}) async {}
+  Future<void> saveTokens({
+    required String accessToken,
+    required String refreshToken,
+  }) async {}
   @override
   Future<void> clearTokens() async {}
 }
@@ -60,21 +61,21 @@ class _FakeSecureStorageService extends SecureStorageService {
 class _FakeWorkspaceRepository implements WorkspaceRepository {
   @override
   Future<List<WorkspaceDto>> getWorkspaces() async => [
-        const WorkspaceDto(
-          id: 1,
-          name: 'Engineering Team',
-          description: 'Core dev',
-          membership: WorkspaceMembershipDto(role: 'Owner'),
-        ),
-      ];
+    const WorkspaceDto(
+      id: 1,
+      name: 'Engineering Team',
+      description: 'Core dev',
+      membership: WorkspaceMembershipDto(role: 'Owner'),
+    ),
+  ];
 
   @override
   Future<WorkspaceDto> getWorkspace(int id) async => const WorkspaceDto(
-        id: 1,
-        name: 'Engineering Team',
-        description: 'Core dev',
-        membership: WorkspaceMembershipDto(role: 'Owner'),
-      );
+    id: 1,
+    name: 'Engineering Team',
+    description: 'Core dev',
+    membership: WorkspaceMembershipDto(role: 'Owner'),
+  );
 
   @override
   Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async =>
@@ -108,63 +109,60 @@ void main() {
     await getIt.reset();
   });
 
-  testWidgets('MainShellScreen renders Desktop layout with DesktopSidebar',
-      (WidgetTester tester) async {
+  testWidgets('MainShellScreen renders Desktop layout with DesktopSidebar', (
+    WidgetTester tester,
+  ) async {
     // Set desktop screen size (1440x900)
     tester.view.physicalSize = const Size(1440, 900);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
 
     await tester.pumpWidget(
-      const MaterialApp(
-        home: MainShellScreen(initialIndex: 0),
-      ),
+      const MaterialApp(home: MainShellScreen(initialIndex: 0)),
     );
     await tester.pump(const Duration(milliseconds: 100));
 
-    // Verify DesktopSidebar & DashboardScreen render
+    // Verify DesktopSidebar & ProjectsScreen render
     expect(find.byType(DesktopSidebar), findsOneWidget);
-    expect(find.byType(DashboardScreen), findsOneWidget);
+    expect(find.byType(ProjectsScreen), findsOneWidget);
   });
 
-  testWidgets('MainShellScreen renders Mobile layout with MobileBottomNav',
-      (WidgetTester tester) async {
+  testWidgets('MainShellScreen renders Mobile layout with MobileBottomNav', (
+    WidgetTester tester,
+  ) async {
     // Set mobile screen size (400x800)
     tester.view.physicalSize = const Size(400, 800);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
 
     await tester.pumpWidget(
-      const MaterialApp(
-        home: MainShellScreen(initialIndex: 0),
-      ),
+      const MaterialApp(home: MainShellScreen(initialIndex: 0)),
     );
     await tester.pump(const Duration(milliseconds: 100));
 
-    // Verify MobileBottomNav & DashboardScreen render
+    // Verify MobileBottomNav & ProjectsScreen render
     expect(find.byType(MobileBottomNav), findsOneWidget);
-    expect(find.byType(DashboardScreen), findsOneWidget);
+    expect(find.byType(ProjectsScreen), findsOneWidget);
   });
 
-  testWidgets('MainShellScreen switches to Projects tab on selection',
-      (WidgetTester tester) async {
+  testWidgets('MainShellScreen switches to My Tasks tab on selection', (
+    WidgetTester tester,
+  ) async {
     tester.view.physicalSize = const Size(1440, 900);
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
 
     await tester.pumpWidget(
-      const MaterialApp(
-        home: MainShellScreen(initialIndex: 0),
-      ),
+      const MaterialApp(home: MainShellScreen(initialIndex: 0)),
     );
     await tester.pump(const Duration(milliseconds: 100));
 
-    expect(find.byType(DashboardScreen), findsOneWidget);
+    expect(find.byType(ProjectsScreen), findsOneWidget);
 
-    // Tap Projects tab in sidebar
-    await tester.tap(find.text('Projects').first);
+    // Tap My Tasks tab in sidebar
+    await tester.tap(find.text('My Tasks').first);
     await tester.pump(const Duration(milliseconds: 100));
 
-    expect(find.byType(ProjectsScreen), findsOneWidget);
+    expect(find.byType(MyTasksScreen), findsOneWidget);
   });
 }

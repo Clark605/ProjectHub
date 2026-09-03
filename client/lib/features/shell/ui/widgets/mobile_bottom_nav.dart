@@ -32,34 +32,26 @@ class MobileBottomNav extends StatelessWidget {
             children: [
               Expanded(
                 child: _BottomNavItem(
-                  icon: Icons.dashboard_rounded,
-                  label: 'Dashboard',
+                  icon: Icons.folder_rounded,
+                  label: 'Projects',
                   isSelected: selectedIndex == 0,
                   onTap: () => onItemSelected(0),
                 ),
               ),
               Expanded(
                 child: _BottomNavItem(
-                  icon: Icons.folder_rounded,
-                  label: 'Projects',
+                  icon: Icons.task_alt_rounded,
+                  label: 'My Tasks',
                   isSelected: selectedIndex == 1,
                   onTap: () => onItemSelected(1),
                 ),
               ),
               Expanded(
                 child: _BottomNavItem(
-                  icon: Icons.task_alt_rounded,
-                  label: 'My Tasks',
-                  isSelected: selectedIndex == 2,
-                  onTap: () => onItemSelected(2),
-                ),
-              ),
-              Expanded(
-                child: _BottomNavItem(
                   icon: Icons.person_rounded,
                   label: 'Profile',
-                  isSelected: selectedIndex == 3,
-                  onTap: () => onItemSelected(3),
+                  isSelected: selectedIndex == 2,
+                  onTap: () => onItemSelected(2),
                 ),
               ),
             ],

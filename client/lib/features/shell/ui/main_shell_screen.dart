@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
+import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
-import 'package:client/features/dashboard/ui/dashboard_screen.dart';
 import 'package:client/features/profile/ui/profile_screen.dart';
 import 'package:client/features/projects/ui/projects_screen.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar.dart';
@@ -14,6 +14,7 @@ import 'package:client/features/shell/ui/widgets/tablet_navigation_rail.dart';
 import 'package:client/features/tasks/ui/my_tasks_screen.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
+import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_switcher_sheet.dart';
 
 class MainShellScreen extends StatefulWidget {
@@ -36,6 +37,11 @@ class _MainShellScreenState extends State<MainShellScreen> {
     final cubit = getIt<WorkspaceContextCubit>();
     cubit.state.maybeWhen(
       initial: () => cubit.loadWorkspaces(),
+      empty: () {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) QuickStartDialog.show(context);
+        });
+      },
       orElse: () {},
     );
   }
@@ -51,24 +57,20 @@ class _MainShellScreenState extends State<MainShellScreen> {
     WorkspaceSwitcherSheet.show(context);
   }
 
+  void _onSettingsTap() {
+    Navigator.of(context).pushNamed(RouteNames.workspaces);
+  }
+
   Widget _buildBody() {
     switch (_selectedIndex) {
       case 0:
-        return DashboardScreen(
-          onNavigateToProjects: () => _onSelectTab(1),
-          onNavigateToMyTasks: () => _onSelectTab(2),
-        );
-      case 1:
         return const ProjectsScreen();
-      case 2:
+      case 1:
         return const MyTasksScreen();
-      case 3:
+      case 2:
         return const ProfileScreen();
       default:
-        return DashboardScreen(
-          onNavigateToProjects: () => _onSelectTab(1),
-          onNavigateToMyTasks: () => _onSelectTab(2),
-        );
+        return const ProjectsScreen();
     }
   }
 
@@ -76,7 +78,12 @@ class _MainShellScreenState extends State<MainShellScreen> {
   Widget build(BuildContext context) {
     return BlocProvider.value(
       value: getIt<WorkspaceContextCubit>(),
-      child: BlocBuilder<WorkspaceContextCubit, WorkspaceContextState>(
+      child: BlocConsumer<WorkspaceContextCubit, WorkspaceContextState>(
+        listener: (context, state) {
+          state.whenOrNull(
+            empty: () => QuickStartDialog.show(context),
+          );
+        },
         builder: (context, workspaceState) {
           final activeWorkspace = workspaceState.whenOrNull(
             loaded: (_, active) => active,
@@ -102,7 +109,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
                               activeWorkspaceName: wsName,
                               activeWorkspaceRole: wsRole,
                               onWorkspaceTap: _onWorkspaceTap,
-                              onProfileTap: () => _onSelectTab(3),
+                              onSettingsTap: _onSettingsTap,
+                              onProfileTap: () => _onSelectTab(2),
                             ),
                             Expanded(child: _buildBody()),
                           ],
@@ -133,9 +141,10 @@ class _MainShellScreenState extends State<MainShellScreen> {
                               activeWorkspaceName: wsName,
                               activeWorkspaceRole: wsRole,
                               onWorkspaceTap: _onWorkspaceTap,
+                              onSettingsTap: _onSettingsTap,
                               onOpenDrawer: () =>
                                   _scaffoldKey.currentState?.openDrawer(),
-                              onProfileTap: () => _onSelectTab(3),
+                              onProfileTap: () => _onSelectTab(2),
                             ),
                             Expanded(child: _buildBody()),
                           ],
@@ -157,8 +166,9 @@ class _MainShellScreenState extends State<MainShellScreen> {
                     activeWorkspaceName: wsName,
                     activeWorkspaceRole: wsRole,
                     onWorkspaceTap: _onWorkspaceTap,
+                    onSettingsTap: _onSettingsTap,
                     onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
-                    onProfileTap: () => _onSelectTab(3),
+                    onProfileTap: () => _onSelectTab(2),
                   ),
                   body: _buildBody(),
                   bottomNavigationBar: MobileBottomNav(
