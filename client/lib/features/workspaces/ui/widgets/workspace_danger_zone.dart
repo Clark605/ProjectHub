@@ -73,6 +73,8 @@ class WorkspaceDangerZone extends StatelessWidget {
                   onPressed: isConfirmed
                       ? () {
                           Navigator.of(dialogCtx).pop();
+                          Navigator.of(dialogCtx).pop();
+
                           cubit.deleteWorkspace();
                         }
                       : null,
