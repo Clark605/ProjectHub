@@ -37,8 +37,10 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
   Future<List<WorkspaceDto>> getWorkspaces() async => workspaces;
 
   @override
-  Future<WorkspaceDto> getWorkspace(int id) async =>
-      workspaces.firstWhere((w) => w.id == id);
+  Future<WorkspaceDto> getWorkspace(
+    int id, {
+    bool forceRefresh = false,
+  }) async => workspaces.firstWhere((w) => w.id == id);
 
   @override
   Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async {
@@ -66,7 +68,11 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
       workspaces[idx] = updated;
       return updated;
     }
-    return WorkspaceDto(id: id, name: request.name, description: request.description);
+    return WorkspaceDto(
+      id: id,
+      name: request.name,
+      description: request.description,
+    );
   }
 
   @override
@@ -75,23 +81,31 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
   }
 
   @override
-  Future<List<MemberDto>> getMembers(int workspaceId) async => [];
+  Future<List<MemberDto>> getMembers(
+    int workspaceId, {
+    bool forceRefresh = false,
+  }) async => [];
 
   @override
   Future<MemberDto> addMember(
     int workspaceId,
     AddMemberRequest request,
-  ) async =>
-      MemberDto(
-        userId: 'u_new',
-        name: 'New Member',
-        email: request.email,
-        role: 'Member',
-        joinedAt: DateTime.now(),
-      );
+  ) async => MemberDto(
+    userId: 'u_new',
+    name: 'New Member',
+    email: request.email,
+    role: 'Member',
+    joinedAt: DateTime.now(),
+  );
 
   @override
   Future<void> removeMember(int workspaceId, String userId) async {}
+
+  @override
+  bool hasCachedSettings(int workspaceId) => false;
+
+  @override
+  void clearCache([int? workspaceId]) {}
 }
 
 void main() {

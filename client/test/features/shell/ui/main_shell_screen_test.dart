@@ -21,6 +21,8 @@ import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
+import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class _FakeAuthRepository implements AuthRepository {
   @override
@@ -53,6 +55,8 @@ class _FakeSecureStorageService extends SecureStorageService {
   @override
   Future<String?> getRefreshToken() async => 'fake-refresh';
   @override
+  Future<bool> hasTokens() async => true;
+  @override
   Future<void> saveTokens({
     required String accessToken,
     required String refreshToken,
@@ -62,8 +66,7 @@ class _FakeSecureStorageService extends SecureStorageService {
 }
 
 class _FakeWorkspaceRepository implements WorkspaceRepository {
-  @override
-  Future<List<WorkspaceDto>> getWorkspaces() async => [
+  List<WorkspaceDto> workspaces = [
     const WorkspaceDto(
       id: 1,
       name: 'Engineering Team',
@@ -73,11 +76,20 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
   ];
 
   @override
-  Future<WorkspaceDto> getWorkspace(int id) async => const WorkspaceDto(
-    id: 1,
-    name: 'Engineering Team',
-    description: 'Core dev',
-    membership: WorkspaceMembershipDto(role: 'Owner'),
+  Future<List<WorkspaceDto>> getWorkspaces() async => workspaces;
+
+  @override
+  Future<WorkspaceDto> getWorkspace(
+    int id, {
+    bool forceRefresh = false,
+  }) async => workspaces.firstWhere(
+    (w) => w.id == id,
+    orElse: () => const WorkspaceDto(
+      id: 1,
+      name: 'Engineering Team',
+      description: 'Core dev',
+      membership: WorkspaceMembershipDto(role: 'Owner'),
+    ),
   );
 
   @override
@@ -93,35 +105,42 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
   Future<WorkspaceDto> updateWorkspace(
     int id,
     UpdateWorkspaceRequest request,
-  ) async =>
-      WorkspaceDto(
-        id: id,
-        name: request.name,
-        description: request.description,
-        membership: const WorkspaceMembershipDto(role: 'Owner'),
-      );
+  ) async => WorkspaceDto(
+    id: id,
+    name: request.name,
+    description: request.description,
+    membership: const WorkspaceMembershipDto(role: 'Owner'),
+  );
 
   @override
   Future<void> deleteWorkspace(int id) async {}
 
   @override
-  Future<List<MemberDto>> getMembers(int workspaceId) async => [];
+  Future<List<MemberDto>> getMembers(
+    int workspaceId, {
+    bool forceRefresh = false,
+  }) async => [];
 
   @override
   Future<MemberDto> addMember(
     int workspaceId,
     AddMemberRequest request,
-  ) async =>
-      MemberDto(
-        userId: 'u_new',
-        name: 'New Member',
-        email: request.email,
-        role: 'Member',
-        joinedAt: DateTime.now(),
-      );
+  ) async => MemberDto(
+    userId: 'u_new',
+    name: 'New Member',
+    email: request.email,
+    role: 'Member',
+    joinedAt: DateTime.now(),
+  );
 
   @override
   Future<void> removeMember(int workspaceId, String userId) async {}
+
+  @override
+  bool hasCachedSettings(int workspaceId) => false;
+
+  @override
+  void clearCache([int? workspaceId]) {}
 }
 
 void main() {
@@ -202,4 +221,69 @@ void main() {
 
     expect(find.byType(MyTasksScreen), findsOneWidget);
   });
+
+  testWidgets(
+    'MainShellScreen renders "Create Workspace" and no role badge when user has no workspaces',
+    (WidgetTester tester) async {
+      final sp = await SharedPreferences.getInstance();
+      final prefs = PrefsService(sp);
+      final emptyRepo = _FakeWorkspaceRepository()..workspaces = [];
+      final emptyContextCubit = WorkspaceContextCubit(emptyRepo, prefs);
+      getIt.unregister<WorkspaceContextCubit>();
+      getIt.registerSingleton<WorkspaceContextCubit>(emptyContextCubit);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: MainShellScreen(initialIndex: 0),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // Top bar displays "Create Workspace"
+      expect(find.text('Create Workspace'), findsWidgets);
+      // No role badge exists ("Owner" or "Member")
+      expect(find.text('Owner'), findsNothing);
+      expect(find.text('Member'), findsNothing);
+      // Workspace settings icon is not displayed
+      expect(find.byIcon(Icons.settings_outlined), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'Tapping "Create Workspace" in ShellTopBar when user has no workspaces opens QuickStartDialog',
+    (WidgetTester tester) async {
+      final sp = await SharedPreferences.getInstance();
+      final prefs = PrefsService(sp);
+      final emptyRepo = _FakeWorkspaceRepository()..workspaces = [];
+      final emptyContextCubit = WorkspaceContextCubit(emptyRepo, prefs);
+      getIt.unregister<WorkspaceContextCubit>();
+      getIt.registerSingleton<WorkspaceContextCubit>(emptyContextCubit);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: MainShellScreen(initialIndex: 0),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(QuickStartDialog), findsOneWidget);
+
+      // Pop dialog
+      final nav = tester.state<NavigatorState>(find.byType(Navigator).last);
+      nav.pop();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(QuickStartDialog), findsNothing);
+
+      // Tap "Create Workspace" button in top bar
+      await tester.tap(find.text('Create Workspace').first);
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(QuickStartDialog), findsOneWidget);
+    },
+  );
 }

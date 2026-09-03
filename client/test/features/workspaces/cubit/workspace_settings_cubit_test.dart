@@ -44,7 +44,7 @@ class _FakeSettingsRepository implements WorkspaceRepository {
   Future<List<WorkspaceDto>> getWorkspaces() async => [workspace];
 
   @override
-  Future<WorkspaceDto> getWorkspace(int id) async {
+  Future<WorkspaceDto> getWorkspace(int id, {bool forceRefresh = false}) async {
     if (shouldFail) throw const ServerException(message: 'Server error');
     return workspace;
   }
@@ -72,16 +72,16 @@ class _FakeSettingsRepository implements WorkspaceRepository {
   }
 
   @override
-  Future<List<MemberDto>> getMembers(int workspaceId) async {
+  Future<List<MemberDto>> getMembers(
+    int workspaceId, {
+    bool forceRefresh = false,
+  }) async {
     if (shouldFail) throw const ServerException(message: 'Get members failed');
     return members;
   }
 
   @override
-  Future<MemberDto> addMember(
-    int workspaceId,
-    AddMemberRequest request,
-  ) async {
+  Future<MemberDto> addMember(int workspaceId, AddMemberRequest request) async {
     if (shouldFail) throw const ServerException(message: 'Invite failed');
     return MemberDto(
       userId: 'u_new',
@@ -97,6 +97,12 @@ class _FakeSettingsRepository implements WorkspaceRepository {
     if (shouldFail) throw const ServerException(message: 'Remove failed');
     members.removeWhere((m) => m.userId != userId);
   }
+
+  @override
+  bool hasCachedSettings(int workspaceId) => false;
+
+  @override
+  void clearCache([int? workspaceId]) {}
 }
 
 void main() {
@@ -107,16 +113,16 @@ void main() {
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
-    final sp = await SharedPreferences.getInstance();
-    prefs = PrefsService(sp);
+    final sharedPrefs = await SharedPreferences.getInstance();
+    prefs = PrefsService(sharedPrefs);
     repository = _FakeSettingsRepository();
     contextCubit = WorkspaceContextCubit(repository, prefs);
     cubit = WorkspaceSettingsCubit(repository, contextCubit);
   });
 
-  tearDown(() async {
-    await cubit.close();
-    await contextCubit.close();
+  tearDown(() {
+    cubit.close();
+    contextCubit.close();
   });
 
   group('WorkspaceSettingsCubit', () {
@@ -150,27 +156,36 @@ void main() {
       expect(state.actionSuccessMessage, 'detailsUpdated');
     });
 
-    test('inviteMember adds member to list and sets success message', () async {
-      await cubit.loadSettings(1);
+    test(
+      'inviteMember adds member to list and sets success message with email',
+      () async {
+        await cubit.loadSettings(1);
 
-      final success = await cubit.inviteMember('colleague@test.com');
+        final success = await cubit.inviteMember('colleague@test.com');
 
-      expect(success, isTrue);
-      final state = cubit.state as WorkspaceSettingsLoaded;
-      expect(state.members.length, 3);
-      expect(state.members.last.email, 'colleague@test.com');
-      expect(state.actionSuccessMessage, 'memberAdded');
-    });
+        expect(success, isTrue);
+        final state = cubit.state as WorkspaceSettingsLoaded;
+        expect(state.members.length, 3);
+        expect(state.members.last.email, 'colleague@test.com');
+        expect(
+          state.actionSuccessMessage,
+          'memberAddedWithEmail:colleague@test.com',
+        );
+      },
+    );
 
-    test('removeMember removes member from list and sets success message', () async {
-      await cubit.loadSettings(1);
+    test(
+      'removeMember removes member from list and sets success message',
+      () async {
+        await cubit.loadSettings(1);
 
-      final success = await cubit.removeMember('u2');
+        final success = await cubit.removeMember('u2');
 
-      expect(success, isTrue);
-      final state = cubit.state as WorkspaceSettingsLoaded;
-      expect(state.actionSuccessMessage, 'memberRemoved');
-    });
+        expect(success, isTrue);
+        final state = cubit.state as WorkspaceSettingsLoaded;
+        expect(state.actionSuccessMessage, 'memberRemoved');
+      },
+    );
 
     test('deleteWorkspace emits deleted state', () async {
       await cubit.loadSettings(1);

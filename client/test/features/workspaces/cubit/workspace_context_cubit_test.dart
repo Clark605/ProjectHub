@@ -24,7 +24,7 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
   }
 
   @override
-  Future<WorkspaceDto> getWorkspace(int id) async {
+  Future<WorkspaceDto> getWorkspace(int id, {bool forceRefresh = false}) async {
     if (shouldThrow) throw ServerException(message: errorMessage);
     return workspaces.firstWhere((w) => w.id == id);
   }
@@ -61,16 +61,16 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
   }
 
   @override
-  Future<List<MemberDto>> getMembers(int workspaceId) async {
+  Future<List<MemberDto>> getMembers(
+    int workspaceId, {
+    bool forceRefresh = false,
+  }) async {
     if (shouldThrow) throw ServerException(message: errorMessage);
     return [];
   }
 
   @override
-  Future<MemberDto> addMember(
-    int workspaceId,
-    AddMemberRequest request,
-  ) async {
+  Future<MemberDto> addMember(int workspaceId, AddMemberRequest request) async {
     if (shouldThrow) throw ServerException(message: errorMessage);
     return MemberDto(
       userId: 'u_new',
@@ -85,6 +85,12 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
   Future<void> removeMember(int workspaceId, String userId) async {
     if (shouldThrow) throw ServerException(message: errorMessage);
   }
+
+  @override
+  bool hasCachedSettings(int workspaceId) => false;
+
+  @override
+  void clearCache([int? workspaceId]) {}
 }
 
 void main() {
