@@ -84,6 +84,7 @@
 
   "switchWorkspace": "تبديل مساحة العمل",
   "createNewWorkspace": "إنشاء مساحة عمل جديدة",
+  "createWorkspace": "إنشاء مساحة عمل",
   "workspaceName": "اسم مساحة العمل",
   "workspaceNamePlaceholder": "مثال: فريق منتجات أكمي",
   "workspaceDescription": "الوصف",
@@ -108,7 +109,6 @@
   "membersCount": "{count} أعضاء",
   "inviteMember": "دعوة عضو جديد",
   "inviteMemberSubtitle": "ادعُ شخصاً للانضمام إلى مساحة العمل هذه. سيتلقى دعوة عبر البريد الإلكتروني.",
-  "emailPlaceholder": "colleague@example.com",
   "addMember": "إضافة عضو",
   "removeMember": "إزالة العضو",
   "memberRemoved": "تمت إزالة العضو من مساحة العمل",
@@ -119,5 +119,14 @@
   "confirmDeleteWorkspace": "تأكيد الحذف",
   "workspaceDeleted": "تم حذف مساحة العمل",
   "typeWorkspaceNameToConfirm": "اكتب \"{name}\" لتأكيد الحذف",
-  "ownerOnlyAccess": "يحق فقط لمالكي مساحة العمل الوصول إلى الإعدادات"
+  "ownerOnlyAccess": "يحق فقط لمالكي مساحة العمل الوصول إلى الإعدادات",
+  "memberAddedWithEmail": "تمت إضافة {email} بنجاح",
+  "@memberAddedWithEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "dismiss": "إغلاق"
 }

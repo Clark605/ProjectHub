@@ -14,21 +14,76 @@ class WorkspaceSettingsCubit extends Cubit<WorkspaceSettingsState> {
   final WorkspaceContextCubit _contextCubit;
 
   WorkspaceSettingsCubit(this._repository, this._contextCubit)
-      : super(const WorkspaceSettingsState.initial());
+    : super(const WorkspaceSettingsState.initial());
 
-  Future<void> loadSettings(int workspaceId) async {
+  Future<void> loadSettings(
+    int workspaceId, {
+    bool forceRefresh = false,
+  }) async {
+    if (!forceRefresh && _repository.hasCachedSettings(workspaceId)) {
+      try {
+        final cachedWorkspace = await _repository.getWorkspace(workspaceId);
+        final cachedMembers = await _repository.getMembers(workspaceId);
+        emit(
+          WorkspaceSettingsState.loaded(
+            workspace: cachedWorkspace,
+            members: cachedMembers,
+            isRevalidating: true,
+          ),
+        );
+
+        // Revalidate in background (stale-while-revalidate)
+        final freshWorkspace = await _repository.getWorkspace(
+          workspaceId,
+          forceRefresh: true,
+        );
+        final freshMembers = await _repository.getMembers(
+          workspaceId,
+          forceRefresh: true,
+        );
+        final currentState = state;
+        if (currentState is WorkspaceSettingsLoaded) {
+          emit(
+            currentState.copyWith(
+              workspace: freshWorkspace,
+              members: freshMembers,
+              isRevalidating: false,
+            ),
+          );
+        }
+        return;
+      } catch (_) {
+        final currentState = state;
+        if (currentState is WorkspaceSettingsLoaded) {
+          emit(currentState.copyWith(isRevalidating: false));
+          return;
+        }
+      }
+    }
+
     emit(const WorkspaceSettingsState.loading());
     try {
-      final workspace = await _repository.getWorkspace(workspaceId);
-      final members = await _repository.getMembers(workspaceId);
-      emit(WorkspaceSettingsState.loaded(
-        workspace: workspace,
-        members: members,
-      ));
+      final workspace = await _repository.getWorkspace(
+        workspaceId,
+        forceRefresh: forceRefresh,
+      );
+      final members = await _repository.getMembers(
+        workspaceId,
+        forceRefresh: forceRefresh,
+      );
+      emit(
+        WorkspaceSettingsState.loaded(
+          workspace: workspace,
+          members: members,
+          isRevalidating: false,
+        ),
+      );
     } on AppException catch (e) {
       emit(WorkspaceSettingsState.error(e.message));
     } catch (_) {
-      emit(const WorkspaceSettingsState.error('Failed to load workspace settings'));
+      emit(
+        const WorkspaceSettingsState.error('Failed to load workspace settings'),
+      );
     }
   }
 
@@ -36,7 +91,13 @@ class WorkspaceSettingsCubit extends Cubit<WorkspaceSettingsState> {
     final currentState = state;
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
-    emit(currentState.copyWith(isSaving: true, actionSuccessMessage: null));
+    emit(
+      currentState.copyWith(
+        isSaving: true,
+        actionSuccessMessage: null,
+        errorMessage: null,
+      ),
+    );
     try {
       final updated = await _repository.updateWorkspace(
         currentState.workspace.id,
@@ -44,20 +105,24 @@ class WorkspaceSettingsCubit extends Cubit<WorkspaceSettingsState> {
       );
       await _contextCubit.selectWorkspace(updated);
 
-      emit(currentState.copyWith(
-        workspace: updated,
-        isSaving: false,
-        actionSuccessMessage: 'detailsUpdated',
-      ));
+      emit(
+        currentState.copyWith(
+          workspace: updated,
+          isSaving: false,
+          actionSuccessMessage: 'detailsUpdated',
+        ),
+      );
       return true;
     } on AppException catch (e) {
       emit(currentState.copyWith(isSaving: false, errorMessage: e.message));
       return false;
     } catch (_) {
-      emit(currentState.copyWith(
-        isSaving: false,
-        errorMessage: 'Failed to update workspace details',
-      ));
+      emit(
+        currentState.copyWith(
+          isSaving: false,
+          errorMessage: 'Failed to update workspace details',
+        ),
+      );
       return false;
     }
   }
@@ -66,27 +131,37 @@ class WorkspaceSettingsCubit extends Cubit<WorkspaceSettingsState> {
     final currentState = state;
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
-    emit(currentState.copyWith(isInviting: true, actionSuccessMessage: null));
+    emit(
+      currentState.copyWith(
+        isInviting: true,
+        actionSuccessMessage: null,
+        errorMessage: null,
+      ),
+    );
     try {
       final newMember = await _repository.addMember(
         currentState.workspace.id,
         AddMemberRequest(email: email),
       );
       final updatedMembers = [...currentState.members, newMember];
-      emit(currentState.copyWith(
-        members: updatedMembers,
-        isInviting: false,
-        actionSuccessMessage: 'memberAdded',
-      ));
+      emit(
+        currentState.copyWith(
+          members: updatedMembers,
+          isInviting: false,
+          actionSuccessMessage: 'memberAddedWithEmail:$email',
+        ),
+      );
       return true;
     } on AppException catch (e) {
       emit(currentState.copyWith(isInviting: false, errorMessage: e.message));
       return false;
     } catch (_) {
-      emit(currentState.copyWith(
-        isInviting: false,
-        errorMessage: 'Failed to invite member',
-      ));
+      emit(
+        currentState.copyWith(
+          isInviting: false,
+          errorMessage: 'Failed to invite member',
+        ),
+      );
       return false;
     }
   }
@@ -95,14 +170,18 @@ class WorkspaceSettingsCubit extends Cubit<WorkspaceSettingsState> {
     final currentState = state;
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
+    emit(currentState.copyWith(actionSuccessMessage: null, errorMessage: null));
     try {
       await _repository.removeMember(currentState.workspace.id, userId);
-      final updatedMembers =
-          currentState.members.where((m) => m.userId != userId).toList();
-      emit(currentState.copyWith(
-        members: updatedMembers,
-        actionSuccessMessage: 'memberRemoved',
-      ));
+      final updatedMembers = currentState.members
+          .where((m) => m.userId != userId)
+          .toList();
+      emit(
+        currentState.copyWith(
+          members: updatedMembers,
+          actionSuccessMessage: 'memberRemoved',
+        ),
+      );
       return true;
     } on AppException catch (e) {
       emit(currentState.copyWith(errorMessage: e.message));
@@ -117,6 +196,7 @@ class WorkspaceSettingsCubit extends Cubit<WorkspaceSettingsState> {
     final currentState = state;
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
+    emit(currentState.copyWith(actionSuccessMessage: null, errorMessage: null));
     try {
       await _repository.deleteWorkspace(currentState.workspace.id);
       await _contextCubit.loadWorkspaces();
@@ -131,13 +211,19 @@ class WorkspaceSettingsCubit extends Cubit<WorkspaceSettingsState> {
     }
   }
 
+  void clearError() {
+    final currentState = state;
+    if (currentState is WorkspaceSettingsLoaded) {
+      emit(currentState.copyWith(errorMessage: null));
+    }
+  }
+
   void clearMessages() {
     final currentState = state;
     if (currentState is WorkspaceSettingsLoaded) {
-      emit(currentState.copyWith(
-        actionSuccessMessage: null,
-        errorMessage: null,
-      ));
+      emit(
+        currentState.copyWith(actionSuccessMessage: null, errorMessage: null),
+      );
     }
   }
 }

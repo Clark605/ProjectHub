@@ -87,6 +87,7 @@
 
   "switchWorkspace": "Switch Workspace",
   "createNewWorkspace": "Create New Workspace",
+  "createWorkspace": "Create Workspace",
   "workspaceName": "Workspace Name",
   "workspaceNamePlaceholder": "e.g. Acme Product Team",
   "workspaceDescription": "Description",
@@ -118,7 +119,6 @@
   },
   "inviteMember": "Invite New Member",
   "inviteMemberSubtitle": "Invite someone to join this workspace. They will receive an email invitation.",
-  "emailPlaceholder": "colleague@example.com",
   "addMember": "Add Member",
   "removeMember": "Remove Member",
   "memberRemoved": "Member removed from workspace",
@@ -136,5 +136,14 @@
       }
     }
   },
-  "ownerOnlyAccess": "Only workspace owners can access settings"
+  "ownerOnlyAccess": "Only workspace owners can access settings",
+  "memberAddedWithEmail": "{email} added successfully",
+  "@memberAddedWithEmail": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "dismiss": "Dismiss"
 }

@@ -154,7 +154,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get fullNamePlaceholder => 'محمد أحمد';
 
   @override
-  String get emailPlaceholder => 'colleague@example.com';
+  String get emailPlaceholder => 'name@example.com';
 
   @override
   String get passwordPlaceholder => '••••••••';
@@ -248,6 +248,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get createNewWorkspace => 'إنشاء مساحة عمل جديدة';
+
+  @override
+  String get createWorkspace => 'إنشاء مساحة عمل';
 
   @override
   String get workspaceName => 'اسم مساحة العمل';
@@ -359,4 +362,12 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get ownerOnlyAccess =>
       'يحق فقط لمالكي مساحة العمل الوصول إلى الإعدادات';
+
+  @override
+  String memberAddedWithEmail(String email) {
+    return 'تمت إضافة $email بنجاح';
+  }
+
+  @override
+  String get dismiss => 'إغلاق';
 }

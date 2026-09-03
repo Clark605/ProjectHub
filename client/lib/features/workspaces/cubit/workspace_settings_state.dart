@@ -14,6 +14,7 @@ sealed class WorkspaceSettingsState with _$WorkspaceSettingsState {
     required List<MemberDto> members,
     @Default(false) bool isSaving,
     @Default(false) bool isInviting,
+    @Default(false) bool isRevalidating,
     String? actionSuccessMessage,
     String? errorMessage,
   }) = WorkspaceSettingsLoaded;

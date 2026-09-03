@@ -383,7 +383,7 @@ abstract class AppLocalizations {
   /// No description provided for @emailPlaceholder.
   ///
   /// In en, this message translates to:
-  /// **'colleague@example.com'**
+  /// **'name@example.com'**
   String get emailPlaceholder;
 
   /// No description provided for @passwordPlaceholder.
@@ -565,6 +565,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Create New Workspace'**
   String get createNewWorkspace;
+
+  /// No description provided for @createWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Workspace'**
+  String get createWorkspace;
 
   /// No description provided for @workspaceName.
   ///
@@ -769,6 +775,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Only workspace owners can access settings'**
   String get ownerOnlyAccess;
+
+  /// No description provided for @memberAddedWithEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'{email} added successfully'**
+  String memberAddedWithEmail(String email);
+
+  /// No description provided for @dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismiss;
 }
 
 class _AppLocalizationsDelegate

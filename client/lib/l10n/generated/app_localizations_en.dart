@@ -155,7 +155,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fullNamePlaceholder => 'John Doe';
 
   @override
-  String get emailPlaceholder => 'colleague@example.com';
+  String get emailPlaceholder => 'name@example.com';
 
   @override
   String get passwordPlaceholder => '••••••••';
@@ -249,6 +249,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createNewWorkspace => 'Create New Workspace';
+
+  @override
+  String get createWorkspace => 'Create Workspace';
 
   @override
   String get workspaceName => 'Workspace Name';
@@ -360,4 +363,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ownerOnlyAccess => 'Only workspace owners can access settings';
+
+  @override
+  String memberAddedWithEmail(String email) {
+    return '$email added successfully';
+  }
+
+  @override
+  String get dismiss => 'Dismiss';
 }
