@@ -20,6 +20,7 @@ _ReSharper*/
 # .NET User Secrets / Local Config overrides
 appsettings*.local.json
 secrets.json
+**/logs/
 
 # ==========================================
 # Flutter / Dart / Web / Mobile

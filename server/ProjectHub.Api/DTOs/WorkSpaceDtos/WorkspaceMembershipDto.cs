@@ -4,3 +4,4 @@ public record WorkspaceMembershipDto(
     string Role,
     DateTime JoinedAt
 );
+
