@@ -15,7 +15,10 @@ import 'package:client/features/shell/ui/main_shell_screen.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar.dart';
 import 'package:client/features/shell/ui/widgets/mobile_bottom_nav.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
+import 'package:client/features/workspaces/data/models/add_member_request.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
+import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 
@@ -85,6 +88,40 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
         description: request.description,
         membership: const WorkspaceMembershipDto(role: 'Owner'),
       );
+
+  @override
+  Future<WorkspaceDto> updateWorkspace(
+    int id,
+    UpdateWorkspaceRequest request,
+  ) async =>
+      WorkspaceDto(
+        id: id,
+        name: request.name,
+        description: request.description,
+        membership: const WorkspaceMembershipDto(role: 'Owner'),
+      );
+
+  @override
+  Future<void> deleteWorkspace(int id) async {}
+
+  @override
+  Future<List<MemberDto>> getMembers(int workspaceId) async => [];
+
+  @override
+  Future<MemberDto> addMember(
+    int workspaceId,
+    AddMemberRequest request,
+  ) async =>
+      MemberDto(
+        userId: 'u_new',
+        name: 'New Member',
+        email: request.email,
+        role: 'Member',
+        joinedAt: DateTime.now(),
+      );
+
+  @override
+  Future<void> removeMember(int workspaceId, String userId) async {}
 }
 
 void main() {

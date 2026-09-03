@@ -101,5 +101,40 @@
   "roleOwner": "Owner",
   "roleMember": "Member",
   "searchWorkspaces": "Search workspaces...",
-  "creatingWorkspace": "Creating workspace..."
+  "creatingWorkspace": "Creating workspace...",
+
+  "workspaceSettings": "Workspace Settings",
+  "workspaceDetails": "Workspace Details",
+  "saveDetails": "Save Details",
+  "detailsUpdated": "Workspace details updated successfully",
+  "teamMembers": "Team Members",
+  "membersCount": "{count} Members",
+  "@membersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inviteMember": "Invite New Member",
+  "inviteMemberSubtitle": "Invite someone to join this workspace. They will receive an email invitation.",
+  "emailPlaceholder": "colleague@example.com",
+  "addMember": "Add Member",
+  "removeMember": "Remove Member",
+  "memberRemoved": "Member removed from workspace",
+  "memberAdded": "Member invited to workspace",
+  "dangerZone": "Danger Zone",
+  "deleteWorkspace": "Delete Workspace",
+  "deleteWorkspaceWarning": "Once deleted, this workspace and all associated projects and tasks will be permanently removed.",
+  "confirmDeleteWorkspace": "Confirm Delete",
+  "workspaceDeleted": "Workspace deleted",
+  "typeWorkspaceNameToConfirm": "Type \"{name}\" to confirm deletion",
+  "@typeWorkspaceNameToConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ownerOnlyAccess": "Only workspace owners can access settings"
 }

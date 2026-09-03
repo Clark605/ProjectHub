@@ -98,5 +98,26 @@
   "roleOwner": "مالك",
   "roleMember": "عضو",
   "searchWorkspaces": "ابحث في مساحات العمل...",
-  "creatingWorkspace": "جاري إنشاء مساحة العمل..."
+  "creatingWorkspace": "جاري إنشاء مساحة العمل...",
+
+  "workspaceSettings": "إعدادات مساحة العمل",
+  "workspaceDetails": "تفاصيل مساحة العمل",
+  "saveDetails": "حفظ التفاصيل",
+  "detailsUpdated": "تم تحديث تفاصيل مساحة العمل بنجاح",
+  "teamMembers": "أعضاء الفريق",
+  "membersCount": "{count} أعضاء",
+  "inviteMember": "دعوة عضو جديد",
+  "inviteMemberSubtitle": "ادعُ شخصاً للانضمام إلى مساحة العمل هذه. سيتلقى دعوة عبر البريد الإلكتروني.",
+  "emailPlaceholder": "colleague@example.com",
+  "addMember": "إضافة عضو",
+  "removeMember": "إزالة العضو",
+  "memberRemoved": "تمت إزالة العضو من مساحة العمل",
+  "memberAdded": "تمت دعوة العضو إلى مساحة العمل",
+  "dangerZone": "منطقة الخطر",
+  "deleteWorkspace": "حذف مساحة العمل",
+  "deleteWorkspaceWarning": "بمجرد الحذف، سيتم حذف مساحة العمل هذه وجميع المشاريع والمهام المرتبطة بها نهائياً.",
+  "confirmDeleteWorkspace": "تأكيد الحذف",
+  "workspaceDeleted": "تم حذف مساحة العمل",
+  "typeWorkspaceNameToConfirm": "اكتب \"{name}\" لتأكيد الحذف",
+  "ownerOnlyAccess": "يحق فقط لمالكي مساحة العمل الوصول إلى الإعدادات"
 }

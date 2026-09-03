@@ -6,7 +6,10 @@ import 'package:client/core/di/injection.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
+import 'package:client/features/workspaces/data/models/add_member_request.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
+import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
@@ -48,6 +51,47 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
     workspaces.add(created);
     return created;
   }
+
+  @override
+  Future<WorkspaceDto> updateWorkspace(
+    int id,
+    UpdateWorkspaceRequest request,
+  ) async {
+    final idx = workspaces.indexWhere((w) => w.id == id);
+    if (idx != -1) {
+      final updated = workspaces[idx].copyWith(
+        name: request.name,
+        description: request.description,
+      );
+      workspaces[idx] = updated;
+      return updated;
+    }
+    return WorkspaceDto(id: id, name: request.name, description: request.description);
+  }
+
+  @override
+  Future<void> deleteWorkspace(int id) async {
+    workspaces.removeWhere((w) => w.id == id);
+  }
+
+  @override
+  Future<List<MemberDto>> getMembers(int workspaceId) async => [];
+
+  @override
+  Future<MemberDto> addMember(
+    int workspaceId,
+    AddMemberRequest request,
+  ) async =>
+      MemberDto(
+        userId: 'u_new',
+        name: 'New Member',
+        email: request.email,
+        role: 'Member',
+        joinedAt: DateTime.now(),
+      );
+
+  @override
+  Future<void> removeMember(int workspaceId, String userId) async {}
 }
 
 void main() {
@@ -73,35 +117,36 @@ void main() {
     return const MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(
-        body: WorkspaceSwitcherSheet(),
-      ),
+      home: Scaffold(body: WorkspaceSwitcherSheet()),
     );
   }
 
-  testWidgets('WorkspaceSwitcherSheet renders workspaces and filters by search',
-      (tester) async {
-    await cubit.loadWorkspaces();
+  testWidgets(
+    'WorkspaceSwitcherSheet renders workspaces and filters by search',
+    (tester) async {
+      await cubit.loadWorkspaces();
 
-    await tester.pumpWidget(buildTestableWidget());
-    await tester.pumpAndSettle();
+      await tester.pumpWidget(buildTestableWidget());
+      await tester.pumpAndSettle();
 
-    // Verify both workspaces rendered via WorkspaceCard
-    expect(find.byType(WorkspaceCard), findsNWidgets(2));
-    expect(find.text('Engineering Team'), findsOneWidget);
-    expect(find.text('Marketing Guild'), findsOneWidget);
+      // Verify both workspaces rendered via WorkspaceCard
+      expect(find.byType(WorkspaceCard), findsNWidgets(2));
+      expect(find.text('Engineering Team'), findsOneWidget);
+      expect(find.text('Marketing Guild'), findsOneWidget);
 
-    // Enter search query
-    await tester.enterText(find.byType(TextField), 'marketing');
-    await tester.pumpAndSettle();
+      // Enter search query
+      await tester.enterText(find.byType(TextField), 'marketing');
+      await tester.pumpAndSettle();
 
-    // Only Marketing Guild should remain
-    expect(find.text('Marketing Guild'), findsOneWidget);
-    expect(find.text('Engineering Team'), findsNothing);
-  });
+      // Only Marketing Guild should remain
+      expect(find.text('Marketing Guild'), findsOneWidget);
+      expect(find.text('Engineering Team'), findsNothing);
+    },
+  );
 
-  testWidgets('Selecting a workspace card triggers cubit.selectWorkspace',
-      (tester) async {
+  testWidgets('Selecting a workspace card triggers cubit.selectWorkspace', (
+    tester,
+  ) async {
     await cubit.loadWorkspaces();
 
     await tester.pumpWidget(buildTestableWidget());
@@ -112,8 +157,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // Cubit should now have Marketing Guild (id: 2) as active
-    final active =
-        cubit.state.mapOrNull(loaded: (s) => s.activeWorkspace);
+    final active = cubit.state.mapOrNull(loaded: (s) => s.activeWorkspace);
     expect(active?.id, 2);
     expect(prefs.activeWorkspaceId, 2);
   });

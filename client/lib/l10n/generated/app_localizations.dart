@@ -383,7 +383,7 @@ abstract class AppLocalizations {
   /// No description provided for @emailPlaceholder.
   ///
   /// In en, this message translates to:
-  /// **'name@example.com'**
+  /// **'colleague@example.com'**
   String get emailPlaceholder;
 
   /// No description provided for @passwordPlaceholder.
@@ -655,6 +655,120 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Creating workspace...'**
   String get creatingWorkspace;
+
+  /// No description provided for @workspaceSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace Settings'**
+  String get workspaceSettings;
+
+  /// No description provided for @workspaceDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace Details'**
+  String get workspaceDetails;
+
+  /// No description provided for @saveDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Details'**
+  String get saveDetails;
+
+  /// No description provided for @detailsUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace details updated successfully'**
+  String get detailsUpdated;
+
+  /// No description provided for @teamMembers.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Members'**
+  String get teamMembers;
+
+  /// No description provided for @membersCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Members'**
+  String membersCount(int count);
+
+  /// No description provided for @inviteMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite New Member'**
+  String get inviteMember;
+
+  /// No description provided for @inviteMemberSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite someone to join this workspace. They will receive an email invitation.'**
+  String get inviteMemberSubtitle;
+
+  /// No description provided for @addMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Member'**
+  String get addMember;
+
+  /// No description provided for @removeMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Member'**
+  String get removeMember;
+
+  /// No description provided for @memberRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Member removed from workspace'**
+  String get memberRemoved;
+
+  /// No description provided for @memberAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Member invited to workspace'**
+  String get memberAdded;
+
+  /// No description provided for @dangerZone.
+  ///
+  /// In en, this message translates to:
+  /// **'Danger Zone'**
+  String get dangerZone;
+
+  /// No description provided for @deleteWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Workspace'**
+  String get deleteWorkspace;
+
+  /// No description provided for @deleteWorkspaceWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Once deleted, this workspace and all associated projects and tasks will be permanently removed.'**
+  String get deleteWorkspaceWarning;
+
+  /// No description provided for @confirmDeleteWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get confirmDeleteWorkspace;
+
+  /// No description provided for @workspaceDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace deleted'**
+  String get workspaceDeleted;
+
+  /// No description provided for @typeWorkspaceNameToConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Type \"{name}\" to confirm deletion'**
+  String typeWorkspaceNameToConfirm(String name);
+
+  /// No description provided for @ownerOnlyAccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Only workspace owners can access settings'**
+  String get ownerOnlyAccess;
 }
 
 class _AppLocalizationsDelegate

@@ -23,6 +23,7 @@ import '../../features/auth/cubit/reset_password_cubit.dart' as _i835;
 import '../../features/auth/data/auth_repository.dart' as _i726;
 import '../../features/auth/data/auth_repository_impl.dart' as _i781;
 import '../../features/workspaces/cubit/workspace_context_cubit.dart' as _i95;
+import '../../features/workspaces/cubit/workspace_settings_cubit.dart' as _i259;
 import '../../features/workspaces/data/workspace_repository.dart' as _i688;
 import '../../features/workspaces/data/workspace_repository_impl.dart' as _i591;
 import '../network/auth_interceptor.dart' as _i908;
@@ -82,6 +83,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i835.ResetPasswordCubit>(
       () => _i835.ResetPasswordCubit(gh<_i726.AuthRepository>()),
+    );
+    gh.factory<_i259.WorkspaceSettingsCubit>(
+      () => _i259.WorkspaceSettingsCubit(
+        gh<_i688.WorkspaceRepository>(),
+        gh<_i95.WorkspaceContextCubit>(),
+      ),
     );
     gh.factory<_i796.LoginCubit>(
       () => _i796.LoginCubit(

@@ -5,7 +5,10 @@ import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
+import 'package:client/features/workspaces/data/models/add_member_request.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
+import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 
@@ -35,6 +38,52 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
       description: request.description,
       membership: const WorkspaceMembershipDto(role: 'Owner'),
     );
+  }
+
+  @override
+  Future<WorkspaceDto> updateWorkspace(
+    int id,
+    UpdateWorkspaceRequest request,
+  ) async {
+    if (shouldThrow) throw ServerException(message: errorMessage);
+    return WorkspaceDto(
+      id: id,
+      name: request.name,
+      description: request.description,
+      membership: const WorkspaceMembershipDto(role: 'Owner'),
+    );
+  }
+
+  @override
+  Future<void> deleteWorkspace(int id) async {
+    if (shouldThrow) throw ServerException(message: errorMessage);
+    workspaces.removeWhere((w) => w.id == id);
+  }
+
+  @override
+  Future<List<MemberDto>> getMembers(int workspaceId) async {
+    if (shouldThrow) throw ServerException(message: errorMessage);
+    return [];
+  }
+
+  @override
+  Future<MemberDto> addMember(
+    int workspaceId,
+    AddMemberRequest request,
+  ) async {
+    if (shouldThrow) throw ServerException(message: errorMessage);
+    return MemberDto(
+      userId: 'u_new',
+      name: 'New Member',
+      email: request.email,
+      role: 'Member',
+      joinedAt: DateTime.now(),
+    );
+  }
+
+  @override
+  Future<void> removeMember(int workspaceId, String userId) async {
+    if (shouldThrow) throw ServerException(message: errorMessage);
   }
 }
 
@@ -73,51 +122,57 @@ void main() {
       await cubit.loadWorkspaces();
     });
 
-    test('auto-selects single workspace and persists ID when 1 workspace exists', () async {
-      const single = WorkspaceDto(
-        id: 101,
-        name: 'Alpha Team',
-        description: 'First team',
-        membership: WorkspaceMembershipDto(role: 'Owner'),
-      );
-      repository.workspaces = [single];
+    test(
+      'auto-selects single workspace and persists ID when 1 workspace exists',
+      () async {
+        const single = WorkspaceDto(
+          id: 101,
+          name: 'Alpha Team',
+          description: 'First team',
+          membership: WorkspaceMembershipDto(role: 'Owner'),
+        );
+        repository.workspaces = [single];
 
-      expectLater(
-        cubit.stream,
-        emitsInOrder([
-          const WorkspaceContextState.loading(),
-          const WorkspaceContextState.loaded(
-            workspaces: [single],
-            activeWorkspace: single,
-          ),
-        ]),
-      );
+        expectLater(
+          cubit.stream,
+          emitsInOrder([
+            const WorkspaceContextState.loading(),
+            const WorkspaceContextState.loaded(
+              workspaces: [single],
+              activeWorkspace: single,
+            ),
+          ]),
+        );
 
-      await cubit.loadWorkspaces();
-      expect(prefs.activeWorkspaceId, 101);
-    });
+        await cubit.loadWorkspaces();
+        expect(prefs.activeWorkspaceId, 101);
+      },
+    );
 
-    test('restores cached active workspace ID when multiple workspaces exist', () async {
-      const ws1 = WorkspaceDto(id: 1, name: 'Team One');
-      const ws2 = WorkspaceDto(id: 2, name: 'Team Two');
-      repository.workspaces = [ws1, ws2];
+    test(
+      'restores cached active workspace ID when multiple workspaces exist',
+      () async {
+        const ws1 = WorkspaceDto(id: 1, name: 'Team One');
+        const ws2 = WorkspaceDto(id: 2, name: 'Team Two');
+        repository.workspaces = [ws1, ws2];
 
-      await prefs.setActiveWorkspaceId(2);
+        await prefs.setActiveWorkspaceId(2);
 
-      expectLater(
-        cubit.stream,
-        emitsInOrder([
-          const WorkspaceContextState.loading(),
-          const WorkspaceContextState.loaded(
-            workspaces: [ws1, ws2],
-            activeWorkspace: ws2,
-          ),
-        ]),
-      );
+        expectLater(
+          cubit.stream,
+          emitsInOrder([
+            const WorkspaceContextState.loading(),
+            const WorkspaceContextState.loaded(
+              workspaces: [ws1, ws2],
+              activeWorkspace: ws2,
+            ),
+          ]),
+        );
 
-      await cubit.loadWorkspaces();
-      expect(prefs.activeWorkspaceId, 2);
-    });
+        await cubit.loadWorkspaces();
+        expect(prefs.activeWorkspaceId, 2);
+      },
+    );
 
     test('selects first workspace when cached ID not found in list', () async {
       const ws1 = WorkspaceDto(id: 10, name: 'Team 10');
@@ -159,23 +214,28 @@ void main() {
       );
     });
 
-    test('createWorkspace adds new workspace and auto-selects as Owner', () async {
-      const ws1 = WorkspaceDto(id: 1, name: 'Existing');
-      repository.workspaces = [ws1];
+    test(
+      'createWorkspace adds new workspace and auto-selects as Owner',
+      () async {
+        const ws1 = WorkspaceDto(id: 1, name: 'Existing');
+        repository.workspaces = [ws1];
 
-      await cubit.loadWorkspaces();
+        await cubit.loadWorkspaces();
 
-      await cubit.createWorkspace(
-        const CreateWorkspaceRequest(name: 'New Product Team'),
-      );
+        await cubit.createWorkspace(
+          const CreateWorkspaceRequest(name: 'New Product Team'),
+        );
 
-      final state = cubit.state.whenOrNull(loaded: (list, active) => (list, active));
-      expect(state, isNotNull);
-      expect(state!.$1.length, 2);
-      expect(state.$2.name, 'New Product Team');
-      expect(state.$2.membership?.role, 'Owner');
-      expect(prefs.activeWorkspaceId, state.$2.id);
-    });
+        final state = cubit.state.whenOrNull(
+          loaded: (list, active) => (list, active),
+        );
+        expect(state, isNotNull);
+        expect(state!.$1.length, 2);
+        expect(state.$2.name, 'New Product Team');
+        expect(state.$2.membership?.role, 'Owner');
+        expect(prefs.activeWorkspaceId, state.$2.id);
+      },
+    );
 
     test('emits error state when repository throws exception', () async {
       repository.shouldThrow = true;

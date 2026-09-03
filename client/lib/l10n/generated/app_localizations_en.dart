@@ -155,7 +155,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fullNamePlaceholder => 'John Doe';
 
   @override
-  String get emailPlaceholder => 'name@example.com';
+  String get emailPlaceholder => 'colleague@example.com';
 
   @override
   String get passwordPlaceholder => '••••••••';
@@ -297,4 +297,67 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get creatingWorkspace => 'Creating workspace...';
+
+  @override
+  String get workspaceSettings => 'Workspace Settings';
+
+  @override
+  String get workspaceDetails => 'Workspace Details';
+
+  @override
+  String get saveDetails => 'Save Details';
+
+  @override
+  String get detailsUpdated => 'Workspace details updated successfully';
+
+  @override
+  String get teamMembers => 'Team Members';
+
+  @override
+  String membersCount(int count) {
+    return '$count Members';
+  }
+
+  @override
+  String get inviteMember => 'Invite New Member';
+
+  @override
+  String get inviteMemberSubtitle =>
+      'Invite someone to join this workspace. They will receive an email invitation.';
+
+  @override
+  String get addMember => 'Add Member';
+
+  @override
+  String get removeMember => 'Remove Member';
+
+  @override
+  String get memberRemoved => 'Member removed from workspace';
+
+  @override
+  String get memberAdded => 'Member invited to workspace';
+
+  @override
+  String get dangerZone => 'Danger Zone';
+
+  @override
+  String get deleteWorkspace => 'Delete Workspace';
+
+  @override
+  String get deleteWorkspaceWarning =>
+      'Once deleted, this workspace and all associated projects and tasks will be permanently removed.';
+
+  @override
+  String get confirmDeleteWorkspace => 'Confirm Delete';
+
+  @override
+  String get workspaceDeleted => 'Workspace deleted';
+
+  @override
+  String typeWorkspaceNameToConfirm(String name) {
+    return 'Type \"$name\" to confirm deletion';
+  }
+
+  @override
+  String get ownerOnlyAccess => 'Only workspace owners can access settings';
 }

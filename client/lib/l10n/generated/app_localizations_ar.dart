@@ -154,7 +154,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get fullNamePlaceholder => 'محمد أحمد';
 
   @override
-  String get emailPlaceholder => 'name@example.com';
+  String get emailPlaceholder => 'colleague@example.com';
 
   @override
   String get passwordPlaceholder => '••••••••';
@@ -295,4 +295,68 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get creatingWorkspace => 'جاري إنشاء مساحة العمل...';
+
+  @override
+  String get workspaceSettings => 'إعدادات مساحة العمل';
+
+  @override
+  String get workspaceDetails => 'تفاصيل مساحة العمل';
+
+  @override
+  String get saveDetails => 'حفظ التفاصيل';
+
+  @override
+  String get detailsUpdated => 'تم تحديث تفاصيل مساحة العمل بنجاح';
+
+  @override
+  String get teamMembers => 'أعضاء الفريق';
+
+  @override
+  String membersCount(int count) {
+    return '$count أعضاء';
+  }
+
+  @override
+  String get inviteMember => 'دعوة عضو جديد';
+
+  @override
+  String get inviteMemberSubtitle =>
+      'ادعُ شخصاً للانضمام إلى مساحة العمل هذه. سيتلقى دعوة عبر البريد الإلكتروني.';
+
+  @override
+  String get addMember => 'إضافة عضو';
+
+  @override
+  String get removeMember => 'إزالة العضو';
+
+  @override
+  String get memberRemoved => 'تمت إزالة العضو من مساحة العمل';
+
+  @override
+  String get memberAdded => 'تمت دعوة العضو إلى مساحة العمل';
+
+  @override
+  String get dangerZone => 'منطقة الخطر';
+
+  @override
+  String get deleteWorkspace => 'حذف مساحة العمل';
+
+  @override
+  String get deleteWorkspaceWarning =>
+      'بمجرد الحذف، سيتم حذف مساحة العمل هذه وجميع المشاريع والمهام المرتبطة بها نهائياً.';
+
+  @override
+  String get confirmDeleteWorkspace => 'تأكيد الحذف';
+
+  @override
+  String get workspaceDeleted => 'تم حذف مساحة العمل';
+
+  @override
+  String typeWorkspaceNameToConfirm(String name) {
+    return 'اكتب \"$name\" لتأكيد الحذف';
+  }
+
+  @override
+  String get ownerOnlyAccess =>
+      'يحق فقط لمالكي مساحة العمل الوصول إلى الإعدادات';
 }
