@@ -6,11 +6,16 @@ import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 
 abstract class WorkspaceRepository {
   Future<List<WorkspaceDto>> getWorkspaces();
-  Future<WorkspaceDto> getWorkspace(int id);
+  Future<WorkspaceDto> getWorkspace(int id, {bool forceRefresh = false});
   Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request);
   Future<WorkspaceDto> updateWorkspace(int id, UpdateWorkspaceRequest request);
   Future<void> deleteWorkspace(int id);
-  Future<List<MemberDto>> getMembers(int workspaceId);
+  Future<List<MemberDto>> getMembers(
+    int workspaceId, {
+    bool forceRefresh = false,
+  });
   Future<MemberDto> addMember(int workspaceId, AddMemberRequest request);
   Future<void> removeMember(int workspaceId, String userId);
+  bool hasCachedSettings(int workspaceId);
+  void clearCache([int? workspaceId]);
 }

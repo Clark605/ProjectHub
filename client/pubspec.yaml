@@ -31,8 +31,9 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   shared_preferences: ^2.5.3
 
-  # Animations
+  # Animations & Skeletons
   flutter_animate: ^4.5.2
+  skeletonizer: ^2.1.3
 
   # Native Splash
   flutter_native_splash: ^2.4.6
