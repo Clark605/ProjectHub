@@ -22,6 +22,10 @@ import '../../features/auth/cubit/register_cubit.dart' as _i341;
 import '../../features/auth/cubit/reset_password_cubit.dart' as _i835;
 import '../../features/auth/data/auth_repository.dart' as _i726;
 import '../../features/auth/data/auth_repository_impl.dart' as _i781;
+import '../../features/projects/cubit/project_detail_cubit.dart' as _i566;
+import '../../features/projects/cubit/projects_list_cubit.dart' as _i771;
+import '../../features/projects/data/project_repository.dart' as _i405;
+import '../../features/projects/data/project_repository_impl.dart' as _i396;
 import '../../features/workspaces/cubit/workspace_context_cubit.dart' as _i95;
 import '../../features/workspaces/cubit/workspace_settings_cubit.dart' as _i259;
 import '../../features/workspaces/data/workspace_repository.dart' as _i688;
@@ -56,8 +60,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i361.Dio>(
       () => dioModule.dio(gh<_i908.AuthInterceptor>()),
     );
+    gh.lazySingleton<_i405.ProjectRepository>(
+      () => _i396.ProjectRepositoryImpl(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i688.WorkspaceRepository>(
       () => _i591.WorkspaceRepositoryImpl(gh<_i361.Dio>()),
+    );
+    gh.factory<_i566.ProjectDetailCubit>(
+      () => _i566.ProjectDetailCubit(gh<_i405.ProjectRepository>()),
+    );
+    gh.factory<_i771.ProjectsListCubit>(
+      () => _i771.ProjectsListCubit(gh<_i405.ProjectRepository>()),
     );
     gh.lazySingleton<_i726.AuthRepository>(
       () => _i781.AuthRepositoryImpl(

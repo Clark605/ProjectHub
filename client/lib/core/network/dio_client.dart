@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/network/auth_interceptor.dart';
+import 'package:client/core/network/global_network_error_handler.dart';
 
 @module
 abstract class DioModule {
@@ -23,6 +24,7 @@ abstract class DioModule {
 
     dio.interceptors.addAll([
       authInterceptor,
+      InterceptorsWrapper(onError: GlobalNetworkErrorHandler.handle),
       LogInterceptor(requestBody: true, responseBody: true),
     ]);
 

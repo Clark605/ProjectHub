@@ -19,14 +19,22 @@ class PermissionChecker {
     required WorkspaceRole role,
     required String projectCreatorId,
     required String currentUserId,
-  }) => role == WorkspaceRole.owner || projectCreatorId == currentUserId;
+  }) =>
+      role == WorkspaceRole.owner ||
+      (projectCreatorId.isNotEmpty &&
+          currentUserId.isNotEmpty &&
+          projectCreatorId == currentUserId);
 
   /// Can delete a project
   static bool canDeleteProject({
     required WorkspaceRole role,
     required String projectCreatorId,
     required String currentUserId,
-  }) => role == WorkspaceRole.owner || projectCreatorId == currentUserId;
+  }) =>
+      role == WorkspaceRole.owner ||
+      (projectCreatorId.isNotEmpty &&
+          currentUserId.isNotEmpty &&
+          projectCreatorId == currentUserId);
 
   /// Can edit a task or move its status
   static bool canEditTask({
@@ -35,13 +43,20 @@ class PermissionChecker {
     required String currentUserId,
   }) =>
       role == WorkspaceRole.owner ||
-      task.createdBy == currentUserId ||
-      task.assigneeId == currentUserId;
+      (currentUserId.isNotEmpty &&
+          ((task.createdBy.isNotEmpty && task.createdBy == currentUserId) ||
+              (task.assigneeId != null &&
+                  task.assigneeId!.isNotEmpty &&
+                  task.assigneeId == currentUserId)));
 
   /// Can delete a task
   static bool canDeleteTask({
     required WorkspaceRole role,
     required TaskItem task,
     required String currentUserId,
-  }) => role == WorkspaceRole.owner || task.createdBy == currentUserId;
+  }) =>
+      role == WorkspaceRole.owner ||
+      (currentUserId.isNotEmpty &&
+          task.createdBy.isNotEmpty &&
+          task.createdBy == currentUserId);
 }
