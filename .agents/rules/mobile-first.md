@@ -1,3 +1,7 @@
+---
+trigger: model_decision
+---
+
 # Mobile-First Priority Rule
 
 1. **Mobile Experience Takes Precedence**: In all UI implementations, layouts, dialogs, and navigation flows, prioritize the **Mobile (< 768px)** experience first before Desktop and Tablet.
