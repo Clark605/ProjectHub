@@ -1,72 +1,51 @@
-# ProjectHub — Architecture & Decision Log
+# ProjectHub — Architecture & Decision Index
 
-This document is a running, chronological record of **architectural decisions, tradeoffs, and rationale** made during the implementation of ProjectHub.
+This document is a running, chronological index of **architectural decisions, tradeoffs, and rationale** for ProjectHub. Each major decision is codified in a dedicated [Architecture Decision Record (ADR)](./adr/), which acts as the single authoritative source of truth.
 
 ---
 
 ## 🏛 Phase 1 — Authentication & Security
 
-### Decision: Multi-Session Refresh Tokens (Dedicated Table)
-- **Choice:** Created a dedicated `RefreshToken` entity table with FK to `AppUser`, instead of a single `CurrentRefreshToken` column on `AppUser`.
-- **Reasoning:** A single column breaks multi-device/multi-browser logins (a second login would silently revoke the first session). Multi-session support is essential for cross-platform (Web + Mobile) support.
-
-### Decision: SHA256 Token Hashing
-- **Choice:** Store SHA256 hashes of refresh tokens in the database rather than plaintext.
-- **Reasoning:** A refresh token is a bearer credential. If the database is compromised, plaintext tokens allow immediate account hijacking. SHA256 is fast and sufficient because refresh tokens are high-entropy cryptographic strings (64 random bytes).
-
-### Decision: Refresh Token Rotation with `IsUsed` Detection
-- **Choice:** Mark tokens with `IsUsed = true` upon rotation instead of immediately deleting the row.
-- **Reasoning:** Retaining consumed tokens enables **token reuse detection** (a critical indicator of token theft where both attacker and legitimate user present the same refresh token).
-
-### Decision: Dedicated `ForbiddenException` (403)
-- **Choice:** Created `ForbiddenException` mapped to HTTP 403 in `ExceptionHandlingMiddleware`, rather than overloading `UnauthorizedAccessException` (401).
-- **Reasoning:** 401 indicates unauthenticated requests (missing/invalid JWT); 403 indicates authenticated users attempting operations outside their permission scope (e.g. non-owner deleting a workspace).
+- **[ADR-0005: Multi-Session SHA256 Refresh Token Rotation](./adr/0005-multi-session-sha256-refresh-token-rotation.md)**  
+  Dedicated `RefreshToken` entity with SHA256 token hashing, rotation, and `IsUsed` tracking for token reuse detection across mobile and web sessions.
+- **Dedicated `ForbiddenException` (HTTP 403)**  
+  Mapped to HTTP 403 in `ExceptionHandlingMiddleware` to distinguish authenticated permission denial (403) from unauthenticated requests (401).
 
 ---
 
 ## 🏢 Phase 2 — Workspaces & Role Isolation
 
-### Decision: No `OwnerId` Field on `WorkSpace`; Single Source of Truth
-- **Choice:** Workspace ownership is determined exclusively by `WorkspaceMember.Role == "Owner"`.
-- **Reasoning:** Storing `OwnerId` on `WorkSpace` alongside a `WorkspaceMember` row with `Role = "Owner"` creates dual sources of truth that can get out of sync.
-- **Invariant:** Creating a workspace atomically creates the Owner's `WorkspaceMember` record within a single database transaction.
-
-### Decision: Direct Member Invitation for MVP
-- **Choice:** Direct addition of members by email (`POST /workspaces/{id}/members`) instead of a multi-state invite machine (`Pending -> Accepted -> Expired`).
-- **Reasoning:** An invitation state machine requires email delivery infrastructure (SMTP / SendGrid) which is out of scope for early MVP testing.
+- **[ADR-0003: Workspace Owner Single Source of Truth](./adr/0003-workspace-owner-single-source-of-truth.md)**  
+  Workspace ownership is determined exclusively by `WorkspaceMember.Role == "Owner"`, eliminating dual sources of truth and synchronizing creation atomically.
+- **Direct Member Invitation for MVP**  
+  Direct addition by email (`POST /workspaces/{id}/members`) for MVP to defer email server (SMTP/SendGrid) infrastructure to post-MVP.
 
 ---
 
 ## 📁 Phase 3 — Projects & Boundary Simplification
 
-### Decision: Workspace as the Isolation Boundary (Removed `ProjectMember` Table)
-- **Choice:** Removed the experimental `ProjectMember` join table and localized all permission checks to the parent `WorkSpace`.
-- **Reasoning:** Having project-level membership creates unnecessary authorization overhead when all workspace members share access to workspace projects.
-- **Rule:** All workspace members can view projects and create tasks. Only the Workspace Owner or Project Creator (`CreatedBy == userId`) can edit or delete a project.
+- **[ADR-0001: Implicit Workspace Membership for Projects](./adr/0001-implicit-workspace-membership-for-projects.md)**  
+  Eliminated the `ProjectMember` join table in favor of implicit workspace-level access, allowing all workspace members to access projects while restricting editing/deletion to Owners and Creators.
+- **[ADR-0002: Strict Read-Only Freeze on Archived Projects](./adr/0002-strict-read-only-freeze-on-archived-projects.md)**  
+  When a project is set to `Archived`, all task mutations, creation, deletions, and Kanban status moves are frozen as read-only.
 
 ---
 
 ## 📋 Phase 4 — Tasks & Kanban Management
 
-### Decision: String Enums with FluentValidation
-- **Choice:** Application enums (`TaskItemStatus`, `TaskItemPriority`, `ProjectStatus`) are stored as readable strings in PostgreSQL and validated on incoming DTOs using FluentValidation `IsEnumName`.
-- **Reasoning:** Improves database inspectability and avoids brittle integer-to-enum mapping bugs during migrations.
-
-### Decision: Dedicated PATCH Endpoints for Kanban & Assignment
-- **Choice:** Provided `PATCH /tasks/{id}/status` and `PATCH /tasks/{id}/assignee` alongside full `PUT /tasks/{id}`.
-- **Reasoning:**
-  - `PATCH /tasks/{id}/status` optimizes Kanban drag-and-drop column moves with minimal network payloads.
-  - `UpdateTaskRequestDto` (PUT) intentionally omits `Status` to prevent accidental status overwrites during general edits.
-
-### Decision: Automated Task Unassignment on Member Removal
-- **Choice:** When a member is removed from a workspace (`DELETE /workspaces/{id}/members/{userId}`), any tasks assigned to that user in that workspace have `AssigneeId` set to `null`.
-- **Reasoning:** Prevents dangling assignee references to users who no longer have access to the workspace.
+- **[ADR-0004: Dedicated PATCH Endpoints for Kanban Status and Assignee](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md)**  
+  Provides minimal `PATCH /tasks/{id}/status` and `PATCH /tasks/{id}/assignee` endpoints to optimize drag-and-drop column moves and 1-tap reassignments. Full `PUT /tasks/{id}` excludes `Status` to prevent accidental overwrites.
+- **[ADR-0006: Automatic Task Unassignment on Member Removal](./adr/0006-automatic-task-unassignment-on-member-removal.md)**  
+  Removing a member from a workspace automatically sets `AssigneeId = null` on all tasks assigned to that user in that workspace.
+- **[ADR-0007: Responsive Kanban Navigation and Modal Interactions](./adr/0007-responsive-kanban-navigation-and-modal-interactions.md)**  
+  Mobile viewports (< 768px) use a swipeable `PageView` with segmented column tabs, while desktop/tablet uses multi-column views and centered modal dialogs.
+- **String Enums with FluentValidation**  
+  Domain enums (`TaskItemStatus`, `TaskItemPriority`, `ProjectStatus`) are persisted as readable strings in PostgreSQL and validated via FluentValidation.
 
 ---
 
-## 🔮 Future Architecture Checkpoints
+## 🔮 Future Architectural Checkpoints
 
-1. **Clean Architecture Separation:** When feature complexity grows in Phase 5+ (comments, attachments, real-time), extract `ProjectHub.Domain` and `ProjectHub.Application` class libraries.
-2. **Shared Authorization Policies:** Extract controller-level permission checks into ASP.NET Core `IAuthorizationHandler` policies if duplication increases.
-3. **Session Cascade Revocation:** Implement automated session revocation if a compromised refresh token reuse is detected.
-
+1. **Clean Architecture Extraction:** When post-MVP complexity increases (comments, attachments, real-time), extract separate `ProjectHub.Domain` and `ProjectHub.Application` assemblies.
+2. **Shared Authorization Policies:** Extract controller-level permission checks into ASP.NET Core `IAuthorizationHandler` policies if policy duplication increases.
+3. **Session Cascade Revocation:** Implement automated multi-session revocation when token theft is detected via reused refresh tokens.

@@ -99,7 +99,7 @@ Future<void> configureDependencies() async => getIt.init();
 
 ## 4. Resilient Network Layer (`AuthInterceptor`)
 
-The network layer provides transparent token refreshing for expired JWT tokens:
+The network layer provides transparent token refreshing for expired JWT tokens, backed by the server's multi-session rotation model (see [ADR-0005](./adr/0005-multi-session-sha256-refresh-token-rotation.md)):
 
 ```mermaid
 sequenceDiagram
@@ -123,9 +123,9 @@ sequenceDiagram
 
 ---
 
-## 5. Responsive UI Strategy
+## 5. Responsive UI Strategy & Interactions
 
-The client dynamically switches layout structures across breakpoints:
+The client dynamically switches layout structures across breakpoints (see [ADR-0007](./adr/0007-responsive-kanban-navigation-and-modal-interactions.md)):
 
 ```mermaid
 graph LR
@@ -134,11 +134,17 @@ graph LR
     Viewport -->|>= 1200px| Desktop["Desktop/Web: Fixed 240px Sidebar + Full Kanban Board + Slide-over Sheet"]
 ```
 
+### Kanban Board Interactions & Optimistic UI
+1. **Mobile (< 768px):** A swipeable `PageView` paired with a segmented column tab bar (`Backlog`, `Todo`, `InProgress`, `Review`, `Done`) avoids nested horizontal/vertical scroll conflicts.
+2. **Desktop / Tablet ($\ge$ 768px):** Full multi-column view with horizontal scrolling and side-by-side columns.
+3. **Optimistic Column Drag-and-Drop:** Task status changes immediately snap to the target column on UI; a minimal `PATCH /tasks/{id}/status` is fired in the background (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md)). On error, the card rolls back with a feedback SnackBar.
+4. **Modals & Fast Actions:** Task creation/editing uses a draggable bottom sheet on mobile and centered modal on desktop. Quick 1-tap popups on assignee avatars and status pills allow immediate in-place updates.
+
 ---
 
 ## 6. Stitch Design System & Theming
 
-Designed in accordance with Material 3, using custom Stitch UI tokens:
+Designed in accordance with Material 3, using custom Stitch UI tokens (see [Design System Specification](./design-system.md)):
 
 - **Foundation Background:** Deep Slate `#0F172A`
 - **Surface Elevation:** `#13131B` and Container `#1E293B`
@@ -150,4 +156,3 @@ Designed in accordance with Material 3, using custom Stitch UI tokens:
   - `Medium`: Sky `#38BDF8`
   - `Low`: Slate `#94A3B8`
 - **Typography:** Bundled **Inter** font family (`assets/fonts/`) for zero font flicker (FOIT).
-

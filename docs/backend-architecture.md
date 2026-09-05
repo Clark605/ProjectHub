@@ -43,7 +43,7 @@ Every HTTP request traverses the pipeline configured in `Program.cs`:
    - `KeyNotFoundException` $\rightarrow$ `404 Not Found`
    - `ArgumentException` $\rightarrow$ `400 Bad Request`
    - `UnauthorizedAccessException` $\rightarrow$ `401 Unauthorized`
-   - `ForbiddenException` $\rightarrow$ `403 Forbidden`
+   - `ForbiddenException` $\rightarrow$ `403 Forbidden` (distinguishing permission denial from missing auth)
    - General `Exception` $\rightarrow$ `500 Internal Server Error`
 3. **HTTPS Redirection & Static Files:** Enforces secure transport.
 4. **Authentication & Authorization:** Validates JWT Bearer tokens and extracts user claims (`sub`, `email`).
@@ -54,14 +54,14 @@ Every HTTP request traverses the pipeline configured in `Program.cs`:
 
 ## 3. Data Model & Database Architecture
 
-### Entities & Relationships
+### Entities & Relationships (aligned with [CONTEXT.md](../CONTEXT.md))
 
 - **`AppUser` (`IdentityUser`):** Represents authenticated users with `Name` and `Bio`.
-- **`RefreshToken`:** Tracks user sessions, hashed token strings, expiration timestamps, and revocation flags.
+- **`RefreshToken`:** Tracks user sessions, hashed token strings, expiration timestamps, and revocation flags (see [ADR-0005](./adr/0005-multi-session-sha256-refresh-token-rotation.md)).
 - **`WorkSpace`:** The root aggregate boundary for multi-tenant isolation.
-- **`WorkspaceMember`:** Join entity connecting `AppUser` to `WorkSpace` with role designation (`Owner` or `Member`).
-- **`Project`:** Projects contained within a workspace with lifecycle status (`Planning`, `Active`, `Completed`, `Archived`).
-- **`Task` (`TaskItem`):** Tasks belonging to a project, featuring status, priority, due date, creator, and assignee.
+- **`WorkspaceMember`:** Join entity connecting `AppUser` to `WorkSpace` with role designation (`Owner` or `Member`). Ownership is derived solely from this relationship (see [ADR-0003](./adr/0003-workspace-owner-single-source-of-truth.md)).
+- **`Project`:** Projects contained within a workspace with lifecycle status (`Planning`, `Active`, `Completed`, `Archived`). Project membership is implicit to all workspace members (see [ADR-0001](./adr/0001-implicit-workspace-membership-for-projects.md)), and archived projects are strictly read-only (see [ADR-0002](./adr/0002-strict-read-only-freeze-on-archived-projects.md)).
+- **`Task`:** Tasks belonging to a project, featuring status, priority, due date, creator, and assignee. Removing a workspace member automatically unassigns their tasks (see [ADR-0006](./adr/0006-automatic-task-unassignment-on-member-removal.md)).
 
 ```mermaid
 erDiagram
@@ -69,13 +69,15 @@ erDiagram
     AppUser ||--o{ WorkspaceMember : joins
     WorkSpace ||--o{ WorkspaceMember : includes
     WorkSpace ||--o{ Project : owns
-    Project ||--o{ TaskItem : contains
-    AppUser ||--o{ TaskItem : assigned
+    Project ||--o{ Task : contains
+    AppUser ||--o{ Task : assigned
 ```
 
 ---
 
 ## 4. Authentication & Security Engine
+
+The authentication system employs multi-session SHA256 hashed refresh tokens with rotation and token reuse detection (see [ADR-0005](./adr/0005-multi-session-sha256-refresh-token-rotation.md)):
 
 ```mermaid
 sequenceDiagram
@@ -109,7 +111,17 @@ sequenceDiagram
 
 ---
 
-## 5. High-Performance Caching (`HybridCache`)
+## 5. Dedicated Endpoints for Kanban & Operations
+
+To minimize payload overhead and prevent accidental field clobbers during rapid UI updates (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md)):
+
+- `PATCH /tasks/{id}/status`: Single-field status updates for drag-and-drop moves.
+- `PATCH /tasks/{id}/assignee`: Single-field reassignment to workspace members.
+- `PUT /tasks/{id}`: General detail edits (title, description, priority, due date), intentionally omitting status.
+
+---
+
+## 6. High-Performance Caching (`HybridCache`)
 
 The API integrates .NET 10's **`HybridCache`** with Redis distributed backend:
 
@@ -130,8 +142,7 @@ The API integrates .NET 10's **`HybridCache`** with Redis distributed backend:
 
 ---
 
-## 6. Validation & Mapping Conventions
+## 7. Validation & Mapping Conventions
 
-- **FluentValidation:** Defined in `Validators/` with rules for string lengths, email formats, and enum boundaries.
+- **FluentValidation:** Defined in `Validators/` with rules for string lengths, email formats, and enum boundaries. Domain enums (`TaskItemStatus`, `TaskItemPriority`, `ProjectStatus`) are stored as readable strings.
 - **AutoMapper:** Centralized mapping profiles converting domain entities to lightweight response DTOs, avoiding entity exposure.
-
