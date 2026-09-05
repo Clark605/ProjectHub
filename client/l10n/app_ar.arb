@@ -128,5 +128,42 @@
       }
     }
   },
-  "dismiss": "إغلاق"
+  "dismiss": "إغلاق",
+  "statusAll": "الكل",
+  "statusPlanning": "قيد التخطيط",
+  "statusActive": "نشط",
+  "statusCompleted": "مكتمل",
+  "statusArchived": "مؤرشف",
+  "projectsTitle": "المشاريع",
+  "projectsSubtitle": "إدارة مشاريع مساحة العمل ومتابعة المخرجات.",
+  "noProjectsFound": "لم يتم العثور على مشاريع",
+  "noProjectsDescription": "ابدأ بإنشاء أول مشروع في مساحة العمل هذه.",
+  "createProject": "إنشاء مشروع",
+  "newProject": "مشروع جديد",
+  "projectName": "اسم المشروع",
+  "projectNamePlaceholder": "مثال: إعادة تصميم الموقع",
+  "projectNameRequired": "يرجى إدخال اسم المشروع",
+  "projectDescription": "الوصف",
+  "projectDescriptionPlaceholder": "صف أهداف ونطاق المشروع",
+  "dueDate": "تاريخ التسليم",
+  "selectDueDate": "حدد تاريخ التسليم",
+  "projectCreated": "تم إنشاء المشروع بنجاح",
+  "projectUpdated": "تم تحديث المشروع بنجاح",
+  "projectDeleted": "تم حذف المشروع بنجاح",
+  "projectDetails": "تفاصيل المشروع",
+  "projectStatus": "الحالة",
+  "createdBy": "تم الإنشاء بواسطة",
+  "deleteProject": "حذف المشروع",
+  "deleteProjectWarning": "بمجرد الحذف، ستتم إزالة هذا المشروع وجميع المهام المرتبطة به نهائياً.",
+  "confirmDeleteProject": "تأكيد الحذف",
+  "typeProjectNameToConfirm": "اكتب \"{name}\" لتأكيد الحذف",
+  "@typeProjectNameToConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noPermissionToEditProject": "يحق لمالك مساحة العمل أو منشئ المشروع فقط تعديل هذا المشروع.",
+  "noPermissionToDeleteProject": "يحق لمالك مساحة العمل أو منشئ المشروع فقط حذف هذا المشروع."
 }

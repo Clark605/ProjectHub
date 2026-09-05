@@ -370,4 +370,100 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dismiss => 'إغلاق';
+
+  @override
+  String get statusAll => 'الكل';
+
+  @override
+  String get statusPlanning => 'قيد التخطيط';
+
+  @override
+  String get statusActive => 'نشط';
+
+  @override
+  String get statusCompleted => 'مكتمل';
+
+  @override
+  String get statusArchived => 'مؤرشف';
+
+  @override
+  String get projectsTitle => 'المشاريع';
+
+  @override
+  String get projectsSubtitle => 'إدارة مشاريع مساحة العمل ومتابعة المخرجات.';
+
+  @override
+  String get noProjectsFound => 'لم يتم العثور على مشاريع';
+
+  @override
+  String get noProjectsDescription =>
+      'ابدأ بإنشاء أول مشروع في مساحة العمل هذه.';
+
+  @override
+  String get createProject => 'إنشاء مشروع';
+
+  @override
+  String get newProject => 'مشروع جديد';
+
+  @override
+  String get projectName => 'اسم المشروع';
+
+  @override
+  String get projectNamePlaceholder => 'مثال: إعادة تصميم الموقع';
+
+  @override
+  String get projectNameRequired => 'يرجى إدخال اسم المشروع';
+
+  @override
+  String get projectDescription => 'الوصف';
+
+  @override
+  String get projectDescriptionPlaceholder => 'صف أهداف ونطاق المشروع';
+
+  @override
+  String get dueDate => 'تاريخ التسليم';
+
+  @override
+  String get selectDueDate => 'حدد تاريخ التسليم';
+
+  @override
+  String get projectCreated => 'تم إنشاء المشروع بنجاح';
+
+  @override
+  String get projectUpdated => 'تم تحديث المشروع بنجاح';
+
+  @override
+  String get projectDeleted => 'تم حذف المشروع بنجاح';
+
+  @override
+  String get projectDetails => 'تفاصيل المشروع';
+
+  @override
+  String get projectStatus => 'الحالة';
+
+  @override
+  String get createdBy => 'تم الإنشاء بواسطة';
+
+  @override
+  String get deleteProject => 'حذف المشروع';
+
+  @override
+  String get deleteProjectWarning =>
+      'بمجرد الحذف، ستتم إزالة هذا المشروع وجميع المهام المرتبطة به نهائياً.';
+
+  @override
+  String get confirmDeleteProject => 'تأكيد الحذف';
+
+  @override
+  String typeProjectNameToConfirm(String name) {
+    return 'اكتب \"$name\" لتأكيد الحذف';
+  }
+
+  @override
+  String get noPermissionToEditProject =>
+      'يحق لمالك مساحة العمل أو منشئ المشروع فقط تعديل هذا المشروع.';
+
+  @override
+  String get noPermissionToDeleteProject =>
+      'يحق لمالك مساحة العمل أو منشئ المشروع فقط حذف هذا المشروع.';
 }

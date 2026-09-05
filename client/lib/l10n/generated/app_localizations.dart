@@ -787,6 +787,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dismiss'**
   String get dismiss;
+
+  /// No description provided for @statusAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get statusAll;
+
+  /// No description provided for @statusPlanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning'**
+  String get statusPlanning;
+
+  /// No description provided for @statusActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get statusActive;
+
+  /// No description provided for @statusCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get statusCompleted;
+
+  /// No description provided for @statusArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Archived'**
+  String get statusArchived;
+
+  /// No description provided for @projectsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get projectsTitle;
+
+  /// No description provided for @projectsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage workspace projects and track deliverables.'**
+  String get projectsSubtitle;
+
+  /// No description provided for @noProjectsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No projects found'**
+  String get noProjectsFound;
+
+  /// No description provided for @noProjectsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started by creating your first project in this workspace.'**
+  String get noProjectsDescription;
+
+  /// No description provided for @createProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Project'**
+  String get createProject;
+
+  /// No description provided for @newProject.
+  ///
+  /// In en, this message translates to:
+  /// **'New Project'**
+  String get newProject;
+
+  /// No description provided for @projectName.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Name'**
+  String get projectName;
+
+  /// No description provided for @projectNamePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Website Redesign'**
+  String get projectNamePlaceholder;
+
+  /// No description provided for @projectNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a project name'**
+  String get projectNameRequired;
+
+  /// No description provided for @projectDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get projectDescription;
+
+  /// No description provided for @projectDescriptionPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the project goals and scope'**
+  String get projectDescriptionPlaceholder;
+
+  /// No description provided for @dueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Date'**
+  String get dueDate;
+
+  /// No description provided for @selectDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Select due date'**
+  String get selectDueDate;
+
+  /// No description provided for @projectCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Project created successfully'**
+  String get projectCreated;
+
+  /// No description provided for @projectUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Project updated successfully'**
+  String get projectUpdated;
+
+  /// No description provided for @projectDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Project deleted successfully'**
+  String get projectDeleted;
+
+  /// No description provided for @projectDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Project Details'**
+  String get projectDetails;
+
+  /// No description provided for @projectStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get projectStatus;
+
+  /// No description provided for @createdBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Created by'**
+  String get createdBy;
+
+  /// No description provided for @deleteProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Project'**
+  String get deleteProject;
+
+  /// No description provided for @deleteProjectWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Once deleted, this project and all associated tasks will be permanently removed.'**
+  String get deleteProjectWarning;
+
+  /// No description provided for @confirmDeleteProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Delete'**
+  String get confirmDeleteProject;
+
+  /// No description provided for @typeProjectNameToConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Type \"{name}\" to confirm deletion'**
+  String typeProjectNameToConfirm(String name);
+
+  /// No description provided for @noPermissionToEditProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Only workspace owner or project creator can edit this project.'**
+  String get noPermissionToEditProject;
+
+  /// No description provided for @noPermissionToDeleteProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Only workspace owner or project creator can delete this project.'**
+  String get noPermissionToDeleteProject;
 }
 
 class _AppLocalizationsDelegate

@@ -145,5 +145,42 @@
       }
     }
   },
-  "dismiss": "Dismiss"
+  "dismiss": "Dismiss",
+  "statusAll": "All",
+  "statusPlanning": "Planning",
+  "statusActive": "Active",
+  "statusCompleted": "Completed",
+  "statusArchived": "Archived",
+  "projectsTitle": "Projects",
+  "projectsSubtitle": "Manage workspace projects and track deliverables.",
+  "noProjectsFound": "No projects found",
+  "noProjectsDescription": "Get started by creating your first project in this workspace.",
+  "createProject": "Create Project",
+  "newProject": "New Project",
+  "projectName": "Project Name",
+  "projectNamePlaceholder": "e.g. Website Redesign",
+  "projectNameRequired": "Please enter a project name",
+  "projectDescription": "Description",
+  "projectDescriptionPlaceholder": "Describe the project goals and scope",
+  "dueDate": "Due Date",
+  "selectDueDate": "Select due date",
+  "projectCreated": "Project created successfully",
+  "projectUpdated": "Project updated successfully",
+  "projectDeleted": "Project deleted successfully",
+  "projectDetails": "Project Details",
+  "projectStatus": "Status",
+  "createdBy": "Created by",
+  "deleteProject": "Delete Project",
+  "deleteProjectWarning": "Once deleted, this project and all associated tasks will be permanently removed.",
+  "confirmDeleteProject": "Confirm Delete",
+  "typeProjectNameToConfirm": "Type \"{name}\" to confirm deletion",
+  "@typeProjectNameToConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noPermissionToEditProject": "Only workspace owner or project creator can edit this project.",
+  "noPermissionToDeleteProject": "Only workspace owner or project creator can delete this project."
 }

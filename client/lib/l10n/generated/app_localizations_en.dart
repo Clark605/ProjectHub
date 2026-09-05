@@ -371,4 +371,102 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dismiss => 'Dismiss';
+
+  @override
+  String get statusAll => 'All';
+
+  @override
+  String get statusPlanning => 'Planning';
+
+  @override
+  String get statusActive => 'Active';
+
+  @override
+  String get statusCompleted => 'Completed';
+
+  @override
+  String get statusArchived => 'Archived';
+
+  @override
+  String get projectsTitle => 'Projects';
+
+  @override
+  String get projectsSubtitle =>
+      'Manage workspace projects and track deliverables.';
+
+  @override
+  String get noProjectsFound => 'No projects found';
+
+  @override
+  String get noProjectsDescription =>
+      'Get started by creating your first project in this workspace.';
+
+  @override
+  String get createProject => 'Create Project';
+
+  @override
+  String get newProject => 'New Project';
+
+  @override
+  String get projectName => 'Project Name';
+
+  @override
+  String get projectNamePlaceholder => 'e.g. Website Redesign';
+
+  @override
+  String get projectNameRequired => 'Please enter a project name';
+
+  @override
+  String get projectDescription => 'Description';
+
+  @override
+  String get projectDescriptionPlaceholder =>
+      'Describe the project goals and scope';
+
+  @override
+  String get dueDate => 'Due Date';
+
+  @override
+  String get selectDueDate => 'Select due date';
+
+  @override
+  String get projectCreated => 'Project created successfully';
+
+  @override
+  String get projectUpdated => 'Project updated successfully';
+
+  @override
+  String get projectDeleted => 'Project deleted successfully';
+
+  @override
+  String get projectDetails => 'Project Details';
+
+  @override
+  String get projectStatus => 'Status';
+
+  @override
+  String get createdBy => 'Created by';
+
+  @override
+  String get deleteProject => 'Delete Project';
+
+  @override
+  String get deleteProjectWarning =>
+      'Once deleted, this project and all associated tasks will be permanently removed.';
+
+  @override
+  String get confirmDeleteProject => 'Confirm Delete';
+
+  @override
+  String typeProjectNameToConfirm(String name) {
+    return 'Type \"$name\" to confirm deletion';
+  }
+
+  @override
+  String get noPermissionToEditProject =>
+      'Only workspace owner or project creator can edit this project.';
+
+  @override
+  String get noPermissionToDeleteProject =>
+      'Only workspace owner or project creator can delete this project.';
 }
