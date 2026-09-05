@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:jwt_decoder/jwt_decoder.dart';
+
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/dio_error_handler.dart';
 import 'package:client/core/storage/secure_storage_service.dart';
@@ -62,7 +64,27 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<User> getCurrentUser() async {
     try {
       final response = await _dio.get(ApiConstants.userProfile);
-      return User.fromJson(response.data as Map<String, dynamic>);
+      var user = User.fromJson(response.data as Map<String, dynamic>);
+
+      final token = await _storage.getAccessToken();
+      if (token != null && token.isNotEmpty) {
+        try {
+          final decoded = JwtDecoder.decode(token);
+          final sub = (decoded['sub'] ??
+                  decoded['nameid'] ??
+                  decoded[
+                      'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ??
+                  '')
+              .toString();
+          if (sub.isNotEmpty) {
+            user = user.copyWith(id: sub);
+          }
+        } catch (_) {
+          // Token decode fallback
+        }
+      }
+
+      return user;
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
     }

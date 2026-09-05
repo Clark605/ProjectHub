@@ -59,13 +59,18 @@ class FakeAuthRepository implements AuthRepository {
 
 class FakeSecureStorageService extends SecureStorageService {
   bool tokensExist = true;
+  String? accessToken;
 
   @override
   Future<bool> hasTokens() async => tokensExist;
 
   @override
+  Future<String?> getAccessToken() async => accessToken;
+
+  @override
   Future<void> clearTokens() async {
     tokensExist = false;
+    accessToken = null;
   }
 }
 
@@ -100,7 +105,7 @@ void main() {
     test('checkAuthStatus emits authenticated immediately from cache', () async {
       storage.tokensExist = true;
       await prefs.cacheUser(
-        const User(name: 'Cached Clark', email: 'cached@example.com'),
+        const User(id: 'user_1', name: 'Cached Clark', email: 'cached@example.com'),
       );
       // Repository throws if called, ensuring it is NOT called when cache exists
       repository.shouldThrow = true;
@@ -109,9 +114,36 @@ void main() {
       expect(
         cubit.state,
         const AppAuthState.authenticated(
-          User(name: 'Cached Clark', email: 'cached@example.com'),
+          User(id: 'user_1', name: 'Cached Clark', email: 'cached@example.com'),
         ),
       );
+    });
+
+    test(
+        'checkAuthStatus migrates ID from JWT access token when cached user has empty ID',
+        () async {
+      storage.tokensExist = true;
+      // Header: {"alg":"HS256","typ":"JWT"}, Payload: {"sub":"jwt_user_42"}
+      storage.accessToken =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqd3RfdXNlcl80MiJ9.signature';
+      await prefs.cacheUser(
+        const User(id: '', name: 'Legacy Clark', email: 'legacy@example.com'),
+      );
+      repository.shouldThrow = true;
+
+      await cubit.checkAuthStatus();
+
+      expect(
+        cubit.state,
+        const AppAuthState.authenticated(
+          User(
+            id: 'jwt_user_42',
+            name: 'Legacy Clark',
+            email: 'legacy@example.com',
+          ),
+        ),
+      );
+      expect(prefs.getCachedUser()?.id, 'jwt_user_42');
     });
 
     test(

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/core/storage/secure_storage_service.dart';
@@ -29,11 +30,33 @@ class AppAuthCubit extends Cubit<AppAuthState> {
     }
 
     // 1. Check local cache (Instant Startup)
-    final cachedUser = _prefs.getCachedUser();
-    if (cachedUser != null) {
-      AppLogger.info('⚡ Local cache hit: authenticated as "${cachedUser.name}" (${cachedUser.email})', tag: 'Auth');
+    final initialCachedUser = _prefs.getCachedUser();
+    if (initialCachedUser != null) {
+      User effectiveUser = initialCachedUser;
+      // Gracefully attach ID from JWT if previously cached without it
+      if (effectiveUser.id.isEmpty) {
+        final token = await _storage.getAccessToken();
+        if (token != null && token.isNotEmpty) {
+          try {
+            final decoded = JwtDecoder.decode(token);
+            final sub = (decoded['sub'] ??
+                    decoded['nameid'] ??
+                    decoded[
+                        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ??
+                    '')
+                .toString();
+            if (sub.isNotEmpty) {
+              effectiveUser = effectiveUser.copyWith(id: sub);
+              await _prefs.cacheUser(effectiveUser);
+            }
+          } catch (_) {
+            // Token decode fallback
+          }
+        }
+      }
+      AppLogger.info('⚡ Local cache hit: authenticated as "${effectiveUser.name}" (${effectiveUser.email})', tag: 'Auth');
       timer.stop(note: 'cache hit - instant');
-      emit(AppAuthState.authenticated(cachedUser));
+      emit(AppAuthState.authenticated(effectiveUser));
       return;
     }
 
