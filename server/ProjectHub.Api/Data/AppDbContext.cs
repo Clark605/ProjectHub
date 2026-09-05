@@ -1,6 +1,7 @@
 using ProjectHub.Api.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Task = ProjectHub.Api.Models.Task;
 
 namespace ProjectHub.Api.Data;
@@ -14,6 +15,17 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<WorkspaceMember> WorkspaceMembers => Set<WorkspaceMember>();
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<Task> Tasks => Set<Task>();
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        base.ConfigureConventions(configurationBuilder);
+
+        configurationBuilder.Properties<DateTime>()
+            .HaveConversion<UtcDateTimeConverter>();
+
+        configurationBuilder.Properties<DateTime?>()
+            .HaveConversion<NullableUtcDateTimeConverter>();
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -70,5 +82,25 @@ public class AppDbContext : IdentityDbContext<AppUser>
             entity.Property(t => t.Status).HasMaxLength(50).IsRequired();
             entity.Property(t => t.Priority).HasMaxLength(50).IsRequired();
         });
+    }
+}
+
+public class UtcDateTimeConverter : ValueConverter<DateTime, DateTime>
+{
+    public UtcDateTimeConverter()
+        : base(
+            v => v.Kind == DateTimeKind.Utc ? v : (v.Kind == DateTimeKind.Local ? v.ToUniversalTime() : DateTime.SpecifyKind(v, DateTimeKind.Utc)),
+            v => DateTime.SpecifyKind(v, DateTimeKind.Utc))
+    {
+    }
+}
+
+public class NullableUtcDateTimeConverter : ValueConverter<DateTime?, DateTime?>
+{
+    public NullableUtcDateTimeConverter()
+        : base(
+            v => !v.HasValue ? v : (v.Value.Kind == DateTimeKind.Utc ? v : (v.Value.Kind == DateTimeKind.Local ? v.Value.ToUniversalTime() : DateTime.SpecifyKind(v.Value, DateTimeKind.Utc))),
+            v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v)
+    {
     }
 }
