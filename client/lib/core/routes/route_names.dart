@@ -13,6 +13,7 @@ class RouteNames {
   static const String dashboard = '/dashboard';
   static const String workspaces = '/workspaces';
   static const String projects = '/projects';
+  static const String projectDetail = '/project-detail';
   static const String myTasks = '/my-tasks';
   static const String kanban = '/kanban';
   static const String profile = '/profile';

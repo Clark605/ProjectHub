@@ -6,6 +6,9 @@ import 'package:client/features/auth/ui/screens/login_screen.dart';
 import 'package:client/features/auth/ui/screens/register_screen.dart';
 import 'package:client/features/auth/ui/screens/reset_password_screen.dart';
 import 'package:client/features/onboarding/ui/onboarding_screen.dart';
+import 'package:client/features/kanban/ui/kanban_screen.dart';
+import 'package:client/features/projects/data/models/project_dto.dart';
+import 'package:client/features/projects/ui/project_detail_screen.dart';
 import 'package:client/features/shell/ui/main_shell_screen.dart';
 import 'package:client/features/workspaces/ui/workspaces_screen.dart';
 
@@ -38,6 +41,12 @@ class AppRouter {
       case RouteNames.dashboard:
       case RouteNames.projects:
         return _fadeRoute(const MainShellScreen(initialIndex: 0), settings);
+      case RouteNames.projectDetail:
+        final args = settings.arguments;
+        final projectId = args is int
+            ? args
+            : int.tryParse(args?.toString() ?? '') ?? 0;
+        return _fadeRoute(ProjectDetailScreen(projectId: projectId), settings);
       case RouteNames.myTasks:
         return _fadeRoute(const MainShellScreen(initialIndex: 1), settings);
       case RouteNames.profile:
@@ -48,9 +57,25 @@ class AppRouter {
           settings: settings,
         );
       case RouteNames.kanban:
-        return MaterialPageRoute(
-          builder: (_) => const Scaffold(body: Center(child: Text('Kanban'))),
-          settings: settings,
+        final args = settings.arguments;
+        final int projectId;
+        final ProjectDto? project;
+        if (args is ProjectDto) {
+          project = args;
+          projectId = args.id;
+        } else if (args is int) {
+          projectId = args;
+          project = null;
+        } else if (args is Map<String, dynamic>) {
+          projectId = args['projectId'] as int? ?? 0;
+          project = args['project'] as ProjectDto?;
+        } else {
+          projectId = int.tryParse(args?.toString() ?? '') ?? 0;
+          project = null;
+        }
+        return _fadeRoute(
+          KanbanScreen(projectId: projectId, initialProject: project),
+          settings,
         );
       default:
         return null;
