@@ -7,7 +7,7 @@ import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:client/features/profile/ui/profile_screen.dart';
 import 'package:client/features/projects/ui/projects_screen.dart';
-import 'package:client/features/shell/ui/widgets/desktop_sidebar.dart';
+import 'package:client/features/shell/ui/widgets/sidebar.dart';
 import 'package:client/features/shell/ui/widgets/mobile_bottom_nav.dart';
 import 'package:client/features/shell/ui/widgets/shell_top_bar.dart';
 import 'package:client/features/shell/ui/widgets/tablet_navigation_rail.dart';
@@ -111,7 +111,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
                   backgroundColor: Colors.transparent,
                   body: Row(
                     children: [
-                      DesktopSidebar(
+                      Sidebar(
                         selectedIndex: _selectedIndex,
                         onItemSelected: _onSelectTab,
                       ),
@@ -137,7 +137,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
                   key: _scaffoldKey,
                   backgroundColor: Colors.transparent,
                   drawer: Drawer(
-                    child: DesktopSidebar(
+                    child: Sidebar(
                       selectedIndex: _selectedIndex,
                       onItemSelected: _onSelectTab,
                     ),
@@ -172,7 +172,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
                   key: _scaffoldKey,
                   backgroundColor: Colors.transparent,
                   drawer: Drawer(
-                    child: DesktopSidebar(
+                    child: Sidebar(
                       selectedIndex: _selectedIndex,
                       onItemSelected: _onSelectTab,
                     ),

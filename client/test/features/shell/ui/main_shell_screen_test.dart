@@ -12,7 +12,7 @@ import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/projects/ui/projects_screen.dart';
 import 'package:client/features/tasks/ui/my_tasks_screen.dart';
 import 'package:client/features/shell/ui/main_shell_screen.dart';
-import 'package:client/features/shell/ui/widgets/desktop_sidebar.dart';
+import 'package:client/features/shell/ui/widgets/sidebar.dart';
 import 'package:client/features/shell/ui/widgets/mobile_bottom_nav.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/data/models/add_member_request.dart';
@@ -179,7 +179,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
 
     // Verify DesktopSidebar & ProjectsScreen render
-    expect(find.byType(DesktopSidebar), findsOneWidget);
+    expect(find.byType(Sidebar), findsOneWidget);
     expect(find.byType(ProjectsScreen), findsOneWidget);
   });
 

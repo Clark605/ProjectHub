@@ -5,11 +5,11 @@ import 'package:client/features/shell/ui/widgets/desktop_sidebar_nav_item.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_quick_links.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_user_profile.dart';
 
-class DesktopSidebar extends StatelessWidget {
+class Sidebar extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onItemSelected;
 
-  const DesktopSidebar({
+  const Sidebar({
     super.key,
     required this.selectedIndex,
     required this.onItemSelected,
@@ -24,10 +24,7 @@ class DesktopSidebar extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.95),
         border: const Border(
-          right: BorderSide(
-            color: AppColors.border,
-            width: 1,
-          ),
+          right: BorderSide(color: AppColors.border, width: 1),
         ),
       ),
       child: Column(
@@ -98,9 +95,7 @@ class DesktopSidebar extends StatelessWidget {
                   isSelected: selectedIndex == 2,
                   onTap: () => onItemSelected(2),
                 ),
-                DesktopSidebarQuickLinks(
-                  onItemSelected: onItemSelected,
-                ),
+                DesktopSidebarQuickLinks(onItemSelected: onItemSelected),
               ],
             ),
           ),
