@@ -4,6 +4,7 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_nav_item.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_quick_links.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_user_profile.dart';
+import 'package:client/features/shell/models/shell_tab.dart';
 
 class Sidebar extends StatelessWidget {
   final int selectedIndex;
@@ -67,34 +68,28 @@ class Sidebar extends StatelessWidget {
           const Divider(color: AppColors.border, height: 1),
           const SizedBox(height: 12),
 
-          // Navigation Section (3 Tabs: Projects, My Tasks, Profile)
+          // Navigation Section
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
-                DesktopSidebarNavItem(
-                  icon: Icons.folder_rounded,
-                  label: 'Projects',
-                  isSelected: selectedIndex == 0,
-                  badge: '3',
-                  onTap: () => onItemSelected(0),
-                ),
-                const SizedBox(height: 4),
-                DesktopSidebarNavItem(
-                  icon: Icons.task_alt_rounded,
-                  label: 'My Tasks',
-                  isSelected: selectedIndex == 1,
-                  badge: '5',
-                  badgeColor: AppColors.priorityUrgent,
-                  onTap: () => onItemSelected(1),
-                ),
-                const SizedBox(height: 4),
-                DesktopSidebarNavItem(
-                  icon: Icons.person_rounded,
-                  label: 'Profile & Settings',
-                  isSelected: selectedIndex == 2,
-                  onTap: () => onItemSelected(2),
-                ),
+                ...ShellTab.values.map((tab) => Column(
+                      children: [
+                        DesktopSidebarNavItem(
+                          icon: tab.selectedIcon,
+                          label: tab == ShellTab.profile ? 'Profile & Settings' : tab.label,
+                          isSelected: selectedIndex == tab.index,
+                          badge: tab == ShellTab.projects
+                              ? '3'
+                              : (tab == ShellTab.myTasks ? '5' : null),
+                          badgeColor: tab == ShellTab.myTasks
+                              ? AppColors.priorityUrgent
+                              : null,
+                          onTap: () => onItemSelected(tab.index),
+                        ),
+                        if (tab != ShellTab.profile) const SizedBox(height: 4),
+                      ],
+                    )),
                 DesktopSidebarQuickLinks(onItemSelected: onItemSelected),
               ],
             ),

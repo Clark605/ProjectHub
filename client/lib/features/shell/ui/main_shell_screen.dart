@@ -53,8 +53,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
     }
   }
 
-  void _onWorkspaceTap() {
-    final hasWorkspaces = getIt<WorkspaceContextCubit>().state.maybeWhen(
+  void _onWorkspaceTap(BuildContext context) {
+    final hasWorkspaces = context.read<WorkspaceContextCubit>().state.maybeWhen(
       loaded: (workspaces, _) => workspaces.isNotEmpty,
       orElse: () => false,
     );
@@ -70,16 +70,14 @@ class _MainShellScreenState extends State<MainShellScreen> {
   }
 
   Widget _buildBody() {
-    switch (_selectedIndex) {
-      case 0:
-        return const ProjectsScreen();
-      case 1:
-        return const MyTasksScreen();
-      case 2:
-        return const ProfileScreen();
-      default:
-        return const ProjectsScreen();
-    }
+    return IndexedStack(
+      index: _selectedIndex,
+      children: const [
+        ProjectsScreen(),
+        MyTasksScreen(),
+        ProfileScreen(),
+      ],
+    );
   }
 
   @override
@@ -122,9 +120,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
                               activeWorkspaceName: wsName,
                               activeWorkspaceRole: wsRole,
                               isLoading: isWsLoading,
-                              onWorkspaceTap: _onWorkspaceTap,
+                              onWorkspaceTap: () => _onWorkspaceTap(context),
                               onSettingsTap: _onSettingsTap,
-                              onProfileTap: () => _onSelectTab(2),
                             ),
                             Expanded(child: _buildBody()),
                           ],
@@ -155,11 +152,11 @@ class _MainShellScreenState extends State<MainShellScreen> {
                               activeWorkspaceName: wsName,
                               activeWorkspaceRole: wsRole,
                               isLoading: isWsLoading,
-                              onWorkspaceTap: _onWorkspaceTap,
+                              onWorkspaceTap: () => _onWorkspaceTap(context),
                               onSettingsTap: _onSettingsTap,
                               onOpenDrawer: () =>
                                   _scaffoldKey.currentState?.openDrawer(),
-                              onProfileTap: () => _onSelectTab(2),
+
                             ),
                             Expanded(child: _buildBody()),
                           ],
@@ -181,10 +178,10 @@ class _MainShellScreenState extends State<MainShellScreen> {
                     activeWorkspaceName: wsName,
                     activeWorkspaceRole: wsRole,
                     isLoading: isWsLoading,
-                    onWorkspaceTap: _onWorkspaceTap,
+                    onWorkspaceTap: () => _onWorkspaceTap(context),
                     onSettingsTap: _onSettingsTap,
                     onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
-                    onProfileTap: () => _onSelectTab(2),
+
                   ),
                   body: _buildBody(),
                   bottomNavigationBar: MobileBottomNav(

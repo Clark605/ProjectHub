@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/features/shell/models/shell_tab.dart';
 
 class MobileBottomNav extends StatelessWidget {
   final int selectedIndex;
@@ -29,32 +30,14 @@ class MobileBottomNav extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: _BottomNavItem(
-                  icon: Icons.folder_rounded,
-                  label: 'Projects',
-                  isSelected: selectedIndex == 0,
-                  onTap: () => onItemSelected(0),
-                ),
-              ),
-              Expanded(
-                child: _BottomNavItem(
-                  icon: Icons.task_alt_rounded,
-                  label: 'My Tasks',
-                  isSelected: selectedIndex == 1,
-                  onTap: () => onItemSelected(1),
-                ),
-              ),
-              Expanded(
-                child: _BottomNavItem(
-                  icon: Icons.person_rounded,
-                  label: 'Profile',
-                  isSelected: selectedIndex == 2,
-                  onTap: () => onItemSelected(2),
-                ),
-              ),
-            ],
+            children: ShellTab.values.map((tab) => Expanded(
+                  child: _BottomNavItem(
+                    icon: tab.selectedIcon,
+                    label: tab.label,
+                    isSelected: selectedIndex == tab.index,
+                    onTap: () => onItemSelected(tab.index),
+                  ),
+                )).toList(),
           ),
         ),
       ),
