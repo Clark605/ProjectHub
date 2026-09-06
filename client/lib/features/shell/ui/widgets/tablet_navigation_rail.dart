@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/features/shell/models/shell_tab.dart';
 
 class TabletNavigationRail extends StatelessWidget {
   final int selectedIndex;
@@ -53,26 +54,17 @@ class TabletNavigationRail extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Rail Nav Items
-          _RailItem(
-            icon: Icons.folder_rounded,
-            label: 'Projects',
-            isSelected: selectedIndex == 0,
-            onTap: () => onItemSelected(0),
-          ),
-          const SizedBox(height: 12),
-          _RailItem(
-            icon: Icons.task_alt_rounded,
-            label: 'My Tasks',
-            isSelected: selectedIndex == 1,
-            onTap: () => onItemSelected(1),
-          ),
-          const SizedBox(height: 12),
-          _RailItem(
-            icon: Icons.person_rounded,
-            label: 'Profile',
-            isSelected: selectedIndex == 2,
-            onTap: () => onItemSelected(2),
-          ),
+          ...ShellTab.values.map((tab) => Column(
+                children: [
+                  _RailItem(
+                    icon: tab.selectedIcon,
+                    label: tab.label,
+                    isSelected: selectedIndex == tab.index,
+                    onTap: () => onItemSelected(tab.index),
+                  ),
+                  if (tab != ShellTab.profile) const SizedBox(height: 12),
+                ],
+              )),
 
           const Spacer(),
           const SizedBox(height: 16),
