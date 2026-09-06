@@ -23,7 +23,10 @@ class AppAuthCubit extends Cubit<AppAuthState> {
     final hasToken = await _storage.hasTokens();
     if (!hasToken) {
       await _prefs.clearCachedUser();
-      AppLogger.info('No stored tokens found. Emitting unauthenticated.', tag: 'Auth');
+      AppLogger.info(
+        'No stored tokens found. Emitting unauthenticated.',
+        tag: 'Auth',
+      );
       timer.stop(note: 'no tokens');
       emit(const AppAuthState.unauthenticated());
       return;
@@ -39,12 +42,12 @@ class AppAuthCubit extends Cubit<AppAuthState> {
         if (token != null && token.isNotEmpty) {
           try {
             final decoded = JwtDecoder.decode(token);
-            final sub = (decoded['sub'] ??
-                    decoded['nameid'] ??
-                    decoded[
-                        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ??
-                    '')
-                .toString();
+            final sub =
+                (decoded['sub'] ??
+                        decoded['nameid'] ??
+                        decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ??
+                        '')
+                    .toString();
             if (sub.isNotEmpty) {
               effectiveUser = effectiveUser.copyWith(id: sub);
               await _prefs.cacheUser(effectiveUser);
@@ -54,22 +57,36 @@ class AppAuthCubit extends Cubit<AppAuthState> {
           }
         }
       }
-      AppLogger.info('⚡ Local cache hit: authenticated as "${effectiveUser.name}" (${effectiveUser.email})', tag: 'Auth');
+      AppLogger.info(
+        '⚡ Local cache hit: authenticated as "${effectiveUser.name}" (${effectiveUser.email})',
+        tag: 'Auth',
+      );
       timer.stop(note: 'cache hit - instant');
       emit(AppAuthState.authenticated(effectiveUser));
       return;
     }
 
     // 2. Graceful Migration: Tokens exist but no cached user yet (e.g. app update)
-    AppLogger.info('🔄 Tokens found without cache. Migrating by fetching profile from server...', tag: 'Auth');
+    AppLogger.info(
+      '🔄 Tokens found without cache. Migrating by fetching profile from server...',
+      tag: 'Auth',
+    );
     try {
       final user = await _authRepository.getCurrentUser();
       await _prefs.cacheUser(user);
-      AppLogger.info('✅ Profile retrieved & cached: "${user.name}"', tag: 'Auth');
+      AppLogger.info(
+        '✅ Profile retrieved & cached: "${user.name}"',
+        tag: 'Auth',
+      );
       timer.stop(note: 'server migration completed');
       emit(AppAuthState.authenticated(user));
     } catch (e, st) {
-      AppLogger.warning('Failed to fetch profile during migration.', tag: 'Auth', error: e, stackTrace: st);
+      AppLogger.warning(
+        'Failed to fetch profile during migration.',
+        tag: 'Auth',
+        error: e,
+        stackTrace: st,
+      );
       await _prefs.clearCachedUser();
       timer.stop(note: 'migration failed');
       emit(const AppAuthState.unauthenticated());
@@ -78,34 +95,53 @@ class AppAuthCubit extends Cubit<AppAuthState> {
 
   /// Background sync to validate session and refresh cached user profile
   Future<void> syncUser() async {
-    AppLogger.debug('🔄 Running background session verification...', tag: 'Auth');
+    AppLogger.debug(
+      '🔄 Running background session verification...',
+      tag: 'Auth',
+    );
     try {
       final user = await _authRepository.getCurrentUser();
       await _prefs.cacheUser(user);
-      AppLogger.info('✅ Background sync succeeded for "${user.name}"', tag: 'Auth');
+      AppLogger.info(
+        '✅ Background sync succeeded for "${user.name}"',
+        tag: 'Auth',
+      );
       emit(AppAuthState.authenticated(user));
     } catch (e) {
       final hasToken = await _storage.hasTokens();
       if (!hasToken) {
-        AppLogger.warning('Session revoked or refresh failed. Emitting unauthenticated.', tag: 'Auth');
+        AppLogger.warning(
+          'Session revoked or refresh failed. Emitting unauthenticated.',
+          tag: 'Auth',
+        );
         await _prefs.clearCachedUser();
         emit(const AppAuthState.unauthenticated());
       } else {
-        AppLogger.debug('Background sync skipped/failed (network offline). Keeping cached session.', tag: 'Auth');
+        AppLogger.debug(
+          'Background sync skipped/failed (network offline). Keeping cached session.',
+          tag: 'Auth',
+        );
       }
     }
   }
 
   void setAuthenticated(User user) {
-    AppLogger.info('User authenticated & cached: "${user.name}" (${user.email})', tag: 'Auth');
+    AppLogger.info(
+      'User authenticated & cached: "${user.name}" (${user.email})',
+      tag: 'Auth',
+    );
     _prefs.cacheUser(user);
     emit(AppAuthState.authenticated(user));
   }
 
   Future<void> logout() async {
-    AppLogger.info('Logging out user. Clearing tokens and cached data...', tag: 'Auth');
+    AppLogger.info(
+      'Logging out user. Clearing tokens and cached data...',
+      tag: 'Auth',
+    );
     await _authRepository.logout();
     await _prefs.clearCachedUser();
+    await _prefs.clearActiveWorkspace();
     emit(const AppAuthState.unauthenticated());
   }
 }

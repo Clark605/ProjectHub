@@ -257,5 +257,87 @@ void main() {
 
       await cubit.loadWorkspaces();
     });
+
+    test(
+      'initializes with loaded state immediately when cached workspace exists',
+      () async {
+        const cached = WorkspaceDto(
+          id: 42,
+          name: 'Cached Org',
+          membership: WorkspaceMembershipDto(role: 'Owner'),
+        );
+        await prefs.cacheActiveWorkspace(cached);
+
+        final newCubit = WorkspaceContextCubit(repository, prefs);
+        expect(
+          newCubit.state,
+          const WorkspaceContextState.loaded(
+            workspaces: [cached],
+            activeWorkspace: cached,
+          ),
+        );
+        await newCubit.close();
+      },
+    );
+
+    test(
+      'loadWorkspaces does not emit loading when cached workspace exists',
+      () async {
+        const cached = WorkspaceDto(
+          id: 42,
+          name: 'Cached Org',
+          membership: WorkspaceMembershipDto(role: 'Owner'),
+        );
+        await prefs.cacheActiveWorkspace(cached);
+
+        const refreshed = WorkspaceDto(
+          id: 42,
+          name: 'Refreshed Org',
+          membership: WorkspaceMembershipDto(role: 'Owner'),
+        );
+        repository.workspaces = [refreshed];
+
+        final newCubit = WorkspaceContextCubit(repository, prefs);
+
+        expectLater(
+          newCubit.stream,
+          emitsInOrder([
+            const WorkspaceContextState.loaded(
+              workspaces: [refreshed],
+              activeWorkspace: refreshed,
+            ),
+          ]),
+        );
+
+        await newCubit.loadWorkspaces();
+        expect(prefs.getCachedActiveWorkspace()?.name, 'Refreshed Org');
+        await newCubit.close();
+      },
+    );
+
+    test('retains cached loaded state when background refresh fails', () async {
+      const cached = WorkspaceDto(
+        id: 42,
+        name: 'Cached Org',
+        membership: WorkspaceMembershipDto(role: 'Owner'),
+      );
+      await prefs.cacheActiveWorkspace(cached);
+
+      repository.shouldThrow = true;
+      repository.errorMessage = 'Network offline';
+
+      final newCubit = WorkspaceContextCubit(repository, prefs);
+
+      await newCubit.loadWorkspaces();
+
+      expect(
+        newCubit.state,
+        const WorkspaceContextState.loaded(
+          workspaces: [cached],
+          activeWorkspace: cached,
+        ),
+      );
+      await newCubit.close();
+    });
   });
 }

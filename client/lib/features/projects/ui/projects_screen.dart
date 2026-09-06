@@ -250,9 +250,8 @@ class _ProjectsViewState extends State<_ProjectsView> {
 
                   // ── Body Content ──
                   state.when(
-                    initial: () => const SliverFillRemaining(
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
+                    initial: () =>
+                        const SliverFillRemaining(child: ProjectsSkeleton()),
                     loading: () =>
                         const SliverFillRemaining(child: ProjectsSkeleton()),
                     error: (message) => SliverFillRemaining(

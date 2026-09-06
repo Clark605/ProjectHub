@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/constants/storage_keys.dart';
 import 'package:client/features/auth/data/models/user.dart';
+import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 
 @lazySingleton
 class PrefsService {
@@ -39,8 +40,29 @@ class PrefsService {
   Future<void> setActiveWorkspaceId(int id) =>
       _prefs.setInt(StorageKeys.activeWorkspaceId, id);
 
-  Future<void> clearActiveWorkspace() =>
-      _prefs.remove(StorageKeys.activeWorkspaceId);
+  WorkspaceDto? getCachedActiveWorkspace() {
+    final jsonStr = _prefs.getString(StorageKeys.cachedActiveWorkspace);
+    if (jsonStr == null || jsonStr.isEmpty) return null;
+    try {
+      final jsonMap = jsonDecode(jsonStr) as Map<String, dynamic>;
+      return WorkspaceDto.fromJson(jsonMap);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  Future<void> cacheActiveWorkspace(WorkspaceDto workspace) => _prefs.setString(
+    StorageKeys.cachedActiveWorkspace,
+    jsonEncode(workspace.toJson()),
+  );
+
+  Future<void> clearCachedActiveWorkspace() =>
+      _prefs.remove(StorageKeys.cachedActiveWorkspace);
+
+  Future<void> clearActiveWorkspace() async {
+    await _prefs.remove(StorageKeys.activeWorkspaceId);
+    await _prefs.remove(StorageKeys.cachedActiveWorkspace);
+  }
 
   // Locale
   String get locale => _prefs.getString(StorageKeys.locale) ?? 'en';

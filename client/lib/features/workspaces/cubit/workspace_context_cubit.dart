@@ -13,15 +13,34 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
   final PrefsService _prefs;
 
   WorkspaceContextCubit(this._repository, this._prefs)
-    : super(const WorkspaceContextState.initial());
+    : super(_resolveInitialState(_prefs));
+
+  static WorkspaceContextState _resolveInitialState(PrefsService prefs) {
+    final cached = prefs.getCachedActiveWorkspace();
+    if (cached != null) {
+      return WorkspaceContextState.loaded(
+        workspaces: [cached],
+        activeWorkspace: cached,
+      );
+    }
+    return const WorkspaceContextState.initial();
+  }
 
   Future<void> loadWorkspaces() async {
-    emit(const WorkspaceContextState.loading());
+    final hasLoadedState = state.maybeWhen(
+      loaded: (_, _) => true,
+      orElse: () => false,
+    );
+    if (!hasLoadedState) {
+      emit(const WorkspaceContextState.loading());
+    }
+
     await safeExecute(
       () async {
         final workspaces = await _repository.getWorkspaces();
 
         if (workspaces.isEmpty) {
+          await _prefs.clearActiveWorkspace();
           emit(const WorkspaceContextState.empty());
           return;
         }
@@ -29,6 +48,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
         if (workspaces.length == 1) {
           final single = workspaces.first;
           await _prefs.setActiveWorkspaceId(single.id);
+          await _prefs.cacheActiveWorkspace(single);
           emit(
             WorkspaceContextState.loaded(
               workspaces: workspaces,
@@ -46,6 +66,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
 
         final active = matched ?? workspaces.first;
         await _prefs.setActiveWorkspaceId(active.id);
+        await _prefs.cacheActiveWorkspace(active);
 
         emit(
           WorkspaceContextState.loaded(
@@ -54,7 +75,15 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
           ),
         );
       },
-      onError: (message) => emit(WorkspaceContextState.error(message)),
+      onError: (message) {
+        final hasLoaded = state.maybeWhen(
+          loaded: (_, _) => true,
+          orElse: () => false,
+        );
+        if (!hasLoaded) {
+          emit(WorkspaceContextState.error(message));
+        }
+      },
       defaultErrorMessage: 'An unexpected error occurred',
       logTag: 'WorkspaceContext',
     );
@@ -68,6 +97,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
     if (currentWorkspaces == null) return;
 
     await _prefs.setActiveWorkspaceId(workspace.id);
+    await _prefs.cacheActiveWorkspace(workspace);
     emit(
       WorkspaceContextState.loaded(
         workspaces: currentWorkspaces,
@@ -88,6 +118,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
 
         final updatedList = [...currentWorkspaces, created];
         await _prefs.setActiveWorkspaceId(created.id);
+        await _prefs.cacheActiveWorkspace(created);
 
         emit(
           WorkspaceContextState.loaded(

@@ -96,6 +96,13 @@ class _MainShellScreenState extends State<MainShellScreen> {
           );
           final wsName = activeWorkspace?.name;
           final wsRole = activeWorkspace?.membership?.role;
+          final isWsLoading =
+              workspaceState.maybeWhen(
+                loading: () => true,
+                initial: () => true,
+                orElse: () => false,
+              ) &&
+              activeWorkspace == null;
 
           return SafeArea(
             child: AmbientGlowBackground(
@@ -114,6 +121,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
                             ShellTopBar(
                               activeWorkspaceName: wsName,
                               activeWorkspaceRole: wsRole,
+                              isLoading: isWsLoading,
                               onWorkspaceTap: _onWorkspaceTap,
                               onSettingsTap: _onSettingsTap,
                               onProfileTap: () => _onSelectTab(2),
@@ -146,6 +154,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
                             ShellTopBar(
                               activeWorkspaceName: wsName,
                               activeWorkspaceRole: wsRole,
+                              isLoading: isWsLoading,
                               onWorkspaceTap: _onWorkspaceTap,
                               onSettingsTap: _onSettingsTap,
                               onOpenDrawer: () =>
@@ -171,6 +180,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
                   appBar: ShellTopBar(
                     activeWorkspaceName: wsName,
                     activeWorkspaceRole: wsRole,
+                    isLoading: isWsLoading,
                     onWorkspaceTap: _onWorkspaceTap,
                     onSettingsTap: _onSettingsTap,
                     onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),

@@ -11,4 +11,5 @@ class StorageKeys {
   static const String activeWorkspaceId = 'active_workspace_id';
   static const String locale = 'locale';
   static const String cachedUser = 'cached_user';
+  static const String cachedActiveWorkspace = 'cached_active_workspace';
 }
