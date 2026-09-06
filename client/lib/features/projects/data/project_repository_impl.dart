@@ -68,7 +68,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
       if (_wsProjectsCache.containsKey(project.workspaceId)) {
         final list = _wsProjectsCache[project.workspaceId]!;
         final idx = list.indexWhere((p) => p.id == id);
-        if (idx != -1) list[idx] = project; else list.add(project);
+        if (idx != -1) { list[idx] = project; } else { list.add(project); }
       }
       
       AppLogger.debug('Fetched project $id', tag: 'ProjectRepository');

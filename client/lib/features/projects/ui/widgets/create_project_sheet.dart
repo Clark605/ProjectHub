@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -54,7 +54,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
 
     final cubit = widget.cubit ?? context.read<ProjectsListCubit>();
     cubit.createProject(request).then((created) {
-      if (created != null && mounted) {
+      if (created != null && context.mounted) {
         Navigator.of(context).pop(created);
       }
     });

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
-import 'package:client/features/workspaces/data/models/member_dto.dart';
+
 import 'package:client/features/workspaces/ui/widgets/invite_member_sheet.dart';
 import 'package:client/features/workspaces/ui/widgets/member_tile.dart';
 import 'package:client/l10n/generated/app_localizations.dart';

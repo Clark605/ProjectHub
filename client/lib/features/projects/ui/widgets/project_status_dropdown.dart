@@ -1,33 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
-
-enum ProjectStatus {
-  planning,
-  active,
-  completed,
-  archived;
-
-  String get displayName {
-    switch (this) {
-      case ProjectStatus.planning:
-        return 'Planning';
-      case ProjectStatus.active:
-        return 'Active';
-      case ProjectStatus.completed:
-        return 'Completed';
-      case ProjectStatus.archived:
-        return 'Archived';
-    }
-  }
-
-  static ProjectStatus fromString(String status) {
-    return ProjectStatus.values.firstWhere(
-      (e) => e.displayName.toLowerCase() == status.toLowerCase(),
-      orElse: () => ProjectStatus.planning,
-    );
-  }
-}
+import 'package:client/features/projects/data/models/project_status.dart';
 
 class ProjectStatusDropdown extends StatelessWidget {
   const ProjectStatusDropdown({
@@ -43,9 +17,7 @@ class ProjectStatusDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    
     final currentStatus = ProjectStatus.fromString(value);
 
     return Column(
@@ -59,26 +31,34 @@ class ProjectStatusDropdown extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<ProjectStatus>(
-          value: currentStatus,
+          initialValue: currentStatus,
           decoration: InputDecoration(
             filled: true,
-            fillColor: enabled ? AppColors.surfaceContainerHigh : AppColors.surfaceContainerLow,
+            fillColor: enabled
+                ? AppColors.surfaceContainerHigh
+                : AppColors.surfaceContainerLow,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColors.border.withValues(alpha: 0.5)),
+              borderSide: BorderSide(
+                color: AppColors.border.withValues(alpha: 0.5),
+              ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: AppColors.border.withValues(alpha: 0.5)),
+              borderSide: BorderSide(
+                color: AppColors.border.withValues(alpha: 0.5),
+              ),
             ),
           ),
           items: ProjectStatus.values.map((status) {
             return DropdownMenuItem(
               value: status,
-              child: Text(status.displayName),
+              child: Text(status.toDisplayString()),
             );
           }).toList(),
-          onChanged: enabled ? (status) => onChanged(status?.displayName) : null,
+          onChanged: enabled
+              ? (status) => onChanged(status?.toDisplayString())
+              : null,
         ),
       ],
     );

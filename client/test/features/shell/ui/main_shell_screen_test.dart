@@ -10,6 +10,11 @@ import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
 import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/projects/ui/projects_screen.dart';
+import 'package:client/features/projects/data/models/create_project_request.dart';
+import 'package:client/features/projects/data/models/project_dto.dart';
+import 'package:client/features/projects/data/models/update_project_request.dart';
+import 'package:client/features/projects/data/project_repository.dart';
+
 import 'package:client/features/tasks/ui/my_tasks_screen.dart';
 import 'package:client/features/shell/ui/main_shell_screen.dart';
 import 'package:client/features/shell/ui/widgets/sidebar.dart';
@@ -143,6 +148,60 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
   void clearCache([int? workspaceId]) {}
 }
 
+
+class _FakeProjectRepository implements ProjectRepository {
+  List<ProjectDto> projects = [];
+
+  @override
+  Future<List<ProjectDto>> getProjects(
+    int workspaceId, {
+    String? status,
+    bool forceRefresh = false,
+  }) async => projects;
+
+  @override
+  Future<ProjectDto> getProject(int id, {bool forceRefresh = false}) async =>
+      const ProjectDto(
+        id: 1,
+        name: 'Project 1',
+        workspaceId: 1,
+      );
+
+  @override
+  Future<ProjectDto> createProject(
+    int workspaceId,
+    CreateProjectRequest request,
+  ) async => ProjectDto(
+    id: 99,
+    name: request.name,
+    description: request.description,
+    workspaceId: workspaceId,
+  );
+
+  @override
+  Future<ProjectDto> updateProject(
+    int id,
+    UpdateProjectRequest request,
+  ) async => ProjectDto(
+    id: id,
+    name: request.name,
+    description: request.description,
+    workspaceId: 1,
+  );
+
+  @override
+  Future<void> deleteProject(int id) async {}
+
+  @override
+  void clearCache([int? workspaceId]) {}
+
+  @override
+  bool hasCachedProjects(int workspaceId) => false;
+
+  @override
+  bool hasCachedProject(int id) => false;
+}
+
 void main() {
   setUp(() async {
     await getIt.reset();
@@ -159,6 +218,9 @@ void main() {
     final workspaceRepo = _FakeWorkspaceRepository();
     final workspaceCubit = WorkspaceContextCubit(workspaceRepo, prefs);
     getIt.registerSingleton<WorkspaceContextCubit>(workspaceCubit);
+
+    final projectRepo = _FakeProjectRepository();
+    getIt.registerSingleton<ProjectRepository>(projectRepo);
   });
 
   tearDown(() async {

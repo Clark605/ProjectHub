@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
@@ -43,7 +43,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = BlocConsumer<ProjectDetailCubit, ProjectDetailState>(
+    final content = BlocConsumer<ProjectDetailCubit, ProjectDetailState>(
       bloc: _cubit,
       listener: (context, state) {
         state.maybeWhen(

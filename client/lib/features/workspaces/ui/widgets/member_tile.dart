@@ -19,8 +19,8 @@ class MemberTile extends StatelessWidget {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Remove Member?'),
-        content: Text('Are you sure you want to remove \ from the workspace?'),
+        title: const Text('Remove Member?'),
+        content: Text('Are you sure you want to remove ${member.name.isNotEmpty ? member.name : member.email} from the workspace?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
