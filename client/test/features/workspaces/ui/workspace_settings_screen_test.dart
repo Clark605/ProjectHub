@@ -15,12 +15,12 @@ import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
-import 'package:client/features/workspaces/ui/widgets/workspace_danger_zone.dart';
+import 'package:client/core/widgets/app_danger_zone.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_details_card.dart';
-import 'package:client/features/workspaces/ui/widgets/workspace_error_banner.dart';
+import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_members_card.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_settings_skeleton.dart';
-import 'package:client/features/workspaces/ui/workspaces_screen.dart';
+import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class _MockRepo implements WorkspaceRepository {
@@ -127,12 +127,12 @@ void main() {
       child: MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: WorkspacesScreen(cubit: settingsCubit),
+        home: WorkspaceSettingsScreen(cubit: settingsCubit),
       ),
     );
   }
 
-  testWidgets('WorkspacesScreen renders settings cards for Owner', (
+  testWidgets('WorkspaceSettingsScreen renders settings cards for Owner', (
     tester,
   ) async {
     await tester.pumpWidget(buildSubject());
@@ -140,11 +140,11 @@ void main() {
 
     expect(find.byType(WorkspaceDetailsCard), findsOneWidget);
     expect(find.byType(WorkspaceMembersCard), findsOneWidget);
-    expect(find.byType(WorkspaceDangerZone), findsOneWidget);
+    expect(find.byType(AppDangerZone), findsOneWidget);
     expect(find.text('Alpha Team'), findsWidgets);
   });
 
-  testWidgets('WorkspacesScreen shows lock and denies access for Member role', (
+  testWidgets('WorkspaceSettingsScreen shows lock and denies access for Member role', (
     tester,
   ) async {
     repo.workspace = repo.workspace.copyWith(
@@ -173,7 +173,7 @@ void main() {
   });
 
   testWidgets(
-    'WorkspacesScreen resolves WorkspaceContextCubit from getIt when pushed without ancestor BlocProvider',
+    'WorkspaceSettingsScreen resolves WorkspaceContextCubit from getIt when pushed without ancestor BlocProvider',
     (tester) async {
       getIt.registerSingleton<WorkspaceContextCubit>(contextCubit);
 
@@ -181,7 +181,7 @@ void main() {
         MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: WorkspacesScreen(cubit: settingsCubit),
+          home: WorkspaceSettingsScreen(cubit: settingsCubit),
         ),
       );
       await tester.pump(const Duration(milliseconds: 100));
@@ -191,13 +191,13 @@ void main() {
   );
 
   testWidgets(
-    'WorkspacesScreen accepts contextCubit directly via constructor',
+    'WorkspaceSettingsScreen accepts contextCubit directly via constructor',
     (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: WorkspacesScreen(
+          home: WorkspaceSettingsScreen(
             cubit: settingsCubit,
             contextCubit: contextCubit,
           ),
@@ -229,7 +229,7 @@ void main() {
   );
 
   testWidgets(
-    'WorkspacesScreen renders WorkspaceSettingsSkeleton when in loading state',
+    'WorkspaceSettingsScreen renders WorkspaceSettingsSkeleton when in loading state',
     (tester) async {
       final loadingCubit = WorkspaceSettingsCubit(repo, contextCubit);
       loadingCubit.emit(const WorkspaceSettingsState.loading());
@@ -240,7 +240,7 @@ void main() {
           child: MaterialApp(
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
-            home: WorkspacesScreen(cubit: loadingCubit),
+            home: WorkspaceSettingsScreen(cubit: loadingCubit),
           ),
         ),
       );
@@ -251,30 +251,30 @@ void main() {
   );
 
   testWidgets(
-    'WorkspacesScreen renders WorkspaceErrorBanner when errorMessage is set and dismisses on button tap',
+    'WorkspaceSettingsScreen renders AppErrorBanner when errorMessage is set and dismisses on button tap',
     (tester) async {
       await tester.pumpWidget(buildSubject());
       await tester.pump(const Duration(milliseconds: 100));
 
-      expect(find.byType(WorkspaceErrorBanner), findsNothing);
+      expect(find.byType(AppErrorBanner), findsNothing);
 
       repo.onUpdateWorkspace = (id, req) => throw Exception('Failed to update');
       await settingsCubit.updateDetails('Bad Name', 'Bad Desc');
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 250));
 
-      expect(find.byType(WorkspaceErrorBanner), findsOneWidget);
+      expect(find.byType(AppErrorBanner), findsOneWidget);
       expect(find.text('Failed to update workspace details'), findsOneWidget);
 
-      await tester.tap(find.text('Dismiss'));
+      await tester.tap(find.byIcon(Icons.close));
       await tester.pump();
 
-      expect(find.byType(WorkspaceErrorBanner), findsNothing);
+      expect(find.byType(AppErrorBanner), findsNothing);
     },
   );
 
   testWidgets(
-    'WorkspacesScreen navigates to RouteNames.shell on delete',
+    'WorkspaceSettingsScreen navigates to RouteNames.shell on delete',
     (tester) async {
       String? pushedRoute;
       await tester.pumpWidget(
@@ -289,7 +289,7 @@ void main() {
               );
             }
             return MaterialPageRoute(
-              builder: (_) => WorkspacesScreen(
+              builder: (_) => WorkspaceSettingsScreen(
                 cubit: settingsCubit,
                 contextCubit: contextCubit,
               ),

@@ -95,7 +95,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState> {
     emit(
       currentState.copyWith(
         isSaving: true,
-        actionSuccessMessage: null,
+        successAction: null,
         errorMessage: null,
       ),
     );
@@ -112,7 +112,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState> {
           currentState.copyWith(
             workspace: updated,
             isSaving: false,
-            actionSuccessMessage: 'detailsUpdated',
+            successAction: ActionDetailsUpdated(),
           ),
         );
         return true;
@@ -134,7 +134,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState> {
     emit(
       currentState.copyWith(
         isInviting: true,
-        actionSuccessMessage: null,
+        successAction: null,
         errorMessage: null,
       ),
     );
@@ -150,7 +150,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState> {
           currentState.copyWith(
             members: updatedMembers,
             isInviting: false,
-            actionSuccessMessage: 'memberAddedWithEmail:$email',
+            successAction: ActionMemberAddedWithEmail(email),
           ),
         );
         return true;
@@ -169,7 +169,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState> {
     final currentState = state;
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
-    emit(currentState.copyWith(actionSuccessMessage: null, errorMessage: null));
+    emit(currentState.copyWith(successAction: null, errorMessage: null));
 
     final success = await safeExecute<bool>(
       () async {
@@ -180,7 +180,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState> {
         emit(
           currentState.copyWith(
             members: updatedMembers,
-            actionSuccessMessage: 'memberRemoved',
+            successAction: ActionMemberRemoved(),
           ),
         );
         return true;
@@ -199,7 +199,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState> {
     final currentState = state;
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
-    emit(currentState.copyWith(actionSuccessMessage: null, errorMessage: null));
+    emit(currentState.copyWith(successAction: null, errorMessage: null));
 
     final success = await safeExecute<bool>(
       () async {
@@ -229,7 +229,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState> {
     final currentState = state;
     if (currentState is WorkspaceSettingsLoaded) {
       emit(
-        currentState.copyWith(actionSuccessMessage: null, errorMessage: null),
+        currentState.copyWith(successAction: null, errorMessage: null),
       );
     }
   }

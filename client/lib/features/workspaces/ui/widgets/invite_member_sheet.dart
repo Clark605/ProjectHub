@@ -49,7 +49,7 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
       child: BlocConsumer<WorkspaceSettingsCubit, WorkspaceSettingsState>(
         listener: (context, state) {
           if (state is WorkspaceSettingsLoaded &&
-              (state.actionSuccessMessage?.startsWith('memberAdded') ??
+              (state.successAction is ActionMemberAdded || state.successAction is ActionMemberAddedWithEmail ??
                   false)) {
             Navigator.of(context).pop();
           }

@@ -153,7 +153,7 @@ void main() {
       final state = cubit.state as WorkspaceSettingsLoaded;
       expect(state.workspace.name, 'New Acme Name');
       expect(state.workspace.description, 'New Desc');
-      expect(state.actionSuccessMessage, 'detailsUpdated');
+      expect(state.successAction, isA<ActionDetailsUpdated>());
     });
 
     test(
@@ -168,8 +168,8 @@ void main() {
         expect(state.members.length, 3);
         expect(state.members.last.email, 'colleague@test.com');
         expect(
-          state.actionSuccessMessage,
-          'memberAddedWithEmail:colleague@test.com',
+          state.successAction,
+          isA<ActionMemberAddedWithEmail>(),
         );
       },
     );
@@ -183,7 +183,7 @@ void main() {
 
         expect(success, isTrue);
         final state = cubit.state as WorkspaceSettingsLoaded;
-        expect(state.actionSuccessMessage, 'memberRemoved');
+        expect(state.successAction, isA<ActionMemberRemoved>());
       },
     );
 

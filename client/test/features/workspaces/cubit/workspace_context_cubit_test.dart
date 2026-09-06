@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -266,7 +267,7 @@ void main() {
           name: 'Cached Org',
           membership: WorkspaceMembershipDto(role: 'Owner'),
         );
-        await prefs.cacheActiveWorkspace(cached);
+        await prefs.setCachedActiveWorkspaceRaw(jsonEncode(cached.toJson()));
 
         final newCubit = WorkspaceContextCubit(repository, prefs);
         expect(
@@ -288,7 +289,7 @@ void main() {
           name: 'Cached Org',
           membership: WorkspaceMembershipDto(role: 'Owner'),
         );
-        await prefs.cacheActiveWorkspace(cached);
+        await prefs.setCachedActiveWorkspaceRaw(jsonEncode(cached.toJson()));
 
         const refreshed = WorkspaceDto(
           id: 42,
@@ -310,7 +311,7 @@ void main() {
         );
 
         await newCubit.loadWorkspaces();
-        expect(prefs.getCachedActiveWorkspace()?.name, 'Refreshed Org');
+        expect(WorkspaceDto.fromJson(jsonDecode(prefs.getCachedActiveWorkspaceRaw()!)).name, 'Refreshed Org');
         await newCubit.close();
       },
     );
@@ -321,7 +322,7 @@ void main() {
         name: 'Cached Org',
         membership: WorkspaceMembershipDto(role: 'Owner'),
       );
-      await prefs.cacheActiveWorkspace(cached);
+      await prefs.setCachedActiveWorkspaceRaw(jsonEncode(cached.toJson()));
 
       repository.shouldThrow = true;
       repository.errorMessage = 'Network offline';

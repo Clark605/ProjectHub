@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -104,9 +105,7 @@ void main() {
 
     test('checkAuthStatus emits authenticated immediately from cache', () async {
       storage.tokensExist = true;
-      await prefs.cacheUser(
-        const User(id: 'user_1', name: 'Cached Clark', email: 'cached@example.com'),
-      );
+      await prefs.setCachedUserRaw(jsonEncode(const User(id: 'user_1', name: 'Cached Clark', email: 'cached@example.com').toJson()));
       // Repository throws if called, ensuring it is NOT called when cache exists
       repository.shouldThrow = true;
 
@@ -126,9 +125,7 @@ void main() {
       // Header: {"alg":"HS256","typ":"JWT"}, Payload: {"sub":"jwt_user_42"}
       storage.accessToken =
           'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqd3RfdXNlcl80MiJ9.signature';
-      await prefs.cacheUser(
-        const User(id: '', name: 'Legacy Clark', email: 'legacy@example.com'),
-      );
+      await prefs.setCachedUserRaw(jsonEncode(const User(id: '', name: 'Legacy Clark', email: 'legacy@example.com').toJson()));
       repository.shouldThrow = true;
 
       await cubit.checkAuthStatus();
@@ -143,7 +140,7 @@ void main() {
           ),
         ),
       );
-      expect(prefs.getCachedUser()?.id, 'jwt_user_42');
+      expect(User.fromJson(jsonDecode(prefs.getCachedUserRaw()!)).id, 'jwt_user_42');
     });
 
     test(
@@ -164,7 +161,7 @@ void main() {
             User(name: 'Clark', email: 'clark@example.com'),
           ),
         );
-        expect(prefs.getCachedUser(), repository.currentUser);
+        expect(User.fromJson(jsonDecode(prefs.getCachedUserRaw()!)), repository.currentUser);
       },
     );
 
@@ -182,16 +179,14 @@ void main() {
           User(name: 'Updated Clark', email: 'updated@example.com'),
         ),
       );
-      expect(prefs.getCachedUser(), repository.currentUser);
+      expect(User.fromJson(jsonDecode(prefs.getCachedUserRaw()!)), repository.currentUser);
     });
 
     test('logout emits unauthenticated and clears cache', () async {
-      await prefs.cacheUser(
-        const User(name: 'Clark', email: 'clark@example.com'),
-      );
+      await prefs.setCachedUserRaw(jsonEncode(const User(name: 'Clark', email: 'clark@example.com').toJson()));
       await cubit.logout();
       expect(cubit.state, const AppAuthState.unauthenticated());
-      expect(prefs.getCachedUser(), isNull);
+      expect(prefs.getCachedUserRaw(), isNull);
     });
   });
 
@@ -232,7 +227,7 @@ void main() {
           const LoginState.success(user),
         ]);
         expect(appAuthCubit.state, const AppAuthState.authenticated(user));
-        expect(prefs.getCachedUser(), user);
+        expect(User.fromJson(jsonDecode(prefs.getCachedUserRaw()!)), user);
       },
     );
 
