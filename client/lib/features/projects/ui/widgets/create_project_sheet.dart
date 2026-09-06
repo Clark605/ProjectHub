@@ -1,61 +1,28 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
+import 'package:client/core/widgets/app_date_field.dart';
+import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
+import 'package:client/features/projects/cubit/projects_list_state.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
-import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class CreateProjectSheet extends StatefulWidget {
-  final ProjectsListCubit cubit;
+  final ProjectsListCubit? cubit;
 
-  const CreateProjectSheet({super.key, required this.cubit});
+  const CreateProjectSheet({super.key, this.cubit});
 
-  static Future<ProjectDto?> show(
-    BuildContext context, {
-    required ProjectsListCubit cubit,
-  }) {
-    final isDesktop = ResponsiveLayout.isDesktop(context);
-
-    if (isDesktop) {
-      return showDialog<ProjectDto>(
-        context: context,
-        builder: (_) => Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 32,
-          ),
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 480),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceContainer,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: AppColors.border.withValues(alpha: 0.6),
-              ),
-            ),
-            child: CreateProjectSheet(cubit: cubit),
-          ),
-        ),
-      );
-    }
-
-    return showModalBottomSheet<ProjectDto>(
+  static void show(BuildContext context, {ProjectsListCubit? cubit}) {
+    showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => Container(
-        decoration: const BoxDecoration(
-          color: AppColors.surfaceContainer,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: CreateProjectSheet(cubit: cubit),
-      ),
+      builder: (_) => CreateProjectSheet(cubit: cubit),
     );
   }
 
@@ -68,8 +35,6 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
   final _nameController = TextEditingController();
   final _descController = TextEditingController();
   DateTime? _selectedDueDate;
-  bool _isLoading = false;
-  String? _errorMessage;
 
   @override
   void dispose() {
@@ -78,207 +43,128 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
     super.dispose();
   }
 
-  Future<void> _pickDueDate() async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDueDate ?? now,
-      firstDate: now.subtract(const Duration(days: 365)),
-      lastDate: now.add(const Duration(days: 3650)),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(
-              context,
-            ).colorScheme.copyWith(primary: AppColors.electricVioletContainer),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (picked != null) {
-      setState(() => _selectedDueDate = picked);
-    }
-  }
-
-  Future<void> _submit() async {
+  void _submit(BuildContext context) {
     if (!_formKey.currentState!.validate()) return;
-
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
+    
     final request = CreateProjectRequest(
       name: _nameController.text.trim(),
       description: _descController.text.trim(),
       dueDate: _selectedDueDate,
     );
 
-    final created = await widget.cubit.createProject(request);
-
-    if (!mounted) return;
-
-    if (created != null) {
-      Navigator.of(context).pop(created);
-    } else {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Failed to create project. Please try again.';
-      });
-    }
+    final cubit = widget.cubit ?? context.read<ProjectsListCubit>();
+    cubit.createProject(request).then((created) {
+      if (created != null && mounted) {
+        Navigator.of(context).pop(created);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final isDesktop = ResponsiveLayout.isDesktop(context);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final cubit = widget.cubit ?? context.read<ProjectsListCubit>();
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(24, 20, 24, 24 + bottomInset),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: AppColors.textTertiary.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.newProject,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              l10n.projectsSubtitle,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: 20),
-            if (_errorMessage != null) ...[
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.error.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: AppColors.error.withValues(alpha: 0.4),
+    return BlocBuilder<ProjectsListCubit, ProjectsListState>(
+      bloc: cubit,
+      builder: (context, state) {
+        final isLoading = state.mapOrNull(loading: (_) => true) ?? false;
+        final errorMessage = state.mapOrNull(error: (s) => s.message);
+
+        return Container(
+          width: isDesktop ? 600 : double.infinity,
+          margin: isDesktop ? const EdgeInsets.all(24) : EdgeInsets.zero,
+          padding: EdgeInsets.fromLTRB(24, 20, 24, 24 + bottomInset),
+          decoration: BoxDecoration(
+            color: AppColors.surfaceContainer,
+            borderRadius: isDesktop
+                ? BorderRadius.circular(24)
+                : const BorderRadius.vertical(top: Radius.circular(24)),
+            border: isDesktop ? Border.all(color: AppColors.border) : null,
+          ),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Center(
+                  child: Container(
+                    width: 40,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: AppColors.textTertiary.withValues(alpha: 0.4),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
                   ),
                 ),
-                child: Text(
-                  _errorMessage!,
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.error,
+                const SizedBox(height: 16),
+                Text(
+                  l10n.newProject,
+                  style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.projectsSubtitle,
+                  style: theme.textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+                ),
+                const SizedBox(height: 20),
+                if (errorMessage != null) ...[
+                  AppErrorBanner(errorMessage: errorMessage),
+                  const SizedBox(height: 16),
+                ],
+                AppTextField(
+                  controller: _nameController,
+                  label: l10n.projectName,
+                  hintText: l10n.projectNamePlaceholder,
+                  prefixIcon: Icons.folder_outlined,
+                  enabled: !isLoading,
+                  validator: (value) =>
+                      value == null || value.trim().isEmpty ? l10n.projectNameRequired : null,
+                ),
+                const SizedBox(height: 16),
+                AppTextField(
+                  controller: _descController,
+                  label: 'Description',
+                  hintText: 'Description...',
+                  prefixIcon: Icons.notes_rounded,
+                  enabled: !isLoading,
+                  maxLines: 3,
+                ),
+                const SizedBox(height: 16),
+                IgnorePointer(
+                  ignoring: isLoading,
+                  child: AppDateField(
+                    label: l10n.dueDate,
+                    selectedDate: _selectedDueDate,
+                    onDateSelected: (date) => setState(() => _selectedDueDate = date),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-            ],
-            AppTextField(
-              controller: _nameController,
-              label: l10n.projectName,
-              hintText: l10n.projectNamePlaceholder,
-              prefixIcon: Icons.folder_outlined,
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return l10n.projectNameRequired;
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            AppTextField(
-              controller: _descController,
-              label: l10n.projectDescription,
-              hintText: l10n.projectDescriptionPlaceholder,
-              prefixIcon: Icons.notes_rounded,
-              maxLines: 3,
-            ),
-            const SizedBox(height: 16),
-            // Due Date field
-            InkWell(
-              onTap: _pickDueDate,
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: AppColors.border.withValues(alpha: 0.6),
-                  ),
-                ),
-                child: Row(
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Icon(
-                      Icons.calendar_today_outlined,
-                      size: 20,
-                      color: AppColors.textSecondary,
+                    TextButton(
+                      onPressed: isLoading ? null : () => Navigator.of(context).pop(),
+                      child: Text(l10n.cancel),
                     ),
                     const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        _selectedDueDate != null
-                            ? DateFormat.yMMMd().format(_selectedDueDate!)
-                            : l10n.selectDueDate,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: _selectedDueDate != null
-                              ? AppColors.textPrimary
-                              : AppColors.textSecondary,
-                        ),
-                      ),
+                    AppButton(
+                      label: l10n.createProject,
+                      isLoading: isLoading,
+                      isExpanded: false,
+                      onPressed: () => _submit(context),
                     ),
-                    if (_selectedDueDate != null)
-                      IconButton(
-                        icon: const Icon(Icons.close_rounded, size: 18),
-                        onPressed: () =>
-                            setState(() => _selectedDueDate = null),
-                        color: AppColors.textTertiary,
-                        visualDensity: VisualDensity.compact,
-                      ),
                   ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: _isLoading
-                      ? null
-                      : () => Navigator.of(context).pop(),
-                  child: Text(l10n.cancel),
-                ),
-                const SizedBox(width: 12),
-                AppButton(
-                  label: l10n.createProject,
-                  isLoading: _isLoading,
-                  isExpanded: false,
-                  onPressed: _submit,
                 ),
               ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

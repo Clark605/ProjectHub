@@ -1,4 +1,4 @@
-import 'package:injectable/injectable.dart';
+﻿import 'package:injectable/injectable.dart';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
@@ -76,6 +76,9 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
   Future<ProjectDto?> createProject(CreateProjectRequest request) async {
     if (_currentWorkspaceId == null) return null;
 
+    final previousState = state;
+    emit(const ProjectsListState.loading());
+
     return await safeExecute<ProjectDto>(
       () async {
         final created = await _projectRepository.createProject(
@@ -83,10 +86,9 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
           request,
         );
 
-        final currentState = state;
         List<ProjectDto> updatedAll;
-        if (currentState is ProjectsListLoaded) {
-          updatedAll = [created, ...currentState.allProjects];
+        if (previousState is ProjectsListLoaded) {
+          updatedAll = [created, ...previousState.allProjects];
         } else {
           updatedAll = [created];
         }
@@ -103,7 +105,7 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
         return created;
       },
       onError: (message) {
-        addError(Exception(message));
+        emit(ProjectsListState.error(message));
       },
       defaultErrorMessage: 'Failed to create project',
       logTag: 'ProjectsListCubit',
