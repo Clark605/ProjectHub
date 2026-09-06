@@ -217,8 +217,8 @@ return $default(_that.id,_that.workspaceId,_that.name,_that.description,_that.st
 /// @nodoc
 @JsonSerializable()
 
-class _ProjectDto implements ProjectDto {
-  const _ProjectDto({required this.id, required this.workspaceId, required this.name, this.description = '', this.status = 'Planning', this.dueDate, this.createdBy = '', this.createdByName = '', this.createdAt, this.updatedAt});
+class _ProjectDto extends ProjectDto {
+  const _ProjectDto({required this.id, required this.workspaceId, required this.name, this.description = '', this.status = 'Planning', this.dueDate, this.createdBy = '', this.createdByName = '', this.createdAt, this.updatedAt}): super._();
   factory _ProjectDto.fromJson(Map<String, dynamic> json) => _$ProjectDtoFromJson(json);
 
 @override final  int id;
