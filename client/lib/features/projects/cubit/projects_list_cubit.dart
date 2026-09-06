@@ -5,6 +5,7 @@ import 'package:client/features/projects/cubit/projects_list_state.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/project_repository.dart';
+import 'package:client/features/projects/data/models/project_status.dart';
 
 @injectable
 class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
@@ -101,7 +102,9 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
 
         return created;
       },
-      onError: (message) => emit(ProjectsListState.error(message)),
+      onError: (message) {
+        addError(Exception(message));
+      },
       defaultErrorMessage: 'Failed to create project',
       logTag: 'ProjectsListCubit',
     );
@@ -142,8 +145,9 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
     if (filter.isEmpty || filter.toLowerCase() == 'all') {
       return projects;
     }
+    final targetStatus = ProjectStatus.fromString(filter);
     return projects
-        .where((p) => p.status.toLowerCase() == filter.toLowerCase())
+        .where((p) => p.statusEnum == targetStatus)
         .toList();
   }
 }
