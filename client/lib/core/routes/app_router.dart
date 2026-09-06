@@ -10,7 +10,7 @@ import 'package:client/features/kanban/ui/kanban_screen.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/ui/project_detail_screen.dart';
 import 'package:client/features/shell/ui/main_shell_screen.dart';
-import 'package:client/features/workspaces/ui/workspaces_screen.dart';
+import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
 
 class AppRouter {
   AppRouter._();
@@ -53,7 +53,7 @@ class AppRouter {
         return _fadeRoute(const MainShellScreen(initialIndex: 2), settings);
       case RouteNames.workspaces:
         return MaterialPageRoute(
-          builder: (_) => const WorkspacesScreen(),
+          builder: (_) => const WorkspaceSettingsScreen(),
           settings: settings,
         );
       case RouteNames.kanban:

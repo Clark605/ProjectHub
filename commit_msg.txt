@@ -1,0 +1,8 @@
+refactor(client/workspaces): fix bugs, decompose settings and members UI, and add logging
+
+- Fix QuickStartDialog silent failure on error by checking cubit state.
+- Decouple workspace_details_card controller logic into BlocListener.
+- Extract _MemberTile from workspace_members_card and add confirmation dialog.
+- Rename workspaces_screen to workspace_settings_screen and replace custom error/danger widgets with core app widgets.
+- Introduce sealed WorkspaceAction classes to eliminate string matching in state.
+- Add comprehensive AppLogger instrumentation to WorkspaceRepositoryImpl.

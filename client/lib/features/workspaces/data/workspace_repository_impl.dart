@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/dio_error_handler.dart';
+import 'package:client/core/utils/app_logger.dart';
 import 'package:client/features/workspaces/data/models/add_member_request.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
@@ -29,14 +30,17 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
     if (workspaceId != null) {
       _workspaceCache.remove(workspaceId);
       _membersCache.remove(workspaceId);
+      AppLogger.debug('Cache cleared for workspace $workspaceId', tag: 'WorkspaceRepository');
     } else {
       _workspaceCache.clear();
       _membersCache.clear();
+      AppLogger.debug('Entire cache cleared', tag: 'WorkspaceRepository');
     }
   }
 
   @override
   Future<List<WorkspaceDto>> getWorkspaces() async {
+    AppLogger.debug('Fetching workspaces', tag: 'WorkspaceRepository');
     try {
       final response = await _dio.get(ApiConstants.workspaces);
       final list = response.data as List<dynamic>;
@@ -44,6 +48,7 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
           .map((item) => WorkspaceDto.fromJson(item as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
+      AppLogger.error('Failed to fetch workspaces: ${e.message}', tag: 'WorkspaceRepository');
       throw DioErrorHandler.handle(e);
     }
   }
@@ -53,6 +58,7 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
     if (!forceRefresh && _workspaceCache.containsKey(id)) {
       return _workspaceCache[id]!;
     }
+    AppLogger.debug('Fetching workspace $id', tag: 'WorkspaceRepository');
     try {
       final response = await _dio.get(ApiConstants.workspaceById(id));
       final workspace = WorkspaceDto.fromJson(
@@ -61,12 +67,14 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
       _workspaceCache[id] = workspace;
       return workspace;
     } on DioException catch (e) {
+      AppLogger.error('Failed to fetch workspace $id: ${e.message}', tag: 'WorkspaceRepository');
       throw DioErrorHandler.handle(e);
     }
   }
 
   @override
   Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async {
+    AppLogger.info('Creating workspace: ${request.name}', tag: 'WorkspaceRepository');
     try {
       final response = await _dio.post(
         ApiConstants.workspaces,
@@ -78,6 +86,7 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
       _workspaceCache[created.id] = created;
       return created;
     } on DioException catch (e) {
+      AppLogger.error('Failed to create workspace: ${e.message}', tag: 'WorkspaceRepository');
       throw DioErrorHandler.handle(e);
     }
   }
@@ -87,6 +96,7 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
     int id,
     UpdateWorkspaceRequest request,
   ) async {
+    AppLogger.info('Updating workspace $id', tag: 'WorkspaceRepository');
     try {
       final response = await _dio.put(
         ApiConstants.workspaceById(id),
@@ -98,17 +108,20 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
       _workspaceCache[id] = updated;
       return updated;
     } on DioException catch (e) {
+      AppLogger.error('Failed to update workspace $id: ${e.message}', tag: 'WorkspaceRepository');
       throw DioErrorHandler.handle(e);
     }
   }
 
   @override
   Future<void> deleteWorkspace(int id) async {
+    AppLogger.info('Deleting workspace $id', tag: 'WorkspaceRepository');
     try {
       await _dio.delete(ApiConstants.workspaceById(id));
       _workspaceCache.remove(id);
       _membersCache.remove(id);
     } on DioException catch (e) {
+      AppLogger.error('Failed to delete workspace $id: ${e.message}', tag: 'WorkspaceRepository');
       throw DioErrorHandler.handle(e);
     }
   }
@@ -121,6 +134,7 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
     if (!forceRefresh && _membersCache.containsKey(workspaceId)) {
       return _membersCache[workspaceId]!;
     }
+    AppLogger.debug('Fetching members for workspace $workspaceId', tag: 'WorkspaceRepository');
     try {
       final response = await _dio.get(
         ApiConstants.workspaceMembers(workspaceId),
@@ -132,12 +146,14 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
       _membersCache[workspaceId] = members;
       return members;
     } on DioException catch (e) {
+      AppLogger.error('Failed to fetch members for $workspaceId: ${e.message}', tag: 'WorkspaceRepository');
       throw DioErrorHandler.handle(e);
     }
   }
 
   @override
   Future<MemberDto> addMember(int workspaceId, AddMemberRequest request) async {
+    AppLogger.info('Adding member ${request.email} to workspace $workspaceId', tag: 'WorkspaceRepository');
     try {
       final response = await _dio.post(
         ApiConstants.workspaceMembers(workspaceId),
@@ -149,12 +165,14 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
       }
       return member;
     } on DioException catch (e) {
+      AppLogger.error('Failed to add member: ${e.message}', tag: 'WorkspaceRepository');
       throw DioErrorHandler.handle(e);
     }
   }
 
   @override
   Future<void> removeMember(int workspaceId, String userId) async {
+    AppLogger.info('Removing member $userId from workspace $workspaceId', tag: 'WorkspaceRepository');
     try {
       await _dio.delete(
         ApiConstants.removeWorkspaceMember(workspaceId, userId),
@@ -165,6 +183,7 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
             .toList();
       }
     } on DioException catch (e) {
+      AppLogger.error('Failed to remove member: ${e.message}', tag: 'WorkspaceRepository');
       throw DioErrorHandler.handle(e);
     }
   }
