@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -33,37 +34,40 @@ class AppAuthCubit extends Cubit<AppAuthState> {
     }
 
     // 1. Check local cache (Instant Startup)
-    final initialCachedUser = _prefs.getCachedUser();
-    if (initialCachedUser != null) {
-      User effectiveUser = initialCachedUser;
-      // Gracefully attach ID from JWT if previously cached without it
-      if (effectiveUser.id.isEmpty) {
-        final token = await _storage.getAccessToken();
-        if (token != null && token.isNotEmpty) {
-          try {
-            final decoded = JwtDecoder.decode(token);
-            final sub =
-                (decoded['sub'] ??
-                        decoded['nameid'] ??
-                        decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ??
-                        '')
-                    .toString();
-            if (sub.isNotEmpty) {
-              effectiveUser = effectiveUser.copyWith(id: sub);
-              await _prefs.cacheUser(effectiveUser);
+    final initialCachedUserRaw = _prefs.getCachedUserRaw();
+    if (initialCachedUserRaw != null && initialCachedUserRaw.isNotEmpty) {
+      try {
+        final jsonMap = jsonDecode(initialCachedUserRaw) as Map<String, dynamic>;
+        User effectiveUser = User.fromJson(jsonMap);
+        // Gracefully attach ID from JWT if previously cached without it
+        if (effectiveUser.id.isEmpty) {
+          final token = await _storage.getAccessToken();
+          if (token != null && token.isNotEmpty) {
+            try {
+              final decoded = JwtDecoder.decode(token);
+              final sub =
+                  (decoded['sub'] ??
+                          decoded['nameid'] ??
+                          decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ??
+                          '')
+                      .toString();
+              if (sub.isNotEmpty) {
+                effectiveUser = effectiveUser.copyWith(id: sub);
+                await _prefs.setCachedUserRaw(jsonEncode(effectiveUser.toJson()));
+              }
+            } catch (_) {
+              // Token decode fallback
             }
-          } catch (_) {
-            // Token decode fallback
           }
         }
-      }
-      AppLogger.info(
-        '⚡ Local cache hit: authenticated as "${effectiveUser.name}" (${effectiveUser.email})',
-        tag: 'Auth',
-      );
-      timer.stop(note: 'cache hit - instant');
-      emit(AppAuthState.authenticated(effectiveUser));
-      return;
+        AppLogger.info(
+          '⚡ Local cache hit: authenticated as "${effectiveUser.name}" (${effectiveUser.email})',
+          tag: 'Auth',
+        );
+        timer.stop(note: 'cache hit - instant');
+        emit(AppAuthState.authenticated(effectiveUser));
+        return;
+      } catch (_) {}
     }
 
     // 2. Graceful Migration: Tokens exist but no cached user yet (e.g. app update)
@@ -73,7 +77,7 @@ class AppAuthCubit extends Cubit<AppAuthState> {
     );
     try {
       final user = await _authRepository.getCurrentUser();
-      await _prefs.cacheUser(user);
+      await _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
       AppLogger.info(
         '✅ Profile retrieved & cached: "${user.name}"',
         tag: 'Auth',
@@ -101,7 +105,7 @@ class AppAuthCubit extends Cubit<AppAuthState> {
     );
     try {
       final user = await _authRepository.getCurrentUser();
-      await _prefs.cacheUser(user);
+      await _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
       AppLogger.info(
         '✅ Background sync succeeded for "${user.name}"',
         tag: 'Auth',
@@ -130,7 +134,7 @@ class AppAuthCubit extends Cubit<AppAuthState> {
       'User authenticated & cached: "${user.name}" (${user.email})',
       tag: 'Auth',
     );
-    _prefs.cacheUser(user);
+    _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
     emit(AppAuthState.authenticated(user));
   }
 

@@ -98,6 +98,35 @@ class AppTheme {
       side: const BorderSide(color: AppColors.border),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     ),
+    snackBarTheme: const SnackBarThemeData(
+      backgroundColor: AppColors.surfaceContainerHigh,
+      contentTextStyle: TextStyle(color: AppColors.textPrimary),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      behavior: SnackBarBehavior.floating,
+    ),
+    dialogTheme: const DialogThemeData(
+      backgroundColor: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      titleTextStyle: const TextStyle(
+        color: AppColors.textPrimary,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      ),
+      contentTextStyle: const TextStyle(
+        color: AppColors.textSecondary,
+        fontSize: 16,
+      ),
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: AppColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+    ),
   );
 
   /// Light theme — Material 3 light counterpart
@@ -194,6 +223,35 @@ class AppTheme {
       selectedColor: AppColors.primary.withAlpha(51),
       side: const BorderSide(color: AppColors.lightBorder),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+    ),
+    snackBarTheme: const SnackBarThemeData(
+      backgroundColor: AppColors.lightSurfaceContainer,
+      contentTextStyle: TextStyle(color: AppColors.lightTextPrimary),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      behavior: SnackBarBehavior.floating,
+    ),
+    dialogTheme: const DialogThemeData(
+      backgroundColor: AppColors.lightSurface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      titleTextStyle: const TextStyle(
+        color: AppColors.lightTextPrimary,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+      ),
+      contentTextStyle: const TextStyle(
+        color: AppColors.lightTextSecondary,
+        fontSize: 16,
+      ),
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: AppColors.lightSurface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
     ),
   );
 }

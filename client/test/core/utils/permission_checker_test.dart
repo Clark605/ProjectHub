@@ -10,7 +10,7 @@ void main() {
 
     test('Workspace Owner can edit project regardless of creator', () {
       final canEdit = PermissionChecker.canEditProject(
-        role: WorkspaceRole.owner,
+        role: 'owner',
         projectCreatorId: creatorUserId,
         currentUserId: ownerUserId,
       );
@@ -19,7 +19,7 @@ void main() {
 
     test('Workspace Owner can delete project regardless of creator', () {
       final canDelete = PermissionChecker.canDeleteProject(
-        role: WorkspaceRole.owner,
+        role: 'owner',
         projectCreatorId: creatorUserId,
         currentUserId: ownerUserId,
       );
@@ -28,7 +28,7 @@ void main() {
 
     test('Member who created the project can edit it', () {
       final canEdit = PermissionChecker.canEditProject(
-        role: WorkspaceRole.member,
+        role: 'member',
         projectCreatorId: creatorUserId,
         currentUserId: creatorUserId,
       );
@@ -37,7 +37,7 @@ void main() {
 
     test('Member who created the project can delete it', () {
       final canDelete = PermissionChecker.canDeleteProject(
-        role: WorkspaceRole.member,
+        role: 'member',
         projectCreatorId: creatorUserId,
         currentUserId: creatorUserId,
       );
@@ -46,7 +46,7 @@ void main() {
 
     test('Member who is NOT the creator cannot edit project', () {
       final canEdit = PermissionChecker.canEditProject(
-        role: WorkspaceRole.member,
+        role: 'member',
         projectCreatorId: creatorUserId,
         currentUserId: otherUserId,
       );
@@ -55,7 +55,7 @@ void main() {
 
     test('Member who is NOT the creator cannot delete project', () {
       final canDelete = PermissionChecker.canDeleteProject(
-        role: WorkspaceRole.member,
+        role: 'member',
         projectCreatorId: creatorUserId,
         currentUserId: otherUserId,
       );

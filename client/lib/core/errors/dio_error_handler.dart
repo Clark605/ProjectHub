@@ -66,7 +66,7 @@ class DioErrorHandler {
 
     final defaultMessage = switch (statusCode) {
       400 => 'Bad request',
-      401 => 'Invalid email or password',
+      401 => 'Authentication required',
       403 => 'You do not have permission to perform this action',
       404 => 'Requested resource not found',
       409 => 'A conflict occurred',
