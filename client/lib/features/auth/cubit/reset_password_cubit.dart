@@ -1,17 +1,16 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:client/core/errors/app_exception.dart';
+import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/features/auth/cubit/reset_password_state.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
 
 @injectable
-class ResetPasswordCubit extends Cubit<ResetPasswordState> {
+class ResetPasswordCubit extends SafeActionCubit<ResetPasswordState> {
   final AuthRepository _authRepository;
 
   ResetPasswordCubit(this._authRepository)
-    : super(const ResetPasswordState.initial());
+      : super(const ResetPasswordState.initial());
 
   Future<void> resetPassword({
     required String email,
@@ -19,16 +18,17 @@ class ResetPasswordCubit extends Cubit<ResetPasswordState> {
     required String newPassword,
   }) async {
     emit(const ResetPasswordState.loading());
-    try {
-      await _authRepository.resetPassword(
-        ResetPasswordDto(email: email, token: token, newPassword: newPassword),
-      );
-      emit(const ResetPasswordState.success());
-    } on AppException catch (e) {
-      emit(ResetPasswordState.failure(e.message));
-    } catch (_) {
-      emit(const ResetPasswordState.failure('An unexpected error occurred'));
-    }
+    await safeExecute(
+      () async {
+        await _authRepository.resetPassword(
+          ResetPasswordDto(email: email, token: token, newPassword: newPassword),
+        );
+        emit(const ResetPasswordState.success());
+        return true;
+      },
+      onError: (msg) => emit(ResetPasswordState.failure(msg)),
+      logTag: 'ResetPasswordCubit',
+    );
   }
 
   void reset() {
