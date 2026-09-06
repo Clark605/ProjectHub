@@ -12,7 +12,7 @@ import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/auth/cubit/forgot_password_cubit.dart';
 import 'package:client/features/auth/cubit/forgot_password_state.dart';
 import 'package:client/features/auth/ui/widgets/auth_back_to_login_link.dart';
-import 'package:client/features/auth/ui/widgets/auth_error_banner.dart';
+import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/auth/ui/widgets/auth_header.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -103,7 +103,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 subtitle: l10n.forgotPasswordSubtitle,
                               ),
                               const SizedBox(height: 24),
-                              AuthErrorBanner(errorMessage: errorMessage),
+                              AppErrorBanner(errorMessage: errorMessage),
                               const SizedBox(height: 12),
                               AppTextField(
                                 label: l10n.email,
