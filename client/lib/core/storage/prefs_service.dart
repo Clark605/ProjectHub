@@ -1,12 +1,10 @@
-import 'dart:convert';
+
 
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/constants/storage_keys.dart';
-import 'package:client/features/auth/data/models/user.dart';
-import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 
 @lazySingleton
 class PrefsService {
@@ -40,20 +38,13 @@ class PrefsService {
   Future<void> setActiveWorkspaceId(int id) =>
       _prefs.setInt(StorageKeys.activeWorkspaceId, id);
 
-  WorkspaceDto? getCachedActiveWorkspace() {
-    final jsonStr = _prefs.getString(StorageKeys.cachedActiveWorkspace);
-    if (jsonStr == null || jsonStr.isEmpty) return null;
-    try {
-      final jsonMap = jsonDecode(jsonStr) as Map<String, dynamic>;
-      return WorkspaceDto.fromJson(jsonMap);
-    } catch (_) {
-      return null;
-    }
+  String? getCachedActiveWorkspaceRaw() {
+    return _prefs.getString(StorageKeys.cachedActiveWorkspace);
   }
 
-  Future<void> cacheActiveWorkspace(WorkspaceDto workspace) => _prefs.setString(
+  Future<void> setCachedActiveWorkspaceRaw(String workspaceJson) => _prefs.setString(
     StorageKeys.cachedActiveWorkspace,
-    jsonEncode(workspace.toJson()),
+    workspaceJson,
   );
 
   Future<void> clearCachedActiveWorkspace() =>
@@ -71,19 +62,12 @@ class PrefsService {
       _prefs.setString(StorageKeys.locale, locale);
 
   // Cached User Profile
-  User? getCachedUser() {
-    final jsonStr = _prefs.getString(StorageKeys.cachedUser);
-    if (jsonStr == null || jsonStr.isEmpty) return null;
-    try {
-      final jsonMap = jsonDecode(jsonStr) as Map<String, dynamic>;
-      return User.fromJson(jsonMap);
-    } catch (_) {
-      return null;
-    }
+  String? getCachedUserRaw() {
+    return _prefs.getString(StorageKeys.cachedUser);
   }
 
-  Future<void> cacheUser(User user) =>
-      _prefs.setString(StorageKeys.cachedUser, jsonEncode(user.toJson()));
+  Future<void> setCachedUserRaw(String userJson) =>
+      _prefs.setString(StorageKeys.cachedUser, userJson);
 
   Future<void> clearCachedUser() => _prefs.remove(StorageKeys.cachedUser);
 }

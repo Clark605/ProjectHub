@@ -149,8 +149,8 @@ class ProjectDetailScreen extends StatelessWidget {
                     final isOwner =
                         activeWs?.membership?.role.toLowerCase() == 'owner';
                     final role = isOwner
-                        ? WorkspaceRole.owner
-                        : WorkspaceRole.member;
+                        ? 'owner'
+                        : 'member';
 
                     final canEdit = PermissionChecker.canEditProject(
                       role: role,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:injectable/injectable.dart';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
@@ -16,51 +18,71 @@ class AppAuthCubit extends SafeActionCubit<AppAuthState> {
   final PrefsService _prefs;
 
   AppAuthCubit(this._authRepository, this._storage, this._prefs)
-      : super(const AppAuthState.initial());
+    : super(const AppAuthState.initial());
 
   Future<void> checkAuthStatus() async {
     final timer = AppLogger.startTimer('Auth Status Check', tag: 'Auth');
     final hasToken = await _storage.hasTokens();
     if (!hasToken) {
       await _prefs.clearCachedUser();
-      AppLogger.info('No stored tokens found. Emitting unauthenticated.', tag: 'Auth');
+      AppLogger.info(
+        'No stored tokens found. Emitting unauthenticated.',
+        tag: 'Auth',
+      );
       timer.stop(note: 'no tokens');
       emit(const AppAuthState.unauthenticated());
       return;
     }
 
-    final initialCachedUser = _prefs.getCachedUser();
-    if (initialCachedUser != null) {
-      User effectiveUser = initialCachedUser;
-      if (effectiveUser.id.isEmpty) {
-        final token = await _storage.getAccessToken();
-        if (token != null && token.isNotEmpty) {
-          final sub = JwtUtils.extractUserId(token);
-          if (sub != null && sub.isNotEmpty) {
-            effectiveUser = effectiveUser.copyWith(id: sub);
-            await _prefs.cacheUser(effectiveUser);
+    // 1. Check local cache (Instant Startup)
+    final initialCachedUserRaw = _prefs.getCachedUserRaw();
+    if (initialCachedUserRaw != null && initialCachedUserRaw.isNotEmpty) {
+      try {
+        final jsonMap =
+            jsonDecode(initialCachedUserRaw) as Map<String, dynamic>;
+        User effectiveUser = User.fromJson(jsonMap);
+        if (effectiveUser.id.isEmpty) {
+          final token = await _storage.getAccessToken();
+          if (token != null && token.isNotEmpty) {
+            final sub = JwtUtils.extractUserId(token);
+            if (sub != null && sub.isNotEmpty) {
+              effectiveUser = effectiveUser.copyWith(id: sub);
+              await _prefs.setCachedUserRaw(jsonEncode(effectiveUser.toJson()));
+            }
           }
         }
-      }
-      AppLogger.info('⚡ Local cache hit: authenticated as "${effectiveUser.name}"', tag: 'Auth');
-      timer.stop(note: 'cache hit - instant');
-      emit(AppAuthState.authenticated(effectiveUser));
-      return;
+        AppLogger.info(
+          '⚡ Local cache hit: authenticated as "${effectiveUser.name}"',
+          tag: 'Auth',
+        );
+        timer.stop(note: 'cache hit - instant');
+        emit(AppAuthState.authenticated(effectiveUser));
+        return;
+      } catch (_) {}
     }
 
-    AppLogger.info('🔄 Tokens found without cache. Migrating by fetching profile from server...', tag: 'Auth');
-    
+    AppLogger.info(
+      '🔄 Tokens found without cache. Migrating by fetching profile from server...',
+      tag: 'Auth',
+    );
+
     await safeExecute(
       () async {
         final user = await _authRepository.getCurrentUser();
-        await _prefs.cacheUser(user);
-        AppLogger.info('✅ Profile retrieved & cached: "${user.name}"', tag: 'Auth');
+        await _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
+        AppLogger.info(
+          '✅ Profile retrieved & cached: "${user.name}"',
+          tag: 'Auth',
+        );
         timer.stop(note: 'server migration completed');
         emit(AppAuthState.authenticated(user));
         return user;
       },
       onError: (msg) async {
-        AppLogger.warning('Failed to fetch profile during migration: $msg', tag: 'Auth');
+        AppLogger.warning(
+          'Failed to fetch profile during migration: $msg',
+          tag: 'Auth',
+        );
         await _prefs.clearCachedUser();
         timer.stop(note: 'migration failed');
         emit(const AppAuthState.unauthenticated());
@@ -70,23 +92,35 @@ class AppAuthCubit extends SafeActionCubit<AppAuthState> {
   }
 
   Future<void> syncUser() async {
-    AppLogger.debug('🔄 Running background session verification...', tag: 'Auth');
+    AppLogger.debug(
+      '🔄 Running background session verification...',
+      tag: 'Auth',
+    );
     await safeExecute(
       () async {
         final user = await _authRepository.getCurrentUser();
-        await _prefs.cacheUser(user);
-        AppLogger.info('✅ Background sync succeeded for "${user.name}"', tag: 'Auth');
+        await _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
+        AppLogger.info(
+          '✅ Background sync succeeded for "${user.name}"',
+          tag: 'Auth',
+        );
         emit(AppAuthState.authenticated(user));
         return user;
       },
       onError: (msg) async {
         final hasToken = await _storage.hasTokens();
         if (!hasToken) {
-          AppLogger.warning('Session revoked or refresh failed. Emitting unauthenticated.', tag: 'Auth');
+          AppLogger.warning(
+            'Session revoked or refresh failed. Emitting unauthenticated.',
+            tag: 'Auth',
+          );
           await _prefs.clearCachedUser();
           emit(const AppAuthState.unauthenticated());
         } else {
-          AppLogger.debug('Background sync skipped/failed (network offline). Keeping cached session.', tag: 'Auth');
+          AppLogger.debug(
+            'Background sync skipped/failed (network offline). Keeping cached session.',
+            tag: 'Auth',
+          );
         }
       },
       logTag: 'Auth',
@@ -94,13 +128,19 @@ class AppAuthCubit extends SafeActionCubit<AppAuthState> {
   }
 
   void setAuthenticated(User user) {
-    AppLogger.info('User authenticated & cached: "${user.name}" (${user.email})', tag: 'Auth');
-    _prefs.cacheUser(user);
+    AppLogger.info(
+      'User authenticated & cached: "${user.name}" (${user.email})',
+      tag: 'Auth',
+    );
+    _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
     emit(AppAuthState.authenticated(user));
   }
 
   Future<void> logout() async {
-    AppLogger.info('Logging out user. Clearing tokens and cached data...', tag: 'Auth');
+    AppLogger.info(
+      'Logging out user. Clearing tokens and cached data...',
+      tag: 'Auth',
+    );
     await safeExecute(
       () async {
         await _authRepository.logout();

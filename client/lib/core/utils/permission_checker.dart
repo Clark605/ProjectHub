@@ -1,62 +1,58 @@
-enum WorkspaceRole { owner, member }
-
-class TaskItem {
-  final String createdBy;
-  final String? assigneeId;
-
-  const TaskItem({required this.createdBy, this.assigneeId});
-}
-
 class PermissionChecker {
   PermissionChecker._();
 
+  static bool _isOwner(String roleStr) {
+    return roleStr.toLowerCase() == 'owner' || roleStr.toLowerCase() == 'workspacerole.owner';
+  }
+
   /// Can manage workspace settings (edit, delete, invite/remove members)
-  static bool canManageWorkspace(WorkspaceRole role) =>
-      role == WorkspaceRole.owner;
+  static bool canManageWorkspace(String role) =>
+      _isOwner(role);
 
   /// Can edit project metadata
   static bool canEditProject({
-    required WorkspaceRole role,
+    required String role,
     required String projectCreatorId,
     required String currentUserId,
   }) =>
-      role == WorkspaceRole.owner ||
+      _isOwner(role) ||
       (projectCreatorId.isNotEmpty &&
           currentUserId.isNotEmpty &&
           projectCreatorId == currentUserId);
 
   /// Can delete a project
   static bool canDeleteProject({
-    required WorkspaceRole role,
+    required String role,
     required String projectCreatorId,
     required String currentUserId,
   }) =>
-      role == WorkspaceRole.owner ||
+      _isOwner(role) ||
       (projectCreatorId.isNotEmpty &&
           currentUserId.isNotEmpty &&
           projectCreatorId == currentUserId);
 
   /// Can edit a task or move its status
   static bool canEditTask({
-    required WorkspaceRole role,
-    required TaskItem task,
+    required String role,
+    required String taskCreatedBy,
+    String? taskAssigneeId,
     required String currentUserId,
   }) =>
-      role == WorkspaceRole.owner ||
+      _isOwner(role) ||
       (currentUserId.isNotEmpty &&
-          ((task.createdBy.isNotEmpty && task.createdBy == currentUserId) ||
-              (task.assigneeId != null &&
-                  task.assigneeId!.isNotEmpty &&
-                  task.assigneeId == currentUserId)));
+          ((taskCreatedBy.isNotEmpty && taskCreatedBy == currentUserId) ||
+              (taskAssigneeId != null &&
+                  taskAssigneeId.isNotEmpty &&
+                  taskAssigneeId == currentUserId)));
 
   /// Can delete a task
   static bool canDeleteTask({
-    required WorkspaceRole role,
-    required TaskItem task,
+    required String role,
+    required String taskCreatedBy,
     required String currentUserId,
   }) =>
-      role == WorkspaceRole.owner ||
+      _isOwner(role) ||
       (currentUserId.isNotEmpty &&
-          task.createdBy.isNotEmpty &&
-          task.createdBy == currentUserId);
+          taskCreatedBy.isNotEmpty &&
+          taskCreatedBy == currentUserId);
 }
