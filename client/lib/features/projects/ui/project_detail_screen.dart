@@ -43,7 +43,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content = BlocConsumer<ProjectDetailCubit, ProjectDetailState>(
+    final content = BlocConsumer<ProjectDetailCubit, ProjectDetailState>(
       bloc: _cubit,
       listener: (context, state) {
         state.maybeWhen(

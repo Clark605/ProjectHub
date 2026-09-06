@@ -65,12 +65,11 @@ class _ViewState extends State<_View> {
       Navigator.of(context).pushNamedAndRemoveUntil(RouteNames.shell, (r) => false);
     } else if (state is WorkspaceSettingsLoaded && state.successAction != null) {
       final action = state.successAction!;
-      final String msg = switch (action) {
-        ActionMemberAddedWithEmail(email: var e) => l10n.memberAddedWithEmail(e),
+      final msg = switch (action) {
+        ActionMemberAddedWithEmail(email: final e) => l10n.memberAddedWithEmail(e),
         ActionDetailsUpdated() => l10n.detailsUpdated,
         ActionMemberAdded() => l10n.memberAdded,
         ActionMemberRemoved() => l10n.memberRemoved,
-        _ => '',
       };
       if (msg.isNotEmpty) context.showSuccessSnackBar(msg);
       context.read<WorkspaceSettingsCubit>().clearMessages();
