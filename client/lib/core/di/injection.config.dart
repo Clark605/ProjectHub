@@ -26,6 +26,9 @@ import '../../features/projects/cubit/project_detail_cubit.dart' as _i566;
 import '../../features/projects/cubit/projects_list_cubit.dart' as _i771;
 import '../../features/projects/data/project_repository.dart' as _i405;
 import '../../features/projects/data/project_repository_impl.dart' as _i396;
+import '../../features/tasks/data/task_remote_data_source.dart' as _i538;
+import '../../features/tasks/data/task_repository.dart' as _i241;
+import '../../features/tasks/data/task_repository_impl.dart' as _i382;
 import '../../features/workspaces/cubit/workspace_context_cubit.dart' as _i95;
 import '../../features/workspaces/cubit/workspace_settings_cubit.dart' as _i259;
 import '../../features/workspaces/data/workspace_repository.dart' as _i688;
@@ -63,6 +66,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i405.ProjectRepository>(
       () => _i396.ProjectRepositoryImpl(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i538.TaskRemoteDataSource>(
+      () => _i538.TaskRemoteDataSourceImpl(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i688.WorkspaceRepository>(
       () => _i591.WorkspaceRepositoryImpl(gh<_i361.Dio>()),
     );
@@ -83,7 +89,23 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i726.AuthRepository>(),
         gh<_i666.SecureStorageService>(),
         gh<_i415.PrefsService>(),
+        gh<_i95.WorkspaceContextCubit>(),
       ),
+    );
+    gh.factory<_i796.LoginCubit>(
+      () => _i796.LoginCubit(
+        gh<_i726.AuthRepository>(),
+        gh<_i784.AppAuthCubit>(),
+      ),
+    );
+    gh.factory<_i341.RegisterCubit>(
+      () => _i341.RegisterCubit(
+        gh<_i726.AuthRepository>(),
+        gh<_i784.AppAuthCubit>(),
+      ),
+    );
+    gh.lazySingleton<_i241.TaskRepository>(
+      () => _i382.TaskRepositoryImpl(gh<_i538.TaskRemoteDataSource>()),
     );
     gh.lazySingleton<_i95.WorkspaceContextCubit>(
       () => _i95.WorkspaceContextCubit(
@@ -101,18 +123,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i259.WorkspaceSettingsCubit(
         gh<_i688.WorkspaceRepository>(),
         gh<_i95.WorkspaceContextCubit>(),
-      ),
-    );
-    gh.factory<_i796.LoginCubit>(
-      () => _i796.LoginCubit(
-        gh<_i726.AuthRepository>(),
-        gh<_i784.AppAuthCubit>(),
-      ),
-    );
-    gh.factory<_i341.RegisterCubit>(
-      () => _i341.RegisterCubit(
-        gh<_i726.AuthRepository>(),
-        gh<_i784.AppAuthCubit>(),
       ),
     );
     return this;

@@ -48,6 +48,7 @@ class ApiConstants {
   static String removeWorkspaceMember(int workspaceId, String userId) =>
       '/workspaces/$workspaceId/members/$userId';
   static String workspaceProjects(int id) => '/workspaces/$id/projects';
+  static String workspaceMyTasks(int id) => '/workspaces/$id/my-tasks';
 
   // Projects
   static String projectById(int id) => '/projects/$id';
