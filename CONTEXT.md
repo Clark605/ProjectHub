@@ -57,3 +57,8 @@ _Avoid_: Deadline, target date, expiry
 **Kanban Board**:
 The visual representation of a project's tasks grouped into fixed 5-stage status columns, supporting user-configured filtering and sorting.
 _Avoid_: Workflow board, taskboard, scrum board
+
+**My Tasks**:
+The personalized focus view aggregating a member's assigned tasks across all projects within an active workspace, categorized into urgency groups.
+_Avoid_: User tasks, assigned list, personal board
+

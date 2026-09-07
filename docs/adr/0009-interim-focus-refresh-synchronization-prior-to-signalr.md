@@ -1,0 +1,3 @@
+﻿# Interim Focus Refresh and Optimistic Synchronization Prior to SignalR
+
+In accordance with PRD phase gates, real-time push synchronization (WebSockets / SignalR) is deferred until Phase 6 to avoid premature distributed state, connection keep-alive, and reconnect-queue complexity. For Phase 4, concurrent state visibility relies on client-side optimistic UI updates with automatic rollback on network failure, pull-to-refresh gestures, and automatic re-fetching upon screen focus (RouteAware / lifecycle resume). Last-write-wins governs concurrent updates until optimistic concurrency (ETags/RowVersion) and SignalR hubs are introduced.
