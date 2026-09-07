@@ -27,6 +27,7 @@ import '../../features/projects/cubit/project_detail_cubit.dart' as _i566;
 import '../../features/projects/cubit/projects_list_cubit.dart' as _i771;
 import '../../features/projects/data/project_repository.dart' as _i405;
 import '../../features/projects/data/project_repository_impl.dart' as _i396;
+import '../../features/tasks/cubit/my_tasks_cubit.dart' as _i816;
 import '../../features/tasks/data/task_remote_data_source.dart' as _i538;
 import '../../features/tasks/data/task_repository.dart' as _i241;
 import '../../features/tasks/data/task_repository_impl.dart' as _i382;
@@ -125,6 +126,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i835.ResetPasswordCubit>(
       () => _i835.ResetPasswordCubit(gh<_i726.AuthRepository>()),
+    );
+    gh.factory<_i816.MyTasksCubit>(
+      () => _i816.MyTasksCubit(gh<_i241.TaskRepository>()),
     );
     gh.factory<_i259.WorkspaceSettingsCubit>(
       () => _i259.WorkspaceSettingsCubit(
