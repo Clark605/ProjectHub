@@ -481,4 +481,46 @@ public class TaskService : ITaskService
             UpdatedAt = task.UpdatedAt
         };
     }
+
+    public async Task<IEnumerable<TaskResponseDto>> GetMyTasksAsync(string userId, int workspaceId)
+    {
+        _logger.LogInformation("Fetching tasks assigned to user {UserId} in workspace {WorkspaceId}", userId, workspaceId);
+
+        var workspaceMember = await _context.WorkspaceMembers
+            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == workspaceId);
+
+        if (workspaceMember == null)
+        {
+            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, workspaceId);
+            throw new KeyNotFoundException($"Workspace with ID {workspaceId} not found for user {userId}");
+        }
+
+        var tasks = await _context.Tasks
+            .Include(t => t.Project)
+            .Include(t => t.Creator)
+            .Include(t => t.Assignee)
+            .Where(t => t.Project.WorkspaceId == workspaceId && t.AssigneeId == userId)
+            .OrderByDescending(t => t.CreatedAt)
+            .Select(t => new TaskResponseDto
+            {
+                Id = t.Id,
+                ProjectId = t.ProjectId,
+                ProjectName = t.Project.Name,
+                Title = t.Title,
+                Description = t.Description,
+                Status = t.Status,
+                Priority = t.Priority,
+                AssigneeId = t.AssigneeId,
+                AssigneeName = t.Assignee != null ? t.Assignee.Name : null,
+                CreatedBy = t.CreatedBy,
+                CreatedByName = t.Creator.Name,
+                DueDate = t.DueDate,
+                CreatedAt = t.CreatedAt,
+                UpdatedAt = t.UpdatedAt
+            })
+            .ToListAsync();
+
+        return tasks;
+    }
 }
+

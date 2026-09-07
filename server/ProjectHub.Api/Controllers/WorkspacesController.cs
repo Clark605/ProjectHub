@@ -14,13 +14,16 @@ namespace ProjectHub.Api.Controllers
     {
         private readonly IWorkspaceService _workspaceService;
         private readonly IProjectService _projectService;
+        private readonly ITaskService _taskService;
 
         public WorkspacesController(
             IWorkspaceService workspaceService,
-            IProjectService projectService)
+            IProjectService projectService,
+            ITaskService taskService)
         {
             _workspaceService = workspaceService;
             _projectService = projectService;
+            _taskService = taskService;
         }
 
         [HttpGet]
@@ -101,6 +104,14 @@ namespace ProjectHub.Api.Controllers
             var userId = User.GetUserId();
             var project = await _projectService.CreateProjectAsync(userId, id, request);
             return CreatedAtAction("GetProject", "Projects", new { id = project.Id }, project);
+        }
+
+        [HttpGet("{id}/my-tasks")]
+        public async Task<IActionResult> GetMyTasks(int id)
+        {
+            var userId = User.GetUserId();
+            var tasks = await _taskService.GetMyTasksAsync(userId, id);
+            return Ok(tasks);
         }
     }
 }

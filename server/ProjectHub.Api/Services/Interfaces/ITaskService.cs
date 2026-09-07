@@ -13,5 +13,6 @@ public interface ITaskService
     Task DeleteTaskAsync(string userId, int taskId);
     Task<TaskResponseDto> UpdateTaskStatusAsync(string userId, int taskId, UpdateTaskStatusDto request);
     Task<TaskResponseDto> UpdateTaskAssigneeAsync(string userId, int taskId, UpdateTaskAssigneeDto request);
+    Task<IEnumerable<TaskResponseDto>> GetMyTasksAsync(string userId, int workspaceId);
 }
 
