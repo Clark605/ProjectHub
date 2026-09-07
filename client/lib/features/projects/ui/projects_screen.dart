@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
@@ -31,12 +31,20 @@ class ProjectsScreen extends StatelessWidget {
       );
     }
 
-    return BlocProvider<ProjectsListCubit>(
-      create: (_) => getIt.isRegistered<ProjectsListCubit>()
-          ? getIt<ProjectsListCubit>()
-          : ProjectsListCubit(getIt<ProjectRepository>()),
-      child: const _ProjectsView(),
-    );
+    try {
+      final ambientCubit = context.read<ProjectsListCubit>();
+      return BlocProvider<ProjectsListCubit>.value(
+        value: ambientCubit,
+        child: const _ProjectsView(),
+      );
+    } catch (_) {
+      return BlocProvider<ProjectsListCubit>(
+        create: (_) => getIt.isRegistered<ProjectsListCubit>()
+            ? getIt<ProjectsListCubit>()
+            : ProjectsListCubit(getIt<ProjectRepository>()),
+        child: const _ProjectsView(),
+      );
+    }
   }
 }
 
@@ -79,18 +87,15 @@ class _ProjectsViewState extends State<_ProjectsView> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
 
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<WorkspaceContextCubit, WorkspaceContextState>(
-          listener: (context, state) {
-            final activeWs = state.whenOrNull(loaded: (_, active) => active);
-            if (activeWs != null && activeWs.id != _lastWorkspaceId) {
-              _lastWorkspaceId = activeWs.id;
-              context.read<ProjectsListCubit>().loadProjects(activeWs.id);
-            }
-          },
-        ),
-      ],
+    return BlocListener<WorkspaceContextCubit, WorkspaceContextState>(
+      listener: (context, state) {
+        final activeWs = state.whenOrNull(loaded: (_, active) => active);
+        if (activeWs != null && activeWs.id != _lastWorkspaceId) {
+          _lastWorkspaceId = activeWs.id;
+          context.read<ProjectsListCubit>().loadProjects(activeWs.id);
+        }
+      },
+
       child: Scaffold(
         backgroundColor: Colors.transparent,
         floatingActionButton: FloatingActionButton.extended(
@@ -126,8 +131,10 @@ class _ProjectsViewState extends State<_ProjectsView> {
                     ),
                   ),
                   state.when(
-                    initial: () => const SliverFillRemaining(child: ProjectsSkeleton()),
-                    loading: () => const SliverFillRemaining(child: ProjectsSkeleton()),
+                    initial: () =>
+                        const SliverFillRemaining(child: ProjectsSkeleton()),
+                    loading: () =>
+                        const SliverFillRemaining(child: ProjectsSkeleton()),
                     error: (message) => SliverFillRemaining(
                       child: AppErrorState(
                         errorMessage: message,
@@ -144,7 +151,8 @@ class _ProjectsViewState extends State<_ProjectsView> {
                     empty: (filter) => SliverFillRemaining(
                       child: AppEmptyState(
                         title: l10n?.noProjectsFound ?? 'No projects found',
-                        description: l10n?.noProjectsDescription ??
+                        description:
+                            l10n?.noProjectsDescription ??
                             'Get started by creating your first project in this workspace.',
                         icon: Icons.folder_special_rounded,
                         ctaText: l10n?.createProject ?? 'Create Project',
@@ -176,4 +184,3 @@ class _ProjectsViewState extends State<_ProjectsView> {
     );
   }
 }
-

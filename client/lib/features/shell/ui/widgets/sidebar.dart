@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/features/projects/cubit/projects_list_cubit.dart';
+import 'package:client/features/projects/cubit/projects_list_state.dart';
+import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_nav_item.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_quick_links.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_user_profile.dart';
@@ -9,16 +13,57 @@ import 'package:client/features/shell/models/shell_tab.dart';
 class Sidebar extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onItemSelected;
+  final ValueChanged<int>? onProjectSelected;
 
   const Sidebar({
     super.key,
     required this.selectedIndex,
     required this.onItemSelected,
+    this.onProjectSelected,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    ProjectsListCubit? cubit;
+    try {
+      cubit = context.read<ProjectsListCubit>();
+    } catch (_) {}
+
+    Widget buildNavList(List<ProjectDto> projects, bool isLoading) {
+      final projectsCount = projects.isNotEmpty
+          ? projects.length.toString()
+          : null;
+
+      return ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        children: [
+          ...ShellTab.values.map(
+            (tab) => Column(
+              children: [
+                DesktopSidebarNavItem(
+                  icon: tab.selectedIcon,
+                  label: tab == ShellTab.profile
+                      ? 'Profile & Settings'
+                      : tab.label,
+                  isSelected: selectedIndex == tab.index,
+                  badge: tab == ShellTab.projects ? projectsCount : null,
+                  badgeColor: null,
+                  onTap: () => onItemSelected(tab.index),
+                ),
+                if (tab != ShellTab.profile) const SizedBox(height: 4),
+              ],
+            ),
+          ),
+          DesktopSidebarQuickLinks(
+            projects: projects,
+            isLoading: isLoading,
+            onProjectSelected: onProjectSelected,
+          ),
+        ],
+      );
+    }
 
     return Container(
       width: 240,
@@ -70,29 +115,22 @@ class Sidebar extends StatelessWidget {
 
           // Navigation Section
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              children: [
-                ...ShellTab.values.map((tab) => Column(
-                      children: [
-                        DesktopSidebarNavItem(
-                          icon: tab.selectedIcon,
-                          label: tab == ShellTab.profile ? 'Profile & Settings' : tab.label,
-                          isSelected: selectedIndex == tab.index,
-                          badge: tab == ShellTab.projects
-                              ? '3'
-                              : (tab == ShellTab.myTasks ? '5' : null),
-                          badgeColor: tab == ShellTab.myTasks
-                              ? AppColors.priorityUrgent
-                              : null,
-                          onTap: () => onItemSelected(tab.index),
-                        ),
-                        if (tab != ShellTab.profile) const SizedBox(height: 4),
-                      ],
-                    )),
-                DesktopSidebarQuickLinks(onItemSelected: onItemSelected),
-              ],
-            ),
+            child: cubit != null
+                ? BlocBuilder<ProjectsListCubit, ProjectsListState>(
+                    bloc: cubit,
+                    builder: (context, projectsState) {
+                      final projects = projectsState.maybeWhen(
+                        loaded: (_, allProjects, _) => allProjects,
+                        orElse: () => const <ProjectDto>[],
+                      );
+                      final isLoading = projectsState.maybeWhen(
+                        loading: () => true,
+                        orElse: () => false,
+                      );
+                      return buildNavList(projects, isLoading);
+                    },
+                  )
+                : buildNavList(const <ProjectDto>[], false),
           ),
 
           // User Profile & Logout Footer
