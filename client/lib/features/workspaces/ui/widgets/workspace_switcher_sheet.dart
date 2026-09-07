@@ -33,6 +33,12 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
   String _searchQuery = '';
 
   @override
+  void initState() {
+    super.initState();
+    getIt<WorkspaceContextCubit>().loadWorkspaces();
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();

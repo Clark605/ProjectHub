@@ -53,7 +53,9 @@ class _ViewState extends State<_View> {
     super.initState();
     final cubit = context.read<WorkspaceSettingsCubit>();
     if (cubit.state is WorkspaceSettingsInitial) {
-      final active = context.read<WorkspaceContextCubit>().state.whenOrNull(loaded: (workspaces, active) => active);
+      final active = context.read<WorkspaceContextCubit>().state.whenOrNull(
+        loaded: (workspaces, active) => active,
+      );
       if (active != null) cubit.loadSettings(active.id);
     }
   }
@@ -62,11 +64,16 @@ class _ViewState extends State<_View> {
     final l10n = AppLocalizations.of(context)!;
     if (state is WorkspaceSettingsDeleted) {
       context.showSuccessSnackBar(l10n.workspaceDeleted);
-      Navigator.of(context).pushNamedAndRemoveUntil(RouteNames.shell, (r) => false);
-    } else if (state is WorkspaceSettingsLoaded && state.successAction != null) {
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil(RouteNames.shell, (r) => false);
+    } else if (state is WorkspaceSettingsLoaded &&
+        state.successAction != null) {
       final action = state.successAction!;
       final msg = switch (action) {
-        ActionMemberAddedWithEmail(email: final e) => l10n.memberAddedWithEmail(e),
+        ActionMemberAddedWithEmail(email: final e) => l10n.memberAddedWithEmail(
+          e,
+        ),
         ActionDetailsUpdated() => l10n.detailsUpdated,
         ActionMemberAdded() => l10n.memberAdded,
         ActionMemberRemoved() => l10n.memberRemoved,
@@ -79,7 +86,9 @@ class _ViewState extends State<_View> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final active = context.watch<WorkspaceContextCubit>().state.whenOrNull(loaded: (workspaces, active) => active);
+    final active = context.watch<WorkspaceContextCubit>().state.whenOrNull(
+      loaded: (workspaces, active) => active,
+    );
     final isOwner = active?.membership?.role.toLowerCase() == 'owner';
 
     return Scaffold(
@@ -91,13 +100,25 @@ class _ViewState extends State<_View> {
               padding: const EdgeInsets.only(right: 16),
               child: Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.3),
+                    ),
                   ),
-                  child: Text(active.name, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: AppColors.primary)),
+                  child: Text(
+                    active.name,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primary,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -108,10 +129,18 @@ class _ViewState extends State<_View> {
           : BlocConsumer<WorkspaceSettingsCubit, WorkspaceSettingsState>(
               listener: _onState,
               builder: (context, state) {
-                if (state is WorkspaceSettingsLoading) return const WorkspaceSettingsSkeleton();
-                if (state is WorkspaceSettingsError) return Center(child: Text(state.message));
+                if (state is WorkspaceSettingsLoading ||
+                    state is WorkspaceSettingsInitial) {
+                  return const WorkspaceSettingsSkeleton();
+                }
+                if (state is WorkspaceSettingsError) {
+                  return Center(child: Text(state.message));
+                }
+                if (state is! WorkspaceSettingsLoaded) {
+                  return const SizedBox.shrink();
+                }
 
-                final loaded = state as WorkspaceSettingsLoaded;
+                final loaded = state;
                 return Skeletonizer(
                   enabled: loaded.isRevalidating,
                   child: SingleChildScrollView(
@@ -122,12 +151,25 @@ class _ViewState extends State<_View> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            if (loaded.errorMessage != null) AppErrorBanner(errorMessage: loaded.errorMessage!, onDismiss: () => context.read<WorkspaceSettingsCubit>().clearError()),
+                            if (loaded.errorMessage != null)
+                              AppErrorBanner(
+                                errorMessage: loaded.errorMessage!,
+                                onDismiss: () => context
+                                    .read<WorkspaceSettingsCubit>()
+                                    .clearError(),
+                              ),
                             const WorkspaceDetailsCard(),
                             const SizedBox(height: 24),
                             const WorkspaceMembersCard(),
                             const SizedBox(height: 24),
-                            AppDangerZone(title: l10n.deleteWorkspace, description: l10n.deleteWorkspaceWarning, entityName: active?.name ?? l10n.workspaceName, onDelete: () => context.read<WorkspaceSettingsCubit>().deleteWorkspace()),
+                            AppDangerZone(
+                              title: l10n.deleteWorkspace,
+                              description: l10n.deleteWorkspaceWarning,
+                              entityName: active?.name ?? l10n.workspaceName,
+                              onDelete: () => context
+                                  .read<WorkspaceSettingsCubit>()
+                                  .deleteWorkspace(),
+                            ),
                           ],
                         ),
                       ),

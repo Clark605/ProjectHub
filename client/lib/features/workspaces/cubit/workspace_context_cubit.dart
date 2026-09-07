@@ -136,4 +136,10 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
       logTag: 'WorkspaceContext',
     );
   }
+
+  Future<void> reset() async {
+    _repository.clearCache();
+    await _prefs.clearActiveWorkspace();
+    emit(const WorkspaceContextState.initial());
+  }
 }

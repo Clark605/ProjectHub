@@ -1,3 +1,5 @@
+import 'package:client/core/di/injection.dart';
+import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -5,6 +7,9 @@ import 'package:client/core/routes/app_router.dart';
 import 'package:client/core/routes/app_navigator.dart';
 import 'package:client/core/theme/app_theme.dart';
 import 'package:client/core/network/global_network_error_handler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 
 class ProjectHubApp extends StatefulWidget {
   final String initialRoute;
@@ -42,23 +47,31 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ProjectHub',
-      debugShowCheckedModeBanner: false,
-      navigatorKey: AppNavigator.navigatorKey,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AppAuthCubit>.value(value: getIt<AppAuthCubit>()),
+        BlocProvider<WorkspaceContextCubit>.value(
+          value: getIt<WorkspaceContextCubit>(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'ProjectHub',
+        debugShowCheckedModeBanner: false,
+        navigatorKey: AppNavigator.navigatorKey,
 
-      // Theme
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.dark,
+        // Theme
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        themeMode: ThemeMode.dark,
 
-      // Localization
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+        // Localization
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
 
-      // Routing
-      initialRoute: widget.initialRoute,
-      onGenerateRoute: AppRouter.onGenerateRoute,
+        // Routing
+        initialRoute: widget.initialRoute,
+        onGenerateRoute: AppRouter.onGenerateRoute,
+      ),
     );
   }
 }

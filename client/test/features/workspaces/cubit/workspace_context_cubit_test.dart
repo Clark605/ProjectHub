@@ -90,8 +90,12 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
   @override
   bool hasCachedSettings(int workspaceId) => false;
 
+  bool clearCacheCalled = false;
+
   @override
-  void clearCache([int? workspaceId]) {}
+  void clearCache([int? workspaceId]) {
+    clearCacheCalled = true;
+  }
 }
 
 void main() {
@@ -311,7 +315,12 @@ void main() {
         );
 
         await newCubit.loadWorkspaces();
-        expect(WorkspaceDto.fromJson(jsonDecode(prefs.getCachedActiveWorkspaceRaw()!)).name, 'Refreshed Org');
+        expect(
+          WorkspaceDto.fromJson(
+            jsonDecode(prefs.getCachedActiveWorkspaceRaw()!),
+          ).name,
+          'Refreshed Org',
+        );
         await newCubit.close();
       },
     );
@@ -340,5 +349,79 @@ void main() {
       );
       await newCubit.close();
     });
+
+    test(
+      'revalidates cached workspace role from Member to Owner on background refresh',
+      () async {
+        const cachedMember = WorkspaceDto(
+          id: 19,
+          name: 'ProjectHub',
+          membership: WorkspaceMembershipDto(role: 'Member'),
+        );
+        await prefs.setActiveWorkspaceId(19);
+        await prefs.setCachedActiveWorkspaceRaw(
+          jsonEncode(cachedMember.toJson()),
+        );
+
+        const serverOwner = WorkspaceDto(
+          id: 19,
+          name: 'ProjectHub',
+          membership: WorkspaceMembershipDto(role: 'Owner'),
+        );
+        repository.workspaces = [serverOwner];
+
+        final testCubit = WorkspaceContextCubit(repository, prefs);
+
+        // Initial state boots from cache with Member
+        expect(
+          testCubit.state,
+          const WorkspaceContextState.loaded(
+            workspaces: [cachedMember],
+            activeWorkspace: cachedMember,
+          ),
+        );
+
+        // Background revalidation loads fresh data from server
+        await testCubit.loadWorkspaces();
+
+        // State and prefs are updated with Owner
+        expect(
+          testCubit.state,
+          const WorkspaceContextState.loaded(
+            workspaces: [serverOwner],
+            activeWorkspace: serverOwner,
+          ),
+        );
+        final updatedCache = WorkspaceDto.fromJson(
+          jsonDecode(prefs.getCachedActiveWorkspaceRaw()!),
+        );
+        expect(updatedCache.membership?.role, 'Owner');
+        await testCubit.close();
+      },
+    );
+
+    test(
+      'reset clears repository cache, active workspace prefs, and emits initial state',
+      () async {
+        const active = WorkspaceDto(
+          id: 19,
+          name: 'ProjectHub',
+          membership: WorkspaceMembershipDto(role: 'Owner'),
+        );
+        repository.workspaces = [active];
+        await cubit.loadWorkspaces();
+        expect(
+          cubit.state.maybeWhen(loaded: (_, _) => true, orElse: () => false),
+          isTrue,
+        );
+
+        await cubit.reset();
+
+        expect(cubit.state, const WorkspaceContextState.initial());
+        expect(prefs.activeWorkspaceId, isNull);
+        expect(prefs.getCachedActiveWorkspaceRaw(), isNull);
+        expect(repository.clearCacheCalled, isTrue);
+      },
+    );
   });
 }

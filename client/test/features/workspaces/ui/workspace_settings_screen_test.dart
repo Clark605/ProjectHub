@@ -26,7 +26,8 @@ import 'package:client/l10n/generated/app_localizations.dart';
 class _MockRepo implements WorkspaceRepository {
   WorkspaceDto workspace;
   List<MemberDto> members;
-  Future<WorkspaceDto> Function(int id, UpdateWorkspaceRequest r)? onUpdateWorkspace;
+  Future<WorkspaceDto> Function(int id, UpdateWorkspaceRequest r)?
+  onUpdateWorkspace;
 
   _MockRepo({required this.workspace, required this.members});
 
@@ -144,20 +145,21 @@ void main() {
     expect(find.text('Alpha Team'), findsWidgets);
   });
 
-  testWidgets('WorkspaceSettingsScreen shows lock and denies access for Member role', (
-    tester,
-  ) async {
-    repo.workspace = repo.workspace.copyWith(
-      membership: const WorkspaceMembershipDto(role: 'Member'),
-    );
-    await contextCubit.loadWorkspaces();
+  testWidgets(
+    'WorkspaceSettingsScreen shows lock and denies access for Member role',
+    (tester) async {
+      repo.workspace = repo.workspace.copyWith(
+        membership: const WorkspaceMembershipDto(role: 'Member'),
+      );
+      await contextCubit.loadWorkspaces();
 
-    await tester.pumpWidget(buildSubject());
-    await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpWidget(buildSubject());
+      await tester.pump(const Duration(milliseconds: 100));
 
-    expect(find.byType(WorkspaceDetailsCard), findsNothing);
-    expect(find.byIcon(Icons.lock_outline_rounded), findsOneWidget);
-  });
+      expect(find.byType(WorkspaceDetailsCard), findsNothing);
+      expect(find.byIcon(Icons.lock_outline_rounded), findsOneWidget);
+    },
+  );
 
   testWidgets('Tapping Save Details updates workspace name', (tester) async {
     await tester.pumpWidget(buildSubject());
@@ -247,6 +249,28 @@ void main() {
 
       expect(find.byType(WorkspaceSettingsSkeleton), findsOneWidget);
       await loadingCubit.close();
+    },
+  );
+
+  testWidgets(
+    'WorkspaceSettingsScreen renders WorkspaceSettingsSkeleton when in initial state without crashing',
+    (tester) async {
+      final initialCubit = WorkspaceSettingsCubit(repo, contextCubit);
+
+      await tester.pumpWidget(
+        BlocProvider<WorkspaceContextCubit>.value(
+          value: contextCubit,
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: WorkspaceSettingsScreen(cubit: initialCubit),
+          ),
+        ),
+      );
+
+      expect(find.byType(WorkspaceSettingsSkeleton), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await initialCubit.close();
     },
   );
 

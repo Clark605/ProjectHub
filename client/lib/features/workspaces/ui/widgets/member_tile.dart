@@ -15,12 +15,14 @@ class MemberTile extends StatelessWidget {
   Future<void> _confirmRemoval(BuildContext context) async {
     final l10n = AppLocalizations.of(context)!;
     final cubit = context.read<WorkspaceSettingsCubit>();
-    
+
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Remove Member?'),
-        content: Text('Are you sure you want to remove ${member.name.isNotEmpty ? member.name : member.email} from the workspace?'),
+        content: Text(
+          'Are you sure you want to remove ${member.name.isNotEmpty ? member.name : member.email} from the workspace?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -74,6 +76,15 @@ class MemberTile extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          if (!isOwner) ...[
+            const SizedBox(width: 4),
+            IconButton(
+              icon: const Icon(Icons.remove_circle_outline_rounded, size: 18),
+              color: AppColors.error,
+              tooltip: l10n.removeMember,
+              onPressed: () => _confirmRemoval(context),
+            ),
+          ],
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
@@ -96,15 +107,6 @@ class MemberTile extends StatelessWidget {
               ),
             ),
           ),
-          if (!isOwner) ...[
-            const SizedBox(width: 4),
-            IconButton(
-              icon: const Icon(Icons.remove_circle_outline_rounded, size: 18),
-              color: AppColors.error,
-              tooltip: l10n.removeMember,
-              onPressed: () => _confirmRemoval(context),
-            ),
-          ],
         ],
       ),
     );

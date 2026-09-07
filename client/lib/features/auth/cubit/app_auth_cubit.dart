@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:injectable/injectable.dart';
 
+import 'package:client/core/di/injection.dart';
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/core/storage/secure_storage_service.dart';
@@ -10,15 +11,21 @@ import 'package:client/core/utils/jwt_utils.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/user.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 
 @lazySingleton
 class AppAuthCubit extends SafeActionCubit<AppAuthState> {
   final AuthRepository _authRepository;
   final SecureStorageService _storage;
   final PrefsService _prefs;
+  final WorkspaceContextCubit? _workspaceContextCubit;
 
-  AppAuthCubit(this._authRepository, this._storage, this._prefs)
-    : super(const AppAuthState.initial());
+  AppAuthCubit(
+    this._authRepository,
+    this._storage,
+    this._prefs, [
+    this._workspaceContextCubit,
+  ]) : super(const AppAuthState.initial());
 
   Future<void> checkAuthStatus() async {
     final timer = AppLogger.startTimer('Auth Status Check', tag: 'Auth');
@@ -146,12 +153,22 @@ class AppAuthCubit extends SafeActionCubit<AppAuthState> {
         await _authRepository.logout();
         await _prefs.clearCachedUser();
         await _prefs.clearActiveWorkspace();
+        if (_workspaceContextCubit != null) {
+          await _workspaceContextCubit.reset();
+        } else if (getIt.isRegistered<WorkspaceContextCubit>()) {
+          await getIt<WorkspaceContextCubit>().reset();
+        }
         emit(const AppAuthState.unauthenticated());
         return true;
       },
       onError: (msg) async {
         await _prefs.clearCachedUser();
         await _prefs.clearActiveWorkspace();
+        if (_workspaceContextCubit != null) {
+          await _workspaceContextCubit.reset();
+        } else if (getIt.isRegistered<WorkspaceContextCubit>()) {
+          await getIt<WorkspaceContextCubit>().reset();
+        }
         emit(const AppAuthState.unauthenticated());
       },
       logTag: 'Auth',

@@ -1,10 +1,12 @@
 import 'package:injectable/injectable.dart';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
+import 'package:client/core/di/injection.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/login_state.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 
 @injectable
 class LoginCubit extends SafeActionCubit<LoginState> {
@@ -12,7 +14,7 @@ class LoginCubit extends SafeActionCubit<LoginState> {
   final AppAuthCubit _appAuthCubit;
 
   LoginCubit(this._authRepository, this._appAuthCubit)
-      : super(const LoginState.initial());
+    : super(const LoginState.initial());
 
   Future<void> login({required String email, required String password}) async {
     emit(const LoginState.loading());
@@ -22,6 +24,9 @@ class LoginCubit extends SafeActionCubit<LoginState> {
           LoginDto(email: email, password: password),
         );
         _appAuthCubit.setAuthenticated(user);
+        if (getIt.isRegistered<WorkspaceContextCubit>()) {
+          await getIt<WorkspaceContextCubit>().reset();
+        }
         emit(LoginState.success(user));
         return user;
       },

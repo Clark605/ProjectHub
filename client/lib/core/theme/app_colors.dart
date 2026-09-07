@@ -41,7 +41,7 @@ class AppColors {
   // ── Status Tokens ──
   static const Color success = Color(0xFF22C55E); // Green
   static const Color warning = Color(0xFFFBBF24); // Amber
-  static const Color error = Color(0xFFFFB4AB); // Red / Coral
+  static const Color error = Color.fromARGB(255, 255, 65, 44); // Red / Coral
   static const Color onError = Color(0xFF690005);
   static const Color info = Color(0xFF89CEFF); // Sky
 
@@ -49,7 +49,9 @@ class AppColors {
   static const Color textPrimary = Color(0xFFE4E1ED); // Soft high-contrast text
   static const Color textSecondary = Color(0xFF908FA0); // Muted slate / outline
   static const Color textTertiary = Color(0xFF64748B);
-  static const Color textOnPrimary = Color(0xFF1000A9); // Dark contrast on electric violet
+  static const Color textOnPrimary = Color(
+    0xFF1000A9,
+  ); // Dark contrast on electric violet
 
   // ── Light Theme Overrides ──
   static const Color lightBackground = Color(0xFFF8FAFC);

@@ -1,3 +1,4 @@
+import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/di/injection.dart';
@@ -112,46 +113,48 @@ class _KanbanScreenState extends State<KanbanScreen> {
           const SizedBox(width: 8),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                color: AppColors.electricViolet.withValues(alpha: 0.15),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColors.electricViolet.withValues(alpha: 0.4),
+      body: AmbientGlowBackground(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: AppColors.electricViolet.withValues(alpha: 0.15),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.electricViolet.withValues(alpha: 0.4),
+                  ),
+                ),
+                child: const Icon(
+                  Icons.view_kanban_outlined,
+                  size: 36,
+                  color: AppColors.electricViolet,
                 ),
               ),
-              child: const Icon(
-                Icons.view_kanban_outlined,
-                size: 36,
-                color: AppColors.electricViolet,
+              const SizedBox(height: 20),
+              Text(
+                'Kanban Board (Placeholder)',
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: isDark
+                      ? AppColors.textPrimary
+                      : AppColors.lightTextPrimary,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Kanban Board (Placeholder)',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: isDark
-                    ? AppColors.textPrimary
-                    : AppColors.lightTextPrimary,
+              const SizedBox(height: 8),
+              Text(
+                'Sprint & Kanban Orchestration is coming soon.',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: isDark
+                      ? AppColors.textSecondary
+                      : AppColors.lightTextSecondary,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Sprint & Kanban Orchestration is coming soon.',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: isDark
-                    ? AppColors.textSecondary
-                    : AppColors.lightTextSecondary,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
