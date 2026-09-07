@@ -36,7 +36,7 @@ void main() {
     );
   }
 
-  testWidgets('KanbanScreen renders project title and placeholder content', (
+  testWidgets('KanbanScreen renders project title and board content', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -50,11 +50,8 @@ void main() {
     // Verify title and subtitle
     expect(find.text('Apollo Project'), findsOneWidget);
     expect(find.text('Kanban Board'), findsOneWidget);
-    expect(find.text('Kanban Board (Placeholder)'), findsOneWidget);
-    expect(
-      find.text('Sprint & Kanban Orchestration is coming soon.'),
-      findsOneWidget,
-    );
+    expect(find.text('Board is Empty'), findsOneWidget);
+    expect(find.text('New Task'), findsOneWidget);
 
     // Verify presence of settings icon button
     expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
