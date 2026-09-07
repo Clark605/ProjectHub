@@ -131,7 +131,9 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
             description: request.description,
             priority: request.priority,
             assigneeId: request.assigneeId,
-            assigneeName: member?.name ?? _currentTask.assigneeName,
+            assigneeName: request.assigneeId == null
+                ? null
+                : (member?.name ?? _currentTask.assigneeName),
             dueDate: request.dueDate,
             updatedAt: DateTime.now(),
           );
@@ -575,6 +577,12 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                 value: null,
                 child: Text('Unassigned'),
               ),
+              if (_editAssigneeId != null &&
+                  !widget.members.any((m) => m.userId == _editAssigneeId))
+                DropdownMenuItem<String?>(
+                  value: _editAssigneeId,
+                  child: Text(_currentTask.assigneeName ?? 'Assigned Member'),
+                ),
               ...widget.members.map(
                 (m) => DropdownMenuItem<String?>(
                   value: m.userId,

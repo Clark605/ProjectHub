@@ -92,7 +92,10 @@ class KanbanTaskCard extends StatelessWidget {
                                 (onMove != null || onDelete != null))
                               PopupMenuButton<String>(
                                 padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
+                                constraints: const BoxConstraints(
+                                  minWidth: 48,
+                                  minHeight: 48,
+                                ),
                                 icon: Icon(
                                   Icons.more_vert_rounded,
                                   size: 18,

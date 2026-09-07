@@ -32,8 +32,21 @@ abstract class TaskDto with _$TaskDto {
 
   TaskStatus get statusEnum => TaskStatus.fromString(status);
   TaskPriority get priorityEnum => TaskPriority.fromString(priority);
-  bool get isOverdue =>
-      dueDate != null &&
-      dueDate!.isBefore(DateTime.now()) &&
-      statusEnum != TaskStatus.done;
+  bool get isOverdue {
+    if (dueDate == null || statusEnum == TaskStatus.done) return false;
+    final now = DateTime.now();
+    if (dueDate!.hour == 0 && dueDate!.minute == 0 && dueDate!.second == 0) {
+      final endOfDay = DateTime(
+        dueDate!.year,
+        dueDate!.month,
+        dueDate!.day,
+        23,
+        59,
+        59,
+        999,
+      );
+      return endOfDay.isBefore(now);
+    }
+    return dueDate!.isBefore(now);
+  }
 }

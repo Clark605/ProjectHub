@@ -341,6 +341,8 @@ class _KanbanScreenState extends State<KanbanScreen>
                     // Main Board Area
                     Expanded(
                       child: RefreshIndicator(
+                        notificationPredicate: (notification) =>
+                            notification.metrics.axis == Axis.vertical,
                         onRefresh: () => _cubit.loadTasks(
                           widget.projectId,
                           forceRefresh: true,
@@ -442,7 +444,12 @@ class _KanbanScreenState extends State<KanbanScreen>
                 if (isMobile) {
                   return _buildMobileBoard(context, tasksByStatus, arch);
                 } else {
-                  return _buildDesktopBoard(context, tasksByStatus, arch);
+                  return _buildDesktopBoard(
+                    context,
+                    tasksByStatus,
+                    arch,
+                    constraints.maxHeight,
+                  );
                 }
               },
             );
@@ -547,7 +554,10 @@ class _KanbanScreenState extends State<KanbanScreen>
     BuildContext context,
     Map<TaskStatus, List<TaskDto>> tasksByStatus,
     bool isArchived,
+    double availableHeight,
   ) {
+    final columnHeight = (availableHeight - 32).clamp(300.0, double.infinity);
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.all(16),
@@ -555,17 +565,20 @@ class _KanbanScreenState extends State<KanbanScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: TaskStatus.values.map((status) {
           final columnTasks = tasksByStatus[status] ?? [];
-          return Container(
-            width: 280,
-            margin: const EdgeInsets.only(right: 16),
-            child: KanbanColumn(
-              status: status,
-              tasks: columnTasks,
-              isArchived: isArchived,
-              onAddTask: () => _openCreateTask(status.toServerString()),
-              onTaskTap: (task) => _openTaskDetail(task, isArchived),
-              onTaskMove: _openMoveTask,
-              onTaskDelete: (task) => _cubit.deleteTask(task.id),
+          return SizedBox(
+            width: 300,
+            height: columnHeight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: KanbanColumn(
+                status: status,
+                tasks: columnTasks,
+                isArchived: isArchived,
+                onAddTask: () => _openCreateTask(status.toServerString()),
+                onTaskTap: (task) => _openTaskDetail(task, isArchived),
+                onTaskMove: _openMoveTask,
+                onTaskDelete: (task) => _cubit.deleteTask(task.id),
+              ),
             ),
           );
         }).toList(),

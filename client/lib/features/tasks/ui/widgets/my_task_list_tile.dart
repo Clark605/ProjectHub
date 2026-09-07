@@ -129,22 +129,30 @@ class MyTaskListTile extends StatelessWidget {
 
                 // Status Badge
                 GestureDetector(
+                  behavior: HitTestBehavior.opaque,
                   onTap: onStatusTap,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
+                    constraints: const BoxConstraints(
+                      minWidth: 48,
+                      minHeight: 48,
                     ),
-                    decoration: BoxDecoration(
-                      color: task.statusEnum.toColor().withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      task.statusEnum.toDisplayString(),
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        color: task.statusEnum.toColor(),
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: task.statusEnum.toColor().withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        task.statusEnum.toDisplayString(),
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                          color: task.statusEnum.toColor(),
+                        ),
                       ),
                     ),
                   ),

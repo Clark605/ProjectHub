@@ -140,16 +140,32 @@ class KanbanCubit extends SafeActionCubit<KanbanState> {
         await _taskRepository.updateTaskStatus(taskId, newStatus);
       },
       onError: (errorMsg) {
-        // Rollback to original state and notify user
-        emit(
-          currentState.copyWith(
-            allTasks: originalTasks,
-            tasks: _applyFilters(originalTasks),
-            errorMessage: errorMsg.isNotEmpty
-                ? errorMsg
-                : 'Failed to move task. Reverted.',
-          ),
-        );
+        // Rollback specifically this task's status from current state to prevent stomping concurrent moves
+        final latestState = state;
+        if (latestState is KanbanLoaded) {
+          final rollbackAll = latestState.allTasks.map((t) {
+            return t.id == taskId ? t.copyWith(status: originalTask.status) : t;
+          }).toList();
+          emit(
+            latestState.copyWith(
+              allTasks: rollbackAll,
+              tasks: _applyFilters(rollbackAll),
+              errorMessage: errorMsg.isNotEmpty
+                  ? errorMsg
+                  : 'Failed to move task. Reverted.',
+            ),
+          );
+        } else {
+          emit(
+            currentState.copyWith(
+              allTasks: originalTasks,
+              tasks: _applyFilters(originalTasks),
+              errorMessage: errorMsg.isNotEmpty
+                  ? errorMsg
+                  : 'Failed to move task. Reverted.',
+            ),
+          );
+        }
       },
       defaultErrorMessage: 'Failed to update task status',
       logTag: 'KanbanCubit',

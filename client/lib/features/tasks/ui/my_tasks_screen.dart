@@ -154,7 +154,10 @@ class _MyTasksScreenState extends State<MyTasksScreen>
               child: RefreshIndicator(
                 onRefresh: () async {
                   if (_activeWorkspaceId != null) {
-                    await _cubit.loadMyTasks(_activeWorkspaceId!, forceRefresh: true);
+                    await _cubit.loadMyTasks(
+                      _activeWorkspaceId!,
+                      forceRefresh: true,
+                    );
                   }
                 },
                 child: CustomScrollView(

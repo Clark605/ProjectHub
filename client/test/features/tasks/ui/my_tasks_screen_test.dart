@@ -16,25 +16,39 @@ class _MockTaskRepo implements TaskRepository {
   void clearCache([int? projectId]) {}
 
   @override
-  Future<List<TaskDto>> getTasksByProject(int projectId, {String? status, String? assigneeId, String? priority, bool forceRefresh = false}) async => tasks;
+  Future<List<TaskDto>> getTasksByProject(
+    int projectId, {
+    String? status,
+    String? assigneeId,
+    String? priority,
+    bool forceRefresh = false,
+  }) async => tasks;
 
   @override
-  Future<List<TaskDto>> getMyTasks(int workspaceId, {bool forceRefresh = false}) async => tasks;
+  Future<List<TaskDto>> getMyTasks(
+    int workspaceId, {
+    bool forceRefresh = false,
+  }) async => tasks;
 
   @override
-  Future<TaskDto> getTask(int taskId, {bool forceRefresh = false}) async => tasks.firstWhere((t) => t.id == taskId);
+  Future<TaskDto> getTask(int taskId, {bool forceRefresh = false}) async =>
+      tasks.firstWhere((t) => t.id == taskId);
 
   @override
-  Future<TaskDto> createTask(int projectId, CreateTaskRequest request) async => throw UnimplementedError();
+  Future<TaskDto> createTask(int projectId, CreateTaskRequest request) async =>
+      throw UnimplementedError();
 
   @override
-  Future<TaskDto> updateTask(int taskId, UpdateTaskRequest request) async => throw UnimplementedError();
+  Future<TaskDto> updateTask(int taskId, UpdateTaskRequest request) async =>
+      throw UnimplementedError();
 
   @override
-  Future<TaskDto> updateTaskStatus(int taskId, String status) async => throw UnimplementedError();
+  Future<TaskDto> updateTaskStatus(int taskId, String status) async =>
+      throw UnimplementedError();
 
   @override
-  Future<TaskDto> updateTaskAssignee(int taskId, String? assigneeId) async => throw UnimplementedError();
+  Future<TaskDto> updateTaskAssignee(int taskId, String? assigneeId) async =>
+      throw UnimplementedError();
 
   @override
   Future<void> deleteTask(int taskId) async {}
@@ -50,27 +64,33 @@ void main() {
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(
-        body: MyTasksScreen(cubit: cubit),
-      ),
+      home: Scaffold(body: MyTasksScreen(cubit: cubit)),
     );
   }
 
-  testWidgets('MyTasksScreen renders header and empty state when no tasks exist', (tester) async {
-    final repo = _MockTaskRepo();
-    repo.tasks = [];
-    final cubit = MyTasksCubit(repo);
+  testWidgets(
+    'MyTasksScreen renders header and empty state when no tasks exist',
+    (tester) async {
+      final repo = _MockTaskRepo();
+      repo.tasks = [];
+      final cubit = MyTasksCubit(repo);
 
-    await tester.pumpWidget(createWidgetUnderTest(cubit));
-    await cubit.loadMyTasks(10);
-    await tester.pump(const Duration(milliseconds: 100));
+      await tester.pumpWidget(createWidgetUnderTest(cubit));
+      await cubit.loadMyTasks(10);
+      await tester.pump(const Duration(milliseconds: 100));
 
-    expect(find.text('My Tasks'), findsOneWidget);
-    expect(find.text('Personal sprint backlog and assigned deliverables.'), findsOneWidget);
-    expect(find.text('No Assigned Tasks'), findsOneWidget);
-  });
+      expect(find.text('My Tasks'), findsOneWidget);
+      expect(
+        find.text('Personal sprint backlog and assigned deliverables.'),
+        findsOneWidget,
+      );
+      expect(find.text('No Assigned Tasks'), findsOneWidget);
+    },
+  );
 
-  testWidgets('MyTasksScreen renders urgency sections when tasks are loaded', (tester) async {
+  testWidgets('MyTasksScreen renders urgency sections when tasks are loaded', (
+    tester,
+  ) async {
     final repo = _MockTaskRepo();
     repo.tasks = [
       const TaskDto(

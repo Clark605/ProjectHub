@@ -303,6 +303,14 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                                 value: null,
                                 child: Text('Unassigned'),
                               ),
+                              if (_selectedAssigneeId != null &&
+                                  !widget.members.any(
+                                    (m) => m.userId == _selectedAssigneeId,
+                                  ))
+                                DropdownMenuItem<String?>(
+                                  value: _selectedAssigneeId,
+                                  child: const Text('Assigned Member'),
+                                ),
                               ...widget.members.map(
                                 (m) => DropdownMenuItem<String?>(
                                   value: m.userId,
