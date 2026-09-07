@@ -124,8 +124,8 @@ class MoveToStatusSheet extends StatelessWidget {
                               color: isCurrent
                                   ? status.toColor()
                                   : (isDark
-                                      ? AppColors.textPrimary
-                                      : AppColors.lightTextPrimary),
+                                        ? AppColors.textPrimary
+                                        : AppColors.lightTextPrimary),
                             ),
                           ),
                         ),

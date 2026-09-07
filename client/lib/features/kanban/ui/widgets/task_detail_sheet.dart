@@ -151,7 +151,9 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Delete Task'),
-        content: Text('Are you sure you want to delete "${_currentTask.title}"? This action cannot be undone.'),
+        content: Text(
+          'Are you sure you want to delete "${_currentTask.title}"? This action cannot be undone.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
@@ -237,14 +239,14 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                         vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: _currentTask.statusEnum
-                            .toColor()
-                            .withValues(alpha: 0.15),
+                        color: _currentTask.statusEnum.toColor().withValues(
+                          alpha: 0.15,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: _currentTask.statusEnum
-                              .toColor()
-                              .withValues(alpha: 0.4),
+                          color: _currentTask.statusEnum.toColor().withValues(
+                            alpha: 0.4,
+                          ),
                         ),
                       ),
                       child: Row(
@@ -285,9 +287,9 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                       vertical: 5,
                     ),
                     decoration: BoxDecoration(
-                      color: _currentTask.priorityEnum
-                          .toColor()
-                          .withValues(alpha: 0.15),
+                      color: _currentTask.priorityEnum.toColor().withValues(
+                        alpha: 0.15,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -381,8 +383,8 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
             color: _currentTask.description.isNotEmpty
                 ? (isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)
                 : (isDark
-                    ? AppColors.textSecondary
-                    : AppColors.lightTextSecondary),
+                      ? AppColors.textSecondary
+                      : AppColors.lightTextSecondary),
             fontStyle: _currentTask.description.isEmpty
                 ? FontStyle.italic
                 : FontStyle.normal,
@@ -414,7 +416,10 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
           valueColor: isOverdue ? AppColors.error : null,
           trailing: isOverdue
               ? Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.error.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(6),
@@ -449,8 +454,9 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
             context,
             icon: Icons.access_time_rounded,
             label: 'Created',
-            value: DateFormat('MMM d, yyyy • h:mm a')
-                .format(_currentTask.createdAt!.toLocal()),
+            value: DateFormat(
+              'MMM d, yyyy • h:mm a',
+            ).format(_currentTask.createdAt!.toLocal()),
           ),
       ],
     );
@@ -656,10 +662,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                   )
                 : const Text(
                     'Save Changes',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
           ),
         ],
@@ -683,7 +686,9 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
         Icon(
           icon,
           size: 18,
-          color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
+          color: isDark
+              ? AppColors.textSecondary
+              : AppColors.lightTextSecondary,
         ),
         const SizedBox(width: 10),
         Text(
@@ -702,10 +707,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
             color: valueColor,
           ),
         ),
-        if (trailing != null) ...[
-          const SizedBox(width: 8),
-          trailing,
-        ],
+        if (trailing != null) ...[const SizedBox(width: 8), trailing],
       ],
     );
   }

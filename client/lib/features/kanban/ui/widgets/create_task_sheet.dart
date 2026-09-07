@@ -11,7 +11,8 @@ class CreateTaskSheet extends StatefulWidget {
   final int projectId;
   final String initialStatus;
   final List<MemberDto> members;
-  final Future<void> Function(CreateTaskRequest request, String targetStatus) onSubmit;
+  final Future<void> Function(CreateTaskRequest request, String targetStatus)
+  onSubmit;
 
   const CreateTaskSheet({
     super.key,
@@ -26,7 +27,11 @@ class CreateTaskSheet extends StatefulWidget {
     required int projectId,
     String initialStatus = 'Backlog',
     List<MemberDto> members = const [],
-    required Future<void> Function(CreateTaskRequest request, String targetStatus) onSubmit,
+    required Future<void> Function(
+      CreateTaskRequest request,
+      String targetStatus,
+    )
+    onSubmit,
   }) {
     return showModalBottomSheet(
       context: context,
@@ -156,7 +161,9 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: _selectedStatus.toColor().withValues(alpha: 0.15),
+                        color: _selectedStatus.toColor().withValues(
+                          alpha: 0.15,
+                        ),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -242,7 +249,9 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                       selectedColor: priority.toColor(),
                       labelStyle: TextStyle(
                         color: isSelected ? Colors.white : null,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                        fontWeight: isSelected
+                            ? FontWeight.w600
+                            : FontWeight.normal,
                       ),
                       onSelected: (selected) {
                         if (selected) {
@@ -332,7 +341,9 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                             borderRadius: BorderRadius.circular(12),
                             child: Container(
                               height: 48,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                              ),
                               decoration: BoxDecoration(
                                 color: isDark
                                     ? AppColors.surfaceContainer
@@ -357,23 +368,27 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                                   Expanded(
                                     child: Text(
                                       _selectedDueDate != null
-                                          ? DateFormat('MMM d, yyyy')
-                                              .format(_selectedDueDate!)
+                                          ? DateFormat(
+                                              'MMM d, yyyy',
+                                            ).format(_selectedDueDate!)
                                           : 'No date',
-                                      style: theme.textTheme.bodyMedium?.copyWith(
-                                        color: _selectedDueDate != null
-                                            ? null
-                                            : (isDark
-                                                ? AppColors.textSecondary
-                                                : AppColors.lightTextSecondary),
-                                      ),
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                            color: _selectedDueDate != null
+                                                ? null
+                                                : (isDark
+                                                      ? AppColors.textSecondary
+                                                      : AppColors
+                                                            .lightTextSecondary),
+                                          ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                   if (_selectedDueDate != null)
                                     GestureDetector(
                                       onTap: () => setState(
-                                          () => _selectedDueDate = null),
+                                        () => _selectedDueDate = null,
+                                      ),
                                       child: const Icon(
                                         Icons.close_rounded,
                                         size: 16,
@@ -407,8 +422,9 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
                           ),
                         )
                       : const Text(

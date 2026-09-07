@@ -30,9 +30,7 @@ class KanbanTaskCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
       decoration: BoxDecoration(
-        color: isDark
-            ? AppColors.surfaceContainer
-            : AppColors.lightSurface,
+        color: isDark ? AppColors.surfaceContainer : AppColors.lightSurface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isDark ? AppColors.border : AppColors.lightBorder,
@@ -90,7 +88,8 @@ class KanbanTaskCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            if (!isArchived && (onMove != null || onDelete != null))
+                            if (!isArchived &&
+                                (onMove != null || onDelete != null))
                               PopupMenuButton<String>(
                                 padding: EdgeInsets.zero,
                                 constraints: const BoxConstraints(),
@@ -163,8 +162,10 @@ class KanbanTaskCard extends StatelessWidget {
                                   color: isOverdue
                                       ? AppColors.error.withValues(alpha: 0.15)
                                       : (isDark
-                                          ? Colors.white10
-                                          : Colors.black.withValues(alpha: 0.05)),
+                                            ? Colors.white10
+                                            : Colors.black.withValues(
+                                                alpha: 0.05,
+                                              )),
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Row(
@@ -176,8 +177,8 @@ class KanbanTaskCard extends StatelessWidget {
                                       color: isOverdue
                                           ? AppColors.error
                                           : (isDark
-                                              ? AppColors.textSecondary
-                                              : AppColors.lightTextSecondary),
+                                                ? AppColors.textSecondary
+                                                : AppColors.lightTextSecondary),
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
@@ -190,8 +191,9 @@ class KanbanTaskCard extends StatelessWidget {
                                         color: isOverdue
                                             ? AppColors.error
                                             : (isDark
-                                                ? AppColors.textSecondary
-                                                : AppColors.lightTextSecondary),
+                                                  ? AppColors.textSecondary
+                                                  : AppColors
+                                                        .lightTextSecondary),
                                       ),
                                     ),
                                   ],

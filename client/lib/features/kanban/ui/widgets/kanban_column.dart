@@ -72,7 +72,10 @@ class KanbanColumn extends StatelessWidget {
 
                 // Count Badge
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 7,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: isDark ? Colors.white12 : Colors.black12,
                     borderRadius: BorderRadius.circular(10),

@@ -79,10 +79,7 @@ class _KanbanScreenState extends State<KanbanScreen>
         _isInternalCubit = true;
       } else {
         // Mock / placeholder fallback for unit tests without DI
-        _cubit = KanbanCubit(
-          _MockTaskRepository(),
-          _MockProjectRepository(),
-        );
+        _cubit = KanbanCubit(_MockTaskRepository(), _MockProjectRepository());
         _isInternalCubit = true;
       }
     }
@@ -142,10 +139,9 @@ class _KanbanScreenState extends State<KanbanScreen>
   }
 
   Future<void> _openProjectSettings() async {
-    final result = await Navigator.of(context).pushNamed(
-      RouteNames.projectDetail,
-      arguments: widget.projectId,
-    );
+    final result = await Navigator.of(
+      context,
+    ).pushNamed(RouteNames.projectDetail, arguments: widget.projectId);
 
     if (result == true && mounted) {
       Navigator.of(context).pop(true);
@@ -199,7 +195,8 @@ class _KanbanScreenState extends State<KanbanScreen>
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
 
-    final projectName = _project?.name ??
+    final projectName =
+        _project?.name ??
         (_isLoadingProject ? '...' : (l10n?.projectsTitle ?? 'Project'));
     final isArchived = _project?.statusEnum == ProjectStatus.archived;
 
@@ -224,7 +221,8 @@ class _KanbanScreenState extends State<KanbanScreen>
           );
         },
         builder: (context, state) {
-          final isEffectivelyArchived = isArchived ||
+          final isEffectivelyArchived =
+              isArchived ||
               state.maybeWhen(
                 loaded: (_, _, _, arch, _, _, _, _) => arch,
                 empty: (_, arch) => arch,
@@ -404,57 +402,51 @@ class _KanbanScreenState extends State<KanbanScreen>
         isArchived: arch,
         onCreateTask: () => _openCreateTask('Backlog'),
       ),
-      loaded: (projectId, tasks, allTasks, arch, search, priority, assignee, err) {
-        if (tasks.isEmpty && (search != null || priority != null || assignee != null)) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.filter_list_off_rounded,
-                    size: 44,
-                    color: AppColors.textSecondary,
+      loaded:
+          (projectId, tasks, allTasks, arch, search, priority, assignee, err) {
+            if (tasks.isEmpty &&
+                (search != null || priority != null || assignee != null)) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.filter_list_off_rounded,
+                        size: 44,
+                        color: AppColors.textSecondary,
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        'No tasks match active filters',
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 12),
+                      OutlinedButton(
+                        onPressed: () => _cubit.clearFilters(),
+                        child: const Text('Clear Filters'),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'No tasks match active filters',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 12),
-                  OutlinedButton(
-                    onPressed: () => _cubit.clearFilters(),
-                    child: const Text('Clear Filters'),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        final tasksByStatus = state.tasksByStatus;
-
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final isMobile = constraints.maxWidth < 768;
-
-            if (isMobile) {
-              return _buildMobileBoard(
-                context,
-                tasksByStatus,
-                arch,
-              );
-            } else {
-              return _buildDesktopBoard(
-                context,
-                tasksByStatus,
-                arch,
+                ),
               );
             }
+
+            final tasksByStatus = state.tasksByStatus;
+
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                final isMobile = constraints.maxWidth < 768;
+
+                if (isMobile) {
+                  return _buildMobileBoard(context, tasksByStatus, arch);
+                } else {
+                  return _buildDesktopBoard(context, tasksByStatus, arch);
+                }
+              },
+            );
           },
-        );
-      },
     );
   }
 
@@ -495,13 +487,14 @@ class _KanbanScreenState extends State<KanbanScreen>
                     ),
                     label: Text('${status.toDisplayString()} ($count)'),
                     labelStyle: TextStyle(
-                      fontWeight:
-                          isSelected ? FontWeight.w700 : FontWeight.w500,
+                      fontWeight: isSelected
+                          ? FontWeight.w700
+                          : FontWeight.w500,
                       color: isSelected
                           ? (isDark ? Colors.white : Colors.black)
                           : (isDark
-                              ? AppColors.textSecondary
-                              : AppColors.lightTextSecondary),
+                                ? AppColors.textSecondary
+                                : AppColors.lightTextSecondary),
                       fontSize: 12,
                     ),
                     onSelected: (_) {
@@ -585,19 +578,33 @@ class _MockTaskRepository implements TaskRepository {
   @override
   void clearCache([int? projectId]) {}
   @override
-  Future<List<TaskDto>> getTasksByProject(int projectId, {String? status, String? assigneeId, String? priority, bool forceRefresh = false}) async => [];
+  Future<List<TaskDto>> getTasksByProject(
+    int projectId, {
+    String? status,
+    String? assigneeId,
+    String? priority,
+    bool forceRefresh = false,
+  }) async => [];
   @override
-  Future<List<TaskDto>> getMyTasks(int workspaceId, {bool forceRefresh = false}) async => [];
+  Future<List<TaskDto>> getMyTasks(
+    int workspaceId, {
+    bool forceRefresh = false,
+  }) async => [];
   @override
-  Future<TaskDto> getTask(int taskId, {bool forceRefresh = false}) async => throw UnimplementedError();
+  Future<TaskDto> getTask(int taskId, {bool forceRefresh = false}) async =>
+      throw UnimplementedError();
   @override
-  Future<TaskDto> createTask(int projectId, CreateTaskRequest request) async => throw UnimplementedError();
+  Future<TaskDto> createTask(int projectId, CreateTaskRequest request) async =>
+      throw UnimplementedError();
   @override
-  Future<TaskDto> updateTask(int taskId, UpdateTaskRequest request) async => throw UnimplementedError();
+  Future<TaskDto> updateTask(int taskId, UpdateTaskRequest request) async =>
+      throw UnimplementedError();
   @override
-  Future<TaskDto> updateTaskStatus(int taskId, String status) async => throw UnimplementedError();
+  Future<TaskDto> updateTaskStatus(int taskId, String status) async =>
+      throw UnimplementedError();
   @override
-  Future<TaskDto> updateTaskAssignee(int taskId, String? assigneeId) async => throw UnimplementedError();
+  Future<TaskDto> updateTaskAssignee(int taskId, String? assigneeId) async =>
+      throw UnimplementedError();
   @override
   Future<void> deleteTask(int taskId) async {}
   @override
@@ -608,13 +615,20 @@ class _MockProjectRepository implements ProjectRepository {
   @override
   void clearCache([int? wsId]) {}
   @override
-  Future<List<ProjectDto>> getProjects(int wsId, {String? status, bool forceRefresh = false}) async => [];
+  Future<List<ProjectDto>> getProjects(
+    int wsId, {
+    String? status,
+    bool forceRefresh = false,
+  }) async => [];
   @override
-  Future<ProjectDto> getProject(int id, {bool forceRefresh = false}) async => throw UnimplementedError();
+  Future<ProjectDto> getProject(int id, {bool forceRefresh = false}) async =>
+      throw UnimplementedError();
   @override
-  Future<ProjectDto> createProject(int wsId, CreateProjectRequest req) async => throw UnimplementedError();
+  Future<ProjectDto> createProject(int wsId, CreateProjectRequest req) async =>
+      throw UnimplementedError();
   @override
-  Future<ProjectDto> updateProject(int id, UpdateProjectRequest req) async => throw UnimplementedError();
+  Future<ProjectDto> updateProject(int id, UpdateProjectRequest req) async =>
+      throw UnimplementedError();
   @override
   Future<void> deleteProject(int id) async {}
   @override
@@ -622,4 +636,3 @@ class _MockProjectRepository implements ProjectRepository {
   @override
   bool hasCachedProject(int id) => false;
 }
-

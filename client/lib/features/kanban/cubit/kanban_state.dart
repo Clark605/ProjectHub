@@ -33,11 +33,21 @@ abstract class KanbanState with _$KanbanState {
     };
 
     maybeWhen(
-      loaded: (projectId, tasks, allTasks, isArchived, searchFilter, priorityFilter, assigneeFilter, errorMessage) {
-        for (final task in tasks) {
-          map[task.statusEnum]?.add(task);
-        }
-      },
+      loaded:
+          (
+            projectId,
+            tasks,
+            allTasks,
+            isArchived,
+            searchFilter,
+            priorityFilter,
+            assigneeFilter,
+            errorMessage,
+          ) {
+            for (final task in tasks) {
+              map[task.statusEnum]?.add(task);
+            }
+          },
       orElse: () {},
     );
 

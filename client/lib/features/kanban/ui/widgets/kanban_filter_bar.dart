@@ -38,7 +38,8 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
   void initState() {
     super.initState();
     _searchController = TextEditingController(text: widget.searchQuery);
-    _isSearchExpanded = widget.searchQuery != null && widget.searchQuery!.isNotEmpty;
+    _isSearchExpanded =
+        widget.searchQuery != null && widget.searchQuery!.isNotEmpty;
   }
 
   @override
@@ -63,10 +64,12 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final hasActiveFilter = (widget.selectedPriority != null &&
+    final hasActiveFilter =
+        (widget.selectedPriority != null &&
             widget.selectedPriority!.isNotEmpty &&
             widget.selectedPriority!.toLowerCase() != 'all') ||
-        (widget.selectedAssignee != null && widget.selectedAssignee!.isNotEmpty) ||
+        (widget.selectedAssignee != null &&
+            widget.selectedAssignee!.isNotEmpty) ||
         (widget.searchQuery != null && widget.searchQuery!.isNotEmpty);
 
     return Container(
@@ -94,7 +97,9 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                       color: isDark ? AppColors.surfaceContainer : Colors.white,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: isDark ? AppColors.border : AppColors.lightBorder,
+                        color: isDark
+                            ? AppColors.border
+                            : AppColors.lightBorder,
                       ),
                     ),
                     child: TextField(
@@ -121,7 +126,9 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                               )
                             : null,
                         border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10,
+                        ),
                       ),
                     ),
                   ),
@@ -172,8 +179,9 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                         Icons.flag_outlined,
                         size: 16,
                         color: widget.selectedPriority != null
-                            ? TaskPriority.fromString(widget.selectedPriority)
-                                .toColor()
+                            ? TaskPriority.fromString(
+                                widget.selectedPriority,
+                              ).toColor()
                             : null,
                       ),
                       label: Text(
@@ -195,7 +203,10 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                           : null,
                     ),
                     itemBuilder: (context) => [
-                      const PopupMenuItem(value: 'all', child: Text('All Priorities')),
+                      const PopupMenuItem(
+                        value: 'all',
+                        child: Text('All Priorities'),
+                      ),
                       ...TaskPriority.values.map(
                         (p) => PopupMenuItem(
                           value: p.toServerString(),
@@ -221,7 +232,10 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                       widget.onAssigneeSelected(val == 'all' ? null : val);
                     },
                     child: Chip(
-                      avatar: const Icon(Icons.person_outline_rounded, size: 16),
+                      avatar: const Icon(
+                        Icons.person_outline_rounded,
+                        size: 16,
+                      ),
                       label: Text(
                         _resolveAssigneeLabel(widget.selectedAssignee),
                         style: TextStyle(
@@ -239,16 +253,17 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                           : null,
                     ),
                     itemBuilder: (context) => [
-                      const PopupMenuItem(value: 'all', child: Text('All Assignees')),
+                      const PopupMenuItem(
+                        value: 'all',
+                        child: Text('All Assignees'),
+                      ),
                       const PopupMenuItem(
                         value: 'unassigned',
                         child: Text('Unassigned'),
                       ),
                       ...widget.members.map(
-                        (m) => PopupMenuItem(
-                          value: m.userId,
-                          child: Text(m.name),
-                        ),
+                        (m) =>
+                            PopupMenuItem(value: m.userId, child: Text(m.name)),
                       ),
                     ],
                   ),
@@ -277,7 +292,9 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
       return 'Assignee';
     }
     if (assigneeId == 'unassigned') return 'Unassigned';
-    final member = widget.members.where((m) => m.userId == assigneeId).firstOrNull;
+    final member = widget.members
+        .where((m) => m.userId == assigneeId)
+        .firstOrNull;
     return member != null ? member.name : 'Assignee';
   }
 }

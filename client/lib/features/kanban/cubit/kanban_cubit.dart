@@ -20,10 +20,8 @@ class KanbanCubit extends SafeActionCubit<KanbanState> {
   String? _priorityFilter;
   String? _assigneeFilter;
 
-  KanbanCubit(
-    this._taskRepository,
-    this._projectRepository,
-  ) : super(const KanbanState.initial());
+  KanbanCubit(this._taskRepository, this._projectRepository)
+    : super(const KanbanState.initial());
 
   int? get projectId => _projectId;
   bool get isArchived => _isArchived;
@@ -54,7 +52,9 @@ class KanbanCubit extends SafeActionCubit<KanbanState> {
         );
 
         if (tasks.isEmpty) {
-          emit(KanbanState.empty(projectId: projectId, isArchived: _isArchived));
+          emit(
+            KanbanState.empty(projectId: projectId, isArchived: _isArchived),
+          );
         } else {
           final filtered = _applyFilters(tasks);
           emit(
@@ -87,7 +87,9 @@ class KanbanCubit extends SafeActionCubit<KanbanState> {
       );
 
       if (tasks.isEmpty) {
-        emit(KanbanState.empty(projectId: _projectId!, isArchived: _isArchived));
+        emit(
+          KanbanState.empty(projectId: _projectId!, isArchived: _isArchived),
+        );
       } else {
         final filtered = _applyFilters(tasks);
         emit(
