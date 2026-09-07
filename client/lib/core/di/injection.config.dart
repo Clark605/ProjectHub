@@ -22,6 +22,7 @@ import '../../features/auth/cubit/register_cubit.dart' as _i341;
 import '../../features/auth/cubit/reset_password_cubit.dart' as _i835;
 import '../../features/auth/data/auth_repository.dart' as _i726;
 import '../../features/auth/data/auth_repository_impl.dart' as _i781;
+import '../../features/kanban/cubit/kanban_cubit.dart' as _i627;
 import '../../features/projects/cubit/project_detail_cubit.dart' as _i566;
 import '../../features/projects/cubit/projects_list_cubit.dart' as _i771;
 import '../../features/projects/data/project_repository.dart' as _i405;
@@ -111,6 +112,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i95.WorkspaceContextCubit(
         gh<_i688.WorkspaceRepository>(),
         gh<_i415.PrefsService>(),
+      ),
+    );
+    gh.factory<_i627.KanbanCubit>(
+      () => _i627.KanbanCubit(
+        gh<_i241.TaskRepository>(),
+        gh<_i405.ProjectRepository>(),
       ),
     );
     gh.factory<_i1.ForgotPasswordCubit>(
