@@ -64,6 +64,15 @@ class _AmbientGlowBackgroundState extends State<AmbientGlowBackground>
       return widget.child;
     }
 
+    final effectivePrimary = widget.primaryGlowColor != AppColors.electricViolet
+        ? widget.primaryGlowColor
+        : theme.colorScheme.primary;
+    final effectiveSecondary =
+        widget.secondaryGlowColor != AppColors.electricVioletContainer
+            ? widget.secondaryGlowColor
+            : theme.colorScheme.secondary;
+    final effectiveOpacity = isDark ? widget.glowOpacity : widget.glowOpacity * 0.25;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final size = Size(constraints.maxWidth, constraints.maxHeight);
@@ -76,7 +85,7 @@ class _AmbientGlowBackgroundState extends State<AmbientGlowBackground>
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Container(color: AppColors.background),
+                Container(color: theme.scaffoldBackgroundColor),
                 RepaintBoundary(
                   child: AnimatedBuilder(
                     animation: _ticker,
@@ -105,9 +114,9 @@ class _AmbientGlowBackgroundState extends State<AmbientGlowBackground>
                         painter: AmbientGlowPainter(
                           orbitVector: Offset(orbitX, orbitY),
                           pointerOffset: _state.smoothedPointerOffset,
-                          primaryColor: widget.primaryGlowColor,
-                          secondaryColor: widget.secondaryGlowColor,
-                          opacity: widget.glowOpacity,
+                          primaryColor: effectivePrimary,
+                          secondaryColor: effectiveSecondary,
+                          opacity: effectiveOpacity,
                         ),
                         size: Size.infinite,
                       );

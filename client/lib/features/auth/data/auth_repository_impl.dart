@@ -159,4 +159,23 @@ class AuthRepositoryImpl implements AuthRepository {
       throw DioErrorHandler.handle(e);
     }
   }
+
+  @override
+  Future<User> updateProfile({required String name, String? bio}) async {
+    AppLogger.debug('Starting updateProfile', tag: 'AuthRepository');
+    try {
+      final response = await _dio.put(
+        ApiConstants.userProfile,
+        data: {'name': name, 'bio': bio},
+      );
+      final user = User.fromJson(response.data as Map<String, dynamic>);
+      AppLogger.info(
+        'updateProfile completed successfully for ${user.email}',
+        tag: 'AuthRepository',
+      );
+      return user;
+    } on DioException catch (e) {
+      throw DioErrorHandler.handle(e);
+    }
+  }
 }

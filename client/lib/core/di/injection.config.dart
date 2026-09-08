@@ -23,6 +23,7 @@ import '../../features/auth/cubit/reset_password_cubit.dart' as _i835;
 import '../../features/auth/data/auth_repository.dart' as _i726;
 import '../../features/auth/data/auth_repository_impl.dart' as _i781;
 import '../../features/kanban/cubit/kanban_cubit.dart' as _i627;
+import '../../features/profile/cubit/profile_edit_cubit.dart' as _i322;
 import '../../features/projects/cubit/project_detail_cubit.dart' as _i566;
 import '../../features/projects/cubit/projects_list_cubit.dart' as _i771;
 import '../../features/projects/data/project_repository.dart' as _i405;
@@ -35,6 +36,7 @@ import '../../features/workspaces/cubit/workspace_context_cubit.dart' as _i95;
 import '../../features/workspaces/cubit/workspace_settings_cubit.dart' as _i259;
 import '../../features/workspaces/data/workspace_repository.dart' as _i688;
 import '../../features/workspaces/data/workspace_repository_impl.dart' as _i591;
+import '../cubit/app_settings_cubit.dart' as _i30;
 import '../network/auth_interceptor.dart' as _i908;
 import '../network/dio_client.dart' as _i667;
 import '../storage/prefs_service.dart' as _i415;
@@ -80,6 +82,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i771.ProjectsListCubit>(
       () => _i771.ProjectsListCubit(gh<_i405.ProjectRepository>()),
     );
+    gh.lazySingleton<_i30.AppSettingsCubit>(
+      () => _i30.AppSettingsCubit(gh<_i415.PrefsService>()),
+    );
     gh.lazySingleton<_i726.AuthRepository>(
       () => _i781.AuthRepositoryImpl(
         gh<_i361.Dio>(),
@@ -102,6 +107,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i341.RegisterCubit>(
       () => _i341.RegisterCubit(
+        gh<_i726.AuthRepository>(),
+        gh<_i784.AppAuthCubit>(),
+      ),
+    );
+    gh.factory<_i322.ProfileEditCubit>(
+      () => _i322.ProfileEditCubit(
         gh<_i726.AuthRepository>(),
         gh<_i784.AppAuthCubit>(),
       ),

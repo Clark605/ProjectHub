@@ -56,6 +56,15 @@ class FakeAuthRepository implements AuthRepository {
 
   @override
   Future<void> resetPassword(ResetPasswordDto dto) async {}
+
+  @override
+  Future<User> updateProfile({required String name, String? bio}) async {
+    return currentUser = User(
+      name: name,
+      email: currentUser?.email ?? 'test@example.com',
+      bio: bio ?? '',
+    );
+  }
 }
 
 class FakeSecureStorageService extends SecureStorageService {

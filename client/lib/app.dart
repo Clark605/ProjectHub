@@ -5,10 +5,11 @@ import 'package:client/l10n/generated/app_localizations.dart';
 
 import 'package:client/core/routes/app_router.dart';
 import 'package:client/core/routes/app_navigator.dart';
-import 'package:client/core/theme/app_theme.dart';
 import 'package:client/core/network/global_network_error_handler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/cubit/app_settings_cubit.dart';
+import 'package:client/core/cubit/app_settings_state.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 
 class ProjectHubApp extends StatefulWidget {
@@ -53,24 +54,30 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
         BlocProvider<WorkspaceContextCubit>.value(
           value: getIt<WorkspaceContextCubit>(),
         ),
+        BlocProvider<AppSettingsCubit>.value(value: getIt<AppSettingsCubit>()),
       ],
-      child: MaterialApp(
-        title: 'ProjectHub',
-        debugShowCheckedModeBanner: false,
-        navigatorKey: AppNavigator.navigatorKey,
+      child: BlocBuilder<AppSettingsCubit, AppSettingsState>(
+        builder: (context, settingsState) {
+          return MaterialApp(
+            title: 'ProjectHub',
+            debugShowCheckedModeBanner: false,
+            navigatorKey: AppNavigator.navigatorKey,
 
-        // Theme
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
-        themeMode: ThemeMode.dark,
+            // Dynamic Theme & Mode
+            theme: settingsState.palette.toThemeData(Brightness.light),
+            darkTheme: settingsState.palette.toThemeData(Brightness.dark),
+            themeMode: settingsState.themeMode,
 
-        // Localization
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
+            // Localization
+            locale: settingsState.locale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
 
-        // Routing
-        initialRoute: widget.initialRoute,
-        onGenerateRoute: AppRouter.onGenerateRoute,
+            // Routing
+            initialRoute: widget.initialRoute,
+            onGenerateRoute: AppRouter.onGenerateRoute,
+          );
+        },
       ),
     );
   }
