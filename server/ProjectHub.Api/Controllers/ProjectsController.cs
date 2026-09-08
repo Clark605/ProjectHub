@@ -7,7 +7,7 @@ using ProjectHub.Api.Services.Interfaces;
 
 namespace ProjectHub.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/v1/projects")]
     [ApiController]
     [Authorize]
     public class ProjectsController : ControllerBase

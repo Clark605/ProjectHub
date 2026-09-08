@@ -7,7 +7,7 @@ using ProjectHub.Api.Services.Interfaces;
 
 namespace ProjectHub.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/v1/workspaces")]
     [ApiController]
     [Authorize]
     public class WorkspacesController : ControllerBase

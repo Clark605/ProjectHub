@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using ProjectHub.Api.DTOs.AuthDtos;
 using ProjectHub.Api.Services.Interfaces;
 
 namespace ProjectHub.Api.Controllers;
 
 [ApiController]
-[Route("auth")]
+[Route("api/v1/auth")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
@@ -18,7 +19,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register( RegisterDto dto)
+    [EnableRateLimiting("AuthRegisterPolicy")]
+    public async Task<IActionResult> Register(RegisterDto dto)
     {
         var result = await _authService.RegisterAsync(dto);
         if (result is null)
@@ -30,7 +32,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login( LoginDto dto)
+    [EnableRateLimiting("AuthLoginPolicy")]
+    public async Task<IActionResult> Login(LoginDto dto)
     {
         var result = await _authService.LoginAsync(dto);
         if (result is null)
@@ -42,7 +45,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh( RefreshTokenRequestDto dto)
+    public async Task<IActionResult> Refresh(RefreshTokenRequestDto dto)
     {
         var result = await _authService.RefreshTokenAsync(dto);
         if (result is null)
@@ -54,7 +57,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("logout")]
-    public async Task<IActionResult> Logout( LogoutDto dto)
+    public async Task<IActionResult> Logout(LogoutDto dto)
     {
         var revoked = await _authService.LogoutAsync(dto);
         if (!revoked)
@@ -66,7 +69,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("forgot-password")]
-    public async Task<IActionResult> ForgotPassword( ForgotPasswordDto dto)
+    [EnableRateLimiting("AuthForgotPasswordPolicy")]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordDto dto)
     {
         var resetToken = await _authService.GeneratePasswordResetTokenAsync(dto);
 
@@ -74,14 +78,15 @@ public class AuthController : ControllerBase
         var response = new ForgotPasswordResponseDto();
         if (resetToken is not null)
         {
-            response.DevelopmentResetToken = resetToken.DevelopmentResetToken   ;
+            response.DevelopmentResetToken = resetToken.DevelopmentResetToken;
         }
 
         return Ok(response);
     }
 
     [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword( ResetPasswordDto dto)
+    [EnableRateLimiting("AuthResetPasswordPolicy")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordDto dto)
     {
         var success = await _authService.ResetPasswordAsync(dto);
         if (!success)

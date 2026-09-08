@@ -6,7 +6,7 @@ using ProjectHub.Api.Services.Interfaces;
 
 namespace ProjectHub.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/v1/tasks")]
     [ApiController]
     [Authorize]
     public class TasksController : ControllerBase

@@ -21,6 +21,7 @@ public class AuthService : IAuthService
     private readonly AppDbContext _context;
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _environment;
+    private readonly IEmailSender _emailSender;
     private readonly ILogger<AuthService> _logger;
 
     public AuthService(
@@ -28,12 +29,14 @@ public class AuthService : IAuthService
         AppDbContext context,
         IConfiguration configuration,
         IWebHostEnvironment environment,
+        IEmailSender emailSender,
         ILogger<AuthService> logger)
     {
         _userManager = userManager;
         _context = context;
         _configuration = configuration;
         _environment = environment;
+        _emailSender = emailSender;
         _logger = logger;
     }
 
@@ -199,9 +202,11 @@ public class AuthService : IAuthService
         }
 
         var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        await _emailSender.SendPasswordResetEmailAsync(user.Email!, resetToken);
+
         if (!_environment.IsDevelopment())
         {
-            _logger.LogInformation("Password reset token generated for user {UserId} (not returned in production)", user.Id);
+            _logger.LogInformation("Password reset token generated and email dispatched for user {UserId} (not returned in production)", user.Id);
             return new ForgotPasswordResponseDto();
         }
         

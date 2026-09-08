@@ -11,7 +11,7 @@ namespace ProjectHub.Api.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("users")]
+[Route("api/v1/users")]
 public class UsersController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
