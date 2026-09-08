@@ -14,13 +14,16 @@ namespace ProjectHub.Api.Controllers
     {
         private readonly IProjectService _projectService;
         private readonly ITaskService _taskService;
+        private readonly IActivityLogger _activityLogger;
 
         public ProjectsController(
             IProjectService projectService,
-            ITaskService taskService)
+            ITaskService taskService,
+            IActivityLogger activityLogger)
         {
             _projectService = projectService;
             _taskService = taskService;
+            _activityLogger = activityLogger;
         }
 
         [HttpGet("{id}")]
@@ -65,6 +68,15 @@ namespace ProjectHub.Api.Controllers
             var userId = User.GetUserId();
             var task = await _taskService.CreateTaskAsync(userId, id, request);
             return CreatedAtAction("GetTask", "Tasks", new { id = task.Id }, task);
+        }
+
+        [HttpGet("{id}/activity")]
+        public async Task<IActionResult> GetProjectActivity(int id, [FromQuery] int limit = 50)
+        {
+            var userId = User.GetUserId();
+            await _projectService.GetProjectByIdAsync(userId, id);
+            var activities = await _activityLogger.GetProjectActivitiesAsync(id, limit);
+            return Ok(activities);
         }
     }
 }

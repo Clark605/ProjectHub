@@ -15,6 +15,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<WorkspaceMember> WorkspaceMembers => Set<WorkspaceMember>();
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<Task> Tasks => Set<Task>();
+    public DbSet<ActivityEvent> ActivityEvents => Set<ActivityEvent>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
@@ -81,6 +82,15 @@ public class AppDbContext : IdentityDbContext<AppUser>
             entity.Property(t => t.Description).HasMaxLength(2000);
             entity.Property(t => t.Status).HasMaxLength(50).IsRequired();
             entity.Property(t => t.Priority).HasMaxLength(50).IsRequired();
+        });
+
+        builder.Entity<ActivityEvent>(entity =>
+        {
+            entity.HasIndex(a => new { a.WorkspaceId, a.CreatedAt });
+            entity.HasIndex(a => new { a.ProjectId, a.CreatedAt });
+            entity.Property(a => a.EventType).HasConversion<string>().HasMaxLength(50);
+            entity.Property(a => a.ActorName).HasMaxLength(100);
+            entity.Property(a => a.Metadata).HasMaxLength(4000);
         });
     }
 }

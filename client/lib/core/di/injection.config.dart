@@ -22,6 +22,8 @@ import '../../features/auth/cubit/register_cubit.dart' as _i341;
 import '../../features/auth/cubit/reset_password_cubit.dart' as _i835;
 import '../../features/auth/data/auth_repository.dart' as _i726;
 import '../../features/auth/data/auth_repository_impl.dart' as _i781;
+import '../../features/dashboard/cubit/dashboard_cubit.dart' as _i949;
+import '../../features/dashboard/data/activity_repository.dart' as _i568;
 import '../../features/kanban/cubit/kanban_cubit.dart' as _i627;
 import '../../features/profile/cubit/profile_edit_cubit.dart' as _i322;
 import '../../features/projects/cubit/project_detail_cubit.dart' as _i566;
@@ -82,6 +84,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i771.ProjectsListCubit>(
       () => _i771.ProjectsListCubit(gh<_i405.ProjectRepository>()),
     );
+    gh.lazySingleton<_i568.ActivityRepository>(
+      () => _i568.ActivityRepositoryImpl(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i30.AppSettingsCubit>(
       () => _i30.AppSettingsCubit(gh<_i415.PrefsService>()),
     );
@@ -140,6 +145,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i816.MyTasksCubit>(
       () => _i816.MyTasksCubit(gh<_i241.TaskRepository>()),
+    );
+    gh.factory<_i949.DashboardCubit>(
+      () => _i949.DashboardCubit(
+        gh<_i568.ActivityRepository>(),
+        gh<_i405.ProjectRepository>(),
+        gh<_i241.TaskRepository>(),
+      ),
     );
     gh.factory<_i259.WorkspaceSettingsCubit>(
       () => _i259.WorkspaceSettingsCubit(

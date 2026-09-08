@@ -125,6 +125,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 
 // Two-Tier Rate Limiting (ADR-0013)
 builder.Services.AddRateLimiter(options =>

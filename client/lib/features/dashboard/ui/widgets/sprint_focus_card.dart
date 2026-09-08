@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 
+import 'package:client/features/tasks/data/models/task_dto.dart';
+
 class SprintFocusCard extends StatelessWidget {
+  final List<TaskDto> focusTasks;
+  final bool isLoading;
   final VoidCallback? onNavigateToMyTasks;
 
-  const SprintFocusCard({super.key, this.onNavigateToMyTasks});
+  const SprintFocusCard({
+    super.key,
+    this.focusTasks = const [],
+    this.isLoading = false,
+    this.onNavigateToMyTasks,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -68,29 +77,39 @@ class SprintFocusCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          const _FocusTaskTile(
-            title: 'Implement Refresh Token Queue Interceptor',
-            project: 'Mobile Client v1',
-            priority: 'Urgent',
-            priorityColor: AppColors.priorityUrgent,
-            dueDate: 'Today',
-          ),
-          const SizedBox(height: 10),
-          const _FocusTaskTile(
-            title: 'Design 5-Column Responsive Kanban Matrix',
-            project: 'Design Systems',
-            priority: 'High',
-            priorityColor: AppColors.priorityHigh,
-            dueDate: 'Tomorrow',
-          ),
-          const SizedBox(height: 10),
-          const _FocusTaskTile(
-            title: 'Audit Postgres Migration Rollbacks',
-            project: 'Backend API 10',
-            priority: 'Medium',
-            priorityColor: AppColors.priorityMedium,
-            dueDate: 'Sep 05',
-          ),
+          if (focusTasks.isEmpty && !isLoading)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
+              child: Center(
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.task_alt_rounded,
+                      size: 32,
+                      color: AppColors.textTertiary.withValues(alpha: 0.6),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'All caught up! No active tasks assigned.',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: AppColors.textTertiary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: focusTasks.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                final task = focusTasks[index];
+                return _FocusTaskTile(task: task);
+              },
+            ),
         ],
       ),
     );
@@ -98,23 +117,14 @@ class SprintFocusCard extends StatelessWidget {
 }
 
 class _FocusTaskTile extends StatelessWidget {
-  final String title;
-  final String project;
-  final String priority;
-  final Color priorityColor;
-  final String dueDate;
+  final TaskDto task;
 
-  const _FocusTaskTile({
-    required this.title,
-    required this.project,
-    required this.priority,
-    required this.priorityColor,
-    required this.dueDate,
-  });
+  const _FocusTaskTile({required this.task});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final priorityColor = task.priorityEnum.toColor();
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -142,7 +152,7 @@ class _FocusTaskTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  task.title,
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -151,7 +161,7 @@ class _FocusTaskTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  project,
+                  task.projectName ?? 'Task #${task.id}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: AppColors.textSecondary,
                     fontSize: 12,
@@ -168,7 +178,7 @@ class _FocusTaskTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
-              priority,
+              task.priority,
               style: TextStyle(
                 color: priorityColor,
                 fontWeight: FontWeight.w700,

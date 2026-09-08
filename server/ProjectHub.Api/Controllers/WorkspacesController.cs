@@ -15,15 +15,18 @@ namespace ProjectHub.Api.Controllers
         private readonly IWorkspaceService _workspaceService;
         private readonly IProjectService _projectService;
         private readonly ITaskService _taskService;
+        private readonly IActivityLogger _activityLogger;
 
         public WorkspacesController(
             IWorkspaceService workspaceService,
             IProjectService projectService,
-            ITaskService taskService)
+            ITaskService taskService,
+            IActivityLogger activityLogger)
         {
             _workspaceService = workspaceService;
             _projectService = projectService;
             _taskService = taskService;
+            _activityLogger = activityLogger;
         }
 
         [HttpGet]
@@ -112,6 +115,15 @@ namespace ProjectHub.Api.Controllers
             var userId = User.GetUserId();
             var tasks = await _taskService.GetMyTasksAsync(userId, id);
             return Ok(tasks);
+        }
+
+        [HttpGet("{id}/activity")]
+        public async Task<IActionResult> GetWorkspaceActivity(int id, [FromQuery] int limit = 20)
+        {
+            var userId = User.GetUserId();
+            await _workspaceService.GetWorkspaceByIdAsync(userId, id);
+            var activities = await _activityLogger.GetWorkspaceActivitiesAsync(id, limit);
+            return Ok(activities);
         }
     }
 }

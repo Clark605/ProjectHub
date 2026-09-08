@@ -15,15 +15,18 @@ public class TaskService : ITaskService
 {
     private readonly AppDbContext _context;
     private readonly UserManager<AppUser> _userManager;
+    private readonly IActivityLogger _activityLogger;
     private readonly ILogger<TaskService> _logger;
 
     public TaskService(
         AppDbContext context,
         UserManager<AppUser> userManager,
+        IActivityLogger activityLogger,
         ILogger<TaskService> logger)
     {
         _context = context;
         _userManager = userManager;
+        _activityLogger = activityLogger;
         _logger = logger;
     }
 
@@ -92,6 +95,15 @@ public class TaskService : ITaskService
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Task {TaskId} created successfully in project {ProjectId}", task.Id, projectId);
+
+        await _activityLogger.LogAsync(
+            project.WorkspaceId,
+            userId,
+            creator.Name,
+            ActivityEventType.TaskCreated,
+            projectId: task.ProjectId,
+            taskId: task.Id,
+            metadata: new { task.Title, task.Status, task.Priority });
 
         return new TaskResponseDto
         {
@@ -346,6 +358,16 @@ public class TaskService : ITaskService
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Task {TaskId} deleted successfully by user {UserId}", taskId, userId);
+
+        var actor = await _userManager.FindByIdAsync(userId);
+        await _activityLogger.LogAsync(
+            project.WorkspaceId,
+            userId,
+            actor?.Name ?? userId,
+            ActivityEventType.TaskDeleted,
+            projectId: task.ProjectId,
+            taskId: task.Id,
+            metadata: new { task.Title });
     }
 
     public async Task<TaskResponseDto> UpdateTaskStatusAsync(string userId, int taskId, UpdateTaskStatusDto request)
@@ -387,12 +409,23 @@ public class TaskService : ITaskService
             throw new ForbiddenException($"User {userId} does not have permission to update task {taskId}.");
         }
 
+        var oldStatus = task.Status;
         task.Status = request.Status.Trim();
         task.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Task {TaskId} status updated to '{Status}'", taskId, task.Status);
+
+        var actor = await _userManager.FindByIdAsync(userId);
+        await _activityLogger.LogAsync(
+            project.WorkspaceId,
+            userId,
+            actor?.Name ?? userId,
+            ActivityEventType.TaskStatusChanged,
+            projectId: task.ProjectId,
+            taskId: task.Id,
+            metadata: new { task.Title, OldStatus = oldStatus, NewStatus = task.Status });
 
         return new TaskResponseDto
         {
@@ -463,6 +496,16 @@ public class TaskService : ITaskService
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Task {TaskId} assignee updated to '{AssigneeId}'", taskId, task.AssigneeId);
+
+        var assignActor = await _userManager.FindByIdAsync(userId);
+        await _activityLogger.LogAsync(
+            project.WorkspaceId,
+            userId,
+            assignActor?.Name ?? userId,
+            ActivityEventType.TaskAssigned,
+            projectId: task.ProjectId,
+            taskId: task.Id,
+            metadata: new { task.Title, AssigneeId = task.AssigneeId, AssigneeName = assigneeName });
 
         return new TaskResponseDto
         {

@@ -16,17 +16,20 @@ public class WorkspaceService : IWorkspaceService
     private readonly AppDbContext _context;
     private readonly UserManager<AppUser> _userManager;
     private readonly HybridCache _cache;
+    private readonly IActivityLogger _activityLogger;
     private readonly ILogger<WorkspaceService> _logger;
 
     public WorkspaceService(
         AppDbContext context,
         UserManager<AppUser> userManager,
         HybridCache cache,
+        IActivityLogger activityLogger,
         ILogger<WorkspaceService> logger)
     {
         _context = context;
         _userManager = userManager;
         _cache = cache;
+        _activityLogger = activityLogger;
         _logger = logger;
     }
 
@@ -55,6 +58,14 @@ public class WorkspaceService : IWorkspaceService
 
         await _context.SaveChangesAsync();
         _logger.LogInformation("Workspace {WorkspaceId} created successfully", workspace.Id);
+
+        var actor = await _userManager.FindByIdAsync(userId);
+        await _activityLogger.LogAsync(
+            workspace.Id,
+            userId,
+            actor?.Name ?? userId,
+            ActivityEventType.WorkspaceCreated,
+            metadata: new { workspace.Name });
 
         // Invalidate user's workspace list cache
         await _cache.RemoveByTagAsync($"user:{userId}:workspaces");
@@ -140,6 +151,14 @@ public class WorkspaceService : IWorkspaceService
 
         await _context.SaveChangesAsync();
         _logger.LogInformation("Workspace {WorkspaceId} updated successfully", workspaceId);
+
+        var actor = await _userManager.FindByIdAsync(userId);
+        await _activityLogger.LogAsync(
+            workspaceId,
+            userId,
+            actor?.Name ?? userId,
+            ActivityEventType.WorkspaceUpdated,
+            metadata: new { request.Name });
 
         // Invalidate workspace details cache and all members' workspace list caches
         await _cache.RemoveByTagAsync($"workspace:{workspaceId}");
@@ -284,6 +303,14 @@ public class WorkspaceService : IWorkspaceService
 
         _logger.LogInformation("Added user {TargetUserId} as Member to workspace {WorkspaceId}", targetUser.Id, workspaceId);
 
+        var actor = await _userManager.FindByIdAsync(userId);
+        await _activityLogger.LogAsync(
+            workspaceId,
+            userId,
+            actor?.Name ?? userId,
+            ActivityEventType.MemberAdded,
+            metadata: new { TargetUserId = targetUser.Id, TargetName = targetUser.Name, Role = newMember.Role });
+
         // Invalidate members cache and target user's workspace list
         await _cache.RemoveByTagAsync($"workspace:{workspaceId}:members");
         await _cache.RemoveByTagAsync($"user:{targetUser.Id}:workspaces");
@@ -352,6 +379,14 @@ public class WorkspaceService : IWorkspaceService
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Removed member {MemberId} from workspace {WorkspaceId} and unassigned their tasks", memberId, workspaceId);
+
+        var actor = await _userManager.FindByIdAsync(userId);
+        await _activityLogger.LogAsync(
+            workspaceId,
+            userId,
+            actor?.Name ?? userId,
+            ActivityEventType.MemberRemoved,
+            metadata: new { TargetUserId = memberId });
 
         // Invalidate members cache and removed member's workspace list
         await _cache.RemoveByTagAsync($"workspace:{workspaceId}:members");

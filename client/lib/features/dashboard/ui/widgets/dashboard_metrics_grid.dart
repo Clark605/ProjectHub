@@ -4,7 +4,20 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/dashboard/ui/widgets/metric_card.dart';
 
 class DashboardMetricsGrid extends StatelessWidget {
-  const DashboardMetricsGrid({super.key});
+  final int activeProjects;
+  final int inProgressTasks;
+  final int urgentBlockers;
+  final int completedTasks;
+  final bool isLoading;
+
+  const DashboardMetricsGrid({
+    super.key,
+    this.activeProjects = 0,
+    this.inProgressTasks = 0,
+    this.urgentBlockers = 0,
+    this.completedTasks = 0,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,31 +30,31 @@ class DashboardMetricsGrid extends StatelessWidget {
             : 1;
 
         final metrics = [
-          const MetricData(
+          MetricData(
             label: 'Active Projects',
-            value: '4',
-            trend: '2 in sprint',
+            value: isLoading ? '...' : '$activeProjects',
+            trend: 'In current workspace',
             icon: Icons.folder_special_rounded,
             color: AppColors.electricViolet,
           ),
-          const MetricData(
+          MetricData(
             label: 'In Progress Tasks',
-            value: '12',
-            trend: '4 assigned to you',
+            value: isLoading ? '...' : '$inProgressTasks',
+            trend: 'Assigned to you',
             icon: Icons.timelapse_rounded,
             color: AppColors.skyBlue,
           ),
-          const MetricData(
+          MetricData(
             label: 'Urgent Blockers',
-            value: '2',
-            trend: 'Needs review today',
+            value: isLoading ? '...' : '$urgentBlockers',
+            trend: 'High priority queue',
             icon: Icons.error_outline_rounded,
             color: AppColors.priorityUrgent,
           ),
-          const MetricData(
+          MetricData(
             label: 'Completed Tasks',
-            value: '28',
-            trend: '+8 this week',
+            value: isLoading ? '...' : '$completedTasks',
+            trend: 'Finished tasks',
             icon: Icons.check_circle_outline_rounded,
             color: AppColors.success,
           ),

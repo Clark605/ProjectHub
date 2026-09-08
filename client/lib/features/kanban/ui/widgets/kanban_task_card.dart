@@ -27,25 +27,27 @@ class KanbanTaskCard extends StatelessWidget {
     final priorityColor = task.priorityEnum.toColor();
     final isOverdue = task.isOverdue;
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceContainer : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: isDark ? AppColors.border : AppColors.lightBorder,
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
+    return Hero(
+      tag: 'task_${task.id}',
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+        decoration: BoxDecoration(
+          color: isDark ? AppColors.surfaceContainer : AppColors.lightSurface,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isDark ? AppColors.border : AppColors.lightBorder,
+            width: 1,
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
           onTap: onTap,
@@ -216,6 +218,7 @@ class KanbanTaskCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
       ),
     );
   }

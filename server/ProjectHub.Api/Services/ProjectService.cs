@@ -20,17 +20,20 @@ public class ProjectService : IProjectService
     private readonly AppDbContext _context;
     private readonly UserManager<AppUser> _userManager;
     private readonly HybridCache _cache;
+    private readonly IActivityLogger _activityLogger;
     private readonly ILogger<ProjectService> _logger;
 
     public ProjectService(
         AppDbContext context,
         UserManager<AppUser> userManager,
         HybridCache cache,
+        IActivityLogger activityLogger,
         ILogger<ProjectService> logger)
     {
         _context = context;
         _userManager = userManager;
         _cache = cache;
+        _activityLogger = activityLogger;
         _logger = logger;
     }
 
@@ -70,6 +73,14 @@ public class ProjectService : IProjectService
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Project {ProjectId} created successfully by user {UserId}", project.Id, userId);
+
+        await _activityLogger.LogAsync(
+            workspaceId,
+            userId,
+            creator.Name,
+            ActivityEventType.ProjectCreated,
+            projectId: project.Id,
+            metadata: new { project.Name, project.Status });
 
         // Invalidate workspace projects cache
         await _cache.RemoveByTagAsync($"workspace:{workspaceId}:projects");
@@ -223,6 +234,7 @@ public class ProjectService : IProjectService
             throw new ForbiddenException($"User {userId} does not have permission to update project {projectId}.");
         }
 
+        var oldStatus = project.Status;
         project.Name = request.Name;
         project.Description = request.Description;
         project.Status = request.Status;
@@ -231,6 +243,19 @@ public class ProjectService : IProjectService
 
         await _context.SaveChangesAsync();
         _logger.LogInformation("Project {ProjectId} updated successfully", projectId);
+
+        var eventType = request.Status == ProjectStatus.Archived.ToString()
+            ? ActivityEventType.ProjectArchived
+            : ActivityEventType.ProjectStatusChanged;
+
+        var actor = await _userManager.FindByIdAsync(userId);
+        await _activityLogger.LogAsync(
+            project.WorkspaceId,
+            userId,
+            actor?.Name ?? userId,
+            eventType,
+            projectId: project.Id,
+            metadata: new { project.Name, OldStatus = oldStatus, NewStatus = request.Status });
 
         // Invalidate project details cache and workspace projects list cache
         await _cache.RemoveByTagAsync($"project:{projectId}");
