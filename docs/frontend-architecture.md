@@ -113,7 +113,7 @@ sequenceDiagram
     Interceptor->>API: HTTP Request
     API-->>Interceptor: 401 Unauthorized (JWT Expired)
     Note over Interceptor: Enqueue pending requests & lock queue
-    Interceptor->>API: POST /auth/refresh { refreshToken }
+    Interceptor->>API: POST /api/v1/auth/refresh { refreshToken }
     API-->>Interceptor: 200 OK { token, refreshToken }
     Note over Interceptor: Persist new tokens to SecureStorage & unlock queue
     Interceptor->>API: Replay failed request with new token
@@ -137,22 +137,48 @@ graph LR
 ### Kanban Board Interactions & Optimistic UI
 1. **Mobile (< 768px):** A swipeable `PageView` paired with a segmented column tab bar (`Backlog`, `Todo`, `InProgress`, `Review`, `Done`) avoids nested horizontal/vertical scroll conflicts.
 2. **Desktop / Tablet ($\ge$ 768px):** Full multi-column view with horizontal scrolling and side-by-side columns.
-3. **Optimistic Column Drag-and-Drop:** Task status changes immediately snap to the target column on UI; a minimal `PATCH /tasks/{id}/status` is fired in the background (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md)). On error, the card rolls back with a feedback SnackBar.
-4. **Modals & Fast Actions:** Task creation/editing uses a draggable bottom sheet on mobile and centered modal on desktop. Quick 1-tap popups on assignee avatars and status pills allow immediate in-place updates.
+3. **Optimistic Column Drag-and-Drop:** Task status changes immediately snap to the target column on UI; a minimal `PATCH /api/v1/tasks/{id}/status` is fired in the background (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md)). On error, the card rolls back with a feedback SnackBar.
+4. **Hero Animations & Fast Actions:** Task creation/editing uses a draggable bottom sheet on mobile and centered modal on desktop. Tapping a Kanban card triggers a seamless `Hero` expansion transition into the detail view. Quick 1-tap popups on assignee avatars and status pills allow immediate in-place updates.
+5. **Skeleton Loading Consistency:** All list and detail screens utilize `skeletonizer` to ensure flicker-free, skeleton-driven revalidation.
 
 ---
 
-## 6. Stitch Design System & Theming
+## 6. Dynamic Color Palettes & Theming Engine
 
-Designed in accordance with Material 3, using custom Stitch UI tokens (see [Design System Specification](./design-system.md)):
+Designed in accordance with Material 3, using custom Stitch UI tokens and dynamic theme switching (see [ADR-0014](./adr/0014-unified-profile-settings-and-dynamic-theming.md)):
 
-- **Foundation Background:** Deep Slate `#0F172A`
-- **Surface Elevation:** `#13131B` and Container `#1E293B`
-- **Primary Brand:** Indigo `#6366F1`
-- **Secondary Accent:** Sky Blue `#38BDF8`
+- **Theme Modes:** Dark, Light, and System (follow device), managed reactively by `AppSettingsCubit` and persisted to `SharedPreferences`.
+- **6 Curated Dynamic Palettes:**
+  1. *Deep Slate (Default):* Electric Violet (`#C0C1FF`) & Sky Blue (`#89CEFF`) on Deep Slate (`#0F172A`).
+  2. *Ocean Breeze:* Blue (`#60A5FA`) & Emerald (`#34D399`) on Midnight Blue (`#0C1222`).
+  3. *Sunset Ember:* Orange (`#FB923C`) & Pink (`#F472B6`) on Warm Obsidian (`#1A0F0A`).
+  4. *Forest Moss:* Green (`#4ADE80`) & Lime (`#A3E635`) on Forest Night (`#0A1A0F`).
+  5. *Rose Gold:* Rose (`#FDA4AF`) & Amber (`#FBBF24`) on Velvet Plum (`#1A0F14`).
+  6. *Midnight Purple:* Violet (`#A78BFA`) & Indigo (`#818CF8`) on Royal Night (`#0F0A1A`).
+- **Dynamic Ambient Glow Background:** Dual orbital gradients dynamically sample colors from the active palette and animate smoothly behind app surfaces.
 - **Priority Colors:**
   - `Urgent`: Rose `#FB7185`
   - `High`: Coral `#F43F5E`
   - `Medium`: Sky `#38BDF8`
   - `Low`: Slate `#94A3B8`
 - **Typography:** Bundled **Inter** font family (`assets/fonts/`) for zero font flicker (FOIT).
+
+---
+
+## 7. Unified Profile & Settings Hub
+
+Accessible at `/profile`, consolidating non-workspace user settings into a single scrollable view:
+- **Profile Management Card:** Editable display name, bio, and initials avatar with instant API sync (`PUT /api/v1/users/me`).
+- **Appearance Section:** Dark/Light/System theme mode selector and horizontal interactive carousel for the 6 dynamic color palettes.
+- **Localization Section:** English 🇬🇧 and Arabic 🇸🇦 language switcher with immediate RTL/LTR adaptation.
+- **About & Version Section:** Displays application semantic version and build number via `package_info_plus`.
+- **Help Section:** Localized expandable FAQ (`ExpansionTile`) covering workspaces, Kanban rules, and permissions.
+- **Account Actions:** Safe logout button clearing secure tokens and resetting application state.
+
+---
+
+## 8. Activity Feed UI Integration
+
+- **Dashboard Feed:** Shows the latest 10 workspace-level events (`GET /api/v1/workspaces/{id}/activity`) with avatar badges, relative timestamps, and event descriptions.
+- **Project Activity Tab:** Integrated into the project detail screen (`GET /api/v1/projects/{id}/activity`) showing task movements and lifecycle transitions.
+

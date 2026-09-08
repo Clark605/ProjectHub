@@ -90,6 +90,22 @@ To keep QA lean and maintainable, ProjectHub enforces a streamlined **two-tier r
   - Swipeable `PageView` + segmented column tabs on mobile viewports (< 768px).
   - Draggable modal bottom sheet on mobile; centered modal on desktop.
 
+### 4.5 Personalization, Theming & App Settings (Phase 4.5)
+- **Unified Profile & Settings Hub:** Combined account editing, appearance configuration, localization, FAQ, and version details in a single view (`/profile`, see [ADR-0014](./adr/0014-unified-profile-settings-and-dynamic-theming.md)).
+- **Dynamic Color Palettes:** 6 curated color palettes (Deep Slate, Ocean Breeze, Sunset Ember, Forest Moss, Rose Gold, Midnight Purple) dynamically restyling surfaces, accents, typography, and `AmbientGlowBackground`.
+- **Theme Mode & Localization:** Dark, Light, and System theme switching with English and Arabic locale support persisted across sessions.
+- **Hero & Motion Polish:** Hero animation transitions on Kanban task cards and consistent skeleton loading states.
+
+### 4.6 Security Hardening, External OAuth & Versioning (Phase 4.5)
+- **URL-Segment API Versioning:** All endpoints systematically versioned under `/api/v1/` (see [ADR-0010](./adr/0010-url-segment-api-versioning.md)).
+- **Native External OAuth:** Support for Google and GitHub authentication via native client SDKs and backend verification (`POST /api/v1/auth/external-login`, see [ADR-0012](./adr/0012-native-client-external-oauth-integration.md)).
+- **Two-Tier Rate Limiting:** Global IP rate limits (100 req/min) combined with tight auth protections (see [ADR-0013](./adr/0013-two-tier-rate-limiting.md)).
+- **Health Check Infrastructure:** Production diagnostic endpoint (`GET /api/v1/health`) reporting DB and Redis connectivity.
+
+### 4.7 Activity Feed & Audit Logging (Phase 4.5)
+- **Audit Trail & Activity Logging:** Single-table `ActivityEvent` audit log decoupled via `IActivityLogger` (see [ADR-0011](./adr/0011-activity-event-audit-trail-and-logger.md)).
+- **Dual Feed Surfaces:** Workspace activity feed on the main Dashboard and scoped project activity log on project detail views.
+
 ---
 
 ## 5. Development Phases & Roadmap
@@ -103,12 +119,13 @@ gantt
     Phase 1 - Auth & Token Rotation              :done, 2026-08-06, 2026-08-12
     Phase 2 - Workspaces & RBAC                  :done, 2026-08-13, 2026-08-18
     Phase 3 - Projects Management                :done, 2026-08-19, 2026-08-23
-    Phase 4 - Tasks & Kanban Board               :active, 2026-08-24, 2026-09-10
+    Phase 4 - Tasks & Kanban Board               :done, 2026-08-24, 2026-09-07
+    Phase 4.5 - Polish & Portfolio Enhancement   :active, 2026-09-08, 2026-09-20
     section Post-MVP
-    Phase 5 - Collaboration & Activity Feed      :2026-09-11, 2026-09-25
-    Phase 6 - Real-Time (SignalR) & Notifications:2026-09-26, 2026-10-10
-    Phase 7 - Search & Analytics                 :2026-10-11, 2026-10-25
-    Phase 8 - Production Deployment & Monitoring :2026-10-26, 2026-11-10
+    Phase 5 - Collaboration (Comments & Mentions):2026-09-21, 2026-10-05
+    Phase 6 - Real-Time (SignalR) & Notifications:2026-10-06, 2026-10-20
+    Phase 7 - Search & Analytics                 :2026-10-21, 2026-11-04
+    Phase 8 - Production Deployment & Monitoring :2026-11-05, 2026-11-20
 ```
 
 ---
@@ -117,5 +134,6 @@ gantt
 
 To avoid scope creep, subsequent phases have strict stability criteria:
 
-1. **Phase 5 (Collaboration):** Requires using the Kanban board for day-to-day task tracking for at least two weeks with zero data loss or synchronization anomalies.
-2. **Phase 6 (Real-Time SignalR):** SignalR will only be added after offline/silent refresh resilience and REST API correctness are established in production.
+1. **Phase 4.5 (Polish & Portfolio Gate):** Dynamic color palette switcher, unified profile & settings, URL versioning, and activity logging must pass static analysis and unit testing before proceeding.
+2. **Phase 5 (Collaboration):** Requires using the Kanban board and activity feed for day-to-day task tracking for at least two weeks with zero data loss or synchronization anomalies.
+3. **Phase 6 (Real-Time SignalR):** SignalR will only be added after offline/silent refresh resilience and REST API correctness are established in production.

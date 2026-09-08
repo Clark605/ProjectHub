@@ -89,6 +89,22 @@ A comprehensive reference for the **Stitch Deep Slate Design System** utilized a
 | `textTertiary` | `#64748B` | `#94A3B8` | Metadata, disabled text, placeholder hints |
 | `textOnPrimary` | `#1000A9` | `#FFFFFF` | Text rendered on primary buttons |
 
+### 3.6 Dynamic Color Palettes (Phase 4.5)
+
+ProjectHub features a dynamic client-side theming engine that restyles semantic accents, surfaces, and ambient background fields across the entire application (see [ADR-0014](./adr/0014-unified-profile-settings-and-dynamic-theming.md)):
+
+| Palette ID | Name | Primary Accent | Secondary Accent | Canvas Background | Surface Container | Vibe / Personality |
+| :--- | :--- | :---: | :---: | :---: | :---: | :--- |
+| `deepSlate` | **Deep Slate** *(Default)* | `#C0C1FF` (Electric Violet) | `#89CEFF` (Sky Blue) | `#0F172A` | `#1F1F27` | Cyberpunk-modern high contrast |
+| `oceanBreeze` | **Ocean Breeze** | `#60A5FA` (Calm Blue) | `#34D399` (Mint Emerald) | `#0C1222` | `#162032` | Focused, clean, nautical |
+| `sunsetEmber` | **Sunset Ember** | `#FB923C` (Warm Orange) | `#F472B6` (Neon Pink) | `#1A0F0A` | `#261814` | High-energy, warm, vibrant |
+| `forestMoss` | **Forest Moss** | `#4ADE80` (Lush Green) | `#A3E635` (Lime Pop) | `#0A1A0F` | `#142618` | Natural, grounded, calm |
+| `roseGold` | **Rose Gold** | `#FDA4AF` (Muted Rose) | `#FBBF24` (Warm Amber) | `#1A0F14` | `#271720` | Elegant, luxury, refined |
+| `midnightPurple` | **Midnight Purple** | `#A78BFA` (Vibrant Purple) | `#818CF8` (Soft Indigo) | `#0F0A1A` | `#1B1429` | Deep neon, mystical, sleek |
+
+- **Orbital Shader Integration:** The `AmbientGlowBackground` dual-orb trajectory automatically passes `palette.primary` to the primary orbital shader and `palette.secondary` to the trailing follower orb, providing full ambient immersion.
+- **Persistence:** Selected palette ID is persisted to `SharedPreferences` under `app_color_palette` and hydrated during initial splash execution.
+
 ---
 
 ## 4. Typography Scale

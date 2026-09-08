@@ -1,0 +1,3 @@
+﻿# Native Client External OAuth Integration
+
+External social authentication (Google and GitHub) leverages native client-side SDKs and redirect managers (`google_sign_in` and dedicated OAuth client handlers) rather than server-side browser redirect flows. The client retrieves the identity token or authorization credential and passes it to `POST /api/v1/auth/external-login`. The server verifies the provider signature, retrieves or creates the corresponding `AppUser`, and issues our standard high-entropy JWT and rotating refresh token pairs. This provides optimal mobile UX (such as native Google One-Tap account sheets) while preserving clean backend authorization boundaries.

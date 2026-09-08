@@ -173,7 +173,30 @@ flowchart LR
 
 1. User clicks the **Workspace Selector** in the top navigation bar or sidebar.
 2. Dropdown displays all joined workspaces with role pills (`Owner` or `Member`).
-3. User selects target workspace $\rightarrow$ Client updates `activeWorkspaceId`, saves to `PrefsService`, clears previous project cache, and fetches projects for the new workspace via `GET /workspaces/{id}/projects`.
+3. User selects target workspace $\rightarrow$ Client updates `activeWorkspaceId`, saves to `PrefsService`, clears previous project cache, and fetches projects for the new workspace via `GET /api/v1/workspaces/{id}/projects`.
+
+---
+
+### Journey 6: The "Personalization & App Styling" Journey
+> **Objective:** Allow the user to tailor the app's visual identity, language, and personal credentials in one unified screen.
+
+1. User navigates to **Profile & Settings** (`/profile` via sidebar, bottom nav, or top avatar).
+2. **Profile Card:** User inspects current details, edits name/bio, and taps Save $\rightarrow$ fires `PUT /api/v1/users/me` with optimistic update and feedback banner.
+3. **Appearance & Dynamic Palettes:**
+   - User toggles between Dark, Light, or System theme mode.
+   - User swipes through the **6 Dynamic Color Palettes** carousel (*Deep Slate, Ocean Breeze, Sunset Ember, Forest Moss, Rose Gold, Midnight Purple*).
+   - Selecting a palette immediately restyles the entire application: buttons, cards, typography tokens, status pills, and the animated orbital gradients of `AmbientGlowBackground`. Selection is persisted to `SharedPreferences`.
+4. **Language Selection:** User switches between English 🇬🇧 and Arabic 🇸🇦 $\rightarrow$ app dynamically updates locale and text direction (LTR/RTL) without restart.
+5. **Help & Support:** User explores the FAQ section with expandable `ExpansionTile` accordions covering workspaces, projects, Kanban shortcuts, and roles.
+6. **About App:** User reviews semantic app version and build number.
+
+---
+
+### Journey 7: The "Activity & Audit Stream" Discovery Journey
+> **Objective:** Keep teams informed about workspace movements, task assignments, and project status evolutions.
+
+1. **Workspace Overview Feed:** Navigating to Dashboard displays the **Recent Activity** card populated from `GET /api/v1/workspaces/{id}/activity`, featuring actor avatars, time-ago chips, and clear mutation descriptions.
+2. **Project History Feed:** Opening a project's detail view allows switching to the **Activity** tab (`GET /api/v1/projects/{id}/activity`) to inspect granular task transitions, moves to `Done`, and assignment changes.
 
 ---
 
@@ -183,7 +206,7 @@ The application follows a **responsive shell architecture** that adapts to three
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  APP SHELL (AmbientGlowBackground #0F172A)                                  │
+│  APP SHELL (AmbientGlowBackground adapting to selected Color Palette)       │
 ├──────────────┬──────────────────────────────────────────────────────────────┤
 │ SIDEBAR      │ TOP HEADER                                                   │
 │ (240px Fixed │ [Workspace Switcher ▾] [Breadcrumbs] [🔍 Search] [👥 Stack] [👤]│
@@ -191,15 +214,17 @@ The application follows a **responsive shell architecture** that adapts to three
 │ Drawer on    │ MAIN CONTENT VIEWPORT                                        │
 │ Mobile)      │                                                              │
 │              │ 1. 📊 Dashboard / Overview                                   │
-│ 🏢 Workspace │    - Sprint velocity metric (+42% pill)                      │
+│ 🏢 Workspace │    - Real project & task summary counts                      │
 │ 📋 My Tasks  │    - Priority task breakdown                                 │
-│ 📁 Projects  │    - Recent activity                                         │
+│ 📁 Projects  │    - Workspace Activity Feed                                 │
 │    ├─ Client │                                                              │
 │    └─ API    │ 2. 🗂 Project Kanban Board                                    │
 │ 👥 Members   │    [Backlog]  [Todo]  [In Progress]  [Review]  [Done]        │
-│ ⚙️ Settings  │                                                              │
-│              │ 3. 👤 My Profile & Account Settings                          │
-│ 🚪 Logout    │                                                              │
+│              │                                                              │
+│ 👤 Profile & │ 3. 👤 Profile & Settings Hub (/profile)                      │
+│    Settings  │    - Edit Name & Bio                                         │
+│              │    - Theme Mode & Dynamic Color Palettes                     │
+│ 🚪 Logout    │    - Language Picker & FAQ & Version                         │
 └──────────────┴──────────────────────────────────────────────────────────────┘
 ```
 
@@ -207,7 +232,7 @@ The application follows a **responsive shell architecture** that adapts to three
 
 | Breakpoint | Navigation Pattern | Kanban Board View | Task Detail Modal |
 | :--- | :--- | :--- | :--- |
-| **Mobile (`< 768px`)** | Bottom Navigation Bar (*Dashboard, Projects, My Tasks, Profile*) | Swipeable horizontal `PageView` (1 column visible at a time with page indicator dots) | Modal Bottom Sheet |
+| **Mobile (`< 768px`)** | Bottom Navigation Bar (*Dashboard, Projects, My Tasks, Profile*) | Swipeable horizontal `PageView` (1 column visible at a time with page indicator dots) | Modal Bottom Sheet with Hero expansion |
 | **Tablet (`768px – 1199px`)** | Collapsible Left Navigation Rail (icon rail with expandable tooltips) | Scrollable 5-column horizontal board with compact task cards | Centered Glassmorphism Dialog |
 | **Desktop / Web (`>= 1200px`)** | Persistent 240px Sidebar with collapsible project tree & member stack | Full-width multi-column Kanban board with drag-and-drop | Right-side Slide-Over Sheet (keeps board visible) |
 
@@ -228,19 +253,17 @@ abstract class RouteNames {
 
   // Authenticated App Shell & Core Navigation
   static const String shell = '/';                         // Main Responsive Shell
-  static const String workspaces = '/workspaces';           // Workspace Switcher / Management
+  static const String workspaces = '/workspaces';           // Workspace Settings & Members
   static const String dashboard = '/dashboard';             // Global Metrics & Activity Feed
   static const String myTasks = '/my-tasks';               // Aggregated User Tasks
 
   // Projects & Kanban
   static const String projects = '/projects';               // Project Grid in Active Workspace
-  static const String projectDetail = '/projects/:id';      // Project Overview & Metadata
-  static const String kanban = '/projects/:id/kanban';      // Interactive 5-Column Kanban Board
+  static const String projectDetail = '/project-detail';    // Project Overview, Tasks & Activity Tab
+  static const String kanban = '/kanban';                   // Interactive 5-Column Kanban Board
 
-  // Team & Settings
-  static const String members = '/workspaces/:id/members';  // Workspace Members & Invitations
-  static const String settings = '/settings';               // Workspace & App Configuration
-  static const String profile = '/profile';                 // User Profile & Password
+  // Unified User & Settings Hub
+  static const String profile = '/profile';                 // Profile Edit, Theming, Language, FAQ
 }
 ```
 
@@ -249,11 +272,11 @@ abstract class RouteNames {
 ## 6. Resilience & Edge Cases in Post-Login Flows
 
 1. **Silent Token Refresh During Long Sessions:**
-   - If the access token expires while moving tasks on a Kanban board, `AuthInterceptor` pauses outbound requests, rotates the refresh token via `POST /auth/refresh`, updates `SecureStorage`, and replays the original requests transparently with zero UI interruption.
+   - If the access token expires while moving tasks on a Kanban board, `AuthInterceptor` pauses outbound requests, rotates the refresh token via `POST /api/v1/auth/refresh`, updates `SecureStorage`, and replays the original requests transparently with zero UI interruption.
 2. **Network Disconnection During Task Drag-and-Drop:**
-   - The UI optimistically updates the task card's column. If `PATCH /tasks/{id}/status` returns a network error or timeout, the card smoothly animates back to its previous column and displays a transient error toast.
+   - The UI optimistically updates the task card's column. If `PATCH /api/v1/tasks/{id}/status` returns a network error or timeout, the card smoothly animates back to its previous column and displays a transient error toast.
 3. **Workspace Access Revocation:**
    - If the user is removed from a workspace while actively viewing it, subsequent API calls return `403 Forbidden` or `404 Not Found`. The app traps the error, invalidates the active workspace cache, and routes the user back to their next available workspace or the **Zero-State Onboarding** screen.
 4. **Direct-Link Deep Linking:**
-   - When a user opens a direct URL (e.g. `/projects/42/kanban`), `AuthGate` checks authentication state. If valid, it verifies membership for project 42's parent workspace, sets the workspace as active, and renders the Kanban board directly.
+   - When a user opens a direct URL (e.g. `/kanban` with arguments), `AuthGate` checks authentication state. If valid, it verifies membership for the project's parent workspace, sets the workspace as active, and renders the Kanban board directly.
 

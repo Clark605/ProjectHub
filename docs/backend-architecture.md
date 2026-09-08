@@ -10,14 +10,15 @@ The backend is built with **ASP.NET Core 10** targeting modern REST design princ
 
 ```mermaid
 graph TD
-    Client["Client (Flutter Web / Mobile)"] -->|HTTPS + Bearer Token| Middleware["ExceptionHandlingMiddleware & Serilog"]
-    Middleware --> Controllers["ASP.NET Core API Controllers"]
+    Client["Client (Flutter Web / Mobile)"] -->|HTTPS + Bearer Token| Middleware["ExceptionHandling, RateLimiting & Serilog"]
+    Middleware --> Controllers["ASP.NET Core API Controllers (/api/v1)"]
     
     subgraph ServiceLayer ["Service Layer (Business Logic)"]
         AuthService["AuthService"]
         WorkspaceService["WorkspaceService"]
         ProjectService["ProjectService"]
         TaskService["TaskService"]
+        ActivityLogger["ActivityLogger (IActivityLogger)"]
     end
     
     subgraph DataLayer ["Data & Caching Layer"]
@@ -38,17 +39,21 @@ graph TD
 
 Every HTTP request traverses the pipeline configured in `Program.cs`:
 
-1. **Serilog Request Logging:** Structured entry/exit logging with duration, HTTP status, and user context.
+1. **Serilog Request Logging:** Structured entry/exit logging with duration, HTTP status, and traceId correlation.
 2. **ExceptionHandlingMiddleware:** Global `try-catch` boundary converting unhandled exceptions to standardized `ApiErrorResponse` envelopes:
    - `KeyNotFoundException` $\rightarrow$ `404 Not Found`
    - `ArgumentException` $\rightarrow$ `400 Bad Request`
    - `UnauthorizedAccessException` $\rightarrow$ `401 Unauthorized`
    - `ForbiddenException` $\rightarrow$ `403 Forbidden` (distinguishing permission denial from missing auth)
    - General `Exception` $\rightarrow$ `500 Internal Server Error`
-3. **HTTPS Redirection & Static Files:** Enforces secure transport.
-4. **Authentication & Authorization:** Validates JWT Bearer tokens and extracts user claims (`sub`, `email`).
-5. **FluentValidation Auto-Validation:** Validates incoming DTOs prior to controller action execution.
-6. **Controller Dispatch:** Invokes service layer methods and returns typed `IActionResult` responses.
+3. **HTTPS Redirection & CORS:** Enforces secure transport and allows cross-origin requests for Flutter Web.
+4. **Rate Limiting Middleware:** Two-tier protection policy (see [ADR-0013](./adr/0013-two-tier-rate-limiting.md)):
+   - **Global Limit:** 100 requests/minute per client IP.
+   - **Sensitive Auth Policy:** Partitioned limits on `POST /api/v1/auth/login` (5/min), `POST /api/v1/auth/register` (3/min), and `POST /api/v1/auth/forgot-password` (2/min).
+5. **Health Checks:** Diagnostic route `GET /api/v1/health` providing database and Redis connectivity metrics.
+6. **Authentication & Authorization:** Validates JWT Bearer tokens and extracts user claims (`sub`, `email`).
+7. **FluentValidation Auto-Validation:** Validates incoming DTOs prior to controller action execution.
+8. **Controller Dispatch (/api/v1):** Invokes service layer methods and returns typed `IActionResult` responses (see [ADR-0010](./adr/0010-url-segment-api-versioning.md)).
 
 ---
 
@@ -62,6 +67,7 @@ Every HTTP request traverses the pipeline configured in `Program.cs`:
 - **`WorkspaceMember`:** Join entity connecting `AppUser` to `WorkSpace` with role designation (`Owner` or `Member`). Ownership is derived solely from this relationship (see [ADR-0003](./adr/0003-workspace-owner-single-source-of-truth.md)).
 - **`Project`:** Projects contained within a workspace with lifecycle status (`Planning`, `Active`, `Completed`, `Archived`). Project membership is implicit to all workspace members (see [ADR-0001](./adr/0001-implicit-workspace-membership-for-projects.md)), and archived projects are strictly read-only (see [ADR-0002](./adr/0002-strict-read-only-freeze-on-archived-projects.md)).
 - **`Task`:** Tasks belonging to a project, featuring status, priority, due date, creator, and assignee. Removing a workspace member automatically unassigns their tasks (see [ADR-0006](./adr/0006-automatic-task-unassignment-on-member-removal.md)).
+- **`ActivityEvent`:** Unified audit trail and activity log capturing mutations across workspaces, projects, and tasks (`WorkspaceId`, `ProjectId?`, `TaskId?`, `ActorId`, `EventType`, `Metadata`, `CreatedAt`, see [ADR-0011](./adr/0011-activity-event-audit-trail-and-logger.md)).
 
 ```mermaid
 erDiagram
@@ -71,13 +77,14 @@ erDiagram
     WorkSpace ||--o{ Project : owns
     Project ||--o{ Task : contains
     AppUser ||--o{ Task : assigned
+    WorkSpace ||--o{ ActivityEvent : logs
 ```
 
 ---
 
 ## 4. Authentication & Security Engine
 
-The authentication system employs multi-session SHA256 hashed refresh tokens with rotation and token reuse detection (see [ADR-0005](./adr/0005-multi-session-sha256-refresh-token-rotation.md)):
+The authentication system employs multi-session SHA256 hashed refresh tokens with rotation and token reuse detection (see [ADR-0005](./adr/0005-multi-session-sha256-refresh-token-rotation.md)), extended with native external OAuth providers (Google and GitHub, see [ADR-0012](./adr/0012-native-client-external-oauth-integration.md)):
 
 ```mermaid
 sequenceDiagram
@@ -86,16 +93,16 @@ sequenceDiagram
     participant Service as AuthService
     participant DB as PostgreSQL (Identity + RefreshTokens)
 
-    Note over User,DB: Initial Authentication
-    User->>API: POST /auth/login { email, password }
-    API->>Service: LoginAsync(dto)
-    Service->>DB: Verify credentials & password hash
+    Note over User,DB: Standard or External Authentication
+    User->>API: POST /api/v1/auth/login OR POST /api/v1/auth/external-login
+    API->>Service: Authenticate / VerifyExternalTokenAsync(dto)
+    Service->>DB: Verify credentials / Find or create AppUser
     Service->>DB: Insert new RefreshToken (SHA256 hashed)
     Service-->>API: Return { token (JWT), refreshToken (Raw) }
     API-->>User: 200 OK + AuthResponseDto
 
     Note over User,DB: Silent Token Refresh Flow
-    User->>API: POST /auth/refresh { refreshToken }
+    User->>API: POST /api/v1/auth/refresh { refreshToken }
     API->>Service: RefreshTokenAsync(dto)
     Service->>DB: Query RefreshToken by SHA256(refreshToken)
     alt Token Valid & Unused
@@ -113,11 +120,11 @@ sequenceDiagram
 
 ## 5. Dedicated Endpoints for Kanban & Operations
 
-To minimize payload overhead and prevent accidental field clobbers during rapid UI updates (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md)):
+To minimize payload overhead and prevent accidental field clobbers during rapid UI updates (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md) and [ADR-0010](./adr/0010-url-segment-api-versioning.md)):
 
-- `PATCH /tasks/{id}/status`: Single-field status updates for drag-and-drop moves.
-- `PATCH /tasks/{id}/assignee`: Single-field reassignment to workspace members.
-- `PUT /tasks/{id}`: General detail edits (title, description, priority, due date), intentionally omitting status.
+- `PATCH /api/v1/tasks/{id}/status`: Single-field status updates for drag-and-drop moves.
+- `PATCH /api/v1/tasks/{id}/assignee`: Single-field reassignment to workspace members.
+- `PUT /api/v1/tasks/{id}`: General detail edits (title, description, priority, due date), intentionally omitting status.
 
 ---
 
@@ -144,5 +151,18 @@ The API integrates .NET 10's **`HybridCache`** with Redis distributed backend:
 
 ## 7. Validation & Mapping Conventions
 
-- **FluentValidation:** Defined in `Validators/` with rules for string lengths, email formats, and enum boundaries. Domain enums (`TaskItemStatus`, `TaskItemPriority`, `ProjectStatus`) are stored as readable strings.
+- **FluentValidation:** Defined in `Validators/` with rules for string lengths, email formats, and enum boundaries. Domain enums (`TaskItemStatus`, `TaskItemPriority`, `ProjectStatus`, `ActivityEventType`) are stored as readable strings.
 - **AutoMapper:** Centralized mapping profiles converting domain entities to lightweight response DTOs, avoiding entity exposure.
+
+---
+
+## 8. Activity Logging & Audit Trail Architecture
+
+Mutations across entities trigger event logging through a decoupled `IActivityLogger` service (see [ADR-0011](./adr/0011-activity-event-audit-trail-and-logger.md)):
+
+- **Interface:** Injected into `WorkspaceService`, `ProjectService`, and `TaskService`.
+- **Event Types:** `WorkspaceCreated`, `WorkspaceUpdated`, `MemberAdded`, `MemberRemoved`, `ProjectCreated`, `ProjectStatusChanged`, `ProjectArchived`, `TaskCreated`, `TaskStatusChanged`, `TaskAssigned`, `TaskDeleted`.
+- **Feed Queries:**
+  - `GET /api/v1/workspaces/{id}/activity`: Workspace-level audit feed for the Dashboard.
+  - `GET /api/v1/projects/{id}/activity`: Project-scoped activity history for project detail tabs.
+

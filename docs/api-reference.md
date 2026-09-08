@@ -1,12 +1,12 @@
-# ProjectHub — REST API Reference
+﻿# ProjectHub — REST API Reference
 
-Comprehensive specification of all endpoints available in the **ProjectHub.Api** backend.
+Comprehensive specification of all endpoints available in the **ProjectHub.Api** backend. All endpoints are systematically versioned under `/api/v1/` (see [ADR-0010](./adr/0010-url-segment-api-versioning.md)).
 
 ---
 
 ## 🌐 Base URL & Common Headers
 
-- **Local Development:** `http://localhost:5259` or `https://localhost:7125`
+- **Local Development:** `http://localhost:5259/api/v1` or `https://localhost:7125/api/v1`
 - **Swagger Documentation:** `http://localhost:5259/swagger`
 
 ### Headers
@@ -15,6 +15,31 @@ Comprehensive specification of all endpoints available in the **ProjectHub.Api**
 | :--- | :--- | :---: |
 | `Content-Type` | Must be `application/json` | Yes (for POST / PUT / PATCH) |
 | `Authorization` | `Bearer <JWT_ACCESS_TOKEN>` | Yes (for protected endpoints) |
+
+### Rate Limiting Policy Headers (see [ADR-0013](./adr/0013-two-tier-rate-limiting.md))
+
+When request thresholds are approached or exceeded, responses include standard rate limit headers:
+- `429 Too Many Requests` when limit is exceeded.
+- `Retry-After`: Seconds to wait before retrying.
+- Sensitive auth endpoints (`/auth/login`, `/auth/register`, `/auth/forgot-password`) enforce strict partitioned limits (2-5 req/min). Global requests capped at 100 req/min per client IP.
+
+---
+
+## 🩺 System & Diagnostics (`/health`)
+
+### 1. System Health Check
+`GET /api/v1/health`
+
+#### Response (`200 OK`)
+```json
+{
+  "status": "Healthy",
+  "database": "Connected",
+  "redis": "Connected",
+  "uptime": "02:14:35",
+  "timestamp": "2026-09-08T16:00:00Z"
+}
+```
 
 ---
 
@@ -26,7 +51,8 @@ All error responses adhere to the `ApiErrorResponse` schema:
 {
   "statusCode": 400,
   "message": "Request is invalid.",
-  "details": "The Title field is required."
+  "details": "The Title field is required.",
+  "traceId": "00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01"
 }
 ```
 
@@ -36,14 +62,15 @@ All error responses adhere to the `ApiErrorResponse` schema:
 | `401 Unauthorized` | Missing, expired, or invalid JWT | Invalid bearer token |
 | `403 Forbidden` | Authenticated user lacks permission | Non-owner attempting owner actions |
 | `404 Not Found` | Requested resource does not exist | Invalid ID for workspace, project, or task |
+| `429 Too Many Requests` | Rate limit threshold exceeded | Exceeded 100 req/min or sensitive auth quota |
 | `500 Server Error` | Unexpected internal server exception | Database connectivity issues |
 
 ---
 
-## 🔑 Authentication Endpoints (`/auth`)
+## 🔑 Authentication Endpoints (`/api/v1/auth`)
 
 ### 1. Register User
-`POST /auth/register`
+`POST /api/v1/auth/register`
 
 #### Request Body
 ```json
@@ -65,7 +92,7 @@ All error responses adhere to the `ApiErrorResponse` schema:
 ---
 
 ### 2. Login
-`POST /auth/login`
+`POST /api/v1/auth/login`
 
 #### Request Body
 ```json
@@ -85,8 +112,37 @@ All error responses adhere to the `ApiErrorResponse` schema:
 
 ---
 
-### 3. Refresh Token (Rotation)
-`POST /auth/refresh`
+### 3. External OAuth Login (Google & GitHub) (see [ADR-0012](./adr/0012-native-client-external-oauth-integration.md))
+`POST /api/v1/auth/external-login`
+
+#### Request Body (Google)
+```json
+{
+  "provider": "Google",
+  "idToken": "eyJhbGciOiJSUzI1NiIs..."
+}
+```
+
+#### Request Body (GitHub)
+```json
+{
+  "provider": "GitHub",
+  "accessToken": "gho_16C7e42F292c6912E7710c838347Ae178B4a"
+}
+```
+
+#### Response (`200 OK`)
+```json
+{
+  "token": "eyJhbGciOiJIUzI1Ni...",
+  "refreshToken": "6b8d9c02..."
+}
+```
+
+---
+
+### 4. Refresh Token (Rotation)
+`POST /api/v1/auth/refresh`
 
 #### Request Body
 ```json
@@ -105,8 +161,8 @@ All error responses adhere to the `ApiErrorResponse` schema:
 
 ---
 
-### 4. Logout
-`POST /auth/logout`
+### 5. Logout
+`POST /api/v1/auth/logout`
 
 #### Request Body
 ```json
@@ -119,16 +175,16 @@ All error responses adhere to the `ApiErrorResponse` schema:
 
 ---
 
-### 5. Forgot Password & Reset Password
-- `POST /auth/forgot-password`: Generates reset token (dev mode).
-- `POST /auth/reset-password`: Resets user password using the token.
+### 6. Forgot Password & Reset Password
+- `POST /api/v1/auth/forgot-password`: Generates reset token (dev mode / email).
+- `POST /api/v1/auth/reset-password`: Resets user password using the token.
 
 ---
 
-## 👤 Users Endpoints (`/users`)
+## 👤 Users Endpoints (`/api/v1/users`)
 
 ### 1. Get Profile
-`GET /users/me` (Authenticated)
+`GET /api/v1/users/me` (Authenticated)
 
 #### Response (`200 OK`)
 ```json
@@ -140,7 +196,7 @@ All error responses adhere to the `ApiErrorResponse` schema:
 ```
 
 ### 2. Update Profile
-`PUT /users/me` (Authenticated)
+`PUT /api/v1/users/me` (Authenticated)
 
 #### Request Body
 ```json
@@ -152,10 +208,10 @@ All error responses adhere to the `ApiErrorResponse` schema:
 
 ---
 
-## 🏢 Workspaces Endpoints (`/workspaces`)
+## 🏢 Workspaces Endpoints (`/api/v1/workspaces`)
 
 ### 1. List User Workspaces
-`GET /workspaces` (Authenticated)
+`GET /api/v1/workspaces` (Authenticated)
 
 #### Response (`200 OK`)
 ```json
@@ -171,7 +227,7 @@ All error responses adhere to the `ApiErrorResponse` schema:
 ```
 
 ### 2. Create Workspace
-`POST /workspaces` (Authenticated)
+`POST /api/v1/workspaces` (Authenticated)
 
 #### Request Body
 ```json
@@ -182,29 +238,37 @@ All error responses adhere to the `ApiErrorResponse` schema:
 ```
 
 ### 3. Get Workspace by ID
-`GET /workspaces/{id}` (Authenticated)
+`GET /api/v1/workspaces/{id}` (Authenticated)
 
 ### 4. Update Workspace
-`PUT /workspaces/{id}` (Authenticated, Owner only)
+`PUT /api/v1/workspaces/{id}` (Authenticated, Owner only)
 
 ### 5. Delete Workspace
-`DELETE /workspaces/{id}` (Authenticated, Owner only)
+`DELETE /api/v1/workspaces/{id}` (Authenticated, Owner only)
 
 ### 6. Workspace Members
-- `GET /workspaces/{id}/members` — List all members.
-- `POST /workspaces/{id}/members` — Add member by email (`{"email": "colleague@example.com"}`).
-- `DELETE /workspaces/{id}/members/{userId}` — Remove member from workspace.
+- `GET /api/v1/workspaces/{id}/members` — List all members.
+- `POST /api/v1/workspaces/{id}/members` — Add member by email (`{"email": "colleague@example.com"}`).
+- `DELETE /api/v1/workspaces/{id}/members/{userId}` — Remove member from workspace (triggers auto task unassignment).
 
 ### 7. Workspace Projects
-- `GET /workspaces/{id}/projects?status=Active` — List projects in workspace.
-- `POST /workspaces/{id}/projects` — Create project inside workspace.
+- `GET /api/v1/workspaces/{id}/projects?status=Active` — List projects in workspace.
+- `POST /api/v1/workspaces/{id}/projects` — Create project inside workspace.
+
+### 8. Workspace My Tasks (Personal Focus View) (see [ADR-0008](./adr/0008-workspace-scoped-my-tasks-aggregation.md))
+`GET /api/v1/workspaces/{id}/my-tasks` (Authenticated)
+- Retrieves all tasks assigned to the authenticated user within the specified workspace.
+
+### 9. Workspace Activity Feed (see [ADR-0011](./adr/0011-activity-event-audit-trail-and-logger.md))
+`GET /api/v1/workspaces/{id}/activity?limit=20` (Authenticated)
+- Retrieves the latest workspace activity events for the Dashboard feed.
 
 ---
 
-## 📁 Projects Endpoints (`/projects`)
+## 📁 Projects Endpoints (`/api/v1/projects`)
 
 ### 1. Get Project Details
-`GET /projects/{id}` (Authenticated)
+`GET /api/v1/projects/{id}` (Authenticated)
 
 #### Response (`200 OK`)
 ```json
@@ -221,21 +285,25 @@ All error responses adhere to the `ApiErrorResponse` schema:
 ```
 
 ### 2. Update Project
-`PUT /projects/{id}` (Owner or Creator)
+`PUT /api/v1/projects/{id}` (Owner or Creator)
 
 ### 3. Delete Project
-`DELETE /projects/{id}` (Owner or Creator)
+`DELETE /api/v1/projects/{id}` (Owner or Creator)
 
 ### 4. Project Tasks
-- `GET /projects/{id}/tasks?status=InProgress&priority=High` — List tasks with optional query filters.
-- `POST /projects/{id}/tasks` — Create task inside project.
+- `GET /api/v1/projects/{id}/tasks?status=InProgress&priority=High` — List tasks with optional query filters.
+- `POST /api/v1/projects/{id}/tasks` — Create task inside project.
+
+### 5. Project Activity History (see [ADR-0011](./adr/0011-activity-event-audit-trail-and-logger.md))
+`GET /api/v1/projects/{id}/activity?limit=50` (Authenticated)
+- Retrieves granular task transitions and lifecycle events scoped strictly to this project.
 
 ---
 
-## 📋 Tasks Endpoints (`/tasks`)
+## 📋 Tasks Endpoints (`/api/v1/tasks`)
 
 ### 1. Get Task
-`GET /tasks/{id}` (Authenticated)
+`GET /api/v1/tasks/{id}` (Authenticated)
 
 #### Response (`200 OK`)
 ```json
@@ -254,7 +322,7 @@ All error responses adhere to the `ApiErrorResponse` schema:
 ```
 
 ### 2. Update Task
-`PUT /tasks/{id}` (Authenticated, Owner/Creator/Assignee)
+`PUT /api/v1/tasks/{id}` (Authenticated, Owner/Creator/Assignee)
 
 #### Request Body
 ```json
@@ -266,8 +334,8 @@ All error responses adhere to the `ApiErrorResponse` schema:
 }
 ```
 
-### 3. Move Task Status (Kanban Drag-Drop)
-`PATCH /tasks/{id}/status` (Authenticated)
+### 3. Move Task Status (Kanban Drag-Drop) (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md))
+`PATCH /api/v1/tasks/{id}/status` (Authenticated)
 
 #### Request Body
 ```json
@@ -276,8 +344,8 @@ All error responses adhere to the `ApiErrorResponse` schema:
 }
 ```
 
-### 4. Assign Task
-`PATCH /tasks/{id}/assignee` (Authenticated)
+### 4. Assign Task (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md))
+`PATCH /api/v1/tasks/{id}/assignee` (Authenticated)
 
 #### Request Body
 ```json
@@ -287,5 +355,4 @@ All error responses adhere to the `ApiErrorResponse` schema:
 ```
 
 ### 5. Delete Task
-`DELETE /tasks/{id}` (Authenticated, Owner or Creator)
-
+`DELETE /api/v1/tasks/{id}` (Authenticated, Owner or Creator)

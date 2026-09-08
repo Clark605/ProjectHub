@@ -1,0 +1,3 @@
+﻿# Activity Event Audit Trail and Lightweight Logger
+
+Workspace, project, and task mutation events (creation, updates, status transitions, member assignments, and removals) are persisted to a unified `ActivityEvent` entity containing `WorkspaceId`, optional `ProjectId` and `TaskId`, `ActorId`, `EventType` (enum), structured `Metadata` (JSON), and timestamps. To capture events without tight coupling or heavy event-bus frameworks (such as MediatR), services inject a lightweight `IActivityLogger` interface. This enables a single-table audit trail that powers both the workspace and project activity feeds as well as operational security auditing with minimal execution overhead and straightforward transactional integrity.
