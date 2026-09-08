@@ -65,6 +65,19 @@ class FakeAuthRepository implements AuthRepository {
       bio: bio ?? '',
     );
   }
+
+  @override
+  Future<User> externalLogin({
+    required String provider,
+    String? idToken,
+    String? accessToken,
+  }) async {
+    if (shouldThrow) {
+      throw ValidationException(message: errorMessage);
+    }
+    return currentUser ??
+        const User(name: 'Test User', email: 'test@example.com');
+  }
 }
 
 class FakeSecureStorageService extends SecureStorageService {

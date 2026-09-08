@@ -11,5 +11,5 @@ public interface IAuthService
     Task<bool> LogoutAsync(LogoutDto dto);
     Task<ForgotPasswordResponseDto?> GeneratePasswordResetTokenAsync(ForgotPasswordDto dto);
     Task<bool> ResetPasswordAsync(ResetPasswordDto dto);
-
+    Task<AuthResponseDto?> ExternalLoginAsync(ExternalLoginRequestDto dto);
 }

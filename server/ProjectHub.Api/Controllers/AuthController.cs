@@ -96,4 +96,17 @@ public class AuthController : ControllerBase
 
         return Ok();
     }
+
+    [HttpPost("external-login")]
+    [EnableRateLimiting("AuthLoginPolicy")]
+    public async Task<IActionResult> ExternalLogin(ExternalLoginRequestDto dto)
+    {
+        var result = await _authService.ExternalLoginAsync(dto);
+        if (result is null)
+        {
+            return Unauthorized("External authentication failed.");
+        }
+
+        return Ok(result);
+    }
 }

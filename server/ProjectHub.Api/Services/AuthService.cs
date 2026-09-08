@@ -1,7 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -22,6 +25,7 @@ public class AuthService : IAuthService
     private readonly IConfiguration _configuration;
     private readonly IWebHostEnvironment _environment;
     private readonly IEmailSender _emailSender;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<AuthService> _logger;
 
     public AuthService(
@@ -30,6 +34,7 @@ public class AuthService : IAuthService
         IConfiguration configuration,
         IWebHostEnvironment environment,
         IEmailSender emailSender,
+        IHttpClientFactory httpClientFactory,
         ILogger<AuthService> logger)
     {
         _userManager = userManager;
@@ -37,6 +42,7 @@ public class AuthService : IAuthService
         _configuration = configuration;
         _environment = environment;
         _emailSender = emailSender;
+        _httpClientFactory = httpClientFactory;
         _logger = logger;
     }
 
@@ -241,6 +247,146 @@ public class AuthService : IAuthService
         }
         
         return result.Succeeded;
+    }
+
+    public async Task<AuthResponseDto?> ExternalLoginAsync(ExternalLoginRequestDto dto)
+    {
+        string? verifiedEmail = null;
+        string? verifiedName = null;
+
+        var provider = dto.Provider.Trim().ToLowerInvariant();
+        if (provider == "google")
+        {
+            if (string.IsNullOrWhiteSpace(dto.IdToken))
+            {
+                _logger.LogWarning("External login failed - Google IdToken is missing");
+                return null;
+            }
+
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(dto.IdToken);
+                verifiedEmail = payload?.Email;
+                verifiedName = payload?.Name ?? verifiedEmail;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Google token validation failed");
+                return null;
+            }
+        }
+        else if (provider == "github")
+        {
+            if (string.IsNullOrWhiteSpace(dto.AccessToken))
+            {
+                _logger.LogWarning("External login failed - GitHub AccessToken is missing");
+                return null;
+            }
+
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("ProjectHub-API", "1.0"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", dto.AccessToken);
+
+                var response = await client.GetAsync("https://api.github.com/user");
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning("GitHub user lookup failed with status: {StatusCode}", response.StatusCode);
+                    return null;
+                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                using var doc = JsonDocument.Parse(content);
+                var root = doc.RootElement;
+
+                if (root.TryGetProperty("email", out var emailProp) && emailProp.ValueKind == JsonValueKind.String)
+                {
+                    verifiedEmail = emailProp.GetString();
+                }
+
+                if (root.TryGetProperty("name", out var nameProp) && nameProp.ValueKind == JsonValueKind.String && !string.IsNullOrWhiteSpace(nameProp.GetString()))
+                {
+                    verifiedName = nameProp.GetString();
+                }
+                else if (root.TryGetProperty("login", out var loginProp) && loginProp.ValueKind == JsonValueKind.String)
+                {
+                    verifiedName = loginProp.GetString();
+                }
+
+                // If email is private on GitHub profile, fetch from /user/emails
+                if (string.IsNullOrWhiteSpace(verifiedEmail))
+                {
+                    var emailsResponse = await client.GetAsync("https://api.github.com/user/emails");
+                    if (emailsResponse.IsSuccessStatusCode)
+                    {
+                        var emailsContent = await emailsResponse.Content.ReadAsStringAsync();
+                        using var emailsDoc = JsonDocument.Parse(emailsContent);
+                        foreach (var item in emailsDoc.RootElement.EnumerateArray())
+                        {
+                            var isPrimary = item.TryGetProperty("primary", out var p) && p.GetBoolean();
+                            var isVerified = item.TryGetProperty("verified", out var v) && v.GetBoolean();
+                            if (isPrimary && isVerified && item.TryGetProperty("email", out var e))
+                            {
+                                verifiedEmail = e.GetString();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "GitHub OAuth lookup failed");
+                return null;
+            }
+        }
+        else
+        {
+            _logger.LogWarning("Unsupported external login provider: {Provider}", dto.Provider);
+            return null;
+        }
+
+        if (string.IsNullOrWhiteSpace(verifiedEmail))
+        {
+            _logger.LogWarning("External login failed - could not resolve verified email for provider: {Provider}", dto.Provider);
+            return null;
+        }
+
+        var user = await _userManager.FindByEmailAsync(verifiedEmail);
+        if (user is null)
+        {
+            user = new AppUser
+            {
+                UserName = verifiedEmail,
+                Email = verifiedEmail,
+                Name = verifiedName ?? verifiedEmail,
+                EmailConfirmed = true
+            };
+
+            var createResult = await _userManager.CreateAsync(user);
+            if (!createResult.Succeeded)
+            {
+                _logger.LogWarning("Failed to create external user {Email}. Errors: {Errors}", verifiedEmail, string.Join(", ", createResult.Errors.Select(e => e.Description)));
+                return null;
+            }
+        }
+
+        var refreshToken = GenerateRefreshToken();
+        var refreshEntity = BuildRefreshTokenEntity(user.Id, refreshToken);
+        _context.RefreshTokens.Add(refreshEntity);
+        await _context.SaveChangesAsync();
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var userClaims = await _userManager.GetClaimsAsync(user);
+
+        _logger.LogInformation("External login successful for user {UserId} via provider {Provider}", user.Id, dto.Provider);
+
+        return new AuthResponseDto
+        {
+            Token = GenerateJwtToken(user, roles, userClaims.ToList()),
+            RefreshToken = refreshToken
+        };
     }
 
     private string GenerateJwtToken(AppUser user, IList<string> roles, List<Claim> claims)

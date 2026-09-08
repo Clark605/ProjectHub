@@ -139,7 +139,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   .fadeIn(duration: 400.ms, delay: 350.ms)
                   .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 24),
-              SocialAuthSection(onGooglePressed: () {}, onGithubPressed: () {})
+              SocialAuthSection(
+                onGooglePressed: () => context.read<LoginCubit>().externalLogin(
+                      provider: 'Google',
+                      idToken: 'mock_google_id_token',
+                    ),
+                onGithubPressed: () => context.read<LoginCubit>().externalLogin(
+                      provider: 'GitHub',
+                      accessToken: 'mock_github_access_token',
+                    ),
+              )
                   .animate()
                   .fadeIn(duration: 400.ms, delay: 400.ms)
                   .slideY(begin: 0.1, end: 0),

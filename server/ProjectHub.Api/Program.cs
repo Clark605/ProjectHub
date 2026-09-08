@@ -119,6 +119,7 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IEmailSender, DevEmailSender>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();

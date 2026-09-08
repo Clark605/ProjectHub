@@ -35,6 +35,31 @@ class LoginCubit extends SafeActionCubit<LoginState> {
     );
   }
 
+  Future<void> externalLogin({
+    required String provider,
+    String? idToken,
+    String? accessToken,
+  }) async {
+    emit(const LoginState.loading());
+    await safeExecute(
+      () async {
+        final user = await _authRepository.externalLogin(
+          provider: provider,
+          idToken: idToken,
+          accessToken: accessToken,
+        );
+        _appAuthCubit.setAuthenticated(user);
+        if (getIt.isRegistered<WorkspaceContextCubit>()) {
+          await getIt<WorkspaceContextCubit>().reset();
+        }
+        emit(LoginState.success(user));
+        return user;
+      },
+      onError: (msg) => emit(LoginState.failure(msg)),
+      logTag: 'LoginCubit',
+    );
+  }
+
   void reset() {
     emit(const LoginState.initial());
   }

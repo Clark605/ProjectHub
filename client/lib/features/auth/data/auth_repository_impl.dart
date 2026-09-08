@@ -178,4 +178,36 @@ class AuthRepositoryImpl implements AuthRepository {
       throw DioErrorHandler.handle(e);
     }
   }
+
+  @override
+  Future<User> externalLogin({
+    required String provider,
+    String? idToken,
+    String? accessToken,
+  }) async {
+    AppLogger.debug('Starting externalLogin for $provider', tag: 'AuthRepository');
+    try {
+      final response = await _dio.post(
+        ApiConstants.externalLogin,
+        data: {
+          'provider': provider,
+          'idToken': ?idToken,
+          'accessToken': ?accessToken,
+        },
+      );
+
+      final authResponse = AuthResponseDto.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+
+      await _storage.saveTokens(
+        accessToken: authResponse.token,
+        refreshToken: authResponse.refreshToken,
+      );
+
+      return await getCurrentUser();
+    } on DioException catch (e) {
+      throw DioErrorHandler.handle(e);
+    }
+  }
 }

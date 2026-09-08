@@ -47,6 +47,12 @@ class _FakeAuthRepository implements AuthRepository {
   @override
   Future<User> updateProfile({required String name, String? bio}) async =>
       User(id: 'u1', name: name, email: 'u1@test.com', bio: bio ?? '');
+  @override
+  Future<User> externalLogin({
+    required String provider,
+    String? idToken,
+    String? accessToken,
+  }) async => const User(id: 'u1', name: 'User 1', email: 'u1@test.com');
 }
 
 class _FakeSecureStorageService extends SecureStorageService {

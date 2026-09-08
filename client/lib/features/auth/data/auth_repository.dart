@@ -9,4 +9,9 @@ abstract class AuthRepository {
   Future<ForgotPasswordResponseDto> forgotPassword(ForgotPasswordDto dto);
   Future<void> resetPassword(ResetPasswordDto dto);
   Future<User> updateProfile({required String name, String? bio});
+  Future<User> externalLogin({
+    required String provider,
+    String? idToken,
+    String? accessToken,
+  });
 }
