@@ -162,7 +162,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-//app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

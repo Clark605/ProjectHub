@@ -7,7 +7,7 @@
       "request": "launch",
       "preLaunchTask": "build-server",
       "projectPath": "${workspaceFolder}/server/ProjectHub.Api/ProjectHub.Api.csproj",
-      "launchSettingsProfile": "http",
+      "launchSettingsProfile": "https",
       "serverReadyAction": {
         "action": "openIntegratedBrowser",
         "pattern": "\\bNow listening on:\\s+(https?://\\S+)"

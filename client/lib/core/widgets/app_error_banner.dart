@@ -26,7 +26,11 @@ class AppErrorBanner extends StatelessWidget {
           ? Container(
               key: ValueKey<String>(errorMessage!),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              color: AppColors.error,
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.error,
+                borderRadius: BorderRadius.circular(8),
+              ),
               child: Row(
                 children: [
                   const Icon(Icons.error_outline, color: Colors.white),

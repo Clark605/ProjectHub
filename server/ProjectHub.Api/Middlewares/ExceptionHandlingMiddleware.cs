@@ -60,7 +60,7 @@ namespace ProjectHub.Api.Middleware
                     StatusCodes.Status401Unauthorized => "Unauthorized access to preform this action",
                     StatusCodes.Status403Forbidden => "You do not have permission to access this resource.",
 
-                    _ => "An unexpected error occurred."
+                    _ => exception.Message ?? "An unexpected error occurred."
                 },
                 Details = _env.IsDevelopment() ? exception.Message : null,
                 TraceId = traceId

@@ -154,9 +154,7 @@ class _ProjectsViewState extends State<_ProjectsView> {
                         description:
                             l10n?.noProjectsDescription ??
                             'Get started by creating your first project in this workspace.',
-                        icon: Icons.folder_special_rounded,
-                        ctaText: l10n?.createProject ?? 'Create Project',
-                        onCtaPressed: () => _openCreateSheet(context),
+                        icon: Icons.folder_open_rounded,
                       ),
                     ),
                     loaded: (projects, a, s) {

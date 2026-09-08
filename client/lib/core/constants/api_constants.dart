@@ -20,11 +20,15 @@ class ApiConstants {
     }
   }
 
+  static const String _envBaseUrl = String.fromEnvironment('API_BASE_URL');
+
   static String get baseUrl {
+    if (_envBaseUrl.isNotEmpty) return _envBaseUrl;
+
     if (kIsWeb) return 'http://127.0.0.1:5259';
     if (Platform.isAndroid) {
       return isPhysicalDevice
-          ? 'http://192.168.1.8:5259' // Real Android device (LAN IP)
+          ? 'https://vhtl5fd3-5259.uks1.devtunnels.ms/' // Real Android device (LAN IP)
           : 'http://10.0.2.2:5259'; // Android emulator (host loopback)
     }
     return 'http://127.0.0.1:5259'; // iOS simulator / Desktop

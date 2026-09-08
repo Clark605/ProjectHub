@@ -50,10 +50,10 @@ class DioErrorHandler {
       message = data.trim();
     } else if (data is Map<String, dynamic>) {
       message =
-          data['message'] as String? ??
+          data['Message'] as String? ??
           data['title'] as String? ??
-          data['detail'] as String?;
-      details = data['details'] as String?;
+          data['Detail'] as String?;
+      details = data['Details'] as String?;
 
       final errors = data['errors'];
       if (errors is Map<String, dynamic>) {
