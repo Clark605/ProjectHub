@@ -37,8 +37,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     context.read<ForgotPasswordCubit>().sendResetCode(
-          email: _emailController.text.trim(),
-        );
+      email: _emailController.text.trim(),
+    );
   }
 
   @override
@@ -65,9 +65,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             loading: () => true,
             orElse: () => false,
           );
-          final errorMessage = state.whenOrNull(
-            failure: (msg) => msg,
-          );
+          final errorMessage = state.whenOrNull(failure: (msg) => msg);
 
           return AbsorbPointer(
             absorbing: isLoading,
@@ -80,8 +78,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back_rounded),
                     onPressed: () => Navigator.maybePop(context),
-                    tooltip:
-                        MaterialLocalizations.of(context).backButtonTooltip,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
                   ),
                 ),
                 body: SafeArea(
@@ -106,26 +105,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               AppErrorBanner(errorMessage: errorMessage),
                               const SizedBox(height: 12),
                               AppTextField(
-                                label: l10n.email,
-                                hintText: l10n.emailPlaceholder,
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.done,
-                                prefixIcon: Icons.mail_outline_rounded,
-                                onFieldSubmitted: (_) => _onSendCode(context),
-                                validator: (val) =>
-                                    FormValidators.email(val, l10n),
-                              )
+                                    label: l10n.email,
+                                    hintText: l10n.emailPlaceholder,
+                                    controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.done,
+                                    prefixIcon: Icons.mail_outline_rounded,
+                                    onFieldSubmitted: (_) =>
+                                        _onSendCode(context),
+                                    validator: (val) =>
+                                        FormValidators.email(val, l10n),
+                                  )
                                   .animate()
                                   .fadeIn(duration: 400.ms, delay: 200.ms)
                                   .slideY(begin: 0.1, end: 0),
                               const SizedBox(height: 24),
                               AppButton(
-                                label: l10n.sendResetCode,
-                                variant: AppButtonVariant.primary,
-                                isLoading: isLoading,
-                                onPressed: () => _onSendCode(context),
-                              )
+                                    label: l10n.sendResetCode,
+                                    variant: AppButtonVariant.primary,
+                                    isLoading: isLoading,
+                                    onPressed: () => _onSendCode(context),
+                                  )
                                   .animate()
                                   .fadeIn(duration: 400.ms, delay: 300.ms)
                                   .slideY(begin: 0.1, end: 0),
@@ -147,9 +147,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     ),
                                   ),
                                 ),
-                              )
-                                  .animate()
-                                  .fadeIn(duration: 400.ms, delay: 350.ms),
+                              ).animate().fadeIn(
+                                duration: 400.ms,
+                                delay: 350.ms,
+                              ),
                               const SizedBox(height: 16),
                               const AuthBackToLoginLink(delayMs: 400),
                             ],

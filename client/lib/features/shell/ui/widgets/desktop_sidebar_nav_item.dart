@@ -51,9 +51,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
               child: Text(
                 label,
                 style: TextStyle(
-                  color: isSelected
-                      ? AppColors.primary
-                      : AppColors.textPrimary,
+                  color: isSelected ? AppColors.primary : AppColors.textPrimary,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                   fontSize: 13,
                 ),
@@ -61,11 +59,11 @@ class DesktopSidebarNavItem extends StatelessWidget {
             ),
             if (badge != null)
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: (badgeColor ?? AppColors.primary)
-                      .withValues(alpha: 0.15),
+                  color: (badgeColor ?? AppColors.primary).withValues(
+                    alpha: 0.15,
+                  ),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(

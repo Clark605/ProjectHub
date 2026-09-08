@@ -12,7 +12,7 @@ class RegisterCubit extends SafeActionCubit<RegisterState> {
   final AppAuthCubit _appAuthCubit;
 
   RegisterCubit(this._authRepository, this._appAuthCubit)
-      : super(const RegisterState.initial());
+    : super(const RegisterState.initial());
 
   Future<void> register({
     required String name,

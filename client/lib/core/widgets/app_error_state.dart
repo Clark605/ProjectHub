@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 
 class AppErrorState extends StatelessWidget {
-  const AppErrorState({
-    super.key,
-    required this.errorMessage,
-    this.onRetry,
-  });
+  const AppErrorState({super.key, required this.errorMessage, this.onRetry});
 
   final String errorMessage;
   final VoidCallback? onRetry;
@@ -24,17 +20,17 @@ class AppErrorState extends StatelessWidget {
             Text(
               'Something went wrong',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
-                  ),
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               errorMessage,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
               textAlign: TextAlign.center,
             ),
             if (onRetry != null) ...[

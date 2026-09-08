@@ -148,7 +148,6 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
   void clearCache([int? workspaceId]) {}
 }
 
-
 class _FakeProjectRepository implements ProjectRepository {
   List<ProjectDto> projects = [];
 
@@ -161,11 +160,7 @@ class _FakeProjectRepository implements ProjectRepository {
 
   @override
   Future<ProjectDto> getProject(int id, {bool forceRefresh = false}) async =>
-      const ProjectDto(
-        id: 1,
-        name: 'Project 1',
-        workspaceId: 1,
-      );
+      const ProjectDto(id: 1, name: 'Project 1', workspaceId: 1);
 
   @override
   Future<ProjectDto> createProject(

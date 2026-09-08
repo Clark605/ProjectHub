@@ -58,7 +58,10 @@ class AppLogger {
   }
 
   /// Starts a performance stopwatch and returns an [ExecutionTimer] to measure duration.
-  static ExecutionTimer startTimer(String operation, {String tag = 'Benchmark'}) {
+  static ExecutionTimer startTimer(
+    String operation, {
+    String tag = 'Benchmark',
+  }) {
     return ExecutionTimer._(operation, tag)..start();
   }
 
@@ -124,7 +127,10 @@ class ExecutionTimer {
     _stopwatch.stop();
     final elapsedMs = _stopwatch.elapsedMilliseconds;
     final extra = note != null ? ' ($note)' : '';
-    AppLogger.info('⏱️ Completed: $_operation in ${elapsedMs}ms$extra', tag: _tag);
+    AppLogger.info(
+      '⏱️ Completed: $_operation in ${elapsedMs}ms$extra',
+      tag: _tag,
+    );
     return elapsedMs;
   }
 }

@@ -90,7 +90,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     validator: (val) => FormValidators.email(val, l10n),
-                  ).animate().fadeIn(duration: 400.ms, delay: 200.ms).slideY(begin: 0.1, end: 0),
+                  )
+                  .animate()
+                  .fadeIn(duration: 400.ms, delay: 200.ms)
+                  .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 18),
               AppTextField(
                     label: l10n.password,
@@ -100,22 +103,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _onSignIn(context),
                     validator: (val) => FormValidators.password(val, l10n),
-                  ).animate().fadeIn(duration: 400.ms, delay: 250.ms).slideY(begin: 0.1, end: 0),
+                  )
+                  .animate()
+                  .fadeIn(duration: 400.ms, delay: 250.ms)
+                  .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 14),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      RouteNames.forgotPassword,
-                    );
+                    Navigator.pushNamed(context, RouteNames.forgotPassword);
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,
                     minimumSize: const Size(0, 32),
-                    tapTargetSize:
-                        MaterialTapTargetSize.shrinkWrap,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
                     l10n.forgotPassword,
@@ -132,21 +134,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     variant: AppButtonVariant.primary,
                     isLoading: isLoading,
                     onPressed: () => _onSignIn(context),
-                  ).animate().fadeIn(duration: 400.ms, delay: 350.ms).slideY(begin: 0.1, end: 0),
+                  )
+                  .animate()
+                  .fadeIn(duration: 400.ms, delay: 350.ms)
+                  .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 24),
-              SocialAuthSection(
-                onGooglePressed: () {},
-                onGithubPressed: () {},
-              ).animate().fadeIn(duration: 400.ms, delay: 400.ms).slideY(begin: 0.1, end: 0),
+              SocialAuthSection(onGooglePressed: () {}, onGithubPressed: () {})
+                  .animate()
+                  .fadeIn(duration: 400.ms, delay: 400.ms)
+                  .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 32),
               AuthFooterLink(
                 promptText: l10n.dontHaveAccount,
                 actionText: l10n.signUp,
                 onTap: () {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    RouteNames.register,
-                  );
+                  Navigator.pushReplacementNamed(context, RouteNames.register);
                 },
               ),
             ],
@@ -156,4 +158,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-

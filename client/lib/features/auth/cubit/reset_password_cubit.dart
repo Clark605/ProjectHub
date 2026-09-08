@@ -10,7 +10,7 @@ class ResetPasswordCubit extends SafeActionCubit<ResetPasswordState> {
   final AuthRepository _authRepository;
 
   ResetPasswordCubit(this._authRepository)
-      : super(const ResetPasswordState.initial());
+    : super(const ResetPasswordState.initial());
 
   Future<void> resetPassword({
     required String email,
@@ -21,7 +21,11 @@ class ResetPasswordCubit extends SafeActionCubit<ResetPasswordState> {
     await safeExecute(
       () async {
         await _authRepository.resetPassword(
-          ResetPasswordDto(email: email, token: token, newPassword: newPassword),
+          ResetPasswordDto(
+            email: email,
+            token: token,
+            newPassword: newPassword,
+          ),
         );
         emit(const ResetPasswordState.success());
         return true;

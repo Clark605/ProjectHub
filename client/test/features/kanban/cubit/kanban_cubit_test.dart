@@ -311,18 +311,8 @@ void main() {
     'moveTaskStatus preserves subsequent moves when a previous move fails',
     () async {
       taskRepo.tasks = [
-        const TaskDto(
-          id: 1,
-          projectId: 1,
-          title: 'Task 1',
-          status: 'Backlog',
-        ),
-        const TaskDto(
-          id: 2,
-          projectId: 1,
-          title: 'Task 2',
-          status: 'Backlog',
-        ),
+        const TaskDto(id: 1, projectId: 1, title: 'Task 1', status: 'Backlog'),
+        const TaskDto(id: 2, projectId: 1, title: 'Task 2', status: 'Backlog'),
       ];
 
       await cubit.loadTasks(1);
@@ -369,66 +359,77 @@ void main() {
     );
   });
 
-  test('deleteTask transitions to empty state when last task deleted', () async {
-    taskRepo.tasks = [
-      const TaskDto(id: 99, projectId: 1, title: 'Single Task', status: 'Backlog'),
-    ];
-    await cubit.loadTasks(1);
+  test(
+    'deleteTask transitions to empty state when last task deleted',
+    () async {
+      taskRepo.tasks = [
+        const TaskDto(
+          id: 99,
+          projectId: 1,
+          title: 'Single Task',
+          status: 'Backlog',
+        ),
+      ];
+      await cubit.loadTasks(1);
 
-    await cubit.deleteTask(99);
+      await cubit.deleteTask(99);
 
-    cubit.state.maybeWhen(
-      empty: (projectId, isArchived) {
-        expect(projectId, 1);
-        expect(isArchived, false);
-      },
-      orElse: () => fail('State should be KanbanState.empty'),
-    );
-  });
+      cubit.state.maybeWhen(
+        empty: (projectId, isArchived) {
+          expect(projectId, 1);
+          expect(isArchived, false);
+        },
+        orElse: () => fail('State should be KanbanState.empty'),
+      );
+    },
+  );
 
-  test('TaskDto isOverdue treats date-only today as not overdue and yesterday as overdue', () {
-    final todayMidnight = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-    );
-    final yesterday = todayMidnight.subtract(const Duration(days: 1));
-    final tomorrow = todayMidnight.add(const Duration(days: 1));
+  test(
+    'TaskDto isOverdue treats date-only today as not overdue and yesterday as overdue',
+    () {
+      final todayMidnight = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+      );
+      final yesterday = todayMidnight.subtract(const Duration(days: 1));
+      final tomorrow = todayMidnight.add(const Duration(days: 1));
 
-    final taskToday = TaskDto(
-      id: 1,
-      projectId: 1,
-      title: 'Due Today',
-      dueDate: todayMidnight,
-      status: 'Todo',
-    );
-    expect(taskToday.isOverdue, false);
+      final taskToday = TaskDto(
+        id: 1,
+        projectId: 1,
+        title: 'Due Today',
+        dueDate: todayMidnight,
+        status: 'Todo',
+      );
+      expect(taskToday.isOverdue, false);
 
-    final taskYesterday = TaskDto(
-      id: 2,
-      projectId: 1,
-      title: 'Due Yesterday',
-      dueDate: yesterday,
-      status: 'Todo',
-    );
-    expect(taskYesterday.isOverdue, true);
+      final taskYesterday = TaskDto(
+        id: 2,
+        projectId: 1,
+        title: 'Due Yesterday',
+        dueDate: yesterday,
+        status: 'Todo',
+      );
+      expect(taskYesterday.isOverdue, true);
 
-    final taskTomorrow = TaskDto(
-      id: 3,
-      projectId: 1,
-      title: 'Due Tomorrow',
-      dueDate: tomorrow,
-      status: 'Todo',
-    );
-    expect(taskTomorrow.isOverdue, false);
+      final taskTomorrow = TaskDto(
+        id: 3,
+        projectId: 1,
+        title: 'Due Tomorrow',
+        dueDate: tomorrow,
+        status: 'Todo',
+      );
+      expect(taskTomorrow.isOverdue, false);
 
-    final doneTask = TaskDto(
-      id: 4,
-      projectId: 1,
-      title: 'Done Task',
-      dueDate: yesterday,
-      status: 'Done',
-    );
-    expect(doneTask.isOverdue, false);
-  });
+      final doneTask = TaskDto(
+        id: 4,
+        projectId: 1,
+        title: 'Done Task',
+        dueDate: yesterday,
+        status: 'Done',
+      );
+      expect(doneTask.isOverdue, false);
+    },
+  );
 }

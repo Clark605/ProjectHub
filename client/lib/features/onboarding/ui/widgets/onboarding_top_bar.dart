@@ -27,20 +27,30 @@ class OnboardingTopBar extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 32, height: 32,
+                width: 32,
+                height: 32,
                 decoration: BoxDecoration(
                   color: AppColors.electricViolet.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.electricViolet.withValues(alpha: 0.35)),
+                  border: Border.all(
+                    color: AppColors.electricViolet.withValues(alpha: 0.35),
+                  ),
                 ),
-                child: const Icon(Icons.hub_rounded, size: 18, color: AppColors.electricViolet),
+                child: const Icon(
+                  Icons.hub_rounded,
+                  size: 18,
+                  color: AppColors.electricViolet,
+                ),
               ),
               const SizedBox(width: 10),
               Text(
                 l10n.appTitle,
                 style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w800, letterSpacing: -0.3,
-                  color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: -0.3,
+                  color: isDark
+                      ? AppColors.textPrimary
+                      : AppColors.lightTextPrimary,
                 ),
               ),
             ],
@@ -53,11 +63,24 @@ class OnboardingTopBar extends StatelessWidget {
               child: TextButton(
                 onPressed: onSkip,
                 style: TextButton.styleFrom(
-                  foregroundColor: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  foregroundColor: isDark
+                      ? AppColors.textSecondary
+                      : AppColors.lightTextSecondary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 8,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-                child: Text(l10n.skip, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                child: Text(
+                  l10n.skip,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                  ),
+                ),
               ),
             ),
           ).animate().fadeIn(duration: 400.ms).slideX(begin: 0.1, end: 0),

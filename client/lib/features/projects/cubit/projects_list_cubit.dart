@@ -1,4 +1,4 @@
-﻿import 'package:injectable/injectable.dart';
+import 'package:injectable/injectable.dart';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
@@ -148,8 +148,6 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
       return projects;
     }
     final targetStatus = ProjectStatus.fromString(filter);
-    return projects
-        .where((p) => p.statusEnum == targetStatus)
-        .toList();
+    return projects.where((p) => p.statusEnum == targetStatus).toList();
   }
 }

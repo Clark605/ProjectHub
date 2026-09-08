@@ -112,15 +112,15 @@ ThemeData buildDarkTheme() {
         fontSize: 20,
         fontWeight: FontWeight.w600,
       ),
-      contentTextStyle: TextStyle(
-        color: AppColors.textSecondary,
-        fontSize: 16,
-      ),
+      contentTextStyle: TextStyle(color: AppColors.textSecondary, fontSize: 16),
     ),
     bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColors.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
       ),
     ),
   );

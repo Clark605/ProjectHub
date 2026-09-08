@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 
 class AppErrorBanner extends StatelessWidget {
-  const AppErrorBanner({
-    super.key,
-    required this.errorMessage,
-    this.onDismiss,
-  });
+  const AppErrorBanner({super.key, required this.errorMessage, this.onDismiss});
 
   final String? errorMessage;
   final VoidCallback? onDismiss;

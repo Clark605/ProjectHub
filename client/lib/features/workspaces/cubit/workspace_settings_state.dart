@@ -6,12 +6,16 @@ import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 part 'workspace_settings_state.freezed.dart';
 
 sealed class WorkspaceAction {}
+
 class ActionDetailsUpdated extends WorkspaceAction {}
+
 class ActionMemberAdded extends WorkspaceAction {}
+
 class ActionMemberAddedWithEmail extends WorkspaceAction {
   final String email;
   ActionMemberAddedWithEmail(this.email);
 }
+
 class ActionMemberRemoved extends WorkspaceAction {}
 
 @freezed

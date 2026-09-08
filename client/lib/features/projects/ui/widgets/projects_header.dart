@@ -1,14 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class ProjectsHeader extends StatelessWidget {
-  const ProjectsHeader({
-    super.key,
-    required this.onCreatePressed,
-  });
+  const ProjectsHeader({super.key, required this.onCreatePressed});
 
   final VoidCallback onCreatePressed;
 

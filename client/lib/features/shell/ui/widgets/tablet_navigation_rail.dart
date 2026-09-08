@@ -20,10 +20,7 @@ class TabletNavigationRail extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.95),
         border: const Border(
-          right: BorderSide(
-            color: AppColors.border,
-            width: 1,
-          ),
+          right: BorderSide(color: AppColors.border, width: 1),
         ),
       ),
       child: Column(
@@ -54,17 +51,19 @@ class TabletNavigationRail extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Rail Nav Items
-          ...ShellTab.values.map((tab) => Column(
-                children: [
-                  _RailItem(
-                    icon: tab.selectedIcon,
-                    label: tab.label,
-                    isSelected: selectedIndex == tab.index,
-                    onTap: () => onItemSelected(tab.index),
-                  ),
-                  if (tab != ShellTab.profile) const SizedBox(height: 12),
-                ],
-              )),
+          ...ShellTab.values.map(
+            (tab) => Column(
+              children: [
+                _RailItem(
+                  icon: tab.selectedIcon,
+                  label: tab.label,
+                  isSelected: selectedIndex == tab.index,
+                  onTap: () => onItemSelected(tab.index),
+                ),
+                if (tab != ShellTab.profile) const SizedBox(height: 12),
+              ],
+            ),
+          ),
 
           const Spacer(),
           const SizedBox(height: 16),

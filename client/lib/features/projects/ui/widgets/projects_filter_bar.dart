@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
@@ -19,12 +19,18 @@ class ProjectsFilterBar extends StatelessWidget {
   String _getFilterLabel(BuildContext context, String filter) {
     final l10n = AppLocalizations.of(context);
     switch (filter.toLowerCase()) {
-      case 'all': return l10n?.statusAll ?? 'All';
-      case 'planning': return l10n?.statusPlanning ?? 'Planning';
-      case 'active': return l10n?.statusActive ?? 'Active';
-      case 'completed': return l10n?.statusCompleted ?? 'Completed';
-      case 'archived': return l10n?.statusArchived ?? 'Archived';
-      default: return filter;
+      case 'all':
+        return l10n?.statusAll ?? 'All';
+      case 'planning':
+        return l10n?.statusPlanning ?? 'Planning';
+      case 'active':
+        return l10n?.statusActive ?? 'Active';
+      case 'completed':
+        return l10n?.statusCompleted ?? 'Completed';
+      case 'archived':
+        return l10n?.statusArchived ?? 'Archived';
+      default:
+        return filter;
     }
   }
 
@@ -43,7 +49,8 @@ class ProjectsFilterBar extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Row(
             children: _filters.map((filter) {
-              final isSelected = currentFilter.toLowerCase() == filter.toLowerCase();
+              final isSelected =
+                  currentFilter.toLowerCase() == filter.toLowerCase();
 
               return Padding(
                 padding: const EdgeInsets.only(right: 8),
@@ -79,4 +86,3 @@ class ProjectsFilterBar extends StatelessWidget {
     );
   }
 }
-

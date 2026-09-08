@@ -5,7 +5,9 @@ import 'package:client/core/utils/jwt_utils.dart';
 void main() {
   group('JwtUtils', () {
     String createToken(Map<String, dynamic> payload) {
-      final header = base64Url.encode(utf8.encode(jsonEncode({'alg': 'HS256'})));
+      final header = base64Url.encode(
+        utf8.encode(jsonEncode({'alg': 'HS256'})),
+      );
       final body = base64Url.encode(utf8.encode(jsonEncode(payload)));
       return '$header.$body.signature';
     }
@@ -30,7 +32,8 @@ void main() {
 
     test('extractUserId returns nameidentifier', () {
       final token = createToken({
-        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier': 'user-456'
+        'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier':
+            'user-456',
       });
       expect(JwtUtils.extractUserId(token), 'user-456');
     });

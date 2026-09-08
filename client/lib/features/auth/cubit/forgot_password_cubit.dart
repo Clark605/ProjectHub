@@ -10,7 +10,7 @@ class ForgotPasswordCubit extends SafeActionCubit<ForgotPasswordState> {
   final AuthRepository _authRepository;
 
   ForgotPasswordCubit(this._authRepository)
-      : super(const ForgotPasswordState.initial());
+    : super(const ForgotPasswordState.initial());
 
   Future<void> sendResetCode({required String email}) async {
     emit(const ForgotPasswordState.loading());

@@ -19,10 +19,7 @@ class MobileBottomNav extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.95),
         border: const Border(
-          top: BorderSide(
-            color: AppColors.border,
-            width: 1,
-          ),
+          top: BorderSide(color: AppColors.border, width: 1),
         ),
       ),
       child: SafeArea(
@@ -30,14 +27,18 @@ class MobileBottomNav extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: ShellTab.values.map((tab) => Expanded(
-                  child: _BottomNavItem(
-                    icon: tab.selectedIcon,
-                    label: tab.label,
-                    isSelected: selectedIndex == tab.index,
-                    onTap: () => onItemSelected(tab.index),
+            children: ShellTab.values
+                .map(
+                  (tab) => Expanded(
+                    child: _BottomNavItem(
+                      icon: tab.selectedIcon,
+                      label: tab.label,
+                      isSelected: selectedIndex == tab.index,
+                      onTap: () => onItemSelected(tab.index),
+                    ),
                   ),
-                )).toList(),
+                )
+                .toList(),
           ),
         ),
       ),
@@ -77,9 +78,7 @@ class _BottomNavItem extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                color: isSelected
-                    ? AppColors.primary
-                    : AppColors.textSecondary,
+                color: isSelected ? AppColors.primary : AppColors.textSecondary,
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),

@@ -73,7 +73,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
         },
         builder: (context, state) {
-          final isLoading = state.maybeWhen(loading: () => true, orElse: () => false);
+          final isLoading = state.maybeWhen(
+            loading: () => true,
+            orElse: () => false,
+          );
           final errorMessage = state.whenOrNull(failure: (msg) => msg);
 
           return AuthScreenScaffold(
@@ -94,8 +97,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: _nameController,
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
-                    validator: (val) => FormValidators.requiredField(val, l10n.nameRequired),
-                  ).animate().fadeIn(duration: 400.ms, delay: 200.ms).slideY(begin: 0.1, end: 0),
+                    validator: (val) =>
+                        FormValidators.requiredField(val, l10n.nameRequired),
+                  )
+                  .animate()
+                  .fadeIn(duration: 400.ms, delay: 200.ms)
+                  .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 18),
               AppTextField(
                     label: l10n.email,
@@ -104,7 +111,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     validator: (val) => FormValidators.email(val, l10n),
-                  ).animate().fadeIn(duration: 400.ms, delay: 250.ms).slideY(begin: 0.1, end: 0),
+                  )
+                  .animate()
+                  .fadeIn(duration: 400.ms, delay: 250.ms)
+                  .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 18),
               AppTextField(
                     label: l10n.password,
@@ -113,7 +123,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     isPassword: true,
                     textInputAction: TextInputAction.next,
                     validator: (val) => FormValidators.password(val, l10n),
-                  ).animate().fadeIn(duration: 400.ms, delay: 300.ms).slideY(begin: 0.1, end: 0),
+                  )
+                  .animate()
+                  .fadeIn(duration: 400.ms, delay: 300.ms)
+                  .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 18),
               AppTextField(
                     label: l10n.confirmPassword,
@@ -122,8 +135,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     isPassword: true,
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _onSignUp(context),
-                    validator: (val) => FormValidators.confirmPassword(val, _passwordController.text, l10n),
-                  ).animate().fadeIn(duration: 400.ms, delay: 350.ms).slideY(begin: 0.1, end: 0),
+                    validator: (val) => FormValidators.confirmPassword(
+                      val,
+                      _passwordController.text,
+                      l10n,
+                    ),
+                  )
+                  .animate()
+                  .fadeIn(duration: 400.ms, delay: 350.ms)
+                  .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 16),
               TermsCheckbox(
                 value: _agreeToTerms,
@@ -141,21 +161,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     variant: AppButtonVariant.primary,
                     isLoading: isLoading,
                     onPressed: () => _onSignUp(context),
-                  ).animate().fadeIn(duration: 400.ms, delay: 450.ms).slideY(begin: 0.1, end: 0),
+                  )
+                  .animate()
+                  .fadeIn(duration: 400.ms, delay: 450.ms)
+                  .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 24),
-              SocialAuthSection(
-                    onGooglePressed: () {},
-                    onGithubPressed: () {},
-                  ).animate().fadeIn(duration: 400.ms, delay: 500.ms).slideY(begin: 0.1, end: 0),
+              SocialAuthSection(onGooglePressed: () {}, onGithubPressed: () {})
+                  .animate()
+                  .fadeIn(duration: 400.ms, delay: 500.ms)
+                  .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 32),
               AuthFooterLink(
                 promptText: l10n.alreadyHaveAccount,
                 actionText: l10n.signIn,
                 onTap: () {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    RouteNames.login,
-                  );
+                  Navigator.pushReplacementNamed(context, RouteNames.login);
                 },
                 delayMs: 550,
               ),
@@ -166,4 +186,3 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 }
-

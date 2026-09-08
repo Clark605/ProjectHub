@@ -31,8 +31,12 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
     final isDesktop = ResponsiveLayout.isDesktop(context);
     final isMobile = ResponsiveLayout.isMobile(context);
 
-    final hasWorkspace = activeWorkspaceName != null && activeWorkspaceName!.trim().isNotEmpty;
-    final isOwner = hasWorkspace && activeWorkspaceRole != null && activeWorkspaceRole!.trim().toLowerCase() == 'owner';
+    final hasWorkspace =
+        activeWorkspaceName != null && activeWorkspaceName!.trim().isNotEmpty;
+    final isOwner =
+        hasWorkspace &&
+        activeWorkspaceRole != null &&
+        activeWorkspaceRole!.trim().toLowerCase() == 'owner';
 
     return Container(
       height: 64,
@@ -46,7 +50,10 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           if (!isDesktop) ...[
             IconButton(
-              icon: const Icon(Icons.menu_rounded, color: AppColors.textPrimary),
+              icon: const Icon(
+                Icons.menu_rounded,
+                color: AppColors.textPrimary,
+              ),
               tooltip: 'Navigation Menu',
               onPressed: onOpenDrawer,
             ),
@@ -70,9 +77,15 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
           ],
           if (isOwner) ...[
             IconButton(
-              icon: const Icon(Icons.settings_outlined, color: AppColors.textSecondary, size: 20),
+              icon: const Icon(
+                Icons.settings_outlined,
+                color: AppColors.textSecondary,
+                size: 20,
+              ),
               tooltip: 'Workspace Settings',
-              onPressed: onSettingsTap ?? () => Navigator.of(context).pushNamed(RouteNames.workspaces),
+              onPressed:
+                  onSettingsTap ??
+                  () => Navigator.of(context).pushNamed(RouteNames.workspaces),
             ),
             const SizedBox(width: 8),
           ],

@@ -45,7 +45,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
 
   void _submit(BuildContext context) {
     if (!_formKey.currentState!.validate()) return;
-    
+
     final request = CreateProjectRequest(
       name: _nameController.text.trim(),
       description: _descController.text.trim(),
@@ -104,12 +104,16 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                 const SizedBox(height: 16),
                 Text(
                   l10n.newProject,
-                  style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   l10n.projectsSubtitle,
-                  style: theme.textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 if (errorMessage != null) ...[
@@ -122,8 +126,9 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                   hintText: l10n.projectNamePlaceholder,
                   prefixIcon: Icons.folder_outlined,
                   enabled: !isLoading,
-                  validator: (value) =>
-                      value == null || value.trim().isEmpty ? l10n.projectNameRequired : null,
+                  validator: (value) => value == null || value.trim().isEmpty
+                      ? l10n.projectNameRequired
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 AppTextField(
@@ -140,7 +145,8 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                   child: AppDateField(
                     label: l10n.dueDate,
                     selectedDate: _selectedDueDate,
-                    onDateSelected: (date) => setState(() => _selectedDueDate = date),
+                    onDateSelected: (date) =>
+                        setState(() => _selectedDueDate = date),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -148,7 +154,9 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: isLoading ? null : () => Navigator.of(context).pop(),
+                      onPressed: isLoading
+                          ? null
+                          : () => Navigator.of(context).pop(),
                       child: Text(l10n.cancel),
                     ),
                     const SizedBox(width: 12),

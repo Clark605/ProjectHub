@@ -22,7 +22,8 @@ class AppAvatar extends StatelessWidget {
     if (parts.length == 1) {
       return parts[0].characters.take(1).toString().toUpperCase();
     }
-    return '${parts[0].characters.take(1)}${parts[1].characters.take(1)}'.toUpperCase();
+    return '${parts[0].characters.take(1)}${parts[1].characters.take(1)}'
+        .toUpperCase();
   }
 
   @override
@@ -37,11 +38,13 @@ class AppAvatar extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         _initials,
-        style: textStyle ?? TextStyle(
-          color: AppColors.textOnPrimary,
-          fontSize: size * 0.4,
-          fontWeight: FontWeight.w600,
-        ),
+        style:
+            textStyle ??
+            TextStyle(
+              color: AppColors.textOnPrimary,
+              fontSize: size * 0.4,
+              fontWeight: FontWeight.w600,
+            ),
       ),
     );
   }

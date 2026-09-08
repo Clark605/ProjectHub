@@ -68,7 +68,12 @@ class GoogleLogoPainter extends CustomPainter {
 
     // Right crossbar
     final barRect = RRect.fromRectAndRadius(
-      Rect.fromLTWH(center.dx, center.dy - radius * 0.22, radius, radius * 0.44),
+      Rect.fromLTWH(
+        center.dx,
+        center.dy - radius * 0.22,
+        radius,
+        radius * 0.44,
+      ),
       Radius.circular(radius * 0.1),
     );
     canvas.drawRRect(barRect, bluePaint);

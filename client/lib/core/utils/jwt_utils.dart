@@ -20,7 +20,8 @@ class JwtUtils {
     final payload = extractPayload(token);
     if (payload == null) return null;
 
-    final userId = payload['sub'] ??
+    final userId =
+        payload['sub'] ??
         payload['nameid'] ??
         payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ??
         payload['id'];

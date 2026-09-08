@@ -44,9 +44,9 @@ class AppDangerZone extends StatelessWidget {
             Text(
               title,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: AppColors.error,
-                    fontWeight: FontWeight.bold,
-                  ),
+                color: AppColors.error,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 8),
             Text(description),
@@ -109,7 +109,9 @@ class _DeleteConfirmationDialogState extends State<_DeleteConfirmationDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('This action cannot be undone. This will permanently delete the entity.'),
+          const Text(
+            'This action cannot be undone. This will permanently delete the entity.',
+          ),
           const SizedBox(height: 16),
           Text('Please type "${widget.entityName}" to confirm.'),
           const SizedBox(height: 8),

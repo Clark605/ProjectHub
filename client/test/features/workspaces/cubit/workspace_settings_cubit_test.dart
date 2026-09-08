@@ -167,10 +167,7 @@ void main() {
         final state = cubit.state as WorkspaceSettingsLoaded;
         expect(state.members.length, 3);
         expect(state.members.last.email, 'colleague@test.com');
-        expect(
-          state.successAction,
-          isA<ActionMemberAddedWithEmail>(),
-        );
+        expect(state.successAction, isA<ActionMemberAddedWithEmail>());
       },
     );
 

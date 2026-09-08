@@ -30,25 +30,22 @@ class AppEmptyState extends StatelessWidget {
             Text(
               title,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
-                  ),
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               description,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary),
               textAlign: TextAlign.center,
             ),
             if (ctaText != null && onCtaPressed != null) ...[
               const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: onCtaPressed,
-                child: Text(ctaText!),
-              ),
+              ElevatedButton(onPressed: onCtaPressed, child: Text(ctaText!)),
             ],
           ],
         ),

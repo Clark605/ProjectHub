@@ -32,7 +32,10 @@ class AuthRepositoryImpl implements AuthRepository {
         refreshToken: authResponse.refreshToken,
       );
 
-      AppLogger.info('Login completed successfully for ${dto.email}', tag: 'AuthRepository');
+      AppLogger.info(
+        'Login completed successfully for ${dto.email}',
+        tag: 'AuthRepository',
+      );
       return await getCurrentUser();
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
@@ -41,7 +44,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User> register(RegisterDto dto) async {
-    AppLogger.debug('Starting registration for ${dto.email}', tag: 'AuthRepository');
+    AppLogger.debug(
+      'Starting registration for ${dto.email}',
+      tag: 'AuthRepository',
+    );
     try {
       final response = await _dio.post(
         ApiConstants.register,
@@ -57,7 +63,10 @@ class AuthRepositoryImpl implements AuthRepository {
         refreshToken: authResponse.refreshToken,
       );
 
-      AppLogger.info('Registration completed successfully for ${dto.email}', tag: 'AuthRepository');
+      AppLogger.info(
+        'Registration completed successfully for ${dto.email}',
+        tag: 'AuthRepository',
+      );
       return await getCurrentUser();
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
@@ -79,7 +88,10 @@ class AuthRepositoryImpl implements AuthRepository {
         }
       }
 
-      AppLogger.info('getCurrentUser completed successfully for ${user.email}', tag: 'AuthRepository');
+      AppLogger.info(
+        'getCurrentUser completed successfully for ${user.email}',
+        tag: 'AuthRepository',
+      );
       return user;
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
@@ -109,14 +121,20 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<ForgotPasswordResponseDto> forgotPassword(
     ForgotPasswordDto dto,
   ) async {
-    AppLogger.debug('Starting forgotPassword for ${dto.email}', tag: 'AuthRepository');
+    AppLogger.debug(
+      'Starting forgotPassword for ${dto.email}',
+      tag: 'AuthRepository',
+    );
     try {
       final response = await _dio.post(
         ApiConstants.forgotPassword,
         data: dto.toJson(),
       );
 
-      AppLogger.info('forgotPassword completed successfully for ${dto.email}', tag: 'AuthRepository');
+      AppLogger.info(
+        'forgotPassword completed successfully for ${dto.email}',
+        tag: 'AuthRepository',
+      );
       return ForgotPasswordResponseDto.fromJson(
         response.data as Map<String, dynamic>,
       );
@@ -127,10 +145,16 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> resetPassword(ResetPasswordDto dto) async {
-    AppLogger.debug('Starting resetPassword for ${dto.email}', tag: 'AuthRepository');
+    AppLogger.debug(
+      'Starting resetPassword for ${dto.email}',
+      tag: 'AuthRepository',
+    );
     try {
       await _dio.post(ApiConstants.resetPassword, data: dto.toJson());
-      AppLogger.info('resetPassword completed successfully for ${dto.email}', tag: 'AuthRepository');
+      AppLogger.info(
+        'resetPassword completed successfully for ${dto.email}',
+        tag: 'AuthRepository',
+      );
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
     }

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,10 +40,8 @@ class PrefsService {
     return _prefs.getString(StorageKeys.cachedActiveWorkspace);
   }
 
-  Future<void> setCachedActiveWorkspaceRaw(String workspaceJson) => _prefs.setString(
-    StorageKeys.cachedActiveWorkspace,
-    workspaceJson,
-  );
+  Future<void> setCachedActiveWorkspaceRaw(String workspaceJson) =>
+      _prefs.setString(StorageKeys.cachedActiveWorkspace, workspaceJson);
 
   Future<void> clearCachedActiveWorkspace() =>
       _prefs.remove(StorageKeys.cachedActiveWorkspace);

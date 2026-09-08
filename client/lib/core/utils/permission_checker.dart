@@ -2,12 +2,12 @@ class PermissionChecker {
   PermissionChecker._();
 
   static bool _isOwner(String roleStr) {
-    return roleStr.toLowerCase() == 'owner' || roleStr.toLowerCase() == 'workspacerole.owner';
+    return roleStr.toLowerCase() == 'owner' ||
+        roleStr.toLowerCase() == 'workspacerole.owner';
   }
 
   /// Can manage workspace settings (edit, delete, invite/remove members)
-  static bool canManageWorkspace(String role) =>
-      _isOwner(role);
+  static bool canManageWorkspace(String role) => _isOwner(role);
 
   /// Can edit project metadata
   static bool canEditProject({

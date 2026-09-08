@@ -13,8 +13,8 @@ class DashboardMetricsGrid extends StatelessWidget {
         final crossAxisCount = constraints.maxWidth > 1100
             ? 4
             : constraints.maxWidth > 650
-                ? 2
-                : 1;
+            ? 2
+            : 1;
 
         final metrics = [
           const MetricData(
@@ -54,7 +54,7 @@ class DashboardMetricsGrid extends StatelessWidget {
             final cardWidth = crossAxisCount == 1
                 ? constraints.maxWidth
                 : (constraints.maxWidth - (crossAxisCount - 1) * 16) /
-                    crossAxisCount;
+                      crossAxisCount;
 
             return SizedBox(
               width: cardWidth,

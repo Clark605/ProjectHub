@@ -21,8 +21,11 @@ class WorkspaceSwitcherPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final hasWorkspace = activeWorkspaceName != null && activeWorkspaceName!.trim().isNotEmpty;
-    final displayName = hasWorkspace ? activeWorkspaceName! : (l10n?.createWorkspace ?? 'Create Workspace');
+    final hasWorkspace =
+        activeWorkspaceName != null && activeWorkspaceName!.trim().isNotEmpty;
+    final displayName = hasWorkspace
+        ? activeWorkspaceName!
+        : (l10n?.createWorkspace ?? 'Create Workspace');
 
     return InkWell(
       onTap: isLoading ? null : onWorkspaceTap,
@@ -61,20 +64,31 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                       ),
                     )
                   else
-                    const Icon(Icons.add_rounded, size: 16, color: AppColors.primary),
+                    const Icon(
+                      Icons.add_rounded,
+                      size: 16,
+                      color: AppColors.primary,
+                    ),
                   const SizedBox(width: 8),
                   Flexible(
                     child: Text(
                       displayName,
-                      style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  if (hasWorkspace && activeWorkspaceRole != null && activeWorkspaceRole!.trim().isNotEmpty) ...[
+                  if (hasWorkspace &&
+                      activeWorkspaceRole != null &&
+                      activeWorkspaceRole!.trim().isNotEmpty) ...[
                     const SizedBox(width: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(4),
@@ -91,7 +105,9 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                   ],
                   const SizedBox(width: 4),
                   Icon(
-                    hasWorkspace ? Icons.keyboard_arrow_down_rounded : Icons.arrow_forward_ios_rounded,
+                    hasWorkspace
+                        ? Icons.keyboard_arrow_down_rounded
+                        : Icons.arrow_forward_ios_rounded,
                     size: hasWorkspace ? 18 : 12,
                     color: AppColors.textSecondary,
                   ),

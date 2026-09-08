@@ -14,7 +14,11 @@ extension AppSnackBarExtension on BuildContext {
     _showSnackBar(message, AppColors.info, textColor: AppColors.onSkyBlue);
   }
 
-  void _showSnackBar(String message, Color backgroundColor, {Color textColor = Colors.white}) {
+  void _showSnackBar(
+    String message,
+    Color backgroundColor, {
+    Color textColor = Colors.white,
+  }) {
     final scaffoldMessenger = ScaffoldMessenger.maybeOf(this);
     if (scaffoldMessenger == null) return;
 

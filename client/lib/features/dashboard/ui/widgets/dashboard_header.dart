@@ -53,13 +53,15 @@ class DashboardHeader extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                ),
-              ).animate(onPlay: (c) => c.repeat(reverse: true)).scale(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                  )
+                  .animate(onPlay: (c) => c.repeat(reverse: true))
+                  .scale(
                     begin: const Offset(0.8, 0.8),
                     end: const Offset(1.2, 1.2),
                     duration: 1000.ms,

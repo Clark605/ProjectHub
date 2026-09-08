@@ -9,11 +9,7 @@ enum ShellTab {
   final IconData selectedIcon;
   final String label;
 
-  const ShellTab(
-    this.icon,
-    this.selectedIcon,
-    this.label,
-  );
+  const ShellTab(this.icon, this.selectedIcon, this.label);
 
   static ShellTab fromIndex(int index) {
     if (index >= 0 && index < values.length) {

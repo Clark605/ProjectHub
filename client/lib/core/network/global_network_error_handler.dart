@@ -17,7 +17,9 @@ class GlobalNetworkErrorHandler {
     };
 
     if (isConnectionFailure) {
-      _errorStreamController.add('Unable to connect to the server. Please check that it is running.');
+      _errorStreamController.add(
+        'Unable to connect to the server. Please check that it is running.',
+      );
     }
 
     handler.next(error);

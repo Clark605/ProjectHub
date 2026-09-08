@@ -57,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    
+
     final List<OnboardingStep> onboardingData = [
       OnboardingStep(
         badgeText: l10n.onboardingTagWorkspaces,
@@ -90,10 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               constraints: const BoxConstraints(maxWidth: 600),
               child: Column(
                 children: [
-                  OnboardingTopBar(
-                    onSkip: _onSkip,
-                    isLastPage: isLastPage,
-                  ),
+                  OnboardingTopBar(onSkip: _onSkip, isLastPage: isLastPage),
                   Expanded(
                     child: PageView.builder(
                       controller: _pageController,

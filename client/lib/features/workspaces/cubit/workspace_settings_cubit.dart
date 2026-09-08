@@ -8,7 +8,8 @@ import 'package:client/features/workspaces/data/models/update_workspace_request.
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 
 @injectable
-class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState> with WorkspaceSettingsMembersMixin {
+class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
+    with WorkspaceSettingsMembersMixin {
   @override
   final WorkspaceRepository repository;
   final WorkspaceContextCubit contextCubit;
@@ -161,9 +162,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState> wit
   void clearMessages() {
     final currentState = state;
     if (currentState is WorkspaceSettingsLoaded) {
-      emit(
-        currentState.copyWith(successAction: null, errorMessage: null),
-      );
+      emit(currentState.copyWith(successAction: null, errorMessage: null));
     }
   }
 }

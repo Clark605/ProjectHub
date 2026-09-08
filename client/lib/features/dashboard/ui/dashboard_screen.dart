@@ -45,18 +45,13 @@ class DashboardScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 20),
-                    const Expanded(
-                      flex: 4,
-                      child: RecentActivityCard(),
-                    ),
+                    const Expanded(flex: 4, child: RecentActivityCard()),
                   ],
                 );
               }
               return Column(
                 children: [
-                  SprintFocusCard(
-                    onNavigateToMyTasks: onNavigateToMyTasks,
-                  ),
+                  SprintFocusCard(onNavigateToMyTasks: onNavigateToMyTasks),
                   const SizedBox(height: 20),
                   const RecentActivityCard(),
                 ],

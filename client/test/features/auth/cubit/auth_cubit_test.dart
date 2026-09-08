@@ -105,7 +105,15 @@ void main() {
 
     test('checkAuthStatus emits authenticated immediately from cache', () async {
       storage.tokensExist = true;
-      await prefs.setCachedUserRaw(jsonEncode(const User(id: 'user_1', name: 'Cached Clark', email: 'cached@example.com').toJson()));
+      await prefs.setCachedUserRaw(
+        jsonEncode(
+          const User(
+            id: 'user_1',
+            name: 'Cached Clark',
+            email: 'cached@example.com',
+          ).toJson(),
+        ),
+      );
       // Repository throws if called, ensuring it is NOT called when cache exists
       repository.shouldThrow = true;
 
@@ -119,29 +127,41 @@ void main() {
     });
 
     test(
-        'checkAuthStatus migrates ID from JWT access token when cached user has empty ID',
-        () async {
-      storage.tokensExist = true;
-      // Header: {"alg":"HS256","typ":"JWT"}, Payload: {"sub":"jwt_user_42"}
-      storage.accessToken =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqd3RfdXNlcl80MiJ9.signature';
-      await prefs.setCachedUserRaw(jsonEncode(const User(id: '', name: 'Legacy Clark', email: 'legacy@example.com').toJson()));
-      repository.shouldThrow = true;
-
-      await cubit.checkAuthStatus();
-
-      expect(
-        cubit.state,
-        const AppAuthState.authenticated(
-          User(
-            id: 'jwt_user_42',
-            name: 'Legacy Clark',
-            email: 'legacy@example.com',
+      'checkAuthStatus migrates ID from JWT access token when cached user has empty ID',
+      () async {
+        storage.tokensExist = true;
+        // Header: {"alg":"HS256","typ":"JWT"}, Payload: {"sub":"jwt_user_42"}
+        storage.accessToken =
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJqd3RfdXNlcl80MiJ9.signature';
+        await prefs.setCachedUserRaw(
+          jsonEncode(
+            const User(
+              id: '',
+              name: 'Legacy Clark',
+              email: 'legacy@example.com',
+            ).toJson(),
           ),
-        ),
-      );
-      expect(User.fromJson(jsonDecode(prefs.getCachedUserRaw()!)).id, 'jwt_user_42');
-    });
+        );
+        repository.shouldThrow = true;
+
+        await cubit.checkAuthStatus();
+
+        expect(
+          cubit.state,
+          const AppAuthState.authenticated(
+            User(
+              id: 'jwt_user_42',
+              name: 'Legacy Clark',
+              email: 'legacy@example.com',
+            ),
+          ),
+        );
+        expect(
+          User.fromJson(jsonDecode(prefs.getCachedUserRaw()!)).id,
+          'jwt_user_42',
+        );
+      },
+    );
 
     test(
       'checkAuthStatus migrates and caches user when tokens exist but cache is empty',
@@ -161,7 +181,10 @@ void main() {
             User(name: 'Clark', email: 'clark@example.com'),
           ),
         );
-        expect(User.fromJson(jsonDecode(prefs.getCachedUserRaw()!)), repository.currentUser);
+        expect(
+          User.fromJson(jsonDecode(prefs.getCachedUserRaw()!)),
+          repository.currentUser,
+        );
       },
     );
 
@@ -179,11 +202,18 @@ void main() {
           User(name: 'Updated Clark', email: 'updated@example.com'),
         ),
       );
-      expect(User.fromJson(jsonDecode(prefs.getCachedUserRaw()!)), repository.currentUser);
+      expect(
+        User.fromJson(jsonDecode(prefs.getCachedUserRaw()!)),
+        repository.currentUser,
+      );
     });
 
     test('logout emits unauthenticated and clears cache', () async {
-      await prefs.setCachedUserRaw(jsonEncode(const User(name: 'Clark', email: 'clark@example.com').toJson()));
+      await prefs.setCachedUserRaw(
+        jsonEncode(
+          const User(name: 'Clark', email: 'clark@example.com').toJson(),
+        ),
+      );
       await cubit.logout();
       expect(cubit.state, const AppAuthState.unauthenticated());
       expect(prefs.getCachedUserRaw(), isNull);
