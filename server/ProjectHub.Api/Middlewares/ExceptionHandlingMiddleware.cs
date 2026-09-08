@@ -31,6 +31,10 @@ namespace ProjectHub.Api.Middleware
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
+            var traceId = context.TraceIdentifier;
+
+
+
             context.Response.ContentType = "application/json";
             var statusCode = exception switch
             {
@@ -41,20 +45,25 @@ namespace ProjectHub.Api.Middleware
                 _ => StatusCodes.Status500InternalServerError
             };
 
-            context.Response.StatusCode =  statusCode;
+            context.Response.StatusCode = statusCode;
+            if (statusCode == StatusCodes.Status500InternalServerError)
+            {
+                _logger.LogError(exception, "Unhandled exception occurred. TraceId: {TraceId}", traceId);
+            }
             var response = new ApiErrorResponse
             {
-                StatusCode =  context.Response.StatusCode,
+                StatusCode = context.Response.StatusCode,
                 Message = statusCode switch
                 {
                     StatusCodes.Status404NotFound => "Resource not found.",
                     StatusCodes.Status400BadRequest => "Request is invalid.",
                     StatusCodes.Status401Unauthorized => "Unauthorized access to preform this action",
                     StatusCodes.Status403Forbidden => "You do not have permission to access this resource.",
-                    
+
                     _ => "An unexpected error occurred."
                 },
-                Details = _env.IsDevelopment() ? exception.Message : null
+                Details = _env.IsDevelopment() ? exception.Message : null,
+                TraceId = traceId
             };
             var json = JsonSerializer.Serialize(response);
             await context.Response.WriteAsync(json);

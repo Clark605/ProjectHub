@@ -16,18 +16,19 @@ using ProjectHub.Api.Middleware;
 using FluentValidation.AspNetCore;
 using ProjectHub.Api.DTOs.WorkSpaceDtos;
 
-// Configure Serilog
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .WriteTo.File("logs/projecthub-.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add Serilog to the host
-builder.Host.UseSerilog();
-
+// Configure non-blocking async logging from appsettings
+builder.Host.UseSerilog((context, services, configuration) => configuration
+    .ReadFrom.Configuration(context.Configuration)
+    .Enrich.FromLogContext()
+    .WriteTo.Async(a => a.File(
+        path: "logs/projecthub-.txt",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 14,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] ({TraceId}) {Message:lj}{NewLine}{Exception}"
+    ))
+);
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -161,7 +162,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.UseSerilogRequestLogging();
+//app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
