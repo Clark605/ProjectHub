@@ -72,9 +72,11 @@ class _AmbientGlowBackgroundState extends State<AmbientGlowBackground>
         : theme.colorScheme.primary;
     final effectiveSecondary =
         widget.secondaryGlowColor != AppColors.electricVioletContainer
-            ? widget.secondaryGlowColor
-            : theme.colorScheme.secondary;
-    final effectiveOpacity = isDark ? widget.glowOpacity : widget.glowOpacity * 0.25;
+        ? widget.secondaryGlowColor
+        : theme.colorScheme.secondary;
+    final effectiveOpacity = isDark
+        ? widget.glowOpacity
+        : widget.glowOpacity * 0.25;
 
     return LayoutBuilder(
       builder: (context, constraints) {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -51,9 +50,13 @@ class WorkspaceCard extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isActive ? theme.colorScheme.primary : Colors.transparent,
+                  color: isActive
+                      ? theme.colorScheme.primary
+                      : Colors.transparent,
                   border: Border.all(
-                    color: isActive ? theme.colorScheme.primary : theme.colorScheme.outlineVariant,
+                    color: isActive
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.outlineVariant,
                     width: 1.5,
                   ),
                 ),
@@ -103,20 +106,22 @@ class WorkspaceCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: isOwner
-                      ? AppColors.primary.withValues(alpha: 0.15)
-                      : AppColors.secondary.withValues(alpha: 0.15),
+                      ? theme.colorScheme.primary.withValues(alpha: 0.15)
+                      : theme.colorScheme.secondary.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
                     color: isOwner
-                        ? AppColors.primary.withValues(alpha: 0.3)
-                        : AppColors.secondary.withValues(alpha: 0.3),
+                        ? theme.colorScheme.primary.withValues(alpha: 0.3)
+                        : theme.colorScheme.secondary.withValues(alpha: 0.3),
                     width: 0.8,
                   ),
                 ),
                 child: Text(
                   isOwner ? l10n.roleOwner : l10n.roleMember,
                   style: TextStyle(
-                    color: isOwner ? AppColors.primary : AppColors.secondary,
+                    color: isOwner
+                        ? theme.colorScheme.primary
+                        : theme.colorScheme.secondary,
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.3,

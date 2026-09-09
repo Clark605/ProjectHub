@@ -102,6 +102,7 @@ class AppPalette {
       onSecondaryContainer: t.onSecondary,
       surface: t.surface,
       onSurface: t.textPrimary,
+      onSurfaceVariant: t.textSecondary,
       surfaceContainerLowest: isDark ? const Color(0xFF0D0D15) : Colors.white,
       surfaceContainerLow: t.surface,
       surfaceContainer: t.surfaceContainer,
@@ -145,6 +146,28 @@ class AppPalette {
         color: t.borderVariant,
         thickness: 1,
         space: 1,
+      ),
+      drawerTheme: DrawerThemeData(
+        backgroundColor: t.surface,
+        elevation: 0,
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: t.surface,
+        selectedItemColor: t.primary,
+        unselectedItemColor: t.textSecondary,
+      ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: t.surface,
+        surfaceTintColor: Colors.transparent,
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: t.surface,
+        surfaceTintColor: Colors.transparent,
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: t.surfaceContainer,
+        side: BorderSide(color: t.borderVariant),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }

@@ -34,10 +34,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
               : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: isSelected
-              ? Border.all(
-                  color: primaryColor.withValues(alpha: 0.4),
-                  width: 1,
-                )
+              ? Border.all(color: primaryColor.withValues(alpha: 0.4), width: 1)
               : null,
         ),
         child: Row(
@@ -66,9 +63,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: (badgeColor ?? primaryColor).withValues(
-                    alpha: 0.15,
-                  ),
+                  color: (badgeColor ?? primaryColor).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(

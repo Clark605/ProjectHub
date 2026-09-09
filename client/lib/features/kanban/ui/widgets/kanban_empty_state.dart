@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/widgets/app_button.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanEmptyState extends StatelessWidget {
   final bool isArchived;
@@ -16,6 +18,7 @@ class KanbanEmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
 
     return Center(
       child: Container(
@@ -23,11 +26,10 @@ class KanbanEmptyState extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 400),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         decoration: BoxDecoration(
-          color: (isDark ? AppColors.surfaceContainer : Colors.white)
-              .withValues(alpha: 0.9),
+          color: theme.colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isDark ? AppColors.border : AppColors.lightBorder,
+            color: theme.colorScheme.outlineVariant,
           ),
           boxShadow: [
             BoxShadow(
@@ -58,7 +60,9 @@ class KanbanEmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 18),
             Text(
-              isArchived ? 'No Tasks' : 'Board is Empty',
+              isArchived
+                  ? (l10n?.noTasksArchived ?? 'No Tasks')
+                  : (l10n?.boardIsEmpty ?? 'Board is Empty'),
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -66,32 +70,22 @@ class KanbanEmptyState extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               isArchived
-                  ? 'This project is archived and has no tasks recorded.'
-                  : 'Start organizing your workflow by creating the first task for this project.',
+                  ? (l10n?.noTasksArchivedSubtitle ??
+                      'This project is archived and has no tasks recorded.')
+                  : (l10n?.boardIsEmptySubtitle ??
+                      'Start organizing your workflow by creating the first task for this project.'),
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: isDark
-                    ? AppColors.textSecondary
-                    : AppColors.lightTextSecondary,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
               textAlign: TextAlign.center,
             ),
             if (!isArchived && onCreateTask != null) ...[
               const SizedBox(height: 22),
-              ElevatedButton.icon(
+              AppButton(
+                label: l10n?.createFirstTask ?? 'Create First Task',
+                icon: Icons.add_rounded,
+                variant: AppButtonVariant.primary,
                 onPressed: onCreateTask,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.electricViolet,
-                  foregroundColor: Colors.white,
-                  minimumSize: const Size.fromHeight(48),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                icon: const Icon(Icons.add_rounded, size: 20),
-                label: const Text(
-                  'Create First Task',
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
               ),
             ],
           ],

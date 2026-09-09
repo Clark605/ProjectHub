@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -42,9 +42,9 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
 
     return Container(
       padding: EdgeInsets.fromLTRB(24, 16, 24, 24 + bottomInset),
-      decoration: const BoxDecoration(
-        color: AppColors.surfaceContainer,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: BlocConsumer<WorkspaceSettingsCubit, WorkspaceSettingsState>(
         listener: (context, state) {
@@ -69,7 +69,7 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
                     width: 36,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.textSecondary.withValues(alpha: 0.3),
+                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -85,7 +85,7 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
                 Text(
                   l10n.inviteMemberSubtitle,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: AppColors.textSecondary,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -112,30 +112,19 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
                   },
                 ),
                 const SizedBox(height: 28),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: isInviting
-                        ? null
-                        : () {
-                            if (_formKey.currentState?.validate() ?? false) {
-                              context
-                                  .read<WorkspaceSettingsCubit>()
-                                  .inviteMember(_emailController.text.trim());
-                            }
-                          },
-                    child: isInviting
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : Text(l10n.addMember),
-                  ),
+                AppButton(
+                  label: l10n.addMember,
+                  isLoading: isInviting,
+                  variant: AppButtonVariant.primary,
+                  onPressed: isInviting
+                      ? null
+                      : () {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            context
+                                .read<WorkspaceSettingsCubit>()
+                                .inviteMember(_emailController.text.trim());
+                          }
+                        },
                 ),
               ],
             ),

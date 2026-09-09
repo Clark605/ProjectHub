@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class ShellPresenceIndicator extends StatelessWidget {
   const ShellPresenceIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: theme.colorScheme.surfaceContainerLow,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -33,10 +39,10 @@ class ShellPresenceIndicator extends StatelessWidget {
                 duration: 1200.ms,
               ),
           const SizedBox(width: 8),
-          const Text(
-            '3 Online',
+          Text(
+            l10n?.onlineCount(3) ?? '3 Online',
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: theme.colorScheme.onSurfaceVariant,
               fontSize: 11,
               fontWeight: FontWeight.w600,
             ),

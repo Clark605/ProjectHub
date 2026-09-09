@@ -56,10 +56,14 @@ class PaletteCarousel extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final palette = AppPalette.values[index];
                       final isSelected = palette.id == state.palette.id;
-                      final tokens = palette.tokens(isDark ? Brightness.dark : Brightness.light);
+                      final tokens = palette.tokens(
+                        isDark ? Brightness.dark : Brightness.light,
+                      );
 
                       return InkWell(
-                        onTap: () => context.read<AppSettingsCubit>().setPalette(palette),
+                        onTap: () => context
+                            .read<AppSettingsCubit>()
+                            .setPalette(palette),
                         borderRadius: BorderRadius.circular(14),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
@@ -77,7 +81,9 @@ class PaletteCarousel extends StatelessWidget {
                             boxShadow: isSelected
                                 ? [
                                     BoxShadow(
-                                      color: tokens.primary.withValues(alpha: 0.25),
+                                      color: tokens.primary.withValues(
+                                        alpha: 0.25,
+                                      ),
                                       blurRadius: 10,
                                       spreadRadius: 1,
                                     ),
@@ -89,7 +95,8 @@ class PaletteCarousel extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [

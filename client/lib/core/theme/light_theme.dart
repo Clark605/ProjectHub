@@ -129,5 +129,9 @@ ThemeData buildLightTheme() {
         ),
       ),
     ),
+    drawerTheme: const DrawerThemeData(
+      backgroundColor: AppColors.lightSurface,
+      elevation: 0,
+    ),
   );
 }

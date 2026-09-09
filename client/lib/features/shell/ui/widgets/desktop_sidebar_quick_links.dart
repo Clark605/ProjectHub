@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/project_status.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class DesktopSidebarProjectQuickLink extends StatelessWidget {
   final String title;
@@ -34,8 +34,8 @@ class DesktopSidebarProjectQuickLink extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(
-                  color: AppColors.textSecondary,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -65,6 +65,7 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final activeProjects = projects
         .where((p) => p.statusEnum == ProjectStatus.active)
         .toList();
@@ -79,9 +80,9 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
-            'ACTIVE PROJECTS',
+            l10n?.activeProjectsSection ?? 'ACTIVE PROJECTS',
             style: theme.textTheme.labelSmall?.copyWith(
-              color: AppColors.textTertiary,
+              color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.bold,
               letterSpacing: 0.8,
               fontSize: 10,
@@ -102,9 +103,9 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Text(
-              'No projects yet',
+              l10n?.noProjectsYet ?? 'No projects yet',
               style: theme.textTheme.bodySmall?.copyWith(
-                color: AppColors.textTertiary,
+                color: theme.colorScheme.onSurfaceVariant,
                 fontSize: 11,
               ),
             ),

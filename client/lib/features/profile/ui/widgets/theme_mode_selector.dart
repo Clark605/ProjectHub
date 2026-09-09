@@ -66,9 +66,9 @@ class ThemeModeSelector extends StatelessWidget {
                   selected: {state.themeMode},
                   onSelectionChanged: (newSelection) {
                     if (newSelection.isNotEmpty) {
-                      context
-                          .read<AppSettingsCubit>()
-                          .setThemeMode(newSelection.first);
+                      context.read<AppSettingsCubit>().setThemeMode(
+                        newSelection.first,
+                      );
                     }
                   },
                 ),

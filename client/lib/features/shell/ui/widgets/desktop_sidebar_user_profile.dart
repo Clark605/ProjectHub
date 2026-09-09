@@ -7,6 +7,7 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/core/widgets/app_avatar.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class DesktopSidebarUserProfile extends StatelessWidget {
   const DesktopSidebarUserProfile({super.key});
@@ -26,11 +27,12 @@ class DesktopSidebarUserProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Divider(color: AppColors.border, height: 1),
+        Divider(color: theme.colorScheme.outlineVariant, height: 1),
         BlocProvider.value(
           value: getIt<AppAuthCubit>(),
           child: BlocBuilder<AppAuthCubit, AppAuthState>(
@@ -44,9 +46,11 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                     AppAvatar(
                       name: user?.name ?? 'U',
                       size: 32,
-                      backgroundColor: AppColors.primary.withValues(alpha: 0.2),
-                      textStyle: const TextStyle(
-                        color: AppColors.primary,
+                      backgroundColor: theme.colorScheme.primary.withValues(
+                        alpha: 0.2,
+                      ),
+                      textStyle: TextStyle(
+                        color: theme.colorScheme.primary,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
@@ -60,6 +64,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                             user?.name ?? 'ProjectHub User',
                             style: theme.textTheme.bodySmall?.copyWith(
                               fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onSurface,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -67,7 +72,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                           Text(
                             user?.email ?? '',
                             style: theme.textTheme.labelSmall?.copyWith(
-                              color: AppColors.textSecondary,
+                              color: theme.colorScheme.onSurfaceVariant,
                               fontSize: 10,
                             ),
                             maxLines: 1,
@@ -82,7 +87,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                         size: 18,
                         color: AppColors.priorityHigh,
                       ),
-                      tooltip: 'Logout',
+                      tooltip: l10n?.logOut ?? 'Logout',
                       onPressed: () => _onLogout(context),
                     ),
                   ],

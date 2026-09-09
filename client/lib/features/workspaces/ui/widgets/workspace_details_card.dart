@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -59,9 +59,9 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainer,
+            color: theme.colorScheme.surfaceContainerLow,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
+            border: Border.all(color: theme.colorScheme.outlineVariant),
           ),
           child: Form(
             key: _formKey,
@@ -109,7 +109,12 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                 const SizedBox(height: 20),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: ElevatedButton.icon(
+                  child: AppButton(
+                    label: l10n.saveDetails,
+                    icon: Icons.check_rounded,
+                    isLoading: state.isSaving,
+                    isExpanded: false,
+                    variant: AppButtonVariant.primary,
                     onPressed: state.isSaving
                         ? null
                         : () {
@@ -122,17 +127,6 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                                   );
                             }
                           },
-                    icon: state.isSaving
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Icon(Icons.check_rounded, size: 18),
-                    label: Text(l10n.saveDetails),
                   ),
                 ),
               ],

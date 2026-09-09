@@ -103,12 +103,14 @@ class _RailItem extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             color: isSelected
-                ? AppColors.primary.withValues(alpha: 0.15)
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.15)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
             border: isSelected
                 ? Border.all(
-                    color: AppColors.primary.withValues(alpha: 0.4),
+                    color: Theme.of(context).colorScheme.primary.withValues(
+                          alpha: 0.4,
+                        ),
                     width: 1.5,
                   )
                 : null,
@@ -117,7 +119,7 @@ class _RailItem extends StatelessWidget {
             icon,
             size: 22,
             color: isSelected
-                ? AppColors.primary
+                ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),

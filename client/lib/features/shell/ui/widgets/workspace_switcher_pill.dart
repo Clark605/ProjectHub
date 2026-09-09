@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class WorkspaceSwitcherPill extends StatelessWidget {
@@ -33,9 +32,11 @@ class WorkspaceSwitcherPill extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: AppColors.surfaceContainerHigh.withValues(alpha: 0.6),
+          color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.6),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.border.withValues(alpha: 0.8)),
+          border: Border.all(
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.8),
+          ),
         ),
         child: isLoading
             ? const Skeletonizer(
@@ -58,16 +59,16 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                     Container(
                       width: 8,
                       height: 8,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.primary,
+                        color: theme.colorScheme.primary,
                       ),
                     )
                   else
-                    const Icon(
+                    Icon(
                       Icons.add_rounded,
                       size: 16,
-                      color: AppColors.primary,
+                      color: theme.colorScheme.primary,
                     ),
                   const SizedBox(width: 8),
                   Flexible(
@@ -90,13 +91,13 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.15),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         activeWorkspaceRole!,
-                        style: const TextStyle(
-                          color: AppColors.primary,
+                        style: TextStyle(
+                          color: theme.colorScheme.primary,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),
@@ -109,7 +110,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                         ? Icons.keyboard_arrow_down_rounded
                         : Icons.arrow_forward_ios_rounded,
                     size: hasWorkspace ? 18 : 12,
-                    color: AppColors.textSecondary,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ],
               ),

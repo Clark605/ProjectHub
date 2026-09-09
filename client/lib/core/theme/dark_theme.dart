@@ -123,5 +123,9 @@ ThemeData buildDarkTheme() {
         ),
       ),
     ),
+    drawerTheme: const DrawerThemeData(
+      backgroundColor: AppColors.surface,
+      elevation: 0,
+    ),
   );
 }
