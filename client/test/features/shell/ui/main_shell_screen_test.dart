@@ -9,7 +9,7 @@ import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
 import 'package:client/features/auth/data/models/user.dart';
-import 'package:client/features/projects/ui/projects_screen.dart';
+import 'package:client/features/dashboard/ui/dashboard_screen.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/update_project_request.dart';
@@ -242,13 +242,17 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
 
     await tester.pumpWidget(
-      const MaterialApp(home: MainShellScreen(initialIndex: 0)),
+      const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: MainShellScreen(initialIndex: 0),
+      ),
     );
     await tester.pump(const Duration(milliseconds: 100));
 
-    // Verify DesktopSidebar & ProjectsScreen render
+    // Verify DesktopSidebar & DashboardScreen render
     expect(find.byType(Sidebar), findsOneWidget);
-    expect(find.byType(ProjectsScreen), findsOneWidget);
+    expect(find.byType(DashboardScreen), findsOneWidget);
   });
 
   testWidgets('MainShellScreen renders Mobile layout with MobileBottomNav', (
@@ -260,13 +264,17 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
 
     await tester.pumpWidget(
-      const MaterialApp(home: MainShellScreen(initialIndex: 0)),
+      const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: MainShellScreen(initialIndex: 0),
+      ),
     );
     await tester.pump(const Duration(milliseconds: 100));
 
-    // Verify MobileBottomNav & ProjectsScreen render
+    // Verify MobileBottomNav & DashboardScreen render
     expect(find.byType(MobileBottomNav), findsOneWidget);
-    expect(find.byType(ProjectsScreen), findsOneWidget);
+    expect(find.byType(DashboardScreen), findsOneWidget);
   });
 
   testWidgets('MainShellScreen switches to My Tasks tab on selection', (
@@ -277,11 +285,15 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
 
     await tester.pumpWidget(
-      const MaterialApp(home: MainShellScreen(initialIndex: 0)),
+      const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: MainShellScreen(initialIndex: 0),
+      ),
     );
     await tester.pump(const Duration(milliseconds: 100));
 
-    expect(find.byType(ProjectsScreen), findsOneWidget);
+    expect(find.byType(DashboardScreen), findsOneWidget);
 
     // Tap My Tasks tab in sidebar
     await tester.tap(find.text('My Tasks').first);

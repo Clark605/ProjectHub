@@ -5,6 +5,7 @@ import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
+import 'package:client/features/dashboard/ui/dashboard_screen.dart';
 import 'package:client/features/profile/ui/profile_screen.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/data/project_repository.dart';
@@ -80,7 +81,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
     if (_scaffoldKey.currentState?.isDrawerOpen == true) {
       Navigator.of(context).pop();
     }
-    setState(() => _selectedIndex = 0);
+    setState(() => _selectedIndex = 1);
     Navigator.of(
       context,
     ).pushNamed(RouteNames.projectDetail, arguments: projectId);
@@ -106,6 +107,10 @@ class _MainShellScreenState extends State<MainShellScreen> {
     return IndexedStack(
       index: _selectedIndex,
       children: [
+        DashboardScreen(
+          onNavigateToProjects: () => setState(() => _selectedIndex = 1),
+          onNavigateToMyTasks: () => setState(() => _selectedIndex = 2),
+        ),
         ProjectsScreen(cubit: _projectsListCubit),
         const MyTasksScreen(),
         const ProfileScreen(),
