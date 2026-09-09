@@ -30,6 +30,12 @@ public class ActivityLogger : IActivityLogger
     {
         try
         {
+            string? serializedMetadata = metadata != null ? JsonSerializer.Serialize(metadata) : null;
+            if (serializedMetadata != null && serializedMetadata.Length > 4000)
+            {
+                serializedMetadata = serializedMetadata[..4000];
+            }
+
             var activity = new ActivityEvent
             {
                 WorkspaceId = workspaceId,
@@ -38,7 +44,7 @@ public class ActivityLogger : IActivityLogger
                 EventType = eventType,
                 ProjectId = projectId,
                 TaskId = taskId,
-                Metadata = metadata != null ? JsonSerializer.Serialize(metadata) : null,
+                Metadata = serializedMetadata,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -55,6 +61,7 @@ public class ActivityLogger : IActivityLogger
     {
         var clampedLimit = Math.Clamp(limit, 1, 100);
         return await _context.ActivityEvents
+            .AsNoTracking()
             .Where(a => a.WorkspaceId == workspaceId)
             .OrderByDescending(a => a.CreatedAt)
             .Take(clampedLimit)
@@ -77,6 +84,7 @@ public class ActivityLogger : IActivityLogger
     {
         var clampedLimit = Math.Clamp(limit, 1, 100);
         return await _context.ActivityEvents
+            .AsNoTracking()
             .Where(a => a.ProjectId == projectId)
             .OrderByDescending(a => a.CreatedAt)
             .Take(clampedLimit)

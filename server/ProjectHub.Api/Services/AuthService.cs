@@ -263,16 +263,43 @@ public class AuthService : IAuthService
                 return null;
             }
 
-            try
+            if (_environment.IsDevelopment() && (dto.IdToken.StartsWith("dev_token:") || dto.IdToken == "mock_google_id_token"))
             {
-                var payload = await GoogleJsonWebSignature.ValidateAsync(dto.IdToken);
-                verifiedEmail = payload?.Email;
-                verifiedName = payload?.Name ?? verifiedEmail;
+                if (dto.IdToken == "mock_google_id_token")
+                {
+                    verifiedEmail = "google.user@example.com";
+                    verifiedName = "Google Test User";
+                }
+                else
+                {
+                    var parts = dto.IdToken.Split(':');
+                    verifiedEmail = parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]) ? parts[1] : "dev.user@example.com";
+                    verifiedName = parts.Length > 2 && !string.IsNullOrWhiteSpace(parts[2]) ? parts[2] : "Dev User";
+                }
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogWarning(ex, "Google token validation failed");
-                return null;
+                try
+                {
+                    var googleClientId = _configuration["Authentication:Google:ClientId"];
+                    GoogleJsonWebSignature.ValidationSettings? settings = null;
+                    if (!string.IsNullOrWhiteSpace(googleClientId))
+                    {
+                        settings = new GoogleJsonWebSignature.ValidationSettings
+                        {
+                            Audience = new[] { googleClientId }
+                        };
+                    }
+
+                    var payload = await GoogleJsonWebSignature.ValidateAsync(dto.IdToken, settings);
+                    verifiedEmail = payload?.Email;
+                    verifiedName = payload?.Name ?? verifiedEmail;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Google token validation failed");
+                    return null;
+                }
             }
         }
         else if (provider == "github")
