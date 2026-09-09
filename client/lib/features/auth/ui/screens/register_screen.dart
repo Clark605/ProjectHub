@@ -60,9 +60,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final token = await googleAuthService.signIn();
     if (token != null && context.mounted) {
       context.read<RegisterCubit>().externalLogin(
-            provider: 'Google',
-            idToken: token,
-          );
+        provider: 'Google',
+        idToken: token,
+      );
     }
   }
 
@@ -179,12 +179,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 24),
               SocialAuthSection(
-                onGooglePressed: () => _onGoogleSignIn(context),
-                onGithubPressed: () => context.read<RegisterCubit>().externalLogin(
-                      provider: 'GitHub',
-                      accessToken: 'mock_github_access_token',
-                    ),
-              )
+                    onGooglePressed: () => _onGoogleSignIn(context),
+                    onGithubPressed: () =>
+                        context.read<RegisterCubit>().externalLogin(
+                          provider: 'GitHub',
+                          accessToken: 'mock_github_access_token',
+                        ),
+                  )
                   .animate()
                   .fadeIn(duration: 400.ms, delay: 500.ms)
                   .slideY(begin: 0.1, end: 0),

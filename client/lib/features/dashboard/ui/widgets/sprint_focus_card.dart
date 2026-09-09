@@ -43,10 +43,14 @@ class SprintFocusCard extends StatelessWidget {
                       width: 36,
                       height: 36,
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                        color: theme.colorScheme.primary.withValues(
+                          alpha: 0.15,
+                        ),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.3,
+                          ),
                         ),
                       ),
                       child: Icon(
@@ -86,7 +90,9 @@ class SprintFocusCard extends StatelessWidget {
                     Icon(
                       Icons.task_alt_rounded,
                       size: 32,
-                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                      color: theme.colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.6,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -180,7 +186,9 @@ class _FocusTaskTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
-              l10n != null ? task.priorityEnum.localizedName(l10n) : task.priority,
+              l10n != null
+                  ? task.priorityEnum.localizedName(l10n)
+                  : task.priority,
               style: TextStyle(
                 color: priorityColor,
                 fontWeight: FontWeight.w700,

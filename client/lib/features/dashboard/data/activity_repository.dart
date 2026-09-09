@@ -5,8 +5,14 @@ import 'package:client/core/utils/app_logger.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 
 abstract class ActivityRepository {
-  Future<List<ActivityEventDto>> getWorkspaceActivities(int workspaceId, {int limit = 20});
-  Future<List<ActivityEventDto>> getProjectActivities(int projectId, {int limit = 50});
+  Future<List<ActivityEventDto>> getWorkspaceActivities(
+    int workspaceId, {
+    int limit = 20,
+  });
+  Future<List<ActivityEventDto>> getProjectActivities(
+    int projectId, {
+    int limit = 50,
+  });
 }
 
 @LazySingleton(as: ActivityRepository)
@@ -16,11 +22,18 @@ class ActivityRepositoryImpl implements ActivityRepository {
   ActivityRepositoryImpl(this._dio);
 
   @override
-  Future<List<ActivityEventDto>> getWorkspaceActivities(int workspaceId, {int limit = 20}) async {
+  Future<List<ActivityEventDto>> getWorkspaceActivities(
+    int workspaceId, {
+    int limit = 20,
+  }) async {
     try {
-      final response = await _dio.get(ApiConstants.workspaceActivity(workspaceId, limit: limit));
+      final response = await _dio.get(
+        ApiConstants.workspaceActivity(workspaceId, limit: limit),
+      );
       final list = response.data as List<dynamic>;
-      return list.map((e) => ActivityEventDto.fromJson(e as Map<String, dynamic>)).toList();
+      return list
+          .map((e) => ActivityEventDto.fromJson(e as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e, stackTrace) {
       AppLogger.error(
         'Failed to fetch workspace activities (workspaceId: $workspaceId, status: ${e.response?.statusCode})',
@@ -41,11 +54,18 @@ class ActivityRepositoryImpl implements ActivityRepository {
   }
 
   @override
-  Future<List<ActivityEventDto>> getProjectActivities(int projectId, {int limit = 50}) async {
+  Future<List<ActivityEventDto>> getProjectActivities(
+    int projectId, {
+    int limit = 50,
+  }) async {
     try {
-      final response = await _dio.get(ApiConstants.projectActivity(projectId, limit: limit));
+      final response = await _dio.get(
+        ApiConstants.projectActivity(projectId, limit: limit),
+      );
       final list = response.data as List<dynamic>;
-      return list.map((e) => ActivityEventDto.fromJson(e as Map<String, dynamic>)).toList();
+      return list
+          .map((e) => ActivityEventDto.fromJson(e as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e, stackTrace) {
       AppLogger.error(
         'Failed to fetch project activities (projectId: $projectId, status: ${e.response?.statusCode})',

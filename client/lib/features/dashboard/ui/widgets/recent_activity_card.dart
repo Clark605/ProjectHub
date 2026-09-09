@@ -80,7 +80,9 @@ class RecentActivityCard extends StatelessWidget {
                     Icon(
                       Icons.notifications_none_rounded,
                       size: 32,
-                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                      color: theme.colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.6,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(

@@ -26,6 +26,9 @@ class AuthInterceptor extends Interceptor {
       ApiConstants.login,
       ApiConstants.register,
       ApiConstants.refresh,
+      ApiConstants.externalLogin,
+      ApiConstants.forgotPassword,
+      ApiConstants.resetPassword,
     ];
 
     if (!publicPaths.contains(options.path)) {
@@ -51,6 +54,7 @@ class AuthInterceptor extends Interceptor {
       ApiConstants.login,
       ApiConstants.register,
       ApiConstants.refresh,
+      ApiConstants.externalLogin,
       ApiConstants.forgotPassword,
       ApiConstants.resetPassword,
     ];

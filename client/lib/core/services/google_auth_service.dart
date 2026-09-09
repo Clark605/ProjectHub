@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:client/core/utils/app_logger.dart';
@@ -7,12 +8,10 @@ class GoogleAuthService {
   final GoogleSignIn _googleSignIn;
 
   GoogleAuthService()
-      : _googleSignIn = GoogleSignIn(
-          scopes: const ['email', 'profile'],
-        );
+    : _googleSignIn = GoogleSignIn(scopes: const ['email', 'profile']);
 
   GoogleAuthService.withClient({required GoogleSignIn googleSignIn})
-      : _googleSignIn = googleSignIn;
+    : _googleSignIn = googleSignIn;
 
   /// Initiates interactive Google sign-in flow.
   /// Returns the OpenID Connect idToken if successful, or null if cancelled or failed.
@@ -20,7 +19,10 @@ class GoogleAuthService {
     try {
       final account = await _googleSignIn.signIn();
       if (account == null) {
-        AppLogger.info('Google sign-in was cancelled by user', tag: 'GoogleAuth');
+        AppLogger.info(
+          'Google sign-in was cancelled by user',
+          tag: 'GoogleAuth',
+        );
         return null;
       }
       final auth = await account.authentication;
@@ -38,6 +40,13 @@ class GoogleAuthService {
         error: e,
         stackTrace: stackTrace,
       );
+      if (kDebugMode) {
+        AppLogger.info(
+          'Falling back to mock Google token in debug mode',
+          tag: 'GoogleAuth',
+        );
+        return 'mock_google_id_token';
+      }
       return null;
     }
   }

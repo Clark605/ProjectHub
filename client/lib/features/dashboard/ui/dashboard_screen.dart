@@ -120,10 +120,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             },
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 20,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -154,8 +151,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               child: SprintFocusCard(
                                 focusTasks: state.focusTasks,
                                 isLoading: state.isLoading,
-                                onNavigateToMyTasks:
-                                    widget.onNavigateToMyTasks,
+                                onNavigateToMyTasks: widget.onNavigateToMyTasks,
                               ),
                             ),
                             const SizedBox(width: 20),
