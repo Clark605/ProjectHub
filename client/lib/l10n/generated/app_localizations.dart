@@ -967,6 +967,462 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Only workspace owner or project creator can delete this project.'**
   String get noPermissionToDeleteProject;
+
+  /// No description provided for @sprintOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Sprint Overview'**
+  String get sprintOverview;
+
+  /// No description provided for @sprintOverviewSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Live workspace metrics and sprint cadence'**
+  String get sprintOverviewSubtitle;
+
+  /// No description provided for @velocityBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Sprint Velocity'**
+  String get velocityBadge;
+
+  /// No description provided for @activeProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Projects'**
+  String get activeProjects;
+
+  /// No description provided for @inProgressTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get inProgressTasks;
+
+  /// No description provided for @urgentBlockers.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent / Blockers'**
+  String get urgentBlockers;
+
+  /// No description provided for @completedTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completedTasks;
+
+  /// No description provided for @teamStream.
+  ///
+  /// In en, this message translates to:
+  /// **'Team Presence & Stream'**
+  String get teamStream;
+
+  /// No description provided for @noRecentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent activity yet'**
+  String get noRecentActivity;
+
+  /// No description provided for @myActiveFocus.
+  ///
+  /// In en, this message translates to:
+  /// **'My Active Focus'**
+  String get myActiveFocus;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get viewAll;
+
+  /// No description provided for @allCaughtUp.
+  ///
+  /// In en, this message translates to:
+  /// **'All caught up! No active tasks assigned.'**
+  String get allCaughtUp;
+
+  /// No description provided for @activityTaskCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'created a new task'**
+  String get activityTaskCreated;
+
+  /// No description provided for @activityTaskStatusChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'updated task status'**
+  String get activityTaskStatusChanged;
+
+  /// No description provided for @activityTaskAssigned.
+  ///
+  /// In en, this message translates to:
+  /// **'assigned a task'**
+  String get activityTaskAssigned;
+
+  /// No description provided for @activityTaskDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'deleted a task'**
+  String get activityTaskDeleted;
+
+  /// No description provided for @activityProjectCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'created project'**
+  String get activityProjectCreated;
+
+  /// No description provided for @activityProjectStatusChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'updated project status'**
+  String get activityProjectStatusChanged;
+
+  /// No description provided for @activityProjectArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'archived project'**
+  String get activityProjectArchived;
+
+  /// No description provided for @activityMemberAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'joined the workspace'**
+  String get activityMemberAdded;
+
+  /// No description provided for @activityMemberRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'left the workspace'**
+  String get activityMemberRemoved;
+
+  /// No description provided for @activityWorkspaceCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'created this workspace'**
+  String get activityWorkspaceCreated;
+
+  /// No description provided for @activityWorkspaceUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'updated workspace settings'**
+  String get activityWorkspaceUpdated;
+
+  /// No description provided for @timeJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get timeJustNow;
+
+  /// No description provided for @timeMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m ago'**
+  String timeMinutesAgo(int minutes);
+
+  /// No description provided for @timeHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h ago'**
+  String timeHoursAgo(int hours);
+
+  /// No description provided for @timeDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}d ago'**
+  String timeDaysAgo(int days);
+
+  /// No description provided for @myTasksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Tasks'**
+  String get myTasksTitle;
+
+  /// No description provided for @myTasksSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal sprint backlog and assigned deliverables.'**
+  String get myTasksSubtitle;
+
+  /// No description provided for @overdueUrgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue & Urgent'**
+  String get overdueUrgent;
+
+  /// No description provided for @inProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get inProgress;
+
+  /// No description provided for @upNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Up Next'**
+  String get upNext;
+
+  /// No description provided for @recentlyDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently Done'**
+  String get recentlyDone;
+
+  /// No description provided for @noAssignedTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'No Assigned Tasks'**
+  String get noAssignedTasks;
+
+  /// No description provided for @noAssignedTasksSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no pending tasks assigned in this workspace. Take a break or check project boards!'**
+  String get noAssignedTasksSubtitle;
+
+  /// No description provided for @kanbanBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Kanban Board'**
+  String get kanbanBoard;
+
+  /// No description provided for @refreshBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Board'**
+  String get refreshBoard;
+
+  /// No description provided for @newTask.
+  ///
+  /// In en, this message translates to:
+  /// **'New Task'**
+  String get newTask;
+
+  /// No description provided for @createTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Task'**
+  String get createTask;
+
+  /// No description provided for @archivedProjectNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'This project is archived and read-only'**
+  String get archivedProjectNotice;
+
+  /// No description provided for @noTasksInColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks in this column'**
+  String get noTasksInColumn;
+
+  /// No description provided for @taskTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Title'**
+  String get taskTitle;
+
+  /// No description provided for @whatNeedsDone.
+  ///
+  /// In en, this message translates to:
+  /// **'What needs to be done?'**
+  String get whatNeedsDone;
+
+  /// No description provided for @taskDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Details'**
+  String get taskDetails;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @deleteTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Task'**
+  String get deleteTask;
+
+  /// No description provided for @moveTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Move to'**
+  String get moveTo;
+
+  /// No description provided for @profileAndSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile & Settings'**
+  String get profileAndSettings;
+
+  /// No description provided for @profileSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal settings, appearance, and active session'**
+  String get profileSubtitle;
+
+  /// No description provided for @appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get appearance;
+
+  /// No description provided for @colorPalette.
+  ///
+  /// In en, this message translates to:
+  /// **'Color Palette'**
+  String get colorPalette;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @sessionSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Session & Security'**
+  String get sessionSecurity;
+
+  /// No description provided for @logOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Log Out'**
+  String get logOut;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @bio.
+  ///
+  /// In en, this message translates to:
+  /// **'Bio'**
+  String get bio;
+
+  /// No description provided for @tabDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get tabDashboard;
+
+  /// No description provided for @tabProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get tabProjects;
+
+  /// No description provided for @tabMyTasks.
+  ///
+  /// In en, this message translates to:
+  /// **'My Tasks'**
+  String get tabMyTasks;
+
+  /// No description provided for @tabProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get tabProfile;
+
+  /// No description provided for @statusBacklog.
+  ///
+  /// In en, this message translates to:
+  /// **'Backlog'**
+  String get statusBacklog;
+
+  /// No description provided for @statusTodo.
+  ///
+  /// In en, this message translates to:
+  /// **'To Do'**
+  String get statusTodo;
+
+  /// No description provided for @statusInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get statusInProgress;
+
+  /// No description provided for @statusReview.
+  ///
+  /// In en, this message translates to:
+  /// **'In Review'**
+  String get statusReview;
+
+  /// No description provided for @statusDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get statusDone;
+
+  /// No description provided for @priorityLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get priorityLow;
+
+  /// No description provided for @priorityMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get priorityMedium;
+
+  /// No description provided for @priorityHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get priorityHigh;
+
+  /// No description provided for @priorityUrgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent'**
+  String get priorityUrgent;
+
+  /// No description provided for @appearanceSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose whether to follow device settings or lock to dark or light mode.'**
+  String get appearanceSubtitle;
+
+  /// No description provided for @colorPaletteSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a curated palette to dynamically re-theme buttons, surfaces, and ambient glow.'**
+  String get colorPaletteSubtitle;
+
+  /// No description provided for @languageSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch the application language and reading layout (LTR / RTL).'**
+  String get languageSubtitle;
+
+  /// No description provided for @logoutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to log out of your session on this device?'**
+  String get logoutConfirmation;
+
+  /// No description provided for @themeModeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get themeModeSystem;
+
+  /// No description provided for @themeModeDark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get themeModeDark;
+
+  /// No description provided for @themeModeLight.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get themeModeLight;
 }
 
 class _AppLocalizationsDelegate

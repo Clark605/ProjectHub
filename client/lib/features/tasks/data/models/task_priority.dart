@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 enum TaskPriority {
   low,
@@ -33,6 +34,19 @@ enum TaskPriority {
         return 'High';
       case TaskPriority.urgent:
         return 'Urgent';
+    }
+  }
+
+  String localizedName(AppLocalizations l10n) {
+    switch (this) {
+      case TaskPriority.low:
+        return l10n.priorityLow;
+      case TaskPriority.medium:
+        return l10n.priorityMedium;
+      case TaskPriority.high:
+        return l10n.priorityHigh;
+      case TaskPriority.urgent:
+        return l10n.priorityUrgent;
     }
   }
 

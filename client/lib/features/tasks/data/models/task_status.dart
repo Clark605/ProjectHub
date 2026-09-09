@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 enum TaskStatus {
   backlog,
@@ -43,6 +44,21 @@ enum TaskStatus {
         return 'Review';
       case TaskStatus.done:
         return 'Done';
+    }
+  }
+
+  String localizedName(AppLocalizations l10n) {
+    switch (this) {
+      case TaskStatus.backlog:
+        return l10n.statusBacklog;
+      case TaskStatus.todo:
+        return l10n.statusTodo;
+      case TaskStatus.inProgress:
+        return l10n.statusInProgress;
+      case TaskStatus.review:
+        return l10n.statusReview;
+      case TaskStatus.done:
+        return l10n.statusDone;
     }
   }
 

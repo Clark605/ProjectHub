@@ -17,6 +17,7 @@ import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class MyTasksScreen extends StatefulWidget {
   final MyTasksCubit? cubit;
@@ -124,6 +125,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
 
     final wsCubit = getIt.isRegistered<WorkspaceContextCubit>()
         ? getIt<WorkspaceContextCubit>()
@@ -171,7 +173,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'My Tasks',
+                              l10n?.myTasksTitle ?? 'My Tasks',
                               style: theme.textTheme.headlineMedium?.copyWith(
                                 fontWeight: FontWeight.w700,
                                 letterSpacing: -0.5,
@@ -179,7 +181,8 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Personal sprint backlog and assigned deliverables.',
+                              l10n?.myTasksSubtitle ??
+                                  'Personal sprint backlog and assigned deliverables.',
                               style: theme.textTheme.bodyMedium?.copyWith(
                                 color: isDark
                                     ? AppColors.textSecondary
@@ -226,6 +229,8 @@ class _MyTasksScreenState extends State<MyTasksScreen>
   }
 
   List<Widget> _buildContentSlivers(BuildContext context, MyTasksState state) {
+    final l10n = AppLocalizations.of(context);
+
     return state.when(
       initial: () => [
         const SliverFillRemaining(
@@ -267,7 +272,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                       }
                     },
                     icon: const Icon(Icons.refresh_rounded),
-                    label: const Text('Retry'),
+                    label: Text(l10n?.retry ?? 'Retry'),
                   ),
                 ],
               ),
@@ -296,7 +301,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                 if (urgent.isNotEmpty)
                   MyTasksSection(
                     emoji: '🚨',
-                    title: 'Overdue & Urgent',
+                    title: l10n?.overdueUrgent ?? 'Overdue & Urgent',
                     tasks: urgent,
                     onTaskTap: _openTaskDetail,
                     onTaskStatusTap: _openMoveTask,
@@ -306,7 +311,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                 if (inProgress.isNotEmpty)
                   MyTasksSection(
                     emoji: '⚡',
-                    title: 'In Progress',
+                    title: l10n?.inProgress ?? 'In Progress',
                     tasks: inProgress,
                     onTaskTap: _openTaskDetail,
                     onTaskStatusTap: _openMoveTask,
@@ -316,7 +321,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                 if (todo.isNotEmpty)
                   MyTasksSection(
                     emoji: '📋',
-                    title: 'Up Next',
+                    title: l10n?.upNext ?? 'Up Next',
                     tasks: todo,
                     onTaskTap: _openTaskDetail,
                     onTaskStatusTap: _openMoveTask,
@@ -325,7 +330,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                 // Recently Done (Collapsible)
                 MyTasksSection(
                   emoji: '✅',
-                  title: 'Recently Done',
+                  title: l10n?.recentlyDone ?? 'Recently Done',
                   tasks: done,
                   isCollapsible: true,
                   isCollapsed: !showDone,
@@ -346,6 +351,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
   Widget _buildEmptyView(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
 
     return Center(
       child: Container(
@@ -353,11 +359,13 @@ class _MyTasksScreenState extends State<MyTasksScreen>
         margin: const EdgeInsets.all(24),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         decoration: BoxDecoration(
-          color: (isDark ? AppColors.surfaceContainerLow : Colors.white)
+          color: (isDark
+                  ? theme.colorScheme.surfaceContainerLow
+                  : theme.colorScheme.surface)
               .withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isDark ? AppColors.border : AppColors.lightBorder,
+            color: theme.colorScheme.outlineVariant,
           ),
         ),
         child: Column(
@@ -381,14 +389,15 @@ class _MyTasksScreenState extends State<MyTasksScreen>
             ),
             const SizedBox(height: 20),
             Text(
-              'No Assigned Tasks',
+              l10n?.noAssignedTasks ?? 'No Assigned Tasks',
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              'You have no pending tasks assigned in this workspace. Take a break or check project boards!',
+              l10n?.noAssignedTasksSubtitle ??
+                  'You have no pending tasks assigned in this workspace. Take a break or check project boards!',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: isDark
                     ? AppColors.textSecondary

@@ -1,7 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/cubit/app_settings_state.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class LanguageSelectorTile extends StatelessWidget {
   const LanguageSelectorTile({super.key});
@@ -9,6 +10,7 @@ class LanguageSelectorTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return BlocBuilder<AppSettingsCubit, AppSettingsState>(
       builder: (context, state) {
@@ -29,7 +31,7 @@ class LanguageSelectorTile extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      'Language',
+                      l10n?.language ?? 'Language',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
@@ -38,7 +40,8 @@ class LanguageSelectorTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Switch the application language and reading layout (LTR / RTL).',
+                  l10n?.languageSubtitle ??
+                      'Switch the application language and reading layout (LTR / RTL).',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                   ),

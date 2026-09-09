@@ -466,4 +466,244 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get noPermissionToDeleteProject =>
       'يحق لمالك مساحة العمل أو منشئ المشروع فقط حذف هذا المشروع.';
+
+  @override
+  String get sprintOverview => 'نظرة عامة على السبرنت';
+
+  @override
+  String get sprintOverviewSubtitle =>
+      'مؤشرات مساحة العمل وسير السبرنت المباشر';
+
+  @override
+  String get velocityBadge => 'سرعة السبرنت';
+
+  @override
+  String get activeProjects => 'المشاريع النشطة';
+
+  @override
+  String get inProgressTasks => 'مهام قيد التنفيذ';
+
+  @override
+  String get urgentBlockers => 'مهام عاجلة / معطلة';
+
+  @override
+  String get completedTasks => 'المهام المكتملة';
+
+  @override
+  String get teamStream => 'نشاط الفريق والحضور';
+
+  @override
+  String get noRecentActivity => 'لا يوجد نشاط أخير بعد';
+
+  @override
+  String get myActiveFocus => 'تركيزي الحالي';
+
+  @override
+  String get viewAll => 'عرض الكل';
+
+  @override
+  String get allCaughtUp => 'أنت على اطلاع تام! لا توجد مهام نشطة مسندة لك.';
+
+  @override
+  String get activityTaskCreated => 'أنشأ مهمة جديدة';
+
+  @override
+  String get activityTaskStatusChanged => 'حدّث حالة المهمة';
+
+  @override
+  String get activityTaskAssigned => 'عيّن مهمة';
+
+  @override
+  String get activityTaskDeleted => 'حذف مهمة';
+
+  @override
+  String get activityProjectCreated => 'أنشأ مشروعاً';
+
+  @override
+  String get activityProjectStatusChanged => 'حدّث حالة المشروع';
+
+  @override
+  String get activityProjectArchived => 'أرشف مشروعاً';
+
+  @override
+  String get activityMemberAdded => 'انضم إلى مساحة العمل';
+
+  @override
+  String get activityMemberRemoved => 'غادر مساحة العمل';
+
+  @override
+  String get activityWorkspaceCreated => 'أنشأ مساحة العمل هذه';
+
+  @override
+  String get activityWorkspaceUpdated => 'حدّث إعدادات مساحة العمل';
+
+  @override
+  String get timeJustNow => 'الآن';
+
+  @override
+  String timeMinutesAgo(int minutes) {
+    return 'منذ $minutes د';
+  }
+
+  @override
+  String timeHoursAgo(int hours) {
+    return 'منذ $hours س';
+  }
+
+  @override
+  String timeDaysAgo(int days) {
+    return 'منذ $days ي';
+  }
+
+  @override
+  String get myTasksTitle => 'مهامي';
+
+  @override
+  String get myTasksSubtitle => 'سجل مهام السبرنت الشخصية والمهام المسندة.';
+
+  @override
+  String get overdueUrgent => 'المتأخرة والعاجلة';
+
+  @override
+  String get inProgress => 'قيد التنفيذ';
+
+  @override
+  String get upNext => 'التالي';
+
+  @override
+  String get recentlyDone => 'المكتملة حديثاً';
+
+  @override
+  String get noAssignedTasks => 'لا توجد مهام مسندة';
+
+  @override
+  String get noAssignedTasksSubtitle =>
+      'ليس لديك أي مهام معلقة في مساحة العمل هذه. خذ قسطاً من الراحة أو تفقد لوحات المشاريع!';
+
+  @override
+  String get kanbanBoard => 'لوحة كانبان';
+
+  @override
+  String get refreshBoard => 'تحديث اللوحة';
+
+  @override
+  String get newTask => 'مهمة جديدة';
+
+  @override
+  String get createTask => 'إنشاء مهمة';
+
+  @override
+  String get archivedProjectNotice => 'هذا المشروع مؤرشف للقراءة فقط';
+
+  @override
+  String get noTasksInColumn => 'لا توجد مهام في هذه القائمة';
+
+  @override
+  String get taskTitle => 'عنوان المهمة';
+
+  @override
+  String get whatNeedsDone => 'ما الذي يجب إنجازه؟';
+
+  @override
+  String get taskDetails => 'تفاصيل المهمة';
+
+  @override
+  String get saveChanges => 'حفظ التغييرات';
+
+  @override
+  String get deleteTask => 'حذف المهمة';
+
+  @override
+  String get moveTo => 'نقل إلى';
+
+  @override
+  String get profileAndSettings => 'الملف الشخصي والإعدادات';
+
+  @override
+  String get profileSubtitle => 'الإعدادات الشخصية والمظهر والجلسات النشطة';
+
+  @override
+  String get appearance => 'المظهر';
+
+  @override
+  String get colorPalette => 'لوحة الألوان';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String get sessionSecurity => 'الجلسة والأمان';
+
+  @override
+  String get logOut => 'تسجيل الخروج';
+
+  @override
+  String get editProfile => 'تعديل الملف الشخصي';
+
+  @override
+  String get bio => 'النبذة الشخصية';
+
+  @override
+  String get tabDashboard => 'لوحة التحكم';
+
+  @override
+  String get tabProjects => 'المشاريع';
+
+  @override
+  String get tabMyTasks => 'مهامي';
+
+  @override
+  String get tabProfile => 'الملف الشخصي';
+
+  @override
+  String get statusBacklog => 'قائمة الانتظار';
+
+  @override
+  String get statusTodo => 'قيد الانتظار';
+
+  @override
+  String get statusInProgress => 'قيد التنفيذ';
+
+  @override
+  String get statusReview => 'قيد المراجعة';
+
+  @override
+  String get statusDone => 'مكتمل';
+
+  @override
+  String get priorityLow => 'منخفضة';
+
+  @override
+  String get priorityMedium => 'متوسطة';
+
+  @override
+  String get priorityHigh => 'عالية';
+
+  @override
+  String get priorityUrgent => 'عاجلة';
+
+  @override
+  String get appearanceSubtitle =>
+      'اختر اتباع إعدادات الجهاز أو التبديل للوضع الداكن أو الفاتح.';
+
+  @override
+  String get colorPaletteSubtitle =>
+      'اختر سمة لونية لتغيير سمات الأزرار والأسطح والتوهج المحيطي ديناميكيًا.';
+
+  @override
+  String get languageSubtitle =>
+      'تبديل لغة التطبيق وتنسيق القراءة (من اليمين لليسار / من اليسار لليمين).';
+
+  @override
+  String get logoutConfirmation =>
+      'هل أنت متأكد أنك تريد تسجيل الخروج من هذه الجلسة على هذا الجهاز؟';
+
+  @override
+  String get themeModeSystem => 'النظام';
+
+  @override
+  String get themeModeDark => 'داكن';
+
+  @override
+  String get themeModeLight => 'فاتح';
 }

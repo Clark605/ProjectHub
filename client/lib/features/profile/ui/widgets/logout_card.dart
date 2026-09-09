@@ -1,28 +1,34 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class LogoutCard extends StatelessWidget {
   const LogoutCard({super.key});
 
   void _onLogout(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogCtx) => AlertDialog(
-        title: const Text('Log Out'),
-        content: const Text(
-          'Are you sure you want to log out of your session on this device?',
+        title: Text(l10n?.logOut ?? 'Log Out'),
+        content: Text(
+          l10n?.logoutConfirmation ??
+              'Are you sure you want to log out of your session on this device?',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogCtx).pop(false),
-            child: const Text('Cancel'),
+            child: Text(l10n?.cancel ?? 'Cancel'),
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogCtx).pop(true),
-            child: const Text('Log Out', style: TextStyle(color: Colors.redAccent)),
+            child: Text(
+              l10n?.logOut ?? 'Log Out',
+              style: const TextStyle(color: Colors.redAccent),
+            ),
           ),
         ],
       ),
@@ -43,6 +49,8 @@ class LogoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -53,7 +61,7 @@ class LogoutCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Session Security',
+                    l10n?.sessionSecurity ?? 'Session Security',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -74,7 +82,7 @@ class LogoutCard extends StatelessWidget {
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 130),
               child: AppButton(
-                label: 'Log Out',
+                label: l10n?.logOut ?? 'Log Out',
                 icon: Icons.logout_rounded,
                 variant: AppButtonVariant.outline,
                 onPressed: () => _onLogout(context),

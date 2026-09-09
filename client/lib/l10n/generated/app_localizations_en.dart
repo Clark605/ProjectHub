@@ -469,4 +469,246 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get noPermissionToDeleteProject =>
       'Only workspace owner or project creator can delete this project.';
+
+  @override
+  String get sprintOverview => 'Sprint Overview';
+
+  @override
+  String get sprintOverviewSubtitle =>
+      'Live workspace metrics and sprint cadence';
+
+  @override
+  String get velocityBadge => 'Sprint Velocity';
+
+  @override
+  String get activeProjects => 'Active Projects';
+
+  @override
+  String get inProgressTasks => 'In Progress';
+
+  @override
+  String get urgentBlockers => 'Urgent / Blockers';
+
+  @override
+  String get completedTasks => 'Completed';
+
+  @override
+  String get teamStream => 'Team Presence & Stream';
+
+  @override
+  String get noRecentActivity => 'No recent activity yet';
+
+  @override
+  String get myActiveFocus => 'My Active Focus';
+
+  @override
+  String get viewAll => 'View All';
+
+  @override
+  String get allCaughtUp => 'All caught up! No active tasks assigned.';
+
+  @override
+  String get activityTaskCreated => 'created a new task';
+
+  @override
+  String get activityTaskStatusChanged => 'updated task status';
+
+  @override
+  String get activityTaskAssigned => 'assigned a task';
+
+  @override
+  String get activityTaskDeleted => 'deleted a task';
+
+  @override
+  String get activityProjectCreated => 'created project';
+
+  @override
+  String get activityProjectStatusChanged => 'updated project status';
+
+  @override
+  String get activityProjectArchived => 'archived project';
+
+  @override
+  String get activityMemberAdded => 'joined the workspace';
+
+  @override
+  String get activityMemberRemoved => 'left the workspace';
+
+  @override
+  String get activityWorkspaceCreated => 'created this workspace';
+
+  @override
+  String get activityWorkspaceUpdated => 'updated workspace settings';
+
+  @override
+  String get timeJustNow => 'Just now';
+
+  @override
+  String timeMinutesAgo(int minutes) {
+    return '${minutes}m ago';
+  }
+
+  @override
+  String timeHoursAgo(int hours) {
+    return '${hours}h ago';
+  }
+
+  @override
+  String timeDaysAgo(int days) {
+    return '${days}d ago';
+  }
+
+  @override
+  String get myTasksTitle => 'My Tasks';
+
+  @override
+  String get myTasksSubtitle =>
+      'Personal sprint backlog and assigned deliverables.';
+
+  @override
+  String get overdueUrgent => 'Overdue & Urgent';
+
+  @override
+  String get inProgress => 'In Progress';
+
+  @override
+  String get upNext => 'Up Next';
+
+  @override
+  String get recentlyDone => 'Recently Done';
+
+  @override
+  String get noAssignedTasks => 'No Assigned Tasks';
+
+  @override
+  String get noAssignedTasksSubtitle =>
+      'You have no pending tasks assigned in this workspace. Take a break or check project boards!';
+
+  @override
+  String get kanbanBoard => 'Kanban Board';
+
+  @override
+  String get refreshBoard => 'Refresh Board';
+
+  @override
+  String get newTask => 'New Task';
+
+  @override
+  String get createTask => 'Create Task';
+
+  @override
+  String get archivedProjectNotice => 'This project is archived and read-only';
+
+  @override
+  String get noTasksInColumn => 'No tasks in this column';
+
+  @override
+  String get taskTitle => 'Task Title';
+
+  @override
+  String get whatNeedsDone => 'What needs to be done?';
+
+  @override
+  String get taskDetails => 'Task Details';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get deleteTask => 'Delete Task';
+
+  @override
+  String get moveTo => 'Move to';
+
+  @override
+  String get profileAndSettings => 'Profile & Settings';
+
+  @override
+  String get profileSubtitle =>
+      'Personal settings, appearance, and active session';
+
+  @override
+  String get appearance => 'Appearance';
+
+  @override
+  String get colorPalette => 'Color Palette';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get sessionSecurity => 'Session & Security';
+
+  @override
+  String get logOut => 'Log Out';
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get bio => 'Bio';
+
+  @override
+  String get tabDashboard => 'Dashboard';
+
+  @override
+  String get tabProjects => 'Projects';
+
+  @override
+  String get tabMyTasks => 'My Tasks';
+
+  @override
+  String get tabProfile => 'Profile';
+
+  @override
+  String get statusBacklog => 'Backlog';
+
+  @override
+  String get statusTodo => 'To Do';
+
+  @override
+  String get statusInProgress => 'In Progress';
+
+  @override
+  String get statusReview => 'In Review';
+
+  @override
+  String get statusDone => 'Done';
+
+  @override
+  String get priorityLow => 'Low';
+
+  @override
+  String get priorityMedium => 'Medium';
+
+  @override
+  String get priorityHigh => 'High';
+
+  @override
+  String get priorityUrgent => 'Urgent';
+
+  @override
+  String get appearanceSubtitle =>
+      'Choose whether to follow device settings or lock to dark or light mode.';
+
+  @override
+  String get colorPaletteSubtitle =>
+      'Select a curated palette to dynamically re-theme buttons, surfaces, and ambient glow.';
+
+  @override
+  String get languageSubtitle =>
+      'Switch the application language and reading layout (LTR / RTL).';
+
+  @override
+  String get logoutConfirmation =>
+      'Are you sure you want to log out of your session on this device?';
+
+  @override
+  String get themeModeSystem => 'System';
+
+  @override
+  String get themeModeDark => 'Dark';
+
+  @override
+  String get themeModeLight => 'Light';
 }

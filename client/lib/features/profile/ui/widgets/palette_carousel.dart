@@ -1,8 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/cubit/app_settings_state.dart';
 import 'package:client/core/theme/app_palette.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class PaletteCarousel extends StatelessWidget {
   const PaletteCarousel({super.key});
@@ -11,6 +12,7 @@ class PaletteCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
 
     return BlocBuilder<AppSettingsCubit, AppSettingsState>(
       builder: (context, state) {
@@ -29,7 +31,7 @@ class PaletteCarousel extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      'Color Palette',
+                      l10n?.colorPalette ?? 'Color Palette',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
@@ -38,7 +40,8 @@ class PaletteCarousel extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Select a curated palette to dynamically re-theme buttons, surfaces, and ambient glow.',
+                  l10n?.colorPaletteSubtitle ??
+                      'Select a curated palette to dynamically re-theme buttons, surfaces, and ambient glow.',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                   ),

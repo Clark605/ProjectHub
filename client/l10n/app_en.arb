@@ -182,5 +182,104 @@
     }
   },
   "noPermissionToEditProject": "Only workspace owner or project creator can edit this project.",
-  "noPermissionToDeleteProject": "Only workspace owner or project creator can delete this project."
+  "noPermissionToDeleteProject": "Only workspace owner or project creator can delete this project.",
+  "sprintOverview": "Sprint Overview",
+  "sprintOverviewSubtitle": "Live workspace metrics and sprint cadence",
+  "velocityBadge": "Sprint Velocity",
+  "activeProjects": "Active Projects",
+  "inProgressTasks": "In Progress",
+  "urgentBlockers": "Urgent / Blockers",
+  "completedTasks": "Completed",
+  "teamStream": "Team Presence & Stream",
+  "noRecentActivity": "No recent activity yet",
+  "myActiveFocus": "My Active Focus",
+  "viewAll": "View All",
+  "allCaughtUp": "All caught up! No active tasks assigned.",
+  "activityTaskCreated": "created a new task",
+  "activityTaskStatusChanged": "updated task status",
+  "activityTaskAssigned": "assigned a task",
+  "activityTaskDeleted": "deleted a task",
+  "activityProjectCreated": "created project",
+  "activityProjectStatusChanged": "updated project status",
+  "activityProjectArchived": "archived project",
+  "activityMemberAdded": "joined the workspace",
+  "activityMemberRemoved": "left the workspace",
+  "activityWorkspaceCreated": "created this workspace",
+  "activityWorkspaceUpdated": "updated workspace settings",
+  "timeJustNow": "Just now",
+  "timeMinutesAgo": "{minutes}m ago",
+  "@timeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "timeHoursAgo": "{hours}h ago",
+  "@timeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "timeDaysAgo": "{days}d ago",
+  "@timeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "myTasksTitle": "My Tasks",
+  "myTasksSubtitle": "Personal sprint backlog and assigned deliverables.",
+  "overdueUrgent": "Overdue & Urgent",
+  "inProgress": "In Progress",
+  "upNext": "Up Next",
+  "recentlyDone": "Recently Done",
+  "noAssignedTasks": "No Assigned Tasks",
+  "noAssignedTasksSubtitle": "You have no pending tasks assigned in this workspace. Take a break or check project boards!",
+  "kanbanBoard": "Kanban Board",
+  "refreshBoard": "Refresh Board",
+  "newTask": "New Task",
+  "createTask": "Create Task",
+  "archivedProjectNotice": "This project is archived and read-only",
+  "noTasksInColumn": "No tasks in this column",
+  "taskTitle": "Task Title",
+  "whatNeedsDone": "What needs to be done?",
+  "taskDetails": "Task Details",
+  "saveChanges": "Save Changes",
+  "deleteTask": "Delete Task",
+  "moveTo": "Move to",
+  "profileAndSettings": "Profile & Settings",
+  "profileSubtitle": "Personal settings, appearance, and active session",
+  "appearance": "Appearance",
+  "colorPalette": "Color Palette",
+  "language": "Language",
+  "sessionSecurity": "Session & Security",
+  "logOut": "Log Out",
+  "editProfile": "Edit Profile",
+  "bio": "Bio",
+  "tabDashboard": "Dashboard",
+  "tabProjects": "Projects",
+  "tabMyTasks": "My Tasks",
+  "tabProfile": "Profile",
+  "statusBacklog": "Backlog",
+  "statusTodo": "To Do",
+  "statusInProgress": "In Progress",
+  "statusReview": "In Review",
+  "statusDone": "Done",
+  "priorityLow": "Low",
+  "priorityMedium": "Medium",
+  "priorityHigh": "High",
+  "priorityUrgent": "Urgent",
+  "retry": "Retry",
+  "appearanceSubtitle": "Choose whether to follow device settings or lock to dark or light mode.",
+  "colorPaletteSubtitle": "Select a curated palette to dynamically re-theme buttons, surfaces, and ambient glow.",
+  "languageSubtitle": "Switch the application language and reading layout (LTR / RTL).",
+  "logoutConfirmation": "Are you sure you want to log out of your session on this device?",
+  "themeModeSystem": "System",
+  "themeModeDark": "Dark",
+  "themeModeLight": "Light",
+  "cancel": "Cancel"
 }

@@ -15,6 +15,7 @@ import 'package:client/features/profile/ui/widgets/palette_carousel.dart';
 import 'package:client/features/profile/ui/widgets/profile_header_card.dart';
 import 'package:client/features/profile/ui/widgets/theme_mode_selector.dart';
 import 'package:client/features/profile/ui/widgets/version_info_tile.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class _FallbackAuthRepository implements AuthRepository {
   @override
@@ -27,6 +28,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return MultiBlocProvider(
       providers: [
@@ -59,7 +61,7 @@ class ProfileScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Profile & Settings',
+                      l10n?.profileAndSettings ?? 'Profile & Settings',
                       style: theme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.5,
@@ -67,7 +69,8 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Manage credentials, appearance, dynamic themes, language, and support.',
+                      l10n?.profileSubtitle ??
+                          'Manage credentials, appearance, dynamic themes, language, and support.',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                       ),
