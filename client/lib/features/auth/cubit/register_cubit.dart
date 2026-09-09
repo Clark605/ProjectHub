@@ -34,6 +34,28 @@ class RegisterCubit extends SafeActionCubit<RegisterState> {
     );
   }
 
+  Future<void> externalLogin({
+    required String provider,
+    String? idToken,
+    String? accessToken,
+  }) async {
+    emit(const RegisterState.loading());
+    await safeExecute(
+      () async {
+        final user = await _authRepository.externalLogin(
+          provider: provider,
+          idToken: idToken,
+          accessToken: accessToken,
+        );
+        _appAuthCubit.setAuthenticated(user);
+        emit(RegisterState.success(user));
+        return user;
+      },
+      onError: (msg) => emit(RegisterState.failure(msg)),
+      logTag: 'RegisterCubit',
+    );
+  }
+
   void reset() {
     emit(const RegisterState.initial());
   }

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/services/google_auth_service.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/utils/validators.dart';
 import 'package:client/core/widgets/app_button.dart';
@@ -43,6 +44,17 @@ class _LoginScreenState extends State<LoginScreen> {
       email: _emailController.text.trim(),
       password: _passwordController.text,
     );
+  }
+
+  Future<void> _onGoogleSignIn(BuildContext context) async {
+    final googleAuthService = getIt<GoogleAuthService>();
+    final token = await googleAuthService.signIn();
+    if (token != null && context.mounted) {
+      context.read<LoginCubit>().externalLogin(
+            provider: 'Google',
+            idToken: token,
+          );
+    }
   }
 
   @override
@@ -140,10 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 24),
               SocialAuthSection(
-                onGooglePressed: () => context.read<LoginCubit>().externalLogin(
-                      provider: 'Google',
-                      idToken: 'mock_google_id_token',
-                    ),
+                onGooglePressed: () => _onGoogleSignIn(context),
                 onGithubPressed: () => context.read<LoginCubit>().externalLogin(
                       provider: 'GitHub',
                       accessToken: 'mock_github_access_token',

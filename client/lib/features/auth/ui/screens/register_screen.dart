@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/services/google_auth_service.dart';
 import 'package:client/core/utils/validators.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_error_banner.dart';
@@ -52,6 +53,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       email: _emailController.text.trim(),
       password: _passwordController.text,
     );
+  }
+
+  Future<void> _onGoogleSignIn(BuildContext context) async {
+    final googleAuthService = getIt<GoogleAuthService>();
+    final token = await googleAuthService.signIn();
+    if (token != null && context.mounted) {
+      context.read<RegisterCubit>().externalLogin(
+            provider: 'Google',
+            idToken: token,
+          );
+    }
   }
 
   @override
@@ -166,7 +178,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   .fadeIn(duration: 400.ms, delay: 450.ms)
                   .slideY(begin: 0.1, end: 0),
               const SizedBox(height: 24),
-              SocialAuthSection(onGooglePressed: () {}, onGithubPressed: () {})
+              SocialAuthSection(
+                onGooglePressed: () => _onGoogleSignIn(context),
+                onGithubPressed: () => context.read<RegisterCubit>().externalLogin(
+                      provider: 'GitHub',
+                      accessToken: 'mock_github_access_token',
+                    ),
+              )
                   .animate()
                   .fadeIn(duration: 400.ms, delay: 500.ms)
                   .slideY(begin: 0.1, end: 0),
