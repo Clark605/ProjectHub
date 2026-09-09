@@ -45,7 +45,6 @@ class ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final statusColor = _getStatusColor(project.status);
 
     return InkWell(
@@ -54,14 +53,10 @@ class ProjectCard extends StatelessWidget {
       child: Ink(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: isDark
-              ? AppColors.surfaceContainerLow
-              : AppColors.lightSurface,
+          color: theme.colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isDark
-                ? AppColors.border.withValues(alpha: 0.6)
-                : AppColors.lightBorder,
+            color: theme.colorScheme.outlineVariant,
             width: 1,
           ),
         ),
@@ -77,9 +72,7 @@ class ProjectCard extends StatelessWidget {
                     project.name,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: isDark
-                          ? AppColors.textPrimary
-                          : AppColors.lightTextPrimary,
+                      color: theme.colorScheme.onSurface,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -113,9 +106,7 @@ class ProjectCard extends StatelessWidget {
             Text(
               project.description.isNotEmpty ? project.description : '—',
               style: theme.textTheme.bodySmall?.copyWith(
-                color: isDark
-                    ? AppColors.textSecondary
-                    : AppColors.lightTextSecondary,
+                color: theme.colorScheme.onSurfaceVariant,
               ),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -126,16 +117,16 @@ class ProjectCard extends StatelessWidget {
             Row(
               children: [
                 if (project.dueDate != null) ...[
-                  const Icon(
+                  Icon(
                     Icons.calendar_today_outlined,
                     size: 14,
-                    color: AppColors.textTertiary,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     DateFormat.yMMMd().format(project.dueDate!),
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppColors.textTertiary,
+                      color: theme.colorScheme.onSurfaceVariant,
                       fontSize: 12,
                     ),
                   ),
@@ -144,10 +135,10 @@ class ProjectCard extends StatelessWidget {
                   const Spacer(),
                 if (project.createdByName.isNotEmpty ||
                     project.createdBy.isNotEmpty) ...[
-                  const Icon(
+                  Icon(
                     Icons.person_outline_rounded,
                     size: 14,
-                    color: AppColors.textTertiary,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                   const SizedBox(width: 4),
                   Text(
@@ -155,7 +146,7 @@ class ProjectCard extends StatelessWidget {
                         ? project.createdByName
                         : project.createdBy,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: AppColors.textTertiary,
+                      color: theme.colorScheme.onSurfaceVariant,
                       fontSize: 12,
                     ),
                     maxLines: 1,

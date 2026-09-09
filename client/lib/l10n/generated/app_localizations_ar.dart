@@ -706,4 +706,176 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get themeModeLight => 'فاتح';
+
+  @override
+  String get taskPriority => 'الأولوية';
+
+  @override
+  String get assignee => 'المسؤول';
+
+  @override
+  String get unassigned => 'غير معين';
+
+  @override
+  String get assignedMember => 'عضو معين';
+
+  @override
+  String get taskDescription => 'الوصف';
+
+  @override
+  String get taskDescriptionPlaceholder =>
+      'أضف تفاصيل أو سياقاً أو معايير القبول...';
+
+  @override
+  String get taskTitleRequired => 'عنوان المهمة مطلوب';
+
+  @override
+  String get noDueDate => 'بلا تاريخ';
+
+  @override
+  String get activeProjectsSection => 'المشاريع النشطة';
+
+  @override
+  String get noProjectsYet => 'لا توجد مشاريع بعد';
+
+  @override
+  String get removeMemberTitle => 'إزالة العضو؟';
+
+  @override
+  String get currentStatus => 'الحالي';
+
+  @override
+  String onlineCount(int count) {
+    return '$count متصلون';
+  }
+
+  @override
+  String get sessionSecurityDesc =>
+      'إنهاء جلستك النشطة وإلغاء بيانات الاعتماد.';
+
+  @override
+  String get moveTask => 'نقل المهمة';
+
+  @override
+  String get editTask => 'تعديل المهمة';
+
+  @override
+  String get deleteTaskConfirmTitle => 'حذف المهمة';
+
+  @override
+  String deleteTaskConfirmMessage(String title) {
+    return 'هل أنت متأكد من حذف \"$title\"؟ لا يمكن التراجع عن هذا الإجراء.';
+  }
+
+  @override
+  String get noDescriptionProvided => 'لا يوجد وصف مقدم.';
+
+  @override
+  String get dueDateNotSet => 'غير محدد';
+
+  @override
+  String get taskOverdue => 'متأخرة';
+
+  @override
+  String get taskCreatedBy => 'أنشئت بواسطة';
+
+  @override
+  String get unknownUser => 'غير معروف';
+
+  @override
+  String get taskCreatedAt => 'تاريخ الإنشاء';
+
+  @override
+  String get somethingWentWrong => 'حدث خطأ ما';
+
+  @override
+  String get taskTitleRequiredLabel => 'عنوان المهمة *';
+
+  @override
+  String get taskTitlePlaceholder => 'ما الذي يجب إنجازه؟';
+
+  @override
+  String get clearFilters => 'إعادة ضبط التصفية';
+
+  @override
+  String get allPriorities => 'كل الأولويات';
+
+  @override
+  String get allAssignees => 'كل المسؤولين';
+
+  @override
+  String get filterByPriority => 'تصفية حسب الأولوية';
+
+  @override
+  String get filterByAssignee => 'تصفية حسب المسؤول';
+
+  @override
+  String get noTasksMatchFilters => 'لا توجد مهام تطابق عوامل التصفية الحالية';
+
+  @override
+  String get boardIsEmpty => 'لوحة المهام فارغة';
+
+  @override
+  String get boardIsEmptySubtitle =>
+      'ابدأ تنظيم سير عملك بإنشاء أول مهمة لهذا المشروع.';
+
+  @override
+  String get noTasksArchived => 'لا توجد مهام';
+
+  @override
+  String get noTasksArchivedSubtitle =>
+      'هذا المشروع مؤرشف ولا توجد به أي مهام مسجلة.';
+
+  @override
+  String get createFirstTask => 'إنشاء أول مهمة';
+
+  @override
+  String get profileUpdatedSuccess => 'تم تحديث الملف الشخصي بنجاح!';
+
+  @override
+  String get returnToWorkspace => 'العودة إلى مساحة العمل';
+
+  @override
+  String get areYouSureDelete => 'هل أنت متأكد تماماً؟';
+
+  @override
+  String typeToConfirm(String name) {
+    return 'يرجى كتابة \"$name\" للتأكيد.';
+  }
+
+  @override
+  String get actionCannotBeUndone =>
+      'لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف العنصر نهائياً.';
+
+  @override
+  String get connectionUnavailable => 'الاتصال غير متوفر';
+
+  @override
+  String get ok => 'حسناً';
+
+  @override
+  String get closeSearch => 'إغلاق البحث';
+
+  @override
+  String get yourFullNameHint => 'اسمك الكامل';
+
+  @override
+  String get shortDescriptionHint => 'وصف قصير عن نفسك';
+
+  @override
+  String get projectDescriptionHint => 'الوصف...';
+
+  @override
+  String get navigationMenu => 'قائمة التنقل';
+
+  @override
+  String addTaskToStatus(String status) {
+    return 'إضافة مهمة إلى $status';
+  }
+
+  @override
+  String get displayName => 'الاسم المعروض';
+
+  @override
+  String get saveProfile => 'حفظ الملف الشخصي';
 }

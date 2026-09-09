@@ -32,8 +32,9 @@ class KanbanColumn extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
     final statusColor = status.toColor();
-    final statusName =
-        l10n != null ? status.localizedName(l10n) : status.toDisplayString();
+    final statusName = l10n != null
+        ? status.localizedName(l10n)
+        : status.toDisplayString();
 
     return Container(
       decoration: BoxDecoration(
@@ -41,10 +42,7 @@ class KanbanColumn extends StatelessWidget {
             ? theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.5)
             : theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant,
-          width: 1,
-        ),
+        border: Border.all(color: theme.colorScheme.outlineVariant, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -104,7 +102,9 @@ class KanbanColumn extends StatelessWidget {
                 if (!isArchived && onAddTask != null)
                   IconButton(
                     icon: const Icon(Icons.add_rounded, size: 20),
-                    tooltip: 'Add task to $statusName',
+                    tooltip: l10n != null
+                        ? l10n.addTaskToStatus(statusName)
+                        : 'Add task to $statusName',
                     constraints: const BoxConstraints(),
                     padding: const EdgeInsets.all(6),
                     onPressed: onAddTask,
@@ -140,7 +140,8 @@ class KanbanColumn extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  l10n?.noTasksInColumn ?? 'No tasks in this column',
+                                  l10n?.noTasksInColumn ??
+                                      'No tasks in this column',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: isDark

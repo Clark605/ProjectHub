@@ -711,4 +711,176 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get themeModeLight => 'Light';
+
+  @override
+  String get taskPriority => 'Priority';
+
+  @override
+  String get assignee => 'Assignee';
+
+  @override
+  String get unassigned => 'Unassigned';
+
+  @override
+  String get assignedMember => 'Assigned Member';
+
+  @override
+  String get taskDescription => 'Description';
+
+  @override
+  String get taskDescriptionPlaceholder =>
+      'Add details, context, or acceptance criteria...';
+
+  @override
+  String get taskTitleRequired => 'Task title is required';
+
+  @override
+  String get noDueDate => 'No date';
+
+  @override
+  String get activeProjectsSection => 'ACTIVE PROJECTS';
+
+  @override
+  String get noProjectsYet => 'No projects yet';
+
+  @override
+  String get removeMemberTitle => 'Remove Member?';
+
+  @override
+  String get currentStatus => 'Current';
+
+  @override
+  String onlineCount(int count) {
+    return '$count Online';
+  }
+
+  @override
+  String get sessionSecurityDesc =>
+      'End your active session and revoke credentials.';
+
+  @override
+  String get moveTask => 'Move Task';
+
+  @override
+  String get editTask => 'Edit Task';
+
+  @override
+  String get deleteTaskConfirmTitle => 'Delete Task';
+
+  @override
+  String deleteTaskConfirmMessage(String title) {
+    return 'Are you sure you want to delete \"$title\"? This action cannot be undone.';
+  }
+
+  @override
+  String get noDescriptionProvided => 'No description provided.';
+
+  @override
+  String get dueDateNotSet => 'Not set';
+
+  @override
+  String get taskOverdue => 'Overdue';
+
+  @override
+  String get taskCreatedBy => 'Created By';
+
+  @override
+  String get unknownUser => 'Unknown';
+
+  @override
+  String get taskCreatedAt => 'Created';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get taskTitleRequiredLabel => 'Title *';
+
+  @override
+  String get taskTitlePlaceholder => 'What needs to be done?';
+
+  @override
+  String get clearFilters => 'Clear Filters';
+
+  @override
+  String get allPriorities => 'All Priorities';
+
+  @override
+  String get allAssignees => 'All Assignees';
+
+  @override
+  String get filterByPriority => 'Filter by priority';
+
+  @override
+  String get filterByAssignee => 'Filter by assignee';
+
+  @override
+  String get noTasksMatchFilters => 'No tasks match active filters';
+
+  @override
+  String get boardIsEmpty => 'Board is Empty';
+
+  @override
+  String get boardIsEmptySubtitle =>
+      'Start organizing your workflow by creating the first task for this project.';
+
+  @override
+  String get noTasksArchived => 'No Tasks';
+
+  @override
+  String get noTasksArchivedSubtitle =>
+      'This project is archived and has no tasks recorded.';
+
+  @override
+  String get createFirstTask => 'Create First Task';
+
+  @override
+  String get profileUpdatedSuccess => 'Profile updated successfully!';
+
+  @override
+  String get returnToWorkspace => 'Return to Workspace';
+
+  @override
+  String get areYouSureDelete => 'Are you absolutely sure?';
+
+  @override
+  String typeToConfirm(String name) {
+    return 'Please type \"$name\" to confirm.';
+  }
+
+  @override
+  String get actionCannotBeUndone =>
+      'This action cannot be undone. This will permanently delete the entity.';
+
+  @override
+  String get connectionUnavailable => 'Connection unavailable';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get closeSearch => 'Close search';
+
+  @override
+  String get yourFullNameHint => 'Your full name';
+
+  @override
+  String get shortDescriptionHint => 'Short description about yourself';
+
+  @override
+  String get projectDescriptionHint => 'Description...';
+
+  @override
+  String get navigationMenu => 'Navigation Menu';
+
+  @override
+  String addTaskToStatus(String status) {
+    return 'Add task to $status';
+  }
+
+  @override
+  String get displayName => 'Display Name';
+
+  @override
+  String get saveProfile => 'Save Profile';
 }

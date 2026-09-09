@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
@@ -38,7 +37,7 @@ class CreateTaskSheet extends StatefulWidget {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surfaceContainerLow,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -152,7 +151,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                 Row(
                   children: [
                     Text(
-                      'Create Task',
+                      l10n?.createTask ?? 'Create Task',
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
@@ -170,7 +169,9 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        _selectedStatus.toDisplayString(),
+                        l10n != null
+                            ? _selectedStatus.localizedName(l10n)
+                            : _selectedStatus.toDisplayString(),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -188,19 +189,17 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                   autofocus: true,
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
-                    labelText: 'Task Title *',
-                    hintText: 'What needs to be done?',
+                    labelText: l10n?.taskTitle ?? 'Task Title *',
+                    hintText: l10n?.taskTitlePlaceholder ?? 'What needs to be done?',
                     filled: true,
-                    fillColor: isDark
-                        ? AppColors.surfaceContainer
-                        : AppColors.lightSurface,
+                    fillColor: theme.colorScheme.surfaceContainer,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
                   validator: (val) {
                     if (val == null || val.trim().isEmpty) {
-                      return 'Task title is required';
+                      return l10n?.taskTitleRequired ?? 'Task title is required';
                     }
                     return null;
                   },
@@ -213,12 +212,11 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                   minLines: 2,
                   maxLines: 4,
                   decoration: InputDecoration(
-                    labelText: 'Description',
-                    hintText: 'Add details, context, or acceptance criteria...',
+                    labelText: l10n?.taskDescription ?? 'Description',
+                    hintText: l10n?.taskDescriptionPlaceholder ??
+                        'Add details, context, or acceptance criteria...',
                     filled: true,
-                    fillColor: isDark
-                        ? AppColors.surfaceContainer
-                        : AppColors.lightSurface,
+                    fillColor: theme.colorScheme.surfaceContainer,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -228,12 +226,10 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
 
                 // Priority Selection
                 Text(
-                  'Priority',
+                  l10n?.taskPriority ?? 'Priority',
                   style: theme.textTheme.labelMedium?.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: isDark
-                        ? AppColors.textSecondary
-                        : AppColors.lightTextSecondary,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -248,7 +244,11 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                         size: 16,
                         color: isSelected ? Colors.white : priority.toColor(),
                       ),
-                      label: Text(priority.toDisplayString()),
+                      label: Text(
+                        l10n != null
+                            ? priority.localizedName(l10n)
+                            : priority.toDisplayString(),
+                      ),
                       selectedColor: priority.toColor(),
                       labelStyle: TextStyle(
                         color: isSelected ? Colors.white : null,
@@ -275,12 +275,10 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Assignee',
+                            l10n?.assignee ?? 'Assignee',
                             style: theme.textTheme.labelMedium?.copyWith(
                               fontWeight: FontWeight.w600,
-                              color: isDark
-                                  ? AppColors.textSecondary
-                                  : AppColors.lightTextSecondary,
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -293,18 +291,16 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                                 vertical: 12,
                               ),
                               filled: true,
-                              fillColor: isDark
-                                  ? AppColors.surfaceContainer
-                                  : AppColors.lightSurface,
+                              fillColor: theme.colorScheme.surfaceContainer,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            hint: const Text('Unassigned'),
+                            hint: Text(l10n?.unassigned ?? 'Unassigned'),
                             items: [
-                              const DropdownMenuItem<String?>(
+                              DropdownMenuItem<String?>(
                                 value: null,
-                                child: Text('Unassigned'),
+                                child: Text(l10n?.unassigned ?? 'Unassigned'),
                               ),
                               if (_selectedAssigneeId != null &&
                                   !widget.members.any(
@@ -312,7 +308,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                                   ))
                                 DropdownMenuItem<String?>(
                                   value: _selectedAssigneeId,
-                                  child: const Text('Assigned Member'),
+                                  child: Text(l10n?.assignedMember ?? 'Assigned Member'),
                                 ),
                               ...widget.members.map(
                                 (m) => DropdownMenuItem<String?>(
@@ -338,12 +334,10 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Due Date',
+                            l10n?.dueDate ?? 'Due Date',
                             style: theme.textTheme.labelMedium?.copyWith(
                               fontWeight: FontWeight.w600,
-                              color: isDark
-                                  ? AppColors.textSecondary
-                                  : AppColors.lightTextSecondary,
+                              color: theme.colorScheme.onSurfaceVariant,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -356,14 +350,10 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                                 horizontal: 12,
                               ),
                               decoration: BoxDecoration(
-                                color: isDark
-                                    ? AppColors.surfaceContainer
-                                    : AppColors.lightSurface,
+                                color: theme.colorScheme.surfaceContainer,
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: isDark
-                                      ? AppColors.border
-                                      : AppColors.lightBorder,
+                                  color: theme.colorScheme.outlineVariant,
                                 ),
                               ),
                               child: Row(
@@ -371,9 +361,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                                   Icon(
                                     Icons.calendar_today_outlined,
                                     size: 16,
-                                    color: isDark
-                                        ? AppColors.textSecondary
-                                        : AppColors.lightTextSecondary,
+                                    color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                   const SizedBox(width: 8),
                                   Expanded(
@@ -382,15 +370,12 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                                           ? DateFormat(
                                               'MMM d, yyyy',
                                             ).format(_selectedDueDate!)
-                                          : 'No date',
+                                          : (l10n?.noDueDate ?? 'No date'),
                                       style: theme.textTheme.bodyMedium
                                           ?.copyWith(
                                             color: _selectedDueDate != null
                                                 ? null
-                                                : (isDark
-                                                      ? AppColors.textSecondary
-                                                      : AppColors
-                                                            .lightTextSecondary),
+                                                : theme.colorScheme.onSurfaceVariant,
                                           ),
                                       overflow: TextOverflow.ellipsis,
                                     ),

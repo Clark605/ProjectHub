@@ -179,6 +179,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
                 key: _scaffoldKey,
                 backgroundColor: Colors.transparent,
                 drawer: Drawer(
+                  width: 240,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
                   child: Sidebar(
                     selectedIndex: _selectedIndex,
                     onItemSelected: _onSelectTab,
@@ -214,6 +216,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
                 key: _scaffoldKey,
                 backgroundColor: Colors.transparent,
                 drawer: Drawer(
+                  width: 240,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
                   child: Sidebar(
                     selectedIndex: _selectedIndex,
                     onItemSelected: _onSelectTab,

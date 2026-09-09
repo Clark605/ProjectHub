@@ -273,7 +273,6 @@
   "priorityMedium": "Medium",
   "priorityHigh": "High",
   "priorityUrgent": "Urgent",
-  "retry": "Retry",
   "appearanceSubtitle": "Choose whether to follow device settings or lock to dark or light mode.",
   "colorPaletteSubtitle": "Select a curated palette to dynamically re-theme buttons, surfaces, and ambient glow.",
   "languageSubtitle": "Switch the application language and reading layout (LTR / RTL).",
@@ -281,5 +280,88 @@
   "themeModeSystem": "System",
   "themeModeDark": "Dark",
   "themeModeLight": "Light",
-  "cancel": "Cancel"
+  "taskPriority": "Priority",
+  "assignee": "Assignee",
+  "unassigned": "Unassigned",
+  "assignedMember": "Assigned Member",
+  "taskDescription": "Description",
+  "taskDescriptionPlaceholder": "Add details, context, or acceptance criteria...",
+  "taskTitleRequired": "Task title is required",
+  "noDueDate": "No date",
+  "activeProjectsSection": "ACTIVE PROJECTS",
+  "noProjectsYet": "No projects yet",
+  "removeMemberTitle": "Remove Member?",
+  "currentStatus": "Current",
+  "onlineCount": "{count} Online",
+  "@onlineCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "sessionSecurityDesc": "End your active session and revoke credentials.",
+  "moveTask": "Move Task",
+  "editTask": "Edit Task",
+  "deleteTaskConfirmTitle": "Delete Task",
+  "deleteTaskConfirmMessage": "Are you sure you want to delete \"{title}\"? This action cannot be undone.",
+  "@deleteTaskConfirmMessage": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "noDescriptionProvided": "No description provided.",
+  "dueDateNotSet": "Not set",
+  "taskOverdue": "Overdue",
+  "taskCreatedBy": "Created By",
+  "unknownUser": "Unknown",
+  "taskCreatedAt": "Created",
+  "somethingWentWrong": "Something went wrong",
+  "taskTitleRequiredLabel": "Title *",
+  "taskTitlePlaceholder": "What needs to be done?",
+  "clearFilters": "Clear Filters",
+  "allPriorities": "All Priorities",
+  "allAssignees": "All Assignees",
+  "filterByPriority": "Filter by priority",
+  "filterByAssignee": "Filter by assignee",
+  "noTasksMatchFilters": "No tasks match active filters",
+  "boardIsEmpty": "Board is Empty",
+  "boardIsEmptySubtitle": "Start organizing your workflow by creating the first task for this project.",
+  "noTasksArchived": "No Tasks",
+  "noTasksArchivedSubtitle": "This project is archived and has no tasks recorded.",
+  "createFirstTask": "Create First Task",
+  "profileUpdatedSuccess": "Profile updated successfully!",
+  "returnToWorkspace": "Return to Workspace",
+  "areYouSureDelete": "Are you absolutely sure?",
+  "typeToConfirm": "Please type \"{name}\" to confirm.",
+  "@typeToConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "actionCannotBeUndone": "This action cannot be undone. This will permanently delete the entity.",
+  "connectionUnavailable": "Connection unavailable",
+  "ok": "OK",
+  "closeSearch": "Close search",
+  "yourFullNameHint": "Your full name",
+  "shortDescriptionHint": "Short description about yourself",
+  "projectDescriptionHint": "Description...",
+  "navigationMenu": "Navigation Menu",
+  "workspaceSettings": "Workspace Settings",
+  "addTaskToStatus": "Add task to {status}",
+  "@addTaskToStatus": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "displayName": "Display Name",
+  "saveProfile": "Save Profile"
 }
+
+

@@ -370,6 +370,7 @@ class _KanbanScreenState extends State<KanbanScreen>
     KanbanState state,
     bool isArchived,
   ) {
+    final l10n = AppLocalizations.of(context);
     return state.when(
       initial: () => const Center(child: CircularProgressIndicator()),
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -395,9 +396,7 @@ class _KanbanScreenState extends State<KanbanScreen>
                 onPressed: () =>
                     _cubit.loadTasks(widget.projectId, forceRefresh: true),
                 icon: const Icon(Icons.refresh_rounded),
-                label: Text(
-                  AppLocalizations.of(context)?.retry ?? 'Retry',
-                ),
+                label: Text(AppLocalizations.of(context)?.retry ?? 'Retry'),
               ),
             ],
           ),
@@ -423,14 +422,15 @@ class _KanbanScreenState extends State<KanbanScreen>
                         color: AppColors.textSecondary,
                       ),
                       const SizedBox(height: 12),
-                      const Text(
-                        'No tasks match active filters',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                      Text(
+                        l10n?.noTasksMatchFilters ??
+                            'No tasks match active filters',
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       const SizedBox(height: 12),
                       OutlinedButton(
                         onPressed: () => _cubit.clearFilters(),
-                        child: const Text('Clear Filters'),
+                        child: Text(l10n?.clearFilters ?? 'Clear Filters'),
                       ),
                     ],
                   ),
@@ -482,8 +482,9 @@ class _KanbanScreenState extends State<KanbanScreen>
                 final status = entry.value;
                 final isSelected = idx == _currentColumnIndex;
                 final count = tasksByStatus[status]?.length ?? 0;
-                final statusName =
-                    l10n != null ? status.localizedName(l10n) : status.toDisplayString();
+                final statusName = l10n != null
+                    ? status.localizedName(l10n)
+                    : status.toDisplayString();
 
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),

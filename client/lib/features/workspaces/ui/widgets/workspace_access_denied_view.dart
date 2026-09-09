@@ -30,7 +30,7 @@ class WorkspaceAccessDeniedView extends StatelessWidget {
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Return to Workspace'),
+              child: Text(l10n.returnToWorkspace),
             ),
           ],
         ),

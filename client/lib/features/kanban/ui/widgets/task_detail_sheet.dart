@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/widgets/app_button.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:client/features/kanban/ui/widgets/move_to_status_sheet.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
@@ -38,7 +40,7 @@ class TaskDetailSheet extends StatefulWidget {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surfaceContainerLow,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -149,17 +151,19 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
   }
 
   Future<void> _confirmDelete() async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Delete Task'),
+        title: Text(l10n?.deleteTaskConfirmTitle ?? 'Delete Task'),
         content: Text(
-          'Are you sure you want to delete "${_currentTask.title}"? This action cannot be undone.',
+          l10n?.deleteTaskConfirmMessage(_currentTask.title) ??
+              'Are you sure you want to delete "${_currentTask.title}"? This action cannot be undone.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Cancel'),
+            child: Text(l10n?.cancel ?? 'Cancel'),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -167,7 +171,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
               foregroundColor: Colors.white,
             ),
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Delete'),
+            child: Text(l10n?.delete ?? 'Delete'),
           ),
         ],
       ),
@@ -203,6 +207,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
@@ -261,7 +266,9 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            _currentTask.statusEnum.toDisplayString(),
+                            l10n != null
+                                ? _currentTask.statusEnum.localizedName(l10n)
+                                : _currentTask.statusEnum.toDisplayString(),
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
@@ -304,7 +311,9 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          _currentTask.priorityEnum.toDisplayString(),
+                          l10n != null
+                              ? _currentTask.priorityEnum.localizedName(l10n)
+                              : _currentTask.priorityEnum.toDisplayString(),
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
@@ -321,7 +330,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                     if (!widget.isArchived)
                       IconButton(
                         icon: const Icon(Icons.edit_outlined, size: 20),
-                        tooltip: 'Edit Task',
+                        tooltip: l10n?.editTask ?? 'Edit Task',
                         onPressed: () {
                           _initControllers();
                           setState(() => _isEditMode = true);
@@ -334,13 +343,13 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                           size: 20,
                           color: AppColors.error,
                         ),
-                        tooltip: 'Delete Task',
+                        tooltip: l10n?.deleteTaskConfirmTitle ?? 'Delete Task',
                         onPressed: _confirmDelete,
                       ),
                   ] else ...[
                     TextButton(
                       onPressed: () => setState(() => _isEditMode = false),
-                      child: const Text('Cancel'),
+                      child: Text(l10n?.cancel ?? 'Cancel'),
                     ),
                   ],
                 ],
@@ -361,7 +370,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
 
   Widget _buildReadMode(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
     final isOverdue = _currentTask.isOverdue;
 
     return Column(
@@ -372,6 +381,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
           _currentTask.title,
           style: theme.textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.w700,
+            color: theme.colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 12),
@@ -380,13 +390,11 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
         Text(
           _currentTask.description.isNotEmpty
               ? _currentTask.description
-              : 'No description provided.',
+              : (l10n?.noDescriptionProvided ?? 'No description provided.'),
           style: theme.textTheme.bodyMedium?.copyWith(
             color: _currentTask.description.isNotEmpty
-                ? (isDark ? AppColors.textPrimary : AppColors.lightTextPrimary)
-                : (isDark
-                      ? AppColors.textSecondary
-                      : AppColors.lightTextSecondary),
+                ? theme.colorScheme.onSurface
+                : theme.colorScheme.onSurfaceVariant,
             fontStyle: _currentTask.description.isEmpty
                 ? FontStyle.italic
                 : FontStyle.normal,
@@ -394,7 +402,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
           ),
         ),
         const SizedBox(height: 24),
-        const Divider(height: 1),
+        Divider(height: 1, color: theme.colorScheme.outlineVariant),
         const SizedBox(height: 16),
 
         // Metadata grid / tiles
@@ -402,8 +410,8 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
         _buildInfoRow(
           context,
           icon: Icons.person_outline_rounded,
-          label: 'Assignee',
-          value: _currentTask.assigneeName ?? 'Unassigned',
+          label: l10n?.assignee ?? 'Assignee',
+          value: _currentTask.assigneeName ?? (l10n?.unassigned ?? 'Unassigned'),
         ),
         const SizedBox(height: 12),
 
@@ -411,10 +419,10 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
         _buildInfoRow(
           context,
           icon: Icons.calendar_today_outlined,
-          label: 'Due Date',
+          label: l10n?.dueDate ?? 'Due Date',
           value: _currentTask.dueDate != null
               ? DateFormat('MMMM d, yyyy').format(_currentTask.dueDate!)
-              : 'Not set',
+              : (l10n?.dueDateNotSet ?? 'Not set'),
           valueColor: isOverdue ? AppColors.error : null,
           trailing: isOverdue
               ? Container(
@@ -426,9 +434,9 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                     color: AppColors.error.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: const Text(
-                    'Overdue',
-                    style: TextStyle(
+                  child: Text(
+                    l10n?.taskOverdue ?? 'Overdue',
+                    style: const TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: AppColors.error,
@@ -443,10 +451,10 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
         _buildInfoRow(
           context,
           icon: Icons.history_edu_rounded,
-          label: 'Created By',
+          label: l10n?.taskCreatedBy ?? 'Created By',
           value: _currentTask.createdByName.isNotEmpty
               ? _currentTask.createdByName
-              : 'Unknown',
+              : (l10n?.unknownUser ?? 'Unknown'),
         ),
         const SizedBox(height: 12),
 
@@ -455,7 +463,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
           _buildInfoRow(
             context,
             icon: Icons.access_time_rounded,
-            label: 'Created',
+            label: l10n?.taskCreatedAt ?? 'Created',
             value: DateFormat(
               'MMM d, yyyy • h:mm a',
             ).format(_currentTask.createdAt!.toLocal()),
@@ -466,7 +474,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
 
   Widget _buildEditMode(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
 
     return Form(
       key: _formKey,
@@ -478,17 +486,23 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
             controller: _titleController,
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-              labelText: 'Title *',
+              labelText: l10n?.taskTitleRequiredLabel ??
+                  (l10n?.taskTitle != null ? '${l10n!.taskTitle} *' : 'Title *'),
               filled: true,
-              fillColor: isDark
-                  ? AppColors.surfaceContainer
-                  : AppColors.lightSurface,
+              fillColor: theme.colorScheme.surfaceContainer,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
             ),
             validator: (v) =>
-                v == null || v.trim().isEmpty ? 'Title is required' : null,
+                v == null || v.trim().isEmpty
+                    ? (l10n?.taskTitleRequired ?? 'Title is required')
+                    : null,
           ),
           const SizedBox(height: 16),
 
@@ -498,13 +512,17 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
             minLines: 3,
             maxLines: 5,
             decoration: InputDecoration(
-              labelText: 'Description',
+              labelText: l10n?.taskDescription ?? 'Description',
+              hintText: l10n?.taskDescriptionPlaceholder,
               filled: true,
-              fillColor: isDark
-                  ? AppColors.surfaceContainer
-                  : AppColors.lightSurface,
+              fillColor: theme.colorScheme.surfaceContainer,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
             ),
           ),
@@ -512,12 +530,10 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
 
           // Priority selector
           Text(
-            'Priority',
+            l10n?.taskPriority ?? 'Priority',
             style: theme.textTheme.labelMedium?.copyWith(
               fontWeight: FontWeight.w600,
-              color: isDark
-                  ? AppColors.textSecondary
-                  : AppColors.lightTextSecondary,
+              color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 8),
@@ -532,7 +548,11 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                   size: 16,
                   color: isSelected ? Colors.white : priority.toColor(),
                 ),
-                label: Text(priority.toDisplayString()),
+                label: Text(
+                  l10n != null
+                      ? priority.localizedName(l10n)
+                      : priority.toDisplayString(),
+                ),
                 selectedColor: priority.toColor(),
                 labelStyle: TextStyle(
                   color: isSelected ? Colors.white : null,
@@ -550,12 +570,10 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
 
           // Assignee Dropdown
           Text(
-            'Assignee',
+            l10n?.assignee ?? 'Assignee',
             style: theme.textTheme.labelMedium?.copyWith(
               fontWeight: FontWeight.w600,
-              color: isDark
-                  ? AppColors.textSecondary
-                  : AppColors.lightTextSecondary,
+              color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 8),
@@ -564,24 +582,30 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
             isExpanded: true,
             decoration: InputDecoration(
               filled: true,
-              fillColor: isDark
-                  ? AppColors.surfaceContainer
-                  : AppColors.lightSurface,
+              fillColor: theme.colorScheme.surfaceContainer,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
             ),
-            hint: const Text('Unassigned'),
+            hint: Text(l10n?.unassigned ?? 'Unassigned'),
             items: [
-              const DropdownMenuItem<String?>(
+              DropdownMenuItem<String?>(
                 value: null,
-                child: Text('Unassigned'),
+                child: Text(l10n?.unassigned ?? 'Unassigned'),
               ),
               if (_editAssigneeId != null &&
                   !widget.members.any((m) => m.userId == _editAssigneeId))
                 DropdownMenuItem<String?>(
                   value: _editAssigneeId,
-                  child: Text(_currentTask.assigneeName ?? 'Assigned Member'),
+                  child: Text(
+                    _currentTask.assigneeName ??
+                        (l10n?.assignedMember ?? 'Assigned Member'),
+                  ),
                 ),
               ...widget.members.map(
                 (m) => DropdownMenuItem<String?>(
@@ -596,12 +620,10 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
 
           // Due Date Picker
           Text(
-            'Due Date',
+            l10n?.dueDate ?? 'Due Date',
             style: theme.textTheme.labelMedium?.copyWith(
               fontWeight: FontWeight.w600,
-              color: isDark
-                  ? AppColors.textSecondary
-                  : AppColors.lightTextSecondary,
+              color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 8),
@@ -612,12 +634,10 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
               height: 48,
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color: isDark
-                    ? AppColors.surfaceContainer
-                    : AppColors.lightSurface,
+                color: theme.colorScheme.surfaceContainer,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: isDark ? AppColors.border : AppColors.lightBorder,
+                  color: theme.colorScheme.outlineVariant,
                 ),
               ),
               child: Row(
@@ -625,16 +645,14 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                   Icon(
                     Icons.calendar_today_outlined,
                     size: 16,
-                    color: isDark
-                        ? AppColors.textSecondary
-                        : AppColors.lightTextSecondary,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       _editDueDate != null
                           ? DateFormat('MMM d, yyyy').format(_editDueDate!)
-                          : 'No due date',
+                          : (l10n?.noDueDate ?? 'No due date'),
                     ),
                   ),
                   if (_editDueDate != null)
@@ -649,29 +667,11 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
           const SizedBox(height: 24),
 
           // Save Button
-          ElevatedButton(
+          AppButton(
+            label: l10n?.saveChanges ?? (l10n?.save ?? 'Save Changes'),
+            isLoading: _isSaving,
+            variant: AppButtonVariant.primary,
             onPressed: _isSaving ? null : _saveChanges,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.electricViolet,
-              foregroundColor: Colors.white,
-              minimumSize: const Size.fromHeight(50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: _isSaving
-                ? const SizedBox(
-                    height: 20,
-                    width: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  )
-                : const Text(
-                    'Save Changes',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
           ),
         ],
       ),
@@ -687,24 +687,19 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
     Widget? trailing,
   }) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return Row(
       children: [
         Icon(
           icon,
           size: 18,
-          color: isDark
-              ? AppColors.textSecondary
-              : AppColors.lightTextSecondary,
+          color: theme.colorScheme.onSurfaceVariant,
         ),
         const SizedBox(width: 10),
         Text(
           label,
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: isDark
-                ? AppColors.textSecondary
-                : AppColors.lightTextSecondary,
+            color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
         const Spacer(),

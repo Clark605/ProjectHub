@@ -19,7 +19,7 @@ class MemberTile extends StatelessWidget {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Remove Member?'),
+        title: Text(l10n.removeMemberTitle),
         content: Text(
           'Are you sure you want to remove ${member.name.isNotEmpty ? member.name : member.email} from the workspace?',
         ),
@@ -45,6 +45,8 @@ class MemberTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
     final isOwner = member.role.toLowerCase() == 'owner';
 
     return ListTile(
@@ -53,23 +55,30 @@ class MemberTile extends StatelessWidget {
         name: member.name,
         size: 40,
         backgroundColor: isOwner
-            ? AppColors.primary.withValues(alpha: 0.2)
-            : AppColors.surfaceContainerHigh,
+            ? primaryColor.withValues(alpha: 0.2)
+            : theme.colorScheme.surfaceContainerHigh,
         textStyle: TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 13,
-          color: isOwner ? AppColors.primary : AppColors.textPrimary,
+          color: isOwner ? primaryColor : theme.colorScheme.onSurface,
         ),
       ),
       title: Text(
         member.name,
-        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 14,
+          color: theme.colorScheme.onSurface,
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
       subtitle: Text(
         member.email,
-        style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
+        style: TextStyle(
+          color: theme.colorScheme.onSurfaceVariant,
+          fontSize: 12,
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -89,13 +98,13 @@ class MemberTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
               color: isOwner
-                  ? AppColors.primary.withValues(alpha: 0.15)
-                  : AppColors.surfaceContainerHigh,
+                  ? primaryColor.withValues(alpha: 0.15)
+                  : theme.colorScheme.surfaceContainerHigh,
               borderRadius: BorderRadius.circular(6),
               border: Border.all(
                 color: isOwner
-                    ? AppColors.primary.withValues(alpha: 0.3)
-                    : AppColors.border,
+                    ? primaryColor.withValues(alpha: 0.3)
+                    : theme.colorScheme.outlineVariant,
               ),
             ),
             child: Text(
@@ -103,7 +112,7 @@ class MemberTile extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: isOwner ? AppColors.primary : AppColors.textSecondary,
+                color: isOwner ? primaryColor : theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ),

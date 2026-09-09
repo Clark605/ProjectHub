@@ -72,7 +72,9 @@ class ProfileScreen extends StatelessWidget {
                       l10n?.profileSubtitle ??
                           'Manage credentials, appearance, dynamic themes, language, and support.',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.65,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 24),

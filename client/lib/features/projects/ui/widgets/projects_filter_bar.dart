@@ -36,6 +36,8 @@ class ProjectsFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocBuilder<ProjectsListCubit, ProjectsListState>(
       builder: (context, state) {
         final currentFilter = state.maybeWhen(
@@ -64,17 +66,19 @@ class ProjectsFilterBar extends StatelessWidget {
                   },
                   selectedColor: AppColors.electricVioletContainer,
                   labelStyle: TextStyle(
-                    color: isSelected ? Colors.white : AppColors.textSecondary,
+                    color: isSelected
+                        ? Colors.white
+                        : theme.colorScheme.onSurfaceVariant,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                     fontSize: 13,
                   ),
-                  backgroundColor: AppColors.surfaceContainerLow,
+                  backgroundColor: theme.colorScheme.surfaceContainerLow,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                     side: BorderSide(
                       color: isSelected
                           ? AppColors.electricVioletContainer
-                          : AppColors.border.withValues(alpha: 0.6),
+                          : theme.colorScheme.outlineVariant,
                     ),
                   ),
                 ),

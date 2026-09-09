@@ -31,16 +31,19 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
         showDialog<void>(
           context: context,
           barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: const Text('Connection unavailable'),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
+          builder: (dialogContext) {
+            final l10n = AppLocalizations.of(dialogContext);
+            return AlertDialog(
+              title: Text(l10n?.connectionUnavailable ?? 'Connection unavailable'),
+              content: Text(message),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: Text(l10n?.ok ?? 'OK'),
+                ),
+              ],
+            );
+          },
         );
       }
     });

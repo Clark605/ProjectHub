@@ -3,6 +3,7 @@ import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/features/shell/ui/widgets/shell_presence_indicator.dart';
 import 'package:client/features/shell/ui/widgets/workspace_switcher_pill.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onOpenDrawer;
@@ -38,6 +39,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
         activeWorkspaceRole!.trim().toLowerCase() == 'owner';
 
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Container(
       height: 64,
@@ -55,7 +57,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                 Icons.menu_rounded,
                 color: theme.colorScheme.onSurface,
               ),
-              tooltip: 'Navigation Menu',
+              tooltip: l10n?.navigationMenu ?? 'Navigation Menu',
               onPressed: onOpenDrawer,
             ),
             const SizedBox(width: 8),
@@ -83,7 +85,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                 color: theme.colorScheme.onSurfaceVariant,
                 size: 20,
               ),
-              tooltip: 'Workspace Settings',
+              tooltip: l10n?.workspaceSettings ?? 'Workspace Settings',
               onPressed:
                   onSettingsTap ??
                   () => Navigator.of(context).pushNamed(RouteNames.workspaces),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class MoveToStatusSheet extends StatelessWidget {
   final TaskDto task;
@@ -22,7 +22,7 @@ class MoveToStatusSheet extends StatelessWidget {
     return showModalBottomSheet<TaskStatus>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surfaceContainerLow,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -39,6 +39,7 @@ class MoveToStatusSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final currentStatus = task.statusEnum;
 
@@ -66,7 +67,7 @@ class MoveToStatusSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Move Task',
+                    l10n != null ? l10n.moveTask : 'Move Task',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -75,9 +76,7 @@ class MoveToStatusSheet extends StatelessWidget {
                   Text(
                     task.title,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: isDark
-                          ? AppColors.textSecondary
-                          : AppColors.lightTextSecondary,
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -86,7 +85,7 @@ class MoveToStatusSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            const Divider(height: 1),
+            Divider(height: 1, color: theme.colorScheme.outlineVariant),
             const SizedBox(height: 8),
             ...TaskStatus.values.map((status) {
               final isCurrent = status == currentStatus;
@@ -116,16 +115,14 @@ class MoveToStatusSheet extends StatelessWidget {
                         const SizedBox(width: 14),
                         Expanded(
                           child: Text(
-                            status.toDisplayString(),
+                            l10n != null ? status.localizedName(l10n) : status.toDisplayString(),
                             style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: isCurrent
                                   ? FontWeight.w700
                                   : FontWeight.w500,
                               color: isCurrent
                                   ? status.toColor()
-                                  : (isDark
-                                        ? AppColors.textPrimary
-                                        : AppColors.lightTextPrimary),
+                                  : theme.colorScheme.onSurface,
                             ),
                           ),
                         ),
@@ -140,7 +137,7 @@ class MoveToStatusSheet extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              'Current',
+                              l10n != null ? l10n.currentStatus : 'Current',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600,
@@ -152,9 +149,7 @@ class MoveToStatusSheet extends StatelessWidget {
                           Icon(
                             Icons.arrow_forward_ios_rounded,
                             size: 14,
-                            color: isDark
-                                ? AppColors.textSecondary
-                                : AppColors.lightTextSecondary,
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
                       ],
                     ),

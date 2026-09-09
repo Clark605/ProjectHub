@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
@@ -79,11 +78,11 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
           margin: isDesktop ? const EdgeInsets.all(24) : EdgeInsets.zero,
           padding: EdgeInsets.fromLTRB(24, 20, 24, 24 + bottomInset),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainer,
+            color: theme.colorScheme.surface,
             borderRadius: isDesktop
                 ? BorderRadius.circular(24)
                 : const BorderRadius.vertical(top: Radius.circular(24)),
-            border: isDesktop ? Border.all(color: AppColors.border) : null,
+            border: isDesktop ? Border.all(color: theme.colorScheme.outlineVariant) : null,
           ),
           child: Form(
             key: _formKey,
@@ -96,7 +95,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: AppColors.textTertiary.withValues(alpha: 0.4),
+                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -112,7 +111,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                 Text(
                   l10n.projectsSubtitle,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.textSecondary,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -133,8 +132,8 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                 const SizedBox(height: 16),
                 AppTextField(
                   controller: _descController,
-                  label: 'Description',
-                  hintText: 'Description...',
+                  label: l10n.projectDescription,
+                  hintText: l10n.projectDescriptionPlaceholder,
                   prefixIcon: Icons.notes_rounded,
                   enabled: !isLoading,
                   maxLines: 3,

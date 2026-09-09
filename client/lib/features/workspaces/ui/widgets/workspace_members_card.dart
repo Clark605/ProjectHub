@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 
@@ -23,9 +22,9 @@ class WorkspaceMembersCard extends StatelessWidget {
 
         return Container(
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainer,
+            color: theme.colorScheme.surfaceContainerLow,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
+            border: Border.all(color: theme.colorScheme.outlineVariant),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,15 +41,15 @@ class WorkspaceMembersCard extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceContainerHigh,
+                        color: theme.colorScheme.surfaceContainerHigh,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
                         l10n.membersCount(state.members.length),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textSecondary,
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
                     );
@@ -106,13 +105,13 @@ class WorkspaceMembersCard extends StatelessWidget {
                   },
                 ),
               ),
-              const Divider(height: 1, color: AppColors.border),
+              Divider(height: 1, color: theme.colorScheme.outlineVariant),
               ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: state.members.length,
                 separatorBuilder: (context, index) =>
-                    const Divider(height: 1, color: AppColors.border),
+                    Divider(height: 1, color: theme.colorScheme.outlineVariant),
                 itemBuilder: (context, index) {
                   final member = state.members[index];
                   return MemberTile(member: member);

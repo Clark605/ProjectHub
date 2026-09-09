@@ -1,7 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/core/widgets/app_date_field.dart';
@@ -109,9 +108,9 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
         return Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainer,
+            color: theme.colorScheme.surfaceContainerLow,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
+            border: Border.all(color: theme.colorScheme.outlineVariant),
           ),
           child: Form(
             key: _formKey,
@@ -134,14 +133,14 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.surfaceContainerHigh,
+                          color: theme.colorScheme.surfaceContainer,
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: theme.colorScheme.outlineVariant),
                         ),
                         child: Text(
                           'Read-only',
                           style: theme.textTheme.labelSmall?.copyWith(
-                            color: AppColors.textTertiary,
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ),
@@ -158,11 +157,11 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                 ),
                 const SizedBox(height: 20),
                 AppTextField(
-                  label: 'Description',
+                  label: l10n.projectDescription,
                   controller: _descController,
                   enabled: widget.canEdit && !isSaving,
                   maxLines: 4,
-                  hintText: 'Description...',
+                  hintText: l10n.projectDescriptionPlaceholder,
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -199,7 +198,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       AppButton(
-                        label: 'Save',
+                        label: l10n.save,
                         onPressed: _saveChanges,
                         isLoading: isSaving,
                         isExpanded: false,

@@ -61,9 +61,9 @@ class LanguageSelectorTile extends StatelessWidget {
                   selected: {currentCode},
                   onSelectionChanged: (newSelection) {
                     if (newSelection.isNotEmpty) {
-                      context
-                          .read<AppSettingsCubit>()
-                          .setLocale(Locale(newSelection.first));
+                      context.read<AppSettingsCubit>().setLocale(
+                        Locale(newSelection.first),
+                      );
                     }
                   },
                 ),

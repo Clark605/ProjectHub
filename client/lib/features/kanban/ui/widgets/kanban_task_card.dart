@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanTaskCard extends StatelessWidget {
   final TaskDto task;
@@ -24,6 +25,7 @@ class KanbanTaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
     final priorityColor = task.priorityEnum.toColor();
     final isOverdue = task.isOverdue;
 
@@ -32,10 +34,10 @@ class KanbanTaskCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
         decoration: BoxDecoration(
-          color: isDark ? AppColors.surfaceContainer : AppColors.lightSurface,
+          color: theme.colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isDark ? AppColors.border : AppColors.lightBorder,
+            color: theme.colorScheme.outlineVariant,
             width: 1,
           ),
           boxShadow: [
@@ -82,9 +84,7 @@ class KanbanTaskCard extends StatelessWidget {
                                 task.title,
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  color: isDark
-                                      ? AppColors.textPrimary
-                                      : AppColors.lightTextPrimary,
+                                  color: theme.colorScheme.onSurface,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
@@ -101,9 +101,7 @@ class KanbanTaskCard extends StatelessWidget {
                                 icon: Icon(
                                   Icons.more_vert_rounded,
                                   size: 18,
-                                  color: isDark
-                                      ? AppColors.textSecondary
-                                      : AppColors.lightTextSecondary,
+                                  color: theme.colorScheme.onSurfaceVariant,
                                 ),
                                 onSelected: (action) {
                                   if (action == 'move') {
@@ -114,33 +112,33 @@ class KanbanTaskCard extends StatelessWidget {
                                 },
                                 itemBuilder: (context) => [
                                   if (onMove != null)
-                                    const PopupMenuItem(
+                                    PopupMenuItem(
                                       value: 'move',
                                       child: Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.drive_file_move_outlined,
                                             size: 18,
                                           ),
-                                          SizedBox(width: 8),
-                                          Text('Move to...'),
+                                          const SizedBox(width: 8),
+                                          Text(l10n?.moveTo ?? 'Move to...'),
                                         ],
                                       ),
                                     ),
                                   if (onDelete != null)
-                                    const PopupMenuItem(
+                                    PopupMenuItem(
                                       value: 'delete',
                                       child: Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.delete_outline_rounded,
                                             size: 18,
                                             color: AppColors.error,
                                           ),
-                                          SizedBox(width: 8),
+                                          const SizedBox(width: 8),
                                           Text(
-                                            'Delete',
-                                            style: TextStyle(
+                                            l10n?.delete ?? 'Delete',
+                                            style: const TextStyle(
                                               color: AppColors.error,
                                             ),
                                           ),
@@ -171,54 +169,49 @@ class KanbanTaskCard extends StatelessWidget {
                                             : Colors.black.withValues(
                                                 alpha: 0.05,
                                               )),
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(
-                                      Icons.calendar_today_outlined,
-                                      size: 11,
-                                      color: isOverdue
-                                          ? AppColors.error
-                                          : (isDark
-                                                ? AppColors.textSecondary
-                                                : AppColors.lightTextSecondary),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      DateFormat('MMM d').format(task.dueDate!),
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: isOverdue
-                                            ? FontWeight.w700
-                                            : FontWeight.w500,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_today_outlined,
+                                        size: 11,
                                         color: isOverdue
                                             ? AppColors.error
-                                            : (isDark
-                                                  ? AppColors.textSecondary
-                                                  : AppColors
-                                                        .lightTextSecondary),
+                                            : theme.colorScheme.onSurfaceVariant,
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        DateFormat('MMM d').format(task.dueDate!),
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          fontWeight: isOverdue
+                                              ? FontWeight.w700
+                                              : FontWeight.w500,
+                                          color: isOverdue
+                                              ? AppColors.error
+                                              : theme.colorScheme.onSurfaceVariant,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            const Spacer(),
+                              const Spacer(),
 
-                            // Assignee Avatar
-                            _buildAssigneeAvatar(context),
-                          ],
-                        ),
-                      ],
+                              // Assignee Avatar
+                              _buildAssigneeAvatar(context),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -226,6 +219,7 @@ class KanbanTaskCard extends StatelessWidget {
   Widget _buildAssigneeAvatar(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
     final name = task.assigneeName;
 
     if (name != null && name.trim().isNotEmpty) {
@@ -234,13 +228,13 @@ class KanbanTaskCard extends StatelessWidget {
         message: 'Assigned to $name',
         child: CircleAvatar(
           radius: 12,
-          backgroundColor: AppColors.electricViolet.withValues(alpha: 0.2),
+          backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.2),
           child: Text(
             initial,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: AppColors.electricViolet,
+              color: theme.colorScheme.primary,
             ),
           ),
         ),
@@ -248,7 +242,7 @@ class KanbanTaskCard extends StatelessWidget {
     }
 
     return Tooltip(
-      message: 'Unassigned',
+      message: l10n?.unassigned ?? 'Unassigned',
       child: CircleAvatar(
         radius: 12,
         backgroundColor: isDark
@@ -257,9 +251,7 @@ class KanbanTaskCard extends StatelessWidget {
         child: Icon(
           Icons.person_outline_rounded,
           size: 14,
-          color: isDark
-              ? AppColors.textSecondary
-              : AppColors.lightTextSecondary,
+          color: theme.colorScheme.onSurfaceVariant,
         ),
       ),
     );

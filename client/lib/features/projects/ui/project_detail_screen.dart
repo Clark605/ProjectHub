@@ -90,7 +90,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           final isDesktop = ResponsiveLayout.isDesktop(context);
 
           return Scaffold(
-            backgroundColor: AppColors.background,
+            backgroundColor: theme.colorScheme.surface,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,

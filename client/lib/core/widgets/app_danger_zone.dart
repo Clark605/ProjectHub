@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class AppDangerZone extends StatelessWidget {
   const AppDangerZone({
@@ -30,6 +31,8 @@ class AppDangerZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -57,7 +60,7 @@ class AppDangerZone extends StatelessWidget {
                 foregroundColor: Colors.white,
               ),
               onPressed: () => _showConfirmationDialog(context),
-              child: const Text('Delete'),
+              child: Text(l10n?.delete ?? 'Delete'),
             ),
           ],
         ),
@@ -103,17 +106,23 @@ class _DeleteConfirmationDialogState extends State<_DeleteConfirmationDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AlertDialog(
-      title: const Text('Are you absolutely sure?'),
+      title: Text(l10n?.areYouSureDelete ?? 'Are you absolutely sure?'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'This action cannot be undone. This will permanently delete the entity.',
+          Text(
+            l10n?.actionCannotBeUndone ??
+                'This action cannot be undone. This will permanently delete the entity.',
           ),
           const SizedBox(height: 16),
-          Text('Please type "${widget.entityName}" to confirm.'),
+          Text(
+            l10n?.typeToConfirm(widget.entityName) ??
+                'Please type "${widget.entityName}" to confirm.',
+          ),
           const SizedBox(height: 8),
           TextField(
             controller: _controller,
@@ -127,7 +136,7 @@ class _DeleteConfirmationDialogState extends State<_DeleteConfirmationDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          child: Text(l10n?.cancel ?? 'Cancel'),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
@@ -135,7 +144,7 @@ class _DeleteConfirmationDialogState extends State<_DeleteConfirmationDialog> {
             foregroundColor: Colors.white,
           ),
           onPressed: _canConfirm ? widget.onConfirm : null,
-          child: const Text('Delete'),
+          child: Text(l10n?.delete ?? 'Delete'),
         ),
       ],
     );

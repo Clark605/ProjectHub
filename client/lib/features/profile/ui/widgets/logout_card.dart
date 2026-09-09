@@ -63,18 +63,17 @@ class LogoutCard extends StatelessWidget {
                   Text(
                     l10n?.sessionSecurity ?? 'Session Security',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     'End your active session and revoke credentials.',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.6),
-                        ),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withValues(alpha: 0.6),
+                    ),
                   ),
                 ],
               ),

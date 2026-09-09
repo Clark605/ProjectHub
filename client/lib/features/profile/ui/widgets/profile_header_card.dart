@@ -5,6 +5,7 @@ import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/profile/cubit/profile_edit_cubit.dart';
 import 'package:client/features/profile/cubit/profile_edit_state.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class ProfileHeaderCard extends StatefulWidget {
   final User? user;
@@ -55,6 +56,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final user = widget.user;
 
     return BlocConsumer<ProfileEditCubit, ProfileEditState>(
@@ -62,7 +64,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
         if (state is ProfileEditSuccess) {
           setState(() => _isEditing = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Profile updated successfully!')),
+            SnackBar(content: Text(l10n?.profileUpdatedSuccess ?? 'Profile updated successfully!')),
           );
         }
       },
@@ -123,7 +125,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                     ),
                     IconButton(
                       icon: Icon(_isEditing ? Icons.close_rounded : Icons.edit_rounded),
-                      tooltip: _isEditing ? 'Cancel' : 'Edit profile',
+                      tooltip: _isEditing ? (l10n?.cancel ?? 'Cancel') : (l10n?.editProfile ?? 'Edit profile'),
                       onPressed: () => setState(() => _isEditing = !_isEditing),
                     ),
                   ],
@@ -134,14 +136,14 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                   const SizedBox(height: 16),
                   AppTextField(
                     controller: _nameController,
-                    label: 'Display Name',
-                    hintText: 'Your full name',
+                    label: l10n?.displayName ?? 'Display Name',
+                    hintText: l10n?.yourFullNameHint ?? 'Your full name',
                   ),
                   const SizedBox(height: 14),
                   AppTextField(
                     controller: _bioController,
-                    label: 'Bio',
-                    hintText: 'Short description about yourself',
+                    label: l10n?.bio ?? 'Bio',
+                    hintText: l10n?.shortDescriptionHint ?? 'Short description about yourself',
                   ),
                   const SizedBox(height: 18),
                   Align(
@@ -149,7 +151,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 160),
                       child: AppButton(
-                        label: 'Save Profile',
+                        label: l10n?.saveProfile ?? 'Save Profile',
                         icon: Icons.check_rounded,
                         isLoading: isLoading,
                         onPressed: () => _save(context),

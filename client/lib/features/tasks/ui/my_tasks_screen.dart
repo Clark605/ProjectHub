@@ -359,14 +359,13 @@ class _MyTasksScreenState extends State<MyTasksScreen>
         margin: const EdgeInsets.all(24),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         decoration: BoxDecoration(
-          color: (isDark
-                  ? theme.colorScheme.surfaceContainerLow
-                  : theme.colorScheme.surface)
-              .withValues(alpha: 0.8),
+          color:
+              (isDark
+                      ? theme.colorScheme.surfaceContainerLow
+                      : theme.colorScheme.surface)
+                  .withValues(alpha: 0.8),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: theme.colorScheme.outlineVariant,
-          ),
+          border: Border.all(color: theme.colorScheme.outlineVariant),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

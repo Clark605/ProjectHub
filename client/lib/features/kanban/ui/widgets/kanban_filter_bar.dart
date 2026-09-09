@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanFilterBar extends StatefulWidget {
   final String? selectedPriority;
@@ -62,7 +62,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
 
     final hasActiveFilter =
         (widget.selectedPriority != null &&
@@ -75,10 +75,10 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.surfaceContainerLow : Colors.grey.shade50,
+        color: theme.colorScheme.surfaceContainerLow,
         border: Border(
           bottom: BorderSide(
-            color: isDark ? AppColors.border : AppColors.lightBorder,
+            color: theme.colorScheme.outlineVariant,
             width: 1,
           ),
         ),
@@ -94,12 +94,10 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                   child: Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      color: isDark ? AppColors.surfaceContainer : Colors.white,
+                      color: theme.colorScheme.surface,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: isDark
-                            ? AppColors.border
-                            : AppColors.lightBorder,
+                        color: theme.colorScheme.outlineVariant,
                       ),
                     ),
                     child: TextField(
@@ -108,12 +106,11 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                       autofocus: true,
                       style: theme.textTheme.bodyMedium,
                       decoration: InputDecoration(
-                        hintText: 'Search tasks by title or description...',
+                        hintText: l10n?.taskTitlePlaceholder ??
+                            'Search tasks by title or description...',
                         hintStyle: TextStyle(
                           fontSize: 13,
-                          color: isDark
-                              ? AppColors.textSecondary
-                              : AppColors.lightTextSecondary,
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                         prefixIcon: const Icon(Icons.search_rounded, size: 18),
                         suffixIcon: _searchController.text.isNotEmpty
@@ -136,7 +133,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                 const SizedBox(width: 8),
                 IconButton(
                   icon: const Icon(Icons.close_rounded),
-                  tooltip: 'Close search',
+                  tooltip: l10n?.closeSearch ?? 'Close search',
                   onPressed: () {
                     setState(() {
                       _isSearchExpanded = false;
@@ -161,7 +158,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                     padding: const EdgeInsets.only(right: 8),
                     child: ActionChip(
                       avatar: const Icon(Icons.search_rounded, size: 16),
-                      label: const Text('Search'),
+                      label: Text(l10n?.search ?? 'Search'),
                       onPressed: () => setState(() => _isSearchExpanded = true),
                     ),
                   ),
@@ -170,7 +167,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: PopupMenuButton<String>(
-                    tooltip: 'Filter by priority',
+                    tooltip: l10n?.filterByPriority ?? 'Filter by priority',
                     onSelected: (val) {
                       widget.onPrioritySelected(val == 'all' ? null : val);
                     },
@@ -186,8 +183,8 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                       ),
                       label: Text(
                         widget.selectedPriority != null
-                            ? 'Priority: ${widget.selectedPriority}'
-                            : 'Priority',
+                            ? '${l10n?.taskPriority ?? 'Priority'}: ${widget.selectedPriority}'
+                            : (l10n?.taskPriority ?? 'Priority'),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: widget.selectedPriority != null
@@ -203,9 +200,9 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                           : null,
                     ),
                     itemBuilder: (context) => [
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'all',
-                        child: Text('All Priorities'),
+                        child: Text(l10n?.allPriorities ?? 'All Priorities'),
                       ),
                       ...TaskPriority.values.map(
                         (p) => PopupMenuItem(
@@ -214,7 +211,11 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                             children: [
                               Icon(p.toIcon(), size: 16, color: p.toColor()),
                               const SizedBox(width: 8),
-                              Text(p.toDisplayString()),
+                              Text(
+                                l10n != null
+                                    ? p.localizedName(l10n)
+                                    : p.toDisplayString(),
+                              ),
                             ],
                           ),
                         ),
@@ -227,7 +228,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: PopupMenuButton<String>(
-                    tooltip: 'Filter by assignee',
+                    tooltip: l10n?.filterByAssignee ?? 'Filter by assignee',
                     onSelected: (val) {
                       widget.onAssigneeSelected(val == 'all' ? null : val);
                     },
@@ -237,7 +238,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                         size: 16,
                       ),
                       label: Text(
-                        _resolveAssigneeLabel(widget.selectedAssignee),
+                        _resolveAssigneeLabel(widget.selectedAssignee, l10n),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: widget.selectedAssignee != null
@@ -253,13 +254,13 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                           : null,
                     ),
                     itemBuilder: (context) => [
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'all',
-                        child: Text('All Assignees'),
+                        child: Text(l10n?.allAssignees ?? 'All Assignees'),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'unassigned',
-                        child: Text('Unassigned'),
+                        child: Text(l10n?.unassigned ?? 'Unassigned'),
                       ),
                       ...widget.members.map(
                         (m) =>
@@ -273,7 +274,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                 if (hasActiveFilter)
                   ActionChip(
                     avatar: const Icon(Icons.filter_alt_off_rounded, size: 16),
-                    label: const Text('Clear Filters'),
+                    label: Text(l10n?.clearFilters ?? 'Clear Filters'),
                     onPressed: () {
                       _searchController.clear();
                       widget.onClearFilters();
@@ -287,14 +288,14 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
     );
   }
 
-  String _resolveAssigneeLabel(String? assigneeId) {
+  String _resolveAssigneeLabel(String? assigneeId, AppLocalizations? l10n) {
     if (assigneeId == null || assigneeId.isEmpty || assigneeId == 'all') {
-      return 'Assignee';
+      return l10n?.assignee ?? 'Assignee';
     }
-    if (assigneeId == 'unassigned') return 'Unassigned';
+    if (assigneeId == 'unassigned') return l10n?.unassigned ?? 'Unassigned';
     final member = widget.members
         .where((m) => m.userId == assigneeId)
         .firstOrNull;
-    return member != null ? member.name : 'Assignee';
+    return member != null ? member.name : (l10n?.assignee ?? 'Assignee');
   }
 }

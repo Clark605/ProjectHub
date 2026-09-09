@@ -1423,6 +1423,324 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Light'**
   String get themeModeLight;
+
+  /// No description provided for @taskPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get taskPriority;
+
+  /// No description provided for @assignee.
+  ///
+  /// In en, this message translates to:
+  /// **'Assignee'**
+  String get assignee;
+
+  /// No description provided for @unassigned.
+  ///
+  /// In en, this message translates to:
+  /// **'Unassigned'**
+  String get unassigned;
+
+  /// No description provided for @assignedMember.
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned Member'**
+  String get assignedMember;
+
+  /// No description provided for @taskDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get taskDescription;
+
+  /// No description provided for @taskDescriptionPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add details, context, or acceptance criteria...'**
+  String get taskDescriptionPlaceholder;
+
+  /// No description provided for @taskTitleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Task title is required'**
+  String get taskTitleRequired;
+
+  /// No description provided for @noDueDate.
+  ///
+  /// In en, this message translates to:
+  /// **'No date'**
+  String get noDueDate;
+
+  /// No description provided for @activeProjectsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'ACTIVE PROJECTS'**
+  String get activeProjectsSection;
+
+  /// No description provided for @noProjectsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No projects yet'**
+  String get noProjectsYet;
+
+  /// No description provided for @removeMemberTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Member?'**
+  String get removeMemberTitle;
+
+  /// No description provided for @currentStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Current'**
+  String get currentStatus;
+
+  /// No description provided for @onlineCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Online'**
+  String onlineCount(int count);
+
+  /// No description provided for @sessionSecurityDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'End your active session and revoke credentials.'**
+  String get sessionSecurityDesc;
+
+  /// No description provided for @moveTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Move Task'**
+  String get moveTask;
+
+  /// No description provided for @editTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Task'**
+  String get editTask;
+
+  /// No description provided for @deleteTaskConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Task'**
+  String get deleteTaskConfirmTitle;
+
+  /// No description provided for @deleteTaskConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete \"{title}\"? This action cannot be undone.'**
+  String deleteTaskConfirmMessage(String title);
+
+  /// No description provided for @noDescriptionProvided.
+  ///
+  /// In en, this message translates to:
+  /// **'No description provided.'**
+  String get noDescriptionProvided;
+
+  /// No description provided for @dueDateNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get dueDateNotSet;
+
+  /// No description provided for @taskOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get taskOverdue;
+
+  /// No description provided for @taskCreatedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Created By'**
+  String get taskCreatedBy;
+
+  /// No description provided for @unknownUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknownUser;
+
+  /// No description provided for @taskCreatedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get taskCreatedAt;
+
+  /// No description provided for @somethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWentWrong;
+
+  /// No description provided for @taskTitleRequiredLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title *'**
+  String get taskTitleRequiredLabel;
+
+  /// No description provided for @taskTitlePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'What needs to be done?'**
+  String get taskTitlePlaceholder;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filters'**
+  String get clearFilters;
+
+  /// No description provided for @allPriorities.
+  ///
+  /// In en, this message translates to:
+  /// **'All Priorities'**
+  String get allPriorities;
+
+  /// No description provided for @allAssignees.
+  ///
+  /// In en, this message translates to:
+  /// **'All Assignees'**
+  String get allAssignees;
+
+  /// No description provided for @filterByPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by priority'**
+  String get filterByPriority;
+
+  /// No description provided for @filterByAssignee.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by assignee'**
+  String get filterByAssignee;
+
+  /// No description provided for @noTasksMatchFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks match active filters'**
+  String get noTasksMatchFilters;
+
+  /// No description provided for @boardIsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Board is Empty'**
+  String get boardIsEmpty;
+
+  /// No description provided for @boardIsEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Start organizing your workflow by creating the first task for this project.'**
+  String get boardIsEmptySubtitle;
+
+  /// No description provided for @noTasksArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'No Tasks'**
+  String get noTasksArchived;
+
+  /// No description provided for @noTasksArchivedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This project is archived and has no tasks recorded.'**
+  String get noTasksArchivedSubtitle;
+
+  /// No description provided for @createFirstTask.
+  ///
+  /// In en, this message translates to:
+  /// **'Create First Task'**
+  String get createFirstTask;
+
+  /// No description provided for @profileUpdatedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully!'**
+  String get profileUpdatedSuccess;
+
+  /// No description provided for @returnToWorkspace.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to Workspace'**
+  String get returnToWorkspace;
+
+  /// No description provided for @areYouSureDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you absolutely sure?'**
+  String get areYouSureDelete;
+
+  /// No description provided for @typeToConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Please type \"{name}\" to confirm.'**
+  String typeToConfirm(String name);
+
+  /// No description provided for @actionCannotBeUndone.
+  ///
+  /// In en, this message translates to:
+  /// **'This action cannot be undone. This will permanently delete the entity.'**
+  String get actionCannotBeUndone;
+
+  /// No description provided for @connectionUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection unavailable'**
+  String get connectionUnavailable;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @closeSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Close search'**
+  String get closeSearch;
+
+  /// No description provided for @yourFullNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your full name'**
+  String get yourFullNameHint;
+
+  /// No description provided for @shortDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Short description about yourself'**
+  String get shortDescriptionHint;
+
+  /// No description provided for @projectDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Description...'**
+  String get projectDescriptionHint;
+
+  /// No description provided for @navigationMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Navigation Menu'**
+  String get navigationMenu;
+
+  /// No description provided for @addTaskToStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Add task to {status}'**
+  String addTaskToStatus(String status);
+
+  /// No description provided for @displayName.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Name'**
+  String get displayName;
+
+  /// No description provided for @saveProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Profile'**
+  String get saveProfile;
 }
 
 class _AppLocalizationsDelegate
