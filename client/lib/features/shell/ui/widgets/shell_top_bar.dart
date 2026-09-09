@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/routes/route_names.dart';
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/features/shell/ui/widgets/shell_presence_indicator.dart';
 import 'package:client/features/shell/ui/widgets/workspace_switcher_pill.dart';
@@ -38,21 +37,23 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
         activeWorkspaceRole != null &&
         activeWorkspaceRole!.trim().toLowerCase() == 'owner';
 
+    final theme = Theme.of(context);
+
     return Container(
       height: 64,
       decoration: BoxDecoration(
-        color: AppColors.surface.withValues(alpha: 0.8),
-        border: const Border(
-          bottom: BorderSide(color: AppColors.border, width: 1),
+        color: theme.colorScheme.surface.withValues(alpha: 0.8),
+        border: Border(
+          bottom: BorderSide(color: theme.colorScheme.outlineVariant, width: 1),
         ),
       ),
       child: Row(
         children: [
           if (!isDesktop) ...[
             IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.menu_rounded,
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
               ),
               tooltip: 'Navigation Menu',
               onPressed: onOpenDrawer,
@@ -61,7 +62,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
           ],
           Expanded(
             child: Align(
-              alignment: Alignment.centerLeft,
+              alignment: AlignmentDirectional.centerStart,
               child: WorkspaceSwitcherPill(
                 activeWorkspaceName: activeWorkspaceName,
                 activeWorkspaceRole: activeWorkspaceRole,
@@ -77,9 +78,9 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
           ],
           if (isOwner) ...[
             IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.settings_outlined,
-                color: AppColors.textSecondary,
+                color: theme.colorScheme.onSurfaceVariant,
                 size: 20,
               ),
               tooltip: 'Workspace Settings',

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
@@ -68,9 +67,9 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
         ),
         padding: EdgeInsets.only(bottom: bottomInset),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: theme.colorScheme.surface,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: theme.colorScheme.outlineVariant),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -82,7 +81,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.border.withValues(alpha: 0.9),
+                  color: theme.colorScheme.outlineVariant,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -97,13 +96,13 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                     l10n.switchWorkspace,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
+                      color: theme.colorScheme.onSurface,
                     ),
                   ),
                   const Spacer(),
                   IconButton(
                     icon: const Icon(Icons.close_rounded, size: 20),
-                    color: AppColors.textSecondary,
+                    color: theme.colorScheme.onSurfaceVariant,
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
@@ -143,7 +142,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                             child: Text(
                               l10n.noWorkspacesFound,
                               style: theme.textTheme.bodyMedium?.copyWith(
-                                color: AppColors.textSecondary,
+                                color: theme.colorScheme.onSurfaceVariant,
                               ),
                             ),
                           ),
@@ -170,11 +169,11 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                         },
                       );
                     },
-                    loading: () => const Center(
+                    loading: () => Center(
                       child: Padding(
-                        padding: EdgeInsets.all(32),
+                        padding: const EdgeInsets.all(32),
                         child: CircularProgressIndicator(
-                          color: AppColors.primary,
+                          color: theme.colorScheme.primary,
                         ),
                       ),
                     ),

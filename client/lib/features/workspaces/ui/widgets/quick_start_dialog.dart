@@ -80,9 +80,9 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
         constraints: const BoxConstraints(maxWidth: 440),
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: theme.colorScheme.outlineVariant),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.4),
@@ -151,12 +151,12 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
           width: 52,
           height: 52,
           decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.15),
+            color: theme.colorScheme.primary.withValues(alpha: 0.15),
             shape: BoxShape.circle,
           ),
-          child: const Icon(
+          child: Icon(
             Icons.hub_rounded,
-            color: AppColors.primary,
+            color: theme.colorScheme.primary,
             size: 26,
           ),
         ),
@@ -165,7 +165,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
           l10n.quickStartWelcome,
           style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w800,
-            color: AppColors.textPrimary,
+            color: theme.colorScheme.onSurface,
           ),
           textAlign: TextAlign.center,
         ),
@@ -173,7 +173,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
         Text(
           l10n.quickStartSubtitle,
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: AppColors.textSecondary,
+            color: theme.colorScheme.onSurfaceVariant,
           ),
           textAlign: TextAlign.center,
         ),

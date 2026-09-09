@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/core/theme/app_colors.dart';
-
 class DesktopSidebarNavItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -22,6 +20,9 @@ class DesktopSidebarNavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
@@ -29,12 +30,12 @@ class DesktopSidebarNavItem extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected
-              ? AppColors.primary.withValues(alpha: 0.15)
+              ? primaryColor.withValues(alpha: 0.15)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: isSelected
               ? Border.all(
-                  color: AppColors.primary.withValues(alpha: 0.4),
+                  color: primaryColor.withValues(alpha: 0.4),
                   width: 1,
                 )
               : null,
@@ -44,14 +45,18 @@ class DesktopSidebarNavItem extends StatelessWidget {
             Icon(
               icon,
               size: 20,
-              color: isSelected ? AppColors.primary : AppColors.textSecondary,
+              color: isSelected
+                  ? primaryColor
+                  : theme.colorScheme.onSurfaceVariant,
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Text(
                 label,
                 style: TextStyle(
-                  color: isSelected ? AppColors.primary : AppColors.textPrimary,
+                  color: isSelected
+                      ? primaryColor
+                      : theme.colorScheme.onSurface,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                   fontSize: 13,
                 ),
@@ -61,7 +66,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: (badgeColor ?? AppColors.primary).withValues(
+                  color: (badgeColor ?? primaryColor).withValues(
                     alpha: 0.15,
                   ),
                   borderRadius: BorderRadius.circular(10),
@@ -69,7 +74,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
                 child: Text(
                   badge!,
                   style: TextStyle(
-                    color: badgeColor ?? AppColors.primary,
+                    color: badgeColor ?? primaryColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 10,
                   ),

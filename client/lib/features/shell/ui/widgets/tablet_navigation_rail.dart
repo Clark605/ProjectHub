@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/shell/models/shell_tab.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class TabletNavigationRail extends StatelessWidget {
   final int selectedIndex;
@@ -15,12 +16,15 @@ class TabletNavigationRail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
+
     return Container(
       width: 72,
       decoration: BoxDecoration(
-        color: AppColors.surface.withValues(alpha: 0.95),
-        border: const Border(
-          right: BorderSide(color: AppColors.border, width: 1),
+        color: theme.colorScheme.surface.withValues(alpha: 0.95),
+        border: BorderDirectional(
+          end: BorderSide(color: theme.colorScheme.outlineVariant, width: 1),
         ),
       ),
       child: Column(
@@ -47,7 +51,7 @@ class TabletNavigationRail extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          const Divider(color: AppColors.border, height: 1),
+          Divider(color: theme.colorScheme.outlineVariant, height: 1),
           const SizedBox(height: 16),
 
           // Rail Nav Items
@@ -56,7 +60,7 @@ class TabletNavigationRail extends StatelessWidget {
               children: [
                 _RailItem(
                   icon: tab.selectedIcon,
-                  label: tab.label,
+                  label: l10n != null ? tab.localizedName(l10n) : tab.label,
                   isSelected: selectedIndex == tab.index,
                   onTap: () => onItemSelected(tab.index),
                 ),
@@ -112,7 +116,9 @@ class _RailItem extends StatelessWidget {
           child: Icon(
             icon,
             size: 22,
-            color: isSelected ? AppColors.primary : AppColors.textSecondary,
+            color: isSelected
+                ? AppColors.primary
+                : Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
       ),

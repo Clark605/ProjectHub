@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/shell/models/shell_tab.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class MobileBottomNav extends StatelessWidget {
   final int selectedIndex;
@@ -15,11 +15,13 @@ class MobileBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface.withValues(alpha: 0.95),
-        border: const Border(
-          top: BorderSide(color: AppColors.border, width: 1),
+        color: theme.colorScheme.surface.withValues(alpha: 0.95),
+        border: Border(
+          top: BorderSide(color: theme.colorScheme.outlineVariant, width: 1),
         ),
       ),
       child: SafeArea(
@@ -32,7 +34,7 @@ class MobileBottomNav extends StatelessWidget {
                   (tab) => Expanded(
                     child: _BottomNavItem(
                       icon: tab.selectedIcon,
-                      label: tab.label,
+                      label: l10n != null ? tab.localizedName(l10n) : tab.label,
                       isSelected: selectedIndex == tab.index,
                       onTap: () => onItemSelected(tab.index),
                     ),
@@ -61,6 +63,10 @@ class _BottomNavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final activeColor = theme.colorScheme.primary;
+    final inactiveColor = theme.colorScheme.onSurfaceVariant;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
@@ -72,13 +78,13 @@ class _BottomNavItem extends StatelessWidget {
             Icon(
               icon,
               size: 22,
-              color: isSelected ? AppColors.primary : AppColors.textSecondary,
+              color: isSelected ? activeColor : inactiveColor,
             ),
             const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
-                color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                color: isSelected ? activeColor : inactiveColor,
                 fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),

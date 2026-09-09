@@ -39,8 +39,9 @@ class AppRouter {
         );
       case RouteNames.shell:
       case RouteNames.dashboard:
-      case RouteNames.projects:
         return _fadeRoute(const MainShellScreen(initialIndex: 0), settings);
+      case RouteNames.projects:
+        return _fadeRoute(const MainShellScreen(initialIndex: 1), settings);
       case RouteNames.projectDetail:
         final args = settings.arguments;
         final projectId = args is int
@@ -48,9 +49,9 @@ class AppRouter {
             : int.tryParse(args?.toString() ?? '') ?? 0;
         return _fadeRoute(ProjectDetailScreen(projectId: projectId), settings);
       case RouteNames.myTasks:
-        return _fadeRoute(const MainShellScreen(initialIndex: 1), settings);
-      case RouteNames.profile:
         return _fadeRoute(const MainShellScreen(initialIndex: 2), settings);
+      case RouteNames.profile:
+        return _fadeRoute(const MainShellScreen(initialIndex: 3), settings);
       case RouteNames.workspaces:
         return MaterialPageRoute(
           builder: (_) => const WorkspaceSettingsScreen(),

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class RecentActivityCard extends StatelessWidget {
   final List<ActivityEventDto> activities;
@@ -17,14 +18,15 @@ class RecentActivityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow.withValues(alpha: 0.8),
+        color: theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(
-          color: AppColors.border.withValues(alpha: 0.6),
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
           width: 1,
         ),
       ),
@@ -52,7 +54,7 @@ class RecentActivityCard extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'Team Presence & Stream',
+                  l10n?.teamStream ?? 'Team Presence & Stream',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -78,13 +80,13 @@ class RecentActivityCard extends StatelessWidget {
                     Icon(
                       Icons.notifications_none_rounded,
                       size: 32,
-                      color: AppColors.textTertiary.withValues(alpha: 0.6),
+                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'No recent activity yet',
+                      l10n?.noRecentActivity ?? 'No recent activity yet',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppColors.textTertiary,
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
@@ -97,7 +99,7 @@ class RecentActivityCard extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: activities.take(6).length,
               separatorBuilder: (context, index) =>
-                  const Divider(color: AppColors.border, height: 16),
+                  Divider(color: theme.colorScheme.outlineVariant, height: 16),
               itemBuilder: (context, index) {
                 final activity = activities[index];
                 return _ActivityTile(activity: activity);
@@ -117,12 +119,13 @@ class _ActivityTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final avatarColor = _getColorForEvent(activity.eventType);
     final avatarText = activity.actorName.isNotEmpty
         ? activity.actorName.trim().substring(0, 1).toUpperCase()
         : 'U';
-    final actionDescription = _describeEvent(activity);
-    final timeStr = _formatRelativeTime(activity.createdAt);
+    final actionDescription = _describeEvent(activity, l10n);
+    final timeStr = _formatRelativeTime(activity.createdAt, l10n);
 
     return Row(
       children: [
@@ -143,7 +146,7 @@ class _ActivityTile extends StatelessWidget {
           child: RichText(
             text: TextSpan(
               style: theme.textTheme.bodySmall?.copyWith(
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
               ),
               children: [
                 TextSpan(
@@ -152,7 +155,7 @@ class _ActivityTile extends StatelessWidget {
                 ),
                 TextSpan(
                   text: actionDescription,
-                  style: const TextStyle(color: AppColors.textSecondary),
+                  style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
@@ -162,7 +165,7 @@ class _ActivityTile extends StatelessWidget {
         Text(
           timeStr,
           style: theme.textTheme.labelSmall?.copyWith(
-            color: AppColors.textTertiary,
+            color: theme.colorScheme.onSurfaceVariant,
             fontSize: 11,
           ),
         ),
@@ -177,44 +180,56 @@ class _ActivityTile extends StatelessWidget {
     return AppColors.warning;
   }
 
-  String _describeEvent(ActivityEventDto event) {
+  String _describeEvent(ActivityEventDto event, AppLocalizations? l10n) {
     final meta = event.metadata != null && event.metadata!.isNotEmpty
         ? ' (${event.metadata})'
         : '';
     switch (event.eventType) {
       case 'TaskCreated':
-        return 'created a new task$meta';
+        return '${l10n?.activityTaskCreated ?? "created a new task"}$meta';
       case 'TaskStatusChanged':
-        return 'updated task status$meta';
+        return '${l10n?.activityTaskStatusChanged ?? "updated task status"}$meta';
       case 'TaskAssigned':
-        return 'assigned a task$meta';
+        return '${l10n?.activityTaskAssigned ?? "assigned a task"}$meta';
       case 'TaskDeleted':
-        return 'deleted a task$meta';
+        return '${l10n?.activityTaskDeleted ?? "deleted a task"}$meta';
       case 'ProjectCreated':
-        return 'created project$meta';
+        return '${l10n?.activityProjectCreated ?? "created project"}$meta';
       case 'ProjectStatusChanged':
-        return 'updated project status$meta';
+        return '${l10n?.activityProjectStatusChanged ?? "updated project status"}$meta';
       case 'ProjectArchived':
-        return 'archived project$meta';
+        return '${l10n?.activityProjectArchived ?? "archived project"}$meta';
       case 'MemberAdded':
-        return 'joined the workspace$meta';
+        return '${l10n?.activityMemberAdded ?? "joined the workspace"}$meta';
       case 'MemberRemoved':
-        return 'left the workspace$meta';
+        return '${l10n?.activityMemberRemoved ?? "left the workspace"}$meta';
       case 'WorkspaceCreated':
-        return 'created this workspace';
+        return l10n?.activityWorkspaceCreated ?? 'created this workspace';
       case 'WorkspaceUpdated':
-        return 'updated workspace settings';
+        return l10n?.activityWorkspaceUpdated ?? 'updated workspace settings';
       default:
         return 'performed ${event.eventType}$meta';
     }
   }
 
-  String _formatRelativeTime(DateTime dateTime) {
+  String _formatRelativeTime(DateTime dateTime, AppLocalizations? l10n) {
     final diff = DateTime.now().difference(dateTime);
-    if (diff.inSeconds < 60) return 'Just now';
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
-    if (diff.inHours < 24) return '${diff.inHours}h ago';
-    if (diff.inDays < 7) return '${diff.inDays}d ago';
+    if (diff.inSeconds < 60) return l10n?.timeJustNow ?? 'Just now';
+    if (diff.inMinutes < 60) {
+      return l10n != null
+          ? l10n.timeMinutesAgo(diff.inMinutes)
+          : '${diff.inMinutes}m ago';
+    }
+    if (diff.inHours < 24) {
+      return l10n != null
+          ? l10n.timeHoursAgo(diff.inHours)
+          : '${diff.inHours}h ago';
+    }
+    if (diff.inDays < 7) {
+      return l10n != null
+          ? l10n.timeDaysAgo(diff.inDays)
+          : '${diff.inDays}d ago';
+    }
     return DateFormat('MMM d').format(dateTime);
   }
 }

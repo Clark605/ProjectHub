@@ -230,7 +230,7 @@ class _KanbanScreenState extends State<KanbanScreen>
               );
 
           return Scaffold(
-            backgroundColor: AppColors.background,
+            backgroundColor: theme.scaffoldBackgroundColor,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -250,7 +250,7 @@ class _KanbanScreenState extends State<KanbanScreen>
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    'Kanban Board',
+                    l10n?.kanbanBoard ?? 'Kanban Board',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: isDark
                           ? AppColors.textSecondary
@@ -263,7 +263,7 @@ class _KanbanScreenState extends State<KanbanScreen>
               actions: [
                 IconButton(
                   icon: const Icon(Icons.refresh_rounded),
-                  tooltip: 'Refresh Board',
+                  tooltip: l10n?.refreshBoard ?? 'Refresh Board',
                   onPressed: () =>
                       _cubit.loadTasks(widget.projectId, forceRefresh: true),
                 ),
@@ -279,12 +279,12 @@ class _KanbanScreenState extends State<KanbanScreen>
                 ? null
                 : FloatingActionButton.extended(
                     onPressed: () => _openCreateTask('Backlog'),
-                    backgroundColor: AppColors.electricViolet,
+                    backgroundColor: AppColors.electricVioletContainer,
                     foregroundColor: Colors.white,
                     icon: const Icon(Icons.add_rounded),
-                    label: const Text(
-                      'New Task',
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                    label: Text(
+                      l10n?.newTask ?? 'New Task',
+                      style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                   ),
             body: AmbientGlowBackground(
@@ -310,7 +310,8 @@ class _KanbanScreenState extends State<KanbanScreen>
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
-                                'This project is archived. Tasks and board are read-only.',
+                                l10n?.archivedProjectNotice ??
+                                    'This project is archived. Tasks and board are read-only.',
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: isDark
                                       ? AppColors.textPrimary
@@ -394,7 +395,9 @@ class _KanbanScreenState extends State<KanbanScreen>
                 onPressed: () =>
                     _cubit.loadTasks(widget.projectId, forceRefresh: true),
                 icon: const Icon(Icons.refresh_rounded),
-                label: const Text('Retry'),
+                label: Text(
+                  AppLocalizations.of(context)?.retry ?? 'Retry',
+                ),
               ),
             ],
           ),
@@ -464,6 +467,7 @@ class _KanbanScreenState extends State<KanbanScreen>
   ) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       children: [
@@ -478,6 +482,8 @@ class _KanbanScreenState extends State<KanbanScreen>
                 final status = entry.value;
                 final isSelected = idx == _currentColumnIndex;
                 final count = tasksByStatus[status]?.length ?? 0;
+                final statusName =
+                    l10n != null ? status.localizedName(l10n) : status.toDisplayString();
 
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
@@ -492,7 +498,7 @@ class _KanbanScreenState extends State<KanbanScreen>
                         shape: BoxShape.circle,
                       ),
                     ),
-                    label: Text('${status.toDisplayString()} ($count)'),
+                    label: Text('$statusName ($count)'),
                     labelStyle: TextStyle(
                       fontWeight: isSelected
                           ? FontWeight.w700

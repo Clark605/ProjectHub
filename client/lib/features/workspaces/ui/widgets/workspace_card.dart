@@ -33,13 +33,13 @@ class WorkspaceCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             color: isActive
-                ? AppColors.primary.withValues(alpha: 0.1)
-                : AppColors.surfaceContainerHigh.withValues(alpha: 0.5),
+                ? theme.colorScheme.primary.withValues(alpha: 0.1)
+                : theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isActive
-                  ? AppColors.primary.withValues(alpha: 0.6)
-                  : AppColors.border.withValues(alpha: 0.6),
+                  ? theme.colorScheme.primary.withValues(alpha: 0.6)
+                  : theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
               width: isActive ? 1.5 : 1.0,
             ),
           ),
@@ -51,17 +51,17 @@ class WorkspaceCard extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isActive ? AppColors.primary : Colors.transparent,
+                  color: isActive ? theme.colorScheme.primary : Colors.transparent,
                   border: Border.all(
-                    color: isActive ? AppColors.primary : AppColors.border,
+                    color: isActive ? theme.colorScheme.primary : theme.colorScheme.outlineVariant,
                     width: 1.5,
                   ),
                 ),
                 child: isActive
-                    ? const Icon(
+                    ? Icon(
                         Icons.check_rounded,
                         size: 16,
-                        color: AppColors.textPrimary,
+                        color: theme.colorScheme.onPrimary,
                       )
                     : null,
               ),
@@ -77,7 +77,7 @@ class WorkspaceCard extends StatelessWidget {
                       workspace.name,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: AppColors.textPrimary,
+                        color: theme.colorScheme.onSurface,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -87,7 +87,7 @@ class WorkspaceCard extends StatelessWidget {
                       Text(
                         workspace.description,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,

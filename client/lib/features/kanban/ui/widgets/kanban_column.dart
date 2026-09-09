@@ -4,6 +4,7 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_task_card.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanColumn extends StatelessWidget {
   final TaskStatus status;
@@ -29,16 +30,19 @@ class KanbanColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context);
     final statusColor = status.toColor();
+    final statusName =
+        l10n != null ? status.localizedName(l10n) : status.toDisplayString();
 
     return Container(
       decoration: BoxDecoration(
         color: isDark
-            ? AppColors.surfaceContainerLow.withValues(alpha: 0.5)
-            : Colors.grey.shade100.withValues(alpha: 0.6),
+            ? theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.5)
+            : theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isDark ? AppColors.border : AppColors.lightBorder,
+          color: theme.colorScheme.outlineVariant,
           width: 1,
         ),
       ),
@@ -64,7 +68,7 @@ class KanbanColumn extends StatelessWidget {
                 // Status Title
                 Flexible(
                   child: Text(
-                    status.toDisplayString(),
+                    statusName,
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -100,7 +104,7 @@ class KanbanColumn extends StatelessWidget {
                 if (!isArchived && onAddTask != null)
                   IconButton(
                     icon: const Icon(Icons.add_rounded, size: 20),
-                    tooltip: 'Add task to ${status.toDisplayString()}',
+                    tooltip: 'Add task to $statusName',
                     constraints: const BoxConstraints(),
                     padding: const EdgeInsets.all(6),
                     onPressed: onAddTask,
@@ -136,7 +140,7 @@ class KanbanColumn extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'No tasks',
+                                  l10n?.noTasksInColumn ?? 'No tasks in this column',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: isDark

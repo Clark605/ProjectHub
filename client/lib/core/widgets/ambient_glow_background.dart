@@ -61,7 +61,10 @@ class _AmbientGlowBackgroundState extends State<AmbientGlowBackground>
     final isDark = theme.brightness == Brightness.dark;
 
     if (!widget.showGlow || !isDark) {
-      return widget.child;
+      return ColoredBox(
+        color: theme.scaffoldBackgroundColor,
+        child: widget.child,
+      );
     }
 
     final effectivePrimary = widget.primaryGlowColor != AppColors.electricViolet

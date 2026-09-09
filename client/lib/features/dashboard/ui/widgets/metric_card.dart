@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/core/theme/app_colors.dart';
-
 class MetricData {
   final String label;
   final String value;
@@ -30,10 +28,10 @@ class MetricCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainer.withValues(alpha: 0.8),
+        color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: AppColors.border.withValues(alpha: 0.6),
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
           width: 1,
         ),
       ),
@@ -47,7 +45,7 @@ class MetricCard extends StatelessWidget {
                 child: Text(
                   data.label,
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: AppColors.textSecondary,
+                    color: theme.colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.w500,
                   ),
                   maxLines: 1,
@@ -78,7 +76,7 @@ class MetricCard extends StatelessWidget {
           Text(
             data.trend,
             style: theme.textTheme.labelSmall?.copyWith(
-              color: AppColors.textSecondary,
+              color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w500,
             ),
           ),
