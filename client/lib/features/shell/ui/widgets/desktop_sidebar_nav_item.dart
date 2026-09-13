@@ -53,9 +53,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
               child: Text(
                 label,
                 style: TextStyle(
-                  color: isSelected
-                      ? activeColor
-                      : theme.colorScheme.onSurface,
+                  color: isSelected ? activeColor : theme.colorScheme.onSurface,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                   fontSize: 13,
                 ),

@@ -39,11 +39,12 @@ class KanbanColumn extends StatelessWidget {
         ? status.localizedName(l10n)
         : status.toDisplayString();
     final accent =
-        activeWorkspaceAccent != null && activeWorkspaceAccent!.trim().isNotEmpty
-            ? WorkspaceAccent.fromId(
-                activeWorkspaceAccent,
-              ).resolvedColor(theme.brightness)
-            : null;
+        activeWorkspaceAccent != null &&
+            activeWorkspaceAccent!.trim().isNotEmpty
+        ? WorkspaceAccent.fromId(
+            activeWorkspaceAccent,
+          ).resolvedColor(theme.brightness)
+        : null;
 
     return Container(
       decoration: BoxDecoration(
@@ -115,7 +116,8 @@ class KanbanColumn extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color: accent ??
+                      color:
+                          accent ??
                           (isDark
                               ? AppColors.textSecondary
                               : AppColors.lightTextSecondary),

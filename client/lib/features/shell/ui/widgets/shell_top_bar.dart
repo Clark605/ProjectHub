@@ -44,11 +44,12 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     final accentColor =
-        activeWorkspaceAccent != null && activeWorkspaceAccent!.trim().isNotEmpty
-            ? WorkspaceAccent.fromId(
-                activeWorkspaceAccent,
-              ).resolvedColor(theme.brightness)
-            : null;
+        activeWorkspaceAccent != null &&
+            activeWorkspaceAccent!.trim().isNotEmpty
+        ? WorkspaceAccent.fromId(
+            activeWorkspaceAccent,
+          ).resolvedColor(theme.brightness)
+        : null;
 
     return Container(
       height: 64,
@@ -100,8 +101,9 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                   tooltip: l10n?.workspaceSettings ?? 'Workspace Settings',
                   onPressed:
                       onSettingsTap ??
-                      () =>
-                          Navigator.of(context).pushNamed(RouteNames.workspaces),
+                      () => Navigator.of(
+                        context,
+                      ).pushNamed(RouteNames.workspaces),
                 ),
                 const SizedBox(width: 8),
               ],

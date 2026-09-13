@@ -98,12 +98,9 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             );
           } catch (_) {}
 
-          final accentColor =
-              wsAccent != null && wsAccent.trim().isNotEmpty
-                  ? WorkspaceAccent.fromId(
-                      wsAccent,
-                    ).resolvedColor(theme.brightness)
-                  : null;
+          final accentColor = wsAccent != null && wsAccent.trim().isNotEmpty
+              ? WorkspaceAccent.fromId(wsAccent).resolvedColor(theme.brightness)
+              : null;
 
           return Scaffold(
             backgroundColor: theme.colorScheme.surface,

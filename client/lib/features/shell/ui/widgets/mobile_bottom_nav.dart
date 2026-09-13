@@ -21,11 +21,12 @@ class MobileBottomNav extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     final activeAccent =
-        activeWorkspaceAccent != null && activeWorkspaceAccent!.trim().isNotEmpty
-            ? WorkspaceAccent.fromId(
-                activeWorkspaceAccent,
-              ).resolvedColor(theme.brightness)
-            : theme.colorScheme.primary;
+        activeWorkspaceAccent != null &&
+            activeWorkspaceAccent!.trim().isNotEmpty
+        ? WorkspaceAccent.fromId(
+            activeWorkspaceAccent,
+          ).resolvedColor(theme.brightness)
+        : theme.colorScheme.primary;
 
     return Container(
       decoration: BoxDecoration(

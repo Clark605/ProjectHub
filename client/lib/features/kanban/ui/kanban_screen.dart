@@ -240,12 +240,9 @@ class _KanbanScreenState extends State<KanbanScreen>
             );
           } catch (_) {}
 
-          final accentColor =
-              wsAccent != null && wsAccent.trim().isNotEmpty
-                  ? WorkspaceAccent.fromId(
-                      wsAccent,
-                    ).resolvedColor(theme.brightness)
-                  : null;
+          final accentColor = wsAccent != null && wsAccent.trim().isNotEmpty
+              ? WorkspaceAccent.fromId(wsAccent).resolvedColor(theme.brightness)
+              : null;
 
           return Scaffold(
             backgroundColor: theme.scaffoldBackgroundColor,
@@ -512,12 +509,9 @@ class _KanbanScreenState extends State<KanbanScreen>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
-    final accentColor =
-        wsAccent != null && wsAccent.trim().isNotEmpty
-            ? WorkspaceAccent.fromId(
-                wsAccent,
-              ).resolvedColor(theme.brightness)
-            : null;
+    final accentColor = wsAccent != null && wsAccent.trim().isNotEmpty
+        ? WorkspaceAccent.fromId(wsAccent).resolvedColor(theme.brightness)
+        : null;
 
     return Column(
       children: [
@@ -562,7 +556,7 @@ class _KanbanScreenState extends State<KanbanScreen>
                           : FontWeight.w500,
                       color: isSelected
                           ? (accentColor ??
-                              (isDark ? Colors.white : Colors.black))
+                                (isDark ? Colors.white : Colors.black))
                           : (isDark
                                 ? AppColors.textSecondary
                                 : AppColors.lightTextSecondary),

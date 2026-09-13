@@ -34,11 +34,12 @@ class MyTasksSection extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final accent =
-        activeWorkspaceAccent != null && activeWorkspaceAccent!.trim().isNotEmpty
-            ? WorkspaceAccent.fromId(
-                activeWorkspaceAccent,
-              ).resolvedColor(theme.brightness)
-            : null;
+        activeWorkspaceAccent != null &&
+            activeWorkspaceAccent!.trim().isNotEmpty
+        ? WorkspaceAccent.fromId(
+            activeWorkspaceAccent,
+          ).resolvedColor(theme.brightness)
+        : null;
 
     if (tasks.isEmpty && !isCollapsible) {
       return const SizedBox.shrink();
@@ -81,7 +82,8 @@ class MyTasksSection extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color: accent ??
+                      color:
+                          accent ??
                           (isDark
                               ? AppColors.textSecondary
                               : AppColors.lightTextSecondary),

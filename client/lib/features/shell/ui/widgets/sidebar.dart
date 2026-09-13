@@ -33,11 +33,12 @@ class Sidebar extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     final activeAccentColor =
-        activeWorkspaceAccent != null && activeWorkspaceAccent!.trim().isNotEmpty
-            ? WorkspaceAccent.fromId(
-                activeWorkspaceAccent,
-              ).resolvedColor(theme.brightness)
-            : null;
+        activeWorkspaceAccent != null &&
+            activeWorkspaceAccent!.trim().isNotEmpty
+        ? WorkspaceAccent.fromId(
+            activeWorkspaceAccent,
+          ).resolvedColor(theme.brightness)
+        : null;
 
     ProjectsListCubit? cubit;
     try {
