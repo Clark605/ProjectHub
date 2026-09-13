@@ -246,6 +246,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
                 bottomNavigationBar: MobileBottomNav(
                   selectedIndex: _selectedIndex,
                   onItemSelected: _onSelectTab,
+                  activeWorkspaceAccent: wsAccent,
                 ),
               ),
             ),

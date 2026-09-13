@@ -4,9 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_sheet.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_column.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_empty_state.dart';
@@ -229,11 +232,43 @@ class _KanbanScreenState extends State<KanbanScreen>
                 orElse: () => false,
               );
 
+          String? wsAccent;
+          try {
+            wsAccent = context.watch<WorkspaceContextCubit>().state.maybeWhen(
+              loaded: (_, active) => active.accentColor,
+              orElse: () => null,
+            );
+          } catch (_) {}
+
+          final accentColor =
+              wsAccent != null && wsAccent.trim().isNotEmpty
+                  ? WorkspaceAccent.fromId(
+                      wsAccent,
+                    ).resolvedColor(theme.brightness)
+                  : null;
+
           return Scaffold(
             backgroundColor: theme.scaffoldBackgroundColor,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
+              bottom: accentColor != null
+                  ? PreferredSize(
+                      preferredSize: const Size.fromHeight(2),
+                      child: Container(
+                        height: 2,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              accentColor,
+                              accentColor.withValues(alpha: 0.6),
+                              accentColor.withValues(alpha: 0.1),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  : null,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_rounded),
                 onPressed: () => Navigator.of(context).pop(),
@@ -352,6 +387,7 @@ class _KanbanScreenState extends State<KanbanScreen>
                           context,
                           state,
                           isEffectivelyArchived,
+                          wsAccent,
                         ),
                       ),
                     ),
@@ -369,6 +405,7 @@ class _KanbanScreenState extends State<KanbanScreen>
     BuildContext context,
     KanbanState state,
     bool isArchived,
+    String? wsAccent,
   ) {
     final l10n = AppLocalizations.of(context);
     return state.when(
@@ -396,13 +433,13 @@ class _KanbanScreenState extends State<KanbanScreen>
                 onPressed: () =>
                     _cubit.loadTasks(widget.projectId, forceRefresh: true),
                 icon: const Icon(Icons.refresh_rounded),
-                label: Text(AppLocalizations.of(context)?.retry ?? 'Retry'),
+                label: Text(l10n?.retry ?? 'Retry'),
               ),
             ],
           ),
         ),
       ),
-      empty: (_, arch) => KanbanEmptyState(
+      empty: (projId, arch) => KanbanEmptyState(
         isArchived: arch,
         onCreateTask: () => _openCreateTask('Backlog'),
       ),
@@ -445,13 +482,19 @@ class _KanbanScreenState extends State<KanbanScreen>
                 final isMobile = constraints.maxWidth < 768;
 
                 if (isMobile) {
-                  return _buildMobileBoard(context, tasksByStatus, arch);
+                  return _buildMobileBoard(
+                    context,
+                    tasksByStatus,
+                    arch,
+                    wsAccent,
+                  );
                 } else {
                   return _buildDesktopBoard(
                     context,
                     tasksByStatus,
                     arch,
                     constraints.maxHeight,
+                    wsAccent,
                   );
                 }
               },
@@ -464,10 +507,17 @@ class _KanbanScreenState extends State<KanbanScreen>
     BuildContext context,
     Map<TaskStatus, List<TaskDto>> tasksByStatus,
     bool isArchived,
+    String? wsAccent,
   ) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
+    final accentColor =
+        wsAccent != null && wsAccent.trim().isNotEmpty
+            ? WorkspaceAccent.fromId(
+                wsAccent,
+              ).resolvedColor(theme.brightness)
+            : null;
 
     return Column(
       children: [
@@ -491,6 +541,12 @@ class _KanbanScreenState extends State<KanbanScreen>
                   child: FilterChip(
                     selected: isSelected,
                     showCheckmark: false,
+                    selectedColor: accentColor?.withValues(alpha: 0.18),
+                    side: BorderSide(
+                      color: isSelected
+                          ? (accentColor ?? theme.colorScheme.primary)
+                          : theme.colorScheme.outlineVariant,
+                    ),
                     avatar: Container(
                       width: 8,
                       height: 8,
@@ -505,7 +561,8 @@ class _KanbanScreenState extends State<KanbanScreen>
                           ? FontWeight.w700
                           : FontWeight.w500,
                       color: isSelected
-                          ? (isDark ? Colors.white : Colors.black)
+                          ? (accentColor ??
+                              (isDark ? Colors.white : Colors.black))
                           : (isDark
                                 ? AppColors.textSecondary
                                 : AppColors.lightTextSecondary),
@@ -544,6 +601,7 @@ class _KanbanScreenState extends State<KanbanScreen>
                   status: status,
                   tasks: columnTasks,
                   isArchived: isArchived,
+                  activeWorkspaceAccent: wsAccent,
                   onAddTask: () => _openCreateTask(status.toServerString()),
                   onTaskTap: (task) => _openTaskDetail(task, isArchived),
                   onTaskMove: _openMoveTask,
@@ -562,6 +620,7 @@ class _KanbanScreenState extends State<KanbanScreen>
     Map<TaskStatus, List<TaskDto>> tasksByStatus,
     bool isArchived,
     double availableHeight,
+    String? wsAccent,
   ) {
     final columnHeight = (availableHeight - 32).clamp(300.0, double.infinity);
 
@@ -581,6 +640,7 @@ class _KanbanScreenState extends State<KanbanScreen>
                 status: status,
                 tasks: columnTasks,
                 isArchived: isArchived,
+                activeWorkspaceAccent: wsAccent,
                 onAddTask: () => _openCreateTask(status.toServerString()),
                 onTaskTap: (task) => _openTaskDetail(task, isArchived),
                 onTaskMove: _openMoveTask,

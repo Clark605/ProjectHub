@@ -32,6 +32,12 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
+    final activeAccentColor =
+        activeWorkspaceAccent != null && activeWorkspaceAccent!.trim().isNotEmpty
+            ? WorkspaceAccent.fromId(
+                activeWorkspaceAccent,
+              ).resolvedColor(theme.brightness)
+            : null;
 
     ProjectsListCubit? cubit;
     try {
@@ -57,6 +63,7 @@ class Sidebar extends StatelessWidget {
                   isSelected: selectedIndex == tab.index,
                   badge: tab == ShellTab.projects ? projectsCount : null,
                   badgeColor: null,
+                  selectedAccentColor: activeAccentColor,
                   onTap: () => onItemSelected(tab.index),
                 ),
                 if (tab != ShellTab.profile) const SizedBox(height: 4),

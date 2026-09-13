@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/core/utils/permission_checker.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/app_error_state.dart';
@@ -89,11 +90,43 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           final theme = Theme.of(context);
           final isDesktop = ResponsiveLayout.isDesktop(context);
 
+          String? wsAccent;
+          try {
+            wsAccent = context.watch<WorkspaceContextCubit>().state.maybeWhen(
+              loaded: (_, active) => active.accentColor,
+              orElse: () => null,
+            );
+          } catch (_) {}
+
+          final accentColor =
+              wsAccent != null && wsAccent.trim().isNotEmpty
+                  ? WorkspaceAccent.fromId(
+                      wsAccent,
+                    ).resolvedColor(theme.brightness)
+                  : null;
+
           return Scaffold(
             backgroundColor: theme.colorScheme.surface,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
+              bottom: accentColor != null
+                  ? PreferredSize(
+                      preferredSize: const Size.fromHeight(2),
+                      child: Container(
+                        height: 2,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              accentColor,
+                              accentColor.withValues(alpha: 0.6),
+                              accentColor.withValues(alpha: 0.1),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  : null,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_rounded),
                 onPressed: () => Navigator.of(context).pop(),

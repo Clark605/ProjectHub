@@ -231,6 +231,22 @@ class _MyTasksScreenState extends State<MyTasksScreen>
   List<Widget> _buildContentSlivers(BuildContext context, MyTasksState state) {
     final l10n = AppLocalizations.of(context);
 
+    final wsCubit = getIt.isRegistered<WorkspaceContextCubit>()
+        ? getIt<WorkspaceContextCubit>()
+        : null;
+    String? wsAccent;
+    try {
+      wsAccent = context.watch<WorkspaceContextCubit>().state.maybeWhen(
+        loaded: (_, active) => active.accentColor,
+        orElse: () => null,
+      );
+    } catch (_) {
+      wsAccent = wsCubit?.state.maybeWhen(
+        loaded: (_, active) => active.accentColor,
+        orElse: () => null,
+      );
+    }
+
     return state.when(
       initial: () => [
         const SliverFillRemaining(
@@ -303,6 +319,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                     emoji: '🚨',
                     title: l10n?.overdueUrgent ?? 'Overdue & Urgent',
                     tasks: urgent,
+                    activeWorkspaceAccent: wsAccent,
                     onTaskTap: _openTaskDetail,
                     onTaskStatusTap: _openMoveTask,
                   ),
@@ -313,6 +330,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                     emoji: '⚡',
                     title: l10n?.inProgress ?? 'In Progress',
                     tasks: inProgress,
+                    activeWorkspaceAccent: wsAccent,
                     onTaskTap: _openTaskDetail,
                     onTaskStatusTap: _openMoveTask,
                   ),
@@ -323,6 +341,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                     emoji: '📋',
                     title: l10n?.upNext ?? 'Up Next',
                     tasks: todo,
+                    activeWorkspaceAccent: wsAccent,
                     onTaskTap: _openTaskDetail,
                     onTaskStatusTap: _openMoveTask,
                   ),
@@ -334,6 +353,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                   tasks: done,
                   isCollapsible: true,
                   isCollapsed: !showDone,
+                  activeWorkspaceAccent: wsAccent,
                   onToggleCollapse: () => _cubit.toggleDoneVisibility(),
                   onTaskTap: _openTaskDetail,
                   onTaskStatusTap: _openMoveTask,

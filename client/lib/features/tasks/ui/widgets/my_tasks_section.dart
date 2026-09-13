@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/widgets/my_task_list_tile.dart';
 
@@ -10,6 +11,7 @@ class MyTasksSection extends StatelessWidget {
   final List<TaskDto> tasks;
   final bool isCollapsible;
   final bool isCollapsed;
+  final String? activeWorkspaceAccent;
   final VoidCallback? onToggleCollapse;
   final ValueChanged<TaskDto>? onTaskTap;
   final ValueChanged<TaskDto>? onTaskStatusTap;
@@ -21,6 +23,7 @@ class MyTasksSection extends StatelessWidget {
     required this.tasks,
     this.isCollapsible = false,
     this.isCollapsed = false,
+    this.activeWorkspaceAccent,
     this.onToggleCollapse,
     this.onTaskTap,
     this.onTaskStatusTap,
@@ -30,6 +33,12 @@ class MyTasksSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
+    final accent =
+        activeWorkspaceAccent != null && activeWorkspaceAccent!.trim().isNotEmpty
+            ? WorkspaceAccent.fromId(
+                activeWorkspaceAccent,
+              ).resolvedColor(theme.brightness)
+            : null;
 
     if (tasks.isEmpty && !isCollapsible) {
       return const SizedBox.shrink();
@@ -62,7 +71,9 @@ class MyTasksSection extends StatelessWidget {
                     vertical: 2,
                   ),
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.white12 : Colors.black12,
+                    color: accent != null
+                        ? accent.withValues(alpha: 0.12)
+                        : (isDark ? Colors.white12 : Colors.black12),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -70,9 +81,10 @@ class MyTasksSection extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color: isDark
-                          ? AppColors.textSecondary
-                          : AppColors.lightTextSecondary,
+                      color: accent ??
+                          (isDark
+                              ? AppColors.textSecondary
+                              : AppColors.lightTextSecondary),
                     ),
                   ),
                 ),
