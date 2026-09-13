@@ -177,18 +177,19 @@ flowchart LR
 
 ---
 
-### Journey 6: The "Personalization & App Styling" Journey
-> **Objective:** Allow the user to tailor the app's visual identity, language, and personal credentials in one unified screen.
+### Journey 6: The "Personalization & Workspace Styling" Journey
+> **Objective:** Allow users to manage appearance mode and language, while workspace owners customize workspace wayfinding colors.
 
 1. User navigates to **Profile & Settings** (`/profile` via sidebar, bottom nav, or top avatar).
 2. **Profile Card:** User inspects current details, edits name/bio, and taps Save $\rightarrow$ fires `PUT /api/v1/users/me` with optimistic update and feedback banner.
-3. **Appearance & Dynamic Palettes:**
-   - User toggles between Dark, Light, or System theme mode.
-   - User swipes through the **6 Dynamic Color Palettes** carousel (*Deep Slate, Ocean Breeze, Sunset Ember, Forest Moss, Rose Gold, Midnight Purple*).
-   - Selecting a palette immediately restyles the entire application: buttons, cards, typography tokens, status pills, and the animated orbital gradients of `AmbientGlowBackground`. Selection is persisted to `SharedPreferences`.
-4. **Language Selection:** User switches between English 🇬🇧 and Arabic 🇸🇦 $\rightarrow$ app dynamically updates locale and text direction (LTR/RTL) without restart.
-5. **Help & Support:** User explores the FAQ section with expandable `ExpansionTile` accordions covering workspaces, projects, Kanban shortcuts, and roles.
-6. **About App:** User reviews semantic app version and build number.
+3. **Appearance & Brand Theme:**
+   - User toggles between Dark, Light, or System theme mode. The application remains consistently styled with the signature Deep Slate brand aesthetic (Electric Violet & Sky Blue) and continuous orbital ambient glow.
+4. **Workspace Wayfinding Accent (Owner Flow):**
+   - Workspace owners navigate to Workspace Settings (`/workspaces`), where an inline accent picker allows choosing from 10 vetted accent colors (`teal`, `blue`, `indigo`, `violet`, `pink`, `rose`, `orange`, `amber`, `lime`, `cyan`).
+   - Tapping Save updates `WorkSpace.AccentColor` via `PUT /api/v1/workspaces/{id}`, immediately synchronizing wayfinding indicators across the top bar switcher pill, sidebar active stripe, and workspace switcher cards for all members.
+5. **Language Selection:** User switches between English 🇬🇧 and Arabic 🇸🇦 $\rightarrow$ app dynamically updates locale and text direction (LTR/RTL) without restart.
+6. **Help & Support:** User explores the FAQ section with expandable `ExpansionTile` accordions covering workspaces, projects, Kanban shortcuts, and roles.
+7. **About App:** User reviews semantic app version and build number.
 
 ---
 
@@ -206,25 +207,26 @@ The application follows a **responsive shell architecture** that adapts to three
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  APP SHELL (AmbientGlowBackground adapting to selected Color Palette)       │
+│  APP SHELL (AmbientGlowBackground with Deep Slate Brand Orbital Shader)      │
 ├──────────────┬──────────────────────────────────────────────────────────────┤
 │ SIDEBAR      │ TOP HEADER                                                   │
-│ (240px Fixed │ [Workspace Switcher ▾] [Breadcrumbs] [🔍 Search] [👥 Stack] [👤]│
+│ (240px Fixed │ [Workspace Switcher ▾ (Accent Dot)] [🔍 Search] [👥 Stack] [👤]│
 │ on Desktop / ├──────────────────────────────────────────────────────────────┤
 │ Drawer on    │ MAIN CONTENT VIEWPORT                                        │
 │ Mobile)      │                                                              │
-│              │ 1. 📊 Dashboard / Overview                                   │
-│ 🏢 Workspace │    - Real project & task summary counts                      │
-│ 📋 My Tasks  │    - Priority task breakdown                                 │
-│ 📁 Projects  │    - Workspace Activity Feed                                 │
-│    ├─ Client │                                                              │
-│    └─ API    │ 2. 🗂 Project Kanban Board                                    │
-│ 👥 Members   │    [Backlog]  [Todo]  [In Progress]  [Review]  [Done]        │
-│              │                                                              │
-│ 👤 Profile & │ 3. 👤 Profile & Settings Hub (/profile)                      │
-│    Settings  │    - Edit Name & Bio                                         │
-│              │    - Theme Mode & Dynamic Color Palettes                     │
-│ 🚪 Logout    │    - Language Picker & FAQ & Version                         │
+│ [Active WS   │ 1. 📊 Dashboard / Overview                                   │
+│  Accent      │    - Real project & task summary counts                      │
+│  Stripe]     │    - Priority task breakdown                                 │
+│ 🏢 Workspace │    - Workspace Activity Feed                                 │
+│ 📋 My Tasks  │                                                              │
+│ 📁 Projects  │ 2. 🗂 Project Kanban Board                                    │
+│    ├─ Client │    [Backlog]  [Todo]  [In Progress]  [Review]  [Done]        │
+│    └─ API    │                                                              │
+│ 👥 Members   │ 3. 👤 Profile & Settings Hub (/profile)                      │
+│              │    - Edit Name & Bio                                         │
+│ 👤 Profile & │    - Theme Mode (Dark/Light/System)                          │
+│    Settings  │    - Language Picker & FAQ & Version                         │
+│ 🚪 Logout    │                                                              │
 └──────────────┴──────────────────────────────────────────────────────────────┘
 ```
 

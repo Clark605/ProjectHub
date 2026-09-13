@@ -10,6 +10,10 @@ ProjectHub is a collaborative project and task management platform that helps te
 The top-level organizational and security boundary that contains projects and members.
 _Avoid_: Organization, team, account, group
 
+**Accent Color**:
+A workspace-owned color from a fixed palette of 10 vetted accents, set by the workspace Owner and visible to all members. Used exclusively as a wayfinding signal on workspace switcher indicators, sidebar headers, and workspace list markers. Not a theme — does not affect buttons, cards, backgrounds, or semantic status colors.
+_Avoid_: Theme, palette, brand color, workspace color
+
 **Member**:
 A user who belongs to a workspace with an assigned role (`Owner` or `Member`).
 _Avoid_: User, collaborator, participant

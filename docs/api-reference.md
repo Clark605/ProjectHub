@@ -1,4 +1,4 @@
-﻿# ProjectHub — REST API Reference
+# ProjectHub — REST API Reference
 
 Comprehensive specification of all endpoints available in the **ProjectHub.Api** backend. All endpoints are systematically versioned under `/api/v1/` (see [ADR-0010](./adr/0010-url-segment-api-versioning.md)).
 
@@ -127,7 +127,7 @@ All error responses adhere to the `ApiErrorResponse` schema:
 ```json
 {
   "provider": "GitHub",
-  "accessToken": "gho_16C7e42F292c6912E7710c838347Ae178B4a"
+  "accessToken": "gho_EXAMPLE_MOCK_GITHUB_TOKEN_123456789"
 }
 ```
 
@@ -220,6 +220,7 @@ All error responses adhere to the `ApiErrorResponse` schema:
     "id": 1,
     "name": "Engineering Team",
     "description": "Core software projects and infrastructure",
+    "accentColor": "teal",
     "role": "Owner",
     "createdAt": "2026-08-29T10:00:00Z"
   }
@@ -228,6 +229,7 @@ All error responses adhere to the `ApiErrorResponse` schema:
 
 ### 2. Create Workspace
 `POST /api/v1/workspaces` (Authenticated)
+- Server automatically assigns an accent color from the curated 10-color palette.
 
 #### Request Body
 ```json
@@ -242,6 +244,15 @@ All error responses adhere to the `ApiErrorResponse` schema:
 
 ### 4. Update Workspace
 `PUT /api/v1/workspaces/{id}` (Authenticated, Owner only)
+
+#### Request Body
+```json
+{
+  "name": "Engineering Team",
+  "description": "Core software projects and infrastructure",
+  "accentColor": "violet"
+}
+```
 
 ### 5. Delete Workspace
 `DELETE /api/v1/workspaces/{id}` (Authenticated, Owner only)

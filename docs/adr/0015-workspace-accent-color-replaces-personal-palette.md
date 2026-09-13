@@ -1,0 +1,6 @@
+# Workspace Accent Color Replaces Personal Dynamic Theming
+
+ProjectHub replaces the personal, client-only 6-palette theming preference with a server-owned, workspace-scoped accent color chosen from a fixed palette of 10 vetted colors (`teal`, `blue`, `indigo`, `violet`, `pink`, `rose`, `orange`, `amber`, `lime`, `cyan`). The application permanently locks its primary visual design to the Deep Slate brand theme (Electric Violet and Sky Blue on Deep Slate dark surfaces, with a calibrated high-contrast light theme counterpart) and preserves the signature `AmbientGlowBackground` driven by fixed brand colors. 
+
+The workspace accent color is set exclusively by the workspace Owner (stored on the `WorkSpace.AccentColor` column, defaulting to `teal`, and auto-assigned deterministically at creation), visible to all workspace members, and scoped strictly to wayfinding touchpoints: the workspace switcher pill indicator dot, the active sidebar header stripe, and workspace selection list markers. It is intentionally prohibited from re-skinning global surfaces, cards, action buttons, typography, or semantic status indicators, ensuring consistent brand identity and eliminating member-level UI divergence.
+

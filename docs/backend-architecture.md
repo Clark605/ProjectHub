@@ -63,7 +63,7 @@ Every HTTP request traverses the pipeline configured in `Program.cs`:
 
 - **`AppUser` (`IdentityUser`):** Represents authenticated users with `Name` and `Bio`.
 - **`RefreshToken`:** Tracks user sessions, hashed token strings, expiration timestamps, and revocation flags (see [ADR-0005](./adr/0005-multi-session-sha256-refresh-token-rotation.md)).
-- **`WorkSpace`:** The root aggregate boundary for multi-tenant isolation.
+- **`WorkSpace`:** The root aggregate boundary for multi-tenant isolation, storing `Name`, `Description`, and a curated `AccentColor` (defaulting to `teal`, see [ADR-0015](./adr/0015-workspace-accent-color-replaces-personal-palette.md)).
 - **`WorkspaceMember`:** Join entity connecting `AppUser` to `WorkSpace` with role designation (`Owner` or `Member`). Ownership is derived solely from this relationship (see [ADR-0003](./adr/0003-workspace-owner-single-source-of-truth.md)).
 - **`Project`:** Projects contained within a workspace with lifecycle status (`Planning`, `Active`, `Completed`, `Archived`). Project membership is implicit to all workspace members (see [ADR-0001](./adr/0001-implicit-workspace-membership-for-projects.md)), and archived projects are strictly read-only (see [ADR-0002](./adr/0002-strict-read-only-freeze-on-archived-projects.md)).
 - **`Task`:** Tasks belonging to a project, featuring status, priority, due date, creator, and assignee. Removing a workspace member automatically unassigns their tasks (see [ADR-0006](./adr/0006-automatic-task-unassignment-on-member-removal.md)).

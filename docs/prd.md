@@ -92,7 +92,7 @@ To keep QA lean and maintainable, ProjectHub enforces a streamlined **two-tier r
 
 ### 4.5 Personalization, Theming & App Settings (Phase 4.5)
 - **Unified Profile & Settings Hub:** Combined account editing, appearance configuration, localization, FAQ, and version details in a single view (`/profile`, see [ADR-0014](./adr/0014-unified-profile-settings-and-dynamic-theming.md)).
-- **Dynamic Color Palettes:** 6 curated color palettes (Deep Slate, Ocean Breeze, Sunset Ember, Forest Moss, Rose Gold, Midnight Purple) dynamically restyling surfaces, accents, typography, and `AmbientGlowBackground`.
+- **Locked Brand Theme & Workspace Accent Colors:** Application locked to the signature Deep Slate brand aesthetic (Electric Violet & Sky Blue) with permanent ambient glow, replacing personal theming with 10 vetted, workspace-owned wayfinding accent colors (see [ADR-0015](./adr/0015-workspace-accent-color-replaces-personal-palette.md)).
 - **Theme Mode & Localization:** Dark, Light, and System theme switching with English and Arabic locale support persisted across sessions.
 - **Hero & Motion Polish:** Hero animation transitions on Kanban task cards and consistent skeleton loading states.
 

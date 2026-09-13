@@ -143,19 +143,14 @@ graph LR
 
 ---
 
-## 6. Dynamic Color Palettes & Theming Engine
+## 6. Brand Theme & Workspace-Scoped Accent Colors
 
-Designed in accordance with Material 3, using custom Stitch UI tokens and dynamic theme switching (see [ADR-0014](./adr/0014-unified-profile-settings-and-dynamic-theming.md)):
+Designed in accordance with Material 3, using custom Stitch UI tokens and workspace-level wayfinding colors (see [ADR-0015](./adr/0015-workspace-accent-color-replaces-personal-palette.md)):
 
+- **Locked Brand Identity:** Deep Slate (Electric Violet `#C0C1FF` & Sky Blue `#89CEFF` on Deep Slate `#0F172A` / `#1F1F27`, with calibrated Light theme counterparts).
 - **Theme Modes:** Dark, Light, and System (follow device), managed reactively by `AppSettingsCubit` and persisted to `SharedPreferences`.
-- **6 Curated Dynamic Palettes:**
-  1. *Deep Slate (Default):* Electric Violet (`#C0C1FF`) & Sky Blue (`#89CEFF`) on Deep Slate (`#0F172A`).
-  2. *Ocean Breeze:* Blue (`#60A5FA`) & Emerald (`#34D399`) on Midnight Blue (`#0C1222`).
-  3. *Sunset Ember:* Orange (`#FB923C`) & Pink (`#F472B6`) on Warm Obsidian (`#1A0F0A`).
-  4. *Forest Moss:* Green (`#4ADE80`) & Lime (`#A3E635`) on Forest Night (`#0A1A0F`).
-  5. *Rose Gold:* Rose (`#FDA4AF`) & Amber (`#FBBF24`) on Velvet Plum (`#1A0F14`).
-  6. *Midnight Purple:* Violet (`#A78BFA`) & Indigo (`#818CF8`) on Royal Night (`#0F0A1A`).
-- **Dynamic Ambient Glow Background:** Dual orbital gradients dynamically sample colors from the active palette and animate smoothly behind app surfaces.
+- **Workspace-Scoped Accent Colors:** 10 vetted high-contrast colors (`teal`, `blue`, `indigo`, `violet`, `pink`, `rose`, `orange`, `amber`, `lime`, `cyan`) managed via `WorkspaceAccent`. Evaluated per theme brightness to guarantee legibility and scoped exclusively to wayfinding touchpoints (switcher pill dot, active sidebar stripe, switcher card indicators).
+- **Ambient Glow Background:** Continuous orbital gradient animation permanently locked to the Deep Slate brand colors (`Electric Violet` and `Sky Blue`).
 - **Priority Colors:**
   - `Urgent`: Rose `#FB7185`
   - `High`: Coral `#F43F5E`

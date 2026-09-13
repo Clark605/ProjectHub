@@ -89,21 +89,27 @@ A comprehensive reference for the **Stitch Deep Slate Design System** utilized a
 | `textTertiary` | `#64748B` | `#94A3B8` | Metadata, disabled text, placeholder hints |
 | `textOnPrimary` | `#1000A9` | `#FFFFFF` | Text rendered on primary buttons |
 
-### 3.6 Dynamic Color Palettes (Phase 4.5)
+### 3.6 Workspace-Scoped Accent Colors (Phase 4.5 & ADR-0015)
 
-ProjectHub features a dynamic client-side theming engine that restyles semantic accents, surfaces, and ambient background fields across the entire application (see [ADR-0014](./adr/0014-unified-profile-settings-and-dynamic-theming.md)):
+Per [ADR-0015](./adr/0015-workspace-accent-color-replaces-personal-palette.md), ProjectHub locks its core visual design permanently to the **Deep Slate** brand identity (Electric Violet `#C0C1FF` and Sky Blue `#89CEFF` on Deep Slate dark surfaces `#0F172A`/`#1F1F27`, with calibrated Light theme counterparts), preserving the signature `AmbientGlowBackground` driven by fixed brand colors.
 
-| Palette ID | Name | Primary Accent | Secondary Accent | Canvas Background | Surface Container | Vibe / Personality |
-| :--- | :--- | :---: | :---: | :---: | :---: | :--- |
-| `deepSlate` | **Deep Slate** *(Default)* | `#C0C1FF` (Electric Violet) | `#89CEFF` (Sky Blue) | `#0F172A` | `#1F1F27` | Cyberpunk-modern high contrast |
-| `oceanBreeze` | **Ocean Breeze** | `#60A5FA` (Calm Blue) | `#34D399` (Mint Emerald) | `#0C1222` | `#162032` | Focused, clean, nautical |
-| `sunsetEmber` | **Sunset Ember** | `#FB923C` (Warm Orange) | `#F472B6` (Neon Pink) | `#1A0F0A` | `#261814` | High-energy, warm, vibrant |
-| `forestMoss` | **Forest Moss** | `#4ADE80` (Lush Green) | `#A3E635` (Lime Pop) | `#0A1A0F` | `#142618` | Natural, grounded, calm |
-| `roseGold` | **Rose Gold** | `#FDA4AF` (Muted Rose) | `#FBBF24` (Warm Amber) | `#1A0F14` | `#271720` | Elegant, luxury, refined |
-| `midnightPurple` | **Midnight Purple** | `#A78BFA` (Vibrant Purple) | `#818CF8` (Soft Indigo) | `#0F0A1A` | `#1B1429` | Deep neon, mystical, sleek |
+In place of global theming, each workspace is assigned a server-owned **Accent Color** chosen from a curated, high-contrast 10-color palette used exclusively for wayfinding signals (switcher pill indicator dot, active sidebar stripe, and workspace switcher list items):
 
-- **Orbital Shader Integration:** The `AmbientGlowBackground` dual-orb trajectory automatically passes `palette.primary` to the primary orbital shader and `palette.secondary` to the trailing follower orb, providing full ambient immersion.
-- **Persistence:** Selected palette ID is persisted to `SharedPreferences` under `app_color_palette` and hydrated during initial splash execution.
+| Accent ID | Name | Dark Mode Color | Light Mode Color | Vibe / Personality |
+| :--- | :--- | :---: | :---: | :--- |
+| `teal` | Teal *(Default)* | `#14B8A6` | `#0D9488` | Calm, modern |
+| `blue` | Blue | `#3B82F6` | `#2563EB` | Classic, professional |
+| `indigo` | Indigo | `#6366F1` | `#4F46E5` | Deep, focused |
+| `violet` | Violet | `#8B5CF6` | `#7C3AED` | Creative, bold |
+| `pink` | Pink | `#EC4899` | `#DB2777` | Vibrant, energetic |
+| `rose` | Rose | `#F43F5E` | `#E11D48` | Warm, assertive |
+| `orange` | Orange | `#F97316` | `#EA580C` | Energetic, playful |
+| `amber` | Amber | `#F59E0B` | `#D97706` | Warm, welcoming |
+| `lime` | Lime | `#84CC16` | `#65A30D` | Fresh, natural |
+| `cyan` | Cyan | `#06B6D4` | `#0891B2` | Cool, technical |
+
+- **Strict Boundary Isolation:** Workspace accent colors flow strictly as widget parameters and never pollute global `ThemeData`, `ColorScheme`, surface containers, action buttons, cards, typography, or semantic status dots.
+- **Role Enforcement:** Only the workspace `Owner` can alter the workspace accent color via the inline picker in `WorkspaceDetailsCard`.
 
 ---
 
