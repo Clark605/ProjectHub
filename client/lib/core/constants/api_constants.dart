@@ -28,7 +28,7 @@ class ApiConstants {
     if (kIsWeb) return 'http://127.0.0.1:5259';
     if (Platform.isAndroid) {
       return isPhysicalDevice
-          ? 'https://vhtl5fd3-5259.uks1.devtunnels.ms/' // Real Android device (LAN IP)
+          ? 'http://10.0.2.2:5259' // Configure via --dart-define=API_BASE_URL=https://<your-tunnel>
           : 'http://10.0.2.2:5259'; // Android emulator (host loopback)
     }
     return 'http://127.0.0.1:5259'; // iOS simulator / Desktop

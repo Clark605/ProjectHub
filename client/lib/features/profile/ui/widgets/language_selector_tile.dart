@@ -49,14 +49,8 @@ class LanguageSelectorTile extends StatelessWidget {
                 const SizedBox(height: 16),
                 SegmentedButton<String>(
                   segments: const [
-                    ButtonSegment<String>(
-                      value: 'en',
-                      label: Text('English 🇬🇧'),
-                    ),
-                    ButtonSegment<String>(
-                      value: 'ar',
-                      label: Text('العربية 🇸🇦'),
-                    ),
+                    ButtonSegment<String>(value: 'en', label: Text('English')),
+                    ButtonSegment<String>(value: 'ar', label: Text('العربية')),
                   ],
                   selected: {currentCode},
                   onSelectionChanged: (newSelection) {

@@ -24,3 +24,4 @@ public static class AccentColors
     public static string AutoAssign(int index) =>
         Values[Math.Abs(index) % Values.Length];
 }
+

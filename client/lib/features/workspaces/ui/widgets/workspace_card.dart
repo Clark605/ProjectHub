@@ -55,9 +55,7 @@ class WorkspaceCard extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: isActive
-                      ? accentColor
-                      : Colors.transparent,
+                  color: isActive ? accentColor : Colors.transparent,
                   border: Border.all(
                     color: isActive
                         ? accentColor
@@ -66,11 +64,7 @@ class WorkspaceCard extends StatelessWidget {
                   ),
                 ),
                 child: isActive
-                    ? Icon(
-                        Icons.check_rounded,
-                        size: 16,
-                        color: onAccent,
-                      )
+                    ? Icon(Icons.check_rounded, size: 16, color: onAccent)
                     : Center(
                         child: Container(
                           width: 8,

@@ -60,7 +60,7 @@ class _AmbientGlowBackgroundState extends State<AmbientGlowBackground>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    if (!widget.showGlow || !isDark) {
+    if (!widget.showGlow) {
       return ColoredBox(
         color: theme.scaffoldBackgroundColor,
         child: widget.child,
@@ -76,7 +76,7 @@ class _AmbientGlowBackgroundState extends State<AmbientGlowBackground>
         : theme.colorScheme.secondary;
     final effectiveOpacity = isDark
         ? widget.glowOpacity
-        : widget.glowOpacity * 0.25;
+        : widget.glowOpacity * 2;
 
     return LayoutBuilder(
       builder: (context, constraints) {

@@ -79,7 +79,7 @@ class LogoutCard extends StatelessWidget {
               ),
             ),
             ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 130),
+              constraints: const BoxConstraints(maxWidth: 150),
               child: AppButton(
                 label: l10n?.logOut ?? 'Log Out',
                 icon: Icons.logout_rounded,

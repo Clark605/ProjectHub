@@ -124,14 +124,20 @@ class Sidebar extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.45),
+                  color: theme.colorScheme.surfaceContainerHigh.withValues(
+                    alpha: 0.45,
+                  ),
                   borderRadius: BorderRadius.circular(8),
                   border: BorderDirectional(
                     start: BorderSide(
-                      color: WorkspaceAccent.fromId(activeWorkspaceAccent)
-                          .resolvedColor(theme.brightness),
+                      color: WorkspaceAccent.fromId(
+                        activeWorkspaceAccent,
+                      ).resolvedColor(theme.brightness),
                       width: 3.5,
                     ),
                   ),
