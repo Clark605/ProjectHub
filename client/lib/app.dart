@@ -8,6 +8,7 @@ import 'package:client/core/routes/app_navigator.dart';
 import 'package:client/core/network/global_network_error_handler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/theme/app_palette.dart';
 import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/cubit/app_settings_state.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
@@ -34,7 +35,9 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
           builder: (dialogContext) {
             final l10n = AppLocalizations.of(dialogContext);
             return AlertDialog(
-              title: Text(l10n?.connectionUnavailable ?? 'Connection unavailable'),
+              title: Text(
+                l10n?.connectionUnavailable ?? 'Connection unavailable',
+              ),
               content: Text(message),
               actions: [
                 TextButton(
@@ -66,9 +69,9 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
             debugShowCheckedModeBanner: false,
             navigatorKey: AppNavigator.navigatorKey,
 
-            // Dynamic Theme & Mode
-            theme: settingsState.palette.toThemeData(Brightness.light),
-            darkTheme: settingsState.palette.toThemeData(Brightness.dark),
+            // Brand Theme (Deep Slate) & Mode
+            theme: AppPalette.deepSlate.toThemeData(Brightness.light),
+            darkTheme: AppPalette.deepSlate.toThemeData(Brightness.dark),
             themeMode: settingsState.themeMode,
 
             // Localization

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
@@ -15,12 +16,16 @@ class Sidebar extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onItemSelected;
   final ValueChanged<int>? onProjectSelected;
+  final String? activeWorkspaceName;
+  final String? activeWorkspaceAccent;
 
   const Sidebar({
     super.key,
     required this.selectedIndex,
     required this.onItemSelected,
     this.onProjectSelected,
+    this.activeWorkspaceName,
+    this.activeWorkspaceAccent,
   });
 
   @override
@@ -113,7 +118,39 @@ class Sidebar extends StatelessWidget {
             ),
           ),
           Divider(color: theme.colorScheme.outlineVariant, height: 1),
-          const SizedBox(height: 12),
+          if (activeWorkspaceName != null &&
+              activeWorkspaceName!.trim().isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.45),
+                  borderRadius: BorderRadius.circular(8),
+                  border: BorderDirectional(
+                    start: BorderSide(
+                      color: WorkspaceAccent.fromId(activeWorkspaceAccent)
+                          .resolvedColor(theme.brightness),
+                      width: 3.5,
+                    ),
+                  ),
+                ),
+                child: Text(
+                  activeWorkspaceName!,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
+          ] else ...[
+            const SizedBox(height: 12),
+          ],
 
           // Navigation Section
           Expanded(

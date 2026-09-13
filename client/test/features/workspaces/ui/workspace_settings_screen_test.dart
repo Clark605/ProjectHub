@@ -283,7 +283,7 @@ void main() {
       expect(find.byType(AppErrorBanner), findsNothing);
 
       repo.onUpdateWorkspace = (id, req) => throw Exception('Failed to update');
-      await settingsCubit.updateDetails('Bad Name', 'Bad Desc');
+      await settingsCubit.updateDetails('Bad Name', 'Bad Desc', 'teal');
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 250));
 

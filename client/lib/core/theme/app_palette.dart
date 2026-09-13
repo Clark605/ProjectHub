@@ -77,10 +77,7 @@ class AppPalette {
 
   static AppPalette fromId(String? id) {
     if (id == null) return deepSlate;
-    return values.firstWhere(
-      (p) => p.id == id,
-      orElse: () => deepSlate,
-    );
+    return values.firstWhere((p) => p.id == id, orElse: () => deepSlate);
   }
 
   PaletteColorTokens tokens(Brightness brightness) =>
@@ -147,10 +144,7 @@ class AppPalette {
         thickness: 1,
         space: 1,
       ),
-      drawerTheme: DrawerThemeData(
-        backgroundColor: t.surface,
-        elevation: 0,
-      ),
+      drawerTheme: DrawerThemeData(backgroundColor: t.surface, elevation: 0),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: t.surface,
         selectedItemColor: t.primary,
@@ -168,6 +162,22 @@ class AppPalette {
         backgroundColor: t.surfaceContainer,
         side: BorderSide(color: t.borderVariant),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+            if (states.contains(WidgetState.selected)) {
+              return t.textPrimary;
+            }
+            return t.surfaceContainer;
+          }),
+          foregroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+            if (states.contains(WidgetState.selected)) {
+              return t.onPrimary;
+            }
+            return t.textPrimary;
+          }),
+        ),
       ),
     );
   }

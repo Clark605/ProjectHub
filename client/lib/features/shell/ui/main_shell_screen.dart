@@ -138,6 +138,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
         );
         final wsName = activeWorkspace?.name;
         final wsRole = activeWorkspace?.membership?.role;
+        final wsAccent = activeWorkspace?.accentColor;
         final isWsLoading =
             workspaceState.maybeWhen(
               loading: () => true,
@@ -157,6 +158,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
                       selectedIndex: _selectedIndex,
                       onItemSelected: _onSelectTab,
                       onProjectSelected: _onProjectSelected,
+                      activeWorkspaceName: wsName,
+                      activeWorkspaceAccent: wsAccent,
                     ),
                     Expanded(
                       child: Column(
@@ -164,6 +167,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
                           ShellTopBar(
                             activeWorkspaceName: wsName,
                             activeWorkspaceRole: wsRole,
+                            activeWorkspaceAccent: wsAccent,
                             isLoading: isWsLoading,
                             onWorkspaceTap: () => _onWorkspaceTap(context),
                             onSettingsTap: _onSettingsTap,
@@ -185,6 +189,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
                     selectedIndex: _selectedIndex,
                     onItemSelected: _onSelectTab,
                     onProjectSelected: _onProjectSelected,
+                    activeWorkspaceName: wsName,
+                    activeWorkspaceAccent: wsAccent,
                   ),
                 ),
                 body: Row(
@@ -199,6 +205,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
                           ShellTopBar(
                             activeWorkspaceName: wsName,
                             activeWorkspaceRole: wsRole,
+                            activeWorkspaceAccent: wsAccent,
                             isLoading: isWsLoading,
                             onWorkspaceTap: () => _onWorkspaceTap(context),
                             onSettingsTap: _onSettingsTap,
@@ -222,11 +229,14 @@ class _MainShellScreenState extends State<MainShellScreen> {
                     selectedIndex: _selectedIndex,
                     onItemSelected: _onSelectTab,
                     onProjectSelected: _onProjectSelected,
+                    activeWorkspaceName: wsName,
+                    activeWorkspaceAccent: wsAccent,
                   ),
                 ),
                 appBar: ShellTopBar(
                   activeWorkspaceName: wsName,
                   activeWorkspaceRole: wsRole,
+                  activeWorkspaceAccent: wsAccent,
                   isLoading: isWsLoading,
                   onWorkspaceTap: () => _onWorkspaceTap(context),
                   onSettingsTap: _onSettingsTap,

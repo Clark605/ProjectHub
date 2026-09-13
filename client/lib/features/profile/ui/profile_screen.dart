@@ -11,7 +11,6 @@ import 'package:client/features/profile/cubit/profile_edit_cubit.dart';
 import 'package:client/features/profile/ui/widgets/faq_section.dart';
 import 'package:client/features/profile/ui/widgets/language_selector_tile.dart';
 import 'package:client/features/profile/ui/widgets/logout_card.dart';
-import 'package:client/features/profile/ui/widgets/palette_carousel.dart';
 import 'package:client/features/profile/ui/widgets/profile_header_card.dart';
 import 'package:client/features/profile/ui/widgets/theme_mode_selector.dart';
 import 'package:client/features/profile/ui/widgets/version_info_tile.dart';
@@ -81,8 +80,6 @@ class ProfileScreen extends StatelessWidget {
                     ProfileHeaderCard(user: user),
                     const SizedBox(height: 16),
                     const ThemeModeSelector(),
-                    const SizedBox(height: 16),
-                    const PaletteCarousel(),
                     const SizedBox(height: 16),
                     const LanguageSelectorTile(),
                     const SizedBox(height: 16),

@@ -57,13 +57,6 @@ class PrefsService {
   Future<void> setLocale(String locale) =>
       _prefs.setString(StorageKeys.locale, locale);
 
-  // Color Palette
-  String get paletteId =>
-      _prefs.getString(StorageKeys.colorPalette) ?? 'deepSlate';
-
-  Future<void> setPaletteId(String id) =>
-      _prefs.setString(StorageKeys.colorPalette, id);
-
   // Cached User Profile
   String? getCachedUserRaw() {
     return _prefs.getString(StorageKeys.cachedUser);

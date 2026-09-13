@@ -8,6 +8,7 @@ abstract class UpdateWorkspaceRequest with _$UpdateWorkspaceRequest {
   const factory UpdateWorkspaceRequest({
     required String name,
     @Default('') String description,
+    required String accentColor,
   }) = _UpdateWorkspaceRequest;
 
   factory UpdateWorkspaceRequest.fromJson(Map<String, dynamic> json) =>

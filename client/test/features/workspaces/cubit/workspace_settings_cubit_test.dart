@@ -62,6 +62,7 @@ class _FakeSettingsRepository implements WorkspaceRepository {
     workspace = workspace.copyWith(
       name: request.name,
       description: request.description,
+      accentColor: request.accentColor,
     );
     return workspace;
   }
@@ -147,12 +148,17 @@ void main() {
     test('updateDetails updates workspace and sets success message', () async {
       await cubit.loadSettings(1);
 
-      final success = await cubit.updateDetails('New Acme Name', 'New Desc');
+      final success = await cubit.updateDetails(
+        'New Acme Name',
+        'New Desc',
+        'violet',
+      );
 
       expect(success, isTrue);
       final state = cubit.state as WorkspaceSettingsLoaded;
       expect(state.workspace.name, 'New Acme Name');
       expect(state.workspace.description, 'New Desc');
+      expect(state.workspace.accentColor, 'violet');
       expect(state.successAction, isA<ActionDetailsUpdated>());
     });
 

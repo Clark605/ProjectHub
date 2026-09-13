@@ -90,7 +90,11 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
     );
   }
 
-  Future<bool> updateDetails(String name, String description) async {
+  Future<bool> updateDetails(
+    String name,
+    String description,
+    String accentColor,
+  ) async {
     final currentState = state;
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
@@ -106,7 +110,11 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
       () async {
         final updated = await repository.updateWorkspace(
           currentState.workspace.id,
-          UpdateWorkspaceRequest(name: name, description: description),
+          UpdateWorkspaceRequest(
+            name: name,
+            description: description,
+            accentColor: accentColor,
+          ),
         );
         await contextCubit.selectWorkspace(updated);
 

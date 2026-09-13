@@ -237,6 +237,7 @@ void main() {
           const UpdateWorkspaceRequest(
             name: 'Updated Name',
             description: 'Desc',
+            accentColor: 'teal',
           ),
         );
 

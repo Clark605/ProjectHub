@@ -1,31 +1,17 @@
-﻿import 'package:flutter/material.dart';
-import 'package:client/core/theme/app_palette.dart';
+import 'package:flutter/material.dart';
 
 class AppSettingsState {
   final ThemeMode themeMode;
-  final AppPalette palette;
   final Locale locale;
 
-  const AppSettingsState({
-    required this.themeMode,
-    required this.palette,
-    required this.locale,
-  });
+  const AppSettingsState({required this.themeMode, required this.locale});
 
-  factory AppSettingsState.initial() => const AppSettingsState(
-        themeMode: ThemeMode.dark,
-        palette: AppPalette.deepSlate,
-        locale: Locale('en'),
-      );
+  factory AppSettingsState.initial() =>
+      const AppSettingsState(themeMode: ThemeMode.dark, locale: Locale('en'));
 
-  AppSettingsState copyWith({
-    ThemeMode? themeMode,
-    AppPalette? palette,
-    Locale? locale,
-  }) {
+  AppSettingsState copyWith({ThemeMode? themeMode, Locale? locale}) {
     return AppSettingsState(
       themeMode: themeMode ?? this.themeMode,
-      palette: palette ?? this.palette,
       locale: locale ?? this.locale,
     );
   }
@@ -36,9 +22,8 @@ class AppSettingsState {
       other is AppSettingsState &&
           runtimeType == other.runtimeType &&
           themeMode == other.themeMode &&
-          palette.id == other.palette.id &&
           locale == other.locale;
 
   @override
-  int get hashCode => themeMode.hashCode ^ palette.id.hashCode ^ locale.hashCode;
+  int get hashCode => themeMode.hashCode ^ locale.hashCode;
 }

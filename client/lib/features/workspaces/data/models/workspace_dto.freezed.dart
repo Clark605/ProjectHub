@@ -281,7 +281,7 @@ as DateTime?,
 /// @nodoc
 mixin _$WorkspaceDto {
 
- int get id; String get name; String get description; WorkspaceMembershipDto? get membership;
+ int get id; String get name; String get description; String get accentColor; WorkspaceMembershipDto? get membership;
 /// Create a copy of WorkspaceDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -294,16 +294,16 @@ $WorkspaceDtoCopyWith<WorkspaceDto> get copyWith => _$WorkspaceDtoCopyWithImpl<W
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkspaceDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.membership, membership) || other.membership == membership));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkspaceDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.accentColor, accentColor) || other.accentColor == accentColor)&&(identical(other.membership, membership) || other.membership == membership));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,membership);
+int get hashCode => Object.hash(runtimeType,id,name,description,accentColor,membership);
 
 @override
 String toString() {
-  return 'WorkspaceDto(id: $id, name: $name, description: $description, membership: $membership)';
+  return 'WorkspaceDto(id: $id, name: $name, description: $description, accentColor: $accentColor, membership: $membership)';
 }
 
 
@@ -314,7 +314,7 @@ abstract mixin class $WorkspaceDtoCopyWith<$Res>  {
   factory $WorkspaceDtoCopyWith(WorkspaceDto value, $Res Function(WorkspaceDto) _then) = _$WorkspaceDtoCopyWithImpl;
 @useResult
 $Res call({
- int id, String name, String description, WorkspaceMembershipDto? membership
+ int id, String name, String description, String accentColor, WorkspaceMembershipDto? membership
 });
 
 
@@ -331,11 +331,12 @@ class _$WorkspaceDtoCopyWithImpl<$Res>
 
 /// Create a copy of WorkspaceDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = null,Object? membership = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? description = null,Object? accentColor = null,Object? membership = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String,accentColor: null == accentColor ? _self.accentColor : accentColor // ignore: cast_nullable_to_non_nullable
 as String,membership: freezed == membership ? _self.membership : membership // ignore: cast_nullable_to_non_nullable
 as WorkspaceMembershipDto?,
   ));
@@ -434,10 +435,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String description,  WorkspaceMembershipDto? membership)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String name,  String description,  String accentColor,  WorkspaceMembershipDto? membership)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _WorkspaceDto() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.membership);case _:
+return $default(_that.id,_that.name,_that.description,_that.accentColor,_that.membership);case _:
   return orElse();
 
 }
@@ -455,10 +456,10 @@ return $default(_that.id,_that.name,_that.description,_that.membership);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String description,  WorkspaceMembershipDto? membership)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String name,  String description,  String accentColor,  WorkspaceMembershipDto? membership)  $default,) {final _that = this;
 switch (_that) {
 case _WorkspaceDto():
-return $default(_that.id,_that.name,_that.description,_that.membership);case _:
+return $default(_that.id,_that.name,_that.description,_that.accentColor,_that.membership);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -475,10 +476,10 @@ return $default(_that.id,_that.name,_that.description,_that.membership);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String description,  WorkspaceMembershipDto? membership)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String name,  String description,  String accentColor,  WorkspaceMembershipDto? membership)?  $default,) {final _that = this;
 switch (_that) {
 case _WorkspaceDto() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.membership);case _:
+return $default(_that.id,_that.name,_that.description,_that.accentColor,_that.membership);case _:
   return null;
 
 }
@@ -490,12 +491,13 @@ return $default(_that.id,_that.name,_that.description,_that.membership);case _:
 @JsonSerializable()
 
 class _WorkspaceDto implements WorkspaceDto {
-  const _WorkspaceDto({required this.id, required this.name, this.description = '', this.membership});
+  const _WorkspaceDto({required this.id, required this.name, this.description = '', this.accentColor = 'teal', this.membership});
   factory _WorkspaceDto.fromJson(Map<String, dynamic> json) => _$WorkspaceDtoFromJson(json);
 
 @override final  int id;
 @override final  String name;
 @override@JsonKey() final  String description;
+@override@JsonKey() final  String accentColor;
 @override final  WorkspaceMembershipDto? membership;
 
 /// Create a copy of WorkspaceDto
@@ -511,16 +513,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WorkspaceDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.membership, membership) || other.membership == membership));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WorkspaceDto&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.accentColor, accentColor) || other.accentColor == accentColor)&&(identical(other.membership, membership) || other.membership == membership));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,membership);
+int get hashCode => Object.hash(runtimeType,id,name,description,accentColor,membership);
 
 @override
 String toString() {
-  return 'WorkspaceDto(id: $id, name: $name, description: $description, membership: $membership)';
+  return 'WorkspaceDto(id: $id, name: $name, description: $description, accentColor: $accentColor, membership: $membership)';
 }
 
 
@@ -531,7 +533,7 @@ abstract mixin class _$WorkspaceDtoCopyWith<$Res> implements $WorkspaceDtoCopyWi
   factory _$WorkspaceDtoCopyWith(_WorkspaceDto value, $Res Function(_WorkspaceDto) _then) = __$WorkspaceDtoCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String name, String description, WorkspaceMembershipDto? membership
+ int id, String name, String description, String accentColor, WorkspaceMembershipDto? membership
 });
 
 
@@ -548,11 +550,12 @@ class __$WorkspaceDtoCopyWithImpl<$Res>
 
 /// Create a copy of WorkspaceDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = null,Object? membership = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? description = null,Object? accentColor = null,Object? membership = freezed,}) {
   return _then(_WorkspaceDto(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String,accentColor: null == accentColor ? _self.accentColor : accentColor // ignore: cast_nullable_to_non_nullable
 as String,membership: freezed == membership ? _self.membership : membership // ignore: cast_nullable_to_non_nullable
 as WorkspaceMembershipDto?,
   ));

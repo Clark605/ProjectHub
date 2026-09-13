@@ -20,6 +20,7 @@ abstract class WorkspaceDto with _$WorkspaceDto {
     required int id,
     required String name,
     @Default('') String description,
+    @Default('teal') String accentColor,
     WorkspaceMembershipDto? membership,
   }) = _WorkspaceDto;
 

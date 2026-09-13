@@ -11,6 +11,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onSettingsTap;
   final String? activeWorkspaceName;
   final String? activeWorkspaceRole;
+  final String? activeWorkspaceAccent;
   final bool isLoading;
 
   const ShellTopBar({
@@ -20,6 +21,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
     this.onSettingsTap,
     this.activeWorkspaceName,
     this.activeWorkspaceRole,
+    this.activeWorkspaceAccent,
     this.isLoading = false,
   });
 
@@ -68,6 +70,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
               child: WorkspaceSwitcherPill(
                 activeWorkspaceName: activeWorkspaceName,
                 activeWorkspaceRole: activeWorkspaceRole,
+                activeWorkspaceAccent: activeWorkspaceAccent,
                 isLoading: isLoading,
                 onWorkspaceTap: onWorkspaceTap,
               ),

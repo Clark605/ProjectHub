@@ -27,6 +27,7 @@ _WorkspaceDto _$WorkspaceDtoFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num).toInt(),
       name: json['name'] as String,
       description: json['description'] as String? ?? '',
+      accentColor: json['accentColor'] as String? ?? 'teal',
       membership: json['membership'] == null
           ? null
           : WorkspaceMembershipDto.fromJson(
@@ -39,5 +40,6 @@ Map<String, dynamic> _$WorkspaceDtoToJson(_WorkspaceDto instance) =>
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
+      'accentColor': instance.accentColor,
       'membership': instance.membership,
     };

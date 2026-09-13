@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -22,6 +23,10 @@ class WorkspaceCard extends StatelessWidget {
     final role = workspace.membership?.role ?? l10n.roleMember;
     final isOwner = role.toLowerCase() == 'owner';
 
+    final accent = WorkspaceAccent.fromId(workspace.accentColor);
+    final accentColor = accent.resolvedColor(theme.brightness);
+    final onAccent = accent.resolvedOnAccent(theme.brightness);
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -32,30 +37,30 @@ class WorkspaceCard extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           decoration: BoxDecoration(
             color: isActive
-                ? theme.colorScheme.primary.withValues(alpha: 0.1)
+                ? accentColor.withValues(alpha: 0.1)
                 : theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isActive
-                  ? theme.colorScheme.primary.withValues(alpha: 0.6)
+                  ? accentColor.withValues(alpha: 0.6)
                   : theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
               width: isActive ? 1.5 : 1.0,
             ),
           ),
           child: Row(
             children: [
-              // Active Indicator Circle
+              // Active / Accent Indicator Circle
               Container(
                 width: 24,
                 height: 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: isActive
-                      ? theme.colorScheme.primary
+                      ? accentColor
                       : Colors.transparent,
                   border: Border.all(
                     color: isActive
-                        ? theme.colorScheme.primary
+                        ? accentColor
                         : theme.colorScheme.outlineVariant,
                     width: 1.5,
                   ),
@@ -64,9 +69,18 @@ class WorkspaceCard extends StatelessWidget {
                     ? Icon(
                         Icons.check_rounded,
                         size: 16,
-                        color: theme.colorScheme.onPrimary,
+                        color: onAccent,
                       )
-                    : null,
+                    : Center(
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: accentColor,
+                          ),
+                        ),
+                      ),
               ),
               const SizedBox(width: 12),
 

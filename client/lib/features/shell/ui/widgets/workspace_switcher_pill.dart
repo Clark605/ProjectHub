@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class WorkspaceSwitcherPill extends StatelessWidget {
   final String? activeWorkspaceName;
   final String? activeWorkspaceRole;
+  final String? activeWorkspaceAccent;
   final bool isLoading;
   final VoidCallback? onWorkspaceTap;
 
@@ -12,6 +14,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
     super.key,
     this.activeWorkspaceName,
     this.activeWorkspaceRole,
+    this.activeWorkspaceAccent,
     this.isLoading = false,
     this.onWorkspaceTap,
   });
@@ -25,6 +28,9 @@ class WorkspaceSwitcherPill extends StatelessWidget {
     final displayName = hasWorkspace
         ? activeWorkspaceName!
         : (l10n?.createWorkspace ?? 'Create Workspace');
+
+    final accent = WorkspaceAccent.fromId(activeWorkspaceAccent);
+    final accentColor = accent.resolvedColor(theme.brightness);
 
     return InkWell(
       onTap: isLoading ? null : onWorkspaceTap,
@@ -61,7 +67,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                       height: 8,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: theme.colorScheme.primary,
+                        color: accentColor,
                       ),
                     )
                   else
@@ -91,13 +97,13 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                        color: accentColor.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         activeWorkspaceRole!,
                         style: TextStyle(
-                          color: theme.colorScheme.primary,
+                          color: accentColor,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),

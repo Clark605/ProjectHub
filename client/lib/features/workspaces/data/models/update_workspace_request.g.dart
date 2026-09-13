@@ -11,6 +11,7 @@ _UpdateWorkspaceRequest _$UpdateWorkspaceRequestFromJson(
 ) => _UpdateWorkspaceRequest(
   name: json['name'] as String,
   description: json['description'] as String? ?? '',
+  accentColor: json['accentColor'] as String,
 );
 
 Map<String, dynamic> _$UpdateWorkspaceRequestToJson(
@@ -18,4 +19,5 @@ Map<String, dynamic> _$UpdateWorkspaceRequestToJson(
 ) => <String, dynamic>{
   'name': instance.name,
   'description': instance.description,
+  'accentColor': instance.accentColor,
 };

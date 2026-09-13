@@ -10,7 +10,6 @@ class StorageKeys {
   static const String onboardingSeen = 'onboarding_seen';
   static const String activeWorkspaceId = 'active_workspace_id';
   static const String locale = 'locale';
-  static const String colorPalette = 'color_palette';
   static const String cachedUser = 'cached_user';
   static const String cachedActiveWorkspace = 'cached_active_workspace';
 }
