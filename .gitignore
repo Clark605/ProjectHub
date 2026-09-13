@@ -19,8 +19,33 @@ _ReSharper*/
 
 # .NET User Secrets / Local Config overrides
 appsettings*.local.json
+appsettings.Production.json
 secrets.json
 **/logs/
+
+# Environment Variables & Local Secrets
+.env
+.env.*
+*.env
+*.env.local
+
+# Keystores, Certificates & Private Keys
+*.pfx
+*.p12
+*.pem
+*.cer
+*.crt
+*.key
+*.keystore
+*.jks
+**/android/key.properties
+key.properties
+
+# Cloud / Firebase Credentials
+google-services.json
+**/android/app/google-services.json
+GoogleService-Info.plist
+**/ios/Runner/GoogleService-Info.plist
 
 # ==========================================
 # Flutter / Dart / Web / Mobile
