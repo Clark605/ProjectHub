@@ -37,10 +37,15 @@ public class WorkspaceService : IWorkspaceService
     public async Task<WorkspaceResponseDto> CreateWorkspaceAsync(string userId, CreateWorkspaceRequestDto request)
     {
         _logger.LogInformation("Creating workspace for user {UserId} with name {WorkspaceName}", userId, request.Name);
+
+        var existingCount = await _context.WorkspaceMembers
+            .CountAsync(wm => wm.UserId == userId);
+
         var workspace = new WorkSpace
         {
             Name = request.Name,
             Description = request.Description,
+            AccentColor = AccentColors.AutoAssign(existingCount),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -75,6 +80,7 @@ public class WorkspaceService : IWorkspaceService
             Id = workspace.Id,
             Name = workspace.Name,
             Description = workspace.Description,
+            AccentColor = workspace.AccentColor,
             Membership = new WorkspaceMembershipDto(workspaceMember.Role, workspaceMember.CreatedAt)
         };
     }
@@ -92,6 +98,7 @@ public class WorkspaceService : IWorkspaceService
                     Id = wm.Workspace.Id,
                     Name = wm.Workspace.Name,
                     Description = wm.Workspace.Description,
+                    AccentColor = wm.Workspace.AccentColor,
                     Membership = new WorkspaceMembershipDto(wm.Role, wm.CreatedAt)
                 })
                 .ToListAsync(token),
@@ -112,6 +119,7 @@ public class WorkspaceService : IWorkspaceService
                     Id = wm.Workspace.Id,
                     Name = wm.Workspace.Name,
                     Description = wm.Workspace.Description,
+                    AccentColor = wm.Workspace.AccentColor,
                     Membership = new WorkspaceMembershipDto(wm.Role, wm.CreatedAt)
                 })
                 .FirstOrDefaultAsync(token),
@@ -147,6 +155,7 @@ public class WorkspaceService : IWorkspaceService
 
         workspaceMember.Workspace.Name = request.Name;
         workspaceMember.Workspace.Description = request.Description;
+        workspaceMember.Workspace.AccentColor = request.AccentColor.Trim().ToLowerInvariant();
         workspaceMember.Workspace.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
@@ -176,6 +185,7 @@ public class WorkspaceService : IWorkspaceService
             Id = workspaceMember.Workspace.Id,
             Name = workspaceMember.Workspace.Name,
             Description = workspaceMember.Workspace.Description,
+            AccentColor = workspaceMember.Workspace.AccentColor,
             Membership = new WorkspaceMembershipDto(workspaceMember.Role, workspaceMember.CreatedAt)
         };
     }

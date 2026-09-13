@@ -1,4 +1,5 @@
 using FluentValidation;
+using ProjectHub.Api.Models;
 
 namespace ProjectHub.Api.DTOs.WorkSpaceDtos;
 
@@ -12,6 +13,11 @@ public class UpdateWorkspaceRequestDtoValidator : AbstractValidator<UpdateWorksp
 
         RuleFor(x => x.Description)
             .MaximumLength(500).WithMessage("Workspace description cannot exceed 500 characters.");
+
+        RuleFor(x => x.AccentColor)
+            .NotEmpty().WithMessage("Accent color is required.")
+            .Must(AccentColors.IsValid)
+            .WithMessage("Accent color must be one of the supported values.");
     }
 }
 

@@ -44,6 +44,14 @@ public class AppDbContext : IdentityDbContext<AppUser>
             entity.HasIndex("WorkspaceId", nameof(WorkspaceMember.UserId)).IsUnique();
         });
 
+        builder.Entity<WorkSpace>(entity =>
+        {
+            entity.Property(w => w.AccentColor)
+                .HasMaxLength(20)
+                .IsRequired()
+                .HasDefaultValue(AccentColors.Default);
+        });
+
         builder.Entity<Project>(entity =>
         {
             entity.HasOne(p => p.Workspace)
