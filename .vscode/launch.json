@@ -5,7 +5,7 @@
       "name": ".NET API (Server)",
       "type": "dotnet",
       "request": "launch",
-      "preLaunchTask": "build-server",
+      "preLaunchTask": "prepare-and-build-server",
       "projectPath": "${workspaceFolder}/server/ProjectHub.Api/ProjectHub.Api.csproj",
       "launchSettingsProfile": "https",
       "serverReadyAction": {

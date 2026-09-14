@@ -2,6 +2,78 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "start-docker-services",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/start-docker-services.ps1"
+      ],
+      "windows": {
+        "command": "powershell",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}/scripts/start-docker-services.ps1"
+        ]
+      },
+      "osx": {
+        "command": "${workspaceFolder}/scripts/start-docker-services.sh",
+        "args": []
+      },
+      "linux": {
+        "command": "${workspaceFolder}/scripts/start-docker-services.sh",
+        "args": []
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      }
+    },
+    {
+      "label": "stop-docker-services",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "${workspaceFolder}/scripts/stop-docker-services.ps1"
+      ],
+      "windows": {
+        "command": "powershell",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder}/scripts/stop-docker-services.ps1"
+        ]
+      },
+      "osx": {
+        "command": "${workspaceFolder}/scripts/stop-docker-services.sh",
+        "args": []
+      },
+      "linux": {
+        "command": "${workspaceFolder}/scripts/stop-docker-services.sh",
+        "args": []
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
       "label": "build-server",
       "command": "dotnet",
       "type": "process",
@@ -12,7 +84,15 @@
         "/consoleloggerparameters:NoSummary"
       ],
       "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "prepare-and-build-server",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "start-docker-services",
+        "build-server"
+      ],
+      "problemMatcher": []
     }
   ]
 }
-
