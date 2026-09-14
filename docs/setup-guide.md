@@ -18,16 +18,30 @@ Ensure the following tools are installed on your workstation:
 
 ---
 
-## 🗄 1. Infrastructure Setup (Docker / Local Services)
+## 🗄 1. Infrastructure Setup (Automated Docker / Local Services)
 
-### Running PostgreSQL and Redis via Docker
+> [!TIP]
+> **Zero Manual Docker Setup:** When you run or debug the backend via VS Code (`F5`) or execute `scripts/run-dev.ps1`, the pre-launch task automatically inspects, starts, or provisions the PostgreSQL and Redis containers for you.
 
+### Option A: Automatic Launch via VS Code or Dev Script
+Simply open VS Code, ensure Docker Desktop is active, and press `F5` on **`Full Stack (Server + Client)`** or **`.NET API (Server)`**.
+
+### Option B: Dedicated Repository Automation Scripts
+```powershell
+# Windows
+powershell -ExecutionPolicy Bypass -File .\scripts\start-docker-services.ps1
+
+# Linux / macOS
+bash ./scripts/start-docker-services.sh
+```
+
+### Option C: Manual Container Provisioning (Fallback)
 ```powershell
 # Run PostgreSQL container
-docker run --name projecthub-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ProjectHubDb -p 5432:5432 -d postgres:latest
+docker run --name projecthub-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ProjectHubDb -p 5432:5432 -d postgres:16-alpine
 
-# Run Redis container (optional for L2 caching)
-docker run --name projecthub-redis -p 6379:6379 -d redis:alpine
+# Run Redis container
+docker run --name projecthub-redis -p 6379:6379 -d redis:7-alpine
 ```
 
 ---

@@ -234,14 +234,19 @@ dotnet user-secrets set "Jwt:Audience" "ProjectHub.Client"
 
 ## 🗄 Database Setup & Migrations
 
-### Prerequisites
-- PostgreSQL running locally or in Docker:
+### Prerequisites & Automated Provisioning
+PostgreSQL and Redis can be auto-started or managed via repository scripts:
+- **Automated (VS Code F5 / Launch Task):**
+  Launching `.NET API (Server)` automatically runs `scripts/start-docker-services.ps1` (`.sh`) before building.
+- **Via Script:**
   ```powershell
-  docker run --name projecthub-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ProjectHubDb -p 5432:5432 -d postgres:latest
+  # Automatically starts or creates projecthub-postgres and projecthub-redis
+  powershell -ExecutionPolicy Bypass -File ../../scripts/start-docker-services.ps1
   ```
-- Redis (optional for L2 distributed cache):
+- **Manual Docker CLI (Fallback):**
   ```powershell
-  docker run --name projecthub-redis -p 6379:6379 -d redis:alpine
+  docker run --name projecthub-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ProjectHubDb -p 5432:5432 -d postgres:16-alpine
+  docker run --name projecthub-redis -p 6379:6379 -d redis:7-alpine
   ```
 
 ### Managing Migrations

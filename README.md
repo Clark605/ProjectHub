@@ -272,22 +272,22 @@ All endpoints are versioned under `/api/v1` and return standardized JSON envelop
 ### Prerequisites
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
 - [Flutter SDK 3.29+](https://flutter.dev/docs/get-started/install) (stable channel)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (for PostgreSQL & Redis)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (must be running for automated container provisioning)
 - [Visual Studio Code](https://code.visualstudio.com/) with C# Dev Kit & Flutter extensions
 
-### 1. Clone & Setup Infrastructure
+> [!TIP]
+> **Zero Manual Docker Setup:** You do **not** need to manually create or start PostgreSQL or Redis containers. When you launch via VS Code (`F5`) or execute `.\scripts\run-dev.ps1`, the automated pre-launch pipeline detects your Docker daemon, auto-provisions missing containers, and starts them before the backend boots.
+
+### 1. Clone the Repository
 
 ```bash
-# Clone the repository
 git clone https://github.com/Clark605/ProjectHub.Api.git
 cd ProjectHub.Api
-
-# Start PostgreSQL and Redis containers via Docker
-docker run -d --name projecthub-postgres -p 5432:5432 -e POSTGRES_DB=ProjectHubDb -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres postgres:16-alpine
-docker run -d --name projecthub-redis -p 6379:6379 redis:7-alpine
 ```
 
 ### 2. Configure Backend Secrets & Migrate Database
+
+On a fresh clone, configure your local development secrets and initialize the database schema:
 
 ```bash
 cd server/ProjectHub.Api
@@ -296,25 +296,34 @@ cd server/ProjectHub.Api
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=ProjectHubDb;Username=postgres;Password=postgres;Pooling=true"
 dotnet user-secrets set "Jwt:Key" "DEVELOPMENT_SECRET_KEY_FOR_LOCAL_RUNNING_MIN_32_BYTES_LONG!"
 
-# Apply EF Core migrations
+# Ensure containers are running (if not already started via VS Code)
+powershell -ExecutionPolicy Bypass -File ../../scripts/start-docker-services.ps1
+
+# Apply EF Core migrations to create the schema & tables
 dotnet ef database update
 ```
 
 ### 3. Run Locally
 
-#### Option A: Quick Dev Script (PowerShell)
+#### Option A: VS Code Compound F5 Debugging (Recommended)
+1. Open the repository root in VS Code.
+2. Ensure **Docker Desktop** is running.
+3. Navigate to **Run and Debug** (`Ctrl+Shift+D`).
+4. Select **`Full Stack (Server + Client)`** and hit `F5`.
+   - *The pre-launch task automatically ensures PostgreSQL (`5432`) and Redis (`6379`) containers are running, compiles the .NET server, and starts both server and client together.*
+
+#### Option B: Quick Dev Script (PowerShell)
 ```powershell
-# From repository root
+# From repository root — automatically verifies Docker services and launches both apps
 .\scripts\run-dev.ps1
 ```
 
-#### Option B: VS Code Compound F5 Debugging
-1. Open the repository root in VS Code.
-2. Navigate to **Run and Debug** (`Ctrl+Shift+D`).
-3. Select **`Full Stack (Server + Client)`** and hit `F5`.
-
 #### Option C: Manual CLI
 ```bash
+# Start Docker services
+powershell -ExecutionPolicy Bypass -File .\scripts\start-docker-services.ps1
+# (or ./scripts/start-docker-services.sh on macOS/Linux)
+
 # Terminal 1: Backend API
 cd server/ProjectHub.Api
 dotnet watch run --urls "http://localhost:5259"
@@ -327,6 +336,13 @@ flutter run -d chrome       # For Web
 flutter run -d windows      # For Windows Desktop
 # or
 flutter run                 # For connected Mobile device / emulator
+```
+
+#### Stopping Infrastructure Services
+When finished developing, gracefully stop the background containers:
+```powershell
+.\scripts\stop-docker-services.ps1
+# (or ./scripts/stop-docker-services.sh on macOS/Linux)
 ```
 
 - Swagger UI available at: `http://localhost:5259/swagger`
