@@ -93,7 +93,7 @@ class _ViewState extends State<_View> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.workspaceSettings),
+        title: Text(l10n.workspaceSettings, style: theme.textTheme.titleMedium),
         actions: [
           if (active != null)
             Padding(

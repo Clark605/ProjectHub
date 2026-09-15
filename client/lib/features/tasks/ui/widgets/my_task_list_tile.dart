@@ -70,13 +70,17 @@ class MyTaskListTile extends StatelessWidget {
                         children: [
                           if (task.projectName != null &&
                               task.projectName!.isNotEmpty) ...[
-                            Text(
-                              task.projectName!,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: isDark
-                                    ? AppColors.textSecondary
-                                    : AppColors.lightTextSecondary,
-                                fontWeight: FontWeight.w500,
+                            Flexible(
+                              child: Text(
+                                task.projectName!,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: isDark
+                                      ? AppColors.textSecondary
+                                      : AppColors.lightTextSecondary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                             const SizedBox(width: 8),
