@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
     "http": {
@@ -17,6 +17,17 @@
       "applicationUrl": "https://0.0.0.0:7125;http://0.0.0.0:5259",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "production": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "https://0.0.0.0:7125;http://0.0.0.0:5259",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "ConnectionStrings__DefaultConnection": "Host=localhost;Port=5432;Database=ProjectHubDb;Username=postgres;Password=postgres;Pooling=true;Minimum Pool Size=10;Maximum Pool Size=100",
+        "Jwt__Key": "LOCAL_DEV_ONLY_CHANGE_ME_AND_MOVE_TO_USER_SECRETS"
       }
     }
   }

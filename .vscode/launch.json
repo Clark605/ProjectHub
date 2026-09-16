@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET API (Server)",
+      "name": ".NET API (Server - Dev)",
       "type": "dotnet",
       "request": "launch",
       "preLaunchTask": "prepare-and-build-server",
@@ -14,19 +14,53 @@
       }
     },
     {
-      "name": "Flutter (Client)",
+      "name": ".NET API (Server - Production)",
+      "type": "dotnet",
+      "request": "launch",
+      "preLaunchTask": "prepare-and-build-server",
+      "projectPath": "${workspaceFolder}/server/ProjectHub.Api/ProjectHub.Api.csproj",
+      "launchSettingsProfile": "production",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "ConnectionStrings__DefaultConnection": "Host=localhost;Port=5432;Database=ProjectHubDb;Username=postgres;Password=postgres;Pooling=true;Minimum Pool Size=10;Maximum Pool Size=100",
+        "Jwt__Key": "LOCAL_DEV_ONLY_CHANGE_ME_AND_MOVE_TO_USER_SECRETS"
+      },
+      "serverReadyAction": {
+        "action": "openIntegratedBrowser",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      }
+    },
+    {
+      "name": "Flutter (Client - Dev)",
       "type": "dart",
       "request": "launch",
       "cwd": "client",
-      "program": "lib/main.dart"
+      "program": "lib/main.dart",
+      "flutterMode": "debug"
+    },
+    {
+      "name": "Flutter (Client - Production)",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "client",
+      "program": "lib/main.dart",
+      "flutterMode": "release"
     }
   ],
   "compounds": [
     {
-      "name": "Full Stack (Server + Client)",
+      "name": "Full Stack Dev (Server Dev + Client Dev)",
       "configurations": [
-        ".NET API (Server)",
-        "Flutter (Client)"
+        ".NET API (Server - Dev)",
+        "Flutter (Client - Dev)"
+      ],
+      "stopAll": true
+    },
+    {
+      "name": "Full Stack Production (Server Prod + Client Prod)",
+      "configurations": [
+        ".NET API (Server - Production)",
+        "Flutter (Client - Production)"
       ],
       "stopAll": true
     }
