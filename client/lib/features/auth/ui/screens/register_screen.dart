@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/services/github_auth_service.dart';
 import 'package:client/core/services/google_auth_service.dart';
 import 'package:client/core/utils/validators.dart';
 import 'package:client/core/widgets/app_button.dart';
@@ -62,6 +63,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       context.read<RegisterCubit>().externalLogin(
         provider: 'Google',
         idToken: token,
+      );
+    }
+  }
+
+  Future<void> _onGithubSignIn(BuildContext context) async {
+    final githubAuthService = getIt<GithubAuthService>();
+    final code = await githubAuthService.signIn();
+    if (code != null && context.mounted) {
+      context.read<RegisterCubit>().externalLogin(
+        provider: 'GitHub',
+        code: code,
       );
     }
   }
@@ -180,11 +192,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 24),
               SocialAuthSection(
                     onGooglePressed: () => _onGoogleSignIn(context),
-                    onGithubPressed: () =>
-                        context.read<RegisterCubit>().externalLogin(
-                          provider: 'GitHub',
-                          accessToken: 'mock_github_access_token',
-                        ),
+                    onGithubPressed: () => _onGithubSignIn(context),
                   )
                   .animate()
                   .fadeIn(duration: 400.ms, delay: 500.ms)

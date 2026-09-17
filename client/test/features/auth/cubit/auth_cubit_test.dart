@@ -71,6 +71,8 @@ class FakeAuthRepository implements AuthRepository {
     required String provider,
     String? idToken,
     String? accessToken,
+    String? code,
+    String? redirectUri,
   }) async {
     if (shouldThrow) {
       throw ValidationException(message: errorMessage);
@@ -299,6 +301,45 @@ void main() {
       expect(states, [
         const LoginState.loading(),
         const LoginState.failure('Invalid credentials'),
+      ]);
+    });
+
+    test('externalLogin with GitHub code emits loading then success', () async {
+      const user = User(name: 'GitHub User', email: 'github@example.com');
+      repository.currentUser = user;
+
+      final states = <LoginState>[];
+      loginCubit.stream.listen(states.add);
+
+      await loginCubit.externalLogin(
+        provider: 'GitHub',
+        code: 'valid_auth_code',
+      );
+      await Future.delayed(Duration.zero);
+
+      expect(states, [
+        const LoginState.loading(),
+        const LoginState.success(user),
+      ]);
+      expect(appAuthCubit.state, const AppAuthState.authenticated(user));
+    });
+
+    test('externalLogin failure emits loading then failure', () async {
+      repository.shouldThrow = true;
+      repository.errorMessage = 'External authentication failed.';
+
+      final states = <LoginState>[];
+      loginCubit.stream.listen(states.add);
+
+      await loginCubit.externalLogin(
+        provider: 'GitHub',
+        code: 'invalid_code',
+      );
+      await Future.delayed(Duration.zero);
+
+      expect(states, [
+        const LoginState.loading(),
+        const LoginState.failure('External authentication failed.'),
       ]);
     });
   });
