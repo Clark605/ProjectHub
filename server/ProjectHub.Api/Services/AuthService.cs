@@ -304,68 +304,142 @@ public class AuthService : IAuthService
         }
         else if (provider == "github")
         {
-            if (string.IsNullOrWhiteSpace(dto.AccessToken))
+            if (string.IsNullOrWhiteSpace(dto.AccessToken) && string.IsNullOrWhiteSpace(dto.Code))
             {
-                _logger.LogWarning("External login failed - GitHub AccessToken is missing");
+                _logger.LogWarning("External login failed - GitHub AccessToken and Code are missing");
                 return null;
             }
 
-            try
+            var rawToken = !string.IsNullOrWhiteSpace(dto.AccessToken) ? dto.AccessToken : dto.Code;
+            if (_environment.IsDevelopment() && rawToken != null &&
+                (rawToken.StartsWith("dev_token:") || rawToken == "mock_github_access_token" || rawToken == "mock_github_code"))
             {
-                var client = _httpClientFactory.CreateClient();
-                client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("ProjectHub-API", "1.0"));
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", dto.AccessToken);
-
-                var response = await client.GetAsync("https://api.github.com/user");
-                if (!response.IsSuccessStatusCode)
+                if (rawToken == "mock_github_access_token" || rawToken == "mock_github_code")
                 {
-                    _logger.LogWarning("GitHub user lookup failed with status: {StatusCode}", response.StatusCode);
-                    return null;
+                    verifiedEmail = "github.user@example.com";
+                    verifiedName = "GitHub Test User";
                 }
-
-                var content = await response.Content.ReadAsStringAsync();
-                using var doc = JsonDocument.Parse(content);
-                var root = doc.RootElement;
-
-                if (root.TryGetProperty("email", out var emailProp) && emailProp.ValueKind == JsonValueKind.String)
+                else
                 {
-                    verifiedEmail = emailProp.GetString();
+                    var parts = rawToken.Split(':');
+                    verifiedEmail = parts.Length > 1 && !string.IsNullOrWhiteSpace(parts[1]) ? parts[1] : "github.dev@example.com";
+                    verifiedName = parts.Length > 2 && !string.IsNullOrWhiteSpace(parts[2]) ? parts[2] : "GitHub Dev User";
                 }
+            }
+            else
+            {
+                try
+                {
+                    var client = _httpClientFactory.CreateClient();
+                    client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("ProjectHub-API", "1.0"));
 
-                if (root.TryGetProperty("name", out var nameProp) && nameProp.ValueKind == JsonValueKind.String && !string.IsNullOrWhiteSpace(nameProp.GetString()))
-                {
-                    verifiedName = nameProp.GetString();
-                }
-                else if (root.TryGetProperty("login", out var loginProp) && loginProp.ValueKind == JsonValueKind.String)
-                {
-                    verifiedName = loginProp.GetString();
-                }
+                    string? accessToken = dto.AccessToken;
 
-                // If email is private on GitHub profile, fetch from /user/emails
-                if (string.IsNullOrWhiteSpace(verifiedEmail))
-                {
-                    var emailsResponse = await client.GetAsync("https://api.github.com/user/emails");
-                    if (emailsResponse.IsSuccessStatusCode)
+                    // If authorization code was provided, exchange it for an access_token
+                    if (string.IsNullOrWhiteSpace(accessToken) && !string.IsNullOrWhiteSpace(dto.Code))
                     {
-                        var emailsContent = await emailsResponse.Content.ReadAsStringAsync();
-                        using var emailsDoc = JsonDocument.Parse(emailsContent);
-                        foreach (var item in emailsDoc.RootElement.EnumerateArray())
+                        var githubClientId = _configuration["Authentication:GitHub:ClientId"];
+                        var githubClientSecret = _configuration["Authentication:GitHub:ClientSecret"];
+
+                        if (string.IsNullOrWhiteSpace(githubClientId) || string.IsNullOrWhiteSpace(githubClientSecret))
                         {
-                            var isPrimary = item.TryGetProperty("primary", out var p) && p.GetBoolean();
-                            var isVerified = item.TryGetProperty("verified", out var v) && v.GetBoolean();
-                            if (isPrimary && isVerified && item.TryGetProperty("email", out var e))
+                            _logger.LogWarning("GitHub OAuth code exchange failed: ClientId or ClientSecret is not configured");
+                            return null;
+                        }
+
+                        var tokenRequest = new HttpRequestMessage(HttpMethod.Post, "https://github.com/login/oauth/access_token");
+                        tokenRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        tokenRequest.Content = new FormUrlEncodedContent(new Dictionary<string, string>
+                        {
+                            ["client_id"] = githubClientId,
+                            ["client_secret"] = githubClientSecret,
+                            ["code"] = dto.Code,
+                            ["redirect_uri"] = dto.RedirectUri ?? "projecthub://oauth/github"
+                        });
+
+                        var tokenResponse = await client.SendAsync(tokenRequest);
+                        if (!tokenResponse.IsSuccessStatusCode)
+                        {
+                            _logger.LogWarning("GitHub token exchange failed with status: {StatusCode}", tokenResponse.StatusCode);
+                            return null;
+                        }
+
+                        var tokenContent = await tokenResponse.Content.ReadAsStringAsync();
+                        using var tokenDoc = JsonDocument.Parse(tokenContent);
+                        if (tokenDoc.RootElement.TryGetProperty("access_token", out var tokenProp) && tokenProp.ValueKind == JsonValueKind.String)
+                        {
+                            accessToken = tokenProp.GetString();
+                        }
+                        else if (tokenDoc.RootElement.TryGetProperty("error", out var errorProp))
+                        {
+                            var errorDesc = tokenDoc.RootElement.TryGetProperty("error_description", out var descProp) ? descProp.GetString() : null;
+                            _logger.LogWarning("GitHub token exchange returned error: {Error} - {Description}", errorProp.GetString(), errorDesc);
+                            return null;
+                        }
+                    }
+
+                    if (string.IsNullOrWhiteSpace(accessToken))
+                    {
+                        _logger.LogWarning("Could not obtain GitHub access token for external login");
+                        return null;
+                    }
+
+                    var profileRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user");
+                    profileRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                    var response = await client.SendAsync(profileRequest);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        _logger.LogWarning("GitHub user lookup failed with status: {StatusCode}", response.StatusCode);
+                        return null;
+                    }
+
+                    var content = await response.Content.ReadAsStringAsync();
+                    using var doc = JsonDocument.Parse(content);
+                    var root = doc.RootElement;
+
+                    if (root.TryGetProperty("email", out var emailProp) && emailProp.ValueKind == JsonValueKind.String)
+                    {
+                        verifiedEmail = emailProp.GetString();
+                    }
+
+                    if (root.TryGetProperty("name", out var nameProp) && nameProp.ValueKind == JsonValueKind.String && !string.IsNullOrWhiteSpace(nameProp.GetString()))
+                    {
+                        verifiedName = nameProp.GetString();
+                    }
+                    else if (root.TryGetProperty("login", out var loginProp) && loginProp.ValueKind == JsonValueKind.String)
+                    {
+                        verifiedName = loginProp.GetString();
+                    }
+
+                    // If email is private on GitHub profile, fetch from /user/emails
+                    if (string.IsNullOrWhiteSpace(verifiedEmail))
+                    {
+                        var emailsRequest = new HttpRequestMessage(HttpMethod.Get, "https://api.github.com/user/emails");
+                        emailsRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                        var emailsResponse = await client.SendAsync(emailsRequest);
+                        if (emailsResponse.IsSuccessStatusCode)
+                        {
+                            var emailsContent = await emailsResponse.Content.ReadAsStringAsync();
+                            using var emailsDoc = JsonDocument.Parse(emailsContent);
+                            foreach (var item in emailsDoc.RootElement.EnumerateArray())
                             {
-                                verifiedEmail = e.GetString();
-                                break;
+                                var isPrimary = item.TryGetProperty("primary", out var p) && p.GetBoolean();
+                                var isVerified = item.TryGetProperty("verified", out var v) && v.GetBoolean();
+                                if (isPrimary && isVerified && item.TryGetProperty("email", out var e))
+                                {
+                                    verifiedEmail = e.GetString();
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "GitHub OAuth lookup failed");
-                return null;
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "GitHub OAuth lookup failed");
+                    return null;
+                }
             }
         }
         else

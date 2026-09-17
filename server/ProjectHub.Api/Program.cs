@@ -17,9 +17,27 @@ using ProjectHub.Api.Services.Interfaces;
 using ProjectHub.Api.Middleware;
 using FluentValidation.AspNetCore;
 using ProjectHub.Api.DTOs.WorkSpaceDtos;
+// Load .env environment variables if present
+DotNetEnv.Env.TraversePath().Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Map .env OAuth variables to Configuration if present
+var envGoogleClientId = Environment.GetEnvironmentVariable("GOOGLE_SERVER_CLIENT_ID");
+if (!string.IsNullOrWhiteSpace(envGoogleClientId))
+{
+    builder.Configuration["Authentication:Google:ClientId"] = envGoogleClientId;
+}
+var envGithubClientId = Environment.GetEnvironmentVariable("GITHUB_CLIENT_ID");
+if (!string.IsNullOrWhiteSpace(envGithubClientId))
+{
+    builder.Configuration["Authentication:GitHub:ClientId"] = envGithubClientId;
+}
+var envGithubClientSecret = Environment.GetEnvironmentVariable("GITHUB_CLIENT_SECRET");
+if (!string.IsNullOrWhiteSpace(envGithubClientSecret))
+{
+    builder.Configuration["Authentication:GitHub:ClientSecret"] = envGithubClientSecret;
+}
 // Configure non-blocking async logging from appsettings
 builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Configuration(context.Configuration)
