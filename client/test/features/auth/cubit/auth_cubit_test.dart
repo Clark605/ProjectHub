@@ -331,10 +331,7 @@ void main() {
       final states = <LoginState>[];
       loginCubit.stream.listen(states.add);
 
-      await loginCubit.externalLogin(
-        provider: 'GitHub',
-        code: 'invalid_code',
-      );
+      await loginCubit.externalLogin(provider: 'GitHub', code: 'invalid_code');
       await Future.delayed(Duration.zero);
 
       expect(states, [

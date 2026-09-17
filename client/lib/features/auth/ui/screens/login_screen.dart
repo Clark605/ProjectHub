@@ -62,10 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final githubAuthService = getIt<GithubAuthService>();
     final code = await githubAuthService.signIn();
     if (code != null && context.mounted) {
-      context.read<LoginCubit>().externalLogin(
-        provider: 'GitHub',
-        code: code,
-      );
+      context.read<LoginCubit>().externalLogin(provider: 'GitHub', code: code);
     }
   }
 

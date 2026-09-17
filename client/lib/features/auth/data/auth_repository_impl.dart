@@ -187,7 +187,10 @@ class AuthRepositoryImpl implements AuthRepository {
     String? code,
     String? redirectUri,
   }) async {
-    AppLogger.debug('Starting externalLogin for $provider', tag: 'AuthRepository');
+    AppLogger.debug(
+      'Starting externalLogin for $provider',
+      tag: 'AuthRepository',
+    );
     try {
       final response = await _dio.post(
         ApiConstants.externalLogin,

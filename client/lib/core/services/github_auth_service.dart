@@ -14,13 +14,13 @@ class GithubAuthService {
   final String _clientId;
 
   GithubAuthService()
-      : _clientId = const String.fromEnvironment(
-          'GITHUB_CLIENT_ID',
-          defaultValue: '',
-        );
+    : _clientId = const String.fromEnvironment(
+        'GITHUB_CLIENT_ID',
+        defaultValue: '',
+      );
 
   GithubAuthService.withClientId({required String clientId})
-      : _clientId = clientId;
+    : _clientId = clientId;
 
   String _generateState() {
     final random = Random.secure();
@@ -31,8 +31,8 @@ class GithubAuthService {
   /// Initiates interactive GitHub OAuth web flow via Chrome Custom Tabs / ASWebAuthenticationSession.
   /// Returns the authorization code if successful, or null if cancelled or failed.
   Future<String?> signIn() async {
-    // If not configured in debug mode, provide immediate mock fallback
-    if (_clientId.isEmpty) {
+    // If not configured or placeholder in debug mode, provide immediate mock fallback
+    if (_clientId.isEmpty || _clientId.startsWith('YOUR_') || _clientId.startsWith('your_')) {
       AppLogger.warning(
         'GITHUB_CLIENT_ID is not configured. Falling back to mock_github_code in debug mode.',
         tag: 'GithubAuth',
@@ -52,7 +52,10 @@ class GithubAuthService {
         'state': state,
       }).toString();
 
-      AppLogger.debug('Launching GitHub OAuth flow: $authUrl', tag: 'GithubAuth');
+      AppLogger.debug(
+        'Launching GitHub OAuth flow: $authUrl',
+        tag: 'GithubAuth',
+      );
 
       final result = await FlutterWebAuth2.authenticate(
         url: authUrl,
@@ -72,7 +75,8 @@ class GithubAuthService {
 
       final error = callbackUri.queryParameters['error'];
       if (error != null) {
-        final errorDescription = callbackUri.queryParameters['error_description'];
+        final errorDescription =
+            callbackUri.queryParameters['error_description'];
         AppLogger.warning(
           'GitHub OAuth returned error: $error ($errorDescription)',
           tag: 'GithubAuth',
@@ -91,8 +95,13 @@ class GithubAuthService {
 
       return code;
     } on PlatformException catch (e, stackTrace) {
-      if (e.code == 'CANCELED' || e.code == 'canceled' || e.message?.toLowerCase().contains('cancel') == true) {
-        AppLogger.info('GitHub sign-in was cancelled by user', tag: 'GithubAuth');
+      if (e.code == 'CANCELED' ||
+          e.code == 'canceled' ||
+          e.message?.toLowerCase().contains('cancel') == true) {
+        AppLogger.info(
+          'GitHub sign-in was cancelled by user',
+          tag: 'GithubAuth',
+        );
         return null;
       }
 
