@@ -1,7 +1,6 @@
 import 'package:injectable/injectable.dart';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
-import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_members_mixin.dart';
 import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
@@ -12,9 +11,8 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
     with WorkspaceSettingsMembersMixin {
   @override
   final WorkspaceRepository repository;
-  final WorkspaceContextCubit contextCubit;
 
-  WorkspaceSettingsCubit(this.repository, this.contextCubit)
+  WorkspaceSettingsCubit(this.repository)
     : super(const WorkspaceSettingsState.initial());
 
   Future<void> loadSettings(
@@ -116,7 +114,6 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
             accentColor: accentColor,
           ),
         );
-        await contextCubit.selectWorkspace(updated);
 
         emit(
           currentState.copyWith(
@@ -146,7 +143,6 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
     final success = await safeExecute<bool>(
       () async {
         await repository.deleteWorkspace(currentState.workspace.id);
-        await contextCubit.loadWorkspaces();
         emit(const WorkspaceSettingsState.deleted());
         return true;
       },

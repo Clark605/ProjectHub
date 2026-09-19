@@ -52,6 +52,12 @@ class _FakeWorkspaceRepository extends Fake implements WorkspaceRepository {
   ];
 
   @override
+  WorkspaceDto? get activeWorkspace => workspaces.firstOrNull;
+
+  @override
+  Stream<WorkspaceDto?> get activeWorkspaceChanges => const Stream.empty();
+
+  @override
   void setActiveWorkspace(WorkspaceDto? workspace) {}
 
   @override

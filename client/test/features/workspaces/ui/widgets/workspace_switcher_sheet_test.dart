@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,16 +35,20 @@ class _FakeWorkspaceRepository extends Fake implements WorkspaceRepository {
   ];
 
   @override
+  WorkspaceDto? get activeWorkspace => workspaces.firstOrNull;
+
+  @override
+  Stream<WorkspaceDto?> get activeWorkspaceChanges => const Stream.empty();
+
+  @override
   void setActiveWorkspace(WorkspaceDto? workspace) {}
 
   @override
   Future<List<WorkspaceDto>> getWorkspaces() async => workspaces;
 
   @override
-  Future<WorkspaceDto> getWorkspace(
-    int id, {
-    bool forceRefresh = false,
-  }) async => workspaces.firstWhere((w) => w.id == id);
+  Future<WorkspaceDto> getWorkspace(int id, {bool forceRefresh = false}) async =>
+      workspaces.firstWhere((w) => w.id == id);
 
   @override
   Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async {
@@ -58,24 +63,14 @@ class _FakeWorkspaceRepository extends Fake implements WorkspaceRepository {
   }
 
   @override
-  Future<WorkspaceDto> updateWorkspace(
-    int id,
-    UpdateWorkspaceRequest request,
-  ) async {
+  Future<WorkspaceDto> updateWorkspace(int id, UpdateWorkspaceRequest request) async {
     final idx = workspaces.indexWhere((w) => w.id == id);
     if (idx != -1) {
-      final updated = workspaces[idx].copyWith(
-        name: request.name,
-        description: request.description,
-      );
+      final updated = workspaces[idx].copyWith(name: request.name, description: request.description);
       workspaces[idx] = updated;
       return updated;
     }
-    return WorkspaceDto(
-      id: id,
-      name: request.name,
-      description: request.description,
-    );
+    return WorkspaceDto(id: id, name: request.name, description: request.description);
   }
 
   @override
@@ -131,10 +126,13 @@ void main() {
   });
 
   Widget buildTestableWidget() {
-    return const MaterialApp(
+    return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(body: WorkspaceSwitcherSheet()),
+      home: BlocProvider<WorkspaceContextCubit>.value(
+        value: cubit,
+        child: const Scaffold(body: WorkspaceSwitcherSheet()),
+      ),
     );
   }
 

@@ -32,6 +32,12 @@ class _MockRepo extends Fake implements WorkspaceRepository {
   _MockRepo({required this.workspace, required this.members});
 
   @override
+  WorkspaceDto? get activeWorkspace => workspace;
+
+  @override
+  Stream<WorkspaceDto?> get activeWorkspaceChanges => const Stream.empty();
+
+  @override
   void setActiveWorkspace(WorkspaceDto? workspace) {}
 
   @override
@@ -114,7 +120,7 @@ void main() {
     contextCubit = WorkspaceContextCubit(repo, prefs);
     await contextCubit.loadWorkspaces();
 
-    settingsCubit = WorkspaceSettingsCubit(repo, contextCubit);
+    settingsCubit = WorkspaceSettingsCubit(repo);
     await settingsCubit.loadSettings(1);
     getIt.registerFactory<WorkspaceSettingsCubit>(() => settingsCubit);
   });
@@ -177,23 +183,6 @@ void main() {
     expect(repo.workspace.name, 'Alpha Team Renamed');
   });
 
-  testWidgets(
-    'WorkspaceSettingsScreen resolves WorkspaceContextCubit from getIt when pushed without ancestor BlocProvider',
-    (tester) async {
-      getIt.registerSingleton<WorkspaceContextCubit>(contextCubit);
-
-      await tester.pumpWidget(
-        MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: WorkspaceSettingsScreen(cubit: settingsCubit),
-        ),
-      );
-      await tester.pump(const Duration(milliseconds: 100));
-
-      expect(find.byType(WorkspaceDetailsCard), findsOneWidget);
-    },
-  );
 
   testWidgets(
     'WorkspaceSettingsScreen accepts contextCubit directly via constructor',
@@ -236,7 +225,7 @@ void main() {
   testWidgets(
     'WorkspaceSettingsScreen renders WorkspaceSettingsSkeleton when in loading state',
     (tester) async {
-      final loadingCubit = WorkspaceSettingsCubit(repo, contextCubit);
+      final loadingCubit = WorkspaceSettingsCubit(repo);
       loadingCubit.emit(const WorkspaceSettingsState.loading());
 
       await tester.pumpWidget(
@@ -258,7 +247,7 @@ void main() {
   testWidgets(
     'WorkspaceSettingsScreen renders WorkspaceSettingsSkeleton when in initial state without crashing',
     (tester) async {
-      final initialCubit = WorkspaceSettingsCubit(repo, contextCubit);
+      final initialCubit = WorkspaceSettingsCubit(repo);
 
       await tester.pumpWidget(
         BlocProvider<WorkspaceContextCubit>.value(

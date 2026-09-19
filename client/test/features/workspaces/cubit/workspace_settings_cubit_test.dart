@@ -1,9 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/errors/app_exception.dart';
-import 'package:client/core/storage/prefs_service.dart';
-import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 import 'package:client/features/workspaces/data/models/add_member_request.dart';
@@ -111,22 +108,15 @@ class _FakeSettingsRepository extends Fake implements WorkspaceRepository {
 
 void main() {
   late _FakeSettingsRepository repository;
-  late PrefsService prefs;
-  late WorkspaceContextCubit contextCubit;
   late WorkspaceSettingsCubit cubit;
 
-  setUp(() async {
-    SharedPreferences.setMockInitialValues({});
-    final sharedPrefs = await SharedPreferences.getInstance();
-    prefs = PrefsService(sharedPrefs);
+  setUp(() {
     repository = _FakeSettingsRepository();
-    contextCubit = WorkspaceContextCubit(repository, prefs);
-    cubit = WorkspaceSettingsCubit(repository, contextCubit);
+    cubit = WorkspaceSettingsCubit(repository);
   });
 
   tearDown(() {
     cubit.close();
-    contextCubit.close();
   });
 
   group('WorkspaceSettingsCubit', () {

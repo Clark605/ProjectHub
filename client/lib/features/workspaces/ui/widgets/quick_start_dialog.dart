@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
@@ -13,11 +13,15 @@ class QuickStartDialog extends StatefulWidget {
 
   const QuickStartDialog({super.key, this.onSuccess});
 
-  static Future<void> show(BuildContext context, {VoidCallback? onSuccess}) {
+  static Future<void> show(BuildContext context, {WorkspaceContextCubit? cubit, VoidCallback? onSuccess}) {
+    final effectiveCubit = cubit ?? context.read<WorkspaceContextCubit>();
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (_) => QuickStartDialog(onSuccess: onSuccess),
+      builder: (_) => BlocProvider.value(
+        value: effectiveCubit,
+        child: QuickStartDialog(onSuccess: onSuccess),
+      ),
     );
   }
 
@@ -48,7 +52,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
     });
 
     try {
-      final cubit = getIt<WorkspaceContextCubit>();
+      final cubit = context.read<WorkspaceContextCubit>();
       await cubit.createWorkspace(
         CreateWorkspaceRequest(
           name: _nameController.text.trim(),
@@ -111,12 +115,8 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
                   prefixIcon: Icons.business_rounded,
                   textInputAction: TextInputAction.next,
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) {
-                      return l10n.workspaceNameRequired;
-                    }
-                    if (value.trim().length > 100) {
-                      return l10n.workspaceNameTooLong;
-                    }
+                    if (value == null || value.trim().isEmpty) return l10n.workspaceNameRequired;
+                    if (value.trim().length > 100) return l10n.workspaceNameTooLong;
                     return null;
                   },
                 ),
@@ -189,11 +189,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.error),
       ),
-      child: Text(
-        _errorMessage!,
-        style: const TextStyle(color: AppColors.error, fontSize: 13),
-        textAlign: TextAlign.center,
-      ),
+      child: Text(_errorMessage!, style: const TextStyle(color: AppColors.error, fontSize: 13), textAlign: TextAlign.center),
     );
   }
 }

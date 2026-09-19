@@ -76,11 +76,12 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i405.ProjectRepository>(
       () => _i396.ProjectRepositoryImpl(gh<_i361.Dio>()),
     );
-    gh.lazySingleton<_i538.TaskRemoteDataSource>(
-      () => _i538.TaskRemoteDataSourceImpl(gh<_i361.Dio>()),
-    );
     gh.lazySingleton<_i688.WorkspaceRepository>(
       () => _i591.WorkspaceRepositoryImpl(gh<_i361.Dio>()),
+      dispose: (i) => i.dispose(),
+    );
+    gh.lazySingleton<_i538.TaskRemoteDataSource>(
+      () => _i538.TaskRemoteDataSourceImpl(gh<_i361.Dio>()),
     );
     gh.factory<_i566.ProjectDetailCubit>(
       () => _i566.ProjectDetailCubit(gh<_i405.ProjectRepository>()),
@@ -93,6 +94,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i30.AppSettingsCubit>(
       () => _i30.AppSettingsCubit(gh<_i415.PrefsService>()),
+    );
+    gh.factory<_i259.WorkspaceSettingsCubit>(
+      () => _i259.WorkspaceSettingsCubit(gh<_i688.WorkspaceRepository>()),
     );
     gh.lazySingleton<_i726.AuthRepository>(
       () => _i781.AuthRepositoryImpl(
@@ -144,12 +148,6 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i568.ActivityRepository>(),
         gh<_i405.ProjectRepository>(),
         gh<_i241.TaskRepository>(),
-      ),
-    );
-    gh.factory<_i259.WorkspaceSettingsCubit>(
-      () => _i259.WorkspaceSettingsCubit(
-        gh<_i688.WorkspaceRepository>(),
-        gh<_i95.WorkspaceContextCubit>(),
       ),
     );
     return this;

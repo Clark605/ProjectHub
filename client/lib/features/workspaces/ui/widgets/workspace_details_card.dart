@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/core/widgets/app_button.dart';
+import 'package:client/features/workspaces/ui/widgets/workspace_accent_picker.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -115,74 +115,9 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                 ),
                 if (isOwner) ...[
                   const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.palette_outlined,
-                        size: 18,
-                        color: theme.colorScheme.primary,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Accent Color',
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Subtle wayfinding color for workspace indicators and tabs.',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    height: 44,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: WorkspaceAccent.values.length,
-                      separatorBuilder: (context, index) => const SizedBox(width: 10),
-                      itemBuilder: (context, index) {
-                        final accent = WorkspaceAccent.values[index];
-                        final isSelected = activeAccentId == accent.id;
-                        final color = accent.resolvedColor(theme.brightness);
-                        return Tooltip(
-                          message: accent.name,
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                _selectedAccent = accent.id;
-                              });
-                            },
-                            borderRadius: BorderRadius.circular(22),
-                            child: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: color,
-                                border: Border.all(
-                                  color: isSelected
-                                      ? theme.colorScheme.onSurface
-                                      : Colors.transparent,
-                                  width: isSelected ? 2.5 : 0,
-                                ),
-                              ),
-                              child: isSelected
-                                  ? Icon(
-                                      Icons.check_rounded,
-                                      color: accent.resolvedOnAccent(theme.brightness),
-                                      size: 20,
-                                    )
-                                  : null,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                  WorkspaceAccentPicker(
+                    activeAccentId: activeAccentId,
+                    onAccentSelected: (id) => setState(() => _selectedAccent = id),
                   ),
                 ],
                 const SizedBox(height: 20),

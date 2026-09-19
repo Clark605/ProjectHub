@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:injectable/injectable.dart';
 
@@ -12,9 +13,40 @@ import 'package:client/features/workspaces/data/workspace_repository.dart';
 class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
   final WorkspaceRepository _repository;
   final PrefsService _prefs;
+  StreamSubscription<WorkspaceDto?>? _activeWsSubscription;
 
   WorkspaceContextCubit(this._repository, this._prefs)
-    : super(_resolveInitialState(_prefs, _repository));
+    : super(_resolveInitialState(_prefs, _repository)) {
+    _activeWsSubscription = _repository.activeWorkspaceChanges.listen((ws) {
+      if (ws == null) {
+        state.maybeWhen(
+          loaded: (workspaces, _) => loadWorkspaces(),
+          orElse: () {},
+        );
+      } else {
+        state.maybeWhen(
+          loaded: (workspaces, active) {
+            if (active.id == ws.id &&
+                (active.name != ws.name ||
+                    active.description != ws.description ||
+                    active.accentColor != ws.accentColor)) {
+              final updatedList =
+                  workspaces.map((w) => w.id == ws.id ? ws : w).toList();
+              _prefs.setActiveWorkspaceId(ws.id);
+              _prefs.setCachedActiveWorkspaceRaw(jsonEncode(ws.toJson()));
+              emit(
+                WorkspaceContextState.loaded(
+                  workspaces: updatedList,
+                  activeWorkspace: ws,
+                ),
+              );
+            }
+          },
+          orElse: () {},
+        );
+      }
+    });
+  }
 
   static WorkspaceContextState _resolveInitialState(
     PrefsService prefs,
@@ -148,8 +180,14 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
 
   Future<void> reset() async {
     _repository.clearCache();
-    _repository.setActiveWorkspace(null);
     await _prefs.clearActiveWorkspace();
     emit(const WorkspaceContextState.initial());
+    _repository.setActiveWorkspace(null);
+  }
+
+  @override
+  Future<void> close() {
+    _activeWsSubscription?.cancel();
+    return super.close();
   }
 }

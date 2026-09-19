@@ -1,7 +1,6 @@
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
@@ -24,19 +23,14 @@ class WorkspaceSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        if (cubit != null)
-          BlocProvider.value(value: cubit!)
-        else
-          BlocProvider(create: (_) => getIt<WorkspaceSettingsCubit>()),
-        if (contextCubit != null)
-          BlocProvider.value(value: contextCubit!)
-        else if (getIt.isRegistered<WorkspaceContextCubit>())
-          BlocProvider.value(value: getIt<WorkspaceContextCubit>()),
-      ],
-      child: const _View(),
-    );
+    Widget content = const _View();
+    if (cubit != null) {
+      content = BlocProvider.value(value: cubit!, child: content);
+    }
+    if (contextCubit != null) {
+      content = BlocProvider.value(value: contextCubit!, child: content);
+    }
+    return content;
   }
 }
 
