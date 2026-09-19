@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,10 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/storage/prefs_service.dart';
-import 'package:client/core/storage/secure_storage_service.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
-import 'package:client/features/auth/data/models/auth_dtos.dart';
 import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
@@ -20,47 +20,16 @@ import 'package:client/features/shell/ui/widgets/desktop_sidebar_quick_links.dar
 import 'package:client/features/shell/ui/widgets/sidebar.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-class _FakeAuthRepo implements AuthRepository {
+class _FakeAuthRepo extends Fake implements AuthRepository {
+  final _authStateController = StreamController<User?>.broadcast();
+  @override
+  Stream<User?> get authStateChanges => _authStateController.stream;
+  @override
+  Future<User?> restoreSession() async =>
+      const User(name: 'Clark Kent', email: 'clark@example.com');
   @override
   Future<User> getCurrentUser() async =>
       const User(name: 'Clark Kent', email: 'clark@example.com');
-  @override
-  Future<User> login(LoginDto dto) async =>
-      const User(name: 'Clark Kent', email: 'clark@example.com');
-  @override
-  Future<void> logout() async {}
-  @override
-  Future<User> register(RegisterDto dto) async =>
-      const User(name: 'Clark Kent', email: 'clark@example.com');
-  @override
-  Future<ForgotPasswordResponseDto> forgotPassword(
-    ForgotPasswordDto dto,
-  ) async => const ForgotPasswordResponseDto(message: 'ok');
-  @override
-  Future<void> resetPassword(ResetPasswordDto dto) async {}
-  @override
-  Future<User> updateProfile({required String name, String? bio}) async =>
-      User(name: name, email: 'clark@example.com', bio: bio ?? '');
-  @override
-  Future<User> externalLogin({
-    required String provider,
-    String? idToken,
-    String? accessToken,
-    String? code,
-    String? redirectUri,
-  }) async => const User(name: 'Clark Kent', email: 'clark@example.com');
-}
-
-class _FakeSecureStorage extends SecureStorageService {
-  @override
-  Future<String?> getAccessToken() async => 'fake-token';
-  @override
-  Future<void> saveTokens({
-    required String accessToken,
-    required String refreshToken,
-  }) async {}
-  @override
-  Future<void> clearTokens() async {}
 }
 
 class _FakeProjectRepo implements ProjectRepository {
@@ -109,11 +78,7 @@ void main() {
     final prefs = PrefsService(sp);
     getIt.registerSingleton<PrefsService>(prefs);
 
-    final authCubit = AppAuthCubit(
-      _FakeAuthRepo(),
-      _FakeSecureStorage(),
-      prefs,
-    );
+    final authCubit = AppAuthCubit(_FakeAuthRepo());
     getIt.registerSingleton<AppAuthCubit>(authCubit);
 
     fakeProjectRepo = _FakeProjectRepo();

@@ -1,13 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/storage/prefs_service.dart';
-import 'package:client/core/storage/secure_storage_service.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
-import 'package:client/features/auth/data/models/auth_dtos.dart';
 import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/dashboard/ui/dashboard_screen.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
@@ -29,58 +29,16 @@ import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-class _FakeAuthRepository implements AuthRepository {
+class _FakeAuthRepository extends Fake implements AuthRepository {
+  final _authStateController = StreamController<User?>.broadcast();
   @override
-  Future<User> login(LoginDto dto) async =>
-      const User(name: 'Test Clark', email: 'clark@example.com');
-
+  Stream<User?> get authStateChanges => _authStateController.stream;
   @override
-  Future<User> register(RegisterDto dto) async =>
+  Future<User?> restoreSession() async =>
       const User(name: 'Test Clark', email: 'clark@example.com');
-
   @override
   Future<User> getCurrentUser() async =>
       const User(name: 'Test Clark', email: 'clark@example.com');
-
-  @override
-  Future<void> logout() async {}
-
-  @override
-  Future<ForgotPasswordResponseDto> forgotPassword(
-    ForgotPasswordDto dto,
-  ) async => const ForgotPasswordResponseDto(message: 'Reset sent');
-
-  @override
-  Future<void> resetPassword(ResetPasswordDto dto) async {}
-
-  @override
-  Future<User> updateProfile({required String name, String? bio}) async =>
-      User(name: name, email: 'clark@example.com', bio: bio ?? '');
-
-  @override
-  Future<User> externalLogin({
-    required String provider,
-    String? idToken,
-    String? accessToken,
-    String? code,
-    String? redirectUri,
-  }) async => const User(name: 'Test Clark', email: 'clark@example.com');
-}
-
-class _FakeSecureStorageService extends SecureStorageService {
-  @override
-  Future<String?> getAccessToken() async => 'fake-token';
-  @override
-  Future<String?> getRefreshToken() async => 'fake-refresh';
-  @override
-  Future<bool> hasTokens() async => true;
-  @override
-  Future<void> saveTokens({
-    required String accessToken,
-    required String refreshToken,
-  }) async {}
-  @override
-  Future<void> clearTokens() async {}
 }
 
 class _FakeWorkspaceRepository implements WorkspaceRepository {
@@ -219,8 +177,7 @@ void main() {
     getIt.registerSingleton<PrefsService>(prefs);
 
     final authRepo = _FakeAuthRepository();
-    final secureStorage = _FakeSecureStorageService();
-    final authCubit = AppAuthCubit(authRepo, secureStorage, prefs);
+    final authCubit = AppAuthCubit(authRepo);
     getIt.registerSingleton<AppAuthCubit>(authCubit);
 
     final workspaceRepo = _FakeWorkspaceRepository();

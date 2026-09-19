@@ -2,6 +2,8 @@ import 'package:client/features/auth/data/models/auth_dtos.dart';
 import 'package:client/features/auth/data/models/user.dart';
 
 abstract class AuthRepository {
+  Stream<User?> get authStateChanges;
+  Future<User?> restoreSession();
   Future<User> login(LoginDto dto);
   Future<User> register(RegisterDto dto);
   Future<User> getCurrentUser();
@@ -16,4 +18,7 @@ abstract class AuthRepository {
     String? code,
     String? redirectUri,
   });
+  Future<User> loginWithGoogle();
+  Future<User> loginWithGithub();
+  void setAuthenticated(User user);
 }

@@ -98,32 +98,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i781.AuthRepositoryImpl(
         gh<_i361.Dio>(),
         gh<_i666.SecureStorageService>(),
-      ),
-    );
-    gh.lazySingleton<_i784.AppAuthCubit>(
-      () => _i784.AppAuthCubit(
-        gh<_i726.AuthRepository>(),
-        gh<_i666.SecureStorageService>(),
         gh<_i415.PrefsService>(),
-        gh<_i95.WorkspaceContextCubit>(),
-      ),
-    );
-    gh.factory<_i796.LoginCubit>(
-      () => _i796.LoginCubit(
-        gh<_i726.AuthRepository>(),
-        gh<_i784.AppAuthCubit>(),
-      ),
-    );
-    gh.factory<_i341.RegisterCubit>(
-      () => _i341.RegisterCubit(
-        gh<_i726.AuthRepository>(),
-        gh<_i784.AppAuthCubit>(),
-      ),
-    );
-    gh.factory<_i322.ProfileEditCubit>(
-      () => _i322.ProfileEditCubit(
-        gh<_i726.AuthRepository>(),
-        gh<_i784.AppAuthCubit>(),
+        gh<_i947.GoogleAuthService>(),
+        gh<_i103.GithubAuthService>(),
       ),
     );
     gh.lazySingleton<_i241.TaskRepository>(
@@ -140,6 +117,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i241.TaskRepository>(),
         gh<_i405.ProjectRepository>(),
       ),
+    );
+    gh.lazySingleton<_i784.AppAuthCubit>(
+      () => _i784.AppAuthCubit(gh<_i726.AuthRepository>()),
     );
     gh.factory<_i1.ForgotPasswordCubit>(
       () => _i1.ForgotPasswordCubit(gh<_i726.AuthRepository>()),
@@ -161,6 +141,24 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i259.WorkspaceSettingsCubit(
         gh<_i688.WorkspaceRepository>(),
         gh<_i95.WorkspaceContextCubit>(),
+      ),
+    );
+    gh.factory<_i796.LoginCubit>(
+      () => _i796.LoginCubit(
+        gh<_i726.AuthRepository>(),
+        gh<_i784.AppAuthCubit>(),
+      ),
+    );
+    gh.factory<_i341.RegisterCubit>(
+      () => _i341.RegisterCubit(
+        gh<_i726.AuthRepository>(),
+        gh<_i784.AppAuthCubit>(),
+      ),
+    );
+    gh.factory<_i322.ProfileEditCubit>(
+      () => _i322.ProfileEditCubit(
+        gh<_i726.AuthRepository>(),
+        gh<_i784.AppAuthCubit>(),
       ),
     );
     return this;

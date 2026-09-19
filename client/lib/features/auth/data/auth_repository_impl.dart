@@ -1,42 +1,91 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/dio_error_handler.dart';
+import 'package:client/core/services/github_auth_service.dart';
+import 'package:client/core/services/google_auth_service.dart';
+import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/core/storage/secure_storage_service.dart';
-import 'package:client/core/utils/app_logger.dart';
 import 'package:client/core/utils/jwt_utils.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
+import 'package:client/features/auth/data/auth_social_mixin.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
 import 'package:client/features/auth/data/models/user.dart';
 
 @LazySingleton(as: AuthRepository)
-class AuthRepositoryImpl implements AuthRepository {
+class AuthRepositoryImpl with AuthSocialMixin implements AuthRepository {
   final Dio _dio;
   final SecureStorageService _storage;
+  final PrefsService _prefs;
+  @override
+  final GoogleAuthService googleAuthService;
+  @override
+  final GithubAuthService githubAuthService;
 
-  AuthRepositoryImpl(this._dio, this._storage);
+  final _authStateController = StreamController<User?>.broadcast();
+
+  AuthRepositoryImpl(
+    this._dio,
+    this._storage,
+    this._prefs,
+    this.googleAuthService,
+    this.githubAuthService,
+  );
+
+  @override
+  Stream<User?> get authStateChanges => _authStateController.stream;
+
+  @override
+  Future<User?> restoreSession() async {
+    if (!await _storage.hasTokens()) {
+      await _prefs.clearCachedUser();
+      _authStateController.add(null);
+      return null;
+    }
+    final cached = _prefs.getCachedUserRaw();
+    if (cached != null && cached.isNotEmpty) {
+      try {
+        var user = User.fromJson(jsonDecode(cached) as Map<String, dynamic>);
+        if (user.id.isEmpty) {
+          final token = await _storage.getAccessToken();
+          if (token != null) {
+            final sub = JwtUtils.extractUserId(token);
+            if (sub != null) user = user.copyWith(id: sub);
+          }
+        }
+        await _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
+        _authStateController.add(user);
+        return user;
+      } catch (_) {}
+    }
+    try {
+      final user = await getCurrentUser();
+      await _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
+      _authStateController.add(user);
+      return user;
+    } catch (_) {
+      await _prefs.clearCachedUser();
+      _authStateController.add(null);
+      return null;
+    }
+  }
 
   @override
   Future<User> login(LoginDto dto) async {
-    AppLogger.debug('Starting login for ${dto.email}', tag: 'AuthRepository');
     try {
-      final response = await _dio.post(ApiConstants.login, data: dto.toJson());
-
-      final authResponse = AuthResponseDto.fromJson(
-        response.data as Map<String, dynamic>,
-      );
-
+      final res = await _dio.post(ApiConstants.login, data: dto.toJson());
+      final auth = AuthResponseDto.fromJson(res.data as Map<String, dynamic>);
       await _storage.saveTokens(
-        accessToken: authResponse.token,
-        refreshToken: authResponse.refreshToken,
+        accessToken: auth.token,
+        refreshToken: auth.refreshToken,
       );
-
-      AppLogger.info(
-        'Login completed successfully for ${dto.email}',
-        tag: 'AuthRepository',
-      );
-      return await getCurrentUser();
+      final user = await getCurrentUser();
+      setAuthenticated(user);
+      return user;
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
     }
@@ -44,30 +93,16 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User> register(RegisterDto dto) async {
-    AppLogger.debug(
-      'Starting registration for ${dto.email}',
-      tag: 'AuthRepository',
-    );
     try {
-      final response = await _dio.post(
-        ApiConstants.register,
-        data: dto.toJson(),
-      );
-
-      final authResponse = AuthResponseDto.fromJson(
-        response.data as Map<String, dynamic>,
-      );
-
+      final res = await _dio.post(ApiConstants.register, data: dto.toJson());
+      final auth = AuthResponseDto.fromJson(res.data as Map<String, dynamic>);
       await _storage.saveTokens(
-        accessToken: authResponse.token,
-        refreshToken: authResponse.refreshToken,
+        accessToken: auth.token,
+        refreshToken: auth.refreshToken,
       );
-
-      AppLogger.info(
-        'Registration completed successfully for ${dto.email}',
-        tag: 'AuthRepository',
-      );
-      return await getCurrentUser();
+      final user = await getCurrentUser();
+      setAuthenticated(user);
+      return user;
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
     }
@@ -75,23 +110,14 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User> getCurrentUser() async {
-    AppLogger.debug('Starting getCurrentUser', tag: 'AuthRepository');
     try {
-      final response = await _dio.get(ApiConstants.userProfile);
-      var user = User.fromJson(response.data as Map<String, dynamic>);
-
+      final res = await _dio.get(ApiConstants.userProfile);
+      var user = User.fromJson(res.data as Map<String, dynamic>);
       final token = await _storage.getAccessToken();
       if (token != null && token.isNotEmpty) {
         final sub = JwtUtils.extractUserId(token);
-        if (sub != null && sub.isNotEmpty) {
-          user = user.copyWith(id: sub);
-        }
+        if (sub != null && sub.isNotEmpty) user = user.copyWith(id: sub);
       }
-
-      AppLogger.info(
-        'getCurrentUser completed successfully for ${user.email}',
-        tag: 'AuthRepository',
-      );
       return user;
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
@@ -100,44 +126,23 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> logout() async {
-    AppLogger.debug('Starting logout', tag: 'AuthRepository');
     try {
-      final refreshToken = await _storage.getRefreshToken();
-      if (refreshToken != null && refreshToken.isNotEmpty) {
-        await _dio.post(
-          ApiConstants.logout,
-          data: LogoutDto(refreshToken: refreshToken).toJson(),
-        );
+      final rt = await _storage.getRefreshToken();
+      if (rt != null && rt.isNotEmpty) {
+        await _dio.post(ApiConstants.logout, data: LogoutDto(refreshToken: rt).toJson());
       }
-    } catch (_) {
-      // Even if server call fails or offline, local tokens should be cleared
-    } finally {
-      await _storage.clearTokens();
-      AppLogger.info('Logout completed successfully', tag: 'AuthRepository');
-    }
+    } catch (_) {}
+    await _storage.clearTokens();
+    await _prefs.clearCachedUser();
+    await _prefs.clearActiveWorkspace();
+    _authStateController.add(null);
   }
 
   @override
-  Future<ForgotPasswordResponseDto> forgotPassword(
-    ForgotPasswordDto dto,
-  ) async {
-    AppLogger.debug(
-      'Starting forgotPassword for ${dto.email}',
-      tag: 'AuthRepository',
-    );
+  Future<ForgotPasswordResponseDto> forgotPassword(ForgotPasswordDto dto) async {
     try {
-      final response = await _dio.post(
-        ApiConstants.forgotPassword,
-        data: dto.toJson(),
-      );
-
-      AppLogger.info(
-        'forgotPassword completed successfully for ${dto.email}',
-        tag: 'AuthRepository',
-      );
-      return ForgotPasswordResponseDto.fromJson(
-        response.data as Map<String, dynamic>,
-      );
+      final res = await _dio.post(ApiConstants.forgotPassword, data: dto.toJson());
+      return ForgotPasswordResponseDto.fromJson(res.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
     }
@@ -145,16 +150,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> resetPassword(ResetPasswordDto dto) async {
-    AppLogger.debug(
-      'Starting resetPassword for ${dto.email}',
-      tag: 'AuthRepository',
-    );
     try {
       await _dio.post(ApiConstants.resetPassword, data: dto.toJson());
-      AppLogger.info(
-        'resetPassword completed successfully for ${dto.email}',
-        tag: 'AuthRepository',
-      );
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
     }
@@ -162,17 +159,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User> updateProfile({required String name, String? bio}) async {
-    AppLogger.debug('Starting updateProfile', tag: 'AuthRepository');
     try {
-      final response = await _dio.put(
-        ApiConstants.userProfile,
-        data: {'name': name, 'bio': bio},
-      );
-      final user = User.fromJson(response.data as Map<String, dynamic>);
-      AppLogger.info(
-        'updateProfile completed successfully for ${user.email}',
-        tag: 'AuthRepository',
-      );
+      final res = await _dio.put(ApiConstants.userProfile, data: {'name': name, 'bio': bio});
+      final user = User.fromJson(res.data as Map<String, dynamic>);
+      setAuthenticated(user);
       return user;
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
@@ -187,34 +177,30 @@ class AuthRepositoryImpl implements AuthRepository {
     String? code,
     String? redirectUri,
   }) async {
-    AppLogger.debug(
-      'Starting externalLogin for $provider',
-      tag: 'AuthRepository',
-    );
     try {
-      final response = await _dio.post(
-        ApiConstants.externalLogin,
-        data: {
-          'provider': provider,
-          'idToken': ?idToken,
-          'accessToken': ?accessToken,
-          'code': ?code,
-          'redirectUri': ?redirectUri,
-        },
-      );
-
-      final authResponse = AuthResponseDto.fromJson(
-        response.data as Map<String, dynamic>,
-      );
-
+      final res = await _dio.post(ApiConstants.externalLogin, data: {
+        'provider': provider,
+        'idToken': ?idToken,
+        'accessToken': ?accessToken,
+        'code': ?code,
+        'redirectUri': ?redirectUri,
+      });
+      final auth = AuthResponseDto.fromJson(res.data as Map<String, dynamic>);
       await _storage.saveTokens(
-        accessToken: authResponse.token,
-        refreshToken: authResponse.refreshToken,
+        accessToken: auth.token,
+        refreshToken: auth.refreshToken,
       );
-
-      return await getCurrentUser();
+      final user = await getCurrentUser();
+      setAuthenticated(user);
+      return user;
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
     }
+  }
+
+  @override
+  void setAuthenticated(User user) {
+    _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
+    _authStateController.add(user);
   }
 }
