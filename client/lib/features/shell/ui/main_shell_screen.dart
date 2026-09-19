@@ -3,18 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
-import 'package:client/core/utils/responsive_layout.dart';
-import 'package:client/core/widgets/ambient_glow_background.dart';
-import 'package:client/features/dashboard/ui/dashboard_screen.dart';
-import 'package:client/features/profile/ui/profile_screen.dart';
+import 'package:client/core/routes/route_providers.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
-import 'package:client/features/projects/data/project_repository.dart';
-import 'package:client/features/projects/ui/projects_screen.dart';
-import 'package:client/features/shell/ui/widgets/sidebar.dart';
-import 'package:client/features/shell/ui/widgets/mobile_bottom_nav.dart';
-import 'package:client/features/shell/ui/widgets/shell_top_bar.dart';
-import 'package:client/features/shell/ui/widgets/tablet_navigation_rail.dart';
-import 'package:client/features/tasks/ui/my_tasks_screen.dart';
+import 'package:client/features/shell/ui/widgets/shell_responsive_scaffold.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
@@ -22,8 +13,15 @@ import 'package:client/features/workspaces/ui/widgets/workspace_switcher_sheet.d
 
 class MainShellScreen extends StatefulWidget {
   final int initialIndex;
+  final ProjectsListCubit? projectsCubit;
+  final WorkspaceContextCubit? workspaceCubit;
 
-  const MainShellScreen({super.key, this.initialIndex = 0});
+  const MainShellScreen({
+    super.key,
+    this.initialIndex = 0,
+    this.projectsCubit,
+    this.workspaceCubit,
+  });
 
   @override
   State<MainShellScreen> createState() => _MainShellScreenState();
@@ -31,67 +29,70 @@ class MainShellScreen extends StatefulWidget {
 
 class _MainShellScreenState extends State<MainShellScreen> {
   late int _selectedIndex;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  ProjectsListCubit? _projectsListCubit;
   int? _lastWorkspaceId;
+
+  WorkspaceContextCubit? _resolveWsCubit() {
+    if (widget.workspaceCubit != null) return widget.workspaceCubit;
+    try {
+      return context.read<WorkspaceContextCubit>();
+    } catch (_) {
+      if (getIt.isRegistered<WorkspaceContextCubit>()) {
+        return getIt<WorkspaceContextCubit>();
+      }
+    }
+    return null;
+  }
+
+  ProjectsListCubit? _resolveProjectsCubit() {
+    if (widget.projectsCubit != null) return widget.projectsCubit;
+    try {
+      return context.read<ProjectsListCubit>();
+    } catch (_) {
+      if (getIt.isRegistered<ProjectsListCubit>()) {
+        return getIt<ProjectsListCubit>();
+      }
+    }
+    return null;
+  }
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
-    if (getIt.isRegistered<ProjectsListCubit>()) {
-      _projectsListCubit = getIt<ProjectsListCubit>();
-    } else if (getIt.isRegistered<ProjectRepository>()) {
-      _projectsListCubit = ProjectsListCubit(getIt<ProjectRepository>());
-    }
-
-    final cubit = getIt<WorkspaceContextCubit>();
-    // Always trigger background revalidation (stale-while-revalidate)
-    cubit.loadWorkspaces();
-    final activeWs = cubit.state.whenOrNull(loaded: (_, active) => active);
-    if (activeWs != null) {
-      _lastWorkspaceId = activeWs.id;
-      _projectsListCubit?.loadProjects(activeWs.id);
-    }
-    cubit.state.whenOrNull(
-      empty: () {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (mounted) QuickStartDialog.show(context);
-        });
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    if (!getIt.isRegistered<ProjectsListCubit>()) {
-      _projectsListCubit?.close();
-    }
-    super.dispose();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final wsCubit = _resolveWsCubit();
+      if (wsCubit != null) {
+        wsCubit.loadWorkspaces();
+        final activeWs = wsCubit.state.whenOrNull(loaded: (_, active) => active);
+        if (activeWs != null) {
+          _lastWorkspaceId = activeWs.id;
+          try {
+            _resolveProjectsCubit()?.loadProjects(activeWs.id);
+          } catch (_) {}
+        }
+        wsCubit.state.whenOrNull(
+          empty: () => QuickStartDialog.show(context),
+        );
+      }
+    });
   }
 
   void _onSelectTab(int index) {
     setState(() => _selectedIndex = index);
-    if (_scaffoldKey.currentState?.isDrawerOpen == true) {
-      Navigator.of(context).pop();
-    }
   }
 
   void _onProjectSelected(int projectId) {
-    if (_scaffoldKey.currentState?.isDrawerOpen == true) {
-      Navigator.of(context).pop();
-    }
     setState(() => _selectedIndex = 1);
-    Navigator.of(
-      context,
-    ).pushNamed(RouteNames.projectDetail, arguments: projectId);
+    Navigator.of(context).pushNamed(RouteNames.projectDetail, arguments: projectId);
   }
 
   void _onWorkspaceTap(BuildContext context) {
-    final hasWorkspaces = context.read<WorkspaceContextCubit>().state.maybeWhen(
+    final wsCubit = _resolveWsCubit();
+    final hasWorkspaces = wsCubit?.state.maybeWhen(
       loaded: (workspaces, _) => workspaces.isNotEmpty,
       orElse: () => false,
-    );
+    ) ?? false;
     if (hasWorkspaces) {
       WorkspaceSwitcherSheet.show(context);
     } else {
@@ -107,161 +108,61 @@ class _MainShellScreenState extends State<MainShellScreen> {
     return IndexedStack(
       index: _selectedIndex,
       children: [
-        DashboardScreen(
-          onNavigateToProjects: () => setState(() => _selectedIndex = 1),
-          onNavigateToMyTasks: () => setState(() => _selectedIndex = 2),
-        ),
-        ProjectsScreen(cubit: _projectsListCubit),
-        const MyTasksScreen(),
-        const ProfileScreen(),
+        for (int i = 0; i < 4; i++)
+          buildShellTabContent(i, onSelectTab: _onSelectTab),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final content = BlocConsumer<WorkspaceContextCubit, WorkspaceContextState>(
+    final projectsCubit = _resolveProjectsCubit();
+    final wsCubit = _resolveWsCubit();
+
+    Widget content = BlocConsumer<WorkspaceContextCubit, WorkspaceContextState>(
+      bloc: wsCubit,
       listener: (context, state) {
         state.whenOrNull(
           empty: () => QuickStartDialog.show(context),
           loaded: (_, active) {
             if (active.id != _lastWorkspaceId) {
               _lastWorkspaceId = active.id;
-              _projectsListCubit?.loadProjects(active.id);
+              try {
+                _resolveProjectsCubit()?.loadProjects(active.id);
+              } catch (_) {}
             }
           },
         );
       },
       builder: (context, workspaceState) {
-        final activeWorkspace = workspaceState.whenOrNull(
-          loaded: (_, active) => active,
-        );
-        final wsName = activeWorkspace?.name;
-        final wsRole = activeWorkspace?.membership?.role;
-        final wsAccent = activeWorkspace?.accentColor;
-        final isWsLoading =
-            workspaceState.maybeWhen(
-              loading: () => true,
-              initial: () => true,
-              orElse: () => false,
-            ) &&
-            activeWorkspace == null;
+        final activeWorkspace = workspaceState.whenOrNull(loaded: (_, active) => active);
+        final isWsLoading = workspaceState.maybeWhen(
+          loading: () => true,
+          initial: () => true,
+          orElse: () => false,
+        ) && activeWorkspace == null;
 
-        return SafeArea(
-          child: AmbientGlowBackground(
-            child: ResponsiveLayout(
-              desktop: Scaffold(
-                backgroundColor: Colors.transparent,
-                body: Row(
-                  children: [
-                    Sidebar(
-                      selectedIndex: _selectedIndex,
-                      onItemSelected: _onSelectTab,
-                      onProjectSelected: _onProjectSelected,
-                      activeWorkspaceName: wsName,
-                      activeWorkspaceAccent: wsAccent,
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          ShellTopBar(
-                            activeWorkspaceName: wsName,
-                            activeWorkspaceRole: wsRole,
-                            activeWorkspaceAccent: wsAccent,
-                            isLoading: isWsLoading,
-                            onWorkspaceTap: () => _onWorkspaceTap(context),
-                            onSettingsTap: _onSettingsTap,
-                          ),
-                          Expanded(child: _buildBody()),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              tablet: Scaffold(
-                key: _scaffoldKey,
-                backgroundColor: Colors.transparent,
-                drawer: Drawer(
-                  width: 240,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  child: Sidebar(
-                    selectedIndex: _selectedIndex,
-                    onItemSelected: _onSelectTab,
-                    onProjectSelected: _onProjectSelected,
-                    activeWorkspaceName: wsName,
-                    activeWorkspaceAccent: wsAccent,
-                  ),
-                ),
-                body: Row(
-                  children: [
-                    TabletNavigationRail(
-                      selectedIndex: _selectedIndex,
-                      onItemSelected: _onSelectTab,
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          ShellTopBar(
-                            activeWorkspaceName: wsName,
-                            activeWorkspaceRole: wsRole,
-                            activeWorkspaceAccent: wsAccent,
-                            isLoading: isWsLoading,
-                            onWorkspaceTap: () => _onWorkspaceTap(context),
-                            onSettingsTap: _onSettingsTap,
-                            onOpenDrawer: () =>
-                                _scaffoldKey.currentState?.openDrawer(),
-                          ),
-                          Expanded(child: _buildBody()),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              mobile: Scaffold(
-                key: _scaffoldKey,
-                backgroundColor: Colors.transparent,
-                drawer: Drawer(
-                  width: 240,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  child: Sidebar(
-                    selectedIndex: _selectedIndex,
-                    onItemSelected: _onSelectTab,
-                    onProjectSelected: _onProjectSelected,
-                    activeWorkspaceName: wsName,
-                    activeWorkspaceAccent: wsAccent,
-                  ),
-                ),
-                appBar: ShellTopBar(
-                  activeWorkspaceName: wsName,
-                  activeWorkspaceRole: wsRole,
-                  activeWorkspaceAccent: wsAccent,
-                  isLoading: isWsLoading,
-                  onWorkspaceTap: () => _onWorkspaceTap(context),
-                  onSettingsTap: _onSettingsTap,
-                  onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
-                ),
-                body: _buildBody(),
-                bottomNavigationBar: MobileBottomNav(
-                  selectedIndex: _selectedIndex,
-                  onItemSelected: _onSelectTab,
-                  activeWorkspaceAccent: wsAccent,
-                ),
-              ),
-            ),
-          ),
+        return ShellResponsiveScaffold(
+          selectedIndex: _selectedIndex,
+          onSelectTab: _onSelectTab,
+          onProjectSelected: _onProjectSelected,
+          wsName: activeWorkspace?.name,
+          wsRole: activeWorkspace?.membership?.role,
+          wsAccent: activeWorkspace?.accentColor,
+          isWsLoading: isWsLoading,
+          onWorkspaceTap: () => _onWorkspaceTap(context),
+          onSettingsTap: _onSettingsTap,
+          body: _buildBody(),
         );
       },
     );
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: getIt<WorkspaceContextCubit>()),
-        if (_projectsListCubit != null)
-          BlocProvider.value(value: _projectsListCubit!),
-      ],
-      child: content,
-    );
+    if (projectsCubit != null) {
+      content = BlocProvider.value(value: projectsCubit, child: content);
+    }
+    if (wsCubit != null) {
+      content = BlocProvider.value(value: wsCubit, child: content);
+    }
+    return content;
   }
 }

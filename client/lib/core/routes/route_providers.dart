@@ -30,15 +30,15 @@ import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
 
 /// Builds tab content for the main navigation shell.
 /// Each tab receives its own scoped Cubit via an isolated [BlocProvider].
-Widget buildShellTabContent(int index) => switch (index) {
+Widget buildShellTabContent(int index, {ValueChanged<int>? onSelectTab}) => switch (index) {
       0 => BlocProvider(
           create: (_) => getIt<DashboardCubit>(),
-          child: const DashboardScreen(),
+          child: DashboardScreen(
+            onNavigateToProjects: () => onSelectTab?.call(1),
+            onNavigateToMyTasks: () => onSelectTab?.call(2),
+          ),
         ),
-      1 => BlocProvider(
-          create: (_) => getIt<ProjectsListCubit>(),
-          child: const ProjectsScreen(),
-        ),
+      1 => const ProjectsScreen(),
       2 => BlocProvider(
           create: (_) => getIt<MyTasksCubit>(),
           child: const MyTasksScreen(),
@@ -74,8 +74,9 @@ Widget buildResetPasswordRoute(String? email) => BlocProvider(
       child: ResetPasswordScreen(initialEmail: email),
     );
 
-Widget buildShellRoute({int initialIndex = 0}) => MainShellScreen(
-      initialIndex: initialIndex,
+Widget buildShellRoute({int initialIndex = 0}) => BlocProvider(
+      create: (_) => getIt<ProjectsListCubit>(),
+      child: MainShellScreen(initialIndex: initialIndex),
     );
 
 Widget buildProjectDetailRoute(int projectId) => BlocProvider(
