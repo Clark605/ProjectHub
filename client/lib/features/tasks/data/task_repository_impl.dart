@@ -19,9 +19,7 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   void clearCache([int? projectId]) {
     AppLogger.debug(
-      projectId != null
-          ? 'Clearing task cache for project $projectId'
-          : 'Clearing all task caches',
+      projectId != null ? 'Clearing task cache for project $projectId' : 'Clearing all task caches',
       tag: 'TaskRepository',
     );
     if (projectId != null) {
@@ -42,22 +40,12 @@ class TaskRepositoryImpl implements TaskRepository {
     String? priority,
     bool forceRefresh = false,
   }) async {
-    final hasFilter =
-        (status != null &&
-            status.isNotEmpty &&
-            status.toLowerCase() != 'all') ||
+    final hasFilter = (status != null && status.isNotEmpty && status.toLowerCase() != 'all') ||
         (assigneeId != null && assigneeId.isNotEmpty) ||
-        (priority != null &&
-            priority.isNotEmpty &&
-            priority.toLowerCase() != 'all');
+        (priority != null && priority.isNotEmpty && priority.toLowerCase() != 'all');
 
-    if (!forceRefresh &&
-        !hasFilter &&
-        _projectTasksCache.containsKey(projectId)) {
-      AppLogger.debug(
-        'Cache hit for project $projectId tasks',
-        tag: 'TaskRepository',
-      );
+    if (!forceRefresh && !hasFilter && _projectTasksCache.containsKey(projectId)) {
+      AppLogger.debug('Cache hit for project $projectId tasks', tag: 'TaskRepository');
       return _projectTasksCache[projectId]!;
     }
 
@@ -71,33 +59,21 @@ class TaskRepositoryImpl implements TaskRepository {
     for (final t in tasks) {
       _taskDetailCache[t.id] = t;
     }
-
-    if (!hasFilter) {
-      _projectTasksCache[projectId] = tasks;
-    }
-
+    if (!hasFilter) _projectTasksCache[projectId] = tasks;
     return tasks;
   }
 
   @override
-  Future<List<TaskDto>> getMyTasks(
-    int workspaceId, {
-    bool forceRefresh = false,
-  }) async {
+  Future<List<TaskDto>> getMyTasks(int workspaceId, {bool forceRefresh = false}) async {
     if (!forceRefresh && _myTasksCache.containsKey(workspaceId)) {
-      AppLogger.debug(
-        'Cache hit for workspace $workspaceId my-tasks',
-        tag: 'TaskRepository',
-      );
+      AppLogger.debug('Cache hit for workspace $workspaceId my-tasks', tag: 'TaskRepository');
       return _myTasksCache[workspaceId]!;
     }
 
     final tasks = await _remoteDataSource.getMyTasks(workspaceId);
-
     for (final t in tasks) {
       _taskDetailCache[t.id] = t;
     }
-
     _myTasksCache[workspaceId] = tasks;
     return tasks;
   }
@@ -105,10 +81,7 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<TaskDto> getTask(int taskId, {bool forceRefresh = false}) async {
     if (!forceRefresh && _taskDetailCache.containsKey(taskId)) {
-      AppLogger.debug(
-        'Cache hit for task $taskId detail',
-        tag: 'TaskRepository',
-      );
+      AppLogger.debug('Cache hit for task $taskId detail', tag: 'TaskRepository');
       return _taskDetailCache[taskId]!;
     }
 
@@ -124,7 +97,6 @@ class TaskRepositoryImpl implements TaskRepository {
         list.add(task);
       }
     }
-
     return task;
   }
 
@@ -134,64 +106,39 @@ class TaskRepositoryImpl implements TaskRepository {
     _taskDetailCache[created.id] = created;
 
     if (_projectTasksCache.containsKey(projectId)) {
-      _projectTasksCache[projectId] = [
-        created,
-        ..._projectTasksCache[projectId]!,
-      ];
+      _projectTasksCache[projectId] = [created, ..._projectTasksCache[projectId]!];
     }
     _myTasksCache.clear();
-
     return created;
+  }
+
+  void _onTaskUpdated(TaskDto updated) {
+    _taskDetailCache[updated.id] = updated;
+    if (_projectTasksCache.containsKey(updated.projectId)) {
+      _projectTasksCache[updated.projectId] =
+          _projectTasksCache[updated.projectId]!.map((t) => t.id == updated.id ? updated : t).toList();
+    }
+    _myTasksCache.clear();
   }
 
   @override
   Future<TaskDto> updateTask(int taskId, UpdateTaskRequest request) async {
     final updated = await _remoteDataSource.updateTask(taskId, request);
-    _taskDetailCache[taskId] = updated;
-
-    if (_projectTasksCache.containsKey(updated.projectId)) {
-      _projectTasksCache[updated.projectId] =
-          _projectTasksCache[updated.projectId]!
-              .map((t) => t.id == taskId ? updated : t)
-              .toList();
-    }
-    _myTasksCache.clear();
-
+    _onTaskUpdated(updated);
     return updated;
   }
 
   @override
   Future<TaskDto> updateTaskStatus(int taskId, String status) async {
     final updated = await _remoteDataSource.updateTaskStatus(taskId, status);
-    _taskDetailCache[taskId] = updated;
-
-    if (_projectTasksCache.containsKey(updated.projectId)) {
-      _projectTasksCache[updated.projectId] =
-          _projectTasksCache[updated.projectId]!
-              .map((t) => t.id == taskId ? updated : t)
-              .toList();
-    }
-    _myTasksCache.clear();
-
+    _onTaskUpdated(updated);
     return updated;
   }
 
   @override
   Future<TaskDto> updateTaskAssignee(int taskId, String? assigneeId) async {
-    final updated = await _remoteDataSource.updateTaskAssignee(
-      taskId,
-      assigneeId,
-    );
-    _taskDetailCache[taskId] = updated;
-
-    if (_projectTasksCache.containsKey(updated.projectId)) {
-      _projectTasksCache[updated.projectId] =
-          _projectTasksCache[updated.projectId]!
-              .map((t) => t.id == taskId ? updated : t)
-              .toList();
-    }
-    _myTasksCache.clear();
-
+    final updated = await _remoteDataSource.updateTaskAssignee(taskId, assigneeId);
+    _onTaskUpdated(updated);
     return updated;
   }
 
@@ -212,6 +159,5 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
-  bool hasCachedTasks(int projectId) =>
-      _projectTasksCache.containsKey(projectId);
+  bool hasCachedTasks(int projectId) => _projectTasksCache.containsKey(projectId);
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/data/models/update_task_request.dart';
+import 'package:client/features/tasks/ui/widgets/task_detail_assignee_due_fields.dart';
 import 'package:client/features/tasks/ui/widgets/task_priority_selector.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -66,7 +66,6 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
 
   Future<void> _handleSave() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => _isSaving = true);
     try {
       final request = UpdateTaskRequest(
@@ -78,9 +77,7 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
       );
       await widget.onSave(request);
     } finally {
-      if (mounted) {
-        setState(() => _isSaving = false);
-      }
+      if (mounted) setState(() => _isSaving = false);
     }
   }
 
@@ -141,98 +138,14 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
             onSelected: (p) => setState(() => _editPriority = p),
           ),
           const SizedBox(height: 16),
-          Text(
-            l10n?.assignee ?? 'Assignee',
-            style: theme.textTheme.labelMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 8),
-          DropdownButtonFormField<String?>(
-            initialValue: _editAssigneeId,
-            isExpanded: true,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: theme.colorScheme.surfaceContainer,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
-              ),
-            ),
-            hint: Text(l10n?.unassigned ?? 'Unassigned'),
-            items: [
-              DropdownMenuItem<String?>(
-                value: null,
-                child: Text(l10n?.unassigned ?? 'Unassigned'),
-              ),
-              if (_editAssigneeId != null &&
-                  !widget.members.any((m) => m.userId == _editAssigneeId))
-                DropdownMenuItem<String?>(
-                  value: _editAssigneeId,
-                  child: Text(
-                    widget.task.assigneeName ??
-                        (l10n?.assignedMember ?? 'Assigned Member'),
-                  ),
-                ),
-              ...widget.members.map(
-                (m) => DropdownMenuItem<String?>(
-                  value: m.userId,
-                  child: Text(m.name),
-                ),
-              ),
-            ],
-            onChanged: (val) => setState(() => _editAssigneeId = val),
-          ),
-          const SizedBox(height: 16),
-          Text(
-            l10n?.dueDate ?? 'Due Date',
-            style: theme.textTheme.labelMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const SizedBox(height: 8),
-          InkWell(
-            onTap: _pickDueDate,
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: theme.colorScheme.surfaceContainer,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: theme.colorScheme.outlineVariant,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.calendar_today_outlined,
-                    size: 16,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      _editDueDate != null
-                          ? DateFormat('MMM d, yyyy').format(_editDueDate!)
-                          : (l10n?.noDueDate ?? 'No due date'),
-                    ),
-                  ),
-                  if (_editDueDate != null)
-                    GestureDetector(
-                      onTap: () => setState(() => _editDueDate = null),
-                      child: const Icon(Icons.close_rounded, size: 16),
-                    ),
-                ],
-              ),
-            ),
+          TaskDetailAssigneeDueFields(
+            members: widget.members,
+            editAssigneeId: _editAssigneeId,
+            taskAssigneeName: widget.task.assigneeName,
+            editDueDate: _editDueDate,
+            onAssigneeChanged: (val) => setState(() => _editAssigneeId = val),
+            onPickDueDate: _pickDueDate,
+            onClearDueDate: () => setState(() => _editDueDate = null),
           ),
           const SizedBox(height: 24),
           AppButton(
