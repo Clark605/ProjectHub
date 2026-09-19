@@ -74,18 +74,19 @@ class AuthRepositoryImpl with AuthSocialMixin implements AuthRepository {
     }
   }
 
+  Future<User> _processAuthSuccess(Response res) async {
+    final auth = AuthResponseDto.fromJson(res.data as Map<String, dynamic>);
+    await _storage.saveTokens(accessToken: auth.token, refreshToken: auth.refreshToken);
+    final user = await getCurrentUser();
+    setAuthenticated(user);
+    return user;
+  }
+
   @override
   Future<User> login(LoginDto dto) async {
     try {
       final res = await _dio.post(ApiConstants.login, data: dto.toJson());
-      final auth = AuthResponseDto.fromJson(res.data as Map<String, dynamic>);
-      await _storage.saveTokens(
-        accessToken: auth.token,
-        refreshToken: auth.refreshToken,
-      );
-      final user = await getCurrentUser();
-      setAuthenticated(user);
-      return user;
+      return await _processAuthSuccess(res);
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
     }
@@ -95,14 +96,7 @@ class AuthRepositoryImpl with AuthSocialMixin implements AuthRepository {
   Future<User> register(RegisterDto dto) async {
     try {
       final res = await _dio.post(ApiConstants.register, data: dto.toJson());
-      final auth = AuthResponseDto.fromJson(res.data as Map<String, dynamic>);
-      await _storage.saveTokens(
-        accessToken: auth.token,
-        refreshToken: auth.refreshToken,
-      );
-      final user = await getCurrentUser();
-      setAuthenticated(user);
-      return user;
+      return await _processAuthSuccess(res);
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
     }
@@ -185,14 +179,7 @@ class AuthRepositoryImpl with AuthSocialMixin implements AuthRepository {
         'code': ?code,
         'redirectUri': ?redirectUri,
       });
-      final auth = AuthResponseDto.fromJson(res.data as Map<String, dynamic>);
-      await _storage.saveTokens(
-        accessToken: auth.token,
-        refreshToken: auth.refreshToken,
-      );
-      final user = await getCurrentUser();
-      setAuthenticated(user);
-      return user;
+      return await _processAuthSuccess(res);
     } on DioException catch (e) {
       throw DioErrorHandler.handle(e);
     }

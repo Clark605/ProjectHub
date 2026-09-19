@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/features/dashboard/ui/widgets/focus_task_tile.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
-import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class SprintFocusCard extends StatelessWidget {
@@ -44,14 +44,10 @@ class SprintFocusCard extends StatelessWidget {
                       width: 36,
                       height: 36,
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withValues(
-                          alpha: 0.15,
-                        ),
+                        color: theme.colorScheme.primary.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: theme.colorScheme.primary.withValues(
-                            alpha: 0.3,
-                          ),
+                          color: theme.colorScheme.primary.withValues(alpha: 0.3),
                         ),
                       ),
                       child: Icon(
@@ -91,14 +87,11 @@ class SprintFocusCard extends StatelessWidget {
                     Icon(
                       Icons.task_alt_rounded,
                       size: 32,
-                      color: theme.colorScheme.onSurfaceVariant.withValues(
-                        alpha: 0.6,
-                      ),
+                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      l10n?.allCaughtUp ??
-                          'All caught up! No active tasks assigned.',
+                      l10n?.allCaughtUp ?? 'All caught up! No active tasks assigned.',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -113,90 +106,8 @@ class SprintFocusCard extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: focusTasks.length,
               separatorBuilder: (context, index) => const SizedBox(height: 10),
-              itemBuilder: (context, index) {
-                final task = focusTasks[index];
-                return _FocusTaskTile(task: task);
-              },
+              itemBuilder: (context, index) => FocusTaskTile(task: focusTasks[index]),
             ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FocusTaskTile extends StatelessWidget {
-  final TaskDto task;
-
-  const _FocusTaskTile({required this.task});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
-    final priorityColor = task.priorityEnum.toColor();
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 10,
-            height: 10,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: priorityColor,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  task.title,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  task.projectName ?? 'Task #${task.id}',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 12),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: priorityColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Text(
-              l10n != null
-                  ? task.priorityEnum.localizedName(l10n)
-                  : task.priority,
-              style: TextStyle(
-                color: priorityColor,
-                fontWeight: FontWeight.w700,
-                fontSize: 11,
-              ),
-            ),
-          ),
         ],
       ),
     );

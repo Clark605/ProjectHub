@@ -50,9 +50,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
     if (_lastProjectId != state.project.id) {
       _nameController.text = state.project.name;
       _descController.text = state.project.description;
-      _selectedStatus = state.project.status.isNotEmpty
-          ? state.project.status
-          : 'Planning';
+      _selectedStatus = state.project.status.isNotEmpty ? state.project.status : 'Planning';
       _selectedDueDate = state.project.dueDate;
       _lastProjectId = state.project.id;
     }
@@ -61,8 +59,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
   void _saveChanges() {
     if (!_formKey.currentState!.validate()) return;
     final cubit = context.read<ProjectDetailCubit>();
-    final state = cubit.state;
-    if (state is ProjectDetailLoaded) {
+    if (cubit.state is ProjectDetailLoaded) {
       cubit.updateProject(
         UpdateProjectRequest(
           name: _nameController.text.trim(),
@@ -81,13 +78,10 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
 
     return BlocConsumer<ProjectDetailCubit, ProjectDetailState>(
       listener: (context, state) {
-        if (state is ProjectDetailLoaded) {
-          _syncControllers(state);
-        }
+        if (state is ProjectDetailLoaded) _syncControllers(state);
       },
       builder: (context, state) {
         if (state is! ProjectDetailLoaded) return const SizedBox.shrink();
-
         final isSaving = state.isSaving;
 
         return Container(
@@ -105,29 +99,16 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      l10n.projectDetails,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    Text(l10n.projectDetails, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
                     if (!widget.canEdit)
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.surfaceContainer,
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: theme.colorScheme.outlineVariant),
                         ),
-                        child: Text(
-                          'Read-only',
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
+                        child: Text('Read-only', style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
                       ),
                   ],
                 ),
@@ -136,9 +117,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                   label: l10n.projectName,
                   controller: _nameController,
                   enabled: widget.canEdit && !isSaving,
-                  validator: (value) => value?.trim().isEmpty == true
-                      ? l10n.projectNameRequired
-                      : null,
+                  validator: (value) => value?.trim().isEmpty == true ? l10n.projectNameRequired : null,
                 ),
                 const SizedBox(height: 20),
                 AppTextField(
@@ -157,9 +136,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                         value: _selectedStatus,
                         enabled: widget.canEdit && !isSaving,
                         onChanged: (val) {
-                          if (val != null) {
-                            setState(() => _selectedStatus = val);
-                          }
+                          if (val != null) setState(() => _selectedStatus = val);
                         },
                       ),
                     ),
@@ -170,8 +147,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                         child: AppDateField(
                           label: l10n.dueDate,
                           selectedDate: _selectedDueDate,
-                          onDateSelected: (date) =>
-                              setState(() => _selectedDueDate = date),
+                          onDateSelected: (date) => setState(() => _selectedDueDate = date),
                         ),
                       ),
                     ),
@@ -179,17 +155,15 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                 ),
                 if (widget.canEdit) ...[
                   const SizedBox(height: 32),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      AppButton(
-                        label: l10n.save,
-                        onPressed: _saveChanges,
-                        isLoading: isSaving,
-                        isExpanded: false,
-                        icon: Icons.save_rounded,
-                      ),
-                    ],
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: AppButton(
+                      label: l10n.save,
+                      onPressed: _saveChanges,
+                      isLoading: isSaving,
+                      isExpanded: false,
+                      icon: Icons.save_rounded,
+                    ),
                   ),
                 ],
               ],
