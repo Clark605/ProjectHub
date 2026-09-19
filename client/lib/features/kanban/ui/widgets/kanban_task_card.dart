@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
+import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanTaskCard extends StatelessWidget {

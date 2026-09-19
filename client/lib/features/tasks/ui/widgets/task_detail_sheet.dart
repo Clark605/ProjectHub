@@ -5,6 +5,7 @@ import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/update_task_request.dart';
 import 'package:client/features/tasks/ui/widgets/move_to_status_sheet.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_edit_form.dart';
+import 'package:client/features/tasks/ui/widgets/task_detail_header.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_read_view.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -148,9 +149,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
@@ -173,117 +172,14 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                 ),
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  InkWell(
-                    onTap: widget.isArchived ? null : _openStatusMove,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      decoration: BoxDecoration(
-                        color: _currentTask.statusEnum
-                            .toColor()
-                            .withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: _currentTask.statusEnum
-                              .toColor()
-                              .withValues(alpha: 0.4),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            _currentTask.statusEnum.toIcon(),
-                            size: 14,
-                            color: _currentTask.statusEnum.toColor(),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            l10n != null
-                                ? _currentTask.statusEnum.localizedName(l10n)
-                                : _currentTask.statusEnum.toDisplayString(),
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: _currentTask.statusEnum.toColor(),
-                            ),
-                          ),
-                          if (!widget.isArchived) ...[
-                            const SizedBox(width: 4),
-                            Icon(
-                              Icons.arrow_drop_down_rounded,
-                              size: 16,
-                              color: _currentTask.statusEnum.toColor(),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 5,
-                    ),
-                    decoration: BoxDecoration(
-                      color: _currentTask.priorityEnum
-                          .toColor()
-                          .withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          _currentTask.priorityEnum.toIcon(),
-                          size: 14,
-                          color: _currentTask.priorityEnum.toColor(),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          l10n != null
-                              ? _currentTask.priorityEnum.localizedName(l10n)
-                              : _currentTask.priorityEnum.toDisplayString(),
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: _currentTask.priorityEnum.toColor(),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  if (!_isEditMode) ...[
-                    if (!widget.isArchived)
-                      IconButton(
-                        icon: const Icon(Icons.edit_outlined, size: 20),
-                        tooltip: l10n?.editTask ?? 'Edit Task',
-                        onPressed: () => setState(() => _isEditMode = true),
-                      ),
-                    if (!widget.isArchived)
-                      IconButton(
-                        icon: const Icon(
-                          Icons.delete_outline_rounded,
-                          size: 20,
-                          color: AppColors.error,
-                        ),
-                        tooltip: l10n?.deleteTaskConfirmTitle ?? 'Delete Task',
-                        onPressed: _confirmDelete,
-                      ),
-                  ] else ...[
-                    TextButton(
-                      onPressed: () => setState(() => _isEditMode = false),
-                      child: Text(l10n?.cancel ?? 'Cancel'),
-                    ),
-                  ],
-                ],
+              TaskDetailHeader(
+                task: _currentTask,
+                isArchived: widget.isArchived,
+                isEditMode: _isEditMode,
+                onOpenStatusMove: _openStatusMove,
+                onStartEdit: () => setState(() => _isEditMode = true),
+                onCancelEdit: () => setState(() => _isEditMode = false),
+                onDelete: _confirmDelete,
               ),
               const SizedBox(height: 16),
               if (!_isEditMode)

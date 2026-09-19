@@ -6,6 +6,8 @@ import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
+import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 
 class CreateTaskSheet extends StatefulWidget {

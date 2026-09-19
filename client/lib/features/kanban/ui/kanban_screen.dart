@@ -24,6 +24,7 @@ import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
 import 'package:client/features/tasks/data/models/update_task_request.dart';
 import 'package:client/features/tasks/data/task_repository.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';

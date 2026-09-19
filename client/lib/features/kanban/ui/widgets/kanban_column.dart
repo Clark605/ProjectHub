@@ -5,6 +5,7 @@ import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_task_card.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanColumn extends StatelessWidget {

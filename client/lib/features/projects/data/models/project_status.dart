@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:client/core/theme/app_colors.dart';
-
 enum ProjectStatus {
   planning,
   active,
@@ -33,19 +30,6 @@ enum ProjectStatus {
         return 'Completed';
       case ProjectStatus.archived:
         return 'Archived';
-    }
-  }
-
-  Color toColor(BuildContext context) {
-    switch (this) {
-      case ProjectStatus.planning:
-        return AppColors.info;
-      case ProjectStatus.active:
-        return AppColors.primary;
-      case ProjectStatus.completed:
-        return AppColors.success;
-      case ProjectStatus.archived:
-        return AppColors.textSecondary;
     }
   }
 }
