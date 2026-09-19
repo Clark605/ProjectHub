@@ -80,7 +80,7 @@ Widget buildShellRoute({int initialIndex = 0}) => BlocProvider(
     );
 
 Widget buildProjectDetailRoute(int projectId) => BlocProvider(
-      create: (_) => getIt<ProjectDetailCubit>(),
+      create: (_) => getIt<ProjectDetailCubit>()..loadProject(projectId),
       child: ProjectDetailScreen(projectId: projectId),
     );
 
