@@ -124,8 +124,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1.ForgotPasswordCubit>(
       () => _i1.ForgotPasswordCubit(gh<_i726.AuthRepository>()),
     );
+    gh.factory<_i796.LoginCubit>(
+      () => _i796.LoginCubit(gh<_i726.AuthRepository>()),
+    );
+    gh.factory<_i341.RegisterCubit>(
+      () => _i341.RegisterCubit(gh<_i726.AuthRepository>()),
+    );
     gh.factory<_i835.ResetPasswordCubit>(
       () => _i835.ResetPasswordCubit(gh<_i726.AuthRepository>()),
+    );
+    gh.factory<_i322.ProfileEditCubit>(
+      () => _i322.ProfileEditCubit(gh<_i726.AuthRepository>()),
     );
     gh.factory<_i816.MyTasksCubit>(
       () => _i816.MyTasksCubit(gh<_i241.TaskRepository>()),
@@ -141,24 +150,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i259.WorkspaceSettingsCubit(
         gh<_i688.WorkspaceRepository>(),
         gh<_i95.WorkspaceContextCubit>(),
-      ),
-    );
-    gh.factory<_i796.LoginCubit>(
-      () => _i796.LoginCubit(
-        gh<_i726.AuthRepository>(),
-        gh<_i784.AppAuthCubit>(),
-      ),
-    );
-    gh.factory<_i341.RegisterCubit>(
-      () => _i341.RegisterCubit(
-        gh<_i726.AuthRepository>(),
-        gh<_i784.AppAuthCubit>(),
-      ),
-    );
-    gh.factory<_i322.ProfileEditCubit>(
-      () => _i322.ProfileEditCubit(
-        gh<_i726.AuthRepository>(),
-        gh<_i784.AppAuthCubit>(),
       ),
     );
     return this;

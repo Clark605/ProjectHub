@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
-import 'package:client/core/services/github_auth_service.dart';
-import 'package:client/core/services/google_auth_service.dart';
 import 'package:client/core/utils/validators.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_error_banner.dart';
@@ -56,35 +53,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Future<void> _onGoogleSignIn(BuildContext context) async {
-    final googleAuthService = getIt<GoogleAuthService>();
-    final token = await googleAuthService.signIn();
-    if (token != null && context.mounted) {
-      context.read<RegisterCubit>().externalLogin(
-        provider: 'Google',
-        idToken: token,
-      );
-    }
+  void _onGoogleSignIn(BuildContext context) {
+    context.read<RegisterCubit>().registerWithGoogle();
   }
 
-  Future<void> _onGithubSignIn(BuildContext context) async {
-    final githubAuthService = getIt<GithubAuthService>();
-    final code = await githubAuthService.signIn();
-    if (code != null && context.mounted) {
-      context.read<RegisterCubit>().externalLogin(
-        provider: 'GitHub',
-        code: code,
-      );
-    }
+  void _onGithubSignIn(BuildContext context) {
+    context.read<RegisterCubit>().registerWithGithub();
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocProvider(
-      create: (_) => getIt<RegisterCubit>(),
-      child: BlocConsumer<RegisterCubit, RegisterState>(
+    return BlocConsumer<RegisterCubit, RegisterState>(
         listener: (context, state) {
           state.whenOrNull(
             success: (_) {
@@ -209,7 +190,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ],
           );
         },
-      ),
-    );
+      );
   }
 }

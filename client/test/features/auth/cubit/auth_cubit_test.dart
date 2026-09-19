@@ -188,7 +188,7 @@ void main() {
     setUp(() {
       repository = FakeAuthRepository();
       appAuthCubit = AppAuthCubit(repository);
-      loginCubit = LoginCubit(repository, appAuthCubit);
+      loginCubit = LoginCubit(repository);
     });
 
     test(

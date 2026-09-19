@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/utils/validators.dart';
@@ -46,9 +45,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return BlocProvider(
-      create: (_) => getIt<ForgotPasswordCubit>(),
-      child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
+    return BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
         listener: (context, state) {
           state.whenOrNull(
             success: (response) {
@@ -164,7 +161,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ),
           );
         },
-      ),
-    );
+      );
   }
 }

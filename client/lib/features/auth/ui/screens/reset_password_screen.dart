@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/utils/validators.dart';
 import 'package:client/core/widgets/app_button.dart';
@@ -61,9 +60,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return BlocProvider(
-      create: (_) => getIt<ResetPasswordCubit>(),
-      child: BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
+    return BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
         listener: (context, state) {
           state.whenOrNull(
             success: () {
@@ -166,7 +163,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             ],
           );
         },
-      ),
-    );
+      );
   }
 }

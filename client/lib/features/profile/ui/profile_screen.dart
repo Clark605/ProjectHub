@@ -43,7 +43,6 @@ class ProfileScreen extends StatelessWidget {
                   getIt.isRegistered<AuthRepository>()
                       ? getIt<AuthRepository>()
                       : _FallbackAuthRepository(),
-                  getIt<AppAuthCubit>(),
                 ),
         ),
       ],
