@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:client/features/kanban/ui/widgets/task_detail_sheet.dart';
+import 'package:client/features/tasks/ui/widgets/task_detail_sheet.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/update_task_request.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';

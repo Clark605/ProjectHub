@@ -115,7 +115,9 @@ class MoveToStatusSheet extends StatelessWidget {
                         const SizedBox(width: 14),
                         Expanded(
                           child: Text(
-                            l10n != null ? status.localizedName(l10n) : status.toDisplayString(),
+                            l10n != null
+                                ? status.localizedName(l10n)
+                                : status.toDisplayString(),
                             style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: isCurrent
                                   ? FontWeight.w700
