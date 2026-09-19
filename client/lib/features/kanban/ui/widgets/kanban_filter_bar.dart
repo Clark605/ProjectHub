@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/features/tasks/data/models/task_priority.dart';
-import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
+import 'package:client/features/kanban/ui/widgets/kanban_assignee_filter_menu.dart';
+import 'package:client/features/kanban/ui/widgets/kanban_priority_filter_menu.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -87,7 +87,6 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Search row when expanded
           if (_isSearchExpanded) ...[
             Row(
               children: [
@@ -147,13 +146,10 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
             ),
             const SizedBox(height: 8),
           ],
-
-          // Filter chips row
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                // Search toggle button
                 if (!_isSearchExpanded)
                   Padding(
                     padding: const EdgeInsets.only(right: 8),
@@ -163,115 +159,21 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                       onPressed: () => setState(() => _isSearchExpanded = true),
                     ),
                   ),
-
-                // Priority dropdown / chips
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
-                  child: PopupMenuButton<String>(
-                    tooltip: l10n?.filterByPriority ?? 'Filter by priority',
-                    onSelected: (val) {
-                      widget.onPrioritySelected(val == 'all' ? null : val);
-                    },
-                    child: Chip(
-                      avatar: Icon(
-                        Icons.flag_outlined,
-                        size: 16,
-                        color: widget.selectedPriority != null
-                            ? TaskPriority.fromString(
-                                widget.selectedPriority,
-                              ).toColor()
-                            : null,
-                      ),
-                      label: Text(
-                        widget.selectedPriority != null
-                            ? '${l10n?.taskPriority ?? 'Priority'}: ${widget.selectedPriority}'
-                            : (l10n?.taskPriority ?? 'Priority'),
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: widget.selectedPriority != null
-                              ? FontWeight.w600
-                              : FontWeight.normal,
-                        ),
-                      ),
-                      deleteIcon: widget.selectedPriority != null
-                          ? const Icon(Icons.close_rounded, size: 14)
-                          : null,
-                      onDeleted: widget.selectedPriority != null
-                          ? () => widget.onPrioritySelected(null)
-                          : null,
-                    ),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 'all',
-                        child: Text(l10n?.allPriorities ?? 'All Priorities'),
-                      ),
-                      ...TaskPriority.values.map(
-                        (p) => PopupMenuItem(
-                          value: p.toServerString(),
-                          child: Row(
-                            children: [
-                              Icon(p.toIcon(), size: 16, color: p.toColor()),
-                              const SizedBox(width: 8),
-                              Text(
-                                l10n != null
-                                    ? p.localizedName(l10n)
-                                    : p.toDisplayString(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                  child: KanbanPriorityFilterMenu(
+                    selectedPriority: widget.selectedPriority,
+                    onPrioritySelected: widget.onPrioritySelected,
                   ),
                 ),
-
-                // Assignee filter dropdown
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
-                  child: PopupMenuButton<String>(
-                    tooltip: l10n?.filterByAssignee ?? 'Filter by assignee',
-                    onSelected: (val) {
-                      widget.onAssigneeSelected(val == 'all' ? null : val);
-                    },
-                    child: Chip(
-                      avatar: const Icon(
-                        Icons.person_outline_rounded,
-                        size: 16,
-                      ),
-                      label: Text(
-                        _resolveAssigneeLabel(widget.selectedAssignee, l10n),
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: widget.selectedAssignee != null
-                              ? FontWeight.w600
-                              : FontWeight.normal,
-                        ),
-                      ),
-                      deleteIcon: widget.selectedAssignee != null
-                          ? const Icon(Icons.close_rounded, size: 14)
-                          : null,
-                      onDeleted: widget.selectedAssignee != null
-                          ? () => widget.onAssigneeSelected(null)
-                          : null,
-                    ),
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 'all',
-                        child: Text(l10n?.allAssignees ?? 'All Assignees'),
-                      ),
-                      PopupMenuItem(
-                        value: 'unassigned',
-                        child: Text(l10n?.unassigned ?? 'Unassigned'),
-                      ),
-                      ...widget.members.map(
-                        (m) =>
-                            PopupMenuItem(value: m.userId, child: Text(m.name)),
-                      ),
-                    ],
+                  child: KanbanAssigneeFilterMenu(
+                    selectedAssignee: widget.selectedAssignee,
+                    members: widget.members,
+                    onAssigneeSelected: widget.onAssigneeSelected,
                   ),
                 ),
-
-                // Clear all filters chip
                 if (hasActiveFilter)
                   ActionChip(
                     avatar: const Icon(Icons.filter_alt_off_rounded, size: 16),
@@ -287,16 +189,5 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
         ],
       ),
     );
-  }
-
-  String _resolveAssigneeLabel(String? assigneeId, AppLocalizations? l10n) {
-    if (assigneeId == null || assigneeId.isEmpty || assigneeId == 'all') {
-      return l10n?.assignee ?? 'Assignee';
-    }
-    if (assigneeId == 'unassigned') return l10n?.unassigned ?? 'Unassigned';
-    final member = widget.members
-        .where((m) => m.userId == assigneeId)
-        .firstOrNull;
-    return member != null ? member.name : (l10n?.assignee ?? 'Assignee');
   }
 }
