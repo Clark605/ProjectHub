@@ -23,13 +23,16 @@ import 'package:client/features/workspaces/ui/widgets/workspace_settings_skeleto
 import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-class _MockRepo implements WorkspaceRepository {
+class _MockRepo extends Fake implements WorkspaceRepository {
   WorkspaceDto workspace;
   List<MemberDto> members;
   Future<WorkspaceDto> Function(int id, UpdateWorkspaceRequest r)?
   onUpdateWorkspace;
 
   _MockRepo({required this.workspace, required this.members});
+
+  @override
+  void setActiveWorkspace(WorkspaceDto? workspace) {}
 
   @override
   Future<List<WorkspaceDto>> getWorkspaces() async => [workspace];

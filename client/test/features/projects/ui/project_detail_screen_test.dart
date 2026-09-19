@@ -38,12 +38,15 @@ class _FakeAuthRepository extends Fake implements AuthRepository {
 }
 
 
-class _FakeWorkspaceRepo implements WorkspaceRepository {
+class _FakeWorkspaceRepo extends Fake implements WorkspaceRepository {
   WorkspaceDto workspace = const WorkspaceDto(
     id: 10,
     name: 'Test WS',
     membership: WorkspaceMembershipDto(role: 'Member'),
   );
+
+  @override
+  void setActiveWorkspace(WorkspaceDto? workspace) {}
 
   @override
   Future<List<WorkspaceDto>> getWorkspaces({bool forceRefresh = false}) async =>

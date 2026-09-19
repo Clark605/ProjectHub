@@ -14,13 +14,17 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
   final PrefsService _prefs;
 
   WorkspaceContextCubit(this._repository, this._prefs)
-    : super(_resolveInitialState(_prefs));
+    : super(_resolveInitialState(_prefs, _repository));
 
-  static WorkspaceContextState _resolveInitialState(PrefsService prefs) {
+  static WorkspaceContextState _resolveInitialState(
+    PrefsService prefs,
+    WorkspaceRepository repository,
+  ) {
     final cachedRaw = prefs.getCachedActiveWorkspaceRaw();
     if (cachedRaw != null && cachedRaw.isNotEmpty) {
       try {
         final cached = WorkspaceDto.fromJson(jsonDecode(cachedRaw));
+        repository.setActiveWorkspace(cached);
         return WorkspaceContextState.loaded(
           workspaces: [cached],
           activeWorkspace: cached,
@@ -44,6 +48,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
         final workspaces = await _repository.getWorkspaces();
 
         if (workspaces.isEmpty) {
+          _repository.setActiveWorkspace(null);
           await _prefs.clearActiveWorkspace();
           emit(const WorkspaceContextState.empty());
           return;
@@ -51,6 +56,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
 
         if (workspaces.length == 1) {
           final single = workspaces.first;
+          _repository.setActiveWorkspace(single);
           await _prefs.setActiveWorkspaceId(single.id);
           await _prefs.setCachedActiveWorkspaceRaw(jsonEncode(single.toJson()));
           emit(
@@ -69,6 +75,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
             : null;
 
         final active = matched ?? workspaces.first;
+        _repository.setActiveWorkspace(active);
         await _prefs.setActiveWorkspaceId(active.id);
         await _prefs.setCachedActiveWorkspaceRaw(jsonEncode(active.toJson()));
 
@@ -100,6 +107,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
     );
     if (currentWorkspaces == null) return;
 
+    _repository.setActiveWorkspace(workspace);
     await _prefs.setActiveWorkspaceId(workspace.id);
     await _prefs.setCachedActiveWorkspaceRaw(jsonEncode(workspace.toJson()));
     emit(
@@ -121,6 +129,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
         );
 
         final updatedList = [...currentWorkspaces, created];
+        _repository.setActiveWorkspace(created);
         await _prefs.setActiveWorkspaceId(created.id);
         await _prefs.setCachedActiveWorkspaceRaw(jsonEncode(created.toJson()));
 
@@ -139,6 +148,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
 
   Future<void> reset() async {
     _repository.clearCache();
+    _repository.setActiveWorkspace(null);
     await _prefs.clearActiveWorkspace();
     emit(const WorkspaceContextState.initial());
   }

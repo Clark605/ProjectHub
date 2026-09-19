@@ -13,13 +13,16 @@ import 'package:client/features/workspaces/data/models/update_workspace_request.
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 
-class _FakeSettingsRepository implements WorkspaceRepository {
+class _FakeSettingsRepository extends Fake implements WorkspaceRepository {
   WorkspaceDto workspace = const WorkspaceDto(
     id: 1,
     name: 'Acme Corp',
     description: 'Main org',
     membership: WorkspaceMembershipDto(role: 'Owner'),
   );
+
+  @override
+  void setActiveWorkspace(WorkspaceDto? ws) {}
 
   List<MemberDto> members = [
     MemberDto(

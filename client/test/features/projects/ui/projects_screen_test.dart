@@ -24,8 +24,11 @@ import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class _FakeWorkspaceRepo implements WorkspaceRepository {
+class _FakeWorkspaceRepo extends Fake implements WorkspaceRepository {
   List<WorkspaceDto> workspaces = [];
+
+  @override
+  void setActiveWorkspace(WorkspaceDto? workspace) {}
 
   @override
   Future<List<WorkspaceDto>> getWorkspaces({bool forceRefresh = false}) async =>

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:client/features/workspaces/data/models/add_member_request.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
@@ -5,6 +7,10 @@ import 'package:client/features/workspaces/data/models/update_workspace_request.
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 
 abstract class WorkspaceRepository {
+  Stream<WorkspaceDto?> get activeWorkspaceChanges;
+  WorkspaceDto? get activeWorkspace;
+  void setActiveWorkspace(WorkspaceDto? workspace);
+
   Future<List<WorkspaceDto>> getWorkspaces();
   Future<WorkspaceDto> getWorkspace(int id, {bool forceRefresh = false});
   Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request);
@@ -18,4 +24,5 @@ abstract class WorkspaceRepository {
   Future<void> removeMember(int workspaceId, String userId);
   bool hasCachedSettings(int workspaceId);
   void clearCache([int? workspaceId]);
+  void dispose();
 }

@@ -17,7 +17,7 @@ import 'package:client/features/workspaces/ui/widgets/workspace_card.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_switcher_sheet.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-class _FakeWorkspaceRepository implements WorkspaceRepository {
+class _FakeWorkspaceRepository extends Fake implements WorkspaceRepository {
   List<WorkspaceDto> workspaces = [
     const WorkspaceDto(
       id: 1,
@@ -32,6 +32,9 @@ class _FakeWorkspaceRepository implements WorkspaceRepository {
       membership: WorkspaceMembershipDto(role: 'Member'),
     ),
   ];
+
+  @override
+  void setActiveWorkspace(WorkspaceDto? workspace) {}
 
   @override
   Future<List<WorkspaceDto>> getWorkspaces() async => workspaces;

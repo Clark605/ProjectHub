@@ -8,6 +8,7 @@ import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
+import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository_impl.dart';
 
 class FakeHttpClientAdapter implements HttpClientAdapter {
@@ -266,6 +267,25 @@ void main() {
         adapter.handler = (options) => jsonResponse({});
         await repository.deleteWorkspace(10);
         expect(repository.hasCachedSettings(10), isFalse);
+      });
+
+      test('activeWorkspace changes are emitted via stream', () async {
+        final emissions = <WorkspaceDto?>[];
+        final sub = repository.activeWorkspaceChanges.listen(emissions.add);
+
+        const ws = WorkspaceDto(id: 1, name: 'Main WS');
+        repository.setActiveWorkspace(ws);
+        await Future.delayed(Duration.zero);
+
+        expect(repository.activeWorkspace, ws);
+        expect(emissions, [ws]);
+
+        repository.setActiveWorkspace(null);
+        await Future.delayed(Duration.zero);
+        expect(repository.activeWorkspace, isNull);
+        expect(emissions, [ws, null]);
+
+        await sub.cancel();
       });
     });
   });

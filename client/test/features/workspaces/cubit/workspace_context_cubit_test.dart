@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,10 +14,24 @@ import 'package:client/features/workspaces/data/models/update_workspace_request.
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 
-class _FakeWorkspaceRepository implements WorkspaceRepository {
+class _FakeWorkspaceRepository extends Fake implements WorkspaceRepository {
   List<WorkspaceDto> workspaces = [];
   bool shouldThrow = false;
   String errorMessage = 'Server error';
+  WorkspaceDto? _activeWorkspace;
+  final _activeController = StreamController<WorkspaceDto?>.broadcast();
+
+  @override
+  Stream<WorkspaceDto?> get activeWorkspaceChanges => _activeController.stream;
+
+  @override
+  WorkspaceDto? get activeWorkspace => _activeWorkspace;
+
+  @override
+  void setActiveWorkspace(WorkspaceDto? workspace) {
+    _activeWorkspace = workspace;
+    _activeController.add(workspace);
+  }
 
   @override
   Future<List<WorkspaceDto>> getWorkspaces() async {
