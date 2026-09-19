@@ -38,6 +38,8 @@ class RegisterCubit extends SafeActionCubit<RegisterState> {
     required String provider,
     String? idToken,
     String? accessToken,
+    String? code,
+    String? redirectUri,
   }) async {
     emit(const RegisterState.loading());
     await safeExecute(
@@ -46,6 +48,8 @@ class RegisterCubit extends SafeActionCubit<RegisterState> {
           provider: provider,
           idToken: idToken,
           accessToken: accessToken,
+          code: code,
+          redirectUri: redirectUri,
         );
         _appAuthCubit.setAuthenticated(user);
         emit(RegisterState.success(user));

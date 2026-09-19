@@ -39,6 +39,8 @@ class LoginCubit extends SafeActionCubit<LoginState> {
     required String provider,
     String? idToken,
     String? accessToken,
+    String? code,
+    String? redirectUri,
   }) async {
     emit(const LoginState.loading());
     await safeExecute(
@@ -47,6 +49,8 @@ class LoginCubit extends SafeActionCubit<LoginState> {
           provider: provider,
           idToken: idToken,
           accessToken: accessToken,
+          code: code,
+          redirectUri: redirectUri,
         );
         _appAuthCubit.setAuthenticated(user);
         if (getIt.isRegistered<WorkspaceContextCubit>()) {

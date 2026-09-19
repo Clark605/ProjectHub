@@ -62,6 +62,8 @@ class _FakeAuthRepository implements AuthRepository {
     required String provider,
     String? idToken,
     String? accessToken,
+    String? code,
+    String? redirectUri,
   }) async => const User(name: 'Test Clark', email: 'clark@example.com');
 }
 

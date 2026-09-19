@@ -41,6 +41,7 @@ import '../../features/workspaces/data/workspace_repository_impl.dart' as _i591;
 import '../cubit/app_settings_cubit.dart' as _i30;
 import '../network/auth_interceptor.dart' as _i908;
 import '../network/dio_client.dart' as _i667;
+import '../services/github_auth_service.dart' as _i103;
 import '../services/google_auth_service.dart' as _i947;
 import '../storage/prefs_service.dart' as _i415;
 import '../storage/secure_storage_service.dart' as _i666;
@@ -54,6 +55,7 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final prefsModule = _$PrefsModule();
     final dioModule = _$DioModule();
+    gh.lazySingleton<_i103.GithubAuthService>(() => _i103.GithubAuthService());
     gh.lazySingleton<_i947.GoogleAuthService>(() => _i947.GoogleAuthService());
     await gh.lazySingletonAsync<_i460.SharedPreferences>(
       () => prefsModule.prefs,

@@ -13,5 +13,7 @@ abstract class AuthRepository {
     required String provider,
     String? idToken,
     String? accessToken,
+    String? code,
+    String? redirectUri,
   });
 }
