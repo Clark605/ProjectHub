@@ -32,7 +32,9 @@ class GithubAuthService {
   /// Returns the authorization code if successful, or null if cancelled or failed.
   Future<String?> signIn() async {
     // If not configured or placeholder in debug mode, provide immediate mock fallback
-    if (_clientId.isEmpty || _clientId.startsWith('YOUR_') || _clientId.startsWith('your_')) {
+    if (_clientId.isEmpty ||
+        _clientId.startsWith('YOUR_') ||
+        _clientId.startsWith('your_')) {
       AppLogger.warning(
         'GITHUB_CLIENT_ID is not configured. Falling back to mock_github_code in debug mode.',
         tag: 'GithubAuth',
