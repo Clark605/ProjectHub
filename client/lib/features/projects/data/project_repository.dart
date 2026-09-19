@@ -1,5 +1,6 @@
 import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
+import 'package:client/features/projects/data/models/project_status.dart';
 import 'package:client/features/projects/data/models/update_project_request.dart';
 
 abstract class ProjectRepository {
@@ -35,4 +36,13 @@ abstract class ProjectRepository {
 
   /// Returns whether detail for the given project ID is cached in memory.
   bool hasCachedProject(int id);
+}
+
+/// Extension providing business-level filtering on [ProjectRepository].
+extension ProjectFiltering on ProjectRepository {
+  List<ProjectDto> filterProjects(List<ProjectDto> projects, String status) {
+    if (status.isEmpty || status.toLowerCase() == 'all') return projects;
+    final target = ProjectStatus.fromString(status);
+    return projects.where((p) => p.statusEnum == target).toList();
+  }
 }

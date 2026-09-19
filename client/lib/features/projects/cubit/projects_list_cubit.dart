@@ -5,7 +5,6 @@ import 'package:client/features/projects/cubit/projects_list_state.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/project_repository.dart';
-import 'package:client/features/projects/data/models/project_status.dart';
 
 @injectable
 class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
@@ -43,7 +42,7 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
           return;
         }
 
-        final filtered = _applyFilter(all, _currentFilter);
+        final filtered = _projectRepository.filterProjects(all, _currentFilter);
         emit(
           ProjectsListState.loaded(
             projects: filtered,
@@ -63,7 +62,7 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
 
     final currentState = state;
     if (currentState is ProjectsListLoaded) {
-      final filtered = _applyFilter(currentState.allProjects, status);
+      final filtered = _projectRepository.filterProjects(currentState.allProjects, status);
       emit(currentState.copyWith(projects: filtered, selectedFilter: status));
     } else {
       currentState.maybeWhen(
@@ -93,7 +92,7 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
           updatedAll = [created];
         }
 
-        final filtered = _applyFilter(updatedAll, _currentFilter);
+        final filtered = _projectRepository.filterProjects(updatedAll, _currentFilter);
         emit(
           ProjectsListState.loaded(
             projects: filtered,
@@ -118,7 +117,7 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
       final updatedAll = currentState.allProjects
           .map((p) => p.id == updated.id ? updated : p)
           .toList();
-      final filtered = _applyFilter(updatedAll, currentState.selectedFilter);
+      final filtered = _projectRepository.filterProjects(updatedAll, currentState.selectedFilter);
       emit(currentState.copyWith(projects: filtered, allProjects: updatedAll));
     }
   }
@@ -135,19 +134,11 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
           ProjectsListState.empty(selectedFilter: currentState.selectedFilter),
         );
       } else {
-        final filtered = _applyFilter(updatedAll, currentState.selectedFilter);
+        final filtered = _projectRepository.filterProjects(updatedAll, currentState.selectedFilter);
         emit(
           currentState.copyWith(projects: filtered, allProjects: updatedAll),
         );
       }
     }
-  }
-
-  List<ProjectDto> _applyFilter(List<ProjectDto> projects, String filter) {
-    if (filter.isEmpty || filter.toLowerCase() == 'all') {
-      return projects;
-    }
-    final targetStatus = ProjectStatus.fromString(filter);
-    return projects.where((p) => p.statusEnum == targetStatus).toList();
   }
 }

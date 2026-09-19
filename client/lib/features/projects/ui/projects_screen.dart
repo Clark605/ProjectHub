@@ -7,7 +7,6 @@ import 'package:client/core/widgets/app_empty_state.dart';
 import 'package:client/core/widgets/app_error_state.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
-import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/projects/ui/widgets/create_project_sheet.dart';
 import 'package:client/features/projects/ui/widgets/projects_filter_bar.dart';
 import 'package:client/features/projects/ui/widgets/projects_grid.dart';
@@ -38,12 +37,13 @@ class ProjectsScreen extends StatelessWidget {
         child: const _ProjectsView(),
       );
     } catch (_) {
-      return BlocProvider<ProjectsListCubit>(
-        create: (_) => getIt.isRegistered<ProjectsListCubit>()
-            ? getIt<ProjectsListCubit>()
-            : ProjectsListCubit(getIt<ProjectRepository>()),
-        child: const _ProjectsView(),
-      );
+      if (getIt.isRegistered<ProjectsListCubit>()) {
+        return BlocProvider<ProjectsListCubit>(
+          create: (_) => getIt<ProjectsListCubit>(),
+          child: const _ProjectsView(),
+        );
+      }
+      return const _ProjectsView();
     }
   }
 }
