@@ -30,28 +30,13 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(
-      text:
-          context.read<ProjectDetailCubit>().state.whenOrNull(
-            loaded: (project, _, _, _, _) => project.name,
-          ) ??
-          '',
+    final p = context.read<ProjectDetailCubit>().state.whenOrNull(
+      loaded: (project, _, _, _, _) => project,
     );
-    _descController = TextEditingController(
-      text:
-          context.read<ProjectDetailCubit>().state.whenOrNull(
-            loaded: (project, _, _, _, _) => project.description,
-          ) ??
-          '',
-    );
-    _selectedDueDate = context.read<ProjectDetailCubit>().state.whenOrNull(
-      loaded: (project, _, _, _, _) => project.dueDate,
-    );
-    _selectedStatus =
-        context.read<ProjectDetailCubit>().state.whenOrNull(
-          loaded: (project, _, _, _, _) => project.status,
-        ) ??
-        'Planning';
+    _nameController = TextEditingController(text: p?.name ?? '');
+    _descController = TextEditingController(text: p?.description ?? '');
+    _selectedDueDate = p?.dueDate;
+    _selectedStatus = p?.status ?? 'Planning';
   }
 
   @override
