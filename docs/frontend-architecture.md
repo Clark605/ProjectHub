@@ -6,37 +6,37 @@ A technical specification of the Flutter client architecture for **ProjectHub Cl
 
 ## 1. Architectural Principles
 
-The Flutter client employs a **Feature-First Layered Architecture** with **MVVM + Cubit** state management and the **Repository Pattern**:
+The Flutter client employs a **Clean Feature-First Layered Architecture without a Domain Layer** with **MVVM + Cubit** state management and the **Repository Pattern** (see [ADR-0016](./adr/0016-strict-clean-architecture-without-domain-layer.md)):
 
 ```mermaid
 graph TD
     subgraph FeatureModule ["Feature Module (e.g. features/kanban/)"]
-        subgraph UILayer ["UI Layer"]
-            Screen["Views / Screens"]
-            Widgets["Private UI Components"]
-            Guards["Permission Guards"]
+        subgraph UILayer ["UI / Presentation Layer"]
+            Screen["Views / Screens (Dumb Widgets < 200 lines)"]
+            Widgets["Modular Sub-Widgets & Sheets"]
+            UIExtensions["Presentation Extensions (Colors, Icons, Strings)"]
         end
 
         subgraph LogicLayer ["Logic Layer"]
-            Cubit["Feature Cubit (flutter_bloc)"]
+            Cubit["Feature Cubits (flutter_bloc)"]
             State["Freezed Sealed States"]
+            FilterMixins["Filter & State Mixins"]
         end
 
         subgraph DataLayer ["Data Layer"]
-            Repository["Repository Interface & Implementation"]
-            RemoteDataSource["Remote DataSource (Dio)"]
-            LocalDataSource["Local DataSource (SecureStorage / Prefs)"]
-            Models["Freezed Domain / DTO Models"]
+            Repository["Repository Interface & Cached Implementation"]
+            RemoteDataSource["Remote DataSource (Dio with _guard)"]
+            Models["Freezed DTO Models & Pure Filter Logic"]
         end
     end
 
     Screen --> Cubit
     Widgets --> Screen
-    Guards --> Screen
+    UIExtensions --> Widgets
     Cubit --> State
+    Cubit --> FilterMixins
     Cubit --> Repository
     Repository --> RemoteDataSource
-    Repository --> LocalDataSource
     Models --> Repository
 ```
 
@@ -62,7 +62,7 @@ client/
 │   │   ├── di/                 # Dependency injection setup (GetIt + Injectable)
 │   │   ├── errors/             # Custom Failure classes & Dio error mapper
 │   │   ├── network/            # Resilient Dio client & AuthInterceptor
-│   │   ├── routes/             # AppRouter (onGenerateRoute) & RouteNames
+│   │   ├── routes/             # AppRouter, RouteNames & route_providers.dart
 │   │   ├── storage/            # FlutterSecureStorage & SharedPreferences
 │   │   ├── theme/              # Stitch UI tokens & Material 3 ThemeData
 │   │   ├── utils/              # PermissionChecker, date utilities, validators
@@ -71,17 +71,20 @@ client/
 │   └── features/               # Feature-First Modules
 │       ├── splash/             # Startup & token verification
 │       ├── onboarding/         # First-launch onboarding carousel
-│       ├── auth/               # Login, Register, Profile screens & Cubits
-│       ├── workspaces/         # Workspaces list, switcher & member management
-│       ├── projects/           # Projects dashboard & project creation
-│       └── kanban/             # Kanban board, columns, drag-drop & task sheets
+│       ├── auth/               # Login, Register, Profile screens, Cubits & AuthRepository
+│       ├── workspaces/         # Workspaces list, switcher, member management & WorkspaceRepository
+│       ├── projects/           # Projects dashboard, project detail & ProjectRepository
+│       ├── tasks/              # Task models, TaskRepository, TaskFilter & shared task sheets
+│       ├── kanban/             # Kanban board, columns, drag-drop, mobile PageView & KanbanCubit
+│       └── dashboard/          # Dashboard screen, sprint focus & activity stream
 ```
 
 ---
 
-## 3. Dependency Injection & Service Locator
+## 3. Dependency Injection & Centralized Route Providers
 
-The application uses **`get_it`** and **`injectable`** for automated dependency registration:
+### Service Locator Registration
+The application uses **`get_it`** and **`injectable`** for automated singleton and factory registrations:
 
 ```dart
 // lib/core/di/injection.dart
@@ -93,6 +96,17 @@ final getIt = GetIt.instance;
   asExtension: true,
 )
 Future<void> configureDependencies() async => getIt.init();
+```
+
+### Centralized Route Providers (`route_providers.dart`)
+All BlocProviders are declared in `client/lib/core/routes/route_providers.dart`. Rather than wrapping the whole application with a monolithic `MultiBlocProvider` above `MaterialApp` (which causes improper disposal, memory leaks, and global state pollution), providers are instantiated lazily per route with proper disposal when routes pop:
+
+```dart
+// lib/core/routes/route_providers.dart
+Widget buildKanbanRoute(int projectId) => BlocProvider(
+  create: (_) => getIt<KanbanCubit>(),
+  child: KanbanScreen(projectId: projectId),
+);
 ```
 
 ---
@@ -164,7 +178,7 @@ Designed in accordance with Material 3, using custom Stitch UI tokens and worksp
 
 Accessible at `/profile`, consolidating non-workspace user settings into a single scrollable view:
 - **Profile Management Card:** Editable display name, bio, and initials avatar with instant API sync (`PUT /api/v1/users/me`).
-- **Appearance Section:** Dark/Light/System theme mode selector and horizontal interactive carousel for the 6 dynamic color palettes.
+- **Appearance Section:** Dark/Light/System theme mode selector.
 - **Localization Section:** English 🇬🇧 and Arabic 🇸🇦 language switcher with immediate RTL/LTR adaptation.
 - **About & Version Section:** Displays application semantic version and build number via `package_info_plus`.
 - **Help Section:** Localized expandable FAQ (`ExpansionTile`) covering workspaces, Kanban rules, and permissions.
@@ -177,3 +191,12 @@ Accessible at `/profile`, consolidating non-workspace user settings into a singl
 - **Dashboard Feed:** Shows the latest 10 workspace-level events (`GET /api/v1/workspaces/{id}/activity`) with avatar badges, relative timestamps, and event descriptions.
 - **Project Activity Tab:** Integrated into the project detail screen (`GET /api/v1/projects/{id}/activity`) showing task movements and lifecycle transitions.
 
+---
+
+## 9. Strict Clean Architecture & 200-Line Modularity
+
+To ensure maintainability, testability, and clarity of boundaries:
+1. **Clean Architecture without Domain Overhead**: Features comprise Presentation and Data layers. Domain logic (filtering, ordering) is encapsulated in pure data extensions (`TaskFilter`, `filterProjects`) or repositories.
+2. **Dumb UI Widgets**: Screens and widgets contain zero business calculations, no fallback mock repositories, and no direct service lookups. Test doubles are strictly isolated in `test/**/fakes/`.
+3. **Separation of Presentation Extensions**: Data models and enums are purely structural. Colors, icons, and localized labels are implemented via presentation layer extensions (`*_ui.dart`).
+4. **Strict 200-Line File Limit**: Every source file in `client/lib/` is strictly under 200 lines of code. Large screens, sheets, and forms are decomposed into cohesive child widgets, mixins, and builder helpers.

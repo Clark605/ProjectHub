@@ -1,0 +1,11 @@
+# Strict Clean Architecture Without Domain Layer
+
+The Flutter client adheres strictly to a two-layer Clean Architecture (Presentation and Data layers) without introducing an artificial Domain/UseCase layer. Business logic, cache management, and data orchestration reside within Data repositories and focused Cubits, while widgets remain strictly dumb presentation components.
+
+### Architectural Decisions:
+1. **No Domain/UseCase Layer Overhead**: Because ProjectHub is a client application consuming a .NET 10 REST API where core domain rules (RBAC, workflow state machines, validation) are enforced by the server, an intermediate domain layer would result in pass-through boilerplate use cases. Domain filtering and business formatting are implemented as pure extensions/helpers within data models or repository extensions.
+2. **Single Source of Truth Repositories**: Cross-feature state sharing (e.g. active workspace, authentication session) is managed directly through observable repository streams and in-memory caches, removing tight cubit-to-cubit couplings.
+3. **Route-Scoped Centralized BlocProviders**: All BlocProviders are instantiated centrally within `client/lib/core/routes/route_providers.dart` using lazy route factories tied to screen lifecycles. Global `MultiBlocProvider` declarations at the app root above `MaterialApp` are explicitly prohibited to prevent memory leaks, improper disposal, and violation of separation of concerns.
+4. **Separation of Presentation Logic from Data Enums**: Data layer model enums (`TaskPriority`, `TaskStatus`, `ProjectStatus`) contain zero UI dependencies (no `Color`, `IconData`, or `AppLocalizations`). All visual mapping is implemented via UI extensions in feature presentation layers (`task_priority_ui.dart`, `task_status_ui.dart`, `project_status_ui.dart`).
+5. **Dumb Widgets Without Mock Fallbacks**: UI screens and widgets never contain mock repositories or fallback mock data. If unit/widget tests require mock dependencies, they are injected through test fakes defined under `test/**/fakes/`.
+6. **Strict 200-Line File Limit**: Every implementation file in `client/lib/` is strictly constrained to under 200 lines of code (excluding code generation and localized strings). Complex screens and forms are decomposed into cohesive, single-responsibility subcomponents, mixins, and builder helpers.
