@@ -8,7 +8,7 @@ import 'package:client/core/routes/app_navigator.dart';
 import 'package:client/core/network/global_network_error_handler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/app_palette.dart';
+import 'package:client/core/theme/app_theme.dart';
 import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/cubit/app_settings_state.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
@@ -70,8 +70,8 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
             navigatorKey: AppNavigator.navigatorKey,
 
             // Brand Theme (Deep Slate) & Mode
-            theme: AppPalette.deepSlate.toThemeData(Brightness.light),
-            darkTheme: AppPalette.deepSlate.toThemeData(Brightness.dark),
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
             themeMode: settingsState.themeMode,
 
             // Localization
@@ -81,6 +81,9 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
 
             // Routing
             initialRoute: widget.initialRoute,
+            onGenerateInitialRoutes: (initialRoute) => [
+              AppRouter.onGenerateRoute(RouteSettings(name: initialRoute))!,
+            ],
             onGenerateRoute: AppRouter.onGenerateRoute,
           );
         },

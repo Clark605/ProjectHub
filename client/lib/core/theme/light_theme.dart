@@ -24,16 +24,25 @@ ThemeData buildLightTheme() {
     ),
     colorScheme: const ColorScheme.light(
       primary: AppColors.primary,
-      primaryContainer: AppColors.primaryContainer,
-      secondary: AppColors.secondary,
-      secondaryContainer: AppColors.secondaryContainer,
-      surface: AppColors.lightSurface,
-      error: AppColors.error,
       onPrimary: AppColors.textOnPrimary,
-      onSecondary: AppColors.lightTextPrimary,
+      primaryContainer: AppColors.primaryContainer,
+      onPrimaryContainer: AppColors.onElectricVioletContainer,
+      secondary: AppColors.secondary,
+      onSecondary: AppColors.onSkyBlue,
+      secondaryContainer: AppColors.secondaryContainer,
+      onSecondaryContainer: AppColors.onSkyBlue,
+      surface: AppColors.lightSurface,
       onSurface: AppColors.lightTextPrimary,
-      onError: AppColors.textOnPrimary,
+      onSurfaceVariant: AppColors.lightTextSecondary,
+      surfaceContainerLowest: Colors.white,
+      surfaceContainerLow: AppColors.lightSurface,
+      surfaceContainer: AppColors.lightSurfaceContainer,
+      surfaceContainerHigh: Color(0xFFE2E8F0),
+      surfaceContainerHighest: Color(0xFFCBD5E1),
       outline: AppColors.lightBorder,
+      outlineVariant: Color(0xFFE2E8F0),
+      error: AppColors.error,
+      onError: AppColors.textOnPrimary,
     ),
     cardTheme: CardThemeData(
       color: AppColors.lightSurface,
@@ -132,6 +141,22 @@ ThemeData buildLightTheme() {
     drawerTheme: const DrawerThemeData(
       backgroundColor: AppColors.lightSurface,
       elevation: 0,
+    ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.lightTextPrimary;
+          }
+          return AppColors.lightSurfaceContainer;
+        }),
+        foregroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
+            return Colors.white;
+          }
+          return AppColors.lightTextPrimary;
+        }),
+      ),
     ),
   );
 }

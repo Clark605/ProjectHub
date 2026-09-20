@@ -24,16 +24,25 @@ ThemeData buildDarkTheme() {
     ),
     colorScheme: const ColorScheme.dark(
       primary: AppColors.primary,
-      primaryContainer: AppColors.primaryContainer,
-      secondary: AppColors.secondary,
-      secondaryContainer: AppColors.secondaryContainer,
-      surface: AppColors.surface,
-      error: AppColors.error,
       onPrimary: AppColors.textOnPrimary,
-      onSecondary: AppColors.textPrimary,
+      primaryContainer: AppColors.primaryContainer,
+      onPrimaryContainer: AppColors.onElectricVioletContainer,
+      secondary: AppColors.secondary,
+      onSecondary: AppColors.onSkyBlue,
+      secondaryContainer: AppColors.secondaryContainer,
+      onSecondaryContainer: AppColors.onSkyBlue,
+      surface: AppColors.surface,
       onSurface: AppColors.textPrimary,
-      onError: AppColors.textOnPrimary,
+      onSurfaceVariant: AppColors.textSecondary,
+      surfaceContainerLowest: AppColors.surfaceContainerLowest,
+      surfaceContainerLow: AppColors.surfaceContainerLow,
+      surfaceContainer: AppColors.surfaceContainer,
+      surfaceContainerHigh: AppColors.surfaceContainerHigh,
+      surfaceContainerHighest: AppColors.surfaceContainerHighest,
       outline: AppColors.border,
+      outlineVariant: AppColors.borderVariant,
+      error: AppColors.error,
+      onError: AppColors.onError,
     ),
     cardTheme: CardThemeData(
       color: AppColors.surfaceContainer,
@@ -126,6 +135,22 @@ ThemeData buildDarkTheme() {
     drawerTheme: const DrawerThemeData(
       backgroundColor: AppColors.surface,
       elevation: 0,
+    ),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.textPrimary;
+          }
+          return AppColors.surfaceContainer;
+        }),
+        foregroundColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.background;
+          }
+          return AppColors.textPrimary;
+        }),
+      ),
     ),
   );
 }
