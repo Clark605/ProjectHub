@@ -77,18 +77,14 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
 
   Future<void> _handleUpdate(UpdateTaskRequest req) async {
     await widget.onUpdate(req);
-    final m = widget.members
-        .where((x) => x.userId == req.assigneeId)
-        .firstOrNull;
+    final m = widget.members.where((x) => x.userId == req.assigneeId).firstOrNull;
     if (mounted) {
       final u = _currentTask.copyWith(
         title: req.title,
         description: req.description,
         priority: req.priority,
         assigneeId: req.assigneeId,
-        assigneeName: req.assigneeId == null
-            ? null
-            : (m?.name ?? _currentTask.assigneeName),
+        assigneeName: req.assigneeId == null ? null : (m?.name ?? _currentTask.assigneeName),
         dueDate: req.dueDate,
         updatedAt: DateTime.now(),
       );
@@ -140,21 +136,13 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final auth =
-        context.read<AppAuthCubit?>()?.state ??
-        (getIt.isRegistered<AppAuthCubit>()
-            ? getIt<AppAuthCubit>().state
-            : null);
-    final uid =
-        auth?.maybeMap(authenticated: (a) => a.user.id, orElse: () => '') ?? '';
-    final isOwner = widget.members.any(
-      (m) => m.userId == uid && m.role == 'Owner',
-    );
+    final auth = context.read<AppAuthCubit?>()?.state ??
+        (getIt.isRegistered<AppAuthCubit>() ? getIt<AppAuthCubit>().state : null);
+    final uid = auth?.maybeMap(authenticated: (a) => a.user.id, orElse: () => '') ?? '';
+    final isOwner = widget.members.any((m) => m.userId == uid && m.role == 'Owner');
 
     return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
@@ -190,14 +178,10 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                   currentUserId: uid,
                   isWorkspaceOwner: isOwner,
                   onTagAdded: (t) => _mutateTag(
-                    () =>
-                        _tagRepo?.attachTagToTask(_currentTask.id, t.id) ??
-                        Future.value(_currentTask),
+                    () => _tagRepo?.attachTagToTask(_currentTask.id, t.id) ?? Future.value(_currentTask),
                   ),
                   onTagRemoved: (t) => _mutateTag(
-                    () =>
-                        _tagRepo?.detachTagFromTask(_currentTask.id, t.id) ??
-                        Future.value(_currentTask),
+                    () => _tagRepo?.detachTagFromTask(_currentTask.id, t.id) ?? Future.value(_currentTask),
                   ),
                 )
               else

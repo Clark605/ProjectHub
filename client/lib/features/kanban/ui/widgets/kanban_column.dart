@@ -4,6 +4,7 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_column_header.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_task_card.dart';
+import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
@@ -18,6 +19,7 @@ class KanbanColumn extends StatelessWidget {
   final ValueChanged<TaskDto>? onTaskTap;
   final ValueChanged<TaskDto>? onTaskMove;
   final ValueChanged<TaskDto>? onTaskDelete;
+  final ValueChanged<TagDto>? onTagTap;
 
   const KanbanColumn({
     super.key,
@@ -29,6 +31,7 @@ class KanbanColumn extends StatelessWidget {
     this.onTaskTap,
     this.onTaskMove,
     this.onTaskDelete,
+    this.onTagTap,
   });
 
   @override
@@ -148,6 +151,7 @@ class KanbanColumn extends StatelessWidget {
                         onTap: () => onTaskTap?.call(task),
                         onMove: () => onTaskMove?.call(task),
                         onDelete: () => onTaskDelete?.call(task),
+                        onTagTap: onTagTap,
                       );
                     },
                   ),

@@ -11,6 +11,7 @@ abstract class CreateTaskRequest with _$CreateTaskRequest {
     @Default('Medium') String priority,
     String? assigneeId,
     DateTime? dueDate,
+    @Default([]) List<int> tagIds,
   }) = _CreateTaskRequest;
 
   factory CreateTaskRequest.fromJson(Map<String, dynamic> json) =>

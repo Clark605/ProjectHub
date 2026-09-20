@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
 
 class TaskCommentItem extends StatelessWidget {
@@ -37,6 +36,7 @@ class TaskCommentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final canDelete = comment.authorId == currentUserId || isWorkspaceOwner;
     final initials = _getInitials(comment.authorName);
     final timeStr = _formatDate(comment.createdAt);
@@ -48,13 +48,13 @@ class TaskCommentItem extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 14,
-            backgroundColor: AppColors.surfaceContainerHigh,
+            backgroundColor: theme.colorScheme.surfaceContainerHigh,
             child: Text(
               initials,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
               ),
             ),
           ),
@@ -67,27 +67,27 @@ class TaskCommentItem extends StatelessWidget {
                   children: [
                     Text(
                       comment.authorName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                     const SizedBox(width: 6),
                     Text(
                       timeStr,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
-                        color: AppColors.textSecondary,
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
                     const Spacer(),
                     if (canDelete)
                       IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.delete_outline,
                           size: 16,
-                          color: AppColors.textSecondary,
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
@@ -99,9 +99,9 @@ class TaskCommentItem extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   comment.content,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
-                    color: AppColors.textPrimary,
+                    color: theme.colorScheme.onSurface,
                     height: 1.35,
                   ),
                 ),

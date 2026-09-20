@@ -5,6 +5,7 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/data/tag_repository.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_results.dart';
+import 'package:client/features/tags/ui/widgets/attach_tag_search_field.dart';
 
 class AttachTagModal extends StatefulWidget {
   const AttachTagModal({
@@ -27,7 +28,7 @@ class AttachTagModal extends StatefulWidget {
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -111,6 +112,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final query = _searchController.text.trim().toLowerCase();
     final attachedIds = widget.currentTags.map((t) => t.id).toSet();
     final filtered = _availableTags
@@ -138,36 +140,28 @@ class _AttachTagModalState extends State<AttachTagModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Attach Tag (Max 5)',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: theme.colorScheme.onSurface,
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.close, size: 20),
+                icon: Icon(
+                  Icons.close,
+                  size: 20,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ],
           ),
           const SizedBox(height: 12),
-          TextField(
+          AttachTagSearchField(
             controller: _searchController,
-            autofocus: true,
             onChanged: (_) => setState(() {}),
-            decoration: InputDecoration(
-              hintText: 'Search or create tag...',
-              prefixIcon: const Icon(Icons.search, size: 18),
-              filled: true,
-              fillColor: AppColors.surfaceContainerLow,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: AppColors.border),
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 10),
-            ),
           ),
           if (_error != null) ...[
             const SizedBox(height: 8),

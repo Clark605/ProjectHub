@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 
 import 'package:client/features/kanban/ui/widgets/kanban_assignee_filter_menu.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_priority_filter_menu.dart';
+import 'package:client/features/kanban/ui/widgets/kanban_search_input_row.dart';
+import 'package:client/features/kanban/ui/widgets/kanban_tag_filter_menu.dart';
+import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanFilterBar extends StatefulWidget {
   final String? selectedPriority;
   final String? selectedAssignee;
+  final int? selectedTagId;
+  final List<TagDto> availableTags;
   final String? searchQuery;
   final List<MemberDto> members;
   final ValueChanged<String?> onPrioritySelected;
   final ValueChanged<String?> onAssigneeSelected;
+  final ValueChanged<int?> onTagSelected;
   final ValueChanged<String> onSearchChanged;
   final VoidCallback onClearFilters;
 
@@ -19,10 +25,13 @@ class KanbanFilterBar extends StatefulWidget {
     super.key,
     this.selectedPriority,
     this.selectedAssignee,
+    this.selectedTagId,
+    this.availableTags = const [],
     this.searchQuery,
     this.members = const [],
     required this.onPrioritySelected,
     required this.onAssigneeSelected,
+    required this.onTagSelected,
     required this.onSearchChanged,
     required this.onClearFilters,
   });
@@ -62,7 +71,6 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
     final hasActiveFilter =
@@ -71,6 +79,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
             widget.selectedPriority!.toLowerCase() != 'all') ||
         (widget.selectedAssignee != null &&
             widget.selectedAssignee!.isNotEmpty) ||
+        (widget.selectedTagId != null) ||
         (widget.searchQuery != null && widget.searchQuery!.isNotEmpty);
 
     return Container(
@@ -79,62 +88,16 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (_isSearchExpanded) ...[
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surface,
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: theme.colorScheme.outlineVariant,
-                      ),
-                    ),
-                    child: TextField(
-                      controller: _searchController,
-                      onChanged: widget.onSearchChanged,
-                      autofocus: true,
-                      style: theme.textTheme.bodyMedium,
-                      decoration: InputDecoration(
-                        hintText:
-                            l10n?.taskTitlePlaceholder ??
-                            'Search tasks by title or description...',
-                        hintStyle: TextStyle(
-                          fontSize: 13,
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                        prefixIcon: const Icon(Icons.search_rounded, size: 18),
-                        suffixIcon: _searchController.text.isNotEmpty
-                            ? IconButton(
-                                icon: const Icon(Icons.close_rounded, size: 16),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  widget.onSearchChanged('');
-                                },
-                              )
-                            : null,
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                IconButton(
-                  icon: const Icon(Icons.close_rounded),
-                  tooltip: l10n?.closeSearch ?? 'Close search',
-                  onPressed: () {
-                    setState(() {
-                      _isSearchExpanded = false;
-                      _searchController.clear();
-                      widget.onSearchChanged('');
-                    });
-                  },
-                ),
-              ],
+            KanbanSearchInputRow(
+              controller: _searchController,
+              onChanged: widget.onSearchChanged,
+              onClose: () {
+                setState(() {
+                  _isSearchExpanded = false;
+                  _searchController.clear();
+                  widget.onSearchChanged('');
+                });
+              },
             ),
             const SizedBox(height: 8),
           ],
@@ -164,6 +127,14 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                     selectedAssignee: widget.selectedAssignee,
                     members: widget.members,
                     onAssigneeSelected: widget.onAssigneeSelected,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: KanbanTagFilterMenu(
+                    selectedTagId: widget.selectedTagId,
+                    availableTags: widget.availableTags,
+                    onTagSelected: widget.onTagSelected,
                   ),
                 ),
                 if (hasActiveFilter)

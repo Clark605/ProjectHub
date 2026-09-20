@@ -6,6 +6,7 @@ import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_archived_banner.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_board_body.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_filter_bar.dart';
+import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
@@ -42,6 +43,21 @@ class KanbanViewBody extends StatelessWidget {
     required this.onTaskDelete,
   });
 
+  List<TagDto> _extractTags() {
+    return state.maybeMap(
+      loaded: (l) {
+        final map = <int, TagDto>{};
+        for (final task in l.allTasks) {
+          for (final tag in task.tags) {
+            map[tag.id] = tag;
+          }
+        }
+        return map.values.toList()..sort((a, b) => a.name.compareTo(b.name));
+      },
+      orElse: () => const [],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return AmbientGlowBackground(
@@ -52,10 +68,14 @@ class KanbanViewBody extends StatelessWidget {
             KanbanFilterBar(
               selectedPriority: cubit.priorityFilter,
               selectedAssignee: cubit.assigneeFilter,
+              selectedTagId: cubit.tagFilter,
+              availableTags: _extractTags(),
               searchQuery: cubit.searchFilter,
               members: members,
               onPrioritySelected: (p) => cubit.setFilter(priority: p),
               onAssigneeSelected: (a) => cubit.setFilter(assigneeId: a),
+              onTagSelected: (t) =>
+                  cubit.setFilter(tagId: t, clearTag: t == null),
               onSearchChanged: (q) => cubit.setFilter(search: q),
               onClearFilters: cubit.clearFilters,
             ),

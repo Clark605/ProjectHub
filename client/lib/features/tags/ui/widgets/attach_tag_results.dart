@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
 
@@ -33,6 +31,7 @@ class AttachTagResults extends StatelessWidget {
       );
     }
 
+    final theme = Theme.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,23 +39,26 @@ class AttachTagResults extends StatelessWidget {
         if (canCreate)
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: const Icon(
+            leading: Icon(
               Icons.add_circle_outline,
-              color: AppColors.primary,
+              color: theme.colorScheme.primary,
             ),
             title: Text(
               'Create "$query"',
-              style: const TextStyle(color: AppColors.primary, fontSize: 13),
+              style: TextStyle(color: theme.colorScheme.primary, fontSize: 13),
             ),
             onTap: () => onCreateTag(query),
           ),
         if (filteredTags.isEmpty && !canCreate)
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Center(
               child: Text(
                 'No tags available',
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                style: TextStyle(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontSize: 13,
+                ),
               ),
             ),
           )

@@ -15,6 +15,11 @@ _CreateTaskRequest _$CreateTaskRequestFromJson(Map<String, dynamic> json) =>
       dueDate: json['dueDate'] == null
           ? null
           : DateTime.parse(json['dueDate'] as String),
+      tagIds:
+          (json['tagIds'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$CreateTaskRequestToJson(_CreateTaskRequest instance) =>
@@ -24,4 +29,5 @@ Map<String, dynamic> _$CreateTaskRequestToJson(_CreateTaskRequest instance) =>
       'priority': instance.priority,
       'assigneeId': instance.assigneeId,
       'dueDate': instance.dueDate?.toIso8601String(),
+      'tagIds': instance.tagIds,
     };

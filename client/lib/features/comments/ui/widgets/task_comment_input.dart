@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/core/theme/app_colors.dart';
-
 class TaskCommentInput extends StatefulWidget {
   const TaskCommentInput({
     super.key,
@@ -35,12 +33,13 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainerLow,
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: theme.colorScheme.outlineVariant),
       ),
       child: Row(
         children: [
@@ -49,19 +48,19 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
               controller: _controller,
               minLines: 1,
               maxLines: 3,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 13,
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
               ),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 hintText: 'Write a comment...',
                 hintStyle: TextStyle(
                   fontSize: 13,
-                  color: AppColors.textSecondary,
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
                 border: InputBorder.none,
                 isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 4),
+                contentPadding: const EdgeInsets.symmetric(vertical: 4),
               ),
               onSubmitted: (_) => _submit(),
             ),
@@ -76,7 +75,7 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
           else
             IconButton(
               icon: const Icon(Icons.send_rounded, size: 18),
-              color: AppColors.primary,
+              color: theme.colorScheme.primary,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
               onPressed: _submit,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_task_card_footer.dart';
+import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
@@ -13,6 +14,7 @@ class KanbanTaskCard extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onMove;
   final VoidCallback? onDelete;
+  final ValueChanged<TagDto>? onTagTap;
 
   const KanbanTaskCard({
     super.key,
@@ -21,6 +23,7 @@ class KanbanTaskCard extends StatelessWidget {
     this.onTap,
     this.onMove,
     this.onDelete,
+    this.onTagTap,
   });
 
   @override
@@ -143,7 +146,14 @@ class KanbanTaskCard extends StatelessWidget {
                               spacing: 4,
                               runSpacing: 4,
                               children: task.tags
-                                  .map((t) => TagChip(tag: t))
+                                  .map(
+                                    (t) => TagChip(
+                                      tag: t,
+                                      onTap: onTagTap != null
+                                          ? () => onTagTap!(t)
+                                          : null,
+                                    ),
+                                  )
                                   .toList(),
                             ),
                           ],

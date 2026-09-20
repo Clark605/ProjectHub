@@ -4,7 +4,9 @@ import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_assignee_due_date_row.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_header.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_priority_selector.dart';
+import 'package:client/features/kanban/ui/widgets/create_task_tags_selector.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_text_fields.dart';
+import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
@@ -66,6 +68,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
   late TaskStatus _selectedStatus;
   String? _selectedAssigneeId;
   DateTime? _selectedDueDate;
+  final List<TagDto> _selectedTags = [];
   bool _isSubmitting = false;
 
   @override
@@ -105,6 +108,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
         priority: _selectedPriority.toServerString(),
         assigneeId: _selectedAssigneeId,
         dueDate: _selectedDueDate,
+        tagIds: _selectedTags.map((t) => t.id).toList(),
       );
       await widget.onSubmit(request, _selectedStatus.toServerString());
       if (mounted) Navigator.of(context).pop();
@@ -150,6 +154,15 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                       setState(() => _selectedAssigneeId = val),
                   onPickDueDate: _pickDueDate,
                   onClearDueDate: () => setState(() => _selectedDueDate = null),
+                ),
+                const SizedBox(height: 16),
+                CreateTaskTagsSelector(
+                  projectId: widget.projectId,
+                  selectedTags: _selectedTags,
+                  onTagAdded: (t) => setState(() => _selectedTags.add(t)),
+                  onTagRemoved: (t) => setState(
+                    () => _selectedTags.removeWhere((x) => x.id == t.id),
+                  ),
                 ),
                 const SizedBox(height: 24),
                 AppButton(
