@@ -47,9 +47,7 @@ class TagChip extends StatelessWidget {
               : baseColor.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: isSelected
-                ? baseColor
-                : baseColor.withValues(alpha: 0.4),
+            color: isSelected ? baseColor : baseColor.withValues(alpha: 0.4),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -77,11 +75,7 @@ class TagChip extends StatelessWidget {
               const SizedBox(width: 4),
               GestureDetector(
                 onTap: onDeleted,
-                child: Icon(
-                  Icons.close_rounded,
-                  size: 14,
-                  color: baseColor,
-                ),
+                child: Icon(Icons.close_rounded, size: 14, color: baseColor),
               ),
             ],
           ],

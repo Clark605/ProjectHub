@@ -16,12 +16,14 @@ class _FakeSignalRService extends SignalRService {
 
   final _taskCreatedCtrl = StreamController<TaskCreatedEvent>.broadcast();
   final _taskUpdatedCtrl = StreamController<TaskUpdatedEvent>.broadcast();
-  final _taskStatusChangedCtrl = StreamController<TaskStatusChangedEvent>.broadcast();
+  final _taskStatusChangedCtrl =
+      StreamController<TaskStatusChangedEvent>.broadcast();
   final _taskAssignedCtrl = StreamController<TaskAssignedEvent>.broadcast();
   final _taskDeletedCtrl = StreamController<TaskDeletedEvent>.broadcast();
   final _commentAddedCtrl = StreamController<CommentAddedEvent>.broadcast();
   final _commentDeletedCtrl = StreamController<CommentDeletedEvent>.broadcast();
-  final _presenceChangedCtrl = StreamController<PresenceChangedEvent>.broadcast();
+  final _presenceChangedCtrl =
+      StreamController<PresenceChangedEvent>.broadcast();
 
   int? joinedWorkspaceId;
   int? leftWorkspaceId;
@@ -31,7 +33,8 @@ class _FakeSignalRService extends SignalRService {
   @override
   Stream<TaskUpdatedEvent> get taskUpdated => _taskUpdatedCtrl.stream;
   @override
-  Stream<TaskStatusChangedEvent> get taskStatusChanged => _taskStatusChangedCtrl.stream;
+  Stream<TaskStatusChangedEvent> get taskStatusChanged =>
+      _taskStatusChangedCtrl.stream;
   @override
   Stream<TaskAssignedEvent> get taskAssigned => _taskAssignedCtrl.stream;
   @override
@@ -41,7 +44,8 @@ class _FakeSignalRService extends SignalRService {
   @override
   Stream<CommentDeletedEvent> get commentDeleted => _commentDeletedCtrl.stream;
   @override
-  Stream<PresenceChangedEvent> get presenceChanged => _presenceChangedCtrl.stream;
+  Stream<PresenceChangedEvent> get presenceChanged =>
+      _presenceChangedCtrl.stream;
 
   @override
   Future<void> joinWorkspace(int workspaceId) async {
@@ -59,7 +63,8 @@ class _FakeSignalRService extends SignalRService {
   void emitTaskAssigned(TaskDto task) => _taskAssignedCtrl.add(task);
   void emitTaskDeleted(TaskDeletedEvent event) => _taskDeletedCtrl.add(event);
   void emitCommentAdded(CommentDto comment) => _commentAddedCtrl.add(comment);
-  void emitCommentDeleted(CommentDeletedEvent event) => _commentDeletedCtrl.add(event);
+  void emitCommentDeleted(CommentDeletedEvent event) =>
+      _commentDeletedCtrl.add(event);
 
   void disposeStreams() {
     _taskCreatedCtrl.close();
@@ -136,7 +141,10 @@ void main() {
 
   test('realtime taskAssigned updates assignee', () async {
     await cubit.loadTasks(1);
-    final updated = sampleTask.copyWith(assigneeId: 'u99', assigneeName: 'Alice');
+    final updated = sampleTask.copyWith(
+      assigneeId: 'u99',
+      assigneeName: 'Alice',
+    );
     signalR.emitTaskAssigned(updated);
     await pumpEventQueue();
 
@@ -144,34 +152,49 @@ void main() {
     expect(loaded.allTasks.first.assigneeName, 'Alice');
   });
 
-  test('realtime commentAdded and commentDeleted modify commentCount', () async {
-    await cubit.loadTasks(1);
-    signalR.emitCommentAdded(CommentDto(
-      id: 1,
-      taskId: 101,
-      authorId: 'u1',
-      authorName: 'User',
-      content: 'Hi',
-      createdAt: DateTime.now(),
-    ));
-    await pumpEventQueue();
+  test(
+    'realtime commentAdded and commentDeleted modify commentCount',
+    () async {
+      await cubit.loadTasks(1);
+      signalR.emitCommentAdded(
+        CommentDto(
+          id: 1,
+          taskId: 101,
+          authorId: 'u1',
+          authorName: 'User',
+          content: 'Hi',
+          createdAt: DateTime.now(),
+        ),
+      );
+      await pumpEventQueue();
 
-    var loaded = cubit.state as KanbanLoaded;
-    expect(loaded.allTasks.first.commentCount, 1);
+      var loaded = cubit.state as KanbanLoaded;
+      expect(loaded.allTasks.first.commentCount, 1);
 
-    signalR.emitCommentDeleted(const CommentDeletedEvent(taskId: 101, commentId: 1));
-    await pumpEventQueue();
+      signalR.emitCommentDeleted(
+        const CommentDeletedEvent(taskId: 101, commentId: 1),
+      );
+      await pumpEventQueue();
 
-    loaded = cubit.state as KanbanLoaded;
-    expect(loaded.allTasks.first.commentCount, 0);
-  });
+      loaded = cubit.state as KanbanLoaded;
+      expect(loaded.allTasks.first.commentCount, 0);
+    },
+  );
 
-  test('realtime taskDeleted removes task and triggers empty state when last task removed', () async {
-    await cubit.loadTasks(1);
-    signalR.emitTaskDeleted(const TaskDeletedEvent(taskId: 101, projectId: 1));
-    await pumpEventQueue();
+  test(
+    'realtime taskDeleted removes task and triggers empty state when last task removed',
+    () async {
+      await cubit.loadTasks(1);
+      signalR.emitTaskDeleted(
+        const TaskDeletedEvent(taskId: 101, projectId: 1),
+      );
+      await pumpEventQueue();
 
-    final isEmpty = cubit.state.maybeWhen(empty: (_, _) => true, orElse: () => false);
-    expect(isEmpty, isTrue);
-  });
+      final isEmpty = cubit.state.maybeWhen(
+        empty: (_, _) => true,
+        orElse: () => false,
+      );
+      expect(isEmpty, isTrue);
+    },
+  );
 }

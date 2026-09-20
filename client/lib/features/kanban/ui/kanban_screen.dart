@@ -8,6 +8,7 @@ import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_sheet.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_app_bar.dart';
+import 'package:client/features/kanban/ui/widgets/kanban_fab.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_view_body.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/project_status.dart';
@@ -37,7 +38,8 @@ class KanbanScreen extends StatefulWidget {
   State<KanbanScreen> createState() => _KanbanScreenState();
 }
 
-class _KanbanScreenState extends State<KanbanScreen> with WidgetsBindingObserver {
+class _KanbanScreenState extends State<KanbanScreen>
+    with WidgetsBindingObserver {
   late final KanbanCubit _cubit;
   late final bool _isInternalCubit;
   ProjectDto? _project;
@@ -50,7 +52,8 @@ class _KanbanScreenState extends State<KanbanScreen> with WidgetsBindingObserver
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _cubit = widget.cubit ??
+    _cubit =
+        widget.cubit ??
         (getIt.isRegistered<KanbanCubit>()
             ? getIt<KanbanCubit>()
             : KanbanCubit(getIt(), getIt(), getIt()));
@@ -82,7 +85,9 @@ class _KanbanScreenState extends State<KanbanScreen> with WidgetsBindingObserver
         final p = await getIt<ProjectRepository>().getProject(widget.projectId);
         if (mounted) setState(() => _project = p);
         if (getIt.isRegistered<WorkspaceRepository>()) {
-          final m = await getIt<WorkspaceRepository>().getMembers(p.workspaceId);
+          final m = await getIt<WorkspaceRepository>().getMembers(
+            p.workspaceId,
+          );
           if (mounted) setState(() => _members = m);
         }
       }
@@ -91,44 +96,46 @@ class _KanbanScreenState extends State<KanbanScreen> with WidgetsBindingObserver
   }
 
   Future<void> _openSettings() async {
-    final r = await Navigator.of(context).pushNamed(
-      RouteNames.projectDetail,
-      arguments: widget.projectId,
-    );
-    if (r == true && mounted) {
+    final r = await Navigator.of(
+      context,
+    ).pushNamed(RouteNames.projectDetail, arguments: widget.projectId);
+    if (!mounted) return;
+    if (r == true) {
       Navigator.of(context).pop(true);
-    } else if (mounted) {
+    } else {
       _loadProjectAndMembers();
       _cubit.loadTasks(widget.projectId, forceRefresh: true);
     }
   }
 
-  void _openCreateTask([String s = 'Backlog']) {
-    CreateTaskSheet.show(
-      context,
-      projectId: widget.projectId,
-      initialStatus: s,
-      members: _members,
-      onSubmit: (req, st) async => _cubit.createTask(widget.projectId, req, initialStatus: st),
-    );
-  }
+  void _openCreateTask([String s = 'Backlog']) => CreateTaskSheet.show(
+    context,
+    projectId: widget.projectId,
+    initialStatus: s,
+    members: _members,
+    onSubmit: (req, st) =>
+        _cubit.createTask(widget.projectId, req, initialStatus: st),
+  );
 
-  void _openTaskDetail(TaskDto task, bool isArchived) {
-    TaskDetailSheet.show(
-      context,
-      task: task,
-      isArchived: isArchived,
-      members: _members,
-      onUpdate: (req) => _cubit.updateTask(task.id, req),
-      onStatusChange: (status) => _cubit.moveTaskStatus(task.id, status),
-      onDelete: () => _cubit.deleteTask(task.id),
-    );
-  }
+  void _openTaskDetail(TaskDto task, bool isArchived) => TaskDetailSheet.show(
+    context,
+    task: task,
+    isArchived: isArchived,
+    members: _members,
+    onUpdate: (req) => _cubit.updateTask(task.id, req),
+    onStatusChange: (status) => _cubit.moveTaskStatus(task.id, status),
+    onDelete: () => _cubit.deleteTask(task.id),
+    onTaskUpdated: (t) => _cubit.updateTaskInLoaded(t.id, t),
+  );
 
   void _onError(String? err) {
     if (err == null || err.isEmpty) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(err), backgroundColor: AppColors.error, behavior: SnackBarBehavior.floating),
+      SnackBar(
+        content: Text(err),
+        backgroundColor: AppColors.error,
+        behavior: SnackBarBehavior.floating,
+      ),
     );
     _cubit.clearErrorMessage();
   }
@@ -136,17 +143,23 @@ class _KanbanScreenState extends State<KanbanScreen> with WidgetsBindingObserver
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final projectName = _project?.name ?? (_isLoadingProject ? '...' : (l10n?.projectsTitle ?? 'Project'));
+    final projectName =
+        _project?.name ??
+        (_isLoadingProject ? '...' : (l10n?.projectsTitle ?? 'Project'));
     final isArchived = _project?.statusEnum == ProjectStatus.archived;
 
     return BlocProvider.value(
       value: _cubit,
       child: BlocConsumer<KanbanCubit, KanbanState>(
         listener: (context, state) {
-          state.maybeWhen(loaded: (_, _, _, _, _, _, _, e) => _onError(e), orElse: () {});
+          state.maybeWhen(
+            loaded: (_, _, _, _, _, _, _, e) => _onError(e),
+            orElse: () {},
+          );
         },
         builder: (context, state) {
-          final isEffectivelyArchived = isArchived ||
+          final isEffectivelyArchived =
+              isArchived ||
               state.maybeWhen(
                 loaded: (_, _, _, a, _, _, _, _) => a,
                 empty: (_, a) => a,
@@ -154,8 +167,9 @@ class _KanbanScreenState extends State<KanbanScreen> with WidgetsBindingObserver
               );
           String? wsAccent;
           try {
-            wsAccent = context.watch<WorkspaceContextCubit>().state.mapOrNull(
+            wsAccent = context.watch<WorkspaceContextCubit>().state.maybeMap(
               loaded: (l) => l.activeWorkspace.accentColor,
+              orElse: () => null,
             );
           } catch (_) {}
 
@@ -164,18 +178,14 @@ class _KanbanScreenState extends State<KanbanScreen> with WidgetsBindingObserver
               projectName: projectName,
               wsAccent: wsAccent,
               workspaceId: _project?.workspaceId,
-              onRefresh: () => _cubit.loadTasks(widget.projectId, forceRefresh: true),
+              onRefresh: () =>
+                  _cubit.loadTasks(widget.projectId, forceRefresh: true),
               onSettings: _openSettings,
             ),
-            floatingActionButton: isEffectivelyArchived
-                ? null
-                : FloatingActionButton.extended(
-                    onPressed: () => _openCreateTask('Backlog'),
-                    backgroundColor: AppColors.electricVioletContainer,
-                    foregroundColor: Colors.white,
-                    icon: const Icon(Icons.add_rounded),
-                    label: Text(l10n?.newTask ?? 'New Task', style: const TextStyle(fontWeight: FontWeight.w600)),
-                  ),
+            floatingActionButton: KanbanFab(
+              isArchived: isEffectivelyArchived,
+              onPressed: () => _openCreateTask('Backlog'),
+            ),
             body: KanbanViewBody(
               state: state,
               projectId: widget.projectId,
@@ -191,7 +201,8 @@ class _KanbanScreenState extends State<KanbanScreen> with WidgetsBindingObserver
               onTaskMove: (t) => MoveToStatusSheet.show(
                 context,
                 task: t,
-                onStatusSelected: (s) => _cubit.moveTaskStatus(t.id, s.toServerString()),
+                onStatusSelected: (s) =>
+                    _cubit.moveTaskStatus(t.id, s.toServerString()),
               ),
               onTaskDelete: (t) => _cubit.deleteTask(t.id),
             ),

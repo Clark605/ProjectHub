@@ -12,9 +12,9 @@ class CommentsCubit extends Cubit<CommentsState> {
     required this.taskId,
     required CommentRepository repository,
     SignalRService? signalRService,
-  })  : _repository = repository,
-        _signalRService = signalRService,
-        super(const CommentsState.initial()) {
+  }) : _repository = repository,
+       _signalRService = signalRService,
+       super(const CommentsState.initial()) {
     _initRealtime();
     loadComments();
   }
@@ -46,10 +46,12 @@ class CommentsCubit extends Cubit<CommentsState> {
     state.maybeWhen(
       loaded: (comments, isSending, errorMessage) {
         if (!comments.any((c) => c.id == comment.id)) {
-          emit(CommentsState.loaded(
-            comments: [...comments, comment],
-            isSending: isSending,
-          ));
+          emit(
+            CommentsState.loaded(
+              comments: [...comments, comment],
+              isSending: isSending,
+            ),
+          );
         }
       },
       orElse: () {},
@@ -59,10 +61,12 @@ class CommentsCubit extends Cubit<CommentsState> {
   void _onCommentDeleted(int commentId) {
     state.maybeWhen(
       loaded: (comments, isSending, errorMessage) {
-        emit(CommentsState.loaded(
-          comments: comments.where((c) => c.id != commentId).toList(),
-          isSending: isSending,
-        ));
+        emit(
+          CommentsState.loaded(
+            comments: comments.where((c) => c.id != commentId).toList(),
+            isSending: isSending,
+          ),
+        );
       },
       orElse: () {},
     );
@@ -91,15 +95,19 @@ class CommentsCubit extends Cubit<CommentsState> {
     try {
       final newComment = await _repository.createComment(taskId, trimmed);
       final exists = currentComments.any((c) => c.id == newComment.id);
-      final updated = exists ? currentComments : [...currentComments, newComment];
+      final updated = exists
+          ? currentComments
+          : [...currentComments, newComment];
       emit(CommentsState.loaded(comments: updated, isSending: false));
       return true;
     } catch (e) {
-      emit(CommentsState.loaded(
-        comments: currentComments,
-        isSending: false,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        CommentsState.loaded(
+          comments: currentComments,
+          isSending: false,
+          errorMessage: e.toString(),
+        ),
+      );
       return false;
     }
   }
@@ -112,14 +120,18 @@ class CommentsCubit extends Cubit<CommentsState> {
 
     try {
       await _repository.deleteComment(commentId);
-      emit(CommentsState.loaded(
-        comments: currentComments.where((c) => c.id != commentId).toList(),
-      ));
+      emit(
+        CommentsState.loaded(
+          comments: currentComments.where((c) => c.id != commentId).toList(),
+        ),
+      );
     } catch (e) {
-      emit(CommentsState.loaded(
-        comments: currentComments,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        CommentsState.loaded(
+          comments: currentComments,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 

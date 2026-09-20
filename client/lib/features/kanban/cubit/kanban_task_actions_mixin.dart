@@ -31,13 +31,20 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
     await safeExecute(
       () async => taskRepository.updateTaskStatus(taskId, newStatus),
       onError: (errorMsg) {
-        final latest = state is KanbanLoaded ? (state as KanbanLoaded).allTasks : originalTasks;
+        final latest = state is KanbanLoaded
+            ? (state as KanbanLoaded).allTasks
+            : originalTasks;
         final rollbackAll = latest
-            .map((t) => t.id == taskId ? t.copyWith(status: originalTask.status) : t)
+            .map(
+              (t) =>
+                  t.id == taskId ? t.copyWith(status: originalTask.status) : t,
+            )
             .toList();
         emitLoaded(
           rollbackAll,
-          errorMessage: errorMsg.isNotEmpty ? errorMsg : 'Failed to move task. Reverted.',
+          errorMessage: errorMsg.isNotEmpty
+              ? errorMsg
+              : 'Failed to move task. Reverted.',
         );
       },
       defaultErrorMessage: 'Failed to update task status',
@@ -57,10 +64,15 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
         if (initialStatus != null &&
             initialStatus.toLowerCase() != 'backlog' &&
             initialStatus.isNotEmpty) {
-          created = await taskRepository.updateTaskStatus(created.id, initialStatus);
+          created = await taskRepository.updateTaskStatus(
+            created.id,
+            initialStatus,
+          );
         }
         final current = state;
-        emitLoaded(current is KanbanLoaded ? [created, ...current.allTasks] : [created]);
+        emitLoaded(
+          current is KanbanLoaded ? [created, ...current.allTasks] : [created],
+        );
         return created;
       },
       onError: (msg) => setLoadedError(msg),
@@ -87,7 +99,10 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
     if (isArchived) return;
     await safeExecute(
       () async {
-        final updated = await taskRepository.updateTaskAssignee(taskId, assigneeId);
+        final updated = await taskRepository.updateTaskAssignee(
+          taskId,
+          assigneeId,
+        );
         updateTaskInLoaded(taskId, updated);
       },
       onError: (msg) => setLoadedError(msg),
@@ -103,9 +118,16 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
         await taskRepository.deleteTask(taskId);
         final current = state;
         if (current is KanbanLoaded) {
-          final updatedAll = current.allTasks.where((t) => t.id != taskId).toList();
+          final updatedAll = current.allTasks
+              .where((t) => t.id != taskId)
+              .toList();
           if (updatedAll.isEmpty) {
-            emit(KanbanState.empty(projectId: current.projectId, isArchived: isArchived));
+            emit(
+              KanbanState.empty(
+                projectId: current.projectId,
+                isArchived: isArchived,
+              ),
+            );
           } else {
             emitLoaded(updatedAll);
           }

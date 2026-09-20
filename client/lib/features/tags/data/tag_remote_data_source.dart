@@ -71,14 +71,17 @@ class TagRemoteDataSourceImpl implements TagRemoteDataSource {
 
   @override
   Future<List<TagDto>> getWorkspaceTags(int workspaceId) {
-    return _guard('Fetching workspace tags for workspace $workspaceId', () async {
-      final res = await _dio.get<List<dynamic>>(
-        ApiConstants.workspaceTags(workspaceId),
-      );
-      return (res.data ?? [])
-          .map((e) => TagDto.fromJson(e as Map<String, dynamic>))
-          .toList();
-    });
+    return _guard(
+      'Fetching workspace tags for workspace $workspaceId',
+      () async {
+        final res = await _dio.get<List<dynamic>>(
+          ApiConstants.workspaceTags(workspaceId),
+        );
+        return (res.data ?? [])
+            .map((e) => TagDto.fromJson(e as Map<String, dynamic>))
+            .toList();
+      },
+    );
   }
 
   @override

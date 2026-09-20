@@ -2,11 +2,17 @@ import 'dart:async';
 
 import 'package:client/core/network/signalr_events.dart';
 import 'package:client/core/network/signalr_service.dart';
+import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 
 mixin KanbanRealtimeMixin {
   SignalRService? get signalRService;
   int? get currentProjectId;
+  KanbanState get state;
+  void emit(KanbanState state);
+  void emitLoaded(List<TaskDto> allTasks, {String? errorMessage});
+  void updateTaskInLoaded(int taskId, TaskDto updated);
+  bool get isArchived;
 
   StreamSubscription<TaskCreatedEvent>? _taskCreatedSub;
   StreamSubscription<TaskUpdatedEvent>? _taskUpdatedSub;
@@ -16,13 +22,89 @@ mixin KanbanRealtimeMixin {
   StreamSubscription<CommentAddedEvent>? _commentAddedSub;
   StreamSubscription<CommentDeletedEvent>? _commentDeletedSub;
 
-  void onRealtimeTaskCreated(TaskDto task);
-  void onRealtimeTaskUpdated(TaskDto task);
-  void onRealtimeTaskStatusChanged(int taskId, String newStatus);
-  void onRealtimeTaskAssigned(int taskId, String? assigneeId, String? assigneeName);
-  void onRealtimeTaskDeleted(int taskId);
-  void onRealtimeCommentAdded(int taskId);
-  void onRealtimeCommentDeleted(int taskId);
+  void onRealtimeTaskCreated(TaskDto task) {
+    state.maybeWhen(
+      loaded: (pId, tasks, allTasks, arch, sF, pF, aF, err) {
+        if (!allTasks.any((t) => t.id == task.id)) {
+          emitLoaded([task, ...allTasks]);
+        }
+      },
+      empty: (_, _) => emitLoaded([task]),
+      orElse: () {},
+    );
+  }
+
+  void onRealtimeTaskUpdated(TaskDto task) => updateTaskInLoaded(task.id, task);
+
+  void onRealtimeTaskStatusChanged(int taskId, String newStatus) {
+    final current = state;
+    if (current is KanbanLoaded) {
+      final t = current.allTasks.where((x) => x.id == taskId).firstOrNull;
+      if (t != null && t.status != newStatus) {
+        updateTaskInLoaded(taskId, t.copyWith(status: newStatus));
+      }
+    }
+  }
+
+  void onRealtimeTaskAssigned(
+    int taskId,
+    String? assigneeId,
+    String? assigneeName,
+  ) {
+    final current = state;
+    if (current is KanbanLoaded) {
+      final t = current.allTasks.where((x) => x.id == taskId).firstOrNull;
+      if (t != null) {
+        updateTaskInLoaded(
+          taskId,
+          t.copyWith(assigneeId: assigneeId, assigneeName: assigneeName),
+        );
+      }
+    }
+  }
+
+  void onRealtimeTaskDeleted(int taskId) {
+    final current = state;
+    if (current is KanbanLoaded) {
+      final remaining = current.allTasks.where((t) => t.id != taskId).toList();
+      if (remaining.isEmpty) {
+        emit(
+          KanbanState.empty(
+            projectId: currentProjectId ?? 0,
+            isArchived: isArchived,
+          ),
+        );
+      } else {
+        emitLoaded(remaining);
+      }
+    }
+  }
+
+  void onRealtimeCommentAdded(int taskId) {
+    final current = state;
+    if (current is KanbanLoaded) {
+      final t = current.allTasks.where((x) => x.id == taskId).firstOrNull;
+      if (t != null) {
+        updateTaskInLoaded(
+          taskId,
+          t.copyWith(commentCount: t.commentCount + 1),
+        );
+      }
+    }
+  }
+
+  void onRealtimeCommentDeleted(int taskId) {
+    final current = state;
+    if (current is KanbanLoaded) {
+      final t = current.allTasks.where((x) => x.id == taskId).firstOrNull;
+      if (t != null && t.commentCount > 0) {
+        updateTaskInLoaded(
+          taskId,
+          t.copyWith(commentCount: t.commentCount - 1),
+        );
+      }
+    }
+  }
 
   void subscribeToRealtime() {
     unsubscribeFromRealtime();

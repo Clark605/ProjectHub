@@ -45,7 +45,8 @@ class SignalRService {
 
     final url = ApiConstants.workspaceHubUrl;
     final options = HttpConnectionOptions(
-      accessTokenFactory: () async => (await _secureStorage.getAccessToken()) ?? '',
+      accessTokenFactory: () async =>
+          (await _secureStorage.getAccessToken()) ?? '',
     );
 
     _connection = HubConnectionBuilder()

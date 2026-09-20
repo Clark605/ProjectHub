@@ -22,8 +22,11 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
   int? _workspaceId;
   bool _isArchived = false;
 
-  KanbanCubit(this._taskRepository, this._projectRepository, [this._signalRService])
-      : super(const KanbanState.initial());
+  KanbanCubit(
+    this._taskRepository,
+    this._projectRepository, [
+    this._signalRService,
+  ]) : super(const KanbanState.initial());
 
   @override
   TaskRepository get taskRepository => _taskRepository;
@@ -37,23 +40,27 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
 
   @override
   void emitLoaded(List<TaskDto> allTasks, {String? errorMessage}) {
-    emit(KanbanState.loaded(
-      projectId: _projectId ?? 0,
-      tasks: applyFilters(allTasks),
-      allTasks: allTasks,
-      isArchived: _isArchived,
-      searchFilter: searchFilter,
-      priorityFilter: priorityFilter,
-      assigneeFilter: assigneeFilter,
-      errorMessage: errorMessage,
-    ));
+    emit(
+      KanbanState.loaded(
+        projectId: _projectId ?? 0,
+        tasks: applyFilters(allTasks),
+        allTasks: allTasks,
+        isArchived: _isArchived,
+        searchFilter: searchFilter,
+        priorityFilter: priorityFilter,
+        assigneeFilter: assigneeFilter,
+        errorMessage: errorMessage,
+      ),
+    );
   }
 
   @override
   void updateTaskInLoaded(int taskId, TaskDto updated) {
     final current = state;
     if (current is KanbanLoaded) {
-      emitLoaded(current.allTasks.map((t) => t.id == taskId ? updated : t).toList());
+      emitLoaded(
+        current.allTasks.map((t) => t.id == taskId ? updated : t).toList(),
+      );
     }
   }
 
@@ -83,7 +90,10 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
     await safeExecute(
       () async {
         try {
-          final p = await _projectRepository.getProject(projectId, forceRefresh: forceRefresh);
+          final p = await _projectRepository.getProject(
+            projectId,
+            forceRefresh: forceRefresh,
+          );
           _isArchived = p.statusEnum == ProjectStatus.archived;
           _workspaceId = p.workspaceId;
           await _signalRService?.joinWorkspace(p.workspaceId);
@@ -92,9 +102,14 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
           _isArchived = false;
         }
 
-        final tasks = await _taskRepository.getTasksByProject(projectId, forceRefresh: forceRefresh);
+        final tasks = await _taskRepository.getTasksByProject(
+          projectId,
+          forceRefresh: forceRefresh,
+        );
         if (tasks.isEmpty) {
-          emit(KanbanState.empty(projectId: projectId, isArchived: _isArchived));
+          emit(
+            KanbanState.empty(projectId: projectId, isArchived: _isArchived),
+          );
         } else {
           emitLoaded(tasks);
         }
@@ -108,87 +123,22 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
   Future<void> refreshOnFocus() async {
     if (_projectId == null) return;
     try {
-      final tasks = await _taskRepository.getTasksByProject(_projectId!, forceRefresh: true);
+      final tasks = await _taskRepository.getTasksByProject(
+        _projectId!,
+        forceRefresh: true,
+      );
       if (tasks.isEmpty) {
-        emit(KanbanState.empty(projectId: _projectId!, isArchived: _isArchived));
+        emit(
+          KanbanState.empty(projectId: _projectId!, isArchived: _isArchived),
+        );
       } else {
         final current = state;
-        emitLoaded(tasks, errorMessage: current is KanbanLoaded ? current.errorMessage : null);
+        emitLoaded(
+          tasks,
+          errorMessage: current is KanbanLoaded ? current.errorMessage : null,
+        );
       }
     } catch (_) {}
-  }
-
-  @override
-  void onRealtimeTaskCreated(TaskDto task) {
-    state.maybeWhen(
-      loaded: (projectId, tasks, allTasks, isArchived, sFilter, pFilter, aFilter, err) {
-        if (!allTasks.any((t) => t.id == task.id)) {
-          emitLoaded([task, ...allTasks]);
-        }
-      },
-      empty: (projectId, isArchived) => emitLoaded([task]),
-      orElse: () {},
-    );
-  }
-
-  @override
-  void onRealtimeTaskUpdated(TaskDto task) => updateTaskInLoaded(task.id, task);
-
-  @override
-  void onRealtimeTaskStatusChanged(int taskId, String newStatus) {
-    final current = state;
-    if (current is KanbanLoaded) {
-      final t = current.allTasks.where((x) => x.id == taskId).firstOrNull;
-      if (t != null && t.status != newStatus) {
-        updateTaskInLoaded(taskId, t.copyWith(status: newStatus));
-      }
-    }
-  }
-
-  @override
-  void onRealtimeTaskAssigned(int taskId, String? assigneeId, String? assigneeName) {
-    final current = state;
-    if (current is KanbanLoaded) {
-      final t = current.allTasks.where((x) => x.id == taskId).firstOrNull;
-      if (t != null) {
-        updateTaskInLoaded(taskId, t.copyWith(assigneeId: assigneeId, assigneeName: assigneeName));
-      }
-    }
-  }
-
-  @override
-  void onRealtimeTaskDeleted(int taskId) {
-    final current = state;
-    if (current is KanbanLoaded) {
-      final remaining = current.allTasks.where((t) => t.id != taskId).toList();
-      if (remaining.isEmpty) {
-        emit(KanbanState.empty(projectId: _projectId ?? 0, isArchived: _isArchived));
-      } else {
-        emitLoaded(remaining);
-      }
-    }
-  }
-
-  @override
-  void onRealtimeCommentAdded(int taskId) {
-    final current = state;
-    if (current is KanbanLoaded) {
-      final t = current.allTasks.where((x) => x.id == taskId).firstOrNull;
-      if (t != null) {
-        updateTaskInLoaded(taskId, t.copyWith(commentCount: t.commentCount + 1));
-      }
-    }
-  }
-
-  @override
-  void onRealtimeCommentDeleted(int taskId) {
-    final current = state;
-    if (current is KanbanLoaded) {
-      final t = current.allTasks.where((x) => x.id == taskId).firstOrNull;
-      if (t != null && t.commentCount > 0) {
-        updateTaskInLoaded(taskId, t.copyWith(commentCount: t.commentCount - 1));
-      }
-    }
   }
 
   @override

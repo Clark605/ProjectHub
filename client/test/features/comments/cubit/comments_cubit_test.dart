@@ -34,7 +34,10 @@ class FakeCommentRepository implements CommentRepository {
   @override
   Future<CommentDto> updateComment(int commentId, String content) async {
     final index = comments.indexWhere((c) => c.id == commentId);
-    final updated = comments[index].copyWith(content: content, updatedAt: DateTime.now());
+    final updated = comments[index].copyWith(
+      content: content,
+      updatedAt: DateTime.now(),
+    );
     comments[index] = updated;
     return updated;
   }
@@ -50,19 +53,22 @@ class FakeSignalRService extends SignalRService {
 
   final _taskCreatedCtrl = StreamController<TaskCreatedEvent>.broadcast();
   final _taskUpdatedCtrl = StreamController<TaskUpdatedEvent>.broadcast();
-  final _taskStatusChangedCtrl = StreamController<TaskStatusChangedEvent>.broadcast();
+  final _taskStatusChangedCtrl =
+      StreamController<TaskStatusChangedEvent>.broadcast();
   final _taskAssignedCtrl = StreamController<TaskAssignedEvent>.broadcast();
   final _taskDeletedCtrl = StreamController<TaskDeletedEvent>.broadcast();
   final _commentAddedCtrl = StreamController<CommentAddedEvent>.broadcast();
   final _commentDeletedCtrl = StreamController<CommentDeletedEvent>.broadcast();
-  final _presenceChangedCtrl = StreamController<PresenceChangedEvent>.broadcast();
+  final _presenceChangedCtrl =
+      StreamController<PresenceChangedEvent>.broadcast();
 
   @override
   Stream<TaskCreatedEvent> get taskCreated => _taskCreatedCtrl.stream;
   @override
   Stream<TaskUpdatedEvent> get taskUpdated => _taskUpdatedCtrl.stream;
   @override
-  Stream<TaskStatusChangedEvent> get taskStatusChanged => _taskStatusChangedCtrl.stream;
+  Stream<TaskStatusChangedEvent> get taskStatusChanged =>
+      _taskStatusChangedCtrl.stream;
   @override
   Stream<TaskAssignedEvent> get taskAssigned => _taskAssignedCtrl.stream;
   @override
@@ -72,10 +78,12 @@ class FakeSignalRService extends SignalRService {
   @override
   Stream<CommentDeletedEvent> get commentDeleted => _commentDeletedCtrl.stream;
   @override
-  Stream<PresenceChangedEvent> get presenceChanged => _presenceChangedCtrl.stream;
+  Stream<PresenceChangedEvent> get presenceChanged =>
+      _presenceChangedCtrl.stream;
 
   void emitCommentAdded(CommentDto comment) => _commentAddedCtrl.add(comment);
-  void emitCommentDeleted(CommentDeletedEvent event) => _commentDeletedCtrl.add(event);
+  void emitCommentDeleted(CommentDeletedEvent event) =>
+      _commentDeletedCtrl.add(event);
 
   void disposeStreams() {
     _taskCreatedCtrl.close();
@@ -157,7 +165,9 @@ void main() {
     expect(withAdded, isNotNull);
     expect(withAdded!.comments.any((c) => c.id == 99), isTrue);
 
-    signalR.emitCommentDeleted(const CommentDeletedEvent(taskId: 42, commentId: 99));
+    signalR.emitCommentDeleted(
+      const CommentDeletedEvent(taskId: 42, commentId: 99),
+    );
     await pumpEventQueue();
 
     final withDeleted = cubit.state.mapOrNull(loaded: (l) => l);

@@ -4,7 +4,7 @@ import 'package:client/core/di/injection.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/data/tag_repository.dart';
-import 'package:client/features/tags/ui/widgets/tag_chip.dart';
+import 'package:client/features/tags/ui/widgets/attach_tag_results.dart';
 
 class AttachTagModal extends StatefulWidget {
   const AttachTagModal({
@@ -60,10 +60,22 @@ class _AttachTagModalState extends State<AttachTagModal> {
   Future<void> _loadTags() async {
     setState(() => _isLoading = true);
     try {
-      final tags = await _tagRepository.getAvailableTagsForProject(widget.projectId);
-      if (mounted) setState(() { _availableTags = tags; _isLoading = false; });
+      final tags = await _tagRepository.getAvailableTagsForProject(
+        widget.projectId,
+      );
+      if (mounted) {
+        setState(() {
+          _availableTags = tags;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
-      if (mounted) setState(() { _error = e.toString(); _isLoading = false; });
+      if (mounted) {
+        setState(() {
+          _error = e.toString();
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -73,13 +85,21 @@ class _AttachTagModalState extends State<AttachTagModal> {
 
     setState(() => _isLoading = true);
     try {
-      final newTag = await _tagRepository.createProjectTag(widget.projectId, trimmed);
+      final newTag = await _tagRepository.createProjectTag(
+        widget.projectId,
+        trimmed,
+      );
       if (mounted) {
         widget.onTagSelected(newTag);
         Navigator.of(context).pop();
       }
     } catch (e) {
-      if (mounted) setState(() { _error = e.toString(); _isLoading = false; });
+      if (mounted) {
+        setState(() {
+          _error = e.toString();
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -94,9 +114,15 @@ class _AttachTagModalState extends State<AttachTagModal> {
     final query = _searchController.text.trim().toLowerCase();
     final attachedIds = widget.currentTags.map((t) => t.id).toSet();
     final filtered = _availableTags
-        .where((t) => !attachedIds.contains(t.id) && t.name.toLowerCase().contains(query))
+        .where(
+          (t) =>
+              !attachedIds.contains(t.id) &&
+              t.name.toLowerCase().contains(query),
+        )
         .toList();
-    final canCreate = query.isNotEmpty && !_availableTags.any((t) => t.name.toLowerCase() == query);
+    final canCreate =
+        query.isNotEmpty &&
+        !_availableTags.any((t) => t.name.toLowerCase() == query);
 
     return Padding(
       padding: EdgeInsets.only(
@@ -112,8 +138,18 @@ class _AttachTagModalState extends State<AttachTagModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Attach Tag (Max 5)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
-              IconButton(icon: const Icon(Icons.close, size: 20), onPressed: () => Navigator.of(context).pop()),
+              const Text(
+                'Attach Tag (Max 5)',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.close, size: 20),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -126,40 +162,32 @@ class _AttachTagModalState extends State<AttachTagModal> {
               prefixIcon: const Icon(Icons.search, size: 18),
               filled: true,
               fillColor: AppColors.surfaceContainerLow,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: AppColors.border)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: AppColors.border),
+              ),
               contentPadding: const EdgeInsets.symmetric(vertical: 10),
             ),
           ),
-          if (_error != null) ...[const SizedBox(height: 8), Text(_error!, style: const TextStyle(color: AppColors.error, fontSize: 12))],
-          const SizedBox(height: 14),
-          if (_isLoading)
-            const Center(child: Padding(padding: EdgeInsets.all(16.0), child: CircularProgressIndicator(strokeWidth: 2)))
-          else ...[
-            if (canCreate)
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.add_circle_outline, color: AppColors.primary),
-                title: Text('Create "$query"', style: const TextStyle(color: AppColors.primary, fontSize: 13)),
-                onTap: () => _createAndSelectTag(query),
-              ),
-            if (filtered.isEmpty && !canCreate)
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
-                child: Center(child: Text('No tags available', style: TextStyle(color: AppColors.textSecondary, fontSize: 13))),
-              )
-            else
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: filtered.map((tag) => TagChip(
-                  tag: tag,
-                  onTap: () {
-                    widget.onTagSelected(tag);
-                    Navigator.of(context).pop();
-                  },
-                )).toList(),
-              ),
+          if (_error != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              _error!,
+              style: const TextStyle(color: AppColors.error, fontSize: 12),
+            ),
           ],
+          const SizedBox(height: 14),
+          AttachTagResults(
+            isLoading: _isLoading,
+            canCreate: canCreate,
+            query: query,
+            filteredTags: filtered,
+            onCreateTag: _createAndSelectTag,
+            onSelectTag: (tag) {
+              widget.onTagSelected(tag);
+              Navigator.of(context).pop();
+            },
+          ),
         ],
       ),
     );

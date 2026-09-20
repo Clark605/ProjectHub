@@ -49,7 +49,10 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
               controller: _controller,
               minLines: 1,
               maxLines: 3,
-              style: const TextStyle(fontSize: 13, color: AppColors.textPrimary),
+              style: const TextStyle(
+                fontSize: 13,
+                color: AppColors.textPrimary,
+              ),
               decoration: const InputDecoration(
                 hintText: 'Write a comment...',
                 hintStyle: TextStyle(

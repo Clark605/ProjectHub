@@ -56,7 +56,9 @@ class TaskDetailReadView extends StatelessWidget {
             color: task.description.isNotEmpty
                 ? theme.colorScheme.onSurface
                 : theme.colorScheme.onSurfaceVariant,
-            fontStyle: task.description.isEmpty ? FontStyle.italic : FontStyle.normal,
+            fontStyle: task.description.isEmpty
+                ? FontStyle.italic
+                : FontStyle.normal,
             height: 1.5,
           ),
         ),
@@ -93,7 +95,9 @@ class TaskDetailReadView extends StatelessWidget {
           context,
           icon: Icons.history_edu_rounded,
           label: l10n?.taskCreatedBy ?? 'Created By',
-          value: task.createdByName.isNotEmpty ? task.createdByName : (l10n?.unknownUser ?? 'Unknown'),
+          value: task.createdByName.isNotEmpty
+              ? task.createdByName
+              : (l10n?.unknownUser ?? 'Unknown'),
         ),
         if (task.createdAt != null) ...[
           const SizedBox(height: 12),
@@ -101,7 +105,9 @@ class TaskDetailReadView extends StatelessWidget {
             context,
             icon: Icons.access_time_rounded,
             label: l10n?.taskCreatedAt ?? 'Created',
-            value: DateFormat('MMM d, yyyy • h:mm a').format(task.createdAt!.toLocal()),
+            value: DateFormat(
+              'MMM d, yyyy • h:mm a',
+            ).format(task.createdAt!.toLocal()),
           ),
         ],
         if (getIt.isRegistered<CommentRepository>()) ...[
@@ -135,7 +141,11 @@ class TaskDetailReadView extends StatelessWidget {
       ),
       child: Text(
         l10n?.taskOverdue ?? 'Overdue',
-        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.error),
+        style: const TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: AppColors.error,
+        ),
       ),
     );
   }
@@ -153,9 +163,20 @@ class TaskDetailReadView extends StatelessWidget {
       children: [
         Icon(icon, size: 18, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: 10),
-        Text(label, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+        Text(
+          label,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
         const Spacer(),
-        Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600, color: valueColor)),
+        Text(
+          value,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: valueColor,
+          ),
+        ),
         if (trailing != null) ...[const SizedBox(width: 8), trailing],
       ],
     );

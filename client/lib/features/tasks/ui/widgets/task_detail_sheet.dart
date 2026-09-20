@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/di/injection.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
-import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/data/tag_repository.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/update_task_request.dart';
@@ -22,6 +21,7 @@ class TaskDetailSheet extends StatefulWidget {
   final Future<void> Function(UpdateTaskRequest request) onUpdate;
   final Future<void> Function(String newStatus) onStatusChange;
   final Future<void> Function() onDelete;
+  final ValueChanged<TaskDto>? onTaskUpdated;
 
   const TaskDetailSheet({
     super.key,
@@ -31,6 +31,7 @@ class TaskDetailSheet extends StatefulWidget {
     required this.onUpdate,
     required this.onStatusChange,
     required this.onDelete,
+    this.onTaskUpdated,
   });
 
   static Future<void> show(
@@ -38,27 +39,27 @@ class TaskDetailSheet extends StatefulWidget {
     required TaskDto task,
     bool isArchived = false,
     List<MemberDto> members = const [],
-    required Future<void> Function(UpdateTaskRequest request) onUpdate,
-    required Future<void> Function(String newStatus) onStatusChange,
+    required Future<void> Function(UpdateTaskRequest) onUpdate,
+    required Future<void> Function(String) onStatusChange,
     required Future<void> Function() onDelete,
-  }) {
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) => TaskDetailSheet(
-        task: task,
-        isArchived: isArchived,
-        members: members,
-        onUpdate: onUpdate,
-        onStatusChange: onStatusChange,
-        onDelete: onDelete,
-      ),
-    );
-  }
+    ValueChanged<TaskDto>? onTaskUpdated,
+  }) => showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Theme.of(context).colorScheme.surface,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (_) => TaskDetailSheet(
+      task: task,
+      isArchived: isArchived,
+      members: members,
+      onUpdate: onUpdate,
+      onStatusChange: onStatusChange,
+      onDelete: onDelete,
+      onTaskUpdated: onTaskUpdated,
+    ),
+  );
 
   @override
   State<TaskDetailSheet> createState() => _TaskDetailSheetState();
@@ -74,23 +75,28 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
     _currentTask = widget.task;
   }
 
-  Future<void> _handleUpdate(UpdateTaskRequest request) async {
-    await widget.onUpdate(request);
-    final member = widget.members.where((m) => m.userId == request.assigneeId).firstOrNull;
-
+  Future<void> _handleUpdate(UpdateTaskRequest req) async {
+    await widget.onUpdate(req);
+    final m = widget.members
+        .where((x) => x.userId == req.assigneeId)
+        .firstOrNull;
     if (mounted) {
+      final u = _currentTask.copyWith(
+        title: req.title,
+        description: req.description,
+        priority: req.priority,
+        assigneeId: req.assigneeId,
+        assigneeName: req.assigneeId == null
+            ? null
+            : (m?.name ?? _currentTask.assigneeName),
+        dueDate: req.dueDate,
+        updatedAt: DateTime.now(),
+      );
       setState(() {
-        _currentTask = _currentTask.copyWith(
-          title: request.title,
-          description: request.description,
-          priority: request.priority,
-          assigneeId: request.assigneeId,
-          assigneeName: request.assigneeId == null ? null : (member?.name ?? _currentTask.assigneeName),
-          dueDate: request.dueDate,
-          updatedAt: DateTime.now(),
-        );
+        _currentTask = u;
         _isEditMode = false;
       });
+      widget.onTaskUpdated?.call(u);
     }
   }
 
@@ -107,47 +113,48 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
     await MoveToStatusSheet.show(
       context,
       task: _currentTask,
-      onStatusSelected: (newStatus) async {
-        await widget.onStatusChange(newStatus.toServerString());
+      onStatusSelected: (s) async {
+        await widget.onStatusChange(s.toServerString());
         if (mounted) {
-          setState(() => _currentTask = _currentTask.copyWith(status: newStatus.toServerString()));
+          final u = _currentTask.copyWith(status: s.toServerString());
+          setState(() => _currentTask = u);
+          widget.onTaskUpdated?.call(u);
         }
       },
     );
   }
 
-  Future<void> _onTagAdded(TagDto tag) async {
+  Future<void> _mutateTag(Future<TaskDto> Function() mutate) async {
     try {
-      final updated = await getIt<TagRepository>().attachTagToTask(_currentTask.id, tag.id);
-      if (mounted) setState(() => _currentTask = updated);
+      final u = await mutate();
+      if (mounted) {
+        setState(() => _currentTask = u);
+        widget.onTaskUpdated?.call(u);
+      }
     } catch (_) {}
   }
 
-  Future<void> _onTagRemoved(TagDto tag) async {
-    try {
-      final updated = await getIt<TagRepository>().detachTagFromTask(_currentTask.id, tag.id);
-      if (mounted) setState(() => _currentTask = updated);
-    } catch (_) {}
-  }
+  TagRepository? get _tagRepo =>
+      getIt.isRegistered<TagRepository>() ? getIt<TagRepository>() : null;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-    AppAuthState? authState;
-    try {
-      authState = context.read<AppAuthCubit>().state;
-    } catch (_) {
-      if (getIt.isRegistered<AppAuthCubit>()) {
-        authState = getIt<AppAuthCubit>().state;
-      }
-    }
-    final authUser = authState?.mapOrNull(authenticated: (a) => a.user);
-    final currentUserId = authUser?.id ?? '';
-    final isWorkspaceOwner = widget.members.any((m) => m.userId == currentUserId && m.role == 'Owner');
+    final auth =
+        context.read<AppAuthCubit?>()?.state ??
+        (getIt.isRegistered<AppAuthCubit>()
+            ? getIt<AppAuthCubit>().state
+            : null);
+    final uid =
+        auth?.maybeMap(authenticated: (a) => a.user.id, orElse: () => '') ?? '';
+    final isOwner = widget.members.any(
+      (m) => m.userId == uid && m.role == 'Owner',
+    );
 
     return Padding(
-      padding: EdgeInsets.only(bottom: bottomInset),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
@@ -180,10 +187,18 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                 TaskDetailReadView(
                   task: _currentTask,
                   isArchived: widget.isArchived,
-                  currentUserId: currentUserId,
-                  isWorkspaceOwner: isWorkspaceOwner,
-                  onTagAdded: _onTagAdded,
-                  onTagRemoved: _onTagRemoved,
+                  currentUserId: uid,
+                  isWorkspaceOwner: isOwner,
+                  onTagAdded: (t) => _mutateTag(
+                    () =>
+                        _tagRepo?.attachTagToTask(_currentTask.id, t.id) ??
+                        Future.value(_currentTask),
+                  ),
+                  onTagRemoved: (t) => _mutateTag(
+                    () =>
+                        _tagRepo?.detachTagFromTask(_currentTask.id, t.id) ??
+                        Future.value(_currentTask),
+                  ),
                 )
               else
                 TaskDetailEditForm(

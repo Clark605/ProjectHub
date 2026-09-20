@@ -28,9 +28,11 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
   @override
   void initState() {
     super.initState();
-    final service = widget.signalRService ??
+    final service =
+        widget.signalRService ??
         (getIt.isRegistered<SignalRService>() ? getIt<SignalRService>() : null);
     if (service != null) {
+      service.joinWorkspace(widget.workspaceId);
       _presenceSub = service.presenceChanged.listen((event) {
         if (event.workspaceId == widget.workspaceId && mounted) {
           setState(() {
@@ -46,6 +48,12 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.workspaceId != widget.workspaceId) {
       _onlineUserIds = [];
+      final service =
+          widget.signalRService ??
+          (getIt.isRegistered<SignalRService>()
+              ? getIt<SignalRService>()
+              : null);
+      service?.joinWorkspace(widget.workspaceId);
     }
   }
 

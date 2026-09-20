@@ -62,14 +62,18 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Text(
             projectName,
-            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
             l10n?.kanbanBoard ?? 'Kanban Board',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
+              color: isDark
+                  ? AppColors.textSecondary
+                  : AppColors.lightTextSecondary,
               fontSize: 12,
             ),
           ),
