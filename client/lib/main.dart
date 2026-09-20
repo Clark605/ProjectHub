@@ -33,7 +33,6 @@ void main() async {
   final prefs = getIt<PrefsService>();
   final appAuthCubit = getIt<AppAuthCubit>();
   await appAuthCubit.checkAuthStatus();
-
   final isAuthenticated = appAuthCubit.state.maybeWhen(
     authenticated: (_) => true,
     orElse: () => false,

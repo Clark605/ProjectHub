@@ -24,7 +24,9 @@ class AppAuthCubit extends SafeActionCubit<AppAuthState> {
 
   Future<void> checkAuthStatus() async {
     final user = await _authRepository.restoreSession();
-    if (user == null) {
+    if (user != null) {
+      emit(AppAuthState.authenticated(user));
+    } else {
       state.maybeWhen(
         authenticated: (_) {},
         orElse: () => emit(const AppAuthState.unauthenticated()),
@@ -33,14 +35,11 @@ class AppAuthCubit extends SafeActionCubit<AppAuthState> {
   }
 
   Future<void> syncUser() async {
-    await safeExecute(
-      () async {
-        final user = await _authRepository.getCurrentUser();
-        emit(AppAuthState.authenticated(user));
-        return user;
-      },
-      logTag: 'Auth',
-    );
+    await safeExecute(() async {
+      final user = await _authRepository.getCurrentUser();
+      emit(AppAuthState.authenticated(user));
+      return user;
+    }, logTag: 'Auth');
   }
 
   void setAuthenticated(User user) {
@@ -48,13 +47,10 @@ class AppAuthCubit extends SafeActionCubit<AppAuthState> {
   }
 
   Future<void> logout() async {
-    await safeExecute(
-      () async {
-        await _authRepository.logout();
-        return true;
-      },
-      logTag: 'Auth',
-    );
+    await safeExecute(() async {
+      await _authRepository.logout();
+      return true;
+    }, logTag: 'Auth');
   }
 
   @override
