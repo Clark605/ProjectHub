@@ -95,8 +95,11 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
             controller: _titleController,
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-              labelText: l10n?.taskTitleRequiredLabel ??
-                  (l10n?.taskTitle != null ? '${l10n!.taskTitle} *' : 'Title *'),
+              labelText:
+                  l10n?.taskTitleRequiredLabel ??
+                  (l10n?.taskTitle != null
+                      ? '${l10n!.taskTitle} *'
+                      : 'Title *'),
               filled: true,
               fillColor: theme.colorScheme.surfaceContainer,
               border: OutlineInputBorder(

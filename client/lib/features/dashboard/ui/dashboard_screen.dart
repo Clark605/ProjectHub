@@ -53,10 +53,7 @@ class _DashboardView extends StatefulWidget {
   final VoidCallback? onNavigateToProjects;
   final VoidCallback? onNavigateToMyTasks;
 
-  const _DashboardView({
-    this.onNavigateToProjects,
-    this.onNavigateToMyTasks,
-  });
+  const _DashboardView({this.onNavigateToProjects, this.onNavigateToMyTasks});
 
   @override
   State<_DashboardView> createState() => _DashboardViewState();
@@ -97,7 +94,9 @@ class _DashboardViewState extends State<_DashboardView> {
         return RefreshIndicator(
           onRefresh: () async {
             if (_activeWorkspaceId != null) {
-              await context.read<DashboardCubit>().loadDashboard(_activeWorkspaceId!);
+              await context.read<DashboardCubit>().loadDashboard(
+                _activeWorkspaceId!,
+              );
             }
           },
           child: SingleChildScrollView(
@@ -173,7 +172,9 @@ class _DashboardViewState extends State<_DashboardView> {
             loaded: (s) {
               if (_activeWorkspaceId != s.activeWorkspace.id) {
                 _activeWorkspaceId = s.activeWorkspace.id;
-                context.read<DashboardCubit>().loadDashboard(s.activeWorkspace.id);
+                context.read<DashboardCubit>().loadDashboard(
+                  s.activeWorkspace.id,
+                );
               }
             },
           );

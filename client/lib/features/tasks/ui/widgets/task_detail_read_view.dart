@@ -8,10 +8,7 @@ import 'package:client/l10n/generated/app_localizations.dart';
 class TaskDetailReadView extends StatelessWidget {
   final TaskDto task;
 
-  const TaskDetailReadView({
-    super.key,
-    required this.task,
-  });
+  const TaskDetailReadView({super.key, required this.task});
 
   @override
   Widget build(BuildContext context) {
@@ -118,11 +115,7 @@ class TaskDetailReadView extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(
-          icon,
-          size: 18,
-          color: theme.colorScheme.onSurfaceVariant,
-        ),
+        Icon(icon, size: 18, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: 10),
         Text(
           label,

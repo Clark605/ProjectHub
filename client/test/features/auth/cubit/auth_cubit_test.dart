@@ -33,8 +33,8 @@ class FakeAuthRepository implements AuthRepository {
     if (shouldThrow) {
       throw ValidationException(message: errorMessage);
     }
-    final user = currentUser ??
-        const User(name: 'Test User', email: 'test@example.com');
+    final user =
+        currentUser ?? const User(name: 'Test User', email: 'test@example.com');
     setAuthenticated(user);
     return user;
   }
@@ -44,8 +44,8 @@ class FakeAuthRepository implements AuthRepository {
     if (shouldThrow) {
       throw ValidationException(message: errorMessage);
     }
-    final user = currentUser ??
-        const User(name: 'Test User', email: 'test@example.com');
+    final user =
+        currentUser ?? const User(name: 'Test User', email: 'test@example.com');
     setAuthenticated(user);
     return user;
   }
@@ -97,8 +97,8 @@ class FakeAuthRepository implements AuthRepository {
     if (shouldThrow) {
       throw ValidationException(message: errorMessage);
     }
-    final user = currentUser ??
-        const User(name: 'Test User', email: 'test@example.com');
+    final user =
+        currentUser ?? const User(name: 'Test User', email: 'test@example.com');
     setAuthenticated(user);
     return user;
   }

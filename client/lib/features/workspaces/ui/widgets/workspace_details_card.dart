@@ -117,7 +117,8 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                   const SizedBox(height: 20),
                   WorkspaceAccentPicker(
                     activeAccentId: activeAccentId,
-                    onAccentSelected: (id) => setState(() => _selectedAccent = id),
+                    onAccentSelected: (id) =>
+                        setState(() => _selectedAccent = id),
                   ),
                 ],
                 const SizedBox(height: 20),

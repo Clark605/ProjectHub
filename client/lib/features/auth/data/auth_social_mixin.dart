@@ -19,10 +19,7 @@ mixin AuthSocialMixin {
     if (idToken == null) {
       throw Exception('Google sign-in was cancelled');
     }
-    return externalLogin(
-      provider: 'Google',
-      idToken: idToken,
-    );
+    return externalLogin(provider: 'Google', idToken: idToken);
   }
 
   Future<User> loginWithGithub() async {
@@ -30,9 +27,6 @@ mixin AuthSocialMixin {
     if (code == null) {
       throw Exception('GitHub sign-in was cancelled');
     }
-    return externalLogin(
-      provider: 'GitHub',
-      code: code,
-    );
+    return externalLogin(provider: 'GitHub', code: code);
   }
 }

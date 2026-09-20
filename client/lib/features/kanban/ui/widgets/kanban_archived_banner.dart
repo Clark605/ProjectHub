@@ -16,16 +16,19 @@ class KanbanArchivedBanner extends StatelessWidget {
       color: AppColors.warning.withValues(alpha: 0.15),
       child: Row(
         children: [
-          const Icon(Icons.archive_outlined, size: 18, color: AppColors.warning),
+          const Icon(
+            Icons.archive_outlined,
+            size: 18,
+            color: AppColors.warning,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               l10n?.archivedProjectNotice ??
                   'This project is archived. Tasks and board are read-only.',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(fontWeight: FontWeight.w600),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
         ],

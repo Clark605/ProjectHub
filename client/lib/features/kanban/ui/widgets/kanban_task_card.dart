@@ -77,14 +77,21 @@ class KanbanTaskCard extends StatelessWidget {
                               Expanded(
                                 child: Text(
                                   task.title,
-                                  style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600, height: 1.3),
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    height: 1.3,
+                                  ),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               if (!isArchived)
                                 PopupMenuButton<String>(
-                                  icon: Icon(Icons.more_vert_rounded, size: 16, color: theme.colorScheme.onSurfaceVariant),
+                                  icon: Icon(
+                                    Icons.more_vert_rounded,
+                                    size: 16,
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints(),
                                   onSelected: (action) {
@@ -96,7 +103,11 @@ class KanbanTaskCard extends StatelessWidget {
                                       value: 'move',
                                       child: Row(
                                         children: [
-                                          Icon(Icons.drive_file_move_outlined, size: 18, color: theme.colorScheme.onSurface),
+                                          Icon(
+                                            Icons.drive_file_move_outlined,
+                                            size: 18,
+                                            color: theme.colorScheme.onSurface,
+                                          ),
                                           const SizedBox(width: 8),
                                           Text(l10n?.moveTask ?? 'Move'),
                                         ],
@@ -106,9 +117,18 @@ class KanbanTaskCard extends StatelessWidget {
                                       value: 'delete',
                                       child: Row(
                                         children: [
-                                          const Icon(Icons.delete_outline_rounded, size: 18, color: AppColors.error),
+                                          const Icon(
+                                            Icons.delete_outline_rounded,
+                                            size: 18,
+                                            color: AppColors.error,
+                                          ),
                                           const SizedBox(width: 8),
-                                          Text(l10n?.delete ?? 'Delete', style: const TextStyle(color: AppColors.error)),
+                                          Text(
+                                            l10n?.delete ?? 'Delete',
+                                            style: const TextStyle(
+                                              color: AppColors.error,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),

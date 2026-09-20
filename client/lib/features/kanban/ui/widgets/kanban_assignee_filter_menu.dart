@@ -42,8 +42,9 @@ class KanbanAssigneeFilterMenu extends StatelessWidget {
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
-        deleteIcon:
-            hasSelection ? const Icon(Icons.close_rounded, size: 14) : null,
+        deleteIcon: hasSelection
+            ? const Icon(Icons.close_rounded, size: 14)
+            : null,
         onDeleted: hasSelection ? () => onAssigneeSelected(null) : null,
       ),
       itemBuilder: (context) => [

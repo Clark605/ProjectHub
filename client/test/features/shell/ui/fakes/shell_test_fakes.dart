@@ -55,14 +55,18 @@ class FakeWorkspaceRepository extends Fake implements WorkspaceRepository {
   void setActiveWorkspace(WorkspaceDto? workspace) {}
 
   @override
-  Future<List<WorkspaceDto>> getWorkspaces({bool forceRefresh = false}) async => workspaces;
+  Future<List<WorkspaceDto>> getWorkspaces({bool forceRefresh = false}) async =>
+      workspaces;
 
   @override
-  Future<WorkspaceDto> getWorkspace(int id, {bool forceRefresh = false}) async =>
-      workspaces.firstWhere((w) => w.id == id);
+  Future<WorkspaceDto> getWorkspace(
+    int id, {
+    bool forceRefresh = false,
+  }) async => workspaces.firstWhere((w) => w.id == id);
 
   @override
-  Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async => WorkspaceDto(
+  Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async =>
+      WorkspaceDto(
         id: 2,
         name: request.name,
         description: request.description,
@@ -70,28 +74,36 @@ class FakeWorkspaceRepository extends Fake implements WorkspaceRepository {
       );
 
   @override
-  Future<WorkspaceDto> updateWorkspace(int id, UpdateWorkspaceRequest request) async =>
-      WorkspaceDto(
-        id: id,
-        name: request.name,
-        description: request.description,
-        membership: const WorkspaceMembershipDto(role: 'Owner'),
-      );
+  Future<WorkspaceDto> updateWorkspace(
+    int id,
+    UpdateWorkspaceRequest request,
+  ) async => WorkspaceDto(
+    id: id,
+    name: request.name,
+    description: request.description,
+    membership: const WorkspaceMembershipDto(role: 'Owner'),
+  );
 
   @override
   Future<void> deleteWorkspace(int id) async {}
 
   @override
-  Future<List<MemberDto>> getMembers(int workspaceId, {bool forceRefresh = false}) async => [];
+  Future<List<MemberDto>> getMembers(
+    int workspaceId, {
+    bool forceRefresh = false,
+  }) async => [];
 
   @override
-  Future<MemberDto> addMember(int workspaceId, AddMemberRequest request) async => MemberDto(
-        userId: 'u_new',
-        name: 'New Member',
-        email: request.email,
-        role: 'Member',
-        joinedAt: DateTime.now(),
-      );
+  Future<MemberDto> addMember(
+    int workspaceId,
+    AddMemberRequest request,
+  ) async => MemberDto(
+    userId: 'u_new',
+    name: 'New Member',
+    email: request.email,
+    role: 'Member',
+    joinedAt: DateTime.now(),
+  );
 
   @override
   Future<void> removeMember(int workspaceId, String userId) async {}
@@ -118,12 +130,26 @@ class FakeProjectRepository extends Fake implements ProjectRepository {
       const ProjectDto(id: 1, name: 'Project 1', workspaceId: 1);
 
   @override
-  Future<ProjectDto> createProject(int workspaceId, CreateProjectRequest request) async =>
-      ProjectDto(id: 99, name: request.name, description: request.description, workspaceId: workspaceId);
+  Future<ProjectDto> createProject(
+    int workspaceId,
+    CreateProjectRequest request,
+  ) async => ProjectDto(
+    id: 99,
+    name: request.name,
+    description: request.description,
+    workspaceId: workspaceId,
+  );
 
   @override
-  Future<ProjectDto> updateProject(int id, UpdateProjectRequest request) async =>
-      ProjectDto(id: id, name: request.name, description: request.description, workspaceId: 1);
+  Future<ProjectDto> updateProject(
+    int id,
+    UpdateProjectRequest request,
+  ) async => ProjectDto(
+    id: id,
+    name: request.name,
+    description: request.description,
+    workspaceId: 1,
+  );
 
   @override
   Future<void> deleteProject(int id) async {}
@@ -140,15 +166,24 @@ class FakeProjectRepository extends Fake implements ProjectRepository {
 
 class FakeActivityRepository extends Fake implements ActivityRepository {
   @override
-  Future<List<ActivityEventDto>> getWorkspaceActivities(int workspaceId, {int limit = 20}) async => [];
+  Future<List<ActivityEventDto>> getWorkspaceActivities(
+    int workspaceId, {
+    int limit = 20,
+  }) async => [];
 
   @override
-  Future<List<ActivityEventDto>> getProjectActivities(int projectId, {int limit = 50}) async => [];
+  Future<List<ActivityEventDto>> getProjectActivities(
+    int projectId, {
+    int limit = 50,
+  }) async => [];
 }
 
 class FakeTaskRepository extends Fake implements TaskRepository {
   @override
-  Future<List<TaskDto>> getMyTasks(int workspaceId, {bool forceRefresh = false}) async => [];
+  Future<List<TaskDto>> getMyTasks(
+    int workspaceId, {
+    bool forceRefresh = false,
+  }) async => [];
 
   @override
   Future<List<TaskDto>> getTasksByProject(

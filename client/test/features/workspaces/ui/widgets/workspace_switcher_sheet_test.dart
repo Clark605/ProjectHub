@@ -47,8 +47,10 @@ class _FakeWorkspaceRepository extends Fake implements WorkspaceRepository {
   Future<List<WorkspaceDto>> getWorkspaces() async => workspaces;
 
   @override
-  Future<WorkspaceDto> getWorkspace(int id, {bool forceRefresh = false}) async =>
-      workspaces.firstWhere((w) => w.id == id);
+  Future<WorkspaceDto> getWorkspace(
+    int id, {
+    bool forceRefresh = false,
+  }) async => workspaces.firstWhere((w) => w.id == id);
 
   @override
   Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async {
@@ -63,14 +65,24 @@ class _FakeWorkspaceRepository extends Fake implements WorkspaceRepository {
   }
 
   @override
-  Future<WorkspaceDto> updateWorkspace(int id, UpdateWorkspaceRequest request) async {
+  Future<WorkspaceDto> updateWorkspace(
+    int id,
+    UpdateWorkspaceRequest request,
+  ) async {
     final idx = workspaces.indexWhere((w) => w.id == id);
     if (idx != -1) {
-      final updated = workspaces[idx].copyWith(name: request.name, description: request.description);
+      final updated = workspaces[idx].copyWith(
+        name: request.name,
+        description: request.description,
+      );
       workspaces[idx] = updated;
       return updated;
     }
-    return WorkspaceDto(id: id, name: request.name, description: request.description);
+    return WorkspaceDto(
+      id: id,
+      name: request.name,
+      description: request.description,
+    );
   }
 
   @override

@@ -112,7 +112,9 @@ class MemberTile extends StatelessWidget {
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: isOwner ? primaryColor : theme.colorScheme.onSurfaceVariant,
+                color: isOwner
+                    ? primaryColor
+                    : theme.colorScheme.onSurfaceVariant,
               ),
             ),
           ),

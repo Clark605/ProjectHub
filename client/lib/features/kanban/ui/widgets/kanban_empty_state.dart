@@ -28,9 +28,7 @@ class KanbanEmptyState extends StatelessWidget {
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: theme.colorScheme.outlineVariant,
-          ),
+          border: Border.all(color: theme.colorScheme.outlineVariant),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: isDark ? 0.3 : 0.08),
@@ -71,9 +69,9 @@ class KanbanEmptyState extends StatelessWidget {
             Text(
               isArchived
                   ? (l10n?.noTasksArchivedSubtitle ??
-                      'This project is archived and has no tasks recorded.')
+                        'This project is archived and has no tasks recorded.')
                   : (l10n?.boardIsEmptySubtitle ??
-                      'Start organizing your workflow by creating the first task for this project.'),
+                        'Start organizing your workflow by creating the first task for this project.'),
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),

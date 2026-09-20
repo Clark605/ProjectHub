@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class VersionInfoTile extends StatelessWidget {
@@ -49,7 +49,9 @@ class VersionInfoTile extends StatelessWidget {
                       Text(
                         'Version $version (Build $buildNumber) • Flutter & .NET 10',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.6,
+                          ),
                         ),
                       ),
                     ],

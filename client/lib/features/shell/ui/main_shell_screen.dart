@@ -64,16 +64,16 @@ class _MainShellScreenState extends State<MainShellScreen> {
       final wsCubit = _resolveWsCubit();
       if (wsCubit != null) {
         wsCubit.loadWorkspaces();
-        final activeWs = wsCubit.state.whenOrNull(loaded: (_, active) => active);
+        final activeWs = wsCubit.state.whenOrNull(
+          loaded: (_, active) => active,
+        );
         if (activeWs != null) {
           _lastWorkspaceId = activeWs.id;
           try {
             _resolveProjectsCubit()?.loadProjects(activeWs.id);
           } catch (_) {}
         }
-        wsCubit.state.whenOrNull(
-          empty: () => QuickStartDialog.show(context),
-        );
+        wsCubit.state.whenOrNull(empty: () => QuickStartDialog.show(context));
       }
     });
   }
@@ -84,15 +84,19 @@ class _MainShellScreenState extends State<MainShellScreen> {
 
   void _onProjectSelected(int projectId) {
     setState(() => _selectedIndex = 1);
-    Navigator.of(context).pushNamed(RouteNames.projectDetail, arguments: projectId);
+    Navigator.of(
+      context,
+    ).pushNamed(RouteNames.projectDetail, arguments: projectId);
   }
 
   void _onWorkspaceTap(BuildContext context) {
     final wsCubit = _resolveWsCubit();
-    final hasWorkspaces = wsCubit?.state.maybeWhen(
-      loaded: (workspaces, _) => workspaces.isNotEmpty,
-      orElse: () => false,
-    ) ?? false;
+    final hasWorkspaces =
+        wsCubit?.state.maybeWhen(
+          loaded: (workspaces, _) => workspaces.isNotEmpty,
+          orElse: () => false,
+        ) ??
+        false;
     if (hasWorkspaces) {
       WorkspaceSwitcherSheet.show(context);
     } else {
@@ -135,12 +139,16 @@ class _MainShellScreenState extends State<MainShellScreen> {
         );
       },
       builder: (context, workspaceState) {
-        final activeWorkspace = workspaceState.whenOrNull(loaded: (_, active) => active);
-        final isWsLoading = workspaceState.maybeWhen(
-          loading: () => true,
-          initial: () => true,
-          orElse: () => false,
-        ) && activeWorkspace == null;
+        final activeWorkspace = workspaceState.whenOrNull(
+          loaded: (_, active) => active,
+        );
+        final isWsLoading =
+            workspaceState.maybeWhen(
+              loading: () => true,
+              initial: () => true,
+              orElse: () => false,
+            ) &&
+            activeWorkspace == null;
 
         return ShellResponsiveScaffold(
           selectedIndex: _selectedIndex,

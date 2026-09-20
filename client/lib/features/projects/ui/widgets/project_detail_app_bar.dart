@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-class ProjectDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
+class ProjectDetailAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final String? wsAccent;
 
   const ProjectDetailAppBar({super.key, this.wsAccent});
@@ -45,7 +46,9 @@ class ProjectDetailAppBar extends StatelessWidget implements PreferredSizeWidget
       ),
       title: Text(
         l10n?.projectDetails ?? 'Project Details',
-        style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+        style: theme.textTheme.titleMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

@@ -15,7 +15,8 @@ class CreateTaskSheet extends StatefulWidget {
   final int projectId;
   final String initialStatus;
   final List<MemberDto> members;
-  final Future<void> Function(CreateTaskRequest request, String targetStatus) onSubmit;
+  final Future<void> Function(CreateTaskRequest request, String targetStatus)
+  onSubmit;
 
   const CreateTaskSheet({
     super.key,
@@ -30,7 +31,11 @@ class CreateTaskSheet extends StatefulWidget {
     required int projectId,
     String initialStatus = 'Backlog',
     List<MemberDto> members = const [],
-    required Future<void> Function(CreateTaskRequest request, String targetStatus) onSubmit,
+    required Future<void> Function(
+      CreateTaskRequest request,
+      String targetStatus,
+    )
+    onSubmit,
   }) {
     return showModalBottomSheet(
       context: context,
@@ -133,14 +138,16 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                 const SizedBox(height: 18),
                 CreateTaskPrioritySelector(
                   selectedPriority: _selectedPriority,
-                  onPriorityChanged: (p) => setState(() => _selectedPriority = p),
+                  onPriorityChanged: (p) =>
+                      setState(() => _selectedPriority = p),
                 ),
                 const SizedBox(height: 18),
                 CreateTaskAssigneeDueDateRow(
                   members: widget.members,
                   selectedAssigneeId: _selectedAssigneeId,
                   selectedDueDate: _selectedDueDate,
-                  onAssigneeChanged: (val) => setState(() => _selectedAssigneeId = val),
+                  onAssigneeChanged: (val) =>
+                      setState(() => _selectedAssigneeId = val),
                   onPickDueDate: _pickDueDate,
                   onClearDueDate: () => setState(() => _selectedDueDate = null),
                 ),

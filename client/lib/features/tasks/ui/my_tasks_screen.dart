@@ -77,7 +77,9 @@ class _MyTasksScreenState extends State<MyTasksScreen>
   Future<void> _loadWorkspaceMembers(int workspaceId) async {
     if (getIt.isRegistered<WorkspaceRepository>()) {
       try {
-        final members = await getIt<WorkspaceRepository>().getMembers(workspaceId);
+        final members = await getIt<WorkspaceRepository>().getMembers(
+          workspaceId,
+        );
         if (mounted) setState(() => _workspaceMembers = members);
       } catch (_) {}
     }
@@ -107,7 +109,11 @@ class _MyTasksScreenState extends State<MyTasksScreen>
   void _onError(String? err) {
     if (err == null || err.isEmpty) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(err), backgroundColor: AppColors.error, behavior: SnackBarBehavior.floating),
+      SnackBar(
+        content: Text(err),
+        backgroundColor: AppColors.error,
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -130,9 +136,9 @@ class _MyTasksScreenState extends State<MyTasksScreen>
           String? wsAccent;
           try {
             wsAccent = context.watch<WorkspaceContextCubit>().state.maybeWhen(
-                  loaded: (_, active) => active.accentColor,
-                  orElse: () => null,
-                );
+              loaded: (_, active) => active.accentColor,
+              orElse: () => null,
+            );
           } catch (_) {
             wsAccent = wsCubit?.state.maybeWhen(
               loaded: (_, active) => active.accentColor,
@@ -145,7 +151,10 @@ class _MyTasksScreenState extends State<MyTasksScreen>
               child: RefreshIndicator(
                 onRefresh: () async {
                   if (_activeWorkspaceId != null) {
-                    await _cubit.loadMyTasks(_activeWorkspaceId!, forceRefresh: true);
+                    await _cubit.loadMyTasks(
+                      _activeWorkspaceId!,
+                      forceRefresh: true,
+                    );
                   }
                 },
                 child: CustomScrollView(
@@ -161,7 +170,10 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                       onToggleCollapse: _cubit.toggleDoneVisibility,
                       onRetry: () {
                         if (_activeWorkspaceId != null) {
-                          _cubit.loadMyTasks(_activeWorkspaceId!, forceRefresh: true);
+                          _cubit.loadMyTasks(
+                            _activeWorkspaceId!,
+                            forceRefresh: true,
+                          );
                         }
                       },
                     ),

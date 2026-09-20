@@ -48,9 +48,9 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
     final name = _nameController.text.trim();
     if (name.isEmpty) return;
     context.read<ProfileEditCubit>().updateProfile(
-          name: name,
-          bio: _bioController.text.trim(),
-        );
+      name: name,
+      bio: _bioController.text.trim(),
+    );
   }
 
   @override
@@ -64,7 +64,11 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
         if (state is ProfileEditSuccess) {
           setState(() => _isEditing = false);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(l10n?.profileUpdatedSuccess ?? 'Profile updated successfully!')),
+            SnackBar(
+              content: Text(
+                l10n?.profileUpdatedSuccess ?? 'Profile updated successfully!',
+              ),
+            ),
           );
         }
       },
@@ -84,9 +88,13 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                       height: 64,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                        color: theme.colorScheme.primary.withValues(
+                          alpha: 0.15,
+                        ),
                         border: Border.all(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.6),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.6,
+                          ),
                           width: 2,
                         ),
                       ),
@@ -117,15 +125,21 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                           Text(
                             user?.email ?? '',
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.65,
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
                     IconButton(
-                      icon: Icon(_isEditing ? Icons.close_rounded : Icons.edit_rounded),
-                      tooltip: _isEditing ? (l10n?.cancel ?? 'Cancel') : (l10n?.editProfile ?? 'Edit profile'),
+                      icon: Icon(
+                        _isEditing ? Icons.close_rounded : Icons.edit_rounded,
+                      ),
+                      tooltip: _isEditing
+                          ? (l10n?.cancel ?? 'Cancel')
+                          : (l10n?.editProfile ?? 'Edit profile'),
                       onPressed: () => setState(() => _isEditing = !_isEditing),
                     ),
                   ],
@@ -143,7 +157,9 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                   AppTextField(
                     controller: _bioController,
                     label: l10n?.bio ?? 'Bio',
-                    hintText: l10n?.shortDescriptionHint ?? 'Short description about yourself',
+                    hintText:
+                        l10n?.shortDescriptionHint ??
+                        'Short description about yourself',
                   ),
                   const SizedBox(height: 18),
                   Align(

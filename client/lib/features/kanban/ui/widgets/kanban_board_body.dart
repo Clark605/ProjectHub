@@ -54,9 +54,17 @@ class KanbanBoardBody extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.error_outline_rounded, size: 48, color: AppColors.error),
+              const Icon(
+                Icons.error_outline_rounded,
+                size: 48,
+                color: AppColors.error,
+              ),
               const SizedBox(height: 16),
-              Text(message, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w600)),
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: onRetry,
@@ -72,17 +80,23 @@ class KanbanBoardBody extends StatelessWidget {
         onCreateTask: () => onAddTask(TaskStatus.backlog),
       ),
       loaded: (projId, tasks, allTasks, arch, search, priority, assignee, err) {
-        if (tasks.isEmpty && (search != null || priority != null || assignee != null)) {
+        if (tasks.isEmpty &&
+            (search != null || priority != null || assignee != null)) {
           return Center(
             child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.filter_list_off_rounded, size: 44, color: AppColors.textSecondary),
+                  const Icon(
+                    Icons.filter_list_off_rounded,
+                    size: 44,
+                    color: AppColors.textSecondary,
+                  ),
                   const SizedBox(height: 12),
                   Text(
-                    l10n?.noTasksMatchFilters ?? 'No tasks match active filters',
+                    l10n?.noTasksMatchFilters ??
+                        'No tasks match active filters',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 12),

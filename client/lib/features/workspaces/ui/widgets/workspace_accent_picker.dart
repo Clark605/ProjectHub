@@ -21,11 +21,17 @@ class WorkspaceAccentPicker extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(Icons.palette_outlined, size: 18, color: theme.colorScheme.primary),
+            Icon(
+              Icons.palette_outlined,
+              size: 18,
+              color: theme.colorScheme.primary,
+            ),
             const SizedBox(width: 8),
             Text(
               'Accent Color',
-              style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ],
         ),
@@ -59,7 +65,9 @@ class WorkspaceAccentPicker extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: color,
                       border: Border.all(
-                        color: isSelected ? theme.colorScheme.onSurface : Colors.transparent,
+                        color: isSelected
+                            ? theme.colorScheme.onSurface
+                            : Colors.transparent,
                         width: isSelected ? 2.5 : 0,
                       ),
                     ),

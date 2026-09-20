@@ -51,13 +51,17 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   }) {
     return _guard('Fetching tasks for project $projectId', () async {
       final q = <String, dynamic>{};
-      if (status != null && status.isNotEmpty && status.toLowerCase() != 'all') {
+      if (status != null &&
+          status.isNotEmpty &&
+          status.toLowerCase() != 'all') {
         q['status'] = status;
       }
       if (assigneeId != null && assigneeId.isNotEmpty) {
         q['assigneeId'] = assigneeId;
       }
-      if (priority != null && priority.isNotEmpty && priority.toLowerCase() != 'all') {
+      if (priority != null &&
+          priority.isNotEmpty &&
+          priority.toLowerCase() != 'all') {
         q['priority'] = priority;
       }
 
@@ -65,7 +69,9 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
         ApiConstants.projectTasks(projectId),
         queryParameters: q.isNotEmpty ? q : null,
       );
-      return (res.data as List).map((i) => TaskDto.fromJson(i as Map<String, dynamic>)).toList();
+      return (res.data as List)
+          .map((i) => TaskDto.fromJson(i as Map<String, dynamic>))
+          .toList();
     });
   }
 
@@ -73,7 +79,9 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   Future<List<TaskDto>> getMyTasks(int workspaceId) {
     return _guard('Fetching my tasks for workspace $workspaceId', () async {
       final res = await _dio.get(ApiConstants.workspaceMyTasks(workspaceId));
-      return (res.data as List).map((i) => TaskDto.fromJson(i as Map<String, dynamic>)).toList();
+      return (res.data as List)
+          .map((i) => TaskDto.fromJson(i as Map<String, dynamic>))
+          .toList();
     });
   }
 
@@ -88,7 +96,10 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   @override
   Future<TaskDto> createTask(int projectId, CreateTaskRequest request) {
     return _guard('Creating task in project $projectId', () async {
-      final res = await _dio.post(ApiConstants.projectTasks(projectId), data: request.toJson());
+      final res = await _dio.post(
+        ApiConstants.projectTasks(projectId),
+        data: request.toJson(),
+      );
       return TaskDto.fromJson(res.data as Map<String, dynamic>);
     });
   }
@@ -96,7 +107,10 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   @override
   Future<TaskDto> updateTask(int taskId, UpdateTaskRequest request) {
     return _guard('Updating task $taskId', () async {
-      final res = await _dio.put(ApiConstants.taskById(taskId), data: request.toJson());
+      final res = await _dio.put(
+        ApiConstants.taskById(taskId),
+        data: request.toJson(),
+      );
       return TaskDto.fromJson(res.data as Map<String, dynamic>);
     });
   }
@@ -104,7 +118,10 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   @override
   Future<TaskDto> updateTaskStatus(int taskId, String status) {
     return _guard('Updating status of task $taskId to $status', () async {
-      final res = await _dio.patch(ApiConstants.taskStatus(taskId), data: {'status': status});
+      final res = await _dio.patch(
+        ApiConstants.taskStatus(taskId),
+        data: {'status': status},
+      );
       return TaskDto.fromJson(res.data as Map<String, dynamic>);
     });
   }
@@ -112,7 +129,10 @@ class TaskRemoteDataSourceImpl implements TaskRemoteDataSource {
   @override
   Future<TaskDto> updateTaskAssignee(int taskId, String? assigneeId) {
     return _guard('Updating assignee of task $taskId to $assigneeId', () async {
-      final res = await _dio.patch(ApiConstants.taskAssignee(taskId), data: {'assigneeId': assigneeId});
+      final res = await _dio.patch(
+        ApiConstants.taskAssignee(taskId),
+        data: {'assigneeId': assigneeId},
+      );
       return TaskDto.fromJson(res.data as Map<String, dynamic>);
     });
   }

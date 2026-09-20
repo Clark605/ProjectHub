@@ -30,23 +30,24 @@ import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
 
 /// Builds tab content for the main navigation shell.
 /// Each tab receives its own scoped Cubit via an isolated [BlocProvider].
-Widget buildShellTabContent(int index, {ValueChanged<int>? onSelectTab}) => switch (index) {
+Widget buildShellTabContent(int index, {ValueChanged<int>? onSelectTab}) =>
+    switch (index) {
       0 => BlocProvider(
-          create: (_) => getIt<DashboardCubit>(),
-          child: DashboardScreen(
-            onNavigateToProjects: () => onSelectTab?.call(1),
-            onNavigateToMyTasks: () => onSelectTab?.call(2),
-          ),
+        create: (_) => getIt<DashboardCubit>(),
+        child: DashboardScreen(
+          onNavigateToProjects: () => onSelectTab?.call(1),
+          onNavigateToMyTasks: () => onSelectTab?.call(2),
         ),
+      ),
       1 => const ProjectsScreen(),
       2 => BlocProvider(
-          create: (_) => getIt<MyTasksCubit>(),
-          child: const MyTasksScreen(),
-        ),
+        create: (_) => getIt<MyTasksCubit>(),
+        child: const MyTasksScreen(),
+      ),
       3 => BlocProvider(
-          create: (_) => getIt<ProfileEditCubit>(),
-          child: const ProfileScreen(),
-        ),
+        create: (_) => getIt<ProfileEditCubit>(),
+        child: const ProfileScreen(),
+      ),
       _ => const SizedBox.shrink(),
     };
 
@@ -55,44 +56,41 @@ Widget buildShellTabContent(int index, {ValueChanged<int>? onSelectTab}) => swit
 Widget buildOnboardingRoute() => const OnboardingScreen();
 
 Widget buildLoginRoute() => BlocProvider(
-      create: (_) => getIt<LoginCubit>(),
-      child: const LoginScreen(),
-    );
+  create: (_) => getIt<LoginCubit>(),
+  child: const LoginScreen(),
+);
 
 Widget buildRegisterRoute() => BlocProvider(
-      create: (_) => getIt<RegisterCubit>(),
-      child: const RegisterScreen(),
-    );
+  create: (_) => getIt<RegisterCubit>(),
+  child: const RegisterScreen(),
+);
 
 Widget buildForgotPasswordRoute() => BlocProvider(
-      create: (_) => getIt<ForgotPasswordCubit>(),
-      child: const ForgotPasswordScreen(),
-    );
+  create: (_) => getIt<ForgotPasswordCubit>(),
+  child: const ForgotPasswordScreen(),
+);
 
 Widget buildResetPasswordRoute(String? email) => BlocProvider(
-      create: (_) => getIt<ResetPasswordCubit>(),
-      child: ResetPasswordScreen(initialEmail: email),
-    );
+  create: (_) => getIt<ResetPasswordCubit>(),
+  child: ResetPasswordScreen(initialEmail: email),
+);
 
 Widget buildShellRoute({int initialIndex = 0}) => BlocProvider(
-      create: (_) => getIt<ProjectsListCubit>(),
-      child: MainShellScreen(initialIndex: initialIndex),
-    );
+  create: (_) => getIt<ProjectsListCubit>(),
+  child: MainShellScreen(initialIndex: initialIndex),
+);
 
 Widget buildProjectDetailRoute(int projectId) => BlocProvider(
-      create: (_) => getIt<ProjectDetailCubit>()..loadProject(projectId),
-      child: ProjectDetailScreen(projectId: projectId),
-    );
+  create: (_) => getIt<ProjectDetailCubit>()..loadProject(projectId),
+  child: ProjectDetailScreen(projectId: projectId),
+);
 
 Widget buildWorkspaceSettingsRoute() => BlocProvider(
-      create: (_) => getIt<WorkspaceSettingsCubit>(),
-      child: const WorkspaceSettingsScreen(),
-    );
+  create: (_) => getIt<WorkspaceSettingsCubit>(),
+  child: const WorkspaceSettingsScreen(),
+);
 
-Widget buildKanbanRoute({
-  required int projectId,
-  ProjectDto? initialProject,
-}) =>
+Widget buildKanbanRoute({required int projectId, ProjectDto? initialProject}) =>
     BlocProvider(
       create: (_) => getIt<KanbanCubit>(),
       child: KanbanScreen(projectId: projectId, initialProject: initialProject),

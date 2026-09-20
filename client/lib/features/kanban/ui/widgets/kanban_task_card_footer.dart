@@ -30,7 +30,9 @@ class KanbanTaskCardFooter extends StatelessWidget {
             decoration: BoxDecoration(
               color: isOverdue
                   ? AppColors.error.withValues(alpha: 0.15)
-                  : (isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05)),
+                  : (isDark
+                        ? Colors.white10
+                        : Colors.black.withValues(alpha: 0.05)),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Row(
@@ -39,7 +41,9 @@ class KanbanTaskCardFooter extends StatelessWidget {
                 Icon(
                   Icons.calendar_today_outlined,
                   size: 11,
-                  color: isOverdue ? AppColors.error : theme.colorScheme.onSurfaceVariant,
+                  color: isOverdue
+                      ? AppColors.error
+                      : theme.colorScheme.onSurfaceVariant,
                 ),
                 const SizedBox(width: 4),
                 Text(
@@ -47,7 +51,9 @@ class KanbanTaskCardFooter extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: isOverdue ? FontWeight.w700 : FontWeight.w500,
-                    color: isOverdue ? AppColors.error : theme.colorScheme.onSurfaceVariant,
+                    color: isOverdue
+                        ? AppColors.error
+                        : theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -59,7 +65,12 @@ class KanbanTaskCardFooter extends StatelessWidget {
     );
   }
 
-  Widget _buildAvatar(BuildContext context, ThemeData theme, bool isDark, AppLocalizations? l10n) {
+  Widget _buildAvatar(
+    BuildContext context,
+    ThemeData theme,
+    bool isDark,
+    AppLocalizations? l10n,
+  ) {
     final name = assigneeName;
     if (name != null && name.trim().isNotEmpty) {
       final initial = name.trim().substring(0, 1).toUpperCase();
@@ -70,7 +81,11 @@ class KanbanTaskCardFooter extends StatelessWidget {
           backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.2),
           child: Text(
             initial,
-            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: theme.colorScheme.primary),
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: theme.colorScheme.primary,
+            ),
           ),
         ),
       );
@@ -79,11 +94,15 @@ class KanbanTaskCardFooter extends StatelessWidget {
       message: l10n?.unassigned ?? 'Unassigned',
       child: CircleAvatar(
         radius: 12,
-        backgroundColor: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.06),
+        backgroundColor: isDark
+            ? Colors.white10
+            : Colors.black.withValues(alpha: 0.06),
         child: Icon(
           Icons.person_outline_rounded,
           size: 13,
-          color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
+          color: isDark
+              ? AppColors.textSecondary
+              : AppColors.lightTextSecondary,
         ),
       ),
     );

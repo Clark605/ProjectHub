@@ -34,7 +34,8 @@ class ShellResponsiveScaffold extends StatefulWidget {
   });
 
   @override
-  State<ShellResponsiveScaffold> createState() => _ShellResponsiveScaffoldState();
+  State<ShellResponsiveScaffold> createState() =>
+      _ShellResponsiveScaffoldState();
 }
 
 class _ShellResponsiveScaffoldState extends State<ShellResponsiveScaffold> {
@@ -118,7 +119,8 @@ class _ShellResponsiveScaffoldState extends State<ShellResponsiveScaffold> {
                         isLoading: widget.isWsLoading,
                         onWorkspaceTap: widget.onWorkspaceTap,
                         onSettingsTap: widget.onSettingsTap,
-                        onOpenDrawer: () => _scaffoldKey.currentState?.openDrawer(),
+                        onOpenDrawer: () =>
+                            _scaffoldKey.currentState?.openDrawer(),
                       ),
                       Expanded(child: widget.body),
                     ],

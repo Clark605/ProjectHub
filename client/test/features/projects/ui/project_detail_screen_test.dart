@@ -37,7 +37,6 @@ class _FakeAuthRepository extends Fake implements AuthRepository {
       const User(id: 'u1', name: 'User 1', email: 'u1@test.com');
 }
 
-
 class _FakeWorkspaceRepo extends Fake implements WorkspaceRepository {
   WorkspaceDto workspace = const WorkspaceDto(
     id: 10,

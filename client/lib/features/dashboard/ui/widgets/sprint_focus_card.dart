@@ -44,10 +44,14 @@ class SprintFocusCard extends StatelessWidget {
                       width: 36,
                       height: 36,
                       decoration: BoxDecoration(
-                        color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                        color: theme.colorScheme.primary.withValues(
+                          alpha: 0.15,
+                        ),
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.3,
+                          ),
                         ),
                       ),
                       child: Icon(
@@ -87,11 +91,14 @@ class SprintFocusCard extends StatelessWidget {
                     Icon(
                       Icons.task_alt_rounded,
                       size: 32,
-                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                      color: theme.colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.6,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      l10n?.allCaughtUp ?? 'All caught up! No active tasks assigned.',
+                      l10n?.allCaughtUp ??
+                          'All caught up! No active tasks assigned.',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -106,7 +113,8 @@ class SprintFocusCard extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemCount: focusTasks.length,
               separatorBuilder: (context, index) => const SizedBox(height: 10),
-              itemBuilder: (context, index) => FocusTaskTile(task: focusTasks[index]),
+              itemBuilder: (context, index) =>
+                  FocusTaskTile(task: focusTasks[index]),
             ),
         ],
       ),

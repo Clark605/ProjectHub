@@ -155,8 +155,9 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                         value: _selectedStatus,
                         enabled: widget.canEdit && !isSaving,
                         onChanged: (val) {
-                          if (val != null)
+                          if (val != null) {
                             setState(() => _selectedStatus = val);
+                          }
                         },
                       ),
                     ),

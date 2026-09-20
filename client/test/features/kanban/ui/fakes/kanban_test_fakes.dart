@@ -21,15 +21,13 @@ class TestTaskRepository implements TaskRepository {
     String? assigneeId,
     String? priority,
     bool forceRefresh = false,
-  }) async =>
-      _tasks;
+  }) async => _tasks;
 
   @override
   Future<List<TaskDto>> getMyTasks(
     int workspaceId, {
     bool forceRefresh = false,
-  }) async =>
-      _tasks;
+  }) async => _tasks;
 
   @override
   Future<TaskDto> getTask(int taskId, {bool forceRefresh = false}) async =>
@@ -70,8 +68,7 @@ class TestProjectRepository implements ProjectRepository {
     int workspaceId, {
     String? status,
     bool forceRefresh = false,
-  }) async =>
-      [_project];
+  }) async => [_project];
 
   @override
   Future<ProjectDto> getProject(int id, {bool forceRefresh = false}) async =>
@@ -81,15 +78,13 @@ class TestProjectRepository implements ProjectRepository {
   Future<ProjectDto> createProject(
     int workspaceId,
     CreateProjectRequest request,
-  ) async =>
-      _project;
+  ) async => _project;
 
   @override
   Future<ProjectDto> updateProject(
     int id,
     UpdateProjectRequest request,
-  ) async =>
-      _project;
+  ) async => _project;
 
   @override
   Future<void> deleteProject(int id) async {}

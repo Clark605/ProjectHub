@@ -69,7 +69,9 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
     final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
 
     return Container(
-      constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.82),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.sizeOf(context).height * 0.82,
+      ),
       padding: EdgeInsets.only(bottom: bottomInset),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
@@ -180,18 +182,18 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
             ),
           ),
 
-            // Pinned Bottom Button: Create New Workspace
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: AppButton(
-                label: l10n.createNewWorkspace,
-                icon: Icons.add_rounded,
-                variant: AppButtonVariant.primary,
-                onPressed: _onCreateNew,
-              ),
+          // Pinned Bottom Button: Create New Workspace
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: AppButton(
+              label: l10n.createNewWorkspace,
+              icon: Icons.add_rounded,
+              variant: AppButtonVariant.primary,
+              onPressed: _onCreateNew,
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }

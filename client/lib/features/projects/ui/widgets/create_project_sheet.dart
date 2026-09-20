@@ -82,7 +82,9 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
             borderRadius: isDesktop
                 ? BorderRadius.circular(24)
                 : const BorderRadius.vertical(top: Radius.circular(24)),
-            border: isDesktop ? Border.all(color: theme.colorScheme.outlineVariant) : null,
+            border: isDesktop
+                ? Border.all(color: theme.colorScheme.outlineVariant)
+                : null,
           ),
           child: Form(
             key: _formKey,
@@ -95,7 +97,9 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+                      color: theme.colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.3,
+                      ),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),

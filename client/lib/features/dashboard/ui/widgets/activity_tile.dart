@@ -22,13 +22,19 @@ class ActivityTile extends StatelessWidget {
     final diff = DateTime.now().difference(dateTime);
     if (diff.inSeconds < 60) return l10n?.timeJustNow ?? 'Just now';
     if (diff.inMinutes < 60) {
-      return l10n != null ? l10n.timeMinutesAgo(diff.inMinutes) : '${diff.inMinutes}m ago';
+      return l10n != null
+          ? l10n.timeMinutesAgo(diff.inMinutes)
+          : '${diff.inMinutes}m ago';
     }
     if (diff.inHours < 24) {
-      return l10n != null ? l10n.timeHoursAgo(diff.inHours) : '${diff.inHours}h ago';
+      return l10n != null
+          ? l10n.timeHoursAgo(diff.inHours)
+          : '${diff.inHours}h ago';
     }
     if (diff.inDays < 7) {
-      return l10n != null ? l10n.timeDaysAgo(diff.inDays) : '${diff.inDays}d ago';
+      return l10n != null
+          ? l10n.timeDaysAgo(diff.inDays)
+          : '${diff.inDays}d ago';
     }
     return DateFormat('MMM d').format(dateTime);
   }

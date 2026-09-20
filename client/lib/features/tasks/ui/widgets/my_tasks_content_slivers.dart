@@ -21,10 +21,14 @@ class MyTasksContentSlivers {
 
     return state.when(
       initial: () => [
-        const SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
+        const SliverFillRemaining(
+          child: Center(child: CircularProgressIndicator()),
+        ),
       ],
       loading: () => [
-        const SliverFillRemaining(child: Center(child: CircularProgressIndicator())),
+        const SliverFillRemaining(
+          child: Center(child: CircularProgressIndicator()),
+        ),
       ],
       error: (message) => [
         SliverFillRemaining(
@@ -34,9 +38,17 @@ class MyTasksContentSlivers {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.error_outline_rounded, size: 48, color: AppColors.error),
+                  const Icon(
+                    Icons.error_outline_rounded,
+                    size: 48,
+                    color: AppColors.error,
+                  ),
                   const SizedBox(height: 16),
-                  Text(message, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w600)),
+                  Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
                   const SizedBox(height: 16),
                   ElevatedButton.icon(
                     onPressed: onRetry,
@@ -52,7 +64,10 @@ class MyTasksContentSlivers {
       empty: (_) => [const SliverFillRemaining(child: MyTasksEmptyView())],
       loaded: (wsId, urgent, inProgress, todo, done, showDone, _) {
         final hasTasks =
-            urgent.isNotEmpty || inProgress.isNotEmpty || todo.isNotEmpty || done.isNotEmpty;
+            urgent.isNotEmpty ||
+            inProgress.isNotEmpty ||
+            todo.isNotEmpty ||
+            done.isNotEmpty;
         if (!hasTasks) {
           return [const SliverFillRemaining(child: MyTasksEmptyView())];
         }

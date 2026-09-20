@@ -40,7 +40,9 @@ void main() {
 
     final projectRepo = FakeProjectRepository();
     getIt.registerSingleton<ProjectRepository>(projectRepo);
-    getIt.registerFactory<ProjectsListCubit>(() => ProjectsListCubit(projectRepo));
+    getIt.registerFactory<ProjectsListCubit>(
+      () => ProjectsListCubit(projectRepo),
+    );
 
     final activityRepo = FakeActivityRepository();
     getIt.registerSingleton<ActivityRepository>(activityRepo);

@@ -20,7 +20,9 @@ class ProjectRepositoryImpl implements ProjectRepository {
   @override
   void clearCache([int? wsId]) {
     AppLogger.debug(
-      wsId != null ? 'Clearing cache for ws $wsId' : 'Clearing all project caches',
+      wsId != null
+          ? 'Clearing cache for ws $wsId'
+          : 'Clearing all project caches',
       tag: 'ProjectRepository',
     );
     if (wsId != null) {
@@ -38,14 +40,23 @@ class ProjectRepositoryImpl implements ProjectRepository {
     String? status,
     bool forceRefresh = false,
   }) async {
-    final hasStatus = status != null && status.isNotEmpty && status.toLowerCase() != 'all';
+    final hasStatus =
+        status != null && status.isNotEmpty && status.toLowerCase() != 'all';
     if (!forceRefresh && _wsProjectsCache.containsKey(wsId)) {
-      AppLogger.debug('Cache hit for ws $wsId projects', tag: 'ProjectRepository');
-      return hasStatus ? filterProjects(_wsProjectsCache[wsId]!, status) : _wsProjectsCache[wsId]!;
+      AppLogger.debug(
+        'Cache hit for ws $wsId projects',
+        tag: 'ProjectRepository',
+      );
+      return hasStatus
+          ? filterProjects(_wsProjectsCache[wsId]!, status)
+          : _wsProjectsCache[wsId]!;
     }
 
     try {
-      AppLogger.info('Fetching projects for ws $wsId', tag: 'ProjectRepository');
+      AppLogger.info(
+        'Fetching projects for ws $wsId',
+        tag: 'ProjectRepository',
+      );
       final res = await _dio.get(
         ApiConstants.workspaceProjects(wsId),
         queryParameters: hasStatus ? {'status': status} : null,
@@ -60,7 +71,11 @@ class ProjectRepositoryImpl implements ProjectRepository {
       if (!hasStatus) _wsProjectsCache[wsId] = list;
       return list;
     } on DioException catch (e) {
-      AppLogger.error('Failed to fetch projects for ws $wsId', error: e, tag: 'ProjectRepository');
+      AppLogger.error(
+        'Failed to fetch projects for ws $wsId',
+        error: e,
+        tag: 'ProjectRepository',
+      );
       throw DioErrorHandler.handle(e);
     }
   }
@@ -73,7 +88,8 @@ class ProjectRepositoryImpl implements ProjectRepository {
     try {
       AppLogger.info('Fetching project $id detail', tag: 'ProjectRepository');
       final project = ProjectDto.fromJson(
-        (await _dio.get(ApiConstants.projectById(id))).data as Map<String, dynamic>,
+        (await _dio.get(ApiConstants.projectById(id))).data
+            as Map<String, dynamic>,
       );
       _projectDetailCache[id] = project;
 
@@ -88,7 +104,11 @@ class ProjectRepositoryImpl implements ProjectRepository {
       }
       return project;
     } on DioException catch (e) {
-      AppLogger.error('Failed to fetch project $id', error: e, tag: 'ProjectRepository');
+      AppLogger.error(
+        'Failed to fetch project $id',
+        error: e,
+        tag: 'ProjectRepository',
+      );
       throw DioErrorHandler.handle(e);
     }
   }
@@ -98,7 +118,10 @@ class ProjectRepositoryImpl implements ProjectRepository {
     try {
       AppLogger.info('Creating project in ws $wsId', tag: 'ProjectRepository');
       final created = ProjectDto.fromJson(
-        (await _dio.post(ApiConstants.workspaceProjects(wsId), data: req.toJson())).data
+        (await _dio.post(
+              ApiConstants.workspaceProjects(wsId),
+              data: req.toJson(),
+            )).data
             as Map<String, dynamic>,
       );
       _projectDetailCache[created.id] = created;
@@ -107,7 +130,11 @@ class ProjectRepositoryImpl implements ProjectRepository {
       }
       return created;
     } on DioException catch (e) {
-      AppLogger.error('Failed to create project in ws $wsId', error: e, tag: 'ProjectRepository');
+      AppLogger.error(
+        'Failed to create project in ws $wsId',
+        error: e,
+        tag: 'ProjectRepository',
+      );
       throw DioErrorHandler.handle(e);
     }
   }
@@ -128,7 +155,11 @@ class ProjectRepositoryImpl implements ProjectRepository {
       }
       return updated;
     } on DioException catch (e) {
-      AppLogger.error('Failed to update project $id', error: e, tag: 'ProjectRepository');
+      AppLogger.error(
+        'Failed to update project $id',
+        error: e,
+        tag: 'ProjectRepository',
+      );
       throw DioErrorHandler.handle(e);
     }
   }
@@ -147,7 +178,11 @@ class ProjectRepositoryImpl implements ProjectRepository {
         }
       }
     } on DioException catch (e) {
-      AppLogger.error('Failed to delete project $id', error: e, tag: 'ProjectRepository');
+      AppLogger.error(
+        'Failed to delete project $id',
+        error: e,
+        tag: 'ProjectRepository',
+      );
       throw DioErrorHandler.handle(e);
     }
   }

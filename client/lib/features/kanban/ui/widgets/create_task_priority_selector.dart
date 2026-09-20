@@ -49,8 +49,7 @@ class CreateTaskPrioritySelector extends StatelessWidget {
               selectedColor: priority.toColor(),
               labelStyle: TextStyle(
                 color: isSelected ? Colors.white : null,
-                fontWeight:
-                    isSelected ? FontWeight.w600 : FontWeight.normal,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
               onSelected: (selected) {
                 if (selected) {

@@ -19,7 +19,9 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   void clearCache([int? projectId]) {
     AppLogger.debug(
-      projectId != null ? 'Clearing task cache for project $projectId' : 'Clearing all task caches',
+      projectId != null
+          ? 'Clearing task cache for project $projectId'
+          : 'Clearing all task caches',
       tag: 'TaskRepository',
     );
     if (projectId != null) {
@@ -40,12 +42,22 @@ class TaskRepositoryImpl implements TaskRepository {
     String? priority,
     bool forceRefresh = false,
   }) async {
-    final hasFilter = (status != null && status.isNotEmpty && status.toLowerCase() != 'all') ||
+    final hasFilter =
+        (status != null &&
+            status.isNotEmpty &&
+            status.toLowerCase() != 'all') ||
         (assigneeId != null && assigneeId.isNotEmpty) ||
-        (priority != null && priority.isNotEmpty && priority.toLowerCase() != 'all');
+        (priority != null &&
+            priority.isNotEmpty &&
+            priority.toLowerCase() != 'all');
 
-    if (!forceRefresh && !hasFilter && _projectTasksCache.containsKey(projectId)) {
-      AppLogger.debug('Cache hit for project $projectId tasks', tag: 'TaskRepository');
+    if (!forceRefresh &&
+        !hasFilter &&
+        _projectTasksCache.containsKey(projectId)) {
+      AppLogger.debug(
+        'Cache hit for project $projectId tasks',
+        tag: 'TaskRepository',
+      );
       return _projectTasksCache[projectId]!;
     }
 
@@ -64,9 +76,15 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
-  Future<List<TaskDto>> getMyTasks(int workspaceId, {bool forceRefresh = false}) async {
+  Future<List<TaskDto>> getMyTasks(
+    int workspaceId, {
+    bool forceRefresh = false,
+  }) async {
     if (!forceRefresh && _myTasksCache.containsKey(workspaceId)) {
-      AppLogger.debug('Cache hit for workspace $workspaceId my-tasks', tag: 'TaskRepository');
+      AppLogger.debug(
+        'Cache hit for workspace $workspaceId my-tasks',
+        tag: 'TaskRepository',
+      );
       return _myTasksCache[workspaceId]!;
     }
 
@@ -81,7 +99,10 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<TaskDto> getTask(int taskId, {bool forceRefresh = false}) async {
     if (!forceRefresh && _taskDetailCache.containsKey(taskId)) {
-      AppLogger.debug('Cache hit for task $taskId detail', tag: 'TaskRepository');
+      AppLogger.debug(
+        'Cache hit for task $taskId detail',
+        tag: 'TaskRepository',
+      );
       return _taskDetailCache[taskId]!;
     }
 
@@ -106,7 +127,10 @@ class TaskRepositoryImpl implements TaskRepository {
     _taskDetailCache[created.id] = created;
 
     if (_projectTasksCache.containsKey(projectId)) {
-      _projectTasksCache[projectId] = [created, ..._projectTasksCache[projectId]!];
+      _projectTasksCache[projectId] = [
+        created,
+        ..._projectTasksCache[projectId]!,
+      ];
     }
     _myTasksCache.clear();
     return created;
@@ -116,7 +140,9 @@ class TaskRepositoryImpl implements TaskRepository {
     _taskDetailCache[updated.id] = updated;
     if (_projectTasksCache.containsKey(updated.projectId)) {
       _projectTasksCache[updated.projectId] =
-          _projectTasksCache[updated.projectId]!.map((t) => t.id == updated.id ? updated : t).toList();
+          _projectTasksCache[updated.projectId]!
+              .map((t) => t.id == updated.id ? updated : t)
+              .toList();
     }
     _myTasksCache.clear();
   }
@@ -137,7 +163,10 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @override
   Future<TaskDto> updateTaskAssignee(int taskId, String? assigneeId) async {
-    final updated = await _remoteDataSource.updateTaskAssignee(taskId, assigneeId);
+    final updated = await _remoteDataSource.updateTaskAssignee(
+      taskId,
+      assigneeId,
+    );
     _onTaskUpdated(updated);
     return updated;
   }
@@ -159,5 +188,6 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
-  bool hasCachedTasks(int projectId) => _projectTasksCache.containsKey(projectId);
+  bool hasCachedTasks(int projectId) =>
+      _projectTasksCache.containsKey(projectId);
 }

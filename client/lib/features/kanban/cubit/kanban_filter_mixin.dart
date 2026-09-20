@@ -11,10 +11,10 @@ mixin KanbanFilterMixin {
   String? get assigneeFilter => _assigneeFilter;
 
   TaskFilter get currentFilter => TaskFilter(
-        search: _searchFilter,
-        priority: _priorityFilter,
-        assigneeId: _assigneeFilter,
-      );
+    search: _searchFilter,
+    priority: _priorityFilter,
+    assigneeId: _assigneeFilter,
+  );
 
   List<TaskDto> applyFilters(List<TaskDto> tasks) => currentFilter.apply(tasks);
 

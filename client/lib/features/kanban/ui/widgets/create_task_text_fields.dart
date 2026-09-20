@@ -42,7 +42,8 @@ class CreateTaskTextFields extends StatelessWidget {
           maxLines: 4,
           decoration: InputDecoration(
             labelText: l10n?.taskDescription ?? 'Description',
-            hintText: l10n?.taskDescriptionPlaceholder ??
+            hintText:
+                l10n?.taskDescriptionPlaceholder ??
                 'Add details, context, or acceptance criteria...',
             filled: true,
             fillColor: theme.colorScheme.surfaceContainer,

@@ -19,22 +19,24 @@ class KanbanCubit extends SafeActionCubit<KanbanState> with KanbanFilterMixin {
   bool _isArchived = false;
 
   KanbanCubit(this._taskRepository, this._projectRepository)
-      : super(const KanbanState.initial());
+    : super(const KanbanState.initial());
 
   int? get projectId => _projectId;
   bool get isArchived => _isArchived;
 
   void _emitLoaded(List<TaskDto> allTasks, {String? errorMessage}) {
-    emit(KanbanState.loaded(
-      projectId: _projectId ?? 0,
-      tasks: applyFilters(allTasks),
-      allTasks: allTasks,
-      isArchived: _isArchived,
-      searchFilter: searchFilter,
-      priorityFilter: priorityFilter,
-      assigneeFilter: assigneeFilter,
-      errorMessage: errorMessage,
-    ));
+    emit(
+      KanbanState.loaded(
+        projectId: _projectId ?? 0,
+        tasks: applyFilters(allTasks),
+        allTasks: allTasks,
+        isArchived: _isArchived,
+        searchFilter: searchFilter,
+        priorityFilter: priorityFilter,
+        assigneeFilter: assigneeFilter,
+        errorMessage: errorMessage,
+      ),
+    );
   }
 
   @override
@@ -50,15 +52,23 @@ class KanbanCubit extends SafeActionCubit<KanbanState> with KanbanFilterMixin {
     await safeExecute(
       () async {
         try {
-          final p = await _projectRepository.getProject(projectId, forceRefresh: forceRefresh);
+          final p = await _projectRepository.getProject(
+            projectId,
+            forceRefresh: forceRefresh,
+          );
           _isArchived = p.statusEnum == ProjectStatus.archived;
         } catch (_) {
           _isArchived = false;
         }
 
-        final tasks = await _taskRepository.getTasksByProject(projectId, forceRefresh: forceRefresh);
+        final tasks = await _taskRepository.getTasksByProject(
+          projectId,
+          forceRefresh: forceRefresh,
+        );
         if (tasks.isEmpty) {
-          emit(KanbanState.empty(projectId: projectId, isArchived: _isArchived));
+          emit(
+            KanbanState.empty(projectId: projectId, isArchived: _isArchived),
+          );
         } else {
           _emitLoaded(tasks);
         }
@@ -72,12 +82,20 @@ class KanbanCubit extends SafeActionCubit<KanbanState> with KanbanFilterMixin {
   Future<void> refreshOnFocus() async {
     if (_projectId == null) return;
     try {
-      final tasks = await _taskRepository.getTasksByProject(_projectId!, forceRefresh: true);
+      final tasks = await _taskRepository.getTasksByProject(
+        _projectId!,
+        forceRefresh: true,
+      );
       if (tasks.isEmpty) {
-        emit(KanbanState.empty(projectId: _projectId!, isArchived: _isArchived));
+        emit(
+          KanbanState.empty(projectId: _projectId!, isArchived: _isArchived),
+        );
       } else {
         final current = state;
-        _emitLoaded(tasks, errorMessage: current is KanbanLoaded ? current.errorMessage : null);
+        _emitLoaded(
+          tasks,
+          errorMessage: current is KanbanLoaded ? current.errorMessage : null,
+        );
       }
     } catch (_) {}
   }
@@ -101,25 +119,48 @@ class KanbanCubit extends SafeActionCubit<KanbanState> with KanbanFilterMixin {
     await safeExecute(
       () async => _taskRepository.updateTaskStatus(taskId, newStatus),
       onError: (errorMsg) {
-        final latest = state is KanbanLoaded ? (state as KanbanLoaded).allTasks : originalTasks;
-        final rollbackAll = latest.map((t) => t.id == taskId ? t.copyWith(status: originalTask.status) : t).toList();
-        _emitLoaded(rollbackAll, errorMessage: errorMsg.isNotEmpty ? errorMsg : 'Failed to move task. Reverted.');
+        final latest = state is KanbanLoaded
+            ? (state as KanbanLoaded).allTasks
+            : originalTasks;
+        final rollbackAll = latest
+            .map(
+              (t) =>
+                  t.id == taskId ? t.copyWith(status: originalTask.status) : t,
+            )
+            .toList();
+        _emitLoaded(
+          rollbackAll,
+          errorMessage: errorMsg.isNotEmpty
+              ? errorMsg
+              : 'Failed to move task. Reverted.',
+        );
       },
       defaultErrorMessage: 'Failed to update task status',
       logTag: 'KanbanCubit',
     );
   }
 
-  Future<TaskDto?> createTask(int projectId, CreateTaskRequest req, {String? initialStatus}) async {
+  Future<TaskDto?> createTask(
+    int projectId,
+    CreateTaskRequest req, {
+    String? initialStatus,
+  }) async {
     if (_isArchived) return null;
     return await safeExecute<TaskDto>(
       () async {
         var created = await _taskRepository.createTask(projectId, req);
-        if (initialStatus != null && initialStatus.toLowerCase() != 'backlog' && initialStatus.isNotEmpty) {
-          created = await _taskRepository.updateTaskStatus(created.id, initialStatus);
+        if (initialStatus != null &&
+            initialStatus.toLowerCase() != 'backlog' &&
+            initialStatus.isNotEmpty) {
+          created = await _taskRepository.updateTaskStatus(
+            created.id,
+            initialStatus,
+          );
         }
         final current = state;
-        _emitLoaded(current is KanbanLoaded ? [created, ...current.allTasks] : [created]);
+        _emitLoaded(
+          current is KanbanLoaded ? [created, ...current.allTasks] : [created],
+        );
         return created;
       },
       onError: (msg) => _setLoadedError(msg),
@@ -146,7 +187,10 @@ class KanbanCubit extends SafeActionCubit<KanbanState> with KanbanFilterMixin {
     if (_isArchived) return;
     await safeExecute(
       () async {
-        final updated = await _taskRepository.updateTaskAssignee(taskId, assigneeId);
+        final updated = await _taskRepository.updateTaskAssignee(
+          taskId,
+          assigneeId,
+        );
         _updateTaskInLoaded(taskId, updated);
       },
       onError: (msg) => _setLoadedError(msg),
@@ -162,9 +206,16 @@ class KanbanCubit extends SafeActionCubit<KanbanState> with KanbanFilterMixin {
         await _taskRepository.deleteTask(taskId);
         final current = state;
         if (current is KanbanLoaded) {
-          final updatedAll = current.allTasks.where((t) => t.id != taskId).toList();
+          final updatedAll = current.allTasks
+              .where((t) => t.id != taskId)
+              .toList();
           if (updatedAll.isEmpty) {
-            emit(KanbanState.empty(projectId: current.projectId, isArchived: _isArchived));
+            emit(
+              KanbanState.empty(
+                projectId: current.projectId,
+                isArchived: _isArchived,
+              ),
+            );
           } else {
             _emitLoaded(updatedAll);
           }
@@ -179,7 +230,9 @@ class KanbanCubit extends SafeActionCubit<KanbanState> with KanbanFilterMixin {
   void _updateTaskInLoaded(int taskId, TaskDto updated) {
     final current = state;
     if (current is KanbanLoaded) {
-      _emitLoaded(current.allTasks.map((t) => t.id == taskId ? updated : t).toList());
+      _emitLoaded(
+        current.allTasks.map((t) => t.id == taskId ? updated : t).toList(),
+      );
     }
   }
 

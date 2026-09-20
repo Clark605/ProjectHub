@@ -17,11 +17,15 @@ class TaskFilter {
         if (!matchesTitle && !matchesDesc) return false;
       }
       if (priority != null && priority!.isNotEmpty) {
-        if (task.priority.toLowerCase() != priority!.toLowerCase()) return false;
+        if (task.priority.toLowerCase() != priority!.toLowerCase()) {
+          return false;
+        }
       }
       if (assigneeId != null && assigneeId!.isNotEmpty) {
         if (assigneeId == 'unassigned') {
-          if (task.assigneeId != null && task.assigneeId!.isNotEmpty) return false;
+          if (task.assigneeId != null && task.assigneeId!.isNotEmpty) {
+            return false;
+          }
         } else if (task.assigneeId != assigneeId) {
           return false;
         }

@@ -34,9 +34,11 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _cubit = widget.cubit ?? (getIt.isRegistered<ProjectDetailCubit>()
-        ? getIt<ProjectDetailCubit>()
-        : ProjectDetailCubit(getIt()));
+    _cubit =
+        widget.cubit ??
+        (getIt.isRegistered<ProjectDetailCubit>()
+            ? getIt<ProjectDetailCubit>()
+            : ProjectDetailCubit(getIt()));
     _cubit.loadProject(widget.projectId);
   }
 
@@ -107,19 +109,22 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             loading: () => const ProjectDetailSkeleton(),
             error: (msg) => AppErrorState(
               errorMessage: msg,
-              onRetry: () => _cubit.loadProject(widget.projectId, forceRefresh: true),
+              onRetry: () =>
+                  _cubit.loadProject(widget.projectId, forceRefresh: true),
             ),
             deleted: () => const SizedBox.shrink(),
             loaded: (project, isSaving, isDeleting, _, _) {
-              final currentUserId = context.watch<AppAuthCubit>().state.maybeWhen(
-                authenticated: (u) => u.id,
-                orElse: () => '',
-              );
-              final activeWs = context.watch<WorkspaceContextCubit>().state.maybeWhen(
-                loaded: (_, active) => active,
-                orElse: () => null,
-              );
-              final role = activeWs?.membership?.role.toLowerCase() == 'owner' ? 'owner' : 'member';
+              final currentUserId = context
+                  .watch<AppAuthCubit>()
+                  .state
+                  .maybeWhen(authenticated: (u) => u.id, orElse: () => '');
+              final activeWs = context
+                  .watch<WorkspaceContextCubit>()
+                  .state
+                  .maybeWhen(loaded: (_, active) => active, orElse: () => null);
+              final role = activeWs?.membership?.role.toLowerCase() == 'owner'
+                  ? 'owner'
+                  : 'member';
               final canEdit = PermissionChecker.canEditProject(
                 role: role,
                 projectCreatorId: project.createdBy,
@@ -132,7 +137,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
               );
 
               return SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: isDesktop ? 48 : 20, vertical: 24),
+                padding: EdgeInsets.symmetric(
+                  horizontal: isDesktop ? 48 : 20,
+                  vertical: 24,
+                ),
                 child: Center(
                   child: Container(
                     constraints: const BoxConstraints(maxWidth: 800),
@@ -157,7 +165,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     );
 
     if (!hasAmbientProvider) {
-      screen = BlocProvider<ProjectDetailCubit>.value(value: activeCubit, child: screen);
+      screen = BlocProvider<ProjectDetailCubit>.value(
+        value: activeCubit,
+        child: screen,
+      );
     }
     return screen;
   }

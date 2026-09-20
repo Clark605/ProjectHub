@@ -30,8 +30,9 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
                 (active.name != ws.name ||
                     active.description != ws.description ||
                     active.accentColor != ws.accentColor)) {
-              final updatedList =
-                  workspaces.map((w) => w.id == ws.id ? ws : w).toList();
+              final updatedList = workspaces
+                  .map((w) => w.id == ws.id ? ws : w)
+                  .toList();
               _prefs.setActiveWorkspaceId(ws.id);
               _prefs.setCachedActiveWorkspaceRaw(jsonEncode(ws.toJson()));
               emit(

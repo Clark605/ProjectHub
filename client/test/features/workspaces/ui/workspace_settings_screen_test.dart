@@ -183,7 +183,6 @@ void main() {
     expect(repo.workspace.name, 'Alpha Team Renamed');
   });
 
-
   testWidgets(
     'WorkspaceSettingsScreen accepts contextCubit directly via constructor',
     (tester) async {

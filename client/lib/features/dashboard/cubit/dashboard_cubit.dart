@@ -33,22 +33,33 @@ class DashboardCubit extends Cubit<DashboardState> {
       final tasks = results[1] as List<TaskDto>;
       final activities = results[2] as List<ActivityEventDto>;
 
-      final activeProjects = projects.where((p) => p.status != 'Archived').length;
-      final inProgressTasks = tasks.where((t) => t.status == 'InProgress').length;
-      final urgentTasks = tasks.where((t) => t.priority == 'Urgent' && t.status != 'Done').length;
+      final activeProjects = projects
+          .where((p) => p.status != 'Archived')
+          .length;
+      final inProgressTasks = tasks
+          .where((t) => t.status == 'InProgress')
+          .length;
+      final urgentTasks = tasks
+          .where((t) => t.priority == 'Urgent' && t.status != 'Done')
+          .length;
       final doneTasks = tasks.where((t) => t.status == 'Done').length;
-      final focusTasks = tasks.where((t) => t.status != 'Done').take(3).toList();
+      final focusTasks = tasks
+          .where((t) => t.status != 'Done')
+          .take(3)
+          .toList();
 
-      emit(DashboardState(
-        isLoading: false,
-        totalProjects: projects.length,
-        activeProjects: activeProjects,
-        inProgressTasks: inProgressTasks,
-        urgentBlockers: urgentTasks,
-        completedTasks: doneTasks,
-        focusTasks: focusTasks,
-        recentActivities: activities,
-      ));
+      emit(
+        DashboardState(
+          isLoading: false,
+          totalProjects: projects.length,
+          activeProjects: activeProjects,
+          inProgressTasks: inProgressTasks,
+          urgentBlockers: urgentTasks,
+          completedTasks: doneTasks,
+          focusTasks: focusTasks,
+          recentActivities: activities,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }

@@ -101,9 +101,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceContainer,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: theme.colorScheme.outlineVariant,
-                    ),
+                    border: Border.all(color: theme.colorScheme.outlineVariant),
                   ),
                   child: Row(
                     children: [
@@ -116,7 +114,9 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                       Expanded(
                         child: Text(
                           selectedDueDate != null
-                              ? DateFormat('MMM d, yyyy').format(selectedDueDate!)
+                              ? DateFormat(
+                                  'MMM d, yyyy',
+                                ).format(selectedDueDate!)
                               : (l10n?.noDueDate ?? 'No date'),
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: selectedDueDate != null

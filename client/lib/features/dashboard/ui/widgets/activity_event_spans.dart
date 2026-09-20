@@ -18,7 +18,10 @@ List<InlineSpan> buildActivityEventSpans(
   switch (event.eventType) {
     case 'TaskCreated':
       return [
-        TextSpan(text: l10n?.activityTaskCreated ?? 'created task', style: mutedStyle),
+        TextSpan(
+          text: l10n?.activityTaskCreated ?? 'created task',
+          style: mutedStyle,
+        ),
         if (title != null && title.isNotEmpty) ...[
           const TextSpan(text: ' '),
           TextSpan(text: '"$title"', style: highlightStyle),
@@ -64,7 +67,10 @@ List<InlineSpan> buildActivityEventSpans(
 
     case 'TaskDeleted':
       return [
-        TextSpan(text: l10n?.activityTaskDeleted ?? 'deleted task', style: mutedStyle),
+        TextSpan(
+          text: l10n?.activityTaskDeleted ?? 'deleted task',
+          style: mutedStyle,
+        ),
         if (title != null && title.isNotEmpty) ...[
           const TextSpan(text: ' '),
           TextSpan(text: '"$title"', style: highlightStyle),
@@ -73,7 +79,10 @@ List<InlineSpan> buildActivityEventSpans(
 
     case 'ProjectCreated':
       return [
-        TextSpan(text: l10n?.activityProjectCreated ?? 'created project', style: mutedStyle),
+        TextSpan(
+          text: l10n?.activityProjectCreated ?? 'created project',
+          style: mutedStyle,
+        ),
         if (title != null && title.isNotEmpty) ...[
           const TextSpan(text: ' '),
           TextSpan(text: '"$title"', style: highlightStyle),
@@ -92,7 +101,8 @@ List<InlineSpan> buildActivityEventSpans(
           ],
         ] else ...[
           TextSpan(
-            text: l10n?.activityProjectStatusChanged ?? 'updated project status',
+            text:
+                l10n?.activityProjectStatusChanged ?? 'updated project status',
             style: mutedStyle,
           ),
           if (toStatus != null && toStatus.isNotEmpty) ...[
@@ -104,7 +114,10 @@ List<InlineSpan> buildActivityEventSpans(
 
     case 'ProjectArchived':
       return [
-        TextSpan(text: l10n?.activityProjectArchived ?? 'archived project', style: mutedStyle),
+        TextSpan(
+          text: l10n?.activityProjectArchived ?? 'archived project',
+          style: mutedStyle,
+        ),
         if (title != null && title.isNotEmpty) ...[
           const TextSpan(text: ' '),
           TextSpan(text: '"$title"', style: highlightStyle),
@@ -161,7 +174,8 @@ List<InlineSpan> buildActivityEventSpans(
           TextSpan(text: '"$title"', style: highlightStyle),
         ] else ...[
           TextSpan(
-            text: l10n?.activityWorkspaceUpdated ?? 'updated workspace settings',
+            text:
+                l10n?.activityWorkspaceUpdated ?? 'updated workspace settings',
             style: mutedStyle,
           ),
         ],

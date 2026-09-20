@@ -61,108 +61,108 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
-        listener: (context, state) {
-          state.whenOrNull(
-            success: () {
-              context.showSuccessSnackBar(l10n.passwordResetSuccess);
+      listener: (context, state) {
+        state.whenOrNull(
+          success: () {
+            context.showSuccessSnackBar(l10n.passwordResetSuccess);
 
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                RouteNames.login,
-                (route) => false,
-              );
-            },
-          );
-        },
-        builder: (context, state) {
-          final isLoading = state.maybeWhen(
-            loading: () => true,
-            orElse: () => false,
-          );
-          final errorMessage = state.whenOrNull(failure: (msg) => msg);
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              RouteNames.login,
+              (route) => false,
+            );
+          },
+        );
+      },
+      builder: (context, state) {
+        final isLoading = state.maybeWhen(
+          loading: () => true,
+          orElse: () => false,
+        );
+        final errorMessage = state.whenOrNull(failure: (msg) => msg);
 
-          return AuthScreenScaffold(
-            isLoading: isLoading,
-            formKey: _formKey,
-            children: [
-              AuthHeader(
-                title: l10n.resetPasswordTitle,
-                subtitle: l10n.resetPasswordSubtitle,
-              ),
-              const SizedBox(height: 24),
-              AppErrorBanner(errorMessage: errorMessage),
-              const SizedBox(height: 12),
-              AppTextField(
-                    label: l10n.email,
-                    hintText: l10n.emailPlaceholder,
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: Icons.mail_outline_rounded,
-                    validator: (val) => FormValidators.email(val, l10n),
-                  )
-                  .animate()
-                  .fadeIn(duration: 400.ms, delay: 200.ms)
-                  .slideY(begin: 0.1, end: 0),
-              const SizedBox(height: 18),
-              AppTextField(
-                    label: l10n.resetToken,
-                    hintText: l10n.resetTokenPlaceholder,
-                    controller: _tokenController,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: Icons.vpn_key_outlined,
-                    validator: (val) =>
-                        FormValidators.requiredField(val, l10n.tokenRequired),
-                  )
-                  .animate()
-                  .fadeIn(duration: 400.ms, delay: 250.ms)
-                  .slideY(begin: 0.1, end: 0),
-              const SizedBox(height: 18),
-              AppTextField(
-                    label: l10n.newPassword,
-                    hintText: l10n.passwordPlaceholder,
-                    controller: _newPasswordController,
-                    isPassword: true,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: Icons.lock_outline_rounded,
-                    validator: (val) => FormValidators.password(val, l10n),
-                  )
-                  .animate()
-                  .fadeIn(duration: 400.ms, delay: 300.ms)
-                  .slideY(begin: 0.1, end: 0),
-              const SizedBox(height: 18),
-              AppTextField(
-                    label: l10n.confirmNewPassword,
-                    hintText: l10n.passwordPlaceholder,
-                    controller: _confirmPasswordController,
-                    isPassword: true,
-                    textInputAction: TextInputAction.done,
-                    prefixIcon: Icons.lock_reset_rounded,
-                    onFieldSubmitted: (_) => _onResetPassword(context),
-                    validator: (val) => FormValidators.confirmPassword(
-                      val,
-                      _newPasswordController.text,
-                      l10n,
-                    ),
-                  )
-                  .animate()
-                  .fadeIn(duration: 400.ms, delay: 350.ms)
-                  .slideY(begin: 0.1, end: 0),
-              const SizedBox(height: 24),
-              AppButton(
-                    label: l10n.resetPasswordButton,
-                    variant: AppButtonVariant.primary,
-                    isLoading: isLoading,
-                    onPressed: () => _onResetPassword(context),
-                  )
-                  .animate()
-                  .fadeIn(duration: 400.ms, delay: 400.ms)
-                  .slideY(begin: 0.1, end: 0),
-              const SizedBox(height: 28),
-              const AuthBackToLoginLink(delayMs: 450),
-            ],
-          );
-        },
-      );
+        return AuthScreenScaffold(
+          isLoading: isLoading,
+          formKey: _formKey,
+          children: [
+            AuthHeader(
+              title: l10n.resetPasswordTitle,
+              subtitle: l10n.resetPasswordSubtitle,
+            ),
+            const SizedBox(height: 24),
+            AppErrorBanner(errorMessage: errorMessage),
+            const SizedBox(height: 12),
+            AppTextField(
+                  label: l10n.email,
+                  hintText: l10n.emailPlaceholder,
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  prefixIcon: Icons.mail_outline_rounded,
+                  validator: (val) => FormValidators.email(val, l10n),
+                )
+                .animate()
+                .fadeIn(duration: 400.ms, delay: 200.ms)
+                .slideY(begin: 0.1, end: 0),
+            const SizedBox(height: 18),
+            AppTextField(
+                  label: l10n.resetToken,
+                  hintText: l10n.resetTokenPlaceholder,
+                  controller: _tokenController,
+                  textInputAction: TextInputAction.next,
+                  prefixIcon: Icons.vpn_key_outlined,
+                  validator: (val) =>
+                      FormValidators.requiredField(val, l10n.tokenRequired),
+                )
+                .animate()
+                .fadeIn(duration: 400.ms, delay: 250.ms)
+                .slideY(begin: 0.1, end: 0),
+            const SizedBox(height: 18),
+            AppTextField(
+                  label: l10n.newPassword,
+                  hintText: l10n.passwordPlaceholder,
+                  controller: _newPasswordController,
+                  isPassword: true,
+                  textInputAction: TextInputAction.next,
+                  prefixIcon: Icons.lock_outline_rounded,
+                  validator: (val) => FormValidators.password(val, l10n),
+                )
+                .animate()
+                .fadeIn(duration: 400.ms, delay: 300.ms)
+                .slideY(begin: 0.1, end: 0),
+            const SizedBox(height: 18),
+            AppTextField(
+                  label: l10n.confirmNewPassword,
+                  hintText: l10n.passwordPlaceholder,
+                  controller: _confirmPasswordController,
+                  isPassword: true,
+                  textInputAction: TextInputAction.done,
+                  prefixIcon: Icons.lock_reset_rounded,
+                  onFieldSubmitted: (_) => _onResetPassword(context),
+                  validator: (val) => FormValidators.confirmPassword(
+                    val,
+                    _newPasswordController.text,
+                    l10n,
+                  ),
+                )
+                .animate()
+                .fadeIn(duration: 400.ms, delay: 350.ms)
+                .slideY(begin: 0.1, end: 0),
+            const SizedBox(height: 24),
+            AppButton(
+                  label: l10n.resetPasswordButton,
+                  variant: AppButtonVariant.primary,
+                  isLoading: isLoading,
+                  onPressed: () => _onResetPassword(context),
+                )
+                .animate()
+                .fadeIn(duration: 400.ms, delay: 400.ms)
+                .slideY(begin: 0.1, end: 0),
+            const SizedBox(height: 28),
+            const AuthBackToLoginLink(delayMs: 450),
+          ],
+        );
+      },
+    );
   }
 }

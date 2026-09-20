@@ -108,9 +108,9 @@ class _RailItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             border: isSelected
                 ? Border.all(
-                    color: Theme.of(context).colorScheme.primary.withValues(
-                          alpha: 0.4,
-                        ),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.4),
                     width: 1.5,
                   )
                 : null,

@@ -69,7 +69,9 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
                     width: 36,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
+                      color: theme.colorScheme.onSurfaceVariant.withValues(
+                        alpha: 0.3,
+                      ),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -120,9 +122,9 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
                       ? null
                       : () {
                           if (_formKey.currentState?.validate() ?? false) {
-                            context
-                                .read<WorkspaceSettingsCubit>()
-                                .inviteMember(_emailController.text.trim());
+                            context.read<WorkspaceSettingsCubit>().inviteMember(
+                              _emailController.text.trim(),
+                            );
                           }
                         },
                 ),

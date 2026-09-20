@@ -62,7 +62,10 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
 
     final currentState = state;
     if (currentState is ProjectsListLoaded) {
-      final filtered = _projectRepository.filterProjects(currentState.allProjects, status);
+      final filtered = _projectRepository.filterProjects(
+        currentState.allProjects,
+        status,
+      );
       emit(currentState.copyWith(projects: filtered, selectedFilter: status));
     } else {
       currentState.maybeWhen(
@@ -92,7 +95,10 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
           updatedAll = [created];
         }
 
-        final filtered = _projectRepository.filterProjects(updatedAll, _currentFilter);
+        final filtered = _projectRepository.filterProjects(
+          updatedAll,
+          _currentFilter,
+        );
         emit(
           ProjectsListState.loaded(
             projects: filtered,
@@ -117,7 +123,10 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
       final updatedAll = currentState.allProjects
           .map((p) => p.id == updated.id ? updated : p)
           .toList();
-      final filtered = _projectRepository.filterProjects(updatedAll, currentState.selectedFilter);
+      final filtered = _projectRepository.filterProjects(
+        updatedAll,
+        currentState.selectedFilter,
+      );
       emit(currentState.copyWith(projects: filtered, allProjects: updatedAll));
     }
   }
@@ -134,7 +143,10 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
           ProjectsListState.empty(selectedFilter: currentState.selectedFilter),
         );
       } else {
-        final filtered = _projectRepository.filterProjects(updatedAll, currentState.selectedFilter);
+        final filtered = _projectRepository.filterProjects(
+          updatedAll,
+          currentState.selectedFilter,
+        );
         emit(
           currentState.copyWith(projects: filtered, allProjects: updatedAll),
         );

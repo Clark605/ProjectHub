@@ -72,9 +72,7 @@ mixin WorkspaceMembersMixin {
       tag: 'WorkspaceRepository',
     );
     try {
-      await dio.delete(
-        ApiConstants.removeWorkspaceMember(workspaceId, userId),
-      );
+      await dio.delete(ApiConstants.removeWorkspaceMember(workspaceId, userId));
       if (membersCache.containsKey(workspaceId)) {
         membersCache[workspaceId] = membersCache[workspaceId]!
             .where((m) => m.userId != userId)
