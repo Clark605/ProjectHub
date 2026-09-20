@@ -75,15 +75,6 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerLow,
-        border: Border(
-          bottom: BorderSide(
-            color: theme.colorScheme.outlineVariant,
-            width: 1,
-          ),
-        ),
-      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -106,7 +97,8 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                       autofocus: true,
                       style: theme.textTheme.bodyMedium,
                       decoration: InputDecoration(
-                        hintText: l10n?.taskTitlePlaceholder ??
+                        hintText:
+                            l10n?.taskTitlePlaceholder ??
                             'Search tasks by title or description...',
                         hintStyle: TextStyle(
                           fontSize: 13,

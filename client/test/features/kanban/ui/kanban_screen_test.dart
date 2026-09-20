@@ -25,7 +25,8 @@ void main() {
     ProjectDto? initialProject,
     KanbanCubit? cubit,
   }) {
-    final effectiveCubit = cubit ??
+    final effectiveCubit =
+        cubit ??
         KanbanCubit(
           TestTaskRepository([]),
           TestProjectRepository(initialProject ?? testProject),
@@ -126,6 +127,55 @@ void main() {
       expect(find.byType(PageView), findsOneWidget);
       expect(find.text('Backlog (1)'), findsOneWidget);
       expect(find.text('Mobile Architecture Task'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'swiping PageView on mobile auto-scrolls filter chips and reveals off-screen chips',
+    (tester) async {
+      tester.view.physicalSize = const Size(360, 640);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      final fakeTaskRepo = TestTaskRepository([
+        const TaskDto(
+          id: 101,
+          projectId: 42,
+          title: 'Sync Chip Task',
+          status: 'Backlog',
+          priority: 'High',
+        ),
+      ]);
+      final fakeProjectRepo = TestProjectRepository(testProject);
+      final cubit = KanbanCubit(fakeTaskRepo, fakeProjectRepo);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: KanbanScreen(
+            projectId: testProject.id,
+            initialProject: testProject,
+            cubit: cubit,
+          ),
+        ),
+      );
+      await cubit.loadTasks(testProject.id);
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // Swipe PageView to column 3 (In Review)
+      await tester.drag(find.byType(PageView), const Offset(-360, 0));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.drag(find.byType(PageView), const Offset(-360, 0));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.drag(find.byType(PageView), const Offset(-360, 0));
+      await tester.pump(const Duration(milliseconds: 400));
+
+      // "In Review (0)" chip should now be scrolled into view
+      expect(find.text('In Review (0)'), findsOneWidget);
     },
   );
 
