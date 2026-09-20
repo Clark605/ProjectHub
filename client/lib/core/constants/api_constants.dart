@@ -72,4 +72,22 @@ class ApiConstants {
 
   // Health
   static const String health = '$_v1/health';
+
+  // SignalR Hub
+  static String get workspaceHubUrl => '$baseUrl$_v1/hubs/workspace';
+
+  // Comments
+  static String taskComments(int taskId) => '$_v1/tasks/$taskId/comments';
+  static String commentById(int id) => '$_v1/comments/$id';
+
+  // Tags
+  static String workspaceTags(int workspaceId) =>
+      '$_v1/workspaces/$workspaceId/tags';
+  static String projectTags(int projectId) => '$_v1/projects/$projectId/tags';
+  static String projectAvailableTags(int projectId) =>
+      '$_v1/projects/$projectId/available-tags';
+  static String taskTags(int taskId) => '$_v1/tasks/$taskId/tags';
+  static String taskTag(int taskId, int tagId) =>
+      '$_v1/tasks/$taskId/tags/$tagId';
+  static String tagById(int id) => '$_v1/tags/$id';
 }

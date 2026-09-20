@@ -27,6 +27,12 @@ _TaskDto _$TaskDtoFromJson(Map<String, dynamic> json) => _TaskDto(
   updatedAt: json['updatedAt'] == null
       ? null
       : DateTime.parse(json['updatedAt'] as String),
+  commentCount: (json['commentCount'] as num?)?.toInt() ?? 0,
+  tags:
+      (json['tags'] as List<dynamic>?)
+          ?.map((e) => TagDto.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
 );
 
 Map<String, dynamic> _$TaskDtoToJson(_TaskDto instance) => <String, dynamic>{
@@ -44,4 +50,6 @@ Map<String, dynamic> _$TaskDtoToJson(_TaskDto instance) => <String, dynamic>{
   'dueDate': instance.dueDate?.toIso8601String(),
   'createdAt': instance.createdAt?.toIso8601String(),
   'updatedAt': instance.updatedAt?.toIso8601String(),
+  'commentCount': instance.commentCount,
+  'tags': instance.tags,
 };

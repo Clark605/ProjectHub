@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/di/injection.dart';
+import 'package:client/features/auth/cubit/app_auth_cubit.dart';
+import 'package:client/features/auth/cubit/app_auth_state.dart';
+import 'package:client/features/tags/data/models/tag_dto.dart';
+import 'package:client/features/tags/data/tag_repository.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/update_task_request.dart';
+import 'package:client/features/tasks/ui/widgets/delete_task_dialog.dart';
 import 'package:client/features/tasks/ui/widgets/move_to_status_sheet.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_edit_form.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_header.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_read_view.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
 
 class TaskDetailSheet extends StatefulWidget {
   final TaskDto task;
@@ -44,7 +49,7 @@ class TaskDetailSheet extends StatefulWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (sheetContext) => TaskDetailSheet(
+      builder: (_) => TaskDetailSheet(
         task: task,
         isArchived: isArchived,
         members: members,
@@ -71,9 +76,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
 
   Future<void> _handleUpdate(UpdateTaskRequest request) async {
     await widget.onUpdate(request);
-    final member = widget.members
-        .where((m) => m.userId == request.assigneeId)
-        .firstOrNull;
+    final member = widget.members.where((m) => m.userId == request.assigneeId).firstOrNull;
 
     if (mounted) {
       setState(() {
@@ -82,9 +85,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
           description: request.description,
           priority: request.priority,
           assigneeId: request.assigneeId,
-          assigneeName: request.assigneeId == null
-              ? null
-              : (member?.name ?? _currentTask.assigneeName),
+          assigneeName: request.assigneeId == null ? null : (member?.name ?? _currentTask.assigneeName),
           dueDate: request.dueDate,
           updatedAt: DateTime.now(),
         );
@@ -94,63 +95,56 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
   }
 
   Future<void> _confirmDelete() async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n?.deleteTaskConfirmTitle ?? 'Delete Task'),
-        content: Text(
-          l10n?.deleteTaskConfirmMessage(_currentTask.title) ??
-              'Are you sure you want to delete "${_currentTask.title}"? This action cannot be undone.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(l10n?.cancel ?? 'Cancel'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-              foregroundColor: Colors.white,
-            ),
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(l10n?.delete ?? 'Delete'),
-          ),
-        ],
-      ),
-    );
-
+    final confirmed = await DeleteTaskDialog.show(context, _currentTask.title);
     if (confirmed == true && mounted) {
       await widget.onDelete();
-      if (mounted) {
-        Navigator.of(context).pop();
-      }
+      if (mounted) Navigator.of(context).pop();
     }
   }
 
   Future<void> _openStatusMove() async {
     if (widget.isArchived) return;
-
     await MoveToStatusSheet.show(
       context,
       task: _currentTask,
       onStatusSelected: (newStatus) async {
         await widget.onStatusChange(newStatus.toServerString());
         if (mounted) {
-          setState(() {
-            _currentTask = _currentTask.copyWith(
-              status: newStatus.toServerString(),
-            );
-          });
+          setState(() => _currentTask = _currentTask.copyWith(status: newStatus.toServerString()));
         }
       },
     );
+  }
+
+  Future<void> _onTagAdded(TagDto tag) async {
+    try {
+      final updated = await getIt<TagRepository>().attachTagToTask(_currentTask.id, tag.id);
+      if (mounted) setState(() => _currentTask = updated);
+    } catch (_) {}
+  }
+
+  Future<void> _onTagRemoved(TagDto tag) async {
+    try {
+      final updated = await getIt<TagRepository>().detachTagFromTask(_currentTask.id, tag.id);
+      if (mounted) setState(() => _currentTask = updated);
+    } catch (_) {}
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    AppAuthState? authState;
+    try {
+      authState = context.read<AppAuthCubit>().state;
+    } catch (_) {
+      if (getIt.isRegistered<AppAuthCubit>()) {
+        authState = getIt<AppAuthCubit>().state;
+      }
+    }
+    final authUser = authState?.mapOrNull(authenticated: (a) => a.user);
+    final currentUserId = authUser?.id ?? '';
+    final isWorkspaceOwner = widget.members.any((m) => m.userId == currentUserId && m.role == 'Owner');
 
     return Padding(
       padding: EdgeInsets.only(bottom: bottomInset),
@@ -183,7 +177,14 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
               ),
               const SizedBox(height: 16),
               if (!_isEditMode)
-                TaskDetailReadView(task: _currentTask)
+                TaskDetailReadView(
+                  task: _currentTask,
+                  isArchived: widget.isArchived,
+                  currentUserId: currentUserId,
+                  isWorkspaceOwner: isWorkspaceOwner,
+                  onTagAdded: _onTagAdded,
+                  onTagRemoved: _onTagRemoved,
+                )
               else
                 TaskDetailEditForm(
                   task: _currentTask,

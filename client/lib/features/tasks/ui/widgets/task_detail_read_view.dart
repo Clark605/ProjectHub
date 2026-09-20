@@ -1,14 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+import 'package:client/core/di/injection.dart';
+import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/features/comments/cubit/comments_cubit.dart';
+import 'package:client/features/comments/data/comment_repository.dart';
+import 'package:client/features/comments/ui/widgets/task_comments_list.dart';
+import 'package:client/features/tags/data/models/tag_dto.dart';
+import 'package:client/features/tags/ui/widgets/task_tags_row.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class TaskDetailReadView extends StatelessWidget {
   final TaskDto task;
+  final bool isArchived;
+  final String currentUserId;
+  final bool isWorkspaceOwner;
+  final ValueChanged<TagDto>? onTagAdded;
+  final ValueChanged<TagDto>? onTagRemoved;
 
-  const TaskDetailReadView({super.key, required this.task});
+  const TaskDetailReadView({
+    super.key,
+    required this.task,
+    this.isArchived = false,
+    this.currentUserId = '',
+    this.isWorkspaceOwner = false,
+    this.onTagAdded,
+    this.onTagRemoved,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +56,19 @@ class TaskDetailReadView extends StatelessWidget {
             color: task.description.isNotEmpty
                 ? theme.colorScheme.onSurface
                 : theme.colorScheme.onSurfaceVariant,
-            fontStyle: task.description.isEmpty
-                ? FontStyle.italic
-                : FontStyle.normal,
+            fontStyle: task.description.isEmpty ? FontStyle.italic : FontStyle.normal,
             height: 1.5,
           ),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 12),
+        TaskTagsRow(
+          projectId: task.projectId,
+          tags: task.tags,
+          canEdit: !isArchived,
+          onTagAdded: onTagAdded,
+          onTagRemoved: onTagRemoved,
+        ),
+        const SizedBox(height: 16),
         Divider(height: 1, color: theme.colorScheme.outlineVariant),
         const SizedBox(height: 16),
         _buildInfoRow(
@@ -59,47 +86,57 @@ class TaskDetailReadView extends StatelessWidget {
               ? DateFormat('MMMM d, yyyy').format(task.dueDate!)
               : (l10n?.dueDateNotSet ?? 'Not set'),
           valueColor: isOverdue ? AppColors.error : null,
-          trailing: isOverdue
-              ? Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.error.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Text(
-                    l10n?.taskOverdue ?? 'Overdue',
-                    style: const TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.error,
-                    ),
-                  ),
-                )
-              : null,
+          trailing: isOverdue ? _buildOverdueBadge(l10n) : null,
         ),
         const SizedBox(height: 12),
         _buildInfoRow(
           context,
           icon: Icons.history_edu_rounded,
           label: l10n?.taskCreatedBy ?? 'Created By',
-          value: task.createdByName.isNotEmpty
-              ? task.createdByName
-              : (l10n?.unknownUser ?? 'Unknown'),
+          value: task.createdByName.isNotEmpty ? task.createdByName : (l10n?.unknownUser ?? 'Unknown'),
         ),
-        const SizedBox(height: 12),
-        if (task.createdAt != null)
+        if (task.createdAt != null) ...[
+          const SizedBox(height: 12),
           _buildInfoRow(
             context,
             icon: Icons.access_time_rounded,
             label: l10n?.taskCreatedAt ?? 'Created',
-            value: DateFormat(
-              'MMM d, yyyy • h:mm a',
-            ).format(task.createdAt!.toLocal()),
+            value: DateFormat('MMM d, yyyy • h:mm a').format(task.createdAt!.toLocal()),
           ),
+        ],
+        if (getIt.isRegistered<CommentRepository>()) ...[
+          const SizedBox(height: 20),
+          Divider(height: 1, color: theme.colorScheme.outlineVariant),
+          const SizedBox(height: 16),
+          BlocProvider<CommentsCubit>(
+            create: (_) => CommentsCubit(
+              taskId: task.id,
+              repository: getIt<CommentRepository>(),
+              signalRService: getIt.isRegistered<SignalRService>()
+                  ? getIt<SignalRService>()
+                  : null,
+            ),
+            child: TaskCommentsList(
+              currentUserId: currentUserId,
+              isWorkspaceOwner: isWorkspaceOwner,
+            ),
+          ),
+        ],
       ],
+    );
+  }
+
+  Widget _buildOverdueBadge(AppLocalizations? l10n) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: AppColors.error.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        l10n?.taskOverdue ?? 'Overdue',
+        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: AppColors.error),
+      ),
     );
   }
 
@@ -112,25 +149,13 @@ class TaskDetailReadView extends StatelessWidget {
     Widget? trailing,
   }) {
     final theme = Theme.of(context);
-
     return Row(
       children: [
         Icon(icon, size: 18, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: 10),
-        Text(
-          label,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-        ),
+        Text(label, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
         const Spacer(),
-        Text(
-          value,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-            color: valueColor,
-          ),
-        ),
+        Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600, color: valueColor)),
         if (trailing != null) ...[const SizedBox(width: 8), trailing],
       ],
     );

@@ -5,15 +5,18 @@ mixin KanbanFilterMixin {
   String? _searchFilter;
   String? _priorityFilter;
   String? _assigneeFilter;
+  int? _tagFilter;
 
   String? get searchFilter => _searchFilter;
   String? get priorityFilter => _priorityFilter;
   String? get assigneeFilter => _assigneeFilter;
+  int? get tagFilter => _tagFilter;
 
   TaskFilter get currentFilter => TaskFilter(
     search: _searchFilter,
     priority: _priorityFilter,
     assigneeId: _assigneeFilter,
+    tagId: _tagFilter,
   );
 
   List<TaskDto> applyFilters(List<TaskDto> tasks) => currentFilter.apply(tasks);
@@ -24,9 +27,11 @@ mixin KanbanFilterMixin {
     String? search,
     String? priority,
     String? assigneeId,
+    int? tagId,
     bool clearSearch = false,
     bool clearPriority = false,
     bool clearAssignee = false,
+    bool clearTag = false,
   }) {
     if (clearSearch) {
       _searchFilter = null;
@@ -45,6 +50,12 @@ mixin KanbanFilterMixin {
     } else if (assigneeId != null) {
       _assigneeFilter = assigneeId.toLowerCase() == 'all' ? null : assigneeId;
     }
+
+    if (clearTag) {
+      _tagFilter = null;
+    } else if (tagId != null) {
+      _tagFilter = tagId;
+    }
     onFiltersUpdated();
   }
 
@@ -52,6 +63,7 @@ mixin KanbanFilterMixin {
     _searchFilter = null;
     _priorityFilter = null;
     _assigneeFilter = null;
+    _tagFilter = null;
     onFiltersUpdated();
   }
 }

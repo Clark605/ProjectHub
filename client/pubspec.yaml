@@ -26,6 +26,7 @@ dependencies:
 
   # Networking
   dio: ^5.8.0+1
+  signalr_netcore: ^1.4.4
 
   # Storage & Security
   flutter_secure_storage: ^9.2.4

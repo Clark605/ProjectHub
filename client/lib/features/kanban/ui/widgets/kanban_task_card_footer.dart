@@ -8,12 +8,14 @@ class KanbanTaskCardFooter extends StatelessWidget {
   final DateTime? dueDate;
   final bool isOverdue;
   final String? assigneeName;
+  final int commentCount;
 
   const KanbanTaskCardFooter({
     super.key,
     this.dueDate,
     required this.isOverdue,
     this.assigneeName,
+    this.commentCount = 0,
   });
 
   @override
@@ -59,6 +61,28 @@ class KanbanTaskCardFooter extends StatelessWidget {
               ],
             ),
           ),
+        if (commentCount > 0) ...[
+          const SizedBox(width: 6),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.chat_bubble_outline_rounded,
+                size: 12,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 3),
+              Text(
+                '$commentCount',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+        ],
         const Spacer(),
         _buildAvatar(context, theme, isDark, l10n),
       ],

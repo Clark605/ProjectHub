@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
+import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class DashboardHeader extends StatelessWidget {
@@ -10,7 +14,14 @@ class DashboardHeader extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
+    int? activeWsId;
+    try {
+      final wsState = context.watch<WorkspaceContextCubit>().state;
+      activeWsId = wsState.mapOrNull(loaded: (l) => l.activeWorkspace.id);
+    } catch (_) {}
+
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: Column(
@@ -34,6 +45,10 @@ class DashboardHeader extends StatelessWidget {
             ],
           ),
         ),
+        if (activeWsId != null) ...[
+          const SizedBox(width: 12),
+          WorkspacePresenceAvatars(workspaceId: activeWsId),
+        ],
       ],
     );
   }

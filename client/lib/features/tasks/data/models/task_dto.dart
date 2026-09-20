@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 
@@ -25,6 +26,8 @@ abstract class TaskDto with _$TaskDto {
     DateTime? dueDate,
     DateTime? createdAt,
     DateTime? updatedAt,
+    @Default(0) int commentCount,
+    @Default([]) List<TagDto> tags,
   }) = _TaskDto;
 
   factory TaskDto.fromJson(Map<String, dynamic> json) =>

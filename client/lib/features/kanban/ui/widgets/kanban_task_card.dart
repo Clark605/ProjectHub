@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_task_card_footer.dart';
+import 'package:client/features/tags/ui/widgets/tag_chip.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -136,11 +137,22 @@ class KanbanTaskCard extends StatelessWidget {
                                 ),
                             ],
                           ),
+                          if (task.tags.isNotEmpty) ...[
+                            const SizedBox(height: 6),
+                            Wrap(
+                              spacing: 4,
+                              runSpacing: 4,
+                              children: task.tags
+                                  .map((t) => TagChip(tag: t))
+                                  .toList(),
+                            ),
+                          ],
                           const SizedBox(height: 10),
                           KanbanTaskCardFooter(
                             dueDate: task.dueDate,
                             isOverdue: task.isOverdue,
                             assigneeName: task.assigneeName,
+                            commentCount: task.commentCount,
                           ),
                         ],
                       ),

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/workspace_accent.dart';
+import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String projectName;
   final String? wsAccent;
+  final int? workspaceId;
   final VoidCallback onRefresh;
   final VoidCallback onSettings;
 
@@ -14,6 +16,7 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.projectName,
     this.wsAccent,
+    this.workspaceId,
     required this.onRefresh,
     required this.onSettings,
   });
@@ -59,24 +62,24 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           Text(
             projectName,
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
+            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           Text(
             l10n?.kanbanBoard ?? 'Kanban Board',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: isDark
-                  ? AppColors.textSecondary
-                  : AppColors.lightTextSecondary,
+              color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
               fontSize: 12,
             ),
           ),
         ],
       ),
       actions: [
+        if (workspaceId != null) ...[
+          Center(child: WorkspacePresenceAvatars(workspaceId: workspaceId!)),
+          const SizedBox(width: 4),
+        ],
         IconButton(
           icon: const Icon(Icons.refresh_rounded),
           tooltip: l10n?.refreshBoard ?? 'Refresh Board',

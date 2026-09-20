@@ -22,6 +22,9 @@ import '../../features/auth/cubit/register_cubit.dart' as _i341;
 import '../../features/auth/cubit/reset_password_cubit.dart' as _i835;
 import '../../features/auth/data/auth_repository.dart' as _i726;
 import '../../features/auth/data/auth_repository_impl.dart' as _i781;
+import '../../features/comments/data/comment_remote_data_source.dart' as _i844;
+import '../../features/comments/data/comment_repository.dart' as _i542;
+import '../../features/comments/data/comment_repository_impl.dart' as _i808;
 import '../../features/dashboard/cubit/dashboard_cubit.dart' as _i949;
 import '../../features/dashboard/data/activity_repository.dart' as _i568;
 import '../../features/kanban/cubit/kanban_cubit.dart' as _i627;
@@ -30,6 +33,9 @@ import '../../features/projects/cubit/project_detail_cubit.dart' as _i566;
 import '../../features/projects/cubit/projects_list_cubit.dart' as _i771;
 import '../../features/projects/data/project_repository.dart' as _i405;
 import '../../features/projects/data/project_repository_impl.dart' as _i396;
+import '../../features/tags/data/tag_remote_data_source.dart' as _i749;
+import '../../features/tags/data/tag_repository.dart' as _i800;
+import '../../features/tags/data/tag_repository_impl.dart' as _i311;
 import '../../features/tasks/cubit/my_tasks_cubit.dart' as _i816;
 import '../../features/tasks/data/task_remote_data_source.dart' as _i538;
 import '../../features/tasks/data/task_repository.dart' as _i241;
@@ -41,6 +47,7 @@ import '../../features/workspaces/data/workspace_repository_impl.dart' as _i591;
 import '../cubit/app_settings_cubit.dart' as _i30;
 import '../network/auth_interceptor.dart' as _i908;
 import '../network/dio_client.dart' as _i667;
+import '../network/signalr_service.dart' as _i586;
 import '../services/github_auth_service.dart' as _i103;
 import '../services/google_auth_service.dart' as _i947;
 import '../storage/prefs_service.dart' as _i415;
@@ -70,8 +77,14 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i908.AuthInterceptor>(
       () => _i908.AuthInterceptor(gh<_i666.SecureStorageService>()),
     );
+    gh.lazySingleton<_i586.SignalRService>(
+      () => _i586.SignalRService(gh<_i666.SecureStorageService>()),
+    );
     gh.lazySingleton<_i361.Dio>(
       () => dioModule.dio(gh<_i908.AuthInterceptor>()),
+    );
+    gh.lazySingleton<_i749.TagRemoteDataSource>(
+      () => _i749.TagRemoteDataSourceImpl(gh<_i361.Dio>()),
     );
     gh.lazySingleton<_i405.ProjectRepository>(
       () => _i396.ProjectRepositoryImpl(gh<_i361.Dio>()),
@@ -83,6 +96,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i538.TaskRemoteDataSource>(
       () => _i538.TaskRemoteDataSourceImpl(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i844.CommentRemoteDataSource>(
+      () => _i844.CommentRemoteDataSourceImpl(gh<_i361.Dio>()),
+    );
     gh.factory<_i566.ProjectDetailCubit>(
       () => _i566.ProjectDetailCubit(gh<_i405.ProjectRepository>()),
     );
@@ -91,6 +107,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i568.ActivityRepository>(
       () => _i568.ActivityRepositoryImpl(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i800.TagRepository>(
+      () => _i311.TagRepositoryImpl(gh<_i749.TagRemoteDataSource>()),
     );
     gh.lazySingleton<_i30.AppSettingsCubit>(
       () => _i30.AppSettingsCubit(gh<_i415.PrefsService>()),
@@ -107,6 +126,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i103.GithubAuthService>(),
       ),
     );
+    gh.lazySingleton<_i542.CommentRepository>(
+      () => _i808.CommentRepositoryImpl(gh<_i844.CommentRemoteDataSource>()),
+    );
     gh.lazySingleton<_i241.TaskRepository>(
       () => _i382.TaskRepositoryImpl(gh<_i538.TaskRemoteDataSource>()),
     );
@@ -114,12 +136,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i95.WorkspaceContextCubit(
         gh<_i688.WorkspaceRepository>(),
         gh<_i415.PrefsService>(),
-      ),
-    );
-    gh.factory<_i627.KanbanCubit>(
-      () => _i627.KanbanCubit(
-        gh<_i241.TaskRepository>(),
-        gh<_i405.ProjectRepository>(),
       ),
     );
     gh.lazySingleton<_i784.AppAuthCubit>(
@@ -139,6 +155,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i322.ProfileEditCubit>(
       () => _i322.ProfileEditCubit(gh<_i726.AuthRepository>()),
+    );
+    gh.factory<_i627.KanbanCubit>(
+      () => _i627.KanbanCubit(
+        gh<_i241.TaskRepository>(),
+        gh<_i405.ProjectRepository>(),
+        gh<_i586.SignalRService>(),
+      ),
     );
     gh.factory<_i816.MyTasksCubit>(
       () => _i816.MyTasksCubit(gh<_i241.TaskRepository>()),

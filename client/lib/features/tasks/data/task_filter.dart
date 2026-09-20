@@ -5,8 +5,9 @@ class TaskFilter {
   final String? search;
   final String? priority;
   final String? assigneeId;
+  final int? tagId;
 
-  const TaskFilter({this.search, this.priority, this.assigneeId});
+  const TaskFilter({this.search, this.priority, this.assigneeId, this.tagId});
 
   List<TaskDto> apply(List<TaskDto> tasks) {
     return tasks.where((task) {
@@ -27,6 +28,11 @@ class TaskFilter {
             return false;
           }
         } else if (task.assigneeId != assigneeId) {
+          return false;
+        }
+      }
+      if (tagId != null) {
+        if (!task.tags.any((t) => t.id == tagId)) {
           return false;
         }
       }
