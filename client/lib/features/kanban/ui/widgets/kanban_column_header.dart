@@ -27,42 +27,69 @@ class KanbanColumnHeader extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
     final statusColor = status.toColor();
-    final statusName = l10n != null ? status.localizedName(l10n) : status.toDisplayString();
+    final statusName = l10n != null
+        ? status.localizedName(l10n)
+        : status.toDisplayString();
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 12, 8, 10),
       child: Row(
         children: [
-          Container(width: 10, height: 10, decoration: BoxDecoration(color: statusColor, shape: BoxShape.circle)),
-          const SizedBox(width: 8),
-          Flexible(
-            child: Text(
-              statusName,
-              style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-              overflow: TextOverflow.ellipsis,
+          Expanded(
+            child: Row(
+              children: [
+                Container(
+                  width: 10,
+                  height: 10,
+                  decoration: BoxDecoration(
+                    color: statusColor,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    statusName,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 7,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: accent != null
+                        ? accent!.withValues(alpha: 0.12)
+                        : (isDark ? Colors.white12 : Colors.black12),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '$taskCount',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color:
+                          accent ??
+                          (isDark
+                              ? AppColors.textSecondary
+                              : AppColors.lightTextSecondary),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-            decoration: BoxDecoration(
-              color: accent != null ? accent!.withValues(alpha: 0.12) : (isDark ? Colors.white12 : Colors.black12),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Text(
-              '$taskCount',
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: accent ?? (isDark ? AppColors.textSecondary : AppColors.lightTextSecondary),
-              ),
-            ),
-          ),
-          const Spacer(),
           if (!isArchived && onAddTask != null)
             IconButton(
               icon: const Icon(Icons.add_rounded, size: 20),
-              tooltip: l10n != null ? l10n.addTaskToStatus(statusName) : 'Add task to $statusName',
+              tooltip: l10n != null
+                  ? l10n.addTaskToStatus(statusName)
+                  : 'Add task to $statusName',
               constraints: const BoxConstraints(),
               padding: const EdgeInsets.all(6),
               onPressed: onAddTask,
