@@ -28,7 +28,7 @@ class DashboardMetricsGrid extends StatelessWidget {
       builder: (context, constraints) {
         final crossAxisCount = constraints.maxWidth > 1100
             ? 4
-            : constraints.maxWidth > 650
+            : constraints.maxWidth > 300
             ? 2
             : 1;
 
@@ -36,9 +36,9 @@ class DashboardMetricsGrid extends StatelessWidget {
           MetricData(
             label: l10n?.activeProjects ?? 'Active Projects',
             value: isLoading ? '...' : '$activeProjects',
-            trend: 'In current workspace',
-            icon: Icons.folder_special_rounded,
-            color: AppColors.electricViolet,
+            trend: 'Ongoing projects',
+            icon: Icons.folder_open_rounded,
+            color: AppColors.primary,
           ),
           MetricData(
             label: l10n?.inProgressTasks ?? 'In Progress Tasks',

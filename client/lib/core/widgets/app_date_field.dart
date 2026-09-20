@@ -60,6 +60,8 @@ class AppDateField extends StatelessWidget {
           onTap: () => _selectDate(context),
           borderRadius: BorderRadius.circular(8),
           child: Container(
+            width: double.infinity,
+            height: 51,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.border),

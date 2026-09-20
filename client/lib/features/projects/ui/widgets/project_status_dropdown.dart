@@ -23,20 +23,15 @@ class ProjectStatusDropdown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Status',
-          style: theme.textTheme.labelMedium?.copyWith(
-            color: AppColors.textSecondary,
-          ),
-        ),
+        Text('Status', style: theme.textTheme.labelMedium),
         const SizedBox(height: 8),
         DropdownButtonFormField<ProjectStatus>(
           initialValue: currentStatus,
           decoration: InputDecoration(
             filled: true,
             fillColor: enabled
-                ? AppColors.surfaceContainerHigh
-                : AppColors.surfaceContainerLow,
+                ? theme.colorScheme.surfaceContainerLow
+                : theme.colorScheme.surfaceContainer,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
