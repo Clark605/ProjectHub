@@ -51,12 +51,8 @@ class TaskDetailSheet extends StatefulWidget {
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (_) => TaskDetailSheet(
-      task: task,
-      isArchived: isArchived,
-      members: members,
-      onUpdate: onUpdate,
-      onStatusChange: onStatusChange,
-      onDelete: onDelete,
+      task: task, isArchived: isArchived, members: members,
+      onUpdate: onUpdate, onStatusChange: onStatusChange, onDelete: onDelete,
       onTaskUpdated: onTaskUpdated,
     ),
   );
@@ -77,14 +73,18 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
 
   Future<void> _handleUpdate(UpdateTaskRequest req) async {
     await widget.onUpdate(req);
-    final m = widget.members.where((x) => x.userId == req.assigneeId).firstOrNull;
+    final m = widget.members
+        .where((x) => x.userId == req.assigneeId)
+        .firstOrNull;
     if (mounted) {
       final u = _currentTask.copyWith(
         title: req.title,
         description: req.description,
         priority: req.priority,
         assigneeId: req.assigneeId,
-        assigneeName: req.assigneeId == null ? null : (m?.name ?? _currentTask.assigneeName),
+        assigneeName: req.assigneeId == null
+            ? null
+            : (m?.name ?? _currentTask.assigneeName),
         dueDate: req.dueDate,
         updatedAt: DateTime.now(),
       );
@@ -138,7 +138,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final auth = context.read<AppAuthCubit?>()?.state ??
         (getIt.isRegistered<AppAuthCubit>() ? getIt<AppAuthCubit>().state : null);
-    final uid = auth?.maybeMap(authenticated: (a) => a.user.id, orElse: () => '') ?? '';
+    final uid = auth != null ? (auth.whenOrNull(authenticated: (u) => u.id) ?? '') : '';
     final isOwner = widget.members.any((m) => m.userId == uid && m.role == 'Owner');
 
     return Padding(

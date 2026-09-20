@@ -20,8 +20,9 @@ class KanbanTagFilterMenu extends StatelessWidget {
     if (availableTags.isEmpty) return const SizedBox.shrink();
 
     final hasSelection = selectedTagId != null;
-    final selectedTag =
-        availableTags.where((t) => t.id == selectedTagId).firstOrNull;
+    final selectedTag = availableTags
+        .where((t) => t.id == selectedTagId)
+        .firstOrNull;
 
     return PopupMenuButton<int?>(
       tooltip: 'Filter by tag',
@@ -41,15 +42,13 @@ class KanbanTagFilterMenu extends StatelessWidget {
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
-        deleteIcon:
-            hasSelection ? const Icon(Icons.close_rounded, size: 14) : null,
+        deleteIcon: hasSelection
+            ? const Icon(Icons.close_rounded, size: 14)
+            : null,
         onDeleted: hasSelection ? () => onTagSelected(null) : null,
       ),
       itemBuilder: (context) => [
-        const PopupMenuItem<int?>(
-          value: null,
-          child: Text('All Tags'),
-        ),
+        const PopupMenuItem<int?>(value: null, child: Text('All Tags')),
         ...availableTags.map(
           (t) => PopupMenuItem<int?>(
             value: t.id,

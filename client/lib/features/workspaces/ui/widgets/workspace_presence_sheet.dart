@@ -140,7 +140,9 @@ class WorkspacePresenceSheet extends StatelessWidget {
                       child: Text(
                         isMe ? '$name (You)' : name,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: isMe ? FontWeight.w600 : FontWeight.normal,
+                          fontWeight: isMe
+                              ? FontWeight.w600
+                              : FontWeight.normal,
                           color: theme.colorScheme.onSurface,
                         ),
                       ),

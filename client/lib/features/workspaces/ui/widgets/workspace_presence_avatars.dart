@@ -32,9 +32,10 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
   List<MemberDto> _members = [];
 
   String get _currentUserId {
-    final auth =
-        getIt.isRegistered<AppAuthCubit>() ? getIt<AppAuthCubit>().state : null;
-    return auth?.maybeMap(authenticated: (a) => a.user.id, orElse: () => '') ??
+    if (!getIt.isRegistered<AppAuthCubit>()) return '';
+    return getIt<AppAuthCubit>().state.whenOrNull(
+          authenticated: (u) => u.id,
+        ) ??
         '';
   }
 
@@ -58,10 +59,9 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
   }
 
   void _loadMembers() {
-    final repo =
-        getIt.isRegistered<WorkspaceRepository>()
-            ? getIt<WorkspaceRepository>()
-            : null;
+    final repo = getIt.isRegistered<WorkspaceRepository>()
+        ? getIt<WorkspaceRepository>()
+        : null;
     if (repo != null) {
       repo
           .getMembers(widget.workspaceId)
@@ -99,8 +99,9 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
       if (_onlineUserIds.first == _currentUserId) {
         return '1 online (You)';
       }
-      final other =
-          _members.where((m) => m.userId == _onlineUserIds.first).firstOrNull;
+      final other = _members
+          .where((m) => m.userId == _onlineUserIds.first)
+          .firstOrNull;
       if (other != null && other.name.isNotEmpty) {
         return other.name.split(' ').first;
       }
