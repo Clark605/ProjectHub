@@ -26,6 +26,14 @@ _Avoid_: Board, repository, space
 A distinct unit of actionable work within a project assigned to a workspace member and tracked on the Kanban board.
 _Avoid_: Card, item, ticket, issue, todo
 
+**Comment**:
+A chronological textual remark or discussion entry attached to a task by a workspace member.
+_Avoid_: Message, chat, note, reply
+
+**Tag**:
+A colored label attached to tasks for categorical filtering and classification, scoped either to an entire workspace (cross-project) or to a specific project.
+_Avoid_: Label, category, badge, flag, topic
+
 ### Roles & Ownership
 
 **Role**:
@@ -65,4 +73,8 @@ _Avoid_: Workflow board, taskboard, scrum board
 **My Tasks**:
 The personalized focus view aggregating a member's assigned tasks across all projects within an active workspace, categorized into urgency groups.
 _Avoid_: User tasks, assigned list, personal board
+
+**Presence**:
+The real-time status indicating workspace members actively connected and viewing a workspace session.
+_Avoid_: Active status, online status, ping, watcher
 
