@@ -9,5 +9,6 @@ public class CreateTaskRequestDto
     public string? Priority { get; set; }
     public string? AssigneeId { get; set; }
     public DateTime? DueDate { get; set; }
+    public List<int>? TagIds { get; set; }
 }
 

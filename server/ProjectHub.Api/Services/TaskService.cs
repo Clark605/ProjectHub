@@ -105,6 +105,31 @@ public class TaskService : ITaskService
 
         _logger.LogInformation("Task {TaskId} created successfully in project {ProjectId}", task.Id, projectId);
 
+        List<TagResponseDto> attachedTags = [];
+        if (request.TagIds != null && request.TagIds.Count > 0)
+        {
+            var distinctTagIds = request.TagIds.Distinct().Take(5).ToList();
+            var validTags = await _context.Tags
+                .Where(t => t.WorkspaceId == project.WorkspaceId && (t.ProjectId == null || t.ProjectId == projectId) && distinctTagIds.Contains(t.Id))
+                .ToListAsync();
+
+            foreach (var tagEntity in validTags)
+            {
+                _context.TaskTags.Add(new TaskTag { TaskId = task.Id, TagId = tagEntity.Id });
+            }
+            await _context.SaveChangesAsync();
+
+            attachedTags = validTags.Select(t => new TagResponseDto
+            {
+                Id = t.Id,
+                WorkspaceId = t.WorkspaceId,
+                ProjectId = t.ProjectId,
+                Name = t.Name,
+                Color = t.Color,
+                CreatedAt = t.CreatedAt
+            }).ToList();
+        }
+
         await _activityLogger.LogAsync(
             project.WorkspaceId,
             userId,
@@ -131,7 +156,7 @@ public class TaskService : ITaskService
             CreatedAt = task.CreatedAt,
             UpdatedAt = task.UpdatedAt,
             CommentCount = 0,
-            Tags = []
+            Tags = attachedTags
         };
 
         await _hubContext.Clients.Group($"workspace-{project.WorkspaceId}")
