@@ -16,7 +16,8 @@ using ProjectHub.Api.Services;
 using ProjectHub.Api.Services.Interfaces;
 using ProjectHub.Api.Middleware;
 using FluentValidation.AspNetCore;
-using ProjectHub.Api.DTOs.WorkSpaceDtos;
+using ProjectHub.Api.Hubs;
+using StackExchange.Redis;
 // Load .env environment variables if present
 DotNetEnv.Env.TraversePath().Load();
 
@@ -60,9 +61,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.SetIsOriginAllowed(_ => true)
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -134,6 +136,20 @@ builder.Services
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
             ClockSkew = TimeSpan.Zero
         };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/api/v1/hubs"))
+                {
+                    context.Token = accessToken;
+                }
+                return System.Threading.Tasks.Task.CompletedTask;
+            }
+        };
     });
 
 builder.Services.AddAuthorization();
@@ -143,6 +159,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IWorkspaceService, WorkspaceService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
 
 // Two-Tier Rate Limiting (ADR-0013)
@@ -222,6 +240,18 @@ if (!string.IsNullOrWhiteSpace(redisConnectionString))
         options.Configuration = redisConnectionString;
         options.InstanceName = "ProjectHub:";
     });
+
+    var multiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
+    builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+
+    builder.Services.AddSignalR().AddStackExchangeRedis(redisConnectionString, options =>
+    {
+        options.Configuration.ChannelPrefix = RedisChannel.Literal("ProjectHubSignalR");
+    });
+}
+else
+{
+    builder.Services.AddSignalR();
 }
 
 
@@ -247,5 +277,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<WorkspaceHub>("/api/v1/hubs/workspace");
 
 app.Run();

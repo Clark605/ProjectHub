@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using ProjectHub.Api.DTOs.TagDtos;
 
 namespace ProjectHub.Api.DTOs.TaskDtos;
 
@@ -18,5 +20,7 @@ public class TaskResponseDto
     public DateTime? DueDate { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public int CommentCount { get; set; }
+    public List<TagResponseDto> Tags { get; set; } = [];
 }
 

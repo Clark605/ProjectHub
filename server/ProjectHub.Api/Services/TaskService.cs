@@ -1,9 +1,15 @@
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ProjectHub.Api.Data;
+using ProjectHub.Api.DTOs.TagDtos;
 using ProjectHub.Api.DTOs.TaskDtos;
 using ProjectHub.Api.Exceptions;
+using ProjectHub.Api.Hubs;
 using ProjectHub.Api.Models;
 using ProjectHub.Api.Services.Interfaces;
 using Task = System.Threading.Tasks.Task;
@@ -16,17 +22,20 @@ public class TaskService : ITaskService
     private readonly AppDbContext _context;
     private readonly UserManager<AppUser> _userManager;
     private readonly IActivityLogger _activityLogger;
+    private readonly IHubContext<WorkspaceHub> _hubContext;
     private readonly ILogger<TaskService> _logger;
 
     public TaskService(
         AppDbContext context,
         UserManager<AppUser> userManager,
         IActivityLogger activityLogger,
+        IHubContext<WorkspaceHub> hubContext,
         ILogger<TaskService> logger)
     {
         _context = context;
         _userManager = userManager;
         _activityLogger = activityLogger;
+        _hubContext = hubContext;
         _logger = logger;
     }
 
@@ -105,10 +114,11 @@ public class TaskService : ITaskService
             taskId: task.Id,
             metadata: new { task.Title, task.Status, task.Priority });
 
-        return new TaskResponseDto
+        var responseDto = new TaskResponseDto
         {
             Id = task.Id,
             ProjectId = task.ProjectId,
+            ProjectName = project.Name,
             Title = task.Title,
             Description = task.Description,
             Status = task.Status,
@@ -119,8 +129,15 @@ public class TaskService : ITaskService
             CreatedByName = creator.Name,
             DueDate = task.DueDate,
             CreatedAt = task.CreatedAt,
-            UpdatedAt = task.UpdatedAt
+            UpdatedAt = task.UpdatedAt,
+            CommentCount = 0,
+            Tags = []
         };
+
+        await _hubContext.Clients.Group($"workspace-{project.WorkspaceId}")
+            .SendAsync("TaskCreated", responseDto);
+
+        return responseDto;
     }
 
     public async Task<IEnumerable<TaskResponseDto>> GetTasksByProjectAsync(
@@ -149,6 +166,9 @@ public class TaskService : ITaskService
         var query = _context.Tasks
             .Include(t => t.Creator)
             .Include(t => t.Assignee)
+            .Include(t => t.Comments)
+            .Include(t => t.TaskTags)
+                .ThenInclude(tt => tt.Tag)
             .Where(t => t.ProjectId == projectId);
 
         if (!string.IsNullOrWhiteSpace(status))
@@ -182,7 +202,17 @@ public class TaskService : ITaskService
                 CreatedByName = t.Creator.Name,
                 DueDate = t.DueDate,
                 CreatedAt = t.CreatedAt,
-                UpdatedAt = t.UpdatedAt
+                UpdatedAt = t.UpdatedAt,
+                CommentCount = t.Comments.Count,
+                Tags = t.TaskTags.Select(tt => new TagResponseDto
+                {
+                    Id = tt.Tag.Id,
+                    WorkspaceId = tt.Tag.WorkspaceId,
+                    ProjectId = tt.Tag.ProjectId,
+                    Name = tt.Tag.Name,
+                    Color = tt.Tag.Color,
+                    CreatedAt = tt.Tag.CreatedAt
+                }).ToList()
             })
             .ToListAsync();
 
@@ -192,8 +222,12 @@ public class TaskService : ITaskService
     public async Task<TaskResponseDto> GetTaskByIdAsync(string userId, int taskId)
     {
         var task = await _context.Tasks
+            .Include(t => t.Project)
             .Include(t => t.Creator)
             .Include(t => t.Assignee)
+            .Include(t => t.Comments)
+            .Include(t => t.TaskTags)
+                .ThenInclude(tt => tt.Tag)
             .FirstOrDefaultAsync(t => t.Id == taskId);
 
         if (task == null)
@@ -202,45 +236,27 @@ public class TaskService : ITaskService
             throw new KeyNotFoundException($"Task with ID {taskId} not found.");
         }
 
-        var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == task.ProjectId);
-        if (project == null)
-        {
-            _logger.LogWarning("Project with ID {ProjectId} not found for task {TaskId}", task.ProjectId, taskId);
-            throw new KeyNotFoundException($"Project for task {taskId} not found.");
-        }
-
         var workspaceMember = await _context.WorkspaceMembers
-            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == project.WorkspaceId);
+            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == task.Project.WorkspaceId);
 
         if (workspaceMember == null)
         {
-            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, project.WorkspaceId);
+            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, task.Project.WorkspaceId);
             throw new KeyNotFoundException($"Task with ID {taskId} not found for user {userId}");
         }
 
-        return new TaskResponseDto
-        {
-            Id = task.Id,
-            ProjectId = task.ProjectId,
-            Title = task.Title,
-            Description = task.Description,
-            Status = task.Status,
-            Priority = task.Priority,
-            AssigneeId = task.AssigneeId,
-            AssigneeName = task.Assignee?.Name,
-            CreatedBy = task.CreatedBy,
-            CreatedByName = task.Creator.Name,
-            DueDate = task.DueDate,
-            CreatedAt = task.CreatedAt,
-            UpdatedAt = task.UpdatedAt
-        };
+        return MapToDto(task);
     }
 
     public async Task<TaskResponseDto> UpdateTaskAsync(string userId, int taskId, UpdateTaskRequestDto request)
     {
         var task = await _context.Tasks
+            .Include(t => t.Project)
             .Include(t => t.Creator)
             .Include(t => t.Assignee)
+            .Include(t => t.Comments)
+            .Include(t => t.TaskTags)
+                .ThenInclude(tt => tt.Tag)
             .FirstOrDefaultAsync(t => t.Id == taskId);
 
         if (task == null)
@@ -249,19 +265,12 @@ public class TaskService : ITaskService
             throw new KeyNotFoundException($"Task with ID {taskId} not found.");
         }
 
-        var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == task.ProjectId);
-        if (project == null)
-        {
-            _logger.LogWarning("Project with ID {ProjectId} not found for task {TaskId}", task.ProjectId, taskId);
-            throw new KeyNotFoundException($"Project for task {taskId} not found.");
-        }
-
         var workspaceMember = await _context.WorkspaceMembers
-            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == project.WorkspaceId);
+            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == task.Project.WorkspaceId);
 
         if (workspaceMember == null)
         {
-            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, project.WorkspaceId);
+            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, task.Project.WorkspaceId);
             throw new KeyNotFoundException($"Task with ID {taskId} not found for user {userId}");
         }
 
@@ -279,11 +288,11 @@ public class TaskService : ITaskService
         if (!string.IsNullOrWhiteSpace(request.AssigneeId))
         {
             var isAssigneeInWorkspace = await _context.WorkspaceMembers
-                .AnyAsync(wm => wm.Workspace.Id == project.WorkspaceId && wm.UserId == request.AssigneeId);
+                .AnyAsync(wm => wm.Workspace.Id == task.Project.WorkspaceId && wm.UserId == request.AssigneeId);
 
             if (!isAssigneeInWorkspace)
             {
-                _logger.LogWarning("Assignee user {AssigneeId} is not a member of workspace {WorkspaceId}", request.AssigneeId, project.WorkspaceId);
+                _logger.LogWarning("Assignee user {AssigneeId} is not a member of workspace {WorkspaceId}", request.AssigneeId, task.Project.WorkspaceId);
                 throw new ArgumentException($"User with ID '{request.AssigneeId}' is not a member of this workspace.");
             }
 
@@ -302,46 +311,32 @@ public class TaskService : ITaskService
 
         _logger.LogInformation("Task {TaskId} updated successfully", taskId);
 
-        return new TaskResponseDto
-        {
-            Id = task.Id,
-            ProjectId = task.ProjectId,
-            Title = task.Title,
-            Description = task.Description,
-            Status = task.Status,
-            Priority = task.Priority,
-            AssigneeId = task.AssigneeId,
-            AssigneeName = assigneeName,
-            CreatedBy = task.CreatedBy,
-            CreatedByName = task.Creator.Name,
-            DueDate = task.DueDate,
-            CreatedAt = task.CreatedAt,
-            UpdatedAt = task.UpdatedAt
-        };
+        var response = MapToDto(task, assigneeName: assigneeName);
+
+        await _hubContext.Clients.Group($"workspace-{task.Project.WorkspaceId}")
+            .SendAsync("TaskUpdated", response);
+
+        return response;
     }
 
     public async Task DeleteTaskAsync(string userId, int taskId)
     {
-        var task = await _context.Tasks.FirstOrDefaultAsync(t => t.Id == taskId);
+        var task = await _context.Tasks
+            .Include(t => t.Project)
+            .FirstOrDefaultAsync(t => t.Id == taskId);
+
         if (task == null)
         {
             _logger.LogWarning("Task with ID {TaskId} not found", taskId);
             throw new KeyNotFoundException($"Task with ID {taskId} not found.");
         }
 
-        var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == task.ProjectId);
-        if (project == null)
-        {
-            _logger.LogWarning("Project with ID {ProjectId} not found for task {TaskId}", task.ProjectId, taskId);
-            throw new KeyNotFoundException($"Project for task {taskId} not found.");
-        }
-
         var workspaceMember = await _context.WorkspaceMembers
-            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == project.WorkspaceId);
+            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == task.Project.WorkspaceId);
 
         if (workspaceMember == null)
         {
-            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, project.WorkspaceId);
+            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, task.Project.WorkspaceId);
             throw new KeyNotFoundException($"Task with ID {taskId} not found for user {userId}");
         }
 
@@ -354,6 +349,10 @@ public class TaskService : ITaskService
             throw new ForbiddenException($"User {userId} is not authorized to delete task {taskId}.");
         }
 
+        var workspaceId = task.Project.WorkspaceId;
+        var projectId = task.ProjectId;
+        var taskTitle = task.Title;
+
         _context.Tasks.Remove(task);
         await _context.SaveChangesAsync();
 
@@ -361,20 +360,27 @@ public class TaskService : ITaskService
 
         var actor = await _userManager.FindByIdAsync(userId);
         await _activityLogger.LogAsync(
-            project.WorkspaceId,
+            workspaceId,
             userId,
             actor?.Name ?? userId,
             ActivityEventType.TaskDeleted,
-            projectId: task.ProjectId,
-            taskId: task.Id,
-            metadata: new { task.Title });
+            projectId: projectId,
+            taskId: taskId,
+            metadata: new { Title = taskTitle });
+
+        await _hubContext.Clients.Group($"workspace-{workspaceId}")
+            .SendAsync("TaskDeleted", new { TaskId = taskId, ProjectId = projectId });
     }
 
     public async Task<TaskResponseDto> UpdateTaskStatusAsync(string userId, int taskId, UpdateTaskStatusDto request)
     {
         var task = await _context.Tasks
+            .Include(t => t.Project)
             .Include(t => t.Creator)
             .Include(t => t.Assignee)
+            .Include(t => t.Comments)
+            .Include(t => t.TaskTags)
+                .ThenInclude(tt => tt.Tag)
             .FirstOrDefaultAsync(t => t.Id == taskId);
 
         if (task == null)
@@ -383,19 +389,12 @@ public class TaskService : ITaskService
             throw new KeyNotFoundException($"Task with ID {taskId} not found.");
         }
 
-        var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == task.ProjectId);
-        if (project == null)
-        {
-            _logger.LogWarning("Project with ID {ProjectId} not found for task {TaskId}", task.ProjectId, taskId);
-            throw new KeyNotFoundException($"Project for task {taskId} not found.");
-        }
-
         var workspaceMember = await _context.WorkspaceMembers
-            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == project.WorkspaceId);
+            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == task.Project.WorkspaceId);
 
         if (workspaceMember == null)
         {
-            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, project.WorkspaceId);
+            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, task.Project.WorkspaceId);
             throw new KeyNotFoundException($"Task with ID {taskId} not found for user {userId}");
         }
 
@@ -419,7 +418,7 @@ public class TaskService : ITaskService
 
         var actor = await _userManager.FindByIdAsync(userId);
         await _activityLogger.LogAsync(
-            project.WorkspaceId,
+            task.Project.WorkspaceId,
             userId,
             actor?.Name ?? userId,
             ActivityEventType.TaskStatusChanged,
@@ -427,29 +426,23 @@ public class TaskService : ITaskService
             taskId: task.Id,
             metadata: new { task.Title, OldStatus = oldStatus, NewStatus = task.Status });
 
-        return new TaskResponseDto
-        {
-            Id = task.Id,
-            ProjectId = task.ProjectId,
-            Title = task.Title,
-            Description = task.Description,
-            Status = task.Status,
-            Priority = task.Priority,
-            AssigneeId = task.AssigneeId,
-            AssigneeName = task.Assignee?.Name,
-            CreatedBy = task.CreatedBy,
-            CreatedByName = task.Creator.Name,
-            DueDate = task.DueDate,
-            CreatedAt = task.CreatedAt,
-            UpdatedAt = task.UpdatedAt
-        };
+        var response = MapToDto(task);
+
+        await _hubContext.Clients.Group($"workspace-{task.Project.WorkspaceId}")
+            .SendAsync("TaskStatusChanged", response);
+
+        return response;
     }
 
     public async Task<TaskResponseDto> UpdateTaskAssigneeAsync(string userId, int taskId, UpdateTaskAssigneeDto request)
     {
         var task = await _context.Tasks
+            .Include(t => t.Project)
             .Include(t => t.Creator)
             .Include(t => t.Assignee)
+            .Include(t => t.Comments)
+            .Include(t => t.TaskTags)
+                .ThenInclude(tt => tt.Tag)
             .FirstOrDefaultAsync(t => t.Id == taskId);
 
         if (task == null)
@@ -458,19 +451,12 @@ public class TaskService : ITaskService
             throw new KeyNotFoundException($"Task with ID {taskId} not found.");
         }
 
-        var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == task.ProjectId);
-        if (project == null)
-        {
-            _logger.LogWarning("Project with ID {ProjectId} not found for task {TaskId}", task.ProjectId, taskId);
-            throw new KeyNotFoundException($"Project for task {taskId} not found.");
-        }
-
         var workspaceMember = await _context.WorkspaceMembers
-            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == project.WorkspaceId);
+            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == task.Project.WorkspaceId);
 
         if (workspaceMember == null)
         {
-            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, project.WorkspaceId);
+            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, task.Project.WorkspaceId);
             throw new KeyNotFoundException($"Task with ID {taskId} not found for user {userId}");
         }
 
@@ -478,11 +464,11 @@ public class TaskService : ITaskService
         if (!string.IsNullOrWhiteSpace(request.AssigneeId))
         {
             var isAssigneeInWorkspace = await _context.WorkspaceMembers
-                .AnyAsync(wm => wm.Workspace.Id == project.WorkspaceId && wm.UserId == request.AssigneeId);
+                .AnyAsync(wm => wm.Workspace.Id == task.Project.WorkspaceId && wm.UserId == request.AssigneeId);
 
             if (!isAssigneeInWorkspace)
             {
-                _logger.LogWarning("Assignee user {AssigneeId} is not a member of workspace {WorkspaceId}", request.AssigneeId, project.WorkspaceId);
+                _logger.LogWarning("Assignee user {AssigneeId} is not a member of workspace {WorkspaceId}", request.AssigneeId, task.Project.WorkspaceId);
                 throw new ArgumentException($"User with ID '{request.AssigneeId}' is not a member of this workspace.");
             }
 
@@ -499,7 +485,7 @@ public class TaskService : ITaskService
 
         var assignActor = await _userManager.FindByIdAsync(userId);
         await _activityLogger.LogAsync(
-            project.WorkspaceId,
+            task.Project.WorkspaceId,
             userId,
             assignActor?.Name ?? userId,
             ActivityEventType.TaskAssigned,
@@ -507,22 +493,12 @@ public class TaskService : ITaskService
             taskId: task.Id,
             metadata: new { task.Title, AssigneeId = task.AssigneeId, AssigneeName = assigneeName });
 
-        return new TaskResponseDto
-        {
-            Id = task.Id,
-            ProjectId = task.ProjectId,
-            Title = task.Title,
-            Description = task.Description,
-            Status = task.Status,
-            Priority = task.Priority,
-            AssigneeId = task.AssigneeId,
-            AssigneeName = assigneeName,
-            CreatedBy = task.CreatedBy,
-            CreatedByName = task.Creator.Name,
-            DueDate = task.DueDate,
-            CreatedAt = task.CreatedAt,
-            UpdatedAt = task.UpdatedAt
-        };
+        var response = MapToDto(task, assigneeName: assigneeName);
+
+        await _hubContext.Clients.Group($"workspace-{task.Project.WorkspaceId}")
+            .SendAsync("TaskAssigned", response);
+
+        return response;
     }
 
     public async Task<IEnumerable<TaskResponseDto>> GetMyTasksAsync(string userId, int workspaceId)
@@ -542,6 +518,9 @@ public class TaskService : ITaskService
             .Include(t => t.Project)
             .Include(t => t.Creator)
             .Include(t => t.Assignee)
+            .Include(t => t.Comments)
+            .Include(t => t.TaskTags)
+                .ThenInclude(tt => tt.Tag)
             .Where(t => t.Project.WorkspaceId == workspaceId && t.AssigneeId == userId)
             .OrderByDescending(t => t.CreatedAt)
             .Select(t => new TaskResponseDto
@@ -559,11 +538,51 @@ public class TaskService : ITaskService
                 CreatedByName = t.Creator.Name,
                 DueDate = t.DueDate,
                 CreatedAt = t.CreatedAt,
-                UpdatedAt = t.UpdatedAt
+                UpdatedAt = t.UpdatedAt,
+                CommentCount = t.Comments.Count,
+                Tags = t.TaskTags.Select(tt => new TagResponseDto
+                {
+                    Id = tt.Tag.Id,
+                    WorkspaceId = tt.Tag.WorkspaceId,
+                    ProjectId = tt.Tag.ProjectId,
+                    Name = tt.Tag.Name,
+                    Color = tt.Tag.Color,
+                    CreatedAt = tt.Tag.CreatedAt
+                }).ToList()
             })
             .ToListAsync();
 
         return tasks;
     }
-}
 
+    private static TaskResponseDto MapToDto(TaskEntity task, string? assigneeName = null, string? creatorName = null, string? projectName = null)
+    {
+        return new TaskResponseDto
+        {
+            Id = task.Id,
+            ProjectId = task.ProjectId,
+            ProjectName = projectName ?? task.Project?.Name,
+            Title = task.Title,
+            Description = task.Description,
+            Status = task.Status,
+            Priority = task.Priority,
+            AssigneeId = task.AssigneeId,
+            AssigneeName = assigneeName ?? task.Assignee?.Name,
+            CreatedBy = task.CreatedBy,
+            CreatedByName = creatorName ?? task.Creator?.Name ?? string.Empty,
+            DueDate = task.DueDate,
+            CreatedAt = task.CreatedAt,
+            UpdatedAt = task.UpdatedAt,
+            CommentCount = task.Comments?.Count ?? 0,
+            Tags = task.TaskTags?.Select(tt => new TagResponseDto
+            {
+                Id = tt.Tag.Id,
+                WorkspaceId = tt.Tag.WorkspaceId,
+                ProjectId = tt.Tag.ProjectId,
+                Name = tt.Tag.Name,
+                Color = tt.Tag.Color,
+                CreatedAt = tt.Tag.CreatedAt
+            }).ToList() ?? []
+        };
+    }
+}

@@ -16,6 +16,9 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<Project> Projects => Set<Project>();
     public DbSet<Task> Tasks => Set<Task>();
     public DbSet<ActivityEvent> ActivityEvents => Set<ActivityEvent>();
+    public DbSet<Comment> Comments => Set<Comment>();
+    public DbSet<Tag> Tags => Set<Tag>();
+    public DbSet<TaskTag> TaskTags => Set<TaskTag>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
@@ -99,6 +102,56 @@ public class AppDbContext : IdentityDbContext<AppUser>
             entity.Property(a => a.EventType).HasConversion<string>().HasMaxLength(50);
             entity.Property(a => a.ActorName).HasMaxLength(100);
             entity.Property(a => a.Metadata).HasMaxLength(4000);
+        });
+
+        builder.Entity<TaskTag>(entity =>
+        {
+            entity.HasKey(tt => new { tt.TaskId, tt.TagId });
+
+            entity.HasOne(tt => tt.Task)
+                .WithMany(t => t.TaskTags)
+                .HasForeignKey(tt => tt.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(tt => tt.Tag)
+                .WithMany(t => t.TaskTags)
+                .HasForeignKey(tt => tt.TagId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<Tag>(entity =>
+        {
+            entity.HasOne(t => t.Workspace)
+                .WithMany()
+                .HasForeignKey(t => t.WorkspaceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(t => t.Project)
+                .WithMany()
+                .HasForeignKey(t => t.ProjectId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.Property(t => t.Name).HasMaxLength(30).IsRequired();
+            entity.Property(t => t.Color).HasMaxLength(20).IsRequired();
+
+            entity.HasIndex(t => new { t.WorkspaceId, t.ProjectId });
+        });
+
+        builder.Entity<Comment>(entity =>
+        {
+            entity.HasOne(c => c.Task)
+                .WithMany(t => t.Comments)
+                .HasForeignKey(c => c.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(c => c.Author)
+                .WithMany()
+                .HasForeignKey(c => c.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.Property(c => c.Content).HasMaxLength(2000).IsRequired();
+
+            entity.HasIndex(c => new { c.TaskId, c.CreatedAt });
         });
     }
 }
