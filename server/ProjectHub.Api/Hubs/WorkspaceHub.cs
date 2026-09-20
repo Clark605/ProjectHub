@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using StackExchange.Redis;
@@ -18,13 +19,16 @@ public class PresenceChangedDto
 [Authorize]
 public class WorkspaceHub : Hub
 {
-    private readonly IConnectionMultiplexer _redis;
-    private readonly IDatabase _db;
+    private readonly IConnectionMultiplexer? _redis;
+    private readonly IDatabase? _db;
 
-    public WorkspaceHub(IConnectionMultiplexer redis)
+    private static readonly ConcurrentDictionary<int, ConcurrentDictionary<string, string>> s_memWsConnections = new();
+    private static readonly ConcurrentDictionary<string, ConcurrentBag<int>> s_memConnWorkspaces = new();
+
+    public WorkspaceHub(IConnectionMultiplexer? redis = null)
     {
         _redis = redis;
-        _db = redis.GetDatabase();
+        _db = redis?.GetDatabase();
     }
 
     public async Task JoinWorkspace(int workspaceId)
@@ -40,9 +44,19 @@ public class WorkspaceHub : Hub
 
         await Groups.AddToGroupAsync(connectionId, groupName);
 
-        await _db.SetAddAsync($"conn:{connectionId}:workspaces", workspaceId);
-        await _db.HashSetAsync($"workspace:{workspaceId}:connections", connectionId, userId);
-        await _db.SetAddAsync($"workspace:{workspaceId}:online_users", userId);
+        if (_db != null)
+        {
+            await _db.SetAddAsync($"conn:{connectionId}:workspaces", workspaceId);
+            await _db.HashSetAsync($"workspace:{workspaceId}:connections", connectionId, userId);
+            await _db.SetAddAsync($"workspace:{workspaceId}:online_users", userId);
+        }
+        else
+        {
+            var wsMap = s_memWsConnections.GetOrAdd(workspaceId, _ => new ConcurrentDictionary<string, string>());
+            wsMap[connectionId] = userId;
+            var connList = s_memConnWorkspaces.GetOrAdd(connectionId, _ => new ConcurrentBag<int>());
+            connList.Add(workspaceId);
+        }
 
         var onlineMembers = await GetOnlineUsersAsync(workspaceId);
         await Clients.Group(groupName).SendAsync("PresenceChanged", new PresenceChangedDto
@@ -59,16 +73,26 @@ public class WorkspaceHub : Hub
         var groupName = $"workspace-{workspaceId}";
 
         await Groups.RemoveFromGroupAsync(connectionId, groupName);
-        await _db.SetRemoveAsync($"conn:{connectionId}:workspaces", workspaceId);
-        await _db.HashDeleteAsync($"workspace:{workspaceId}:connections", connectionId);
-
-        if (!string.IsNullOrEmpty(userId))
+        if (_db != null)
         {
-            var remainingConnections = await _db.HashGetAllAsync($"workspace:{workspaceId}:connections");
-            var hasOtherConnections = remainingConnections.Any(e => e.Value == userId);
-            if (!hasOtherConnections)
+            await _db.SetRemoveAsync($"conn:{connectionId}:workspaces", workspaceId);
+            await _db.HashDeleteAsync($"workspace:{workspaceId}:connections", connectionId);
+
+            if (!string.IsNullOrEmpty(userId))
             {
-                await _db.SetRemoveAsync($"workspace:{workspaceId}:online_users", userId);
+                var remainingConnections = await _db.HashGetAllAsync($"workspace:{workspaceId}:connections");
+                var hasOtherConnections = remainingConnections.Any(e => e.Value == userId);
+                if (!hasOtherConnections)
+                {
+                    await _db.SetRemoveAsync($"workspace:{workspaceId}:online_users", userId);
+                }
+            }
+        }
+        else
+        {
+            if (s_memWsConnections.TryGetValue(workspaceId, out var wsMap))
+            {
+                wsMap.TryRemove(connectionId, out _);
             }
         }
 
@@ -85,40 +109,73 @@ public class WorkspaceHub : Hub
         var userId = Context.UserIdentifier ?? Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var connectionId = Context.ConnectionId;
 
-        var workspaces = await _db.SetMembersAsync($"conn:{connectionId}:workspaces");
-        foreach (var wsVal in workspaces)
+        if (_db != null)
         {
-            if (int.TryParse((string?)wsVal, out var workspaceId))
+            var workspaces = await _db.SetMembersAsync($"conn:{connectionId}:workspaces");
+            foreach (var wsVal in workspaces)
             {
-                await _db.HashDeleteAsync($"workspace:{workspaceId}:connections", connectionId);
-
-                if (!string.IsNullOrEmpty(userId))
+                if (int.TryParse((string?)wsVal, out var workspaceId))
                 {
-                    var remainingConnections = await _db.HashGetAllAsync($"workspace:{workspaceId}:connections");
-                    var hasOtherConnections = remainingConnections.Any(e => e.Value == userId);
-                    if (!hasOtherConnections)
+                    await _db.HashDeleteAsync($"workspace:{workspaceId}:connections", connectionId);
+
+                    if (!string.IsNullOrEmpty(userId))
                     {
-                        await _db.SetRemoveAsync($"workspace:{workspaceId}:online_users", userId);
+                        var remainingConnections = await _db.HashGetAllAsync($"workspace:{workspaceId}:connections");
+                        var hasOtherConnections = remainingConnections.Any(e => e.Value == userId);
+                        if (!hasOtherConnections)
+                        {
+                            await _db.SetRemoveAsync($"workspace:{workspaceId}:online_users", userId);
+                        }
                     }
-                }
 
-                var onlineMembers = await GetOnlineUsersAsync(workspaceId);
-                await Clients.Group($"workspace-{workspaceId}").SendAsync("PresenceChanged", new PresenceChangedDto
+                    var onlineMembers = await GetOnlineUsersAsync(workspaceId);
+                    await Clients.Group($"workspace-{workspaceId}").SendAsync("PresenceChanged", new PresenceChangedDto
+                    {
+                        WorkspaceId = workspaceId,
+                        OnlineUserIds = onlineMembers
+                    });
+                }
+            }
+
+            await _db.KeyDeleteAsync($"conn:{connectionId}:workspaces");
+        }
+        else
+        {
+            if (s_memConnWorkspaces.TryRemove(connectionId, out var workspaces))
+            {
+                foreach (var workspaceId in workspaces.Distinct())
                 {
-                    WorkspaceId = workspaceId,
-                    OnlineUserIds = onlineMembers
-                });
+                    if (s_memWsConnections.TryGetValue(workspaceId, out var wsMap))
+                    {
+                        wsMap.TryRemove(connectionId, out _);
+                    }
+
+                    var onlineMembers = await GetOnlineUsersAsync(workspaceId);
+                    await Clients.Group($"workspace-{workspaceId}").SendAsync("PresenceChanged", new PresenceChangedDto
+                    {
+                        WorkspaceId = workspaceId,
+                        OnlineUserIds = onlineMembers
+                    });
+                }
             }
         }
-
-        await _db.KeyDeleteAsync($"conn:{connectionId}:workspaces");
 
         await base.OnDisconnectedAsync(exception);
     }
 
     private async Task<List<string>> GetOnlineUsersAsync(int workspaceId)
     {
-        var members = await _db.SetMembersAsync($"workspace:{workspaceId}:online_users");
-        return members.Select(m => (string)m!).Where(s => !string.IsNullOrEmpty(s)).ToList();
+        if (_db != null)
+        {
+            var members = await _db.SetMembersAsync($"workspace:{workspaceId}:online_users");
+            return members.Select(m => (string)m!).Where(s => !string.IsNullOrEmpty(s)).ToList();
+        }
+
+        if (s_memWsConnections.TryGetValue(workspaceId, out var wsMap))
+        {
+            return wsMap.Values.Distinct().ToList();
+        }
+
+        return [];
     }
 }

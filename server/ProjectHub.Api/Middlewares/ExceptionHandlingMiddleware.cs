@@ -40,6 +40,7 @@ namespace ProjectHub.Api.Middleware
             {
                 KeyNotFoundException => StatusCodes.Status404NotFound,
                 ArgumentException => StatusCodes.Status400BadRequest,
+                InvalidOperationException => StatusCodes.Status400BadRequest,
                 UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
                 ForbiddenException => StatusCodes.Status403Forbidden,
                 _ => StatusCodes.Status500InternalServerError
@@ -56,7 +57,7 @@ namespace ProjectHub.Api.Middleware
                 Message = statusCode switch
                 {
                     StatusCodes.Status404NotFound => "Resource not found.",
-                    StatusCodes.Status400BadRequest => "Request is invalid.",
+                    StatusCodes.Status400BadRequest => exception.Message ?? "Request is invalid.",
                     StatusCodes.Status401Unauthorized => "Unauthorized access to preform this action",
                     StatusCodes.Status403Forbidden => "You do not have permission to access this resource.",
 
