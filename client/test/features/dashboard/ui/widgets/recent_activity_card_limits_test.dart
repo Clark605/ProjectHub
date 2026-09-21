@@ -22,27 +22,28 @@ void main() {
   }
 
   group('RecentActivityCard limits and View All', () {
-    testWidgets('limits displayed activities to exactly 5 when 8 are provided', (
-      tester,
-    ) async {
-      final activities = generateActivities(8);
+    testWidgets(
+      'limits displayed activities to exactly 5 when 8 are provided',
+      (tester) async {
+        final activities = generateActivities(8);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SingleChildScrollView(
-              child: RecentActivityCard(
-                activities: activities,
-                workspaceId: 10,
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: RecentActivityCard(
+                  activities: activities,
+                  workspaceId: 10,
+                ),
               ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.byType(ActivityTile), findsNWidgets(5));
-      expect(find.text('View all'), findsOneWidget);
-    });
+        expect(find.byType(ActivityTile), findsNWidgets(5));
+        expect(find.text('View all'), findsOneWidget);
+      },
+    );
 
     testWidgets('calls onViewAll callback when View all button is tapped', (
       tester,
@@ -70,22 +71,23 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('does not show View all button when no workspaceId or onViewAll provided', (
-      tester,
-    ) async {
-      final activities = generateActivities(3);
+    testWidgets(
+      'does not show View all button when no workspaceId or onViewAll provided',
+      (tester) async {
+        final activities = generateActivities(3);
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SingleChildScrollView(
-              child: RecentActivityCard(activities: activities),
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: RecentActivityCard(activities: activities),
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('View all'), findsNothing);
-    });
+        expect(find.text('View all'), findsNothing);
+      },
+    );
   });
 }

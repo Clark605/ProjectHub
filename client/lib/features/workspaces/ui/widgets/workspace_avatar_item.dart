@@ -63,10 +63,7 @@ class WorkspaceAvatarItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(
-            color: theme.colorScheme.surface,
-            width: 1.5,
-          ),
+          border: Border.all(color: theme.colorScheme.surface, width: 1.5),
         ),
         child: CircleAvatar(
           radius: radius,

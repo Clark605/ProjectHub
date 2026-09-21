@@ -10,11 +10,7 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: KanbanBoardSkeleton(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: KanbanBoardSkeleton())),
       );
 
       expect(find.byType(KanbanBoardSkeleton), findsOneWidget);
@@ -27,11 +23,7 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: KanbanBoardSkeleton(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: KanbanBoardSkeleton())),
       );
 
       expect(find.byType(KanbanBoardSkeleton), findsOneWidget);
@@ -42,9 +34,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: ThemeData.light(),
-          home: const Scaffold(
-            body: KanbanBoardSkeleton(),
-          ),
+          home: const Scaffold(body: KanbanBoardSkeleton()),
         ),
       );
 

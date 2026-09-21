@@ -75,7 +75,8 @@ class RecentActivityCard extends StatelessWidget {
                 )
               else if (onViewAll != null || workspaceId != null)
                 TextButton(
-                  onPressed: onViewAll ??
+                  onPressed:
+                      onViewAll ??
                       () {
                         if (workspaceId != null) {
                           Navigator.pushNamed(

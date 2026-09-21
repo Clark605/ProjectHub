@@ -102,8 +102,9 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
       children: [
         for (int i = 0; i < visibleIds.length; i++)
           Align(
-            widthFactor:
-                (i == visibleIds.length - 1 && overflowCount == 0) ? 1.0 : 0.72,
+            widthFactor: (i == visibleIds.length - 1 && overflowCount == 0)
+                ? 1.0
+                : 0.72,
             child: WorkspaceAvatarItem(
               userId: visibleIds[i],
               member: _members
@@ -120,10 +121,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainerHighest,
               shape: BoxShape.circle,
-              border: Border.all(
-                color: theme.colorScheme.surface,
-                width: 1.5,
-              ),
+              border: Border.all(color: theme.colorScheme.surface, width: 1.5),
             ),
             child: Center(
               child: Text(

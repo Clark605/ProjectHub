@@ -89,41 +89,42 @@ void main() {
     expect(find.text('No recent activity yet'), findsOneWidget);
   });
 
-  testWidgets('ActivityStreamScreen renders error state and retries on button tap', (
-    tester,
-  ) async {
-    fakeRepo.shouldThrow = true;
+  testWidgets(
+    'ActivityStreamScreen renders error state and retries on button tap',
+    (tester) async {
+      fakeRepo.shouldThrow = true;
 
-    await tester.pumpWidget(
-      MaterialApp(
-        home: ActivityStreamScreen(
-          workspaceId: 10,
-          activityRepository: fakeRepo,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ActivityStreamScreen(
+            workspaceId: 10,
+            activityRepository: fakeRepo,
+          ),
         ),
-      ),
-    );
-    await tester.pump();
+      );
+      await tester.pump();
 
-    expect(find.text('Retry'), findsOneWidget);
-    expect(fakeRepo.callCount, 1);
+      expect(find.text('Retry'), findsOneWidget);
+      expect(fakeRepo.callCount, 1);
 
-    fakeRepo.shouldThrow = false;
-    fakeRepo.activitiesToReturn = [
-      ActivityEventDto.fromJson({
-        'id': 1,
-        'workspaceId': 10,
-        'actorId': 'u1',
-        'actorName': 'Alex',
-        'eventType': 'TaskCreated',
-        'metadata': {'Title': 'Done'},
-        'createdAt': DateTime.now().toIso8601String(),
-      }),
-    ];
+      fakeRepo.shouldThrow = false;
+      fakeRepo.activitiesToReturn = [
+        ActivityEventDto.fromJson({
+          'id': 1,
+          'workspaceId': 10,
+          'actorId': 'u1',
+          'actorName': 'Alex',
+          'eventType': 'TaskCreated',
+          'metadata': {'Title': 'Done'},
+          'createdAt': DateTime.now().toIso8601String(),
+        }),
+      ];
 
-    await tester.tap(find.text('Retry'));
-    await tester.pump();
+      await tester.tap(find.text('Retry'));
+      await tester.pump();
 
-    expect(fakeRepo.callCount, 2);
-    expect(find.byType(ActivityTile), findsOneWidget);
-  });
+      expect(fakeRepo.callCount, 2);
+      expect(find.byType(ActivityTile), findsOneWidget);
+    },
+  );
 }

@@ -89,11 +89,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
         const SizedBox(width: 8),
         const Flexible(child: Bone.text(words: 2, fontSize: 14)),
         const SizedBox(width: 8),
-        Bone(
-          width: 24,
-          height: 18,
-          borderRadius: BorderRadius.circular(9),
-        ),
+        Bone(width: 24, height: 18, borderRadius: BorderRadius.circular(9)),
         const Spacer(),
         const Bone.icon(size: 18),
       ],
