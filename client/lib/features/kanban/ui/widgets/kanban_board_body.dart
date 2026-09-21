@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
+import 'package:client/features/kanban/ui/widgets/kanban_board_skeleton.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_desktop_board.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_empty_state.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_mobile_board.dart';
@@ -46,8 +47,8 @@ class KanbanBoardBody extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return state.when(
-      initial: () => const Center(child: CircularProgressIndicator()),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      initial: () => const KanbanBoardSkeleton(),
+      loading: () => const KanbanBoardSkeleton(),
       error: (message) => Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
