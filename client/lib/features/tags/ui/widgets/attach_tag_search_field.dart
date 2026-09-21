@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class AttachTagSearchField extends StatelessWidget {
   const AttachTagSearchField({
@@ -13,6 +14,7 @@ class AttachTagSearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
       borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
@@ -24,7 +26,7 @@ class AttachTagSearchField extends StatelessWidget {
       onChanged: onChanged,
       style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface),
       decoration: InputDecoration(
-        hintText: 'Search or create tag...',
+        hintText: l10n?.searchOrCreateTag ?? 'Search or create tag...',
         hintStyle: TextStyle(
           color: theme.colorScheme.onSurfaceVariant,
           fontSize: 13,

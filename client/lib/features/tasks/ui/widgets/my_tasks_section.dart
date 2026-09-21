@@ -4,6 +4,7 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/widgets/my_task_list_tile.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class MyTasksSection extends StatelessWidget {
   final String emoji;
@@ -32,6 +33,7 @@ class MyTasksSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final accent =
         activeWorkspaceAccent != null &&
@@ -113,7 +115,7 @@ class MyTasksSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               child: Text(
-                'No tasks in this section',
+                l10n?.noTasksInSection ?? 'No tasks in this section',
                 style: TextStyle(
                   fontSize: 12,
                   color: isDark

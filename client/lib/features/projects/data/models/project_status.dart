@@ -1,3 +1,5 @@
+import 'package:client/l10n/generated/app_localizations.dart';
+
 enum ProjectStatus {
   planning,
   active,
@@ -30,6 +32,19 @@ enum ProjectStatus {
         return 'Completed';
       case ProjectStatus.archived:
         return 'Archived';
+    }
+  }
+
+  String localizedName(AppLocalizations l10n) {
+    switch (this) {
+      case ProjectStatus.planning:
+        return l10n.statusPlanning;
+      case ProjectStatus.active:
+        return l10n.statusActive;
+      case ProjectStatus.completed:
+        return l10n.statusCompleted;
+      case ProjectStatus.archived:
+        return l10n.statusArchived;
     }
   }
 }

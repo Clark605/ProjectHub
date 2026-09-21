@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:client/features/comments/data/models/comment_dto.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class TaskCommentItem extends StatelessWidget {
   const TaskCommentItem({
@@ -37,6 +38,7 @@ class TaskCommentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final canDelete = comment.authorId == currentUserId || isWorkspaceOwner;
     final initials = _getInitials(comment.authorName);
     final timeStr = _formatDate(comment.createdAt);
@@ -92,7 +94,7 @@ class TaskCommentItem extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         onPressed: onDelete,
-                        tooltip: 'Delete comment',
+                        tooltip: l10n?.deleteCommentTooltip ?? 'Delete comment',
                       ),
                   ],
                 ),

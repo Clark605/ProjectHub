@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class WorkspaceVisual extends StatelessWidget {
   const WorkspaceVisual({super.key});
@@ -9,6 +10,7 @@ class WorkspaceVisual extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     final cardBg = isDark
@@ -199,7 +201,7 @@ class WorkspaceVisual extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
-                                    'HIGH',
+                                    l10n?.priorityHigh.toUpperCase() ?? 'HIGH',
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: AppColors.priorityHigh,
                                       fontWeight: FontWeight.w700,

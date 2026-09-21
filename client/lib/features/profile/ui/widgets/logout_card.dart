@@ -68,7 +68,8 @@ class LogoutCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'End your active session and revoke credentials.',
+                    l10n?.sessionSecurityDesc ??
+                        'Log out of your account on this device.',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(
                         context,

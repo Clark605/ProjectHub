@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanVisual extends StatefulWidget {
   const KanbanVisual({super.key});
@@ -32,6 +33,7 @@ class _KanbanVisualState extends State<KanbanVisual>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     final columnBg = isDark
@@ -60,20 +62,25 @@ class _KanbanVisualState extends State<KanbanVisual>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildColumnHeader(
-                    'TO DO',
+                    l10n?.statusTodo.toUpperCase() ?? 'TO DO',
                     '2',
                     AppColors.priorityUrgent,
                     theme,
                   ),
                   const SizedBox(width: 8),
                   _buildColumnHeader(
-                    'IN PROGRESS',
+                    l10n?.statusInProgress.toUpperCase() ?? 'IN PROGRESS',
                     '3',
                     AppColors.electricViolet,
                     theme,
                   ),
                   const SizedBox(width: 8),
-                  _buildColumnHeader('DONE', '8', AppColors.success, theme),
+                  _buildColumnHeader(
+                    l10n?.statusDone.toUpperCase() ?? 'DONE',
+                    '8',
+                    AppColors.success,
+                    theme,
+                  ),
                 ],
               ),
               const SizedBox(height: 10),
@@ -95,7 +102,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                         children: [
                           _buildTaskCard(
                             title: 'JWT Refresh',
-                            tag: 'URGENT',
+                            tag: l10n?.priorityUrgent.toUpperCase() ?? 'URGENT',
                             tagColor: AppColors.priorityUrgent,
                             avatarInitials: 'EL',
                             cardBg: cardBg,
@@ -281,7 +288,10 @@ class _KanbanVisualState extends State<KanbanVisual>
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
-                                    isDoneState ? 'DONE' : 'SYNC',
+                                    isDoneState
+                                        ? (l10n?.statusDone.toUpperCase() ??
+                                            'DONE')
+                                        : 'SYNC',
                                     style: TextStyle(
                                       color: isDoneState
                                           ? AppColors.success

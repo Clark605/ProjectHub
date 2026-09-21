@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class VersionInfoTile extends StatelessWidget {
   const VersionInfoTile({super.key});
@@ -7,6 +8,7 @@ class VersionInfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Card(
       child: Padding(
@@ -40,14 +42,15 @@ class VersionInfoTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'ProjectHub',
+                        l10n?.appTitle ?? 'ProjectHub',
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Version $version (Build $buildNumber) • Flutter & .NET 10',
+                        l10n?.appVersionFormat(version, buildNumber) ??
+                            'Version $version (Build $buildNumber) • Flutter & .NET 10',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurface.withValues(
                             alpha: 0.6,

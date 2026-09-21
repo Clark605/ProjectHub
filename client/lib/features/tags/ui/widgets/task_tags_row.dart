@@ -4,6 +4,7 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_modal.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class TaskTagsRow extends StatelessWidget {
   const TaskTagsRow({
@@ -23,6 +24,7 @@ class TaskTagsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (tags.isEmpty && !canEdit) {
       return const SizedBox.shrink();
     }
@@ -58,18 +60,18 @@ class TaskTagsRow extends StatelessWidget {
                   style: BorderStyle.solid,
                 ),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.add_rounded,
                     size: 13,
                     color: AppColors.textSecondary,
                   ),
-                  SizedBox(width: 2),
+                  const SizedBox(width: 2),
                   Text(
-                    'Tag',
-                    style: TextStyle(
+                    l10n?.tagLabel ?? 'Tag',
+                    style: const TextStyle(
                       fontSize: 11,
                       color: AppColors.textSecondary,
                       fontWeight: FontWeight.w500,

@@ -37,7 +37,6 @@
   "getStarted": "Get Started",
   "next": "Next",
   "skip": "Skip",
-
   "signIn": "Sign In",
   "signUp": "Sign Up",
   "welcomeBack": "Welcome back",
@@ -47,7 +46,6 @@
   "forgotPassword": "Forgot password?",
   "rememberMe": "Remember me",
   "orContinueWith": "or continue with",
-
   "createAccount": "Create an account",
   "createAccountSubtitle": "Get started with your team and projects today",
   "fullName": "Full Name",
@@ -59,13 +57,11 @@
   "termsOfService": "Terms of Service",
   "and": " and ",
   "privacyPolicy": "Privacy Policy",
-
   "forgotPasswordTitle": "Forgot Password",
   "forgotPasswordSubtitle": "Don't worry! Enter your email address and we'll send you a password reset code.",
   "sendResetCode": "Send Reset Code",
   "backToSignIn": "Back to Sign In",
   "haveResetCode": "Already have a reset code?",
-
   "resetPasswordTitle": "Set New Password",
   "resetPasswordSubtitle": "Enter the code sent to your email and choose your new password.",
   "resetToken": "Reset Code / Token",
@@ -74,7 +70,6 @@
   "confirmNewPassword": "Confirm New Password",
   "resetPasswordButton": "Reset Password",
   "passwordResetSuccess": "Password reset successfully! Please sign in with your new password.",
-
   "emailRequired": "Please enter your email",
   "invalidEmail": "Please enter a valid email address",
   "passwordRequired": "Please enter your password",
@@ -84,7 +79,6 @@
   "passwordsDoNotMatch": "Passwords do not match",
   "tokenRequired": "Please enter the reset code",
   "termsRequired": "You must agree to the Terms and Privacy Policy",
-
   "switchWorkspace": "Switch Workspace",
   "createNewWorkspace": "Create New Workspace",
   "createWorkspace": "Create Workspace",
@@ -103,7 +97,6 @@
   "roleMember": "Member",
   "searchWorkspaces": "Search workspaces...",
   "creatingWorkspace": "Creating workspace...",
-
   "workspaceSettings": "Workspace Settings",
   "workspaceDetails": "Workspace Details",
   "saveDetails": "Save Details",
@@ -184,7 +177,7 @@
   "noPermissionToEditProject": "Only workspace owner or project creator can edit this project.",
   "noPermissionToDeleteProject": "Only workspace owner or project creator can delete this project.",
   "sprintOverview": "Sprint Overview",
-  "sprintOverviewSubtitle": "Live workspace metrics and sprint cadence",
+  "sprintOverviewSubtitle": "Track team velocity, active deliverables, and daily workflow.",
   "velocityBadge": "Sprint Velocity",
   "activeProjects": "Active Projects",
   "inProgressTasks": "In Progress",
@@ -195,7 +188,7 @@
   "myActiveFocus": "My Active Focus",
   "viewAll": "View All",
   "allCaughtUp": "All caught up! No active tasks assigned.",
-  "activityTaskCreated": "created a new task",
+  "activityTaskCreated": "created task",
   "activityTaskStatusChanged": "updated task status",
   "activityTaskAssigned": "assigned a task",
   "activityTaskDeleted": "deleted a task",
@@ -275,7 +268,7 @@
   "priorityUrgent": "Urgent",
   "appearanceSubtitle": "Choose whether to follow device settings or lock to dark or light mode.",
   "colorPaletteSubtitle": "Select a curated palette to dynamically re-theme buttons, surfaces, and ambient glow.",
-  "languageSubtitle": "Switch the application language and reading layout (LTR / RTL).",
+  "languageSubtitle": "Choose your preferred application language.",
   "logoutConfirmation": "Are you sure you want to log out of your session on this device?",
   "themeModeSystem": "System",
   "themeModeDark": "Dark",
@@ -300,7 +293,7 @@
       }
     }
   },
-  "sessionSecurityDesc": "End your active session and revoke credentials.",
+  "sessionSecurityDesc": "Log out of your account on this device.",
   "moveTask": "Move Task",
   "editTask": "Edit Task",
   "deleteTaskConfirmTitle": "Delete Task",
@@ -351,7 +344,6 @@
   "shortDescriptionHint": "Short description about yourself",
   "projectDescriptionHint": "Description...",
   "navigationMenu": "Navigation Menu",
-  "workspaceSettings": "Workspace Settings",
   "addTaskToStatus": "Add task to {status}",
   "@addTaskToStatus": {
     "placeholders": {
@@ -361,7 +353,302 @@
     }
   },
   "displayName": "Display Name",
-  "saveProfile": "Save Profile"
+  "saveProfile": "Save Profile",
+  "writeAComment": "Write a comment...",
+  "@writeAComment": {
+    "description": "Placeholder for task comment textfield"
+  },
+  "deleteCommentTooltip": "Delete comment",
+  "@deleteCommentTooltip": {
+    "description": "Tooltip for deleting a comment"
+  },
+  "failedToLoadComments": "Failed to load comments: {message}",
+  "@failedToLoadComments": {
+    "description": "Error message when comments fail to load",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "commentsCount": "Comments ({count})",
+  "@commentsCount": {
+    "description": "Title for comments section with count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noCommentsYet": "No comments yet. Start the conversation!",
+  "@noCommentsYet": {
+    "description": "Empty comments placeholder"
+  },
+  "tagLabel": "Tag",
+  "@tagLabel": {
+    "description": "Single tag chip label"
+  },
+  "tagsMenuLabel": "Tags",
+  "@tagsMenuLabel": {
+    "description": "Menu button label for tags"
+  },
+  "allTags": "All Tags",
+  "@allTags": {
+    "description": "Option to show all tags"
+  },
+  "attachTagMax": "Attach Tag (Max 5)",
+  "@attachTagMax": {
+    "description": "Modal title for attaching tags"
+  },
+  "createTagQuery": "Create \"{query}\"",
+  "@createTagQuery": {
+    "description": "Option to create a new tag",
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "noTagsAvailable": "No tags available",
+  "@noTagsAvailable": {
+    "description": "Message when no tags match"
+  },
+  "searchOrCreateTag": "Search or create tag...",
+  "@searchOrCreateTag": {
+    "description": "Hint for tag search input"
+  },
+  "filterByTag": "Filter by tag",
+  "@filterByTag": {
+    "description": "Tooltip for tag filter menu"
+  },
+  "tagPrefix": "Tag: {name}",
+  "@tagPrefix": {
+    "description": "Selected tag label prefix",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "faqTitle": "Help & FAQ",
+  "@faqTitle": {
+    "description": "Title for FAQ section"
+  },
+  "faqSubtitle": "Answers to common questions regarding workspaces, Kanban, and permissions.",
+  "@faqSubtitle": {
+    "description": "Subtitle for FAQ section"
+  },
+  "faqWorkspacesQ": "How do workspaces and roles work?",
+  "@faqWorkspacesQ": {
+    "description": "FAQ question 1"
+  },
+  "faqWorkspacesA": "Each workspace has an Owner and Members. Owners can rename or delete workspaces, and invite or remove members. All members have implicit access to collaborate on all projects within that workspace.",
+  "@faqWorkspacesA": {
+    "description": "FAQ answer 1"
+  },
+  "faqMemberRemovalQ": "What happens when a member is removed?",
+  "@faqMemberRemovalQ": {
+    "description": "FAQ question 2"
+  },
+  "faqMemberRemovalA": "Removing a member automatically sets Assignee = null on all tasks assigned to that user in that workspace. This maintains task integrity without leaving dangling foreign key references.",
+  "@faqMemberRemovalA": {
+    "description": "FAQ answer 2"
+  },
+  "faqArchivedQ": "Can archived projects still be edited?",
+  "@faqArchivedQ": {
+    "description": "FAQ question 3"
+  },
+  "faqArchivedA": "No. Setting a project to Archived strictly freezes the project and all its Kanban tasks as read-only until explicitly restored to Active or Planning.",
+  "@faqArchivedA": {
+    "description": "FAQ answer 3"
+  },
+  "faqMyTasksQ": "How does the \"My Tasks\" focus view work?",
+  "@faqMyTasksQ": {
+    "description": "FAQ question 4"
+  },
+  "faqMyTasksA": "My Tasks aggregates every task assigned to you across all projects in the active workspace via a single indexed query, grouped by urgency so you can focus on immediate deliverables.",
+  "@faqMyTasksA": {
+    "description": "FAQ answer 4"
+  },
+  "accentColor": "Accent Color",
+  "@accentColor": {
+    "description": "Label for workspace accent color picker"
+  },
+  "accentColorSubtitle": "Subtle wayfinding color for workspace indicators and tabs.",
+  "@accentColorSubtitle": {
+    "description": "Subtitle for workspace accent color picker"
+  },
+  "confirmRemoveMember": "Are you sure you want to remove {name} from the workspace?",
+  "@confirmRemoveMember": {
+    "description": "Confirmation message when removing a member",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "onlineMembersCount": "Online Members ({count})",
+  "@onlineMembersCount": {
+    "description": "Title for online members sheet with count",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "youSuffix": "{name} (You)",
+  "@youSuffix": {
+    "description": "Format for current user in presence list",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "readOnlyBadge": "Read-only",
+  "@readOnlyBadge": {
+    "description": "Badge showing read-only permission"
+  },
+  "noTasksInSection": "No tasks in this section",
+  "@noTasksInSection": {
+    "description": "Placeholder when an urgency section has no tasks"
+  },
+  "appVersionFormat": "Version {version} (Build {buildNumber}) • Flutter & .NET 10",
+  "@appVersionFormat": {
+    "description": "Version details format string",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "buildNumber": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionErrorMessage": "Unable to connect to the server. Please check that it is running.",
+  "@connectionErrorMessage": {
+    "description": "Dialog content when connection fails"
+  },
+  "activityMovedTo": "moved \"{title}\" to {status}",
+  "@activityMovedTo": {
+    "description": "Activity span when task moved to new status",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activityTaskMovedToStatus": "moved task to {status}",
+  "@activityTaskMovedToStatus": {
+    "description": "Activity span when task with unknown title moved to new status",
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activityAssignedTo": "assigned \"{title}\" to {assignee}",
+  "@activityAssignedTo": {
+    "description": "Activity span when task assigned to user",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "assignee": {
+        "type": "String"
+      }
+    }
+  },
+  "activityAssignedTaskTo": "assigned a task to {assignee}",
+  "@activityAssignedTaskTo": {
+    "description": "Activity span when task with unknown title assigned to user",
+    "placeholders": {
+      "assignee": {
+        "type": "String"
+      }
+    }
+  },
+  "activityUpdatedProjectTo": "updated project \"{title}\" to {status}",
+  "@activityUpdatedProjectTo": {
+    "description": "Activity span when project status updated",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activityAddedMemberAsRole": "added {member} as {role}",
+  "@activityAddedMemberAsRole": {
+    "description": "Activity span when member added with role",
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "role": {
+        "type": "String"
+      }
+    }
+  },
+  "activityAddedMemberToWorkspace": "added {member} to the workspace",
+  "@activityAddedMemberToWorkspace": {
+    "description": "Activity span when member added to workspace without role",
+    "placeholders": {
+      "member": {
+        "type": "String"
+      }
+    }
+  },
+  "activityRemovedMemberFromWorkspace": "removed {member} from the workspace",
+  "@activityRemovedMemberFromWorkspace": {
+    "description": "Activity span when member removed",
+    "placeholders": {
+      "member": {
+        "type": "String"
+      }
+    }
+  },
+  "activityRenamedWorkspaceTo": "renamed workspace to \"{title}\"",
+  "@activityRenamedWorkspaceTo": {
+    "description": "Activity span when workspace renamed",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "activityPerformedEventOn": "performed {event} on \"{title}\"",
+  "@activityPerformedEventOn": {
+    "description": "Default activity span with title",
+    "placeholders": {
+      "event": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "activityPerformedEvent": "performed {event}",
+  "@activityPerformedEvent": {
+    "description": "Default activity span without title",
+    "placeholders": {
+      "event": {
+        "type": "String"
+      }
+    }
+  },
+  "roleAdminLabel": "Admin",
+  "@roleAdminLabel": {
+    "description": "Role label for Admin"
+  },
+  "roleViewerLabel": "Viewer",
+  "@roleViewerLabel": {
+    "description": "Role label for Viewer"
+  }
 }
-
-

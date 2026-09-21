@@ -977,7 +977,7 @@ abstract class AppLocalizations {
   /// No description provided for @sprintOverviewSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Live workspace metrics and sprint cadence'**
+  /// **'Track team velocity, active deliverables, and daily workflow.'**
   String get sprintOverviewSubtitle;
 
   /// No description provided for @velocityBadge.
@@ -1043,7 +1043,7 @@ abstract class AppLocalizations {
   /// No description provided for @activityTaskCreated.
   ///
   /// In en, this message translates to:
-  /// **'created a new task'**
+  /// **'created task'**
   String get activityTaskCreated;
 
   /// No description provided for @activityTaskStatusChanged.
@@ -1397,7 +1397,7 @@ abstract class AppLocalizations {
   /// No description provided for @languageSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Switch the application language and reading layout (LTR / RTL).'**
+  /// **'Choose your preferred application language.'**
   String get languageSubtitle;
 
   /// No description provided for @logoutConfirmation.
@@ -1505,7 +1505,7 @@ abstract class AppLocalizations {
   /// No description provided for @sessionSecurityDesc.
   ///
   /// In en, this message translates to:
-  /// **'End your active session and revoke credentials.'**
+  /// **'Log out of your account on this device.'**
   String get sessionSecurityDesc;
 
   /// No description provided for @moveTask.
@@ -1741,6 +1741,282 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save Profile'**
   String get saveProfile;
+
+  /// Placeholder for task comment textfield
+  ///
+  /// In en, this message translates to:
+  /// **'Write a comment...'**
+  String get writeAComment;
+
+  /// Tooltip for deleting a comment
+  ///
+  /// In en, this message translates to:
+  /// **'Delete comment'**
+  String get deleteCommentTooltip;
+
+  /// Error message when comments fail to load
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load comments: {message}'**
+  String failedToLoadComments(String message);
+
+  /// Title for comments section with count
+  ///
+  /// In en, this message translates to:
+  /// **'Comments ({count})'**
+  String commentsCount(int count);
+
+  /// Empty comments placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'No comments yet. Start the conversation!'**
+  String get noCommentsYet;
+
+  /// Single tag chip label
+  ///
+  /// In en, this message translates to:
+  /// **'Tag'**
+  String get tagLabel;
+
+  /// Menu button label for tags
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get tagsMenuLabel;
+
+  /// Option to show all tags
+  ///
+  /// In en, this message translates to:
+  /// **'All Tags'**
+  String get allTags;
+
+  /// Modal title for attaching tags
+  ///
+  /// In en, this message translates to:
+  /// **'Attach Tag (Max 5)'**
+  String get attachTagMax;
+
+  /// Option to create a new tag
+  ///
+  /// In en, this message translates to:
+  /// **'Create \"{query}\"'**
+  String createTagQuery(String query);
+
+  /// Message when no tags match
+  ///
+  /// In en, this message translates to:
+  /// **'No tags available'**
+  String get noTagsAvailable;
+
+  /// Hint for tag search input
+  ///
+  /// In en, this message translates to:
+  /// **'Search or create tag...'**
+  String get searchOrCreateTag;
+
+  /// Tooltip for tag filter menu
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by tag'**
+  String get filterByTag;
+
+  /// Selected tag label prefix
+  ///
+  /// In en, this message translates to:
+  /// **'Tag: {name}'**
+  String tagPrefix(String name);
+
+  /// Title for FAQ section
+  ///
+  /// In en, this message translates to:
+  /// **'Help & FAQ'**
+  String get faqTitle;
+
+  /// Subtitle for FAQ section
+  ///
+  /// In en, this message translates to:
+  /// **'Answers to common questions regarding workspaces, Kanban, and permissions.'**
+  String get faqSubtitle;
+
+  /// FAQ question 1
+  ///
+  /// In en, this message translates to:
+  /// **'How do workspaces and roles work?'**
+  String get faqWorkspacesQ;
+
+  /// FAQ answer 1
+  ///
+  /// In en, this message translates to:
+  /// **'Each workspace has an Owner and Members. Owners can rename or delete workspaces, and invite or remove members. All members have implicit access to collaborate on all projects within that workspace.'**
+  String get faqWorkspacesA;
+
+  /// FAQ question 2
+  ///
+  /// In en, this message translates to:
+  /// **'What happens when a member is removed?'**
+  String get faqMemberRemovalQ;
+
+  /// FAQ answer 2
+  ///
+  /// In en, this message translates to:
+  /// **'Removing a member automatically sets Assignee = null on all tasks assigned to that user in that workspace. This maintains task integrity without leaving dangling foreign key references.'**
+  String get faqMemberRemovalA;
+
+  /// FAQ question 3
+  ///
+  /// In en, this message translates to:
+  /// **'Can archived projects still be edited?'**
+  String get faqArchivedQ;
+
+  /// FAQ answer 3
+  ///
+  /// In en, this message translates to:
+  /// **'No. Setting a project to Archived strictly freezes the project and all its Kanban tasks as read-only until explicitly restored to Active or Planning.'**
+  String get faqArchivedA;
+
+  /// FAQ question 4
+  ///
+  /// In en, this message translates to:
+  /// **'How does the \"My Tasks\" focus view work?'**
+  String get faqMyTasksQ;
+
+  /// FAQ answer 4
+  ///
+  /// In en, this message translates to:
+  /// **'My Tasks aggregates every task assigned to you across all projects in the active workspace via a single indexed query, grouped by urgency so you can focus on immediate deliverables.'**
+  String get faqMyTasksA;
+
+  /// Label for workspace accent color picker
+  ///
+  /// In en, this message translates to:
+  /// **'Accent Color'**
+  String get accentColor;
+
+  /// Subtitle for workspace accent color picker
+  ///
+  /// In en, this message translates to:
+  /// **'Subtle wayfinding color for workspace indicators and tabs.'**
+  String get accentColorSubtitle;
+
+  /// Confirmation message when removing a member
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove {name} from the workspace?'**
+  String confirmRemoveMember(String name);
+
+  /// Title for online members sheet with count
+  ///
+  /// In en, this message translates to:
+  /// **'Online Members ({count})'**
+  String onlineMembersCount(int count);
+
+  /// Format for current user in presence list
+  ///
+  /// In en, this message translates to:
+  /// **'{name} (You)'**
+  String youSuffix(String name);
+
+  /// Badge showing read-only permission
+  ///
+  /// In en, this message translates to:
+  /// **'Read-only'**
+  String get readOnlyBadge;
+
+  /// Placeholder when an urgency section has no tasks
+  ///
+  /// In en, this message translates to:
+  /// **'No tasks in this section'**
+  String get noTasksInSection;
+
+  /// Version details format string
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version} (Build {buildNumber}) • Flutter & .NET 10'**
+  String appVersionFormat(String version, String buildNumber);
+
+  /// Dialog content when connection fails
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to connect to the server. Please check that it is running.'**
+  String get connectionErrorMessage;
+
+  /// Activity span when task moved to new status
+  ///
+  /// In en, this message translates to:
+  /// **'moved \"{title}\" to {status}'**
+  String activityMovedTo(String title, String status);
+
+  /// Activity span when task with unknown title moved to new status
+  ///
+  /// In en, this message translates to:
+  /// **'moved task to {status}'**
+  String activityTaskMovedToStatus(String status);
+
+  /// Activity span when task assigned to user
+  ///
+  /// In en, this message translates to:
+  /// **'assigned \"{title}\" to {assignee}'**
+  String activityAssignedTo(String title, String assignee);
+
+  /// Activity span when task with unknown title assigned to user
+  ///
+  /// In en, this message translates to:
+  /// **'assigned a task to {assignee}'**
+  String activityAssignedTaskTo(String assignee);
+
+  /// Activity span when project status updated
+  ///
+  /// In en, this message translates to:
+  /// **'updated project \"{title}\" to {status}'**
+  String activityUpdatedProjectTo(String title, String status);
+
+  /// Activity span when member added with role
+  ///
+  /// In en, this message translates to:
+  /// **'added {member} as {role}'**
+  String activityAddedMemberAsRole(String member, String role);
+
+  /// Activity span when member added to workspace without role
+  ///
+  /// In en, this message translates to:
+  /// **'added {member} to the workspace'**
+  String activityAddedMemberToWorkspace(String member);
+
+  /// Activity span when member removed
+  ///
+  /// In en, this message translates to:
+  /// **'removed {member} from the workspace'**
+  String activityRemovedMemberFromWorkspace(String member);
+
+  /// Activity span when workspace renamed
+  ///
+  /// In en, this message translates to:
+  /// **'renamed workspace to \"{title}\"'**
+  String activityRenamedWorkspaceTo(String title);
+
+  /// Default activity span with title
+  ///
+  /// In en, this message translates to:
+  /// **'performed {event} on \"{title}\"'**
+  String activityPerformedEventOn(String event, String title);
+
+  /// Default activity span without title
+  ///
+  /// In en, this message translates to:
+  /// **'performed {event}'**
+  String activityPerformedEvent(String event);
+
+  /// Role label for Admin
+  ///
+  /// In en, this message translates to:
+  /// **'Admin'**
+  String get roleAdminLabel;
+
+  /// Role label for Viewer
+  ///
+  /// In en, this message translates to:
+  /// **'Viewer'**
+  String get roleViewerLabel;
 }
 
 class _AppLocalizationsDelegate
