@@ -475,7 +475,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sprintOverviewSubtitle =>
-      'Live workspace metrics and sprint cadence';
+      'Track team velocity, active deliverables, and daily workflow.';
 
   @override
   String get velocityBadge => 'Sprint Velocity';
@@ -696,8 +696,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Select a curated palette to dynamically re-theme buttons, surfaces, and ambient glow.';
 
   @override
-  String get languageSubtitle =>
-      'Switch the application language and reading layout (LTR / RTL).';
+  String get languageSubtitle => 'Choose your preferred application language.';
 
   @override
   String get logoutConfirmation =>
@@ -755,8 +754,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get sessionSecurityDesc =>
-      'End your active session and revoke credentials.';
+  String get sessionSecurityDesc => 'Log out of your account on this device.';
 
   @override
   String get moveTask => 'Move Task';
@@ -883,4 +881,187 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveProfile => 'Save Profile';
+
+  @override
+  String get writeAComment => 'Write a comment...';
+
+  @override
+  String get deleteCommentTooltip => 'Delete comment';
+
+  @override
+  String failedToLoadComments(String message) {
+    return 'Failed to load comments: $message';
+  }
+
+  @override
+  String commentsCount(int count) {
+    return 'Comments ($count)';
+  }
+
+  @override
+  String get noCommentsYet => 'No comments yet. Start the conversation!';
+
+  @override
+  String get tagLabel => 'Tag';
+
+  @override
+  String get tagsMenuLabel => 'Tags';
+
+  @override
+  String get allTags => 'All Tags';
+
+  @override
+  String get attachTagMax => 'Attach Tag (Max 5)';
+
+  @override
+  String createTagQuery(String query) {
+    return 'Create \"$query\"';
+  }
+
+  @override
+  String get noTagsAvailable => 'No tags available';
+
+  @override
+  String get searchOrCreateTag => 'Search or create tag...';
+
+  @override
+  String get filterByTag => 'Filter by tag';
+
+  @override
+  String tagPrefix(String name) {
+    return 'Tag: $name';
+  }
+
+  @override
+  String get faqTitle => 'Help & FAQ';
+
+  @override
+  String get faqSubtitle =>
+      'Answers to common questions regarding workspaces, Kanban, and permissions.';
+
+  @override
+  String get faqWorkspacesQ => 'How do workspaces and roles work?';
+
+  @override
+  String get faqWorkspacesA =>
+      'Each workspace has an Owner and Members. Owners can rename or delete workspaces, and invite or remove members. All members have implicit access to collaborate on all projects within that workspace.';
+
+  @override
+  String get faqMemberRemovalQ => 'What happens when a member is removed?';
+
+  @override
+  String get faqMemberRemovalA =>
+      'Removing a member automatically sets Assignee = null on all tasks assigned to that user in that workspace. This maintains task integrity without leaving dangling foreign key references.';
+
+  @override
+  String get faqArchivedQ => 'Can archived projects still be edited?';
+
+  @override
+  String get faqArchivedA =>
+      'No. Setting a project to Archived strictly freezes the project and all its Kanban tasks as read-only until explicitly restored to Active or Planning.';
+
+  @override
+  String get faqMyTasksQ => 'How does the \"My Tasks\" focus view work?';
+
+  @override
+  String get faqMyTasksA =>
+      'My Tasks aggregates every task assigned to you across all projects in the active workspace via a single indexed query, grouped by urgency so you can focus on immediate deliverables.';
+
+  @override
+  String get accentColor => 'Accent Color';
+
+  @override
+  String get accentColorSubtitle =>
+      'Subtle wayfinding color for workspace indicators and tabs.';
+
+  @override
+  String confirmRemoveMember(String name) {
+    return 'Are you sure you want to remove $name from the workspace?';
+  }
+
+  @override
+  String onlineMembersCount(int count) {
+    return 'Online Members ($count)';
+  }
+
+  @override
+  String youSuffix(String name) {
+    return '$name (You)';
+  }
+
+  @override
+  String get readOnlyBadge => 'Read-only';
+
+  @override
+  String get noTasksInSection => 'No tasks in this section';
+
+  @override
+  String appVersionFormat(String version, String buildNumber) {
+    return 'Version $version (Build $buildNumber) • Flutter & .NET 10';
+  }
+
+  @override
+  String get connectionErrorMessage =>
+      'Unable to connect to the server. Please check that it is running.';
+
+  @override
+  String activityMovedTo(String title, String status) {
+    return 'moved \"$title\" to $status';
+  }
+
+  @override
+  String activityTaskMovedToStatus(String status) {
+    return 'moved task to $status';
+  }
+
+  @override
+  String activityAssignedTo(String title, String assignee) {
+    return 'assigned \"$title\" to $assignee';
+  }
+
+  @override
+  String activityAssignedTaskTo(String assignee) {
+    return 'assigned a task to $assignee';
+  }
+
+  @override
+  String activityUpdatedProjectTo(String title, String status) {
+    return 'updated project \"$title\" to $status';
+  }
+
+  @override
+  String activityAddedMemberAsRole(String member, String role) {
+    return 'added $member as $role';
+  }
+
+  @override
+  String activityAddedMemberToWorkspace(String member) {
+    return 'added $member to the workspace';
+  }
+
+  @override
+  String activityRemovedMemberFromWorkspace(String member) {
+    return 'removed $member from the workspace';
+  }
+
+  @override
+  String activityRenamedWorkspaceTo(String title) {
+    return 'renamed workspace to \"$title\"';
+  }
+
+  @override
+  String activityPerformedEventOn(String event, String title) {
+    return 'performed $event on \"$title\"';
+  }
+
+  @override
+  String activityPerformedEvent(String event) {
+    return 'performed $event';
+  }
+
+  @override
+  String get roleAdminLabel => 'Admin';
+
+  @override
+  String get roleViewerLabel => 'Viewer';
 }

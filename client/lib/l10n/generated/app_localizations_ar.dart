@@ -468,14 +468,14 @@ class AppLocalizationsAr extends AppLocalizations {
       'يحق لمالك مساحة العمل أو منشئ المشروع فقط حذف هذا المشروع.';
 
   @override
-  String get sprintOverview => 'نظرة عامة على السبرنت';
+  String get sprintOverview => 'نظرة عامة على سير العمل';
 
   @override
   String get sprintOverviewSubtitle =>
-      'مؤشرات مساحة العمل وسير السبرنت المباشر';
+      'متابعة إنجاز الفريق وسير العمل والمهام اليومية.';
 
   @override
-  String get velocityBadge => 'سرعة السبرنت';
+  String get velocityBadge => 'سرعة الإنجاز';
 
   @override
   String get activeProjects => 'المشاريع النشطة';
@@ -559,7 +559,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get myTasksTitle => 'مهامي';
 
   @override
-  String get myTasksSubtitle => 'سجل مهام السبرنت الشخصية والمهام المسندة.';
+  String get myTasksSubtitle => 'سجل المهام الشخصية والمهام المسندة إليك.';
 
   @override
   String get overdueUrgent => 'المتأخرة والعاجلة';
@@ -632,7 +632,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get language => 'اللغة';
 
   @override
-  String get sessionSecurity => 'الجلسة والأمان';
+  String get sessionSecurity => 'تسجيل الخروج والأمان';
 
   @override
   String get logOut => 'تسجيل الخروج';
@@ -691,8 +691,7 @@ class AppLocalizationsAr extends AppLocalizations {
       'اختر سمة لونية لتغيير سمات الأزرار والأسطح والتوهج المحيطي ديناميكيًا.';
 
   @override
-  String get languageSubtitle =>
-      'تبديل لغة التطبيق وتنسيق القراءة (من اليمين لليسار / من اليسار لليمين).';
+  String get languageSubtitle => 'اختر لغة التطبيق المفضلة لديك.';
 
   @override
   String get logoutConfirmation =>
@@ -751,7 +750,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sessionSecurityDesc =>
-      'إنهاء جلستك النشطة وإلغاء بيانات الاعتماد.';
+      'تسجيل الخروج من حسابك على هذا الجهاز بأمان.';
 
   @override
   String get moveTask => 'نقل المهمة';
@@ -878,4 +877,187 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get saveProfile => 'حفظ الملف الشخصي';
+
+  @override
+  String get writeAComment => 'اكتب تعليقاً...';
+
+  @override
+  String get deleteCommentTooltip => 'حذف التعليق';
+
+  @override
+  String failedToLoadComments(String message) {
+    return 'فشل تحميل التعليقات: $message';
+  }
+
+  @override
+  String commentsCount(int count) {
+    return 'التعليقات ($count)';
+  }
+
+  @override
+  String get noCommentsYet => 'لا توجد تعليقات بعد. ابدأ المحادثة!';
+
+  @override
+  String get tagLabel => 'وسم';
+
+  @override
+  String get tagsMenuLabel => 'الوسوم';
+
+  @override
+  String get allTags => 'جميع الوسوم';
+
+  @override
+  String get attachTagMax => 'إرفاق وسم (بحد أقصى 5)';
+
+  @override
+  String createTagQuery(String query) {
+    return 'إنشاء \"$query\"';
+  }
+
+  @override
+  String get noTagsAvailable => 'لا توجد وسوم متاحة';
+
+  @override
+  String get searchOrCreateTag => 'البحث عن وسم أو إنشاؤه...';
+
+  @override
+  String get filterByTag => 'تصفية حسب الوسم';
+
+  @override
+  String tagPrefix(String name) {
+    return 'الوسم: $name';
+  }
+
+  @override
+  String get faqTitle => 'المساعدة والأسئلة الشائعة';
+
+  @override
+  String get faqSubtitle =>
+      'إجابات على الأسئلة الشائعة حول مساحات العمل ولوحات كانبان والصلاحيات.';
+
+  @override
+  String get faqWorkspacesQ => 'كيف تعمل مساحات العمل والأدوار؟';
+
+  @override
+  String get faqWorkspacesA =>
+      'لكل مساحة عمل مالك وأعضاء. يمكن للمالكين إعادة تسمية أو حذف مساحات العمل ودعوة أو إزالة الأعضاء. يمتلك جميع الأعضاء صلاحية التعاون في جميع المشاريع ضمن مساحة العمل تلك.';
+
+  @override
+  String get faqMemberRemovalQ => 'ماذا يحدث عند إزالة أحد الأعضاء؟';
+
+  @override
+  String get faqMemberRemovalA =>
+      'تؤدي إزالة أي عضو إلى إلغاء تعيينه تلقائياً من جميع المهام المعينة له في مساحة العمل تلك، مما يحافظ على سلامة المهام دون مراجع مفقودة.';
+
+  @override
+  String get faqArchivedQ => 'هل يمكن تعديل المشاريع المؤرشفة؟';
+
+  @override
+  String get faqArchivedA =>
+      'لا. يؤدي ضبط المشروع على \'مؤرشف\' إلى تجميد المشروع وجميع مهام كانبان الخاصة به للقراءة فقط حتى تتم استعادته صراحة إلى \'نشط\' أو \'قيد التخطيط\'.';
+
+  @override
+  String get faqMyTasksQ => 'كيف تعمل شاشة التركيز \"مهامي\"؟';
+
+  @override
+  String get faqMyTasksA =>
+      'تجمع شاشة \"مهامي\" جميع المهام المعينة إليك عبر كل المشاريع في مساحة العمل النشطة، مجمعة حسب الأولوية لتتمكن من التركيز على المهام الفورية.';
+
+  @override
+  String get accentColor => 'اللون المميز';
+
+  @override
+  String get accentColorSubtitle =>
+      'لون مميز لمؤشرات وعلامات تبويب مساحة العمل.';
+
+  @override
+  String confirmRemoveMember(String name) {
+    return 'هل أنت متأكد أنك تريد إزالة $name من مساحة العمل؟';
+  }
+
+  @override
+  String onlineMembersCount(int count) {
+    return 'الأعضاء المتصلون ($count)';
+  }
+
+  @override
+  String youSuffix(String name) {
+    return '$name (أنت)';
+  }
+
+  @override
+  String get readOnlyBadge => 'للقراءة فقط';
+
+  @override
+  String get noTasksInSection => 'لا توجد مهام في هذا القسم';
+
+  @override
+  String appVersionFormat(String version, String buildNumber) {
+    return 'الإصدار $version (البناء $buildNumber) • Flutter & .NET 10';
+  }
+
+  @override
+  String get connectionErrorMessage =>
+      'تعذر الاتصال بالخادم. يرجى التحقق من أنه قيد التشغيل.';
+
+  @override
+  String activityMovedTo(String title, String status) {
+    return 'نقل \"$title\" إلى $status';
+  }
+
+  @override
+  String activityTaskMovedToStatus(String status) {
+    return 'نقل المهمة إلى $status';
+  }
+
+  @override
+  String activityAssignedTo(String title, String assignee) {
+    return 'عيّن \"$title\" إلى $assignee';
+  }
+
+  @override
+  String activityAssignedTaskTo(String assignee) {
+    return 'عيّن مهمة إلى $assignee';
+  }
+
+  @override
+  String activityUpdatedProjectTo(String title, String status) {
+    return 'حدّث مشروع \"$title\" إلى $status';
+  }
+
+  @override
+  String activityAddedMemberAsRole(String member, String role) {
+    return 'أضاف $member بدور $role';
+  }
+
+  @override
+  String activityAddedMemberToWorkspace(String member) {
+    return 'أضاف $member إلى مساحة العمل';
+  }
+
+  @override
+  String activityRemovedMemberFromWorkspace(String member) {
+    return 'أزال $member من مساحة العمل';
+  }
+
+  @override
+  String activityRenamedWorkspaceTo(String title) {
+    return 'أعاد تسمية مساحة العمل إلى \"$title\"';
+  }
+
+  @override
+  String activityPerformedEventOn(String event, String title) {
+    return 'أجرى $event على \"$title\"';
+  }
+
+  @override
+  String activityPerformedEvent(String event) {
+    return 'أجرى $event';
+  }
+
+  @override
+  String get roleAdminLabel => 'مسؤول';
+
+  @override
+  String get roleViewerLabel => 'مشاهد';
 }
