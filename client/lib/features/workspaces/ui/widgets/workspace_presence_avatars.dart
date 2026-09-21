@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
-import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/network/signalr_events.dart';
 import 'package:client/core/network/signalr_service.dart';
@@ -33,9 +33,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
 
   String get _currentUserId {
     if (!getIt.isRegistered<AppAuthCubit>()) return '';
-    return getIt<AppAuthCubit>().state.whenOrNull(
-          authenticated: (u) => u.id,
-        ) ??
+    return getIt<AppAuthCubit>().state.whenOrNull(authenticated: (u) => u.id) ??
         '';
   }
 

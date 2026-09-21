@@ -9,7 +9,6 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String projectName;
   final String? wsAccent;
   final int? workspaceId;
-  final VoidCallback onRefresh;
   final VoidCallback onSettings;
 
   const KanbanAppBar({
@@ -17,7 +16,6 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.projectName,
     this.wsAccent,
     this.workspaceId,
-    required this.onRefresh,
     required this.onSettings,
   });
 
@@ -84,11 +82,6 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
           Center(child: WorkspacePresenceAvatars(workspaceId: workspaceId!)),
           const SizedBox(width: 4),
         ],
-        IconButton(
-          icon: const Icon(Icons.refresh_rounded),
-          tooltip: l10n?.refreshBoard ?? 'Refresh Board',
-          onPressed: onRefresh,
-        ),
         IconButton(
           icon: const Icon(Icons.settings_outlined),
           tooltip: l10n?.projectDetails ?? 'Project Settings',

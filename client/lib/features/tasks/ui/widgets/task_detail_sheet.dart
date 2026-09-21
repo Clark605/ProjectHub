@@ -51,8 +51,12 @@ class TaskDetailSheet extends StatefulWidget {
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (_) => TaskDetailSheet(
-      task: task, isArchived: isArchived, members: members,
-      onUpdate: onUpdate, onStatusChange: onStatusChange, onDelete: onDelete,
+      task: task,
+      isArchived: isArchived,
+      members: members,
+      onUpdate: onUpdate,
+      onStatusChange: onStatusChange,
+      onDelete: onDelete,
       onTaskUpdated: onTaskUpdated,
     ),
   );
@@ -136,13 +140,22 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final auth = context.read<AppAuthCubit?>()?.state ??
-        (getIt.isRegistered<AppAuthCubit>() ? getIt<AppAuthCubit>().state : null);
-    final uid = auth != null ? (auth.whenOrNull(authenticated: (u) => u.id) ?? '') : '';
-    final isOwner = widget.members.any((m) => m.userId == uid && m.role == 'Owner');
+    final auth =
+        context.read<AppAuthCubit?>()?.state ??
+        (getIt.isRegistered<AppAuthCubit>()
+            ? getIt<AppAuthCubit>().state
+            : null);
+    final uid = auth != null
+        ? (auth.whenOrNull(authenticated: (u) => u.id) ?? '')
+        : '';
+    final isOwner = widget.members.any(
+      (m) => m.userId == uid && m.role == 'Owner',
+    );
 
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
@@ -178,10 +191,14 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                   currentUserId: uid,
                   isWorkspaceOwner: isOwner,
                   onTagAdded: (t) => _mutateTag(
-                    () => _tagRepo?.attachTagToTask(_currentTask.id, t.id) ?? Future.value(_currentTask),
+                    () =>
+                        _tagRepo?.attachTagToTask(_currentTask.id, t.id) ??
+                        Future.value(_currentTask),
                   ),
                   onTagRemoved: (t) => _mutateTag(
-                    () => _tagRepo?.detachTagFromTask(_currentTask.id, t.id) ?? Future.value(_currentTask),
+                    () =>
+                        _tagRepo?.detachTagFromTask(_currentTask.id, t.id) ??
+                        Future.value(_currentTask),
                   ),
                 )
               else

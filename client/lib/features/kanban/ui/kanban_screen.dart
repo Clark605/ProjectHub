@@ -178,8 +178,6 @@ class _KanbanScreenState extends State<KanbanScreen>
               projectName: projectName,
               wsAccent: wsAccent,
               workspaceId: _project?.workspaceId,
-              onRefresh: () =>
-                  _cubit.loadTasks(widget.projectId, forceRefresh: true),
               onSettings: _openSettings,
             ),
             floatingActionButton: KanbanFab(
