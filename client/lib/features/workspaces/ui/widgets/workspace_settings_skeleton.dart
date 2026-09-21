@@ -8,6 +8,8 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Skeletonizer(
       enabled: true,
       child: SingleChildScrollView(
@@ -18,11 +20,11 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildDetailsCardSkeleton(),
+                _buildDetailsCardSkeleton(theme),
                 const SizedBox(height: 24),
-                _buildMembersCardSkeleton(),
+                _buildMembersCardSkeleton(theme),
                 const SizedBox(height: 24),
-                _buildDangerZoneSkeleton(),
+                _buildDangerZoneSkeleton(theme),
                 const SizedBox(height: 40),
               ],
             ),
@@ -32,13 +34,15 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailsCardSkeleton() {
+  Widget _buildDetailsCardSkeleton(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainer,
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,12 +74,14 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
     );
   }
 
-  Widget _buildMembersCardSkeleton() {
+  Widget _buildMembersCardSkeleton(ThemeData theme) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainer,
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.6)),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +106,7 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
               ],
             ),
           ),
-          const Divider(height: 1, color: AppColors.border),
+          Divider(height: 1, color: theme.colorScheme.outlineVariant),
           ...List.generate(
             3,
             (index) => Column(
@@ -134,7 +140,7 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
                   ),
                 ),
                 if (index < 2)
-                  const Divider(height: 1, color: AppColors.border),
+                  Divider(height: 1, color: theme.colorScheme.outlineVariant),
               ],
             ),
           ),
@@ -143,11 +149,11 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
     );
   }
 
-  Widget _buildDangerZoneSkeleton() {
+  Widget _buildDangerZoneSkeleton(ThemeData theme) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: AppColors.surfaceContainer,
+        color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.error.withValues(alpha: 0.4)),
       ),

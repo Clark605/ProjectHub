@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 
 class ProjectsSkeleton extends StatelessWidget {
@@ -13,6 +12,8 @@ class ProjectsSkeleton extends StatelessWidget {
     final columns = isDesktop
         ? 3
         : (ResponsiveLayout.isTablet(context) ? 2 : 1);
+
+    final theme = Theme.of(context);
 
     return Skeletonizer(
       enabled: true,
@@ -30,10 +31,10 @@ class ProjectsSkeleton extends StatelessWidget {
           itemBuilder: (context, index) => Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: AppColors.surfaceContainerLow,
+              color: theme.colorScheme.surfaceContainerLow,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: AppColors.border.withValues(alpha: 0.6),
+                color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
               ),
             ),
             child: const Column(

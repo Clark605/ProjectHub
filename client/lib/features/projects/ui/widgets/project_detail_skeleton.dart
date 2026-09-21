@@ -1,12 +1,13 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:client/core/theme/app_colors.dart';
 
 class ProjectDetailSkeleton extends StatelessWidget {
   const ProjectDetailSkeleton({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Skeletonizer(
       enabled: true,
       child: SingleChildScrollView(
@@ -20,10 +21,12 @@ class ProjectDetailSkeleton extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.surfaceContainer,
+                    color: theme.colorScheme.surfaceContainer,
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: AppColors.border.withValues(alpha: 0.6),
+                      color: theme.colorScheme.outlineVariant.withValues(
+                        alpha: 0.6,
+                      ),
                     ),
                   ),
                   child: Column(
