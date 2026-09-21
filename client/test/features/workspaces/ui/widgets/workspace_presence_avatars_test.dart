@@ -23,6 +23,7 @@ class FakeSignalRService extends Fake implements SignalRService {
     _presenceController.add(event);
   }
 
+  @override
   void dispose() {
     _presenceController.close();
   }
