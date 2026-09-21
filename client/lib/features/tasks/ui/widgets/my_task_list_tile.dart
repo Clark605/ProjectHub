@@ -5,6 +5,7 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class MyTaskListTile extends StatelessWidget {
   final TaskDto task;
@@ -21,6 +22,7 @@ class MyTaskListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final priorityColor = task.priorityEnum.toColor();
     final isOverdue = task.isOverdue;
@@ -155,7 +157,9 @@ class MyTaskListTile extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        task.statusEnum.toDisplayString(),
+                        l10n != null
+                            ? task.statusEnum.localizedName(l10n)
+                            : task.statusEnum.toDisplayString(),
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,

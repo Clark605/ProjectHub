@@ -6,6 +6,7 @@ import 'package:client/features/comments/cubit/comments_cubit.dart';
 import 'package:client/features/comments/cubit/comments_state.dart';
 import 'package:client/features/comments/ui/widgets/task_comment_input.dart';
 import 'package:client/features/comments/ui/widgets/task_comment_item.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class TaskCommentsList extends StatelessWidget {
   const TaskCommentsList({
@@ -19,6 +20,7 @@ class TaskCommentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return BlocBuilder<CommentsCubit, CommentsState>(
       builder: (context, state) {
         return state.when(
@@ -36,7 +38,8 @@ class TaskCommentsList extends StatelessWidget {
           error: (message) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
-              'Failed to load comments: $message',
+              l10n?.failedToLoadComments(message) ??
+                  'Failed to load comments: $message',
               style: const TextStyle(color: AppColors.error, fontSize: 12),
             ),
           ),
@@ -54,7 +57,8 @@ class TaskCommentsList extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      'Comments (${comments.length})',
+                      l10n?.commentsCount(comments.length) ??
+                          'Comments (${comments.length})',
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,
@@ -78,7 +82,8 @@ class TaskCommentsList extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                     child: Text(
-                      'No comments yet. Start the conversation!',
+                      l10n?.noCommentsYet ??
+                          'No comments yet. Start the conversation!',
                       style: TextStyle(
                         fontSize: 12,
                         color: theme.colorScheme.onSurfaceVariant,

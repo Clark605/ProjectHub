@@ -1043,7 +1043,7 @@ abstract class AppLocalizations {
   /// No description provided for @activityTaskCreated.
   ///
   /// In en, this message translates to:
-  /// **'created a new task'**
+  /// **'created task'**
   String get activityTaskCreated;
 
   /// No description provided for @activityTaskStatusChanged.

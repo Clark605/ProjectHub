@@ -505,7 +505,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get allCaughtUp => 'أنت على اطلاع تام! لا توجد مهام نشطة مسندة لك.';
 
   @override
-  String get activityTaskCreated => 'أنشأ مهمة جديدة';
+  String get activityTaskCreated => 'أنشأ مهمة';
 
   @override
   String get activityTaskStatusChanged => 'حدّث حالة المهمة';

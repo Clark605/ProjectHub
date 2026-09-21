@@ -38,7 +38,11 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
               title: Text(
                 l10n?.connectionUnavailable ?? 'Connection unavailable',
               ),
-              content: Text(message),
+              content: Text(
+                message.contains('Unable to connect to the server')
+                    ? (l10n?.connectionErrorMessage ?? message)
+                    : message,
+              ),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(dialogContext).pop(),

@@ -121,7 +121,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                           ),
                         ),
                         child: Text(
-                          'Read-only',
+                          l10n.readOnlyBadge,
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),

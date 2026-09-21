@@ -508,7 +508,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allCaughtUp => 'All caught up! No active tasks assigned.';
 
   @override
-  String get activityTaskCreated => 'created a new task';
+  String get activityTaskCreated => 'created task';
 
   @override
   String get activityTaskStatusChanged => 'updated task status';

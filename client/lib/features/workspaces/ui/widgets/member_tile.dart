@@ -21,7 +21,9 @@ class MemberTile extends StatelessWidget {
       builder: (context) => AlertDialog(
         title: Text(l10n.removeMemberTitle),
         content: Text(
-          'Are you sure you want to remove ${member.name.isNotEmpty ? member.name : member.email} from the workspace?',
+          l10n.confirmRemoveMember(
+            member.name.isNotEmpty ? member.name : member.email,
+          ),
         ),
         actions: [
           TextButton(

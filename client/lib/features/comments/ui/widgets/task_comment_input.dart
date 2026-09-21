@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class TaskCommentInput extends StatefulWidget {
   const TaskCommentInput({
@@ -34,6 +35,7 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
@@ -53,7 +55,7 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
                 color: theme.colorScheme.onSurface,
               ),
               decoration: InputDecoration(
-                hintText: 'Write a comment...',
+                hintText: l10n?.writeAComment ?? 'Write a comment...',
                 hintStyle: TextStyle(
                   fontSize: 13,
                   color: theme.colorScheme.onSurfaceVariant,

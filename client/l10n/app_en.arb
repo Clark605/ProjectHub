@@ -188,7 +188,7 @@
   "myActiveFocus": "My Active Focus",
   "viewAll": "View All",
   "allCaughtUp": "All caught up! No active tasks assigned.",
-  "activityTaskCreated": "created a new task",
+  "activityTaskCreated": "created task",
   "activityTaskStatusChanged": "updated task status",
   "activityTaskAssigned": "assigned a task",
   "activityTaskDeleted": "deleted a task",

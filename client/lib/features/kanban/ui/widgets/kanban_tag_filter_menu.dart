@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanTagFilterMenu extends StatelessWidget {
   final int? selectedTagId;
@@ -19,13 +20,14 @@ class KanbanTagFilterMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     if (availableTags.isEmpty) return const SizedBox.shrink();
 
+    final l10n = AppLocalizations.of(context);
     final hasSelection = selectedTagId != null;
     final selectedTag = availableTags
         .where((t) => t.id == selectedTagId)
         .firstOrNull;
 
     return PopupMenuButton<int?>(
-      tooltip: 'Filter by tag',
+      tooltip: l10n?.filterByTag ?? 'Filter by tag',
       onSelected: onTagSelected,
       child: Chip(
         avatar: Icon(
@@ -36,7 +38,10 @@ class KanbanTagFilterMenu extends StatelessWidget {
               : null,
         ),
         label: Text(
-          selectedTag != null ? 'Tag: ${selectedTag.name}' : 'Tags',
+          selectedTag != null
+              ? (l10n?.tagPrefix(selectedTag.name) ??
+                  'Tag: ${selectedTag.name}')
+              : (l10n?.tagsMenuLabel ?? 'Tags'),
           style: TextStyle(
             fontSize: 12,
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
@@ -48,7 +53,10 @@ class KanbanTagFilterMenu extends StatelessWidget {
         onDeleted: hasSelection ? () => onTagSelected(null) : null,
       ),
       itemBuilder: (context) => [
-        const PopupMenuItem<int?>(value: null, child: Text('All Tags')),
+        PopupMenuItem<int?>(
+          value: null,
+          child: Text(l10n?.allTags ?? 'All Tags'),
+        ),
         ...availableTags.map(
           (t) => PopupMenuItem<int?>(
             value: t.id,

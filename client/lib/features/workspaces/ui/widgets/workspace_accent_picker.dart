@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/workspace_accent.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class WorkspaceAccentPicker extends StatelessWidget {
   final String? activeAccentId;
@@ -15,6 +16,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,7 +30,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              'Accent Color',
+              l10n?.accentColor ?? 'Accent Color',
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -37,7 +39,8 @@ class WorkspaceAccentPicker extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          'Subtle wayfinding color for workspace indicators and tabs.',
+          l10n?.accentColorSubtitle ??
+              'Subtle wayfinding color for workspace indicators and tabs.',
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),

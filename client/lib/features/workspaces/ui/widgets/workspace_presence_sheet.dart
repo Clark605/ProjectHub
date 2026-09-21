@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class WorkspacePresenceSheet extends StatelessWidget {
   const WorkspacePresenceSheet({
@@ -51,6 +52,7 @@ class WorkspacePresenceSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
 
     return SafeArea(
       child: Padding(
@@ -84,7 +86,8 @@ class WorkspacePresenceSheet extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Online Members (${onlineUserIds.length})',
+                  l10n?.onlineMembersCount(onlineUserIds.length) ??
+                      'Online Members (${onlineUserIds.length})',
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -138,7 +141,7 @@ class WorkspacePresenceSheet extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        isMe ? '$name (You)' : name,
+                        isMe ? (l10n?.youSuffix(name) ?? '$name (You)') : name,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           fontWeight: isMe
                               ? FontWeight.w600

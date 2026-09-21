@@ -6,6 +6,7 @@ import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/data/tag_repository.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_results.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_search_field.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class AttachTagModal extends StatefulWidget {
   const AttachTagModal({
@@ -113,6 +114,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final query = _searchController.text.trim().toLowerCase();
     final attachedIds = widget.currentTags.map((t) => t.id).toSet();
     final filtered = _availableTags
@@ -141,7 +143,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Attach Tag (Max 5)',
+                l10n?.attachTagMax ?? 'Attach Tag (Max 5)',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

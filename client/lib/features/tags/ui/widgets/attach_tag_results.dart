@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class AttachTagResults extends StatelessWidget {
   const AttachTagResults({
@@ -32,6 +33,7 @@ class AttachTagResults extends StatelessWidget {
     }
 
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +46,7 @@ class AttachTagResults extends StatelessWidget {
               color: theme.colorScheme.primary,
             ),
             title: Text(
-              'Create "$query"',
+              l10n?.createTagQuery(query) ?? 'Create "$query"',
               style: TextStyle(color: theme.colorScheme.primary, fontSize: 13),
             ),
             onTap: () => onCreateTag(query),
@@ -54,7 +56,7 @@ class AttachTagResults extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Center(
               child: Text(
-                'No tags available',
+                l10n?.noTagsAvailable ?? 'No tags available',
                 style: TextStyle(
                   color: theme.colorScheme.onSurfaceVariant,
                   fontSize: 13,
