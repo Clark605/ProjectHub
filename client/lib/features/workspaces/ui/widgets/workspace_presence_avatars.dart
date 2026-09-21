@@ -9,6 +9,7 @@ import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
+import 'package:client/features/workspaces/ui/widgets/workspace_avatar_item.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_sheet.dart';
 
 class WorkspacePresenceAvatars extends StatefulWidget {
@@ -91,20 +92,52 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
     super.dispose();
   }
 
-  String _getLabel() {
-    final count = _onlineUserIds.length;
-    if (count == 1) {
-      if (_onlineUserIds.first == _currentUserId) {
-        return '1 online (You)';
-      }
-      final other = _members
-          .where((m) => m.userId == _onlineUserIds.first)
-          .firstOrNull;
-      if (other != null && other.name.isNotEmpty) {
-        return other.name.split(' ').first;
-      }
-    }
-    return '$count online';
+  Widget _buildAvatarStack(ThemeData theme) {
+    final visibleCount = _onlineUserIds.length > 3 ? 3 : _onlineUserIds.length;
+    final visibleIds = _onlineUserIds.take(visibleCount).toList();
+    final overflowCount = _onlineUserIds.length - visibleCount;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        for (int i = 0; i < visibleIds.length; i++)
+          Align(
+            widthFactor:
+                (i == visibleIds.length - 1 && overflowCount == 0) ? 1.0 : 0.72,
+            child: WorkspaceAvatarItem(
+              userId: visibleIds[i],
+              member: _members
+                  .where((m) => m.userId == visibleIds[i])
+                  .firstOrNull,
+              isMe: visibleIds[i] == _currentUserId,
+              radius: 12,
+            ),
+          ),
+        if (overflowCount > 0)
+          Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: theme.colorScheme.surface,
+                width: 1.5,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                '+$overflowCount',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 
   @override
@@ -113,44 +146,48 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
       return const SizedBox.shrink();
     }
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: () {
-        WorkspacePresenceSheet.show(
-          context,
-          onlineUserIds: _onlineUserIds,
-          members: _members,
-          currentUserId: _currentUserId,
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(
-          color: AppColors.success.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.success.withValues(alpha: 0.3)),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 8,
-              height: 8,
-              decoration: const BoxDecoration(
-                color: AppColors.success,
-                shape: BoxShape.circle,
-              ),
+    final theme = Theme.of(context);
+
+    return Tooltip(
+      message: '${_onlineUserIds.length} online member(s)',
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () {
+          WorkspacePresenceSheet.show(
+            context,
+            onlineUserIds: _onlineUserIds,
+            members: _members,
+            currentUserId: _currentUserId,
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHigh.withValues(
+              alpha: 0.6,
             ),
-            const SizedBox(width: 6),
-            Text(
-              _getLabel(),
-              style: const TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: AppColors.success,
-              ),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: AppColors.success.withValues(alpha: 0.35),
+              width: 1,
             ),
-          ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 7,
+                height: 7,
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                decoration: const BoxDecoration(
+                  color: AppColors.success,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              const SizedBox(width: 4),
+              _buildAvatarStack(theme),
+            ],
+          ),
         ),
       ),
     );
