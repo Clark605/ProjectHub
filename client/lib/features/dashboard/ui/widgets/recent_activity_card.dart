@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/ui/widgets/activity_tile.dart';
@@ -8,11 +9,15 @@ import 'package:client/l10n/generated/app_localizations.dart';
 class RecentActivityCard extends StatelessWidget {
   final List<ActivityEventDto> activities;
   final bool isLoading;
+  final int? workspaceId;
+  final VoidCallback? onViewAll;
 
   const RecentActivityCard({
     super.key,
     this.activities = const [],
     this.isLoading = false,
+    this.workspaceId,
+    this.onViewAll,
   });
 
   @override
@@ -67,6 +72,42 @@ class RecentActivityCard extends StatelessWidget {
                   width: 16,
                   height: 16,
                   child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              else if (onViewAll != null || workspaceId != null)
+                TextButton(
+                  onPressed: onViewAll ??
+                      () {
+                        if (workspaceId != null) {
+                          Navigator.pushNamed(
+                            context,
+                            RouteNames.activityStream,
+                            arguments: workspaceId,
+                          );
+                        }
+                      },
+                  style: TextButton.styleFrom(
+                    visualDensity: VisualDensity.compact,
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        l10n?.viewAll ?? 'View all',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: theme.colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 10,
+                        color: theme.colorScheme.primary,
+                      ),
+                    ],
+                  ),
                 ),
             ],
           ),
@@ -99,7 +140,7 @@ class RecentActivityCard extends StatelessWidget {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: activities.take(6).length,
+              itemCount: activities.take(5).length,
               separatorBuilder: (context, index) =>
                   Divider(color: theme.colorScheme.outlineVariant, height: 16),
               itemBuilder: (context, index) =>

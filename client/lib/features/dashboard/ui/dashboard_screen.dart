@@ -136,6 +136,7 @@ class _DashboardViewState extends State<_DashboardView> {
                             child: RecentActivityCard(
                               activities: state.recentActivities,
                               isLoading: state.isLoading,
+                              workspaceId: _activeWorkspaceId,
                             ),
                           ),
                         ],
@@ -152,6 +153,7 @@ class _DashboardViewState extends State<_DashboardView> {
                         RecentActivityCard(
                           activities: state.recentActivities,
                           isLoading: state.isLoading,
+                          workspaceId: _activeWorkspaceId,
                         ),
                       ],
                     );

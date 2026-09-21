@@ -70,6 +70,12 @@ class AppRouter {
           buildKanbanRoute(projectId: projectId, initialProject: project),
           settings,
         );
+      case RouteNames.activityStream:
+        final args = settings.arguments;
+        final workspaceId = args is int
+            ? args
+            : int.tryParse(args?.toString() ?? '') ?? 0;
+        return _fadeRoute(buildActivityStreamRoute(workspaceId), settings);
       default:
         return null;
     }

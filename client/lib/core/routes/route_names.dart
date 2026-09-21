@@ -17,4 +17,5 @@ class RouteNames {
   static const String myTasks = '/my-tasks';
   static const String kanban = '/kanban';
   static const String profile = '/profile';
+  static const String activityStream = '/activity-stream';
 }

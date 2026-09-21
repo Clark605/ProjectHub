@@ -11,6 +11,7 @@ import 'package:client/features/auth/ui/screens/login_screen.dart';
 import 'package:client/features/auth/ui/screens/register_screen.dart';
 import 'package:client/features/auth/ui/screens/reset_password_screen.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
+import 'package:client/features/dashboard/ui/activity_stream_screen.dart';
 import 'package:client/features/dashboard/ui/dashboard_screen.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/ui/kanban_screen.dart';
@@ -95,3 +96,6 @@ Widget buildKanbanRoute({required int projectId, ProjectDto? initialProject}) =>
       create: (_) => getIt<KanbanCubit>(),
       child: KanbanScreen(projectId: projectId, initialProject: initialProject),
     );
+
+Widget buildActivityStreamRoute(int workspaceId) =>
+    ActivityStreamScreen(workspaceId: workspaceId);
