@@ -109,10 +109,16 @@ ThemeData buildLightTheme([Locale? locale]) {
       backgroundColor: AppColors.lightSurfaceContainer,
       selectedColor: AppColors.primaryContainer.withValues(alpha: 0.18),
       checkmarkColor: AppColors.onElectricVioletContainer,
-      iconTheme: const IconThemeData(color: AppColors.onElectricVioletContainer, size: 18),
+      iconTheme: const IconThemeData(
+        color: AppColors.onElectricVioletContainer,
+        size: 18,
+      ),
       side: WidgetStateBorderSide.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return const BorderSide(color: AppColors.primaryContainer, width: 1.5);
+          return const BorderSide(
+            color: AppColors.primaryContainer,
+            width: 1.5,
+          );
         }
         return const BorderSide(color: AppColors.lightBorder);
       }),

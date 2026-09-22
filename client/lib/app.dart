@@ -74,8 +74,8 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
             navigatorKey: AppNavigator.navigatorKey,
 
             // Brand Theme (Deep Slate) & Mode
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
+            theme: AppTheme.lightTheme(settingsState.locale),
+            darkTheme: AppTheme.darkTheme(settingsState.locale),
             themeMode: settingsState.themeMode,
 
             // Localization
