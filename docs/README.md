@@ -24,6 +24,7 @@ Welcome to the centralized documentation hub for **ProjectHub** — a modern, co
 | Document | Description |
 | :--- | :--- |
 | **[Backend Architecture (.NET 10)](./backend-architecture.md)** | ASP.NET Core API design, SignalR real-time hub, PostgreSQL smallint enums, JWT security, and resilient HybridCache. |
+| **[Database Schema Specification](./database-schema.md)** | PostgreSQL 16 schema, tables, fields, constraints, composite indexes, cascades, enums, and ER diagram. |
 | **[Frontend Architecture (Flutter)](./frontend-architecture.md)** | Flutter Clean Architecture (Presentation + Data, <200 lines/file), Cubits, SignalR service, and Stitch tokens. |
 | **[REST & Real-Time API Reference](./api-reference.md)** | Complete endpoint specifications, SignalR hub contracts, request/response schemas, and authentication flow. |
 
