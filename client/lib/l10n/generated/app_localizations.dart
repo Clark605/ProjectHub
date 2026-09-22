@@ -2047,6 +2047,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Viewer'**
   String get roleViewerLabel;
+
+  /// Title for activity filter and sort sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Filter & Sort'**
+  String get filterAndSort;
+
+  /// Header for filter category section
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get filterCategory;
+
+  /// All activities filter option
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allActivities;
+
+  /// Task activities filter option
+  ///
+  /// In en, this message translates to:
+  /// **'Tasks'**
+  String get taskActivities;
+
+  /// Project activities filter option
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get projectActivities;
+
+  /// Member activities filter option
+  ///
+  /// In en, this message translates to:
+  /// **'Members'**
+  String get memberActivities;
+
+  /// Hint text for activity search field
+  ///
+  /// In en, this message translates to:
+  /// **'Search by actor or item...'**
+  String get searchActivitiesHint;
+
+  /// Label for sort options
+  ///
+  /// In en, this message translates to:
+  /// **'Sort By'**
+  String get sortBy;
+
+  /// Sort order newest first
+  ///
+  /// In en, this message translates to:
+  /// **'Newest first'**
+  String get newestFirst;
+
+  /// Sort order oldest first
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest first'**
+  String get oldestFirst;
+
+  /// Button to apply selected filters
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filters'**
+  String get applyFilters;
+
+  /// Empty state message when filter returns no activities
+  ///
+  /// In en, this message translates to:
+  /// **'No activities match your filters'**
+  String get noMatchingActivities;
 }
 
 class _AppLocalizationsDelegate

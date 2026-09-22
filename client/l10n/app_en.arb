@@ -678,5 +678,53 @@
   "roleViewerLabel": "Viewer",
   "@roleViewerLabel": {
     "description": "Role label for Viewer"
+  },
+  "filterAndSort": "Filter & Sort",
+  "@filterAndSort": {
+    "description": "Title for activity filter and sort sheet"
+  },
+  "filterCategory": "Category",
+  "@filterCategory": {
+    "description": "Header for filter category section"
+  },
+  "allActivities": "All",
+  "@allActivities": {
+    "description": "All activities filter option"
+  },
+  "taskActivities": "Tasks",
+  "@taskActivities": {
+    "description": "Task activities filter option"
+  },
+  "projectActivities": "Projects",
+  "@projectActivities": {
+    "description": "Project activities filter option"
+  },
+  "memberActivities": "Members",
+  "@memberActivities": {
+    "description": "Member activities filter option"
+  },
+  "searchActivitiesHint": "Search by actor or item...",
+  "@searchActivitiesHint": {
+    "description": "Hint text for activity search field"
+  },
+  "sortBy": "Sort By",
+  "@sortBy": {
+    "description": "Label for sort options"
+  },
+  "newestFirst": "Newest first",
+  "@newestFirst": {
+    "description": "Sort order newest first"
+  },
+  "oldestFirst": "Oldest first",
+  "@oldestFirst": {
+    "description": "Sort order oldest first"
+  },
+  "applyFilters": "Apply Filters",
+  "@applyFilters": {
+    "description": "Button to apply selected filters"
+  },
+  "noMatchingActivities": "No activities match your filters",
+  "@noMatchingActivities": {
+    "description": "Empty state message when filter returns no activities"
   }
 }

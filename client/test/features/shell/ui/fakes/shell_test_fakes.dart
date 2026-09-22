@@ -5,6 +5,7 @@ import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
+import 'package:client/features/dashboard/data/models/activity_filter.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/update_project_request.dart';
@@ -169,6 +170,7 @@ class FakeActivityRepository extends Fake implements ActivityRepository {
   Future<List<ActivityEventDto>> getWorkspaceActivities(
     int workspaceId, {
     int limit = 20,
+    ActivityFilter? filter,
   }) async => [];
 
   @override

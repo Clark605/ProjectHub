@@ -25,6 +25,7 @@ import '../../features/auth/data/auth_repository_impl.dart' as _i781;
 import '../../features/comments/data/comment_remote_data_source.dart' as _i844;
 import '../../features/comments/data/comment_repository.dart' as _i542;
 import '../../features/comments/data/comment_repository_impl.dart' as _i808;
+import '../../features/dashboard/cubit/activity_stream_cubit.dart' as _i1022;
 import '../../features/dashboard/cubit/dashboard_cubit.dart' as _i949;
 import '../../features/dashboard/data/activity_repository.dart' as _i568;
 import '../../features/kanban/cubit/kanban_cubit.dart' as _i627;
@@ -116,6 +117,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i259.WorkspaceSettingsCubit>(
       () => _i259.WorkspaceSettingsCubit(gh<_i688.WorkspaceRepository>()),
+    );
+    gh.factory<_i1022.ActivityStreamCubit>(
+      () => _i1022.ActivityStreamCubit(gh<_i568.ActivityRepository>()),
     );
     gh.lazySingleton<_i726.AuthRepository>(
       () => _i781.AuthRepositoryImpl(

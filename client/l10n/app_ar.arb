@@ -345,5 +345,17 @@
   "activityPerformedEventOn": "أجرى {event} على \"{title}\"",
   "activityPerformedEvent": "أجرى {event}",
   "roleAdminLabel": "مسؤول",
-  "roleViewerLabel": "مشاهد"
+  "roleViewerLabel": "مشاهد",
+  "filterAndSort": "التصفية والترتيب",
+  "filterCategory": "الفئة",
+  "allActivities": "الكل",
+  "taskActivities": "المهام",
+  "projectActivities": "المشاريع",
+  "memberActivities": "الأعضاء",
+  "searchActivitiesHint": "البحث بالاسم أو الفاعل...",
+  "sortBy": "ترتيب حسب",
+  "newestFirst": "الأحدث أولاً",
+  "oldestFirst": "الأقدم أولاً",
+  "applyFilters": "تطبيق التصفية",
+  "noMatchingActivities": "لا توجد أنشطة تطابق خيارات التصفية"
 }

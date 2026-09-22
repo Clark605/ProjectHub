@@ -58,8 +58,39 @@ class ApiConstants {
       '$_v1/workspaces/$workspaceId/members/$memberId/role';
   static String workspaceProjects(int id) => '$_v1/workspaces/$id/projects';
   static String workspaceMyTasks(int id) => '$_v1/workspaces/$id/my-tasks';
-  static String workspaceActivity(int id, {int limit = 20}) =>
-      '$_v1/workspaces/$id/activity?limit=$limit';
+  static String workspaceActivity(
+    int id, {
+    int limit = 20,
+    String? eventType,
+    String? search,
+    String? sortBy,
+    bool? sortDescending,
+    DateTime? startDate,
+    DateTime? endDate,
+  }) {
+    final params = <String, String>{'limit': limit.toString()};
+    if (eventType != null && eventType.isNotEmpty) {
+      params['eventType'] = eventType;
+    }
+    if (search != null && search.isNotEmpty) {
+      params['search'] = search;
+    }
+    if (sortBy != null && sortBy.isNotEmpty) {
+      params['sortBy'] = sortBy;
+    }
+    if (sortDescending != null) {
+      params['sortDescending'] = sortDescending.toString();
+    }
+    if (startDate != null) {
+      params['startDate'] = startDate.toIso8601String();
+    }
+    if (endDate != null) {
+      params['endDate'] = endDate.toIso8601String();
+    }
+
+    final query = Uri(queryParameters: params).query;
+    return '$_v1/workspaces/$id/activity?$query';
+  }
 
   // Projects
   static String projectById(int id) => '$_v1/projects/$id';

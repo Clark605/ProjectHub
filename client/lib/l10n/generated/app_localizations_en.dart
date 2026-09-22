@@ -1081,4 +1081,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roleViewerLabel => 'Viewer';
+
+  @override
+  String get filterAndSort => 'Filter & Sort';
+
+  @override
+  String get filterCategory => 'Category';
+
+  @override
+  String get allActivities => 'All';
+
+  @override
+  String get taskActivities => 'Tasks';
+
+  @override
+  String get projectActivities => 'Projects';
+
+  @override
+  String get memberActivities => 'Members';
+
+  @override
+  String get searchActivitiesHint => 'Search by actor or item...';
+
+  @override
+  String get sortBy => 'Sort By';
+
+  @override
+  String get newestFirst => 'Newest first';
+
+  @override
+  String get oldestFirst => 'Oldest first';
+
+  @override
+  String get applyFilters => 'Apply Filters';
+
+  @override
+  String get noMatchingActivities => 'No activities match your filters';
 }

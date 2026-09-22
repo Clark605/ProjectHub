@@ -1077,4 +1077,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get roleViewerLabel => 'مشاهد';
+
+  @override
+  String get filterAndSort => 'التصفية والترتيب';
+
+  @override
+  String get filterCategory => 'الفئة';
+
+  @override
+  String get allActivities => 'الكل';
+
+  @override
+  String get taskActivities => 'المهام';
+
+  @override
+  String get projectActivities => 'المشاريع';
+
+  @override
+  String get memberActivities => 'الأعضاء';
+
+  @override
+  String get searchActivitiesHint => 'البحث بالاسم أو الفاعل...';
+
+  @override
+  String get sortBy => 'ترتيب حسب';
+
+  @override
+  String get newestFirst => 'الأحدث أولاً';
+
+  @override
+  String get oldestFirst => 'الأقدم أولاً';
+
+  @override
+  String get applyFilters => 'تطبيق التصفية';
+
+  @override
+  String get noMatchingActivities => 'لا توجد أنشطة تطابق خيارات التصفية';
 }
