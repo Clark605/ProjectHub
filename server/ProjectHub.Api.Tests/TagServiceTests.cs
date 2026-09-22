@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Hybrid;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
 using ProjectHub.Api.Data;
@@ -35,8 +37,14 @@ public class TagServiceTests
         mockHubContext.Setup(h => h.Clients).Returns(mockClients.Object);
         mockClients.Setup(c => c.Group(It.IsAny<string>())).Returns(mockClientProxy.Object);
 
+        var services = new ServiceCollection();
+#pragma warning disable EXTEXP0018
+        services.AddHybridCache();
+#pragma warning restore EXTEXP0018
+        var cache = services.BuildServiceProvider().GetRequiredService<HybridCache>();
+
         var mockLogger = new Mock<ILogger<TagService>>();
-        return new TagService(context, mockHubContext.Object, mockLogger.Object);
+        return new TagService(context, cache, mockHubContext.Object, mockLogger.Object);
     }
 
     [Fact]
