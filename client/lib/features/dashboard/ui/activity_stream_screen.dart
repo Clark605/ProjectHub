@@ -171,18 +171,12 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
             selectedColor: selectedBgColor,
             checkmarkColor: selectedTextColor,
             side: BorderSide(
-              color: isSelected
-                  ? selectedBorderColor
-                  : unselectedBorderColor,
+              color: isSelected ? selectedBorderColor : unselectedBorderColor,
               width: isSelected ? 1.5 : 1.0,
             ),
             labelStyle: TextStyle(
-              color: isSelected
-                  ? selectedTextColor
-                  : unselectedTextColor,
-              fontWeight: isSelected
-                  ? FontWeight.w600
-                  : FontWeight.w500,
+              color: isSelected ? selectedTextColor : unselectedTextColor,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               fontSize: 13,
             ),
             onSelected: (selected) {

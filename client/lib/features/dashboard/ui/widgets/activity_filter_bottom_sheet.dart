@@ -264,24 +264,21 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                     selectedColor: selectedBgColor,
                     checkmarkColor: selectedTextColor,
                     side: BorderSide(
-                      color:
-                          _selectedSortOrder == ActivitySortOrder.newestFirst
-                              ? selectedBorderColor
-                              : unselectedBorderColor,
-                      width:
-                          _selectedSortOrder == ActivitySortOrder.newestFirst
-                              ? 1.5
-                              : 1.0,
+                      color: _selectedSortOrder == ActivitySortOrder.newestFirst
+                          ? selectedBorderColor
+                          : unselectedBorderColor,
+                      width: _selectedSortOrder == ActivitySortOrder.newestFirst
+                          ? 1.5
+                          : 1.0,
                     ),
                     labelStyle: TextStyle(
-                      color:
-                          _selectedSortOrder == ActivitySortOrder.newestFirst
-                              ? selectedTextColor
-                              : unselectedTextColor,
+                      color: _selectedSortOrder == ActivitySortOrder.newestFirst
+                          ? selectedTextColor
+                          : unselectedTextColor,
                       fontWeight:
                           _selectedSortOrder == ActivitySortOrder.newestFirst
-                              ? FontWeight.w600
-                              : FontWeight.w500,
+                          ? FontWeight.w600
+                          : FontWeight.w500,
                       fontSize: 13,
                     ),
                     onSelected: (selected) {
@@ -300,24 +297,21 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                     selectedColor: selectedBgColor,
                     checkmarkColor: selectedTextColor,
                     side: BorderSide(
-                      color:
-                          _selectedSortOrder == ActivitySortOrder.oldestFirst
-                              ? selectedBorderColor
-                              : unselectedBorderColor,
-                      width:
-                          _selectedSortOrder == ActivitySortOrder.oldestFirst
-                              ? 1.5
-                              : 1.0,
+                      color: _selectedSortOrder == ActivitySortOrder.oldestFirst
+                          ? selectedBorderColor
+                          : unselectedBorderColor,
+                      width: _selectedSortOrder == ActivitySortOrder.oldestFirst
+                          ? 1.5
+                          : 1.0,
                     ),
                     labelStyle: TextStyle(
-                      color:
-                          _selectedSortOrder == ActivitySortOrder.oldestFirst
-                              ? selectedTextColor
-                              : unselectedTextColor,
+                      color: _selectedSortOrder == ActivitySortOrder.oldestFirst
+                          ? selectedTextColor
+                          : unselectedTextColor,
                       fontWeight:
                           _selectedSortOrder == ActivitySortOrder.oldestFirst
-                              ? FontWeight.w600
-                              : FontWeight.w500,
+                          ? FontWeight.w600
+                          : FontWeight.w500,
                       fontSize: 13,
                     ),
                     onSelected: (selected) {
@@ -355,9 +349,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: isDark
-                          ? AppColors.textOnPrimary
-                          : Colors.white,
+                      color: isDark ? AppColors.textOnPrimary : Colors.white,
                     ),
                   ),
                 ),
