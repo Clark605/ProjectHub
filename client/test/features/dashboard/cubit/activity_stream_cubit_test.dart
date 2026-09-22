@@ -69,17 +69,20 @@ void main() {
       expect(cubit.state.filteredActivities, isEmpty);
     });
 
-    test('loadActivities populates activities and applies default filter', () async {
-      mockRepo.activitiesToReturn = dummyActivities;
+    test(
+      'loadActivities populates activities and applies default filter',
+      () async {
+        mockRepo.activitiesToReturn = dummyActivities;
 
-      await cubit.loadActivities(10);
+        await cubit.loadActivities(10);
 
-      expect(cubit.state.isLoading, isFalse);
-      expect(cubit.state.activities.length, 2);
-      expect(cubit.state.filteredActivities.length, 2);
-      expect(cubit.state.filteredActivities.first.id, 2); // newest first
-      expect(cubit.state.errorMessage, isNull);
-    });
+        expect(cubit.state.isLoading, isFalse);
+        expect(cubit.state.activities.length, 2);
+        expect(cubit.state.filteredActivities.length, 2);
+        expect(cubit.state.filteredActivities.first.id, 2); // newest first
+        expect(cubit.state.errorMessage, isNull);
+      },
+    );
 
     test('loadActivities handles failure cleanly', () async {
       mockRepo.shouldThrow = true;
@@ -90,28 +93,34 @@ void main() {
       expect(cubit.state.errorMessage, isNotNull);
     });
 
-    test('updateCategory filters activities immediately and queries repository', () async {
-      mockRepo.activitiesToReturn = dummyActivities;
-      await cubit.loadActivities(10);
+    test(
+      'updateCategory filters activities immediately and queries repository',
+      () async {
+        mockRepo.activitiesToReturn = dummyActivities;
+        await cubit.loadActivities(10);
 
-      cubit.updateCategory('Tasks');
+        cubit.updateCategory('Tasks');
 
-      // Immediate local evaluation
-      expect(cubit.state.filteredActivities.length, 1);
-      expect(cubit.state.filteredActivities.first.eventType, 'TaskCreated');
-      expect(cubit.state.filter.category, 'Tasks');
-    });
+        // Immediate local evaluation
+        expect(cubit.state.filteredActivities.length, 1);
+        expect(cubit.state.filteredActivities.first.eventType, 'TaskCreated');
+        expect(cubit.state.filter.category, 'Tasks');
+      },
+    );
 
-    test('clearFilters resets filter to empty and shows all activities', () async {
-      mockRepo.activitiesToReturn = dummyActivities;
-      await cubit.loadActivities(10);
+    test(
+      'clearFilters resets filter to empty and shows all activities',
+      () async {
+        mockRepo.activitiesToReturn = dummyActivities;
+        await cubit.loadActivities(10);
 
-      cubit.updateCategory('Tasks');
-      expect(cubit.state.filteredActivities.length, 1);
+        cubit.updateCategory('Tasks');
+        expect(cubit.state.filteredActivities.length, 1);
 
-      cubit.clearFilters();
-      expect(cubit.state.filter.category, 'All');
-      expect(cubit.state.filteredActivities.length, 2);
-    });
+        cubit.clearFilters();
+        expect(cubit.state.filter.category, 'All');
+        expect(cubit.state.filteredActivities.length, 2);
+      },
+    );
   });
 }

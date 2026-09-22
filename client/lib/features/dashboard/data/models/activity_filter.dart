@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 
-enum ActivitySortOrder {
-  newestFirst,
-  oldestFirst,
-}
+enum ActivitySortOrder { newestFirst, oldestFirst }
 
 /// Pure filtering and sorting utility for workspace activity stream.
 class ActivityFilter {
@@ -23,11 +20,11 @@ class ActivityFilter {
   });
 
   const ActivityFilter.empty()
-      : category = 'All',
-        eventType = null,
-        search = null,
-        sortOrder = ActivitySortOrder.newestFirst,
-        dateRange = null;
+    : category = 'All',
+      eventType = null,
+      search = null,
+      sortOrder = ActivitySortOrder.newestFirst,
+      dateRange = null;
 
   bool get hasActiveFilters =>
       category != 'All' ||
@@ -76,9 +73,9 @@ class ActivityFilter {
 
       // Exact eventType filter
       if (eventType != null && eventType!.isNotEmpty) {
-        if (!activity.eventType
-            .toLowerCase()
-            .contains(eventType!.toLowerCase())) {
+        if (!activity.eventType.toLowerCase().contains(
+          eventType!.toLowerCase(),
+        )) {
           return false;
         }
       }
@@ -91,7 +88,8 @@ class ActivityFilter {
         final member = activity.memberName?.toLowerCase() ?? '';
         final assignee = activity.assigneeName?.toLowerCase() ?? '';
 
-        final matches = actor.contains(query) ||
+        final matches =
+            actor.contains(query) ||
             target.contains(query) ||
             member.contains(query) ||
             assignee.contains(query);
@@ -137,9 +135,7 @@ class ActivityFilter {
 
   /// Converts active filter to HTTP query parameters.
   Map<String, dynamic> toQueryParams({int limit = 50}) {
-    final params = <String, dynamic>{
-      'limit': limit,
-    };
+    final params = <String, dynamic>{'limit': limit};
 
     if (category != 'All') {
       // Map category to prefix/type

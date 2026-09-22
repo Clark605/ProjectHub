@@ -13,7 +13,7 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
   int _requestId = 0;
 
   ActivityStreamCubit(this._repository)
-      : super(const ActivityStreamState(isLoading: true));
+    : super(const ActivityStreamState(isLoading: true));
 
   int? get workspaceId => _workspaceId;
   ActivityFilter get currentFilter => state.filter;
@@ -33,11 +33,7 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
       emit(state.copyWith(isRefreshing: true, clearError: true));
     } else {
       emit(
-        state.copyWith(
-          isLoading: true,
-          filter: targetFilter,
-          clearError: true,
-        ),
+        state.copyWith(isLoading: true, filter: targetFilter, clearError: true),
       );
     }
 

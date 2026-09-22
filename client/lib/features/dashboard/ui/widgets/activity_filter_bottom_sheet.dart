@@ -45,8 +45,9 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
     super.initState();
     _selectedCategory = widget.initialFilter.category;
     _selectedSortOrder = widget.initialFilter.sortOrder;
-    _searchController =
-        TextEditingController(text: widget.initialFilter.search ?? '');
+    _searchController = TextEditingController(
+      text: widget.initialFilter.search ?? '',
+    );
     _selectedDateRange = widget.initialFilter.dateRange;
   }
 
@@ -83,6 +84,23 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
+    final isDark = theme.brightness == Brightness.dark;
+    final selectedBgColor = isDark
+        ? AppColors.primary.withValues(alpha: 0.22)
+        : AppColors.primaryContainer.withValues(alpha: 0.18);
+    final selectedTextColor = isDark
+        ? AppColors.primary
+        : AppColors.onElectricVioletContainer;
+    final unselectedTextColor = isDark
+        ? AppColors.textSecondary
+        : AppColors.lightTextSecondary;
+    final selectedBorderColor = isDark
+        ? AppColors.primary
+        : AppColors.primaryContainer;
+    final unselectedBorderColor = isDark
+        ? AppColors.border
+        : AppColors.lightBorder;
 
     final categories = [
       {'key': 'All', 'label': l10n?.allActivities ?? 'All'},
@@ -155,7 +173,8 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
               TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
-                  hintText: l10n?.searchActivitiesHint ??
+                  hintText:
+                      l10n?.searchActivitiesHint ??
                       'Search by actor or item...',
                   prefixIcon: const Icon(Icons.search_rounded, size: 20),
                   suffixIcon: _searchController.text.isNotEmpty
@@ -196,6 +215,23 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   return ChoiceChip(
                     label: Text(cat['label']!),
                     selected: isSelected,
+                    selectedColor: selectedBgColor,
+                    checkmarkColor: selectedTextColor,
+                    side: BorderSide(
+                      color: isSelected
+                          ? selectedBorderColor
+                          : unselectedBorderColor,
+                      width: isSelected ? 1.5 : 1.0,
+                    ),
+                    labelStyle: TextStyle(
+                      color: isSelected
+                          ? selectedTextColor
+                          : unselectedTextColor,
+                      fontWeight: isSelected
+                          ? FontWeight.w600
+                          : FontWeight.w500,
+                      fontSize: 13,
+                    ),
                     onSelected: (selected) {
                       if (selected) {
                         setState(() {
@@ -225,6 +261,29 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                     label: Text(l10n?.newestFirst ?? 'Newest first'),
                     selected:
                         _selectedSortOrder == ActivitySortOrder.newestFirst,
+                    selectedColor: selectedBgColor,
+                    checkmarkColor: selectedTextColor,
+                    side: BorderSide(
+                      color:
+                          _selectedSortOrder == ActivitySortOrder.newestFirst
+                              ? selectedBorderColor
+                              : unselectedBorderColor,
+                      width:
+                          _selectedSortOrder == ActivitySortOrder.newestFirst
+                              ? 1.5
+                              : 1.0,
+                    ),
+                    labelStyle: TextStyle(
+                      color:
+                          _selectedSortOrder == ActivitySortOrder.newestFirst
+                              ? selectedTextColor
+                              : unselectedTextColor,
+                      fontWeight:
+                          _selectedSortOrder == ActivitySortOrder.newestFirst
+                              ? FontWeight.w600
+                              : FontWeight.w500,
+                      fontSize: 13,
+                    ),
                     onSelected: (selected) {
                       if (selected) {
                         setState(() {
@@ -238,6 +297,29 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                     label: Text(l10n?.oldestFirst ?? 'Oldest first'),
                     selected:
                         _selectedSortOrder == ActivitySortOrder.oldestFirst,
+                    selectedColor: selectedBgColor,
+                    checkmarkColor: selectedTextColor,
+                    side: BorderSide(
+                      color:
+                          _selectedSortOrder == ActivitySortOrder.oldestFirst
+                              ? selectedBorderColor
+                              : unselectedBorderColor,
+                      width:
+                          _selectedSortOrder == ActivitySortOrder.oldestFirst
+                              ? 1.5
+                              : 1.0,
+                    ),
+                    labelStyle: TextStyle(
+                      color:
+                          _selectedSortOrder == ActivitySortOrder.oldestFirst
+                              ? selectedTextColor
+                              : unselectedTextColor,
+                      fontWeight:
+                          _selectedSortOrder == ActivitySortOrder.oldestFirst
+                              ? FontWeight.w600
+                              : FontWeight.w500,
+                      fontSize: 13,
+                    ),
                     onSelected: (selected) {
                       if (selected) {
                         setState(() {
@@ -257,8 +339,12 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 child: ElevatedButton(
                   onPressed: _apply,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
+                    backgroundColor: isDark
+                        ? AppColors.primary
+                        : AppColors.primaryContainer,
+                    foregroundColor: isDark
+                        ? AppColors.textOnPrimary
+                        : Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -266,9 +352,12 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   ),
                   child: Text(
                     l10n?.applyFilters ?? 'Apply Filters',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
+                      color: isDark
+                          ? AppColors.textOnPrimary
+                          : Colors.white,
                     ),
                   ),
                 ),

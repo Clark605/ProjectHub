@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_typography.dart';
 
-ThemeData buildDarkTheme() {
+ThemeData buildDarkTheme([Locale? locale]) {
+  final fontFamily = AppTypography.fontFamilyFor(locale);
+  final fontFallback = AppTypography.fallbackFor(locale);
+
   return ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
-    fontFamily: AppTypography.fontFamily,
+    fontFamily: fontFamily,
+    fontFamilyFallback: fontFallback,
     scaffoldBackgroundColor: AppColors.background,
     splashFactory: NoSplash.splashFactory,
     splashColor: AppColors.primary.withValues(alpha: 0.05),
@@ -18,7 +22,7 @@ ThemeData buildDarkTheme() {
         TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
       },
     ),
-    textTheme: AppTypography.textTheme.apply(
+    textTheme: AppTypography.getTextTheme(locale).apply(
       bodyColor: AppColors.textPrimary,
       displayColor: AppColors.textPrimary,
     ),
@@ -84,8 +88,9 @@ ThemeData buildDarkTheme() {
         elevation: 0,
         minimumSize: const Size(double.infinity, 52),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        textStyle: const TextStyle(
-          fontFamily: AppTypography.fontFamily,
+        textStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontFamilyFallback: fontFallback,
           fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
@@ -99,9 +104,32 @@ ThemeData buildDarkTheme() {
     ),
     chipTheme: ChipThemeData(
       backgroundColor: AppColors.surfaceContainer,
-      selectedColor: AppColors.primary.withAlpha(51),
-      side: const BorderSide(color: AppColors.border),
+      selectedColor: AppColors.primary.withValues(alpha: 0.2),
+      checkmarkColor: AppColors.primary,
+      iconTheme: const IconThemeData(color: AppColors.primary, size: 18),
+      side: WidgetStateBorderSide.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
+          return const BorderSide(color: AppColors.primary, width: 1.5);
+        }
+        return const BorderSide(color: AppColors.border);
+      }),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      labelStyle: const TextStyle(
+        color: AppColors.textSecondary,
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+      ),
+      secondaryLabelStyle: const TextStyle(
+        color: AppColors.primary,
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+      ),
+      color: WidgetStateProperty.resolveWith<Color?>((states) {
+        if (states.contains(WidgetState.selected)) {
+          return AppColors.primary.withValues(alpha: 0.2);
+        }
+        return AppColors.surfaceContainer;
+      }),
     ),
     snackBarTheme: const SnackBarThemeData(
       backgroundColor: AppColors.surfaceContainerHigh,

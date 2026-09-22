@@ -132,62 +132,63 @@ void main() {
     },
   );
 
-  testWidgets('ActivityStreamScreen filters activities using quick filter chips', (
-    tester,
-  ) async {
-    fakeRepo.activitiesToReturn = [
-      ActivityEventDto.fromJson({
-        'id': 1,
-        'workspaceId': 10,
-        'actorId': 'u1',
-        'actorName': 'Alex',
-        'eventType': 'TaskCreated',
-        'metadata': {'Title': 'Write tests'},
-        'createdAt': DateTime.now().toIso8601String(),
-      }),
-      ActivityEventDto.fromJson({
-        'id': 2,
-        'workspaceId': 10,
-        'actorId': 'u2',
-        'actorName': 'Sam',
-        'eventType': 'ProjectCreated',
-        'metadata': {'Name': 'Platform'},
-        'createdAt': DateTime.now().toIso8601String(),
-      }),
-    ];
+  testWidgets(
+    'ActivityStreamScreen filters activities using quick filter chips',
+    (tester) async {
+      fakeRepo.activitiesToReturn = [
+        ActivityEventDto.fromJson({
+          'id': 1,
+          'workspaceId': 10,
+          'actorId': 'u1',
+          'actorName': 'Alex',
+          'eventType': 'TaskCreated',
+          'metadata': {'Title': 'Write tests'},
+          'createdAt': DateTime.now().toIso8601String(),
+        }),
+        ActivityEventDto.fromJson({
+          'id': 2,
+          'workspaceId': 10,
+          'actorId': 'u2',
+          'actorName': 'Sam',
+          'eventType': 'ProjectCreated',
+          'metadata': {'Name': 'Platform'},
+          'createdAt': DateTime.now().toIso8601String(),
+        }),
+      ];
 
-    await tester.pumpWidget(
-      MaterialApp(
-        home: ActivityStreamScreen(
-          workspaceId: 10,
-          activityRepository: fakeRepo,
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ActivityStreamScreen(
+            workspaceId: 10,
+            activityRepository: fakeRepo,
+          ),
         ),
-      ),
-    );
-    await tester.pump();
+      );
+      await tester.pump();
 
-    expect(find.byType(ActivityTile), findsNWidgets(2));
+      expect(find.byType(ActivityTile), findsNWidgets(2));
 
-    // Tap Tasks chip
-    await tester.tap(find.byKey(const Key('activity_quick_filter_Tasks')));
-    await tester.pumpAndSettle();
+      // Tap Tasks chip
+      await tester.tap(find.byKey(const Key('activity_quick_filter_Tasks')));
+      await tester.pumpAndSettle();
 
-    expect(find.byType(ActivityTile), findsOneWidget);
-    var richTexts = tester.widgetList<RichText>(find.byType(RichText));
-    var text = richTexts.map((r) => r.text.toPlainText()).join(' | ');
-    expect(text, contains('Alex'));
-    expect(text, isNot(contains('Sam')));
+      expect(find.byType(ActivityTile), findsOneWidget);
+      var richTexts = tester.widgetList<RichText>(find.byType(RichText));
+      var text = richTexts.map((r) => r.text.toPlainText()).join(' | ');
+      expect(text, contains('Alex'));
+      expect(text, isNot(contains('Sam')));
 
-    // Tap Projects chip
-    await tester.tap(find.byKey(const Key('activity_quick_filter_Projects')));
-    await tester.pumpAndSettle();
+      // Tap Projects chip
+      await tester.tap(find.byKey(const Key('activity_quick_filter_Projects')));
+      await tester.pumpAndSettle();
 
-    expect(find.byType(ActivityTile), findsOneWidget);
-    richTexts = tester.widgetList<RichText>(find.byType(RichText));
-    text = richTexts.map((r) => r.text.toPlainText()).join(' | ');
-    expect(text, contains('Sam'));
-    expect(text, isNot(contains('Alex')));
-  });
+      expect(find.byType(ActivityTile), findsOneWidget);
+      richTexts = tester.widgetList<RichText>(find.byType(RichText));
+      text = richTexts.map((r) => r.text.toPlainText()).join(' | ');
+      expect(text, contains('Sam'));
+      expect(text, isNot(contains('Alex')));
+    },
+  );
 
   testWidgets(
     'ActivityStreamScreen shows filter empty state and resets filters',

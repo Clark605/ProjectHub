@@ -96,8 +96,9 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
               ),
               Center(
-                child:
-                    WorkspacePresenceAvatars(workspaceId: widget.workspaceId),
+                child: WorkspacePresenceAvatars(
+                  workspaceId: widget.workspaceId,
+                ),
               ),
               const SizedBox(width: 16),
             ],
@@ -135,6 +136,23 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
       {'key': 'Members', 'label': l10n?.memberActivities ?? 'Members'},
     ];
 
+    final isDark = theme.brightness == Brightness.dark;
+    final selectedBgColor = isDark
+        ? AppColors.primary.withValues(alpha: 0.22)
+        : AppColors.primaryContainer.withValues(alpha: 0.18);
+    final selectedTextColor = isDark
+        ? AppColors.primary
+        : AppColors.onElectricVioletContainer;
+    final unselectedTextColor = isDark
+        ? AppColors.textSecondary
+        : AppColors.lightTextSecondary;
+    final selectedBorderColor = isDark
+        ? AppColors.primary
+        : AppColors.primaryContainer;
+    final unselectedBorderColor = isDark
+        ? AppColors.border
+        : AppColors.lightBorder;
+
     return Container(
       height: 48,
       margin: const EdgeInsets.only(top: 8, bottom: 4),
@@ -150,6 +168,23 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
             key: Key('activity_quick_filter_${cat['key']}'),
             label: Text(cat['label']!),
             selected: isSelected,
+            selectedColor: selectedBgColor,
+            checkmarkColor: selectedTextColor,
+            side: BorderSide(
+              color: isSelected
+                  ? selectedBorderColor
+                  : unselectedBorderColor,
+              width: isSelected ? 1.5 : 1.0,
+            ),
+            labelStyle: TextStyle(
+              color: isSelected
+                  ? selectedTextColor
+                  : unselectedTextColor,
+              fontWeight: isSelected
+                  ? FontWeight.w600
+                  : FontWeight.w500,
+              fontSize: 13,
+            ),
             onSelected: (selected) {
               if (selected) {
                 _cubit.updateCategory(cat['key']!);
@@ -221,7 +256,8 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                l10n?.noMatchingActivities ?? 'No activities match your filters',
+                l10n?.noMatchingActivities ??
+                    'No activities match your filters',
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

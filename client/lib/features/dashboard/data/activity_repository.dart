@@ -53,7 +53,8 @@ class ActivityRepositoryImpl implements ActivityRepository {
           eventType: eventTypeParam,
           search: filter?.search,
           sortBy: 'date',
-          sortDescending: filter == null ||
+          sortDescending:
+              filter == null ||
               filter.sortOrder == ActivitySortOrder.newestFirst,
           startDate: filter?.dateRange?.start,
           endDate: filter?.dateRange?.end,

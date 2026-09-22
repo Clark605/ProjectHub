@@ -45,7 +45,9 @@ void main() {
         expect(find.text('Sort By'), findsOneWidget);
 
         // Verify Apply button touch target height is at least 48px
-        final applyButtonSize = tester.getSize(find.widgetWithText(ElevatedButton, 'Apply Filters'));
+        final applyButtonSize = tester.getSize(
+          find.widgetWithText(ElevatedButton, 'Apply Filters'),
+        );
         expect(applyButtonSize.height, greaterThanOrEqualTo(48.0));
 
         // Select 'Projects' category
