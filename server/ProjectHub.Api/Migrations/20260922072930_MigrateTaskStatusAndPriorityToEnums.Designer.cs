@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ProjectHub.Api.Data;
@@ -11,9 +12,11 @@ using ProjectHub.Api.Data;
 namespace ProjectHub.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260922072930_MigrateTaskStatusAndPriorityToEnums")]
+    partial class MigrateTaskStatusAndPriorityToEnums
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,7 +201,7 @@ namespace ProjectHub.Api.Migrations
 
                     b.HasIndex("WorkspaceId", "CreatedAt");
 
-                    b.ToTable("ActivityEvents", (string)null);
+                    b.ToTable("ActivityEvents");
                 });
 
             modelBuilder.Entity("ProjectHub.Api.Models.AppUser", b =>
@@ -305,7 +308,7 @@ namespace ProjectHub.Api.Migrations
 
                     b.HasIndex("TaskId", "CreatedAt");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ProjectHub.Api.Models.Project", b =>
@@ -353,7 +356,7 @@ namespace ProjectHub.Api.Migrations
 
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("ProjectHub.Api.Models.RefreshToken", b =>
@@ -399,7 +402,7 @@ namespace ProjectHub.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("ProjectHub.Api.Models.Tag", b =>
@@ -435,7 +438,7 @@ namespace ProjectHub.Api.Migrations
 
                     b.HasIndex("WorkspaceId", "ProjectId");
 
-                    b.ToTable("Tags", (string)null);
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("ProjectHub.Api.Models.Task", b =>
@@ -489,7 +492,7 @@ namespace ProjectHub.Api.Migrations
 
                     b.HasIndex("ProjectId", "Status");
 
-                    b.ToTable("Tasks", (string)null);
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("ProjectHub.Api.Models.TaskTag", b =>
@@ -504,7 +507,7 @@ namespace ProjectHub.Api.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("TaskTags", (string)null);
+                    b.ToTable("TaskTags");
                 });
 
             modelBuilder.Entity("ProjectHub.Api.Models.WorkSpace", b =>
@@ -538,7 +541,7 @@ namespace ProjectHub.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WorkSpaces", (string)null);
+                    b.ToTable("WorkSpaces");
                 });
 
             modelBuilder.Entity("ProjectHub.Api.Models.WorkspaceMember", b =>
@@ -571,7 +574,7 @@ namespace ProjectHub.Api.Migrations
                     b.HasIndex("WorkspaceId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("WorkspaceMembers", (string)null);
+                    b.ToTable("WorkspaceMembers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

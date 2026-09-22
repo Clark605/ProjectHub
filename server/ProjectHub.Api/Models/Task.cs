@@ -9,8 +9,8 @@ public class Task
     public Project Project { get; set; } = null!;
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
-    public string Status { get; set; } = TaskItemStatus.Backlog.ToString();
-    public string Priority { get; set; } = TaskItemPriority.Medium.ToString();
+    public TaskItemStatus Status { get; set; } = TaskItemStatus.Backlog;
+    public TaskItemPriority Priority { get; set; } = TaskItemPriority.Medium;
     public string? AssigneeId { get; set; }
     public AppUser? Assignee { get; set; }
     public string CreatedBy { get; set; } = string.Empty;

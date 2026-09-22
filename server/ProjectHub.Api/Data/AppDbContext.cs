@@ -91,8 +91,10 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
             entity.Property(t => t.Title).HasMaxLength(200).IsRequired();
             entity.Property(t => t.Description).HasMaxLength(2000);
-            entity.Property(t => t.Status).HasMaxLength(50).IsRequired();
-            entity.Property(t => t.Priority).HasMaxLength(50).IsRequired();
+            entity.Property(t => t.Status).HasConversion<short>().IsRequired();
+            entity.Property(t => t.Priority).HasConversion<short>().IsRequired();
+
+            entity.HasIndex(t => new { t.ProjectId, t.Status });
         });
 
         builder.Entity<ActivityEvent>(entity =>
