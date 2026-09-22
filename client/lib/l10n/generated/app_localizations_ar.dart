@@ -976,6 +976,23 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get promoteToOwner => 'ترقية إلى مالك';
+
+  @override
+  String get demoteToMember => 'تغيير إلى عضو';
+
+  @override
+  String get confirmChangeRoleTitle => 'تغيير دور العضو؟';
+
+  @override
+  String confirmChangeRole(String name, String role) {
+    return 'هل أنت متأكد أنك تريد تغيير دور $name إلى $role؟';
+  }
+
+  @override
+  String get memberRoleUpdated => 'تم تحديث دور العضو بنجاح';
+
+  @override
   String onlineMembersCount(int count) {
     return 'الأعضاء المتصلون ($count)';
   }

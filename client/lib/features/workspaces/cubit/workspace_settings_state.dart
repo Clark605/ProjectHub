@@ -18,6 +18,12 @@ class ActionMemberAddedWithEmail extends WorkspaceAction {
 
 class ActionMemberRemoved extends WorkspaceAction {}
 
+class ActionMemberRoleUpdated extends WorkspaceAction {
+  final String userId;
+  final String role;
+  ActionMemberRoleUpdated(this.userId, this.role);
+}
+
 @freezed
 sealed class WorkspaceSettingsState with _$WorkspaceSettingsState {
   const factory WorkspaceSettingsState.initial() = WorkspaceSettingsInitial;

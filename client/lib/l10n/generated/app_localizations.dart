@@ -1904,6 +1904,36 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to remove {name} from the workspace?'**
   String confirmRemoveMember(String name);
 
+  /// Action to promote a member to owner
+  ///
+  /// In en, this message translates to:
+  /// **'Promote to Owner'**
+  String get promoteToOwner;
+
+  /// Action to demote an owner to member
+  ///
+  /// In en, this message translates to:
+  /// **'Change to Member'**
+  String get demoteToMember;
+
+  /// Title for role change dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Change Member Role?'**
+  String get confirmChangeRoleTitle;
+
+  /// Confirmation message when changing a member role
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to change {name}\'s role to {role}?'**
+  String confirmChangeRole(String name, String role);
+
+  /// Success message when role is changed
+  ///
+  /// In en, this message translates to:
+  /// **'Member role updated successfully'**
+  String get memberRoleUpdated;
+
   /// Title for online members sheet with count
   ///
   /// In en, this message translates to:

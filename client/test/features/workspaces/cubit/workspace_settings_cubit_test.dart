@@ -100,6 +100,21 @@ class _FakeSettingsRepository extends Fake implements WorkspaceRepository {
   }
 
   @override
+  Future<MemberDto> updateMemberRole(
+    int workspaceId,
+    String userId,
+    String role,
+  ) async {
+    if (shouldFail) throw const ServerException(message: 'Role update failed');
+    final index = members.indexWhere((m) => m.userId == userId);
+    if (index != -1) {
+      members[index] = members[index].copyWith(role: role);
+      return members[index];
+    }
+    throw const ServerException(message: 'Member not found');
+  }
+
+  @override
   bool hasCachedSettings(int workspaceId) => false;
 
   @override
@@ -182,6 +197,31 @@ void main() {
         expect(state.successAction, isA<ActionMemberRemoved>());
       },
     );
+
+    test(
+      'updateMemberRole updates role in member list and emits ActionMemberRoleUpdated',
+      () async {
+        await cubit.loadSettings(1);
+
+        final success = await cubit.updateMemberRole('u2', 'Owner');
+
+        expect(success, isTrue);
+        final state = cubit.state as WorkspaceSettingsLoaded;
+        expect(state.members.firstWhere((m) => m.userId == 'u2').role, 'Owner');
+        expect(state.successAction, isA<ActionMemberRoleUpdated>());
+      },
+    );
+
+    test('updateMemberRole sets errorMessage when repo fails', () async {
+      await cubit.loadSettings(1);
+      repository.shouldFail = true;
+
+      final success = await cubit.updateMemberRole('u2', 'Owner');
+
+      expect(success, isFalse);
+      final state = cubit.state as WorkspaceSettingsLoaded;
+      expect(state.errorMessage, 'Role update failed');
+    });
 
     test('deleteWorkspace emits deleted state', () async {
       await cubit.loadSettings(1);

@@ -980,6 +980,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get promoteToOwner => 'Promote to Owner';
+
+  @override
+  String get demoteToMember => 'Change to Member';
+
+  @override
+  String get confirmChangeRoleTitle => 'Change Member Role?';
+
+  @override
+  String confirmChangeRole(String name, String role) {
+    return 'Are you sure you want to change $name\'s role to $role?';
+  }
+
+  @override
+  String get memberRoleUpdated => 'Member role updated successfully';
+
+  @override
   String onlineMembersCount(int count) {
     return 'Online Members ($count)';
   }

@@ -73,4 +73,39 @@ mixin WorkspaceSettingsMembersMixin on SafeActionCubit<WorkspaceSettingsState> {
 
     return success ?? false;
   }
+
+  Future<bool> updateMemberRole(String userId, String newRole) async {
+    final currentState = state;
+    if (currentState is! WorkspaceSettingsLoaded) return false;
+
+    emit(currentState.copyWith(successAction: null, errorMessage: null));
+
+    final success = await safeExecute<bool>(
+      () async {
+        final updatedMember = await repository.updateMemberRole(
+          currentState.workspace.id,
+          userId,
+          newRole,
+        );
+        final updatedMembers = currentState.members.map((m) {
+          return m.userId == userId ? updatedMember : m;
+        }).toList();
+
+        emit(
+          currentState.copyWith(
+            members: updatedMembers,
+            successAction: ActionMemberRoleUpdated(userId, newRole),
+          ),
+        );
+        return true;
+      },
+      onError: (message) {
+        emit(currentState.copyWith(errorMessage: message));
+      },
+      defaultErrorMessage: 'Failed to update member role',
+      logTag: 'WorkspaceSettings',
+    );
+
+    return success ?? false;
+  }
 }

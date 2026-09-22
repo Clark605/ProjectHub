@@ -54,6 +54,8 @@ class ApiConstants {
   static String workspaceMembers(int id) => '$_v1/workspaces/$id/members';
   static String removeWorkspaceMember(int workspaceId, String userId) =>
       '$_v1/workspaces/$workspaceId/members/$userId';
+  static String updateMemberRole(int workspaceId, String memberId) =>
+      '$_v1/workspaces/$workspaceId/members/$memberId/role';
   static String workspaceProjects(int id) => '$_v1/workspaces/$id/projects';
   static String workspaceMyTasks(int id) => '$_v1/workspaces/$id/my-tasks';
   static String workspaceActivity(int id, {int limit = 20}) =>

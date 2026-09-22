@@ -22,6 +22,11 @@ abstract class WorkspaceRepository {
   });
   Future<MemberDto> addMember(int workspaceId, AddMemberRequest request);
   Future<void> removeMember(int workspaceId, String userId);
+  Future<MemberDto> updateMemberRole(
+    int workspaceId,
+    String userId,
+    String role,
+  );
   bool hasCachedSettings(int workspaceId);
   void clearCache([int? workspaceId]);
   void dispose();

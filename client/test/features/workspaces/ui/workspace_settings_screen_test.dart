@@ -80,6 +80,16 @@ class _MockRepo extends Fake implements WorkspaceRepository {
   }
 
   @override
+  Future<MemberDto> updateMemberRole(int wid, String uid, String role) async {
+    final index = members.indexWhere((m) => m.userId == uid);
+    if (index != -1) {
+      members[index] = members[index].copyWith(role: role);
+      return members[index];
+    }
+    throw Exception('Member not found');
+  }
+
+  @override
   bool hasCachedSettings(int workspaceId) => false;
   @override
   void clearCache([int? workspaceId]) {}
@@ -113,6 +123,13 @@ void main() {
           email: 'alice@alpha.com',
           role: 'Owner',
           joinedAt: DateTime(2026, 1, 1),
+        ),
+        MemberDto(
+          userId: 'u2',
+          name: 'Bob Member',
+          email: 'bob@alpha.com',
+          role: 'Member',
+          joinedAt: DateTime(2026, 1, 2),
         ),
       ],
     );
@@ -285,6 +302,35 @@ void main() {
       await tester.pump();
 
       expect(find.byType(AppErrorBanner), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'WorkspaceSettingsScreen can promote a member to Owner via context menu',
+    (tester) async {
+      await tester.pumpWidget(buildSubject());
+      await tester.pump(const Duration(milliseconds: 100));
+
+      final popupFinder = find.byType(PopupMenuButton<String>);
+      expect(popupFinder, findsWidgets);
+
+      await tester.ensureVisible(popupFinder.at(1));
+      await tester.pumpAndSettle();
+
+      await tester.tap(popupFinder.at(1));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Promote to Owner'), findsOneWidget);
+
+      await tester.tap(find.text('Promote to Owner'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Change Member Role?'), findsOneWidget);
+
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+
+      expect(repo.members.firstWhere((m) => m.userId == 'u2').role, 'Owner');
     },
   );
 

@@ -216,6 +216,41 @@ void main() {
         expect(callCount, 1);
       });
 
+      test(
+        'updateMemberRole updates role via PUT and updates cached member list',
+        () async {
+          adapter.handler = (options) => jsonResponse([
+            {
+              'userId': 'u1',
+              'name': 'Member 1',
+              'email': 'm1@acme.com',
+              'role': 'Member',
+              'joinedAt': '2026-01-01T00:00:00Z',
+            },
+          ]);
+          await repository.getMembers(10);
+
+          adapter.handler = (options) {
+            expect(options.method, 'PUT');
+            expect(options.path, ApiConstants.updateMemberRole(10, 'u1'));
+            expect(options.data, {'role': 'Owner'});
+            return jsonResponse({
+              'userId': 'u1',
+              'name': 'Member 1',
+              'email': 'm1@acme.com',
+              'role': 'Owner',
+              'joinedAt': '2026-01-01T00:00:00Z',
+            });
+          };
+
+          final updated = await repository.updateMemberRole(10, 'u1', 'Owner');
+          expect(updated.role, 'Owner');
+
+          final cachedMembers = await repository.getMembers(10);
+          expect(cachedMembers.first.role, 'Owner');
+        },
+      );
+
       test('updateWorkspace updates the in-memory cache', () async {
         adapter.handler = (options) {
           return jsonResponse({

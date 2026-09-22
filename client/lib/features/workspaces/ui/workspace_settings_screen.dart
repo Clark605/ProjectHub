@@ -70,6 +70,7 @@ class _ViewState extends State<_View> {
         ActionDetailsUpdated() => l10n.detailsUpdated,
         ActionMemberAdded() => l10n.memberAdded,
         ActionMemberRemoved() => l10n.memberRemoved,
+        ActionMemberRoleUpdated() => l10n.memberRoleUpdated,
       };
       if (msg.isNotEmpty) context.showSuccessSnackBar(msg);
       context.read<WorkspaceSettingsCubit>().clearMessages();

@@ -44,6 +44,41 @@ class MemberTile extends StatelessWidget {
     }
   }
 
+  Future<void> _confirmRoleChange(
+    BuildContext context,
+    String targetRole,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final cubit = context.read<WorkspaceSettingsCubit>();
+
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.confirmChangeRoleTitle),
+        content: Text(
+          l10n.confirmChangeRole(
+            member.name.isNotEmpty ? member.name : member.email,
+            targetRole == 'Owner' ? l10n.roleOwner : l10n.roleMember,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.save),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      cubit.updateMemberRole(member.userId, targetRole);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -87,15 +122,6 @@ class MemberTile extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (!isOwner) ...[
-            const SizedBox(width: 4),
-            IconButton(
-              icon: const Icon(Icons.remove_circle_outline_rounded, size: 18),
-              color: AppColors.error,
-              tooltip: l10n.removeMember,
-              onPressed: () => _confirmRemoval(context),
-            ),
-          ],
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
@@ -119,6 +145,73 @@ class MemberTile extends StatelessWidget {
                     : theme.colorScheme.onSurfaceVariant,
               ),
             ),
+          ),
+          const SizedBox(width: 4),
+          PopupMenuButton<String>(
+            icon: Icon(
+              Icons.more_vert_rounded,
+              size: 20,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            tooltip: l10n.edit,
+            onSelected: (action) {
+              if (action == 'promote') {
+                _confirmRoleChange(context, 'Owner');
+              } else if (action == 'demote') {
+                _confirmRoleChange(context, 'Member');
+              } else if (action == 'remove') {
+                _confirmRemoval(context);
+              }
+            },
+            itemBuilder: (context) => [
+              if (!isOwner)
+                PopupMenuItem(
+                  value: 'promote',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.arrow_upward_rounded,
+                        size: 18,
+                        color: primaryColor,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(l10n.promoteToOwner),
+                    ],
+                  ),
+                )
+              else
+                PopupMenuItem(
+                  value: 'demote',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.arrow_downward_rounded,
+                        size: 18,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(l10n.demoteToMember),
+                    ],
+                  ),
+                ),
+              PopupMenuItem(
+                value: 'remove',
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.person_remove_outlined,
+                      size: 18,
+                      color: AppColors.error,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      l10n.removeMember,
+                      style: const TextStyle(color: AppColors.error),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

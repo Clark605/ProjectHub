@@ -86,4 +86,36 @@ mixin WorkspaceMembersMixin {
       throw DioErrorHandler.handle(e);
     }
   }
+
+  Future<MemberDto> updateMemberRole(
+    int workspaceId,
+    String userId,
+    String role,
+  ) async {
+    AppLogger.info(
+      'Updating member $userId role to $role in workspace $workspaceId',
+      tag: 'WorkspaceRepository',
+    );
+    try {
+      final response = await dio.put(
+        ApiConstants.updateMemberRole(workspaceId, userId),
+        data: {'role': role},
+      );
+      final updatedMember = MemberDto.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+      if (membersCache.containsKey(workspaceId)) {
+        membersCache[workspaceId] = membersCache[workspaceId]!.map((m) {
+          return m.userId == userId ? updatedMember : m;
+        }).toList();
+      }
+      return updatedMember;
+    } on DioException catch (e) {
+      AppLogger.error(
+        'Failed to update member role: ${e.message}',
+        tag: 'WorkspaceRepository',
+      );
+      throw DioErrorHandler.handle(e);
+    }
+  }
 }
