@@ -15,6 +15,15 @@ public interface IActivityLogger
         int? taskId = null,
         object? metadata = null);
 
-    Task<IEnumerable<ActivityEventDto>> GetWorkspaceActivitiesAsync(int workspaceId, int limit = 20);
+    Task<IEnumerable<ActivityEventDto>> GetWorkspaceActivitiesAsync(
+        int workspaceId,
+        int limit = 20,
+        string? eventType = null,
+        string? search = null,
+        int? projectId = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null,
+        string? sortBy = null,
+        bool sortDescending = true);
     Task<IEnumerable<ActivityEventDto>> GetProjectActivitiesAsync(int projectId, int limit = 50);
 }

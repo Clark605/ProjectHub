@@ -126,11 +126,29 @@ namespace ProjectHub.Api.Controllers
         }
 
         [HttpGet("{id}/activity")]
-        public async Task<IActionResult> GetWorkspaceActivity(int id, [FromQuery] int limit = 20)
+        public async Task<IActionResult> GetWorkspaceActivity(
+            int id,
+            [FromQuery] int limit = 50,
+            [FromQuery] string? eventType = null,
+            [FromQuery] string? search = null,
+            [FromQuery] int? projectId = null,
+            [FromQuery] DateTime? startDate = null,
+            [FromQuery] DateTime? endDate = null,
+            [FromQuery] string? sortBy = null,
+            [FromQuery] bool sortDescending = true)
         {
             var userId = User.GetUserId();
             await _workspaceService.GetWorkspaceByIdAsync(userId, id);
-            var activities = await _activityLogger.GetWorkspaceActivitiesAsync(id, limit);
+            var activities = await _activityLogger.GetWorkspaceActivitiesAsync(
+                id,
+                limit,
+                eventType,
+                search,
+                projectId,
+                startDate,
+                endDate,
+                sortBy,
+                sortDescending);
             return Ok(activities);
         }
     }

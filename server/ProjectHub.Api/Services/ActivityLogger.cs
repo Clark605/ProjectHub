@@ -57,13 +57,58 @@ public class ActivityLogger : IActivityLogger
         }
     }
 
-    public async Task<IEnumerable<ActivityEventDto>> GetWorkspaceActivitiesAsync(int workspaceId, int limit = 20)
+    public async Task<IEnumerable<ActivityEventDto>> GetWorkspaceActivitiesAsync(
+        int workspaceId,
+        int limit = 20,
+        string? eventType = null,
+        string? search = null,
+        int? projectId = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null,
+        string? sortBy = null,
+        bool sortDescending = true)
     {
         var clampedLimit = Math.Clamp(limit, 1, 100);
-        return await _context.ActivityEvents
+        var query = _context.ActivityEvents
             .AsNoTracking()
-            .Where(a => a.WorkspaceId == workspaceId)
-            .OrderByDescending(a => a.CreatedAt)
+            .Where(a => a.WorkspaceId == workspaceId);
+
+        if (!string.IsNullOrWhiteSpace(eventType))
+        {
+            query = query.Where(a => a.EventType.ToString() == eventType || a.EventType.ToString().StartsWith(eventType));
+        }
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(a => a.ActorName.Contains(search) || (a.Metadata != null && a.Metadata.Contains(search)));
+        }
+
+        if (projectId.HasValue)
+        {
+            query = query.Where(a => a.ProjectId == projectId.Value);
+        }
+
+        if (startDate.HasValue)
+        {
+            query = query.Where(a => a.CreatedAt >= startDate.Value);
+        }
+
+        if (endDate.HasValue)
+        {
+            query = query.Where(a => a.CreatedAt <= endDate.Value);
+        }
+
+        query = (sortBy?.ToLowerInvariant(), sortDescending) switch
+        {
+            ("actor", true) => query.OrderByDescending(a => a.ActorName).ThenByDescending(a => a.CreatedAt),
+            ("actor", false) => query.OrderBy(a => a.ActorName).ThenByDescending(a => a.CreatedAt),
+            ("type", true) => query.OrderByDescending(a => a.EventType).ThenByDescending(a => a.CreatedAt),
+            ("type", false) => query.OrderBy(a => a.EventType).ThenByDescending(a => a.CreatedAt),
+            (_, false) => query.OrderBy(a => a.CreatedAt),
+            _ => query.OrderByDescending(a => a.CreatedAt)
+        };
+
+        return await query
             .Take(clampedLimit)
             .Select(a => new ActivityEventDto
             {
