@@ -39,7 +39,10 @@ class AppRouter {
         final projectId = args is int
             ? args
             : int.tryParse(args?.toString() ?? '') ?? 0;
-        return _fadeRoute(buildProjectDetailRoute(projectId), settings);
+        return MaterialPageRoute(
+          builder: (_) => buildProjectDetailRoute(projectId),
+          settings: settings,
+        );
       case RouteNames.myTasks:
         return _fadeRoute(buildShellRoute(initialIndex: 2), settings);
       case RouteNames.profile:

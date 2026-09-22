@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -25,7 +24,6 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
     final accentColor = wsAccent != null && wsAccent!.trim().isNotEmpty
         ? WorkspaceAccent.fromId(wsAccent!).resolvedColor(theme.brightness)
@@ -68,22 +66,22 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           Text(
             l10n?.kanbanBoard ?? 'Kanban Board',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: isDark
-                  ? AppColors.textSecondary
-                  : AppColors.lightTextSecondary,
-              fontSize: 12,
-            ),
+            style: theme.textTheme.bodySmall?.copyWith(fontSize: 12),
           ),
         ],
       ),
       actions: [
         if (workspaceId != null) ...[
-          Center(child: WorkspacePresenceAvatars(workspaceId: workspaceId!)),
+          WorkspacePresenceAvatars(workspaceId: workspaceId!),
           const SizedBox(width: 4),
         ],
         IconButton(
-          icon: const Icon(Icons.settings_outlined),
+          icon: Icon(
+            Icons.settings_outlined,
+            color: theme.colorScheme.onSurfaceVariant,
+            size: 20,
+          ),
+
           tooltip: l10n?.projectDetails ?? 'Project Settings',
           onPressed: onSettings,
         ),

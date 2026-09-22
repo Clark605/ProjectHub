@@ -42,7 +42,7 @@ class ProjectDetailAppBar extends StatelessWidget
           : null,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_rounded),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () => Navigator.of(context).maybePop(),
       ),
       title: Text(
         l10n?.projectDetails ?? 'Project Details',

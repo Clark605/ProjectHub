@@ -221,4 +221,144 @@ void main() {
       expect(find.text('To Do'), findsAtLeast(1));
     },
   );
+
+  testWidgets(
+    'KanbanScreen settings pop without modifications does not reload tasks',
+    (tester) async {
+      int fetchCount = 0;
+      final fakeTaskRepo = _CountingTaskRepository(
+        onFetch: () => fetchCount++,
+        tasks: [],
+      );
+      final fakeProjectRepo = TestProjectRepository(testProject);
+      final cubit = KanbanCubit(fakeTaskRepo, fakeProjectRepo);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routes: {
+            RouteNames.projectDetail: (context) => Scaffold(
+              body: Center(
+                child: Builder(
+                  builder: (innerContext) => TextButton(
+                    onPressed: () => Navigator.of(innerContext).pop(),
+                    child: const Text('Close Settings'),
+                  ),
+                ),
+              ),
+            ),
+          },
+          home: KanbanScreen(
+            projectId: testProject.id,
+            initialProject: testProject,
+            cubit: cubit,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(fetchCount, 1);
+
+      // Open settings
+      await tester.tap(find.byIcon(Icons.settings_outlined));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('Close Settings'), findsOneWidget);
+
+      // Pop settings without any returned data
+      await tester.tap(find.text('Close Settings'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('Close Settings'), findsNothing);
+      expect(find.text('Apollo Project'), findsOneWidget);
+      expect(fetchCount, 1);
+    },
+  );
+
+  testWidgets(
+    'KanbanScreen settings pop with updated project updates project name without reloading tasks',
+    (tester) async {
+      int fetchCount = 0;
+      final fakeTaskRepo = _CountingTaskRepository(
+        onFetch: () => fetchCount++,
+        tasks: [],
+      );
+      final fakeProjectRepo = TestProjectRepository(testProject);
+      final cubit = KanbanCubit(fakeTaskRepo, fakeProjectRepo);
+
+      final updatedProject = testProject.copyWith(
+        name: 'Updated Apollo Mission',
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          routes: {
+            RouteNames.projectDetail: (context) => Scaffold(
+              body: Center(
+                child: Builder(
+                  builder: (innerContext) => TextButton(
+                    onPressed: () =>
+                        Navigator.of(innerContext).pop(updatedProject),
+                    child: const Text('Save and Close Settings'),
+                  ),
+                ),
+              ),
+            ),
+          },
+          home: KanbanScreen(
+            projectId: testProject.id,
+            initialProject: testProject,
+            cubit: cubit,
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(fetchCount, 1);
+
+      // Open settings
+      await tester.tap(find.byIcon(Icons.settings_outlined));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(find.text('Save and Close Settings'), findsOneWidget);
+
+      // Pop settings with updated project
+      await tester.tap(find.text('Save and Close Settings'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('Save and Close Settings'), findsNothing);
+      expect(find.text('Updated Apollo Mission'), findsOneWidget);
+      expect(fetchCount, 1);
+    },
+  );
+}
+
+class _CountingTaskRepository extends TestTaskRepository {
+  final VoidCallback onFetch;
+
+  _CountingTaskRepository({required this.onFetch, required List<TaskDto> tasks})
+    : super(tasks);
+
+  @override
+  Future<List<TaskDto>> getTasksByProject(
+    int projectId, {
+    String? status,
+    String? assigneeId,
+    String? priority,
+    bool forceRefresh = false,
+  }) async {
+    onFetch();
+    return super.getTasksByProject(
+      projectId,
+      status: status,
+      assigneeId: assigneeId,
+      priority: priority,
+      forceRefresh: forceRefresh,
+    );
+  }
 }

@@ -20,13 +20,14 @@ void main() {
         final route = AppRouter.onGenerateRoute(
           const RouteSettings(name: RouteNames.projectDetail, arguments: 123),
         );
-        expect(route, isA<PageRouteBuilder>());
-        final pageRoute = route as PageRouteBuilder;
-        final widget = pageRoute.pageBuilder(
-          _MockBuildContext(),
-          const AlwaysStoppedAnimation(1.0),
-          const AlwaysStoppedAnimation(1.0),
-        );
+        expect(route, isA<PageRoute>());
+        final widget = route is PageRouteBuilder
+            ? route.pageBuilder(
+                _MockBuildContext(),
+                const AlwaysStoppedAnimation(1.0),
+                const AlwaysStoppedAnimation(1.0),
+              )
+            : (route as MaterialPageRoute).builder(_MockBuildContext());
         expect(widget, isA<BlocProvider<ProjectDetailCubit>>());
         final provider = widget as BlocProvider<ProjectDetailCubit>;
         expect(provider.child, isA<ProjectDetailScreen>());
@@ -38,13 +39,14 @@ void main() {
       final route = AppRouter.onGenerateRoute(
         const RouteSettings(name: RouteNames.projectDetail, arguments: '456'),
       );
-      expect(route, isA<PageRouteBuilder>());
-      final pageRoute = route as PageRouteBuilder;
-      final widget = pageRoute.pageBuilder(
-        _MockBuildContext(),
-        const AlwaysStoppedAnimation(1.0),
-        const AlwaysStoppedAnimation(1.0),
-      );
+      expect(route, isA<PageRoute>());
+      final widget = route is PageRouteBuilder
+          ? route.pageBuilder(
+              _MockBuildContext(),
+              const AlwaysStoppedAnimation(1.0),
+              const AlwaysStoppedAnimation(1.0),
+            )
+          : (route as MaterialPageRoute).builder(_MockBuildContext());
       expect(widget, isA<BlocProvider<ProjectDetailCubit>>());
       final provider = widget as BlocProvider<ProjectDetailCubit>;
       expect(provider.child, isA<ProjectDetailScreen>());
@@ -55,13 +57,14 @@ void main() {
       final route = AppRouter.onGenerateRoute(
         const RouteSettings(name: RouteNames.projectDetail, arguments: null),
       );
-      expect(route, isA<PageRouteBuilder>());
-      final pageRoute = route as PageRouteBuilder;
-      final widget = pageRoute.pageBuilder(
-        _MockBuildContext(),
-        const AlwaysStoppedAnimation(1.0),
-        const AlwaysStoppedAnimation(1.0),
-      );
+      expect(route, isA<PageRoute>());
+      final widget = route is PageRouteBuilder
+          ? route.pageBuilder(
+              _MockBuildContext(),
+              const AlwaysStoppedAnimation(1.0),
+              const AlwaysStoppedAnimation(1.0),
+            )
+          : (route as MaterialPageRoute).builder(_MockBuildContext());
       expect(widget, isA<BlocProvider<ProjectDetailCubit>>());
       final provider = widget as BlocProvider<ProjectDetailCubit>;
       expect(provider.child, isA<ProjectDetailScreen>());

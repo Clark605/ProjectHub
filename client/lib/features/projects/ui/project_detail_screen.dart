@@ -12,6 +12,7 @@ import 'package:client/features/projects/cubit/project_detail_cubit.dart';
 import 'package:client/features/projects/cubit/project_detail_state.dart';
 import 'package:client/features/projects/ui/widgets/project_danger_zone.dart';
 import 'package:client/features/projects/ui/widgets/project_detail_app_bar.dart';
+import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/ui/widgets/project_detail_skeleton.dart';
 import 'package:client/features/projects/ui/widgets/project_details_card.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
@@ -30,6 +31,7 @@ class ProjectDetailScreen extends StatefulWidget {
 
 class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   late ProjectDetailCubit _cubit;
+  ProjectDto? _updatedProject;
 
   @override
   void initState() {
@@ -54,9 +56,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
         );
         Navigator.of(context).pop(true);
       },
-      loaded: (_, _, _, errorMessage, actionSuccessMessage) {
+      loaded: (project, _, _, errorMessage, actionSuccessMessage) {
         final l10n = AppLocalizations.of(context)!;
         if (actionSuccessMessage != null) {
+          _updatedProject = project;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(l10n.projectUpdated),
@@ -101,64 +104,74 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           );
         } catch (_) {}
 
-        return Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          appBar: ProjectDetailAppBar(wsAccent: wsAccent),
-          body: state.when(
-            initial: () => const SizedBox.shrink(),
-            loading: () => const ProjectDetailSkeleton(),
-            error: (msg) => AppErrorState(
-              errorMessage: msg,
-              onRetry: () =>
-                  _cubit.loadProject(widget.projectId, forceRefresh: true),
-            ),
-            deleted: () => const SizedBox.shrink(),
-            loaded: (project, isSaving, isDeleting, _, _) {
-              final currentUserId = context
-                  .watch<AppAuthCubit>()
-                  .state
-                  .maybeWhen(authenticated: (u) => u.id, orElse: () => '');
-              final activeWs = context
-                  .watch<WorkspaceContextCubit>()
-                  .state
-                  .maybeWhen(loaded: (_, active) => active, orElse: () => null);
-              final role = activeWs?.membership?.role.toLowerCase() == 'owner'
-                  ? 'owner'
-                  : 'member';
-              final canEdit = PermissionChecker.canEditProject(
-                role: role,
-                projectCreatorId: project.createdBy,
-                currentUserId: currentUserId,
-              );
-              final canDelete = PermissionChecker.canDeleteProject(
-                role: role,
-                projectCreatorId: project.createdBy,
-                currentUserId: currentUserId,
-              );
+        return PopScope<Object?>(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) {
+            if (didPop) return;
+            Navigator.of(context).pop(result ?? _updatedProject);
+          },
+          child: Scaffold(
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            appBar: ProjectDetailAppBar(wsAccent: wsAccent),
+            body: state.when(
+              initial: () => const SizedBox.shrink(),
+              loading: () => const ProjectDetailSkeleton(),
+              error: (msg) => AppErrorState(
+                errorMessage: msg,
+                onRetry: () =>
+                    _cubit.loadProject(widget.projectId, forceRefresh: true),
+              ),
+              deleted: () => const SizedBox.shrink(),
+              loaded: (project, isSaving, isDeleting, _, _) {
+                final currentUserId = context
+                    .watch<AppAuthCubit>()
+                    .state
+                    .maybeWhen(authenticated: (u) => u.id, orElse: () => '');
+                final activeWs = context
+                    .watch<WorkspaceContextCubit>()
+                    .state
+                    .maybeWhen(
+                      loaded: (_, active) => active,
+                      orElse: () => null,
+                    );
+                final role = activeWs?.membership?.role.toLowerCase() == 'owner'
+                    ? 'owner'
+                    : 'member';
+                final canEdit = PermissionChecker.canEditProject(
+                  role: role,
+                  projectCreatorId: project.createdBy,
+                  currentUserId: currentUserId,
+                );
+                final canDelete = PermissionChecker.canDeleteProject(
+                  role: role,
+                  projectCreatorId: project.createdBy,
+                  currentUserId: currentUserId,
+                );
 
-              return SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: isDesktop ? 48 : 20,
-                  vertical: 24,
-                ),
-                child: Center(
-                  child: Container(
-                    constraints: const BoxConstraints(maxWidth: 800),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        ProjectDetailsCard(canEdit: canEdit),
-                        if (canDelete) ...[
-                          const SizedBox(height: 24),
-                          ProjectDangerZone(canDelete: canDelete),
+                return SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isDesktop ? 48 : 20,
+                    vertical: 24,
+                  ),
+                  child: Center(
+                    child: Container(
+                      constraints: const BoxConstraints(maxWidth: 800),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ProjectDetailsCard(canEdit: canEdit),
+                          if (canDelete) ...[
+                            const SizedBox(height: 24),
+                            ProjectDangerZone(canDelete: canDelete),
+                          ],
+                          const SizedBox(height: 40),
                         ],
-                        const SizedBox(height: 40),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         );
       },

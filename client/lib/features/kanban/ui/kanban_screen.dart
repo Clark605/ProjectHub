@@ -102,9 +102,8 @@ class _KanbanScreenState extends State<KanbanScreen>
     if (!mounted) return;
     if (r == true) {
       Navigator.of(context).pop(true);
-    } else {
-      _loadProjectAndMembers();
-      _cubit.loadTasks(widget.projectId, forceRefresh: true);
+    } else if (r is ProjectDto) {
+      setState(() => _project = r);
     }
   }
 
