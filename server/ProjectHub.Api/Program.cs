@@ -235,18 +235,27 @@ builder.Services.AddHybridCache(options =>
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis");
 if (!string.IsNullOrWhiteSpace(redisConnectionString))
 {
+    var redisOptions = ConfigurationOptions.Parse(redisConnectionString);
+    redisOptions.AbortOnConnectFail = false;
+    redisOptions.ConnectTimeout = 2000;
+    redisOptions.SyncTimeout = 1000;
+
+    var multiplexer = await ConnectionMultiplexer.ConnectAsync(redisOptions);
+    builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+
     builder.Services.AddStackExchangeRedisCache(options =>
     {
-        options.Configuration = redisConnectionString;
+        options.ConfigurationOptions = redisOptions;
         options.InstanceName = "ProjectHub:";
     });
 
-    var multiplexer = ConnectionMultiplexer.Connect(redisConnectionString);
-    builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
-
-    builder.Services.AddSignalR().AddStackExchangeRedis(redisConnectionString, options =>
+    builder.Services.AddSignalR().AddStackExchangeRedis(options =>
     {
-        options.Configuration.ChannelPrefix = RedisChannel.Literal("ProjectHubSignalR");
+        options.Configuration = redisOptions;
+        options.ConnectionFactory = async writer =>
+        {
+            return await ConnectionMultiplexer.ConnectAsync(redisOptions, writer);
+        };
     });
 }
 else
