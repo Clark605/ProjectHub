@@ -93,6 +93,14 @@ namespace ProjectHub.Api.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}/members/{memberId}/role")]
+        public async Task<IActionResult> UpdateMemberRole(int id, string memberId, UpdateMemberRoleDto request)
+        {
+            var currentUserId = User.GetUserId();
+            var member = await _workspaceService.UpdateMemberRoleAsync(currentUserId, id, memberId, request);
+            return Ok(member);
+        }
+
         [HttpGet("{id}/projects")]
         public async Task<IActionResult> GetProjects(int id, [FromQuery] string? status)
         {

@@ -228,6 +228,7 @@ public class WorkspaceService : IWorkspaceService
         foreach (var memberUserId in memberUserIds)
         {
             await _cache.RemoveByTagAsync($"user:{memberUserId}:workspaces");
+            await _cache.RemoveByTagAsync($"user:{memberUserId}:roles");
         }
     }
 
@@ -321,9 +322,10 @@ public class WorkspaceService : IWorkspaceService
             ActivityEventType.MemberAdded,
             metadata: new { TargetUserId = targetUser.Id, TargetName = targetUser.Name, Role = newMember.Role });
 
-        // Invalidate members cache and target user's workspace list
+        // Invalidate members cache, target user's workspace list, and role cache
         await _cache.RemoveByTagAsync($"workspace:{workspaceId}:members");
         await _cache.RemoveByTagAsync($"user:{targetUser.Id}:workspaces");
+        await _cache.RemoveByTagAsync($"user:{targetUser.Id}:roles");
 
         return new MemberResponseDto
         {
@@ -398,9 +400,85 @@ public class WorkspaceService : IWorkspaceService
             ActivityEventType.MemberRemoved,
             metadata: new { TargetUserId = memberId });
 
-        // Invalidate members cache and removed member's workspace list
+        // Invalidate members cache, removed member's workspace list, and role cache
         await _cache.RemoveByTagAsync($"workspace:{workspaceId}:members");
         await _cache.RemoveByTagAsync($"user:{memberId}:workspaces");
+        await _cache.RemoveByTagAsync($"user:{memberId}:roles");
+    }
+
+    public async Task<MemberResponseDto> UpdateMemberRoleAsync(string userId, int workspaceId, string memberId, UpdateMemberRoleDto request)
+    {
+        var ownerMembership = await _context.WorkspaceMembers
+            .FirstOrDefaultAsync(wm => wm.UserId == userId && wm.Workspace.Id == workspaceId);
+
+        if (ownerMembership == null)
+        {
+            _logger.LogWarning("Workspace with ID {WorkspaceId} not found for user {UserId}", workspaceId, userId);
+            throw new KeyNotFoundException($"Workspace with ID {workspaceId} not found for user {userId}");
+        }
+
+        if (ownerMembership.Role != WorkspaceRoles.Owner.ToString())
+        {
+            _logger.LogWarning("User {UserId} is not the owner of workspace {WorkspaceId}", userId, workspaceId);
+            throw new ForbiddenException($"User {userId} is not the owner of workspace {workspaceId}");
+        }
+
+        var targetMembership = await _context.WorkspaceMembers
+            .FirstOrDefaultAsync(wm => wm.Workspace.Id == workspaceId && wm.UserId == memberId);
+
+        if (targetMembership == null)
+        {
+            _logger.LogWarning("Member with ID {MemberId} not found in workspace {WorkspaceId}", memberId, workspaceId);
+            throw new KeyNotFoundException($"Member with user ID '{memberId}' was not found in workspace {workspaceId}.");
+        }
+
+        var normalizedRole = request.Role.Trim();
+        if (targetMembership.Role == WorkspaceRoles.Owner.ToString() && normalizedRole != WorkspaceRoles.Owner.ToString())
+        {
+            var ownerCount = await _context.WorkspaceMembers
+                .CountAsync(wm => wm.Workspace.Id == workspaceId && wm.Role == WorkspaceRoles.Owner.ToString());
+
+            if (ownerCount <= 1)
+            {
+                _logger.LogWarning("Attempted to demote the sole owner of workspace {WorkspaceId}", workspaceId);
+                throw new ArgumentException("Cannot demote the sole owner of the workspace.");
+            }
+        }
+
+        targetMembership.Role = normalizedRole;
+        targetMembership.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("Updated member {MemberId} role to {Role} in workspace {WorkspaceId}", memberId, normalizedRole, workspaceId);
+
+        // Invalidate member cache and target member roles immediately
+        await _cache.RemoveByTagAsync($"workspace:{workspaceId}:members");
+        await _cache.RemoveByTagAsync($"user:{memberId}:roles");
+
+        var targetUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == memberId);
+
+        return new MemberResponseDto
+        {
+            UserId = memberId,
+            Name = targetUser?.Name ?? string.Empty,
+            Email = targetUser?.Email ?? string.Empty,
+            Role = targetMembership.Role,
+            JoinedAt = targetMembership.CreatedAt
+        };
+    }
+
+    public async Task<string?> GetMemberRoleAsync(string userId, int workspaceId)
+    {
+        string cacheKey = $"user:{userId}:ws:{workspaceId}:role";
+        return await _cache.GetOrCreateAsync(
+            cacheKey,
+            async token => await _context.WorkspaceMembers
+                .Where(wm => wm.UserId == userId && wm.Workspace.Id == workspaceId)
+                .Select(wm => wm.Role)
+                .FirstOrDefaultAsync(token),
+            tags: [$"user:{userId}:roles", $"workspace:{workspaceId}:members"]
+        );
     }
 }
 
