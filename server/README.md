@@ -23,7 +23,7 @@ Production-ready RESTful Web API for **ProjectHub**, built with **ASP.NET Core 1
 
 ## 🌟 Overview
 
-The **ProjectHub.Api** backend provides the core domain logic, persistence, and REST endpoints for multi-workspace collaboration, project tracking, and Kanban task management. It enforces a strict **two-tier role model** (`Owner` vs `Member`), multi-session token rotation, distributed Redis caching with .NET 10 `HybridCache`, and centralized middleware-driven error handling.
+The **ProjectHub.Api** backend provides the core domain logic, persistence, real-time push synchronization, and REST endpoints for multi-workspace collaboration, project tracking, and Kanban task management. It enforces a strict **two-tier role model** (`Owner` vs `Member`), multi-session token rotation, distributed Redis caching with .NET 10 `HybridCache`, real-time **SignalR** synchronization with Redis pub/sub backplane, atomic task creation with dual-scope tag validation, PostgreSQL `smallint` enum storage, and centralized middleware-driven error handling.
 
 ---
 
@@ -32,11 +32,12 @@ The **ProjectHub.Api** backend provides the core domain logic, persistence, and 
 | Category | Technology / Package | Purpose |
 | :--- | :--- | :--- |
 | **Framework** | .NET 10.0 (`net10.0`) | Modern, high-performance C# runtime & Web API framework |
-| **Database** | PostgreSQL + `Npgsql.EntityFrameworkCore.PostgreSQL` | Relational storage & EF Core provider |
+| **Real-Time Engine** | `Microsoft.AspNetCore.SignalR` + `StackExchange.Redis` | Bidirectional push synchronization & presence backplane |
+| **Database** | PostgreSQL + `Npgsql.EntityFrameworkCore.PostgreSQL` | Relational storage & EF Core provider with smallint enums |
 | **Identity & Auth** | `Microsoft.AspNetCore.Identity.EntityFrameworkCore` | User store, password hashing, and token providers |
-| **Authentication** | `Microsoft.AspNetCore.Authentication.JwtBearer` | Stateless JWT verification for API requests |
-| **Caching** | `Microsoft.Extensions.Caching.Hybrid` + `StackExchangeRedis` | Two-level caching (L1 in-memory + L2 distributed Redis) |
-| **Validation** | `FluentValidation.AspNetCore` | Strongly typed DTO validation rules |
+| **Authentication** | `Microsoft.AspNetCore.Authentication.JwtBearer` | Stateless JWT verification for API & WebSocket requests |
+| **Caching** | `Microsoft.Extensions.Caching.Hybrid` + `StackExchangeRedis` | Two-level caching (L1 in-memory + L2 distributed Redis) with L1 fallback |
+| **Validation** | `FluentValidation.AspNetCore` | Strongly typed DTO validation rules & pre-save tag validation |
 | **Mapping** | `AutoMapper` | Clean entity-to-DTO and DTO-to-entity mapping |
 | **Logging** | `Serilog.AspNetCore` + Sinks (Console, File) | Structured JSON logging with daily rolling logs |
 | **API Docs** | `Swashbuckle.AspNetCore` + `Microsoft.AspNetCore.OpenApi` | Swagger UI & OpenAPI v1 specification |
@@ -53,43 +54,56 @@ server/
 └── ProjectHub.Api/
     ├── Controllers/                    # REST API Controllers (thin endpoints)
     │   ├── AuthController.cs           # Authentication & password reset
-    │   ├── UsersController.cs          # User profile management & caching
-    │   ├── WorkspacesController.cs     # Workspaces & member management
+    │   ├── CommentsController.cs       # Task comments CRUD
+    │   ├── HealthController.cs         # Observable diagnostic health check (Healthy/Degraded/Unhealthy)
     │   ├── ProjectsController.cs       # Projects CRUD & project tasks
-    │   └── TasksController.cs          # Tasks CRUD, Kanban status & assignee PATCH
+    │   ├── TagsController.cs           # Dual-scope tags management & attachment
+    │   ├── TasksController.cs          # Tasks CRUD, Kanban status & assignee PATCH
+    │   ├── UsersController.cs          # User profile management & caching
+    │   └── WorkspacesController.cs     # Workspaces, member management & role promotion/demotion
     ├── Data/
-    │   └── AppDbContext.cs             # EF Core DbContext, Identity config & relationships
+    │   └── AppDbContext.cs             # EF Core DbContext, Identity config, relationships & smallint enums
     ├── DTOs/                           # Data Transfer Objects
     │   ├── AuthDtos/                   # Register, Login, Refresh, Password reset DTOs
-    │   ├── WorkSpaceDtos/              # Workspace request/response DTOs
+    │   ├── CommentDtos/                # Comment request/response DTOs
     │   ├── ProjectDtos/                # Project request/response DTOs
-    │   └── TaskDtos/                   # Task request/response DTOs
+    │   ├── TagDtos/                    # Dual-scope tag request/response DTOs
+    │   ├── TaskDtos/                   # Task request/response DTOs with tagIds
+    │   └── WorkSpaceDtos/              # Workspace & member role DTOs
     ├── Exceptions/
     │   └── ForbiddenException.cs       # Custom 403 Forbidden domain exception
     ├── Extensions/
-    │   └── ClaimsPrincipalExtensions.cs # Claims helper (User.GetUserId())
+    │   ├── ClaimsPrincipalExtensions.cs # Claims helper (User.GetUserId())
+    │   └── TaskEnumExtensions.cs       # Conversion between smallint enums and wire strings
+    ├── Hubs/
+    │   └── WorkspaceHub.cs             # SignalR real-time push synchronization & online presence hub
     ├── Middlewares/
     │   └── ExceptionHandlingMiddleware.cs # Global error handler & ApiErrorResponse formatter
     ├── Migrations/                     # EF Core migration history
     ├── Models/                         # Domain Entities & Enums
     │   ├── AppUser.cs                  # Identity user entity (Name, Bio)
+    │   ├── Comment.cs                  # Flat chronological task comments
     │   ├── RefreshToken.cs             # Multi-session hashed refresh tokens
+    │   ├── Tag.cs                      # Workspace & project scoped tags
+    │   ├── TaskTag.cs                  # Many-to-many join entity
     │   ├── WorkSpace.cs                # Workspace aggregate root
     │   ├── WorkspaceMember.cs          # Workspace membership & role join entity
     │   ├── WorkspaceRoles.cs           # Roles: Owner, Member
     │   ├── Project.cs                  # Project aggregate
     │   ├── ProjectStatus.cs            # Status: Planning, Active, Completed, Archived
-    │   ├── Task.cs                     # Task item entity
+    │   ├── Task.cs                     # Task item entity (smallint Status and Priority)
     │   ├── TaskItemStatus.cs           # Status: Backlog, Todo, InProgress, Review, Done
     │   └── TaskItemPriority.cs         # Priority: Low, Medium, High, Urgent
     ├── Responses/
     │   └── ApiErrorResponse.cs         # Standardized JSON error response envelope
     ├── Services/                       # Business logic layer
-    │   ├── Interfaces/                 # IAuthService, IWorkspaceService, etc.
+    │   ├── Interfaces/                 # IAuthService, IWorkspaceService, ITagService, etc.
     │   ├── AuthService.cs              # Identity & token rotation logic
-    │   ├── WorkspaceService.cs         # Workspace permissions & membership logic
+    │   ├── CommentService.cs           # Comment logic & SignalR push notifications
     │   ├── ProjectService.cs           # Project lifecycle & workspace guards
-    │   └── TaskService.cs              # Task Kanban transitions & assignment logic
+    │   ├── TagService.cs               # Dual-scope tags & deterministic color hashing
+    │   ├── TaskService.cs              # Atomic task creation, Kanban transitions & assignment
+    │   └── WorkspaceService.cs         # Workspace permissions & member role management
     ├── appsettings.json                # Base configuration & Serilog settings
     ├── appsettings.Development.json    # Development connection strings & overrides
     ├── Program.cs                      # Application entrypoint & DI registrations
@@ -106,8 +120,15 @@ erDiagram
     AppUser ||--o{ WorkspaceMember : "belongs to"
     WorkSpace ||--o{ WorkspaceMember : "has members"
     WorkSpace ||--o{ Project : "contains"
+    WorkSpace ||--o{ Tag : "workspace tags"
+    Project ||--o{ Tag : "project tags"
     Project ||--o{ TaskItem : "contains"
+    TaskItem ||--o{ TaskTag : "categorized"
+    Tag ||--o{ TaskTag : "applied"
+    TaskItem ||--o{ Comment : "receives"
+    AppUser ||--o{ Comment : "authors"
     AppUser ||--o{ TaskItem : "assigned to"
+```
 
     AppUser {
         string Id PK
@@ -301,9 +322,33 @@ dotnet ef migrations remove
 | `DELETE` | `/workspaces/{id}` | Delete workspace (Owner only) | Bearer |
 | `GET` | `/workspaces/{id}/members` | List members of workspace | Bearer |
 | `POST` | `/workspaces/{id}/members` | Add member by email (Owner only) | Bearer |
+| `PUT` | `/workspaces/{id}/members/{userId}/role` | Update member role (`Owner` or `Member`, Owner only) | Bearer |
 | `DELETE` | `/workspaces/{id}/members/{userId}` | Remove member from workspace (Owner only) | Bearer |
 | `GET` | `/workspaces/{id}/projects` | List projects in workspace (`?status=Active`) | Bearer |
 | `POST` | `/workspaces/{id}/projects` | Create project in workspace | Bearer |
+| `GET` | `/workspaces/{id}/my-tasks` | Aggregated personal task list in active workspace | Bearer |
+| `GET` | `/workspaces/{id}/activity` | Fetch workspace-wide activity audit trail | Bearer |
+
+### Dual-Scope Tags (`/workspaces`, `/projects`, `/tasks`, `/tags`)
+
+| Method | Route | Description | Auth Required |
+| :--- | :--- | :--- | :---: |
+| `GET` | `/workspaces/{id}/tags` | List reusable workspace-level tags | Bearer |
+| `POST` | `/workspaces/{id}/tags` | Create workspace tag (Owner only) | Bearer |
+| `GET` | `/projects/{id}/available-tags` | List all tags applicable to project (workspace + project scoped) | Bearer |
+| `POST` | `/projects/{id}/tags` | Create project-scoped tag (Owner/Creator) | Bearer |
+| `DELETE` | `/tags/{id}` | Delete tag (cascades from tasks without deleting tasks) | Bearer |
+| `POST` | `/tasks/{id}/tags` | Attach tag to task (max 5 tags per task) | Bearer |
+| `DELETE` | `/tasks/{id}/tags/{tagId}` | Detach tag from task | Bearer |
+
+### Task Comments (`/tasks`, `/comments`)
+
+| Method | Route | Description | Auth Required |
+| :--- | :--- | :--- | :---: |
+| `GET` | `/tasks/{id}/comments` | List flat chronological comments on task | Bearer |
+| `POST` | `/tasks/{id}/comments` | Add comment to task | Bearer |
+| `PUT` | `/comments/{id}` | Update comment content | Bearer (Author) |
+| `DELETE` | `/comments/{id}` | Delete comment | Bearer (Author/Owner) |
 
 ### Projects (`/projects`)
 
@@ -313,7 +358,8 @@ dotnet ef migrations remove
 | `PUT` | `/projects/{id}` | Update project (Owner or Creator) | Bearer |
 | `DELETE` | `/projects/{id}` | Delete project (Owner or Creator) | Bearer |
 | `GET` | `/projects/{id}/tasks` | Get tasks in project (`?status=&assigneeId=&priority=`) | Bearer |
-| `POST` | `/projects/{id}/tasks` | Create task in project | Bearer |
+| `POST` | `/projects/{id}/tasks` | Create task in project (supports optional `tagIds: [1, 2]`) | Bearer |
+| `GET` | `/projects/{id}/activity` | Project-scoped activity audit trail | Bearer |
 
 ### Tasks (`/tasks`)
 
@@ -325,14 +371,28 @@ dotnet ef migrations remove
 | `PATCH` | `/tasks/{id}/status` | Move task to new status (Kanban drag-drop) | Bearer |
 | `PATCH` | `/tasks/{id}/assignee` | Assign or reassign task to workspace member | Bearer |
 
+### Real-Time SignalR Hub (`/api/v1/hubs/workspace`)
+
+| Transport | Route | Key Methods & Events | Auth Required |
+| :--- | :--- | :--- | :---: |
+| `WebSockets` / `SSE` | `/api/v1/hubs/workspace` | `JoinWorkspace`, `LeaveWorkspace`, `PresenceChanged`, `TaskCreated`, `TaskStatusChanged`, `TaskAssigned`, `TaskDeleted`, `CommentAdded`, `CommentDeleted` | Bearer (`?access_token=...`) |
+
+### Health & Diagnostics (`/health`)
+
+| Method | Route | Description | Auth Required |
+| :--- | :--- | :--- | :---: |
+| `GET` | `/health` | Live diagnostic health: returns `Healthy`, `Degraded` with L1 fallback, or `Unhealthy` | ❌ |
+
 ---
 
-## ⚡ Caching Strategy
+## ⚡ Caching Strategy & Startup Resilience
 
-The API utilizes .NET 10 `HybridCache` with fallback to Redis:
+The API utilizes .NET 10 `HybridCache` with fallback to Redis (see [ADR-0018](docs/adr/0018-enum-schema-migration-and-resilient-caching.md)):
 - **L1 In-Memory Cache:** Fast local process memory cache (default local lifetime: 5 minutes).
 - **L2 Distributed Cache:** Redis cache instance (entry expiration: 15 minutes).
-- **Tag-Based Invalidation:** Profile updates automatically invalidate cached profiles via `_cache.RemoveByTagAsync($"user:{userId}:profile")`.
+- **Non-Blocking Resilience:** Redis connectivity uses `AbortOnConnectFail = false` and bounded timeouts. If Redis is down, the API starts without error and transparently falls back to L1 in-memory caching.
+- **Tag-Based Invalidation:** Profile updates invalidate cached profiles via `_cache.RemoveByTagAsync($"user:{userId}:profile")`.
+- **Role & Membership Invalidation:** Member promotion/demotion, removal, or workspace deletion immediately busts compound tags `user:{userId}:roles` and `workspace:{workspaceId}:members`.
 
 ---
 

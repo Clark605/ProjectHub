@@ -32,30 +32,33 @@ The **ProjectHub Client** delivers a responsive experience across Web and Mobile
 | Category | Package | Purpose |
 | :--- | :--- | :--- |
 | **Framework** | Flutter 3.x / Dart 3.x | Cross-platform UI toolkit (Web, Android, iOS) |
+| **Real-Time Client** | `web_socket_channel` / SignalR | Live push synchronization for tasks, comments, and online presence |
 | **State Management** | `flutter_bloc` | Predictable, testable Cubits with sealed states |
 | **Immutability & Unions**| `freezed`, `freezed_annotation` | Pattern-matching union states, copyWith, value equality |
 | **Serialization** | `json_serializable`, `json_annotation` | Type-safe JSON converters generated via `build_runner` |
-| **Dependency Injection** | `get_it`, `injectable` | Automated `@injectable` and `@lazySingleton` wiring |
+| **Dependency Injection** | `get_it`, `injectable` | Automated `@injectable` and `@lazySingleton` wiring with route-scoped providers |
 | **Networking** | `dio` | HTTP client with retry policy, timeout configuration & interceptors |
 | **Secure Storage** | `flutter_secure_storage` | Encrypted Keychain (iOS) & Keystore (Android) for JWT tokens |
 | **Preferences** | `shared_preferences` | User preferences (active workspace, theme mode) |
+| **Loading Skeletons** | `skeletonizer` | Dual-theme shimmer skeleton loading states (Dark & Light) |
 | **Native Splash** | `flutter_native_splash` | Native zero-flicker splash screen (`#0F172A`) |
 | **Animations** | `flutter_animate` | Staggered list animations, glowing effects, fade transitions |
-| **Localization** | `flutter_localizations`, `intl` | Official Flutter `.arb` multi-language support (English & Arabic) |
+| **Localization** | `flutter_localizations`, `intl` | Official Flutter `.arb` multi-language support (English & Arabic RTL) |
 
 ---
 
 ## 🏗 Architecture & Folder Structure
 
-The project employs a **Feature-First Layered Architecture** with the **Repository Pattern** and **Cubit** state management:
+The client adheres strictly to a **Feature-First Clean Architecture Without a Domain Layer** (see [ADR-0016](docs/adr/0016-strict-clean-architecture-without-domain-layer.md)), ensuring all files remain under 200 lines:
 
 ```mermaid
 graph TD
     subgraph Feature ["Feature Module (e.g. features/kanban/)"]
-        subgraph UI ["UI Layer"]
+        subgraph UI ["UI / Presentation Layer (< 200 lines/file)"]
             View[Views / Screens] -->|Listens / Dispatches| Cubit[Feature Cubit]
-            CustomWidgets[Private Widgets] -.-> View
+            CustomWidgets[Private Widgets & Skeletons] -.-> View
             RoleGuards[UI Role & Permission Guards] -.-> View
+            UIExt[Presentation Extensions: Colors, Icons] -.-> CustomWidgets
         end
 
         subgraph Logic ["Logic Layer"]
@@ -67,13 +70,14 @@ graph TD
             ReposImpl[Repository Implementation] -.->|Implements| ReposInterface
             ReposImpl -->|Dio API Calls| RemoteDS[Remote DataSource]
             ReposImpl -->|SecureStorage / Prefs| LocalDS[Local DataSource]
-            FreezedModels[Freezed Data Models] -.-> ReposImpl
+            FreezedModels[Freezed Data Models & Filters] -.-> ReposImpl
         end
     end
 
     subgraph Core ["Core Infrastructure (lib/core/)"]
         DI[GetIt + Injectable DI Container] --> Cubit
         DI --> ReposImpl
+        SignalRService[SignalRService WebSocket Client] -.->|Real-Time Streams| Cubit
         Network[Dio Client + AuthInterceptor] --> RemoteDS
         AppRouter[onGenerateRoute Navigator] --> View
         Theme[Material 3 Theme & Stitch Tokens] --> View
@@ -90,7 +94,7 @@ client/
 │   └── images/                 # Onboarding & branding illustrations
 ├── l10n/
 │   ├── app_en.arb              # English localization bundle
-│   └── app_ar.arb              # Arabic localization bundle
+│   └── app_ar.arb              # Comprehensive Arabic RTL localization bundle
 ├── lib/
 │   ├── main.dart               # Entrypoint, native splash preserve & DI configuration
 │   ├── app.dart                # MaterialApp with onGenerateRoute, AuthGate, theme & l10n
@@ -100,19 +104,22 @@ client/
 │   │   ├── di/                 # GetIt + Injectable setup (injection.dart)
 │   │   ├── errors/             # Custom AppExceptions, Failure classes & Dio mapper
 │   │   ├── network/            # Dio client & AuthInterceptor (silent refresh queue)
-│   │   ├── routes/             # AppRouter (onGenerateRoute), RouteNames, Transitions
+│   │   ├── realtime/           # SignalRService, lifecycle management & mutation streams
+│   │   ├── routes/             # AppRouter (onGenerateRoute), RouteNames, route_providers.dart
 │   │   ├── storage/            # FlutterSecureStorage & SharedPreferences helpers
-│   │   ├── theme/              # Stitch color tokens, typography & ThemeData
+│   │   ├── theme/              # Stitch color tokens, typography & Material 3 ThemeData
 │   │   ├── utils/              # PermissionChecker, date formatters, validators
-│   │   └── widgets/            # Shared UI components (glass cards, buttons, chips, inputs)
+│   │   └── widgets/            # Shared UI components (glass cards, buttons, chips, inputs, avatar stacks)
 │   │
-│   └── features/               # Feature-First Modules
+│   └── features/               # Feature-First Modules (< 200 lines per file)
 │       ├── splash/             # Native splash dismissal & initialization
 │       ├── onboarding/         # Onboarding walkthrough & first-launch screen
 │       ├── auth/               # Login, register, profile screens & AuthCubit
-│       ├── workspaces/         # Workspace switcher, creation modal & member management
-│       ├── projects/           # Projects dashboard, creation modal & ProjectCubit
-│       └── kanban/             # Kanban board, column drag-drop, mobile swipe & task sheet
+│       ├── workspaces/         # Workspace switcher, creation modal, MemberTile & WorkspaceRepository
+│       ├── projects/           # Projects dashboard, creation modal, tag filter & ProjectCubit
+│       ├── tasks/              # Task models, TaskRepository, comments discussion sheet & dialogs
+│       ├── kanban/             # Kanban board, column drag-drop, mobile swipe, dual-theme skeleton & KanbanCubit
+│       └── dashboard/          # Dashboard screen, sprint focus, presence stack & ActivityStreamScreen
 │
 ├── test/                       # Unit and widget tests
 ├── pubspec.yaml                # Dependencies & asset declarations
@@ -123,13 +130,14 @@ client/
 
 ## 🔒 Role-Based UI Authorization
 
-The client uses strongly typed permission helpers (`core/utils/permission_checker.dart`) to conditionally render and guard action buttons (edit, delete, invite, remove) matching the backend security model:
+The client uses strongly typed permission helpers (`core/utils/permission_checker.dart`) to conditionally render and guard action buttons (edit, delete, invite, remove, change role) matching the backend security model:
 
 | Resource | Action | Workspace `Owner` | Creator (`CreatedBy == userId`) | Assignee (`AssigneeId == userId`) | Regular `Member` |
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | **Workspace** | View workspace & members | ✅ | ✅ | N/A | ✅ |
 | | Edit / Delete workspace | ✅ | ❌ | N/A | ❌ |
 | | Direct Add Member by email | ✅ | ❌ | N/A | ❌ |
+| | Update Member Role | ✅ | ❌ | N/A | ❌ |
 | | Remove Member | ✅ | ❌ | N/A | ❌ |
 | **Projects** | View projects & Kanban board | ✅ | ✅ | N/A | ✅ |
 | | Create Project | ✅ | ✅ | N/A | ✅ |
@@ -139,6 +147,7 @@ The client uses strongly typed permission helpers (`core/utils/permission_checke
 | | Create Task | ✅ | ✅ | ✅ | ✅ |
 | | Edit Task / Move Status | ✅ | ✅ | ✅ | ❌ |
 | | Assign / Reassign Task | ✅ | ✅ | ✅ | ✅ |
+| | Add / Delete Comments | ✅ | ✅ (Own comment) | ✅ (Own comment) | ✅ (Own comment) |
 | | Delete Task | ✅ | ✅ | ❌ | ❌ |
 
 ---
@@ -192,7 +201,7 @@ sequenceDiagram
 
 ---
 
-## 🎨 Design System & Theming
+## 🎨 Design System, Theming & Localization
 
 Designed with **Material 3** and custom Stitch UI design tokens with bundled **Inter** typography:
 
@@ -218,15 +227,29 @@ class AppColors {
 }
 ```
 
+### Dual-Theme Skeleton Loading
+Custom `SkeletonizerConfigData` ensures shimmering placeholders blend natively across themes without jarring white-flash artifacts:
+- **Dark Mode:** Surface container background `#1E293B` with border shimmer `#334155`.
+- **Light Mode:** Light slate background `#F1F5F9` with soft border shimmer `#E2E8F0`.
+
+### Deep Slate Locked Identity & Workspace Wayfinding
+- Core navigation shell (sidebar, navigation rail, and bottom bar) maintains a locked **Deep Slate** aesthetic for focused visual hierarchy.
+- Workspaces leverage deterministic colorway palettes (`#6366F1`, `#38BDF8`, `#10B981`, `#F59E0B`, `#EC4899`, `#8B5CF6`) for instant contextual wayfinding.
+
+### Comprehensive Arabic (RTL) Support
+Fully localized via Flutter's synthetic `AppLocalizations` (`intl`) supporting English (`en`) and Arabic (`ar`):
+- Mirrored navigation drawer/rail transitions, bidirectional typography, and contextual trailing chevron placement.
+- Pluralization rules for task comments, member counts, and activity stream events.
+
 ---
 
 ## 📱 Responsive Layout Strategy
 
 The application layout adapts smoothly across various screen form factors:
 
-- **Mobile (< 768px):** Bottom navigation bar, swipeable Kanban column `PageView`, bottom-sheet modal for task details.
-- **Tablet (768px – 1199px):** Collapsible navigation rail, 2-column Kanban view, centered dialogs.
-- **Desktop & Web ($\ge$ 1200px):** Fixed 240px left sidebar, widescreen multi-column Kanban board, 480px slide-over task side-sheet.
+- **Mobile (< 768px):** Bottom navigation bar, swipeable Kanban column `PageView`, bottom-sheet modal for task details, and compact online presence indicator counter.
+- **Tablet (768px – 1199px):** Collapsible navigation rail, 2-column Kanban view, centered dialogs, and expanded member tile layout.
+- **Desktop & Web ($\ge$ 1200px):** Fixed 240px left sidebar, widescreen multi-column Kanban board, 480px slide-over task side-sheet with chronological discussion thread, and interactive live presence avatar stack with real-time status pulses.
 
 ---
 

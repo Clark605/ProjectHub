@@ -148,7 +148,7 @@ flowchart TD
 ---
 
 ### Journey 4: The "Workspace Governance & Team Management" Journey (Owner)
-> **Objective:** Add team members, control access boundaries, and manage project lifecycles.
+> **Objective:** Add team members, manage roles, control access boundaries, and govern project lifecycles.
 
 ```mermaid
 flowchart LR
@@ -157,13 +157,18 @@ flowchart LR
     C --> D[POST /workspaces/:id/members]
     D --> E[Member Added to Realtime Member Stack]
     
-    B --> F[Remove Member]
-    F --> G[DELETE /workspaces/:id/members/:userId]
-    G --> H[Server Unassigns Orphaned Tasks Automatically]
+    B --> F[Change Member Role]
+    F --> G[PUT /workspaces/:id/members/:userId/role]
+    G --> H[Roles Cache Invalidation & Instant Role Update]
+
+    B --> I[Remove Member]
+    I --> J[DELETE /workspaces/:id/members/:userId]
+    J --> K[Server Unassigns Orphaned Tasks Automatically]
 ```
 
 * **Security & Governance Invariants:**
-  * Only users with `WorkspaceMember.Role == "Owner"` have access to rename/delete workspaces, remove members, or edit workspace settings.
+  * Only users with `WorkspaceMember.Role == "Owner"` have access to rename/delete workspaces, invite/remove members, promote/demote member roles, or edit workspace settings.
+  * Owners can promote members to `Owner` or demote co-owners to `Member` via the `MemberTile` role options menu. The last remaining owner cannot be demoted or removed.
   * Removing a member automatically sets `AssigneeId = null` on all tasks assigned to that user in that workspace, preventing broken references.
 
 ---
@@ -197,7 +202,46 @@ flowchart LR
 > **Objective:** Keep teams informed about workspace movements, task assignments, and project status evolutions.
 
 1. **Workspace Overview Feed:** Navigating to Dashboard displays the **Recent Activity** card populated from `GET /api/v1/workspaces/{id}/activity`, featuring actor avatars, time-ago chips, and clear mutation descriptions.
-2. **Project History Feed:** Opening a project's detail view allows switching to the **Activity** tab (`GET /api/v1/projects/{id}/activity`) to inspect granular task transitions, moves to `Done`, and assignment changes.
+2. **Dedicated Activity Stream:** Tapping "View All" on the Dashboard navigates to `/activity-stream` (`ActivityStreamScreen`) with infinite pagination, full activity filtering, and actor drilldown.
+3. **Project History Feed:** Opening a project's detail view allows switching to the **Activity** tab (`GET /api/v1/projects/{id}/activity`) to inspect granular task transitions, moves to `Done`, and assignment changes.
+
+---
+
+### Journey 8: The "Real-Time Collaboration & Discussion" Journey (Team)
+> **Objective:** Multiple distributed team members collaborate live on the same Kanban board, discuss blockers, and track active online teammates.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Alice as Alice (Developer)
+    actor Bob as Bob (Lead)
+    participant AppA as Alice's Client
+    participant AppB as Bob's Client
+    participant Hub as SignalR WorkspaceHub
+    participant API as ASP.NET Core API
+
+    Note over Alice,Bob: Both view Kanban board for 'Mobile Client v1'
+    AppA->>Hub: JoinWorkspace(workspaceId: 101)
+    AppB->>Hub: JoinWorkspace(workspaceId: 101)
+    Hub-->>AppA: PresenceChanged([AliceId, BobId])
+    Hub-->>AppB: PresenceChanged([AliceId, BobId])
+    Note over AppA,AppB: Online Presence Avatar Stack pulses green (#22C55E)
+
+    Alice->>AppA: Drags task card 'Auth Flow' from Todo -> InProgress
+    AppA->>API: PATCH /api/v1/tasks/42/status {"status": "InProgress"}
+    API-->>AppA: 200 OK
+    API->>Hub: Broadcast TaskStatusChanged(42, "InProgress")
+    Hub-->>AppB: TaskStatusChanged(42, "InProgress")
+    Note over AppB: Task card animates to InProgress column in real-time
+
+    Bob->>AppB: Clicks task card to inspect details and comments
+    Bob->>AppB: Submits comment: "Looks great, please verify token refresh."
+    AppB->>API: POST /api/v1/tasks/42/comments
+    API-->>AppB: 201 Created (CommentResponseDto)
+    API->>Hub: Broadcast CommentAdded(CommentResponseDto)
+    Hub-->>AppA: CommentAdded(CommentResponseDto)
+    Note over AppA: Comment badge increments to '1' and comment appears in discussion sheet
+```
 
 ---
 
@@ -257,6 +301,7 @@ abstract class RouteNames {
   static const String shell = '/';                         // Main Responsive Shell
   static const String workspaces = '/workspaces';           // Workspace Settings & Members
   static const String dashboard = '/dashboard';             // Global Metrics & Activity Feed
+  static const String activityStream = '/activity-stream';   // Full Historical Activity Stream
   static const String myTasks = '/my-tasks';               // Aggregated User Tasks
 
   // Projects & Kanban

@@ -27,17 +27,47 @@ When request thresholds are approached or exceeded, responses include standard r
 
 ## 🩺 System & Diagnostics (`/health`)
 
-### 1. System Health Check
+### 1. System Health Check (see [ADR-0018](./adr/0018-enum-schema-migration-and-resilient-caching.md))
 `GET /api/v1/health`
 
-#### Response (`200 OK`)
+#### Response (`200 OK` — Healthy)
 ```json
 {
   "status": "Healthy",
-  "database": "Connected",
-  "redis": "Connected",
-  "uptime": "02:14:35",
-  "timestamp": "2026-09-08T16:00:00Z"
+  "components": {
+    "database": "Connected",
+    "redis": "Connected"
+  },
+  "uptime": "0.02:14:35",
+  "timestamp": "2026-09-22T12:00:00Z"
+}
+```
+
+#### Response (`200 OK` — Degraded / Redis Offline)
+When Redis is down but PostgreSQL is connected, the API transparently falls back to L1 in-memory caching and continues serving requests:
+```json
+{
+  "status": "Degraded",
+  "components": {
+    "database": "Connected",
+    "redis": "Degraded (L1 Fallback)"
+  },
+  "uptime": "0.02:14:35",
+  "timestamp": "2026-09-22T12:00:00Z"
+}
+```
+
+#### Response (`503 Service Unavailable` — Unhealthy)
+If the PostgreSQL database connection fails:
+```json
+{
+  "status": "Unhealthy",
+  "components": {
+    "database": "Disconnected",
+    "redis": "Connected"
+  },
+  "uptime": "0.02:14:35",
+  "timestamp": "2026-09-22T12:00:00Z"
 }
 ```
 
@@ -258,8 +288,9 @@ All error responses adhere to the `ApiErrorResponse` schema:
 `DELETE /api/v1/workspaces/{id}` (Authenticated, Owner only)
 
 ### 6. Workspace Members
-- `GET /api/v1/workspaces/{id}/members` — List all members.
+- `GET /api/v1/workspaces/{id}/members` — List all members and their roles.
 - `POST /api/v1/workspaces/{id}/members` — Add member by email (`{"email": "colleague@example.com"}`).
+- `PUT /api/v1/workspaces/{id}/members/{userId}/role` — Update member role (`{"role": "Owner" | "Member"}`). Owner only. Synchronously busts cached role keys (see [ADR-0018](./adr/0018-enum-schema-migration-and-resilient-caching.md)).
 - `DELETE /api/v1/workspaces/{id}/members/{userId}` — Remove member from workspace (triggers auto task unassignment).
 
 ### 7. Workspace Projects
@@ -273,6 +304,104 @@ All error responses adhere to the `ApiErrorResponse` schema:
 ### 9. Workspace Activity Feed (see [ADR-0011](./adr/0011-activity-event-audit-trail-and-logger.md))
 `GET /api/v1/workspaces/{id}/activity?limit=20` (Authenticated)
 - Retrieves the latest workspace activity events for the Dashboard feed.
+
+---
+
+## 🏷 Dual-Scope Tags Endpoints (see [ADR-0017](./adr/0017-signalr-realtime-collaboration-and-dual-scope-tags.md))
+
+Tags are partitioned into reusable workspace-level tags (`ProjectId == null`) and project-scoped tags (`ProjectId != null`). Tag colors are deterministically hashed against a curated 12-color palette.
+
+### 1. Create Workspace Tag
+`POST /api/v1/workspaces/{workspaceId}/tags` (Authenticated, Owner only)
+
+#### Request Body
+```json
+{
+  "name": "Backend"
+}
+```
+
+### 2. List Workspace Tags
+`GET /api/v1/workspaces/{workspaceId}/tags` (Authenticated)
+
+### 3. Create Project Tag
+`POST /api/v1/projects/{projectId}/tags` (Authenticated, Owner or Creator)
+
+#### Request Body
+```json
+{
+  "name": "Sprint-1"
+}
+```
+
+### 4. List Available Tags for Project
+`GET /api/v1/projects/{projectId}/available-tags` (Authenticated)
+- Returns combined list of workspace-level tags and project-scoped tags available for assignment.
+
+### 5. Attach Tag to Task
+`POST /api/v1/tasks/{taskId}/tags` (Authenticated)
+- Enforces a maximum of 5 tags per task.
+
+#### Request Body
+```json
+{
+  "tagId": 3
+}
+```
+
+### 6. Detach Tag from Task
+`DELETE /api/v1/tasks/{taskId}/tags/{tagId}` (Authenticated)
+
+### 7. Delete Tag
+`DELETE /api/v1/tags/{id}` (Authenticated, Owner or Creator)
+- Cascades cleanly through `TaskTag` join records without deleting tasks.
+
+---
+
+## 💬 Task Comments Endpoints (see [ADR-0017](./adr/0017-signalr-realtime-collaboration-and-dual-scope-tags.md))
+
+Task discussions are modeled as single-level flat chronological comments. Adding or removing comments broadcasts real-time SignalR notifications and updates the task's `commentCount`.
+
+### 1. List Task Comments
+`GET /api/v1/tasks/{taskId}/comments` (Authenticated)
+
+#### Response (`200 OK`)
+```json
+[
+  {
+    "id": 1,
+    "taskId": 42,
+    "userId": "user-guid-456",
+    "userName": "Jane Doe",
+    "content": "Added the Dio interceptor queue lock.",
+    "createdAt": "2026-09-22T10:15:00Z",
+    "updatedAt": null
+  }
+]
+```
+
+### 2. Create Comment
+`POST /api/v1/tasks/{taskId}/comments` (Authenticated)
+
+#### Request Body
+```json
+{
+  "content": "Verified on Android emulator."
+}
+```
+
+### 3. Update Comment
+`PUT /api/v1/comments/{id}` (Authenticated, Author only)
+
+#### Request Body
+```json
+{
+  "content": "Verified on Android emulator and iOS simulator."
+}
+```
+
+### 4. Delete Comment
+`DELETE /api/v1/comments/{id}` (Authenticated, Author or Workspace Owner)
 
 ---
 
@@ -303,7 +432,7 @@ All error responses adhere to the `ApiErrorResponse` schema:
 
 ### 4. Project Tasks
 - `GET /api/v1/projects/{id}/tasks?status=InProgress&priority=High` — List tasks with optional query filters.
-- `POST /api/v1/projects/{id}/tasks` — Create task inside project.
+- `POST /api/v1/projects/{id}/tasks` — Create task inside project. Supports optional `tagIds: [1, 2]` with pre-save ownership validation (see [ADR-0018](./adr/0018-enum-schema-migration-and-resilient-caching.md)).
 
 ### 5. Project Activity History (see [ADR-0011](./adr/0011-activity-event-audit-trail-and-logger.md))
 `GET /api/v1/projects/{id}/activity?limit=50` (Authenticated)
@@ -328,6 +457,14 @@ All error responses adhere to the `ApiErrorResponse` schema:
   "assigneeId": "user-guid-456",
   "createdBy": "user-guid-123",
   "dueDate": "2026-09-05T00:00:00Z",
+  "commentCount": 3,
+  "tags": [
+    {
+      "id": 1,
+      "name": "Backend",
+      "colorHex": "#3B82F6"
+    }
+  ],
   "createdAt": "2026-08-29T11:00:00Z"
 }
 ```
@@ -345,7 +482,7 @@ All error responses adhere to the `ApiErrorResponse` schema:
 }
 ```
 
-### 3. Move Task Status (Kanban Drag-Drop) (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md))
+### 3. Move Task Status (Kanban Drag-Drop) (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md) and [ADR-0018](./adr/0018-enum-schema-migration-and-resilient-caching.md))
 `PATCH /api/v1/tasks/{id}/status` (Authenticated)
 
 #### Request Body
@@ -367,3 +504,32 @@ All error responses adhere to the `ApiErrorResponse` schema:
 
 ### 5. Delete Task
 `DELETE /api/v1/tasks/{id}` (Authenticated, Owner or Creator)
+
+---
+
+## ⚡ Real-Time SignalR Hub Specification (see [ADR-0017](./adr/0017-signalr-realtime-collaboration-and-dual-scope-tags.md))
+
+ProjectHub exposes an authenticated SignalR hub for bidirectional push synchronization and online presence.
+
+- **Hub Endpoint:** `ws://localhost:5259/api/v1/hubs/workspace` (or `wss://`)
+- **Authentication:** Bearer token transmitted via query string parameter `?access_token=<JWT>`.
+
+### Client-to-Server Invocations
+
+| Method | Parameters | Description |
+| :--- | :--- | :--- |
+| `JoinWorkspace` | `int workspaceId` | Adds connection to workspace group (`workspace-{id}`) and registers user in Redis online presence set. Broadcasts updated `PresenceChanged` event. |
+| `LeaveWorkspace` | `int workspaceId` | Removes connection from workspace group, cleans up Redis presence set, and broadcasts updated `PresenceChanged` event. |
+
+### Server-to-Client Broadcast Events
+
+| Event Name | Target Group | Payload Schema | Trigger Condition |
+| :--- | :--- | :--- | :--- |
+| `PresenceChanged` | `workspace-{id}` | `{ workspaceId: int, onlineUserIds: string[] }` | Member joins, leaves, or abruptly disconnects (30s ping timeout) |
+| `TaskCreated` | `workspace-{id}` | `TaskResponseDto` | New task created in project |
+| `TaskStatusChanged`| `workspace-{id}` | `{ taskId: int, projectId: int, newStatus: string }` | Kanban card moved across columns |
+| `TaskAssigned` | `workspace-{id}` | `{ taskId: int, assigneeId: string? }` | Task assignee updated or unassigned |
+| `TaskDeleted` | `workspace-{id}` | `{ taskId: int, projectId: int }` | Task deleted |
+| `CommentAdded` | `workspace-{id}` | `CommentResponseDto` | New comment posted to task |
+| `CommentDeleted` | `workspace-{id}` | `{ taskId: int, commentId: int }` | Comment deleted |
+

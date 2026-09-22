@@ -106,6 +106,21 @@ To keep QA lean and maintainable, ProjectHub enforces a streamlined **two-tier r
 - **Audit Trail & Activity Logging:** Single-table `ActivityEvent` audit log decoupled via `IActivityLogger` (see [ADR-0011](./adr/0011-activity-event-audit-trail-and-logger.md)).
 - **Dual Feed Surfaces:** Workspace activity feed on the main Dashboard and scoped project activity log on project detail views.
 
+### 4.8 Real-Time Synchronization & Online Presence (Phase 6 & ADR-0017)
+- **SignalR Push Infrastructure:** Authenticated `/api/v1/hubs/workspace` hub with workspace group isolation and Redis pub/sub backplane.
+- **Live Board Reconciliation:** Instant mutation broadcasts for task creation, movement, assignment, and deletion with Last-Write-Wins resolution.
+- **Distributed Online Presence:** Real-time online member tracking backed by Redis sets with ping/pong timeout handling.
+
+### 4.9 Dual-Scope Tags & Flat Task Comments (Phase 5 & ADR-0017)
+- **Dual-Scope Tagging:** Reusable workspace-level tags and project-scoped tags with deterministic 12-palette color hashing. Maximum 5 tags per task.
+- **Task Comments:** Flat chronological comments with author attribution and real-time push synchronization.
+
+### 4.10 Database Schema Optimization & Resilient Caching (Phase 7 & ADR-0018)
+- **PostgreSQL Smallint Enums:** `Task.Status` and `Task.Priority` stored as 2-byte `smallint` with composite index on `(ProjectId, Status)`.
+- **Atomic Task Creation:** Tag resolution validated strictly pre-save within an implicit transaction.
+- **Non-Blocking Resilience & Health:** Redis client configured with `AbortOnConnectFail = false` and L1 in-memory fallback. `/api/v1/health` reports `Healthy`, `Degraded`, or `Unhealthy`.
+- **Workspace Member Role Management:** Workspace owners can promote/demote members (`PUT /api/v1/workspaces/{id}/members/{userId}/role`) with immediate compound tag cache invalidation.
+
 ---
 
 ## 5. Development Phases & Roadmap
@@ -120,20 +135,22 @@ gantt
     Phase 2 - Workspaces & RBAC                  :done, 2026-08-13, 2026-08-18
     Phase 3 - Projects Management                :done, 2026-08-19, 2026-08-23
     Phase 4 - Tasks & Kanban Board               :done, 2026-08-24, 2026-09-07
-    Phase 4.5 - Polish & Portfolio Enhancement   :active, 2026-09-08, 2026-09-20
+    Phase 4.5 - Polish & Portfolio Enhancement   :done, 2026-09-08, 2026-09-15
     section Post-MVP
-    Phase 5 - Collaboration (Comments & Mentions):2026-09-21, 2026-10-05
-    Phase 6 - Real-Time (SignalR) & Notifications:2026-10-06, 2026-10-20
-    Phase 7 - Search & Analytics                 :2026-10-21, 2026-11-04
-    Phase 8 - Production Deployment & Monitoring :2026-11-05, 2026-11-20
+    Phase 5 - Collaboration (Comments & Tags)    :done, 2026-09-16, 2026-09-20
+    Phase 6 - Real-Time (SignalR) & Presence     :done, 2026-09-21, 2026-09-22
+    Phase 7 - Correctness, Resilience & Enums    :done, 2026-09-22, 2026-09-22
+    Phase 8 - Search & Analytics                 :active, 2026-09-23, 2026-10-05
+    Phase 9 - Production Deployment & Monitoring :2026-10-06, 2026-10-20
 ```
 
 ---
 
 ## 6. Phase Gates for Post-MVP Features
 
-To avoid scope creep, subsequent phases have strict stability criteria:
+To avoid scope creep, project phases have satisfied rigorous criteria:
 
-1. **Phase 4.5 (Polish & Portfolio Gate):** Dynamic color palette switcher, unified profile & settings, URL versioning, and activity logging must pass static analysis and unit testing before proceeding.
-2. **Phase 5 (Collaboration):** Requires using the Kanban board and activity feed for day-to-day task tracking for at least two weeks with zero data loss or synchronization anomalies.
-3. **Phase 6 (Real-Time SignalR):** SignalR will only be added after offline/silent refresh resilience and REST API correctness are established in production.
+1. **Phase 4.5 (Polish & Portfolio Gate):** Dynamic color palette switcher, unified profile & settings, URL versioning, and activity logging verified with strict analysis and widget tests.
+2. **Phase 5 (Collaboration Gate):** Dual-scope tags with deterministic color hashing and flat chronological comments integrated and verified.
+3. **Phase 6 (Real-Time SignalR Gate):** SignalR hub with Redis pub/sub backplane, group isolation, and distributed presence sets validated with silent token rotation and reconnect handling.
+4. **Phase 7 (Correctness & Resilience Gate):** PostgreSQL `smallint` enum storage migration, composite indexing, atomic task creation, non-blocking Redis connection, Degraded health state reporting, and member role cache busting fully tested.

@@ -15,6 +15,7 @@ graph TD
             Screen["Views / Screens (Dumb Widgets < 200 lines)"]
             Widgets["Modular Sub-Widgets & Sheets"]
             UIExtensions["Presentation Extensions (Colors, Icons, Strings)"]
+            Guards["Permission / Role Guards"]
         end
 
         subgraph LogicLayer ["Logic Layer"]
@@ -30,12 +31,18 @@ graph TD
         end
     end
 
+    subgraph RealTimeInfrastructure ["Core Infrastructure (lib/core/)"]
+        SignalRService["SignalRService (WorkspaceHub Client)"]
+    end
+
     Screen --> Cubit
     Widgets --> Screen
     UIExtensions --> Widgets
+    Guards --> Screen
     Cubit --> State
     Cubit --> FilterMixins
     Cubit --> Repository
+    Cubit -.->|Real-Time Streams| SignalRService
     Repository --> RemoteDataSource
     Models --> Repository
 ```
@@ -52,7 +59,7 @@ client/
 │   └── images/                 # Onboarding & brand illustrations
 ├── l10n/
 │   ├── app_en.arb              # English localization bundle
-│   └── app_ar.arb              # Arabic localization bundle
+│   └── app_ar.arb              # Comprehensive Arabic localization bundle
 ├── lib/
 │   ├── main.dart               # App initialization, native splash & DI setup
 │   ├── app.dart                # MaterialApp, AuthGate, theme & routes
@@ -62,21 +69,22 @@ client/
 │   │   ├── di/                 # Dependency injection setup (GetIt + Injectable)
 │   │   ├── errors/             # Custom Failure classes & Dio error mapper
 │   │   ├── network/            # Resilient Dio client & AuthInterceptor
+│   │   ├── realtime/           # SignalRService, hub connection lifecycle & streams
 │   │   ├── routes/             # AppRouter, RouteNames & route_providers.dart
 │   │   ├── storage/            # FlutterSecureStorage & SharedPreferences
 │   │   ├── theme/              # Stitch UI tokens & Material 3 ThemeData
 │   │   ├── utils/              # PermissionChecker, date utilities, validators
-│   │   └── widgets/            # Reusable UI atoms (buttons, cards, chips, dialogs)
+│   │   └── widgets/            # Reusable UI atoms (buttons, cards, chips, dialogs, avatar stacks)
 │   │
-│   └── features/               # Feature-First Modules
+│   └── features/               # Feature-First Modules (< 200 lines per file)
 │       ├── splash/             # Startup & token verification
 │       ├── onboarding/         # First-launch onboarding carousel
 │       ├── auth/               # Login, Register, Profile screens, Cubits & AuthRepository
-│       ├── workspaces/         # Workspaces list, switcher, member management & WorkspaceRepository
-│       ├── projects/           # Projects dashboard, project detail & ProjectRepository
-│       ├── tasks/              # Task models, TaskRepository, TaskFilter & shared task sheets
-│       ├── kanban/             # Kanban board, columns, drag-drop, mobile PageView & KanbanCubit
-│       └── dashboard/          # Dashboard screen, sprint focus & activity stream
+│       ├── workspaces/         # Workspaces list, switcher, MemberTile with role dialog & WorkspaceRepository
+│       ├── projects/           # Projects dashboard, project detail, tag management & ProjectRepository
+│       ├── tasks/              # Task models, TaskRepository, TaskFilter, comments sheet & task dialogs
+│       ├── kanban/             # Kanban board, columns, drag-drop, mobile PageView, dual-theme skeleton & KanbanCubit
+│       └── dashboard/          # Dashboard screen, sprint focus, presence stack & ActivityStreamScreen
 ```
 
 ---
@@ -153,7 +161,8 @@ graph LR
 2. **Desktop / Tablet ($\ge$ 768px):** Full multi-column view with horizontal scrolling and side-by-side columns.
 3. **Optimistic Column Drag-and-Drop:** Task status changes immediately snap to the target column on UI; a minimal `PATCH /api/v1/tasks/{id}/status` is fired in the background (see [ADR-0004](./adr/0004-dedicated-patch-endpoints-for-kanban-status-and-assignee.md)). On error, the card rolls back with a feedback SnackBar.
 4. **Hero Animations & Fast Actions:** Task creation/editing uses a draggable bottom sheet on mobile and centered modal on desktop. Tapping a Kanban card triggers a seamless `Hero` expansion transition into the detail view. Quick 1-tap popups on assignee avatars and status pills allow immediate in-place updates.
-5. **Skeleton Loading Consistency:** All list and detail screens utilize `skeletonizer` to ensure flicker-free, skeleton-driven revalidation.
+5. **Dual-Theme Skeleton Loading:** All list and detail screens utilize `skeletonizer` calibrated for both Dark and Light themes to ensure flicker-free, skeleton-driven revalidation.
+6. **Live Presence & Collaboration Badges:** The Kanban header renders a live online presence avatar stack. Task cards feature deterministic color-hashed tag chips and real-time comment count badges.
 
 ---
 
@@ -186,17 +195,46 @@ Accessible at `/profile`, consolidating non-workspace user settings into a singl
 
 ---
 
-## 8. Activity Feed UI Integration
+## 8. Activity Stream & Audit UI Integration
 
 - **Dashboard Feed:** Shows the latest 10 workspace-level events (`GET /api/v1/workspaces/{id}/activity`) with avatar badges, relative timestamps, and event descriptions.
+- **Dedicated Activity Stream Route (`/activity-stream`):** Tapping "View All" on the Dashboard navigates to the dedicated `ActivityStreamScreen` featuring infinite scrolling, event filtering, and full historical inspection.
 - **Project Activity Tab:** Integrated into the project detail screen (`GET /api/v1/projects/{id}/activity`) showing task movements and lifecycle transitions.
 
 ---
 
 ## 9. Strict Clean Architecture & 200-Line Modularity
 
-To ensure maintainability, testability, and clarity of boundaries:
+To ensure maintainability, testability, and clarity of boundaries (see [ADR-0016](./adr/0016-strict-clean-architecture-without-domain-layer.md)):
 1. **Clean Architecture without Domain Overhead**: Features comprise Presentation and Data layers. Domain logic (filtering, ordering) is encapsulated in pure data extensions (`TaskFilter`, `filterProjects`) or repositories.
 2. **Dumb UI Widgets**: Screens and widgets contain zero business calculations, no fallback mock repositories, and no direct service lookups. Test doubles are strictly isolated in `test/**/fakes/`.
 3. **Separation of Presentation Extensions**: Data models and enums are purely structural. Colors, icons, and localized labels are implemented via presentation layer extensions (`*_ui.dart`).
 4. **Strict 200-Line File Limit**: Every source file in `client/lib/` is strictly under 200 lines of code. Large screens, sheets, and forms are decomposed into cohesive child widgets, mixins, and builder helpers.
+
+---
+
+## 10. Real-Time SignalR Service & Presence Integration (ADR-0017)
+
+- **Singleton `SignalRService`:** Registered in `GetIt`, managing WebSocket lifecycle to `/api/v1/hubs/workspace`.
+- **Silent Token Rotation:** Configured with an `accessTokenFactory` wired to `AuthRepository` for transparent token refresh during reconnection attempts.
+- **Domain Streams:** Emits typed Dart streams consumed by route-scoped Cubits:
+  - `presenceStream` $\rightarrow$ updates active member stacks on Dashboard and Kanban.
+  - `taskEventsStream` $\rightarrow$ notifies `KanbanCubit` to ingest remote card moves, additions, or deletions without full board reloads.
+  - `commentsStream` $\rightarrow$ feeds `CommentsCubit` for instantaneous comment insertion/removal.
+- **Lifecycle Management:** Feature screens subscribe upon initialization and cancel subscriptions when popped, preventing memory leaks and ghost updates.
+
+---
+
+## 11. Workspace Member Role Governance & UI Flow (ADR-0018)
+
+- **Interactive `MemberTile`:** Renders role badges (`Owner` or `Member`) with options menu accessible only to Workspace Owners.
+- **Promotion & Demotion Dialog:** Tapping "Change Role" opens a confirmation dialog warning of permission implications.
+- **Optimistic Update & Invalidation:** Dispatches `PUT /api/v1/workspaces/{id}/members/{userId}/role` and updates local state while server invalidates permissions.
+
+---
+
+## 12. Comprehensive Localization (i18n & RTL)
+
+- **Multi-Language Bundles:** Complete English (`client/l10n/app_en.arb`) and Arabic (`client/l10n/app_ar.arb`) coverage.
+- **RTL Layout Mirroring:** Automatic bidirectional text alignment and icon flipping (drawers, back buttons, column tabs).
+- **Localized Role & Status Badges:** All enums, role names, confirmation dialogs, and error messages provide complete bilingual copy.
