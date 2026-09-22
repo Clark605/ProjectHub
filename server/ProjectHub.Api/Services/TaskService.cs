@@ -4,11 +4,13 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Logging;
 using ProjectHub.Api.Data;
 using ProjectHub.Api.DTOs.TagDtos;
 using ProjectHub.Api.DTOs.TaskDtos;
 using ProjectHub.Api.Exceptions;
+using ProjectHub.Api.Extensions;
 using ProjectHub.Api.Hubs;
 using ProjectHub.Api.Models;
 using ProjectHub.Api.Services.Interfaces;
@@ -21,6 +23,7 @@ public class TaskService : ITaskService
 {
     private readonly AppDbContext _context;
     private readonly UserManager<AppUser> _userManager;
+    private readonly HybridCache _cache;
     private readonly IActivityLogger _activityLogger;
     private readonly IHubContext<WorkspaceHub> _hubContext;
     private readonly ILogger<TaskService> _logger;
@@ -28,12 +31,14 @@ public class TaskService : ITaskService
     public TaskService(
         AppDbContext context,
         UserManager<AppUser> userManager,
+        HybridCache cache,
         IActivityLogger activityLogger,
         IHubContext<WorkspaceHub> hubContext,
         ILogger<TaskService> logger)
     {
         _context = context;
         _userManager = userManager;
+        _cache = cache;
         _activityLogger = activityLogger;
         _hubContext = hubContext;
         _logger = logger;
@@ -82,42 +87,23 @@ public class TaskService : ITaskService
             assigneeName = assigneeUser?.Name;
         }
 
-        var priority = !string.IsNullOrWhiteSpace(request.Priority)
-            ? request.Priority.Trim()
-            : TaskItemPriority.Medium.ToString();
-
-        var task = new TaskEntity
-        {
-            ProjectId = projectId,
-            Title = request.Title.Trim(),
-            Description = request.Description?.Trim() ?? string.Empty,
-            Status = TaskItemStatus.Backlog.ToString(),
-            Priority = priority,
-            AssigneeId = string.IsNullOrWhiteSpace(request.AssigneeId) ? null : request.AssigneeId,
-            CreatedBy = userId,
-            DueDate = request.DueDate,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-
-        _context.Tasks.Add(task);
-        await _context.SaveChangesAsync();
-
-        _logger.LogInformation("Task {TaskId} created successfully in project {ProjectId}", task.Id, projectId);
-
+        List<Tag> validTags = [];
         List<TagResponseDto> attachedTags = [];
         if (request.TagIds != null && request.TagIds.Count > 0)
         {
-            var distinctTagIds = request.TagIds.Distinct().Take(5).ToList();
-            var validTags = await _context.Tags
-                .Where(t => t.WorkspaceId == project.WorkspaceId && (t.ProjectId == null || t.ProjectId == projectId) && distinctTagIds.Contains(t.Id))
+            var distinctTagIds = request.TagIds.Distinct().ToList();
+            validTags = await _context.Tags
+                .Where(t => t.WorkspaceId == project.WorkspaceId && 
+                            (t.ProjectId == null || t.ProjectId == projectId) && 
+                            distinctTagIds.Contains(t.Id))
                 .ToListAsync();
 
-            foreach (var tagEntity in validTags)
+            if (validTags.Count != distinctTagIds.Count)
             {
-                _context.TaskTags.Add(new TaskTag { TaskId = task.Id, TagId = tagEntity.Id });
+                var missingIds = distinctTagIds.Except(validTags.Select(t => t.Id));
+                throw new ArgumentException(
+                    $"The following tag IDs are invalid or not available for this project: {string.Join(", ", missingIds)}");
             }
-            await _context.SaveChangesAsync();
 
             attachedTags = validTags.Select(t => new TagResponseDto
             {
@@ -130,6 +116,35 @@ public class TaskService : ITaskService
             }).ToList();
         }
 
+        var priority = request.Priority.ToTaskItemPriority(TaskItemPriority.Medium);
+
+        var task = new TaskEntity
+        {
+            ProjectId = projectId,
+            Title = request.Title.Trim(),
+            Description = request.Description?.Trim() ?? string.Empty,
+            Status = TaskItemStatus.Backlog,
+            Priority = priority,
+            AssigneeId = string.IsNullOrWhiteSpace(request.AssigneeId) ? null : request.AssigneeId,
+            CreatedBy = userId,
+            DueDate = request.DueDate,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            TaskTags = validTags.Select(t => new TaskTag { TagId = t.Id }).ToList()
+        };
+
+        _context.Tasks.Add(task);
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("Task {TaskId} created successfully in project {ProjectId}", task.Id, projectId);
+
+        // Invalidate caches
+        await _cache.RemoveByTagAsync($"project:{projectId}:tasks");
+        if (!string.IsNullOrEmpty(task.AssigneeId))
+        {
+            await _cache.RemoveByTagAsync($"user:{task.AssigneeId}:my-tasks");
+        }
+
         await _activityLogger.LogAsync(
             project.WorkspaceId,
             userId,
@@ -137,7 +152,7 @@ public class TaskService : ITaskService
             ActivityEventType.TaskCreated,
             projectId: task.ProjectId,
             taskId: task.Id,
-            metadata: new { task.Title, task.Status, task.Priority });
+            metadata: new { task.Title, Status = task.Status.ToWireString(), Priority = task.Priority.ToWireString() });
 
         var responseDto = new TaskResponseDto
         {
@@ -146,8 +161,8 @@ public class TaskService : ITaskService
             ProjectName = project.Name,
             Title = task.Title,
             Description = task.Description,
-            Status = task.Status,
-            Priority = task.Priority,
+            Status = task.Status.ToWireString(),
+            Priority = task.Priority.ToWireString(),
             AssigneeId = task.AssigneeId,
             AssigneeName = assigneeName,
             CreatedBy = task.CreatedBy,
@@ -188,60 +203,63 @@ public class TaskService : ITaskService
             throw new KeyNotFoundException($"Project with ID {projectId} not found for user {userId}");
         }
 
-        var query = _context.Tasks
-            .Include(t => t.Creator)
-            .Include(t => t.Assignee)
-            .Include(t => t.Comments)
-            .Include(t => t.TaskTags)
-                .ThenInclude(tt => tt.Tag)
-            .Where(t => t.ProjectId == projectId);
+        string cacheKey = $"project:{projectId}:tasks:s={status ?? "all"}:a={assigneeId ?? "all"}:p={priority ?? "all"}";
 
-        if (!string.IsNullOrWhiteSpace(status))
-        {
-            query = query.Where(t => t.Status.ToLower() == status.Trim().ToLower());
-        }
-
-        if (!string.IsNullOrWhiteSpace(assigneeId))
-        {
-            query = query.Where(t => t.AssigneeId == assigneeId.Trim());
-        }
-
-        if (!string.IsNullOrWhiteSpace(priority))
-        {
-            query = query.Where(t => t.Priority.ToLower() == priority.Trim().ToLower());
-        }
-
-        var tasks = await query
-            .OrderByDescending(t => t.CreatedAt)
-            .Select(t => new TaskResponseDto
+        return await _cache.GetOrCreateAsync(
+            cacheKey,
+            async token =>
             {
-                Id = t.Id,
-                ProjectId = t.ProjectId,
-                Title = t.Title,
-                Description = t.Description,
-                Status = t.Status,
-                Priority = t.Priority,
-                AssigneeId = t.AssigneeId,
-                AssigneeName = t.Assignee != null ? t.Assignee.Name : null,
-                CreatedBy = t.CreatedBy,
-                CreatedByName = t.Creator.Name,
-                DueDate = t.DueDate,
-                CreatedAt = t.CreatedAt,
-                UpdatedAt = t.UpdatedAt,
-                CommentCount = t.Comments.Count,
-                Tags = t.TaskTags.Select(tt => new TagResponseDto
-                {
-                    Id = tt.Tag.Id,
-                    WorkspaceId = tt.Tag.WorkspaceId,
-                    ProjectId = tt.Tag.ProjectId,
-                    Name = tt.Tag.Name,
-                    Color = tt.Tag.Color,
-                    CreatedAt = tt.Tag.CreatedAt
-                }).ToList()
-            })
-            .ToListAsync();
+                var query = _context.Tasks.Where(t => t.ProjectId == projectId);
 
-        return tasks;
+                if (!string.IsNullOrWhiteSpace(status))
+                {
+                    var parsedStatus = status.ToTaskItemStatus();
+                    query = query.Where(t => t.Status == parsedStatus);
+                }
+
+                if (!string.IsNullOrWhiteSpace(assigneeId))
+                {
+                    query = query.Where(t => t.AssigneeId == assigneeId.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(priority))
+                {
+                    var parsedPriority = priority.ToTaskItemPriority();
+                    query = query.Where(t => t.Priority == parsedPriority);
+                }
+
+                return await query
+                    .OrderByDescending(t => t.CreatedAt)
+                    .Select(t => new TaskResponseDto
+                    {
+                        Id = t.Id,
+                        ProjectId = t.ProjectId,
+                        Title = t.Title,
+                        Description = t.Description,
+                        Status = t.Status.ToWireString(),
+                        Priority = t.Priority.ToWireString(),
+                        AssigneeId = t.AssigneeId,
+                        AssigneeName = t.Assignee != null ? t.Assignee.Name : null,
+                        CreatedBy = t.CreatedBy,
+                        CreatedByName = t.Creator.Name,
+                        DueDate = t.DueDate,
+                        CreatedAt = t.CreatedAt,
+                        UpdatedAt = t.UpdatedAt,
+                        CommentCount = t.Comments.Count,
+                        Tags = t.TaskTags.Select(tt => new TagResponseDto
+                        {
+                            Id = tt.Tag.Id,
+                            WorkspaceId = tt.Tag.WorkspaceId,
+                            ProjectId = tt.Tag.ProjectId,
+                            Name = tt.Tag.Name,
+                            Color = tt.Tag.Color,
+                            CreatedAt = tt.Tag.CreatedAt
+                        }).ToList()
+                    })
+                    .ToListAsync(token);
+            },
+            tags: [$"project:{projectId}:tasks", $"workspace:{project.WorkspaceId}:tasks"]
+        );
     }
 
     public async Task<TaskResponseDto> GetTaskByIdAsync(string userId, int taskId)
@@ -327,7 +345,7 @@ public class TaskService : ITaskService
 
         task.Title = request.Title.Trim();
         task.Description = request.Description?.Trim() ?? string.Empty;
-        task.Priority = request.Priority.Trim();
+        task.Priority = request.Priority.ToTaskItemPriority(task.Priority);
         task.AssigneeId = string.IsNullOrWhiteSpace(request.AssigneeId) ? null : request.AssigneeId;
         task.DueDate = request.DueDate;
         task.UpdatedAt = DateTime.UtcNow;
@@ -335,6 +353,13 @@ public class TaskService : ITaskService
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Task {TaskId} updated successfully", taskId);
+
+        // Invalidate caches
+        await _cache.RemoveByTagAsync($"project:{task.ProjectId}:tasks");
+        if (!string.IsNullOrEmpty(task.AssigneeId))
+        {
+            await _cache.RemoveByTagAsync($"user:{task.AssigneeId}:my-tasks");
+        }
 
         var response = MapToDto(task, assigneeName: assigneeName);
 
@@ -377,11 +402,19 @@ public class TaskService : ITaskService
         var workspaceId = task.Project.WorkspaceId;
         var projectId = task.ProjectId;
         var taskTitle = task.Title;
+        var assigneeId = task.AssigneeId;
 
         _context.Tasks.Remove(task);
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Task {TaskId} deleted successfully by user {UserId}", taskId, userId);
+
+        // Invalidate caches
+        await _cache.RemoveByTagAsync($"project:{projectId}:tasks");
+        if (!string.IsNullOrEmpty(assigneeId))
+        {
+            await _cache.RemoveByTagAsync($"user:{assigneeId}:my-tasks");
+        }
 
         var actor = await _userManager.FindByIdAsync(userId);
         await _activityLogger.LogAsync(
@@ -433,13 +466,20 @@ public class TaskService : ITaskService
             throw new ForbiddenException($"User {userId} does not have permission to update task {taskId}.");
         }
 
-        var oldStatus = task.Status;
-        task.Status = request.Status.Trim();
+        var oldStatus = task.Status.ToWireString();
+        task.Status = request.Status.ToTaskItemStatus(task.Status);
         task.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Task {TaskId} status updated to '{Status}'", taskId, task.Status);
+
+        // Invalidate caches
+        await _cache.RemoveByTagAsync($"project:{task.ProjectId}:tasks");
+        if (!string.IsNullOrEmpty(task.AssigneeId))
+        {
+            await _cache.RemoveByTagAsync($"user:{task.AssigneeId}:my-tasks");
+        }
 
         var actor = await _userManager.FindByIdAsync(userId);
         await _activityLogger.LogAsync(
@@ -449,7 +489,7 @@ public class TaskService : ITaskService
             ActivityEventType.TaskStatusChanged,
             projectId: task.ProjectId,
             taskId: task.Id,
-            metadata: new { task.Title, OldStatus = oldStatus, NewStatus = task.Status });
+            metadata: new { task.Title, OldStatus = oldStatus, NewStatus = task.Status.ToWireString() });
 
         var response = MapToDto(task);
 
@@ -501,12 +541,24 @@ public class TaskService : ITaskService
             assigneeName = assigneeUser?.Name;
         }
 
+        var oldAssigneeId = task.AssigneeId;
         task.AssigneeId = string.IsNullOrWhiteSpace(request.AssigneeId) ? null : request.AssigneeId;
         task.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Task {TaskId} assignee updated to '{AssigneeId}'", taskId, task.AssigneeId);
+
+        // Invalidate caches
+        await _cache.RemoveByTagAsync($"project:{task.ProjectId}:tasks");
+        if (!string.IsNullOrEmpty(oldAssigneeId))
+        {
+            await _cache.RemoveByTagAsync($"user:{oldAssigneeId}:my-tasks");
+        }
+        if (!string.IsNullOrEmpty(task.AssigneeId))
+        {
+            await _cache.RemoveByTagAsync($"user:{task.AssigneeId}:my-tasks");
+        }
 
         var assignActor = await _userManager.FindByIdAsync(userId);
         await _activityLogger.LogAsync(
@@ -539,45 +591,43 @@ public class TaskService : ITaskService
             throw new KeyNotFoundException($"Workspace with ID {workspaceId} not found for user {userId}");
         }
 
-        var tasks = await _context.Tasks
-            .Include(t => t.Project)
-            .Include(t => t.Creator)
-            .Include(t => t.Assignee)
-            .Include(t => t.Comments)
-            .Include(t => t.TaskTags)
-                .ThenInclude(tt => tt.Tag)
-            .Where(t => t.Project.WorkspaceId == workspaceId && t.AssigneeId == userId)
-            .OrderByDescending(t => t.CreatedAt)
-            .Select(t => new TaskResponseDto
-            {
-                Id = t.Id,
-                ProjectId = t.ProjectId,
-                ProjectName = t.Project.Name,
-                Title = t.Title,
-                Description = t.Description,
-                Status = t.Status,
-                Priority = t.Priority,
-                AssigneeId = t.AssigneeId,
-                AssigneeName = t.Assignee != null ? t.Assignee.Name : null,
-                CreatedBy = t.CreatedBy,
-                CreatedByName = t.Creator.Name,
-                DueDate = t.DueDate,
-                CreatedAt = t.CreatedAt,
-                UpdatedAt = t.UpdatedAt,
-                CommentCount = t.Comments.Count,
-                Tags = t.TaskTags.Select(tt => new TagResponseDto
-                {
-                    Id = tt.Tag.Id,
-                    WorkspaceId = tt.Tag.WorkspaceId,
-                    ProjectId = tt.Tag.ProjectId,
-                    Name = tt.Tag.Name,
-                    Color = tt.Tag.Color,
-                    CreatedAt = tt.Tag.CreatedAt
-                }).ToList()
-            })
-            .ToListAsync();
+        string cacheKey = $"user:{userId}:workspace:{workspaceId}:my-tasks";
 
-        return tasks;
+        return await _cache.GetOrCreateAsync(
+            cacheKey,
+            async token => await _context.Tasks
+                .Where(t => t.Project.WorkspaceId == workspaceId && t.AssigneeId == userId)
+                .OrderByDescending(t => t.CreatedAt)
+                .Select(t => new TaskResponseDto
+                {
+                    Id = t.Id,
+                    ProjectId = t.ProjectId,
+                    ProjectName = t.Project.Name,
+                    Title = t.Title,
+                    Description = t.Description,
+                    Status = t.Status.ToWireString(),
+                    Priority = t.Priority.ToWireString(),
+                    AssigneeId = t.AssigneeId,
+                    AssigneeName = t.Assignee != null ? t.Assignee.Name : null,
+                    CreatedBy = t.CreatedBy,
+                    CreatedByName = t.Creator.Name,
+                    DueDate = t.DueDate,
+                    CreatedAt = t.CreatedAt,
+                    UpdatedAt = t.UpdatedAt,
+                    CommentCount = t.Comments.Count,
+                    Tags = t.TaskTags.Select(tt => new TagResponseDto
+                    {
+                        Id = tt.Tag.Id,
+                        WorkspaceId = tt.Tag.WorkspaceId,
+                        ProjectId = tt.Tag.ProjectId,
+                        Name = tt.Tag.Name,
+                        Color = tt.Tag.Color,
+                        CreatedAt = tt.Tag.CreatedAt
+                    }).ToList()
+                })
+                .ToListAsync(token),
+            tags: [$"user:{userId}:my-tasks", $"workspace:{workspaceId}:tasks"]
+        );
     }
 
     private static TaskResponseDto MapToDto(TaskEntity task, string? assigneeName = null, string? creatorName = null, string? projectName = null)
@@ -589,8 +639,8 @@ public class TaskService : ITaskService
             ProjectName = projectName ?? task.Project?.Name,
             Title = task.Title,
             Description = task.Description,
-            Status = task.Status,
-            Priority = task.Priority,
+            Status = task.Status.ToWireString(),
+            Priority = task.Priority.ToWireString(),
             AssigneeId = task.AssigneeId,
             AssigneeName = assigneeName ?? task.Assignee?.Name,
             CreatedBy = task.CreatedBy,

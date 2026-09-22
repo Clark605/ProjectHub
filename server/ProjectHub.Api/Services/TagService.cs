@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Logging;
 using ProjectHub.Api.Data;
 using ProjectHub.Api.DTOs.TagDtos;
 using ProjectHub.Api.DTOs.TaskDtos;
 using ProjectHub.Api.Exceptions;
+using ProjectHub.Api.Extensions;
 using ProjectHub.Api.Hubs;
 using ProjectHub.Api.Models;
 using ProjectHub.Api.Services.Interfaces;
@@ -19,15 +21,18 @@ namespace ProjectHub.Api.Services;
 public class TagService : ITagService
 {
     private readonly AppDbContext _context;
+    private readonly HybridCache _cache;
     private readonly IHubContext<WorkspaceHub> _hubContext;
     private readonly ILogger<TagService> _logger;
 
     public TagService(
         AppDbContext context,
+        HybridCache cache,
         IHubContext<WorkspaceHub> hubContext,
         ILogger<TagService> logger)
     {
         _context = context;
+        _cache = cache;
         _hubContext = hubContext;
         _logger = logger;
     }
@@ -265,6 +270,8 @@ public class TagService : ITagService
 
         await _context.SaveChangesAsync();
 
+        await _cache.RemoveByTagAsync($"project:{task.ProjectId}:tasks");
+
         var response = MapToDto(task);
         await _hubContext.Clients.Group($"workspace-{task.Project.WorkspaceId}")
             .SendAsync("TaskUpdated", response);
@@ -314,6 +321,7 @@ public class TagService : ITagService
             task.TaskTags.Remove(existingJoin);
             task.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
+            await _cache.RemoveByTagAsync($"project:{task.ProjectId}:tasks");
         }
 
         var response = MapToDto(task);
@@ -354,16 +362,29 @@ public class TagService : ITagService
         else
         {
             var project = await _context.Projects.FirstOrDefaultAsync(p => p.Id == tag.ProjectId);
-            bool isCreator = project != null && project.CreatedBy == userId;
-            if (!isOwner && !isCreator)
+            bool isProjectCreator = project != null && project.CreatedBy == userId;
+
+            if (!isOwner && !isProjectCreator)
             {
                 _logger.LogWarning("User {UserId} is not authorized to delete project tag {TagId}", userId, tagId);
                 throw new ForbiddenException("Only workspace owners or project creators can delete project-level tags.");
             }
         }
 
+        var affectedProjectId = tag.ProjectId;
+        var affectedWorkspaceId = tag.WorkspaceId;
+
         _context.Tags.Remove(tag);
         await _context.SaveChangesAsync();
+
+        if (affectedProjectId.HasValue)
+        {
+            await _cache.RemoveByTagAsync($"project:{affectedProjectId.Value}:tasks");
+        }
+        else
+        {
+            await _cache.RemoveByTagAsync($"workspace:{affectedWorkspaceId}:tasks");
+        }
     }
 
     private static TaskResponseDto MapToDto(TaskEntity task)
@@ -375,8 +396,8 @@ public class TagService : ITagService
             ProjectName = task.Project?.Name,
             Title = task.Title,
             Description = task.Description,
-            Status = task.Status,
-            Priority = task.Priority,
+            Status = task.Status.ToWireString(),
+            Priority = task.Priority.ToWireString(),
             AssigneeId = task.AssigneeId,
             AssigneeName = task.Assignee?.Name,
             CreatedBy = task.CreatedBy,
