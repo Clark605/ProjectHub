@@ -49,8 +49,9 @@ class VersionInfoTile extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        l10n?.appVersionFormat(version, buildNumber) ??
-                            'Version $version (Build $buildNumber) • Flutter & .NET 10',
+                        '${l10n?.appVersionFormat(version, buildNumber) ?? 'Version $version (Build $buildNumber) • Flutter & .NET 10'} • Made with ❤️ by Clark Remon',
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurface.withValues(
                             alpha: 0.6,
