@@ -1,0 +1,24 @@
+# Ignore version control and environment metadata
+**/.git
+**/.github
+**/.vs
+**/.vscode
+**/.agents
+**/.maestro
+**/.stitch
+
+# Ignore frontend and documentation
+client/
+docs/
+scripts/
+
+# Ignore compiled artifacts and test assemblies
+**/bin/
+**/obj/
+**/logs/
+server/ProjectHub.Api.Tests/
+server/ProjectHub.Api/migrate.sql
+
+# Ignore secrets and environment files
+.env*
+*.md
