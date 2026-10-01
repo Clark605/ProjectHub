@@ -37,7 +37,7 @@ erDiagram
 
     Projects ||--o{ Tasks : "contains (Cascade)"
     Projects ||--o{ Tags : "scopes (Cascade)"
-    Projects ||--o{ ActivityEvents : "contextualizes (Restrict)"
+    Projects ||--o{ ActivityEvents : "contextualizes (SetNull)"
 
     Tasks ||--o{ TaskTags : "categorized (Cascade)"
     Tags ||--o{ TaskTags : "applied (Cascade)"
@@ -241,7 +241,7 @@ Immutable audit log and activity timeline recording mutations across workspaces,
   - `IX_ActivityEvents_ProjectId_CreatedAt`: Composite index on `(ProjectId, CreatedAt)` for project timeline feeds.
 - **Foreign Keys:**
   - `FK_ActivityEvents_WorkSpaces_WorkspaceId`: `WorkspaceId` $\rightarrow$ `WorkSpaces(Id)` `ON DELETE CASCADE`.
-  - `FK_ActivityEvents_Projects_ProjectId`: `ProjectId` $\rightarrow$ `Projects(Id)` (Optional reference).
+  - `FK_ActivityEvents_Projects_ProjectId`: `ProjectId` $\rightarrow$ `Projects(Id)` `ON DELETE SET NULL`.
 
 ---
 
@@ -409,6 +409,7 @@ The database schema is versioned via Entity Framework Core code-first migrations
 | `20260913120747_AddWorkspaceAccentColor` | Added AccentColor column to WorkSpaces defaulting to `'teal'` (ADR-0015). |
 | `20260920121337_AddCommentsAndTags` | Added Comments, Tags (dual-scoped), and TaskTags join tables (ADR-0017). |
 | `20260922072930_MigrateTaskStatusAndPriorityToEnums` | Migrated Task Status and Priority to PostgreSQL `smallint` enums with composite indexing (ADR-0018). |
+| `20261001125026_SetNullOnDeleteActivityEventProject` | Configure `ON DELETE SET NULL` on `FK_ActivityEvents_Projects_ProjectId` to preserve workspace audit timeline on project deletion. |
 
 ---
 
@@ -416,8 +417,8 @@ The database schema is versioned via Entity Framework Core code-first migrations
 
 1. **Workspace Cascade (`ON DELETE CASCADE`):**
    Deleting a `WorkSpace` permanently cascades and deletes all associated `WorkspaceMembers`, `Projects`, child `Tasks`, `Comments`, `Tags`, `TaskTags`, and `ActivityEvents`.
-2. **Project Cascade (`ON DELETE CASCADE`):**
-   Deleting a `Project` permanently cascades and deletes all its `Tasks`, `Comments`, `TaskTags`, and project-scoped `Tags`.
+2. **Project Cascade (`ON DELETE CASCADE` / `ON DELETE SET NULL`):**
+   Deleting a `Project` permanently cascades and deletes all its `Tasks`, `Comments`, `TaskTags`, and project-scoped `Tags`. Associated `ActivityEvents` preserve their workspace audit record with `ProjectId` set to `NULL` (`ON DELETE SET NULL`).
 3. **Task Cascade (`ON DELETE CASCADE`):**
    Deleting a `Task` permanently cascades and removes its `Comments` and `TaskTags` associations.
 4. **Member Removal & Assignee Set Null (`ON DELETE SET NULL` / Unassignment Trigger):**
