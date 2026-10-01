@@ -8,19 +8,25 @@ import 'package:client/features/dashboard/cubit/activity_stream_state.dart';
 import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/ui/widgets/activity_filter_bottom_sheet.dart';
 import 'package:client/features/dashboard/ui/widgets/activity_tile.dart';
+import 'package:client/features/projects/data/models/project_dto.dart';
+import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class ActivityStreamScreen extends StatefulWidget {
   final int workspaceId;
   final ActivityRepository? activityRepository;
+  final ProjectRepository? projectRepository;
   final ActivityStreamCubit? cubit;
+  final List<ProjectDto>? initialProjects;
 
   const ActivityStreamScreen({
     super.key,
     required this.workspaceId,
     this.activityRepository,
+    this.projectRepository,
     this.cubit,
+    this.initialProjects,
   });
 
   @override
@@ -30,10 +36,17 @@ class ActivityStreamScreen extends StatefulWidget {
 class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
   late final ActivityStreamCubit _cubit;
   late final bool _isInternalCubit;
+  List<ProjectDto> _projects = [];
 
   @override
   void initState() {
     super.initState();
+    if (widget.initialProjects != null) {
+      _projects = widget.initialProjects!;
+    } else {
+      _loadProjects();
+    }
+
     if (widget.cubit != null) {
       _cubit = widget.cubit!;
       _isInternalCubit = false;
@@ -44,6 +57,18 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
       _isInternalCubit = true;
       _cubit.loadActivities(widget.workspaceId);
     }
+  }
+
+  Future<void> _loadProjects() async {
+    try {
+      final repo = widget.projectRepository ?? getIt<ProjectRepository>();
+      final projects = await repo.getProjects(widget.workspaceId);
+      if (mounted) {
+        setState(() {
+          _projects = projects;
+        });
+      }
+    } catch (_) {}
   }
 
   @override
@@ -58,6 +83,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
     ActivityFilterBottomSheet.show(
       context,
       initialFilter: state.filter,
+      availableProjects: _projects,
       onApply: (updatedFilter) {
         _cubit.updateFilter(updatedFilter);
       },

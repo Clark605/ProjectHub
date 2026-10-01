@@ -306,10 +306,20 @@ public class ProjectService : IProjectService
         }
 
         int workspaceId = project.WorkspaceId;
+        string projectName = project.Name;
         _context.Projects.Remove(project);
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Project {ProjectId} deleted successfully by user {UserId}", projectId, userId);
+
+        var actor = await _userManager.FindByIdAsync(userId);
+        await _activityLogger.LogAsync(
+            workspaceId,
+            userId,
+            actor?.Name ?? userId,
+            ActivityEventType.ProjectDeleted,
+            projectId: null,
+            metadata: new { ProjectName = projectName });
 
         // Invalidate project details cache and workspace projects list cache
         await _cache.RemoveByTagAsync($"project:{projectId}");

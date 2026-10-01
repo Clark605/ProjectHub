@@ -153,6 +153,9 @@ public class WorkspaceService : IWorkspaceService
             throw new ForbiddenException($"User {userId} is not the owner of workspace {workspaceId}");
         }
 
+        string oldName = workspaceMember.Workspace.Name;
+        string oldDescription = workspaceMember.Workspace.Description;
+
         workspaceMember.Workspace.Name = request.Name;
         workspaceMember.Workspace.Description = request.Description;
         workspaceMember.Workspace.AccentColor = request.AccentColor.Trim().ToLowerInvariant();
@@ -161,13 +164,17 @@ public class WorkspaceService : IWorkspaceService
         await _context.SaveChangesAsync();
         _logger.LogInformation("Workspace {WorkspaceId} updated successfully", workspaceId);
 
-        var actor = await _userManager.FindByIdAsync(userId);
-        await _activityLogger.LogAsync(
-            workspaceId,
-            userId,
-            actor?.Name ?? userId,
-            ActivityEventType.WorkspaceUpdated,
-            metadata: new { request.Name });
+        bool isContentUpdated = oldName != request.Name || oldDescription != request.Description;
+        if (isContentUpdated)
+        {
+            var actor = await _userManager.FindByIdAsync(userId);
+            await _activityLogger.LogAsync(
+                workspaceId,
+                userId,
+                actor?.Name ?? userId,
+                ActivityEventType.WorkspaceUpdated,
+                metadata: new { request.Name });
+        }
 
         // Invalidate workspace details cache and all members' workspace list caches
         await _cache.RemoveByTagAsync($"workspace:{workspaceId}");

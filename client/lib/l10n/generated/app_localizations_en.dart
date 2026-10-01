@@ -511,6 +511,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get activityTaskCreated => 'created task';
 
   @override
+  String get activityTaskUpdated => 'updated task';
+
+  @override
   String get activityTaskStatusChanged => 'updated task status';
 
   @override
@@ -527,6 +530,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activityProjectArchived => 'archived project';
+
+  @override
+  String get activityProjectDeleted => 'deleted project';
 
   @override
   String get activityMemberAdded => 'joined the workspace';
@@ -1023,7 +1029,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String activityMovedTo(String title, String status) {
-    return 'moved \"$title\" to $status';
+    return 'moved $title to $status';
   }
 
   @override
@@ -1033,7 +1039,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String activityAssignedTo(String title, String assignee) {
-    return 'assigned \"$title\" to $assignee';
+    return 'assigned $title to $assignee';
   }
 
   @override
@@ -1043,7 +1049,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String activityUpdatedProjectTo(String title, String status) {
-    return 'updated project \"$title\" to $status';
+    return 'updated project $title to $status';
   }
 
   @override
@@ -1063,17 +1069,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String activityRenamedWorkspaceTo(String title) {
-    return 'renamed workspace to \"$title\"';
+    return 'renamed workspace to $title';
   }
 
   @override
   String activityPerformedEventOn(String event, String title) {
-    return 'performed $event on \"$title\"';
+    return 'performed $event on $title';
   }
 
   @override
   String activityPerformedEvent(String event) {
     return 'performed $event';
+  }
+
+  @override
+  String activityInProject(String project) {
+    return 'in $project';
   }
 
   @override

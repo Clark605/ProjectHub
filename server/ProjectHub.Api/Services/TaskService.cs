@@ -152,7 +152,7 @@ public class TaskService : ITaskService
             ActivityEventType.TaskCreated,
             projectId: task.ProjectId,
             taskId: task.Id,
-            metadata: new { task.Title, Status = task.Status.ToWireString(), Priority = task.Priority.ToWireString() });
+            metadata: new { task.Title, ProjectName = project.Name, Status = task.Status.ToWireString(), Priority = task.Priority.ToWireString() });
 
         var responseDto = new TaskResponseDto
         {
@@ -354,6 +354,16 @@ public class TaskService : ITaskService
 
         _logger.LogInformation("Task {TaskId} updated successfully", taskId);
 
+        var actor = await _userManager.FindByIdAsync(userId);
+        await _activityLogger.LogAsync(
+            task.Project.WorkspaceId,
+            userId,
+            actor?.Name ?? userId,
+            ActivityEventType.TaskUpdated,
+            projectId: task.ProjectId,
+            taskId: task.Id,
+            metadata: new { task.Title, ProjectName = task.Project.Name, Priority = task.Priority.ToWireString() });
+
         // Invalidate caches
         await _cache.RemoveByTagAsync($"project:{task.ProjectId}:tasks");
         if (!string.IsNullOrEmpty(task.AssigneeId))
@@ -401,6 +411,7 @@ public class TaskService : ITaskService
 
         var workspaceId = task.Project.WorkspaceId;
         var projectId = task.ProjectId;
+        var projectName = task.Project.Name;
         var taskTitle = task.Title;
         var assigneeId = task.AssigneeId;
 
@@ -424,7 +435,7 @@ public class TaskService : ITaskService
             ActivityEventType.TaskDeleted,
             projectId: projectId,
             taskId: taskId,
-            metadata: new { Title = taskTitle });
+            metadata: new { Title = taskTitle, ProjectName = projectName });
 
         await _hubContext.Clients.Group($"workspace-{workspaceId}")
             .SendAsync("TaskDeleted", new { TaskId = taskId, ProjectId = projectId });
@@ -489,7 +500,7 @@ public class TaskService : ITaskService
             ActivityEventType.TaskStatusChanged,
             projectId: task.ProjectId,
             taskId: task.Id,
-            metadata: new { task.Title, OldStatus = oldStatus, NewStatus = task.Status.ToWireString() });
+            metadata: new { task.Title, ProjectName = task.Project.Name, OldStatus = oldStatus, NewStatus = task.Status.ToWireString() });
 
         var response = MapToDto(task);
 
@@ -568,7 +579,7 @@ public class TaskService : ITaskService
             ActivityEventType.TaskAssigned,
             projectId: task.ProjectId,
             taskId: task.Id,
-            metadata: new { task.Title, AssigneeId = task.AssigneeId, AssigneeName = assigneeName });
+            metadata: new { task.Title, ProjectName = task.Project.Name, AssigneeId = task.AssigneeId, AssigneeName = assigneeName });
 
         var response = MapToDto(task, assigneeName: assigneeName);
 

@@ -63,6 +63,7 @@ class ApiConstants {
     int limit = 20,
     String? eventType,
     String? search,
+    int? projectId,
     String? sortBy,
     bool? sortDescending,
     DateTime? startDate,
@@ -74,6 +75,9 @@ class ApiConstants {
     }
     if (search != null && search.isNotEmpty) {
       params['search'] = search;
+    }
+    if (projectId != null) {
+      params['projectId'] = projectId.toString();
     }
     if (sortBy != null && sortBy.isNotEmpty) {
       params['sortBy'] = sortBy;

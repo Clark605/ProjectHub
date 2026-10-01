@@ -141,12 +141,12 @@ void main() {
 
       expect(
         allPlainText,
-        contains('Google Test User created task "play haaha"'),
+        contains('Google Test User created task play haaha'),
       );
-      expect(allPlainText, contains('Google Test User created project "hi"'));
+      expect(allPlainText, contains('Google Test User created project hi'));
       expect(
         allPlainText,
-        contains('Google Test User moved "play haaha" to Done'),
+        contains('Google Test User moved play haaha to Done'),
       );
     });
   });
