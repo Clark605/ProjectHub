@@ -125,6 +125,11 @@ class VoiceListeningOverlay extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.electricVioletContainer,
                         foregroundColor: Colors.white,
+                        minimumSize: const Size(0, 42),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
