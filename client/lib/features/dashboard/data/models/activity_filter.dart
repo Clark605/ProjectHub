@@ -6,6 +6,7 @@ enum ActivitySortOrder { newestFirst, oldestFirst }
 /// Pure filtering and sorting utility for workspace activity stream.
 class ActivityFilter {
   final String category;
+  final int? projectId;
   final String? eventType;
   final String? search;
   final ActivitySortOrder sortOrder;
@@ -13,6 +14,7 @@ class ActivityFilter {
 
   const ActivityFilter({
     this.category = 'All',
+    this.projectId,
     this.eventType,
     this.search,
     this.sortOrder = ActivitySortOrder.newestFirst,
@@ -21,6 +23,7 @@ class ActivityFilter {
 
   const ActivityFilter.empty()
     : category = 'All',
+      projectId = null,
       eventType = null,
       search = null,
       sortOrder = ActivitySortOrder.newestFirst,
@@ -28,6 +31,7 @@ class ActivityFilter {
 
   bool get hasActiveFilters =>
       category != 'All' ||
+      projectId != null ||
       (eventType != null && eventType!.isNotEmpty) ||
       (search != null && search!.trim().isNotEmpty) ||
       sortOrder != ActivitySortOrder.newestFirst ||
@@ -35,6 +39,8 @@ class ActivityFilter {
 
   ActivityFilter copyWith({
     String? category,
+    int? projectId,
+    bool clearProjectId = false,
     String? eventType,
     String? search,
     ActivitySortOrder? sortOrder,
@@ -43,6 +49,7 @@ class ActivityFilter {
   }) {
     return ActivityFilter(
       category: category ?? this.category,
+      projectId: clearProjectId ? null : (projectId ?? this.projectId),
       eventType: eventType ?? this.eventType,
       search: search ?? this.search,
       sortOrder: sortOrder ?? this.sortOrder,
@@ -53,6 +60,11 @@ class ActivityFilter {
   /// Pure client-side filtering and sorting for instant evaluation.
   List<ActivityEventDto> apply(List<ActivityEventDto> items) {
     final result = items.where((activity) {
+      // Project filter
+      if (projectId != null && activity.projectId != projectId) {
+        return false;
+      }
+
       // Category filter
       if (category != 'All') {
         final normCategory = category.toLowerCase();
@@ -166,6 +178,10 @@ class ActivityFilter {
       params['endDate'] = dateRange!.end.toIso8601String();
     }
 
+    if (projectId != null) {
+      params['projectId'] = projectId;
+    }
+
     return params;
   }
 
@@ -174,6 +190,7 @@ class ActivityFilter {
       identical(this, other) ||
       other is ActivityFilter &&
           runtimeType == other.runtimeType &&
+          projectId == other.projectId &&
           category == other.category &&
           eventType == other.eventType &&
           search == other.search &&
@@ -182,6 +199,7 @@ class ActivityFilter {
 
   @override
   int get hashCode =>
+      projectId.hashCode ^
       category.hashCode ^
       eventType.hashCode ^
       search.hashCode ^

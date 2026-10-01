@@ -52,6 +52,7 @@ class ActivityRepositoryImpl implements ActivityRepository {
           limit: limit,
           eventType: eventTypeParam,
           search: filter?.search,
+          projectId: filter?.projectId,
           sortBy: 'date',
           sortDescending:
               filter == null ||

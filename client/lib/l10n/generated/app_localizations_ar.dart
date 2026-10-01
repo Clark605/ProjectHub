@@ -508,6 +508,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get activityTaskCreated => 'أنشأ مهمة';
 
   @override
+  String get activityTaskUpdated => 'حدّث مهمة';
+
+  @override
   String get activityTaskStatusChanged => 'حدّث حالة المهمة';
 
   @override
@@ -524,6 +527,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get activityProjectArchived => 'أرشف مشروعاً';
+
+  @override
+  String get activityProjectDeleted => 'حذف مشروعاً';
 
   @override
   String get activityMemberAdded => 'انضم إلى مساحة العمل';
@@ -1019,7 +1025,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String activityMovedTo(String title, String status) {
-    return 'نقل \"$title\" إلى $status';
+    return 'نقل $title إلى $status';
   }
 
   @override
@@ -1029,7 +1035,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String activityAssignedTo(String title, String assignee) {
-    return 'عيّن \"$title\" إلى $assignee';
+    return 'عيّن $title إلى $assignee';
   }
 
   @override
@@ -1039,7 +1045,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String activityUpdatedProjectTo(String title, String status) {
-    return 'حدّث مشروع \"$title\" إلى $status';
+    return 'حدّث مشروع $title إلى $status';
   }
 
   @override
@@ -1059,17 +1065,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String activityRenamedWorkspaceTo(String title) {
-    return 'أعاد تسمية مساحة العمل إلى \"$title\"';
+    return 'أعاد تسمية مساحة العمل إلى $title';
   }
 
   @override
   String activityPerformedEventOn(String event, String title) {
-    return 'أجرى $event على \"$title\"';
+    return 'أجرى $event على $title';
   }
 
   @override
   String activityPerformedEvent(String event) {
     return 'أجرى $event';
+  }
+
+  @override
+  String activityInProject(String project) {
+    return 'في $project';
   }
 
   @override

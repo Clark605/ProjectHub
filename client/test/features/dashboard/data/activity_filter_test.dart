@@ -156,5 +156,49 @@ void main() {
       expect(params['sortBy'], 'date');
       expect(params['sortDescending'], isFalse);
     });
+
+    test('filters by projectId', () {
+      final projectActivities = [
+        ActivityEventDto(
+          id: 1,
+          workspaceId: 10,
+          projectId: 42,
+          actorId: 'u1',
+          actorName: 'Alice',
+          eventType: 'TaskCreated',
+          metadata: {'Title': 'Task 1', 'ProjectName': 'Alpha'},
+          createdAt: now,
+        ),
+        ActivityEventDto(
+          id: 2,
+          workspaceId: 10,
+          projectId: 99,
+          actorId: 'u2',
+          actorName: 'Bob',
+          eventType: 'TaskCreated',
+          metadata: {'Title': 'Task 2', 'ProjectName': 'Beta'},
+          createdAt: now,
+        ),
+        ActivityEventDto(
+          id: 3,
+          workspaceId: 10,
+          actorId: 'u3',
+          actorName: 'Charlie',
+          eventType: 'WorkspaceUpdated',
+          metadata: {'Name': 'New WS'},
+          createdAt: now,
+        ),
+      ];
+
+      const filter = ActivityFilter(projectId: 42);
+      final filtered = filter.apply(projectActivities);
+
+      expect(filtered.length, 1);
+      expect(filtered.first.id, 1);
+      expect(filter.hasActiveFilters, isTrue);
+
+      final params = filter.toQueryParams();
+      expect(params['projectId'], 42);
+    });
   });
 }

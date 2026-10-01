@@ -63,7 +63,14 @@ class ActivityEventDto {
       metadata?['Title'] as String? ??
       metadata?['title'] as String? ??
       metadata?['Name'] as String? ??
-      metadata?['name'] as String?;
+      metadata?['name'] as String? ??
+      metadata?['ProjectName'] as String? ??
+      metadata?['projectName'] as String?;
+
+  /// Parent project name for contextualizing tasks or project events
+  String? get projectName =>
+      metadata?['ProjectName'] as String? ??
+      metadata?['projectName'] as String?;
 
   /// Status of the target entity
   String? get status =>

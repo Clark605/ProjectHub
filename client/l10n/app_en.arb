@@ -189,12 +189,14 @@
   "viewAll": "View All",
   "allCaughtUp": "All caught up! No active tasks assigned.",
   "activityTaskCreated": "created task",
+  "activityTaskUpdated": "updated task",
   "activityTaskStatusChanged": "updated task status",
   "activityTaskAssigned": "assigned a task",
   "activityTaskDeleted": "deleted a task",
   "activityProjectCreated": "created project",
   "activityProjectStatusChanged": "updated project status",
   "activityProjectArchived": "archived project",
+  "activityProjectDeleted": "deleted project",
   "activityMemberAdded": "joined the workspace",
   "activityMemberRemoved": "left the workspace",
   "activityWorkspaceCreated": "created this workspace",
@@ -557,7 +559,7 @@
   "@connectionErrorMessage": {
     "description": "Dialog content when connection fails"
   },
-  "activityMovedTo": "moved \"{title}\" to {status}",
+  "activityMovedTo": "moved {title} to {status}",
   "@activityMovedTo": {
     "description": "Activity span when task moved to new status",
     "placeholders": {
@@ -578,7 +580,7 @@
       }
     }
   },
-  "activityAssignedTo": "assigned \"{title}\" to {assignee}",
+  "activityAssignedTo": "assigned {title} to {assignee}",
   "@activityAssignedTo": {
     "description": "Activity span when task assigned to user",
     "placeholders": {
@@ -599,7 +601,7 @@
       }
     }
   },
-  "activityUpdatedProjectTo": "updated project \"{title}\" to {status}",
+  "activityUpdatedProjectTo": "updated project {title} to {status}",
   "@activityUpdatedProjectTo": {
     "description": "Activity span when project status updated",
     "placeholders": {
@@ -641,7 +643,7 @@
       }
     }
   },
-  "activityRenamedWorkspaceTo": "renamed workspace to \"{title}\"",
+  "activityRenamedWorkspaceTo": "renamed workspace to {title}",
   "@activityRenamedWorkspaceTo": {
     "description": "Activity span when workspace renamed",
     "placeholders": {
@@ -650,7 +652,7 @@
       }
     }
   },
-  "activityPerformedEventOn": "performed {event} on \"{title}\"",
+  "activityPerformedEventOn": "performed {event} on {title}",
   "@activityPerformedEventOn": {
     "description": "Default activity span with title",
     "placeholders": {
@@ -667,6 +669,19 @@
     "description": "Default activity span without title",
     "placeholders": {
       "event": {
+        "type": "String"
+      }
+    }
+  },
+  "activityProjectDeleted": "deleted project",
+  "@activityProjectDeleted": {
+    "description": "Activity span when project is deleted"
+  },
+  "activityInProject": "in {project}",
+  "@activityInProject": {
+    "description": "Project context suffix for task activity items",
+    "placeholders": {
+      "project": {
         "type": "String"
       }
     }

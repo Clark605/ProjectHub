@@ -1046,6 +1046,12 @@ abstract class AppLocalizations {
   /// **'created task'**
   String get activityTaskCreated;
 
+  /// No description provided for @activityTaskUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'updated task'**
+  String get activityTaskUpdated;
+
   /// No description provided for @activityTaskStatusChanged.
   ///
   /// In en, this message translates to:
@@ -1081,6 +1087,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'archived project'**
   String get activityProjectArchived;
+
+  /// Activity span when project is deleted
+  ///
+  /// In en, this message translates to:
+  /// **'deleted project'**
+  String get activityProjectDeleted;
 
   /// No description provided for @activityMemberAdded.
   ///
@@ -1973,7 +1985,7 @@ abstract class AppLocalizations {
   /// Activity span when task moved to new status
   ///
   /// In en, this message translates to:
-  /// **'moved \"{title}\" to {status}'**
+  /// **'moved {title} to {status}'**
   String activityMovedTo(String title, String status);
 
   /// Activity span when task with unknown title moved to new status
@@ -1985,7 +1997,7 @@ abstract class AppLocalizations {
   /// Activity span when task assigned to user
   ///
   /// In en, this message translates to:
-  /// **'assigned \"{title}\" to {assignee}'**
+  /// **'assigned {title} to {assignee}'**
   String activityAssignedTo(String title, String assignee);
 
   /// Activity span when task with unknown title assigned to user
@@ -1997,7 +2009,7 @@ abstract class AppLocalizations {
   /// Activity span when project status updated
   ///
   /// In en, this message translates to:
-  /// **'updated project \"{title}\" to {status}'**
+  /// **'updated project {title} to {status}'**
   String activityUpdatedProjectTo(String title, String status);
 
   /// Activity span when member added with role
@@ -2021,13 +2033,13 @@ abstract class AppLocalizations {
   /// Activity span when workspace renamed
   ///
   /// In en, this message translates to:
-  /// **'renamed workspace to \"{title}\"'**
+  /// **'renamed workspace to {title}'**
   String activityRenamedWorkspaceTo(String title);
 
   /// Default activity span with title
   ///
   /// In en, this message translates to:
-  /// **'performed {event} on \"{title}\"'**
+  /// **'performed {event} on {title}'**
   String activityPerformedEventOn(String event, String title);
 
   /// Default activity span without title
@@ -2035,6 +2047,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'performed {event}'**
   String activityPerformedEvent(String event);
+
+  /// Project context suffix for task activity items
+  ///
+  /// In en, this message translates to:
+  /// **'in {project}'**
+  String activityInProject(String project);
 
   /// Role label for Admin
   ///

@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
+import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class ActivityFilterBottomSheet extends StatefulWidget {
   final ActivityFilter initialFilter;
   final ValueChanged<ActivityFilter> onApply;
+  final List<ProjectDto> availableProjects;
 
   const ActivityFilterBottomSheet({
     super.key,
     required this.initialFilter,
     required this.onApply,
+    this.availableProjects = const [],
   });
 
   static Future<void> show(
     BuildContext context, {
     required ActivityFilter initialFilter,
     required ValueChanged<ActivityFilter> onApply,
+    List<ProjectDto> availableProjects = const [],
   }) {
     return showModalBottomSheet<void>(
       context: context,
@@ -25,6 +29,7 @@ class ActivityFilterBottomSheet extends StatefulWidget {
       builder: (ctx) => ActivityFilterBottomSheet(
         initialFilter: initialFilter,
         onApply: onApply,
+        availableProjects: availableProjects,
       ),
     );
   }
@@ -36,6 +41,7 @@ class ActivityFilterBottomSheet extends StatefulWidget {
 
 class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
   late String _selectedCategory;
+  int? _selectedProjectId;
   late ActivitySortOrder _selectedSortOrder;
   late final TextEditingController _searchController;
   DateTimeRange? _selectedDateRange;
@@ -44,6 +50,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
   void initState() {
     super.initState();
     _selectedCategory = widget.initialFilter.category;
+    _selectedProjectId = widget.initialFilter.projectId;
     _selectedSortOrder = widget.initialFilter.sortOrder;
     _searchController = TextEditingController(
       text: widget.initialFilter.search ?? '',
@@ -60,6 +67,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
   void _reset() {
     setState(() {
       _selectedCategory = 'All';
+      _selectedProjectId = null;
       _selectedSortOrder = ActivitySortOrder.newestFirst;
       _searchController.clear();
       _selectedDateRange = null;
@@ -69,6 +77,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
   void _apply() {
     final updated = ActivityFilter(
       category: _selectedCategory,
+      projectId: _selectedProjectId,
       search: _searchController.text.trim().isEmpty
           ? null
           : _searchController.text.trim(),
@@ -244,6 +253,83 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 }).toList(),
               ),
               const SizedBox(height: 16),
+
+              // Project Section
+              if (widget.availableProjects.isNotEmpty) ...[
+                Text(
+                  l10n?.projectActivities ?? 'Projects',
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ChoiceChip(
+                      label: Text(l10n?.allActivities ?? 'All'),
+                      selected: _selectedProjectId == null,
+                      selectedColor: selectedBgColor,
+                      checkmarkColor: selectedTextColor,
+                      side: BorderSide(
+                        color: _selectedProjectId == null
+                            ? selectedBorderColor
+                            : unselectedBorderColor,
+                        width: _selectedProjectId == null ? 1.5 : 1.0,
+                      ),
+                      labelStyle: TextStyle(
+                        color: _selectedProjectId == null
+                            ? selectedTextColor
+                            : unselectedTextColor,
+                        fontWeight: _selectedProjectId == null
+                            ? FontWeight.w600
+                            : FontWeight.w500,
+                        fontSize: 13,
+                      ),
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() {
+                            _selectedProjectId = null;
+                          });
+                        }
+                      },
+                      materialTapTargetSize: MaterialTapTargetSize.padded,
+                    ),
+                    ...widget.availableProjects.map((proj) {
+                      final isSelected = _selectedProjectId == proj.id;
+                      return ChoiceChip(
+                        label: Text(proj.name),
+                        selected: isSelected,
+                        selectedColor: selectedBgColor,
+                        checkmarkColor: selectedTextColor,
+                        side: BorderSide(
+                          color: isSelected
+                              ? selectedBorderColor
+                              : unselectedBorderColor,
+                          width: isSelected ? 1.5 : 1.0,
+                        ),
+                        labelStyle: TextStyle(
+                          color: isSelected
+                              ? selectedTextColor
+                              : unselectedTextColor,
+                          fontWeight: isSelected
+                              ? FontWeight.w600
+                              : FontWeight.w500,
+                          fontSize: 13,
+                        ),
+                        onSelected: (selected) {
+                          setState(() {
+                            _selectedProjectId = selected ? proj.id : null;
+                          });
+                        },
+                        materialTapTargetSize: MaterialTapTargetSize.padded,
+                      );
+                    }),
+                  ],
+                ),
+                const SizedBox(height: 16),
+              ],
 
               // Sort Section
               Text(
