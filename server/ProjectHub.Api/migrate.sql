@@ -711,3 +711,28 @@ BEGIN
 END $EF$;
 COMMIT;
 
+START TRANSACTION;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20261001125026_SetNullOnDeleteActivityEventProject') THEN
+    ALTER TABLE "ActivityEvents" DROP CONSTRAINT "FK_ActivityEvents_Projects_ProjectId";
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20261001125026_SetNullOnDeleteActivityEventProject') THEN
+    ALTER TABLE "ActivityEvents" ADD CONSTRAINT "FK_ActivityEvents_Projects_ProjectId" FOREIGN KEY ("ProjectId") REFERENCES "Projects" ("Id") ON DELETE SET NULL;
+    END IF;
+END $EF$;
+
+DO $EF$
+BEGIN
+    IF NOT EXISTS(SELECT 1 FROM "__EFMigrationsHistory" WHERE "MigrationId" = '20261001125026_SetNullOnDeleteActivityEventProject') THEN
+    INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+    VALUES ('20261001125026_SetNullOnDeleteActivityEventProject', '10.0.11');
+    END IF;
+END $EF$;
+COMMIT;
+

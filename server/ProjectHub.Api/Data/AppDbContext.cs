@@ -99,6 +99,16 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
         builder.Entity<ActivityEvent>(entity =>
         {
+            entity.HasOne(a => a.Workspace)
+                .WithMany()
+                .HasForeignKey(a => a.WorkspaceId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(a => a.Project)
+                .WithMany()
+                .HasForeignKey(a => a.ProjectId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             entity.HasIndex(a => new { a.WorkspaceId, a.CreatedAt });
             entity.HasIndex(a => new { a.ProjectId, a.CreatedAt });
             entity.Property(a => a.EventType).HasConversion<string>().HasMaxLength(50);
