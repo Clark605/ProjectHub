@@ -46,6 +46,8 @@ dependencies:
   device_info_plus: ^12.4.0
   jwt_decoder: ^2.0.1
   package_info_plus: ^8.3.0
+  speech_to_text: ^7.4.0
+  permission_handler: ^13.0.2
 
 dev_dependencies:
   flutter_test:

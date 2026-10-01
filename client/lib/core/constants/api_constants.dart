@@ -107,6 +107,9 @@ class ApiConstants {
   static String taskStatus(int id) => '$_v1/tasks/$id/status';
   static String taskAssignee(int id) => '$_v1/tasks/$id/assignee';
 
+  // AI
+  static const String aiParseTask = '$_v1/ai/parse-task';
+
   // Health
   static const String health = '$_v1/health';
 
