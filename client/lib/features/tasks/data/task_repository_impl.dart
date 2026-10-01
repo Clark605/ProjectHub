@@ -129,7 +129,7 @@ class TaskRepositoryImpl implements TaskRepository {
     if (_projectTasksCache.containsKey(projectId)) {
       _projectTasksCache[projectId] = [
         created,
-        ..._projectTasksCache[projectId]!,
+        ..._projectTasksCache[projectId]!.where((t) => t.id != created.id),
       ];
     }
     _myTasksCache.clear();
