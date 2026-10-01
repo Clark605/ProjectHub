@@ -9,7 +9,11 @@ Start-Process powershell -ArgumentList "-NoExit", "-Command", "Write-Host 'Start
 Write-Host "Launching Flutter Client..." -ForegroundColor Cyan
 Push-Location "$PSScriptRoot/../client"
 try {
-    flutter run
+    if (Test-Path "$PSScriptRoot/../.env") {
+        flutter run --dart-define-from-file=../.env
+    } else {
+        flutter run
+    }
 }
 finally {
     Pop-Location
