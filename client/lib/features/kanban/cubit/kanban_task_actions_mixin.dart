@@ -70,9 +70,18 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
           );
         }
         final current = state;
-        emitLoaded(
-          current is KanbanLoaded ? [created, ...current.allTasks] : [created],
-        );
+        if (current is KanbanLoaded) {
+          final existingIndex = current.allTasks.indexWhere(
+            (t) => t.id == created.id,
+          );
+          final updatedAll = existingIndex != -1
+              ? (List<TaskDto>.from(current.allTasks)
+                  ..[existingIndex] = created)
+              : [created, ...current.allTasks];
+          emitLoaded(updatedAll);
+        } else {
+          emitLoaded([created]);
+        }
         return created;
       },
       onError: (msg) => setLoadedError(msg),

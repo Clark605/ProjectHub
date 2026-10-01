@@ -8,6 +8,7 @@ import 'package:client/features/comments/data/models/comment_dto.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
+import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import '../ui/fakes/kanban_test_fakes.dart';
 
@@ -197,4 +198,100 @@ void main() {
       expect(isEmpty, isTrue);
     },
   );
+
+  test(
+    'createTask reconciles idempotently and does not duplicate task when SignalR taskCreated arrives first',
+    () async {
+      final repo = _RealtimeTaskTestRepo(
+        [sampleTask],
+        onBeforeCreateReturn: (created) async {
+          signalR.emitTaskCreated(created);
+          await pumpEventQueue();
+        },
+      );
+      final testCubit = KanbanCubit(
+        repo,
+        TestProjectRepository(testProject),
+        signalR,
+      );
+      await testCubit.loadTasks(1);
+
+      await testCubit.createTask(
+        1,
+        const CreateTaskRequest(title: 'Created Task'),
+      );
+
+      final loaded = testCubit.state as KanbanLoaded;
+      final occurrences = loaded.allTasks.where((t) => t.id == 200).length;
+      expect(occurrences, 1);
+      await testCubit.close();
+    },
+  );
+
+  test(
+    'createTask with initialStatus updates status cleanly and does not duplicate when SignalR emits Backlog first',
+    () async {
+      final repo = _RealtimeTaskTestRepo(
+        [sampleTask],
+        onBeforeCreateReturn: (created) async {
+          signalR.emitTaskCreated(created);
+          await pumpEventQueue();
+        },
+      );
+      final testCubit = KanbanCubit(
+        repo,
+        TestProjectRepository(testProject),
+        signalR,
+      );
+      await testCubit.loadTasks(1);
+
+      final created = await testCubit.createTask(
+        1,
+        const CreateTaskRequest(title: 'In Progress Task'),
+        initialStatus: 'InProgress',
+      );
+
+      expect(created?.status, 'InProgress');
+      final loaded = testCubit.state as KanbanLoaded;
+      final occurrences = loaded.allTasks.where((t) => t.id == 200).length;
+      expect(occurrences, 1);
+      expect(
+        loaded.allTasks.firstWhere((t) => t.id == 200).status,
+        'InProgress',
+      );
+      await testCubit.close();
+    },
+  );
+}
+
+class _RealtimeTaskTestRepo extends TestTaskRepository {
+  final Future<void> Function(TaskDto created)? onBeforeCreateReturn;
+  TaskDto? lastTask;
+
+  _RealtimeTaskTestRepo(super.tasks, {this.onBeforeCreateReturn});
+
+  @override
+  Future<TaskDto> createTask(int projectId, CreateTaskRequest request) async {
+    final created = TaskDto(
+      id: 200,
+      projectId: 1,
+      title: request.title,
+      status: 'Backlog',
+    );
+    lastTask = created;
+    if (onBeforeCreateReturn != null) {
+      await onBeforeCreateReturn!(created);
+    }
+    return created;
+  }
+
+  @override
+  Future<TaskDto> updateTaskStatus(int taskId, String status) async {
+    final updated =
+        (lastTask ?? TaskDto(id: taskId, projectId: 1, title: 'Task')).copyWith(
+          status: status,
+        );
+    lastTask = updated;
+    return updated;
+  }
 }

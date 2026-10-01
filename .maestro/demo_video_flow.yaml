@@ -1,0 +1,646 @@
+appId: com.projecthub.client
+name: "ProjectHub Complete Product Walkthrough"
+tags:
+  - demo
+  - readme
+  - android
+---
+
+# ==============================================================================
+# PROJECTHUB COMPREHENSIVE PRODUCT DEMO WALKTHROUGH
+# Full flow: Login → Signup → Workspace creation → Dashboard → Projects CRUD →
+#   Tasks CRUD (all properties) → Tags (create/attach/filter) → Kanban filters →
+#   Activity Stream (filtering/sorting/presence) → My Tasks → Workspace Governance
+#   (accents, member add/promote/demote/remove) → Member Restricted Access (403) →
+#   Theming (Light/Dark) → Localization (Arabic RTL) → Social Auth showcase
+# Timeouts: ≤1000ms except data-fetch screens (dashboard, kanban) which use up to 8s
+# ==============================================================================
+
+# ==============================================================================
+# ACT 0: INITIALIZATION & VIDEO CAPTURE
+# ==============================================================================
+- launchApp:
+    clearState: false
+
+# First log out if already authenticated (Profile → Log Out)
+- tapOn:
+    text: "Profile"
+    optional: true
+
+    
+
+- scroll:
+    optional: true
+
+    
+
+- tapOn:
+    text: "Log Out"
+    optional: true
+
+    
+
+- tapOn:
+    text: "Log Out"
+    index: 1
+    optional: true
+
+
+    
+
+# Start recording right on the clean Login screen
+- startRecording: "projecthub_demo_walkthrough.mp4"
+
+
+    
+
+# ==============================================================================
+# ACT 1: LOGIN SCREEN SHOWCASE & SOCIAL AUTH
+# ==============================================================================
+# Show the login screen with social auth buttons (Google & GitHub)
+
+    
+
+# Navigate to Register screen to show signup flow
+- tapOn: "Sign Up"
+
+    
+
+    
+
+# ==============================================================================
+# ACT 2: SIGNUP SCREEN SHOWCASE
+# ==============================================================================
+# Show all signup fields and social auth
+- scroll
+
+    
+
+# Scroll back up
+- swipe:
+    direction: DOWN
+    duration: 400
+
+    
+
+# Navigate back to Login
+- tapOn: "Sign In"
+
+    
+
+    
+
+# ==============================================================================
+# ACT 3: SIGN IN WITH CREDENTIALS
+# ==============================================================================
+# Enter email
+- tapOn: "name@example.com"
+- inputText: "clarkremon12@gmail.com"
+
+    
+
+# Enter password
+- tapOn: "••••••••"
+- inputText: "Clark_372005"
+
+    
+
+# Hide keyboard before tapping Sign In
+- hideKeyboard
+
+    
+
+# Sign in
+- tapOn: "Sign In"
+
+    
+
+    
+
+# ==============================================================================
+# ACT 4: DASHBOARD & SPRINT OVERVIEW
+# ==============================================================================
+# Settle on dashboard metrics
+
+    
+
+# Scroll to see Team Presence & Activity Stream section
+- scroll
+
+    
+
+# Open Activity Stream (full screen)
+- tapOn:
+    text: "View All"
+    index: 1
+
+    
+
+    
+
+# ==============================================================================
+# ACT 5: ACTIVITY STREAM — FILTERING & SORTING & PRESENCE
+# ==============================================================================
+# Quick filter: Tasks category
+- tapOn: "Tasks"
+
+    
+
+# Quick filter: Projects category
+- tapOn: "Projects"
+
+    
+
+# Quick filter: Members category
+- tapOn: "Members"
+
+    
+
+# Reset to All
+- tapOn: "All"
+
+    
+
+# Open advanced filter & sort bottom sheet
+- tapOn:
+    id: "activity_stream_filter_button"
+
+    
+
+# Select "Oldest first" sort
+- tapOn: "Oldest first"
+
+    
+
+# Apply filters
+- tapOn: "Apply Filters"
+
+    
+
+# Return to Dashboard
+- back
+
+    
+
+# Scroll back to top of dashboard
+- swipe:
+    direction: DOWN
+    duration: 400
+
+    
+
+# ==============================================================================
+# ACT 6: PROJECTS CRUD
+# ==============================================================================
+# Navigate to Projects tab
+- tapOn: "Projects"
+
+    
+
+    
+
+# Create New Project
+- tapOn: "New Project"
+
+    
+
+    
+
+# Enter project name
+- tapOn: "e.g. Website Redesign"
+- inputText: "Analytics Dashboard V3"
+
+    
+
+# Hide keyboard
+- hideKeyboard
+
+    
+
+# Submit project creation
+- tapOn: "Create Project"
+
+    
+
+# Open existing project Kanban Board (Mobile Trading Experience)
+- tapOn:
+    text: ".*Mobile Trading Experience.*"
+
+    
+
+    
+
+# View Project Details
+- tapOn: "Project Details"
+
+    
+
+# Return to Kanban Board
+- back
+
+    
+
+# ==============================================================================
+# ACT 7: KANBAN BOARD COLUMNS & FILTERING
+# ==============================================================================
+# Navigate between Kanban columns
+- tapOn:
+    text: ".*In Progress.*"
+
+    
+
+- tapOn:
+    text: ".*Backlog.*"
+
+    
+
+# Filter by Priority
+- tapOn: "Priority"
+
+    
+
+# Select High priority
+- tapOn: "High"
+
+    
+
+# Clear that filter
+- tapOn: "Clear Filters"
+
+    
+
+# Open Search
+- tapOn: "Search"
+
+    
+
+# Type search query
+- inputText: "Biometric"
+
+    
+
+# Clear search
+- hideKeyboard
+
+    
+
+# Close search
+- tapOn:
+    text: ".*Close search.*"
+    optional: true
+
+    
+
+# Clear all filters
+- tapOn:
+    text: "Clear Filters"
+    optional: true
+
+    
+
+# ==============================================================================
+# ACT 8: TASK CRUD — CREATE WITH ALL PROPERTIES
+# ==============================================================================
+# Open Create Task sheet
+- tapOn: "New Task"
+
+    
+
+# Enter task title
+- inputText: "Integrate Payment Gateway SDK"
+
+    
+
+# Hide keyboard to reveal full sheet
+- hideKeyboard
+
+    
+
+# Scroll sheet to see description and priority
+- scroll
+
+    
+
+# Select High priority
+- tapOn: "High"
+
+    
+
+# Open Tag selector
+- tapOn: "Tag"
+
+    
+
+    
+
+# Tap existing tag "backend"
+- tapOn:
+    text: "backend"
+    optional: true
+
+    
+
+# Dismiss tag modal
+- back
+
+    
+
+# Submit task creation
+- tapOn: "Create Task"
+
+    
+
+# ==============================================================================
+# ACT 9: TASK DETAILS — READ, COMMENT, STATUS TRANSITION
+# ==============================================================================
+# Open existing task to show Read view with all properties
+- tapOn:
+    text: ".*Biometric.*"
+
+    
+
+    
+
+# Scroll down to comments section
+- scroll
+
+    
+
+# Post a live comment
+- tapOn: "Write a comment..."
+- inputText: "Verified on Android. Ready to ship!"
+
+    
+
+# Hide keyboard
+- hideKeyboard
+
+    
+
+# Close task details sheet
+- back
+
+    
+
+# Return from Kanban Board to Projects
+- back
+
+    
+
+    
+
+# ==============================================================================
+# ACT 10: MY TASKS — PERSONAL SPRINT BACKLOG
+# ==============================================================================
+- tapOn: "My Tasks"
+
+    
+
+    
+
+# Scroll through personal urgency backlog sections
+- scroll
+
+    
+
+- swipe:
+    direction: DOWN
+    duration: 400
+
+    
+
+# ==============================================================================
+# ACT 11: WORKSPACE GOVERNANCE — ACCENTS & MEMBER MANAGEMENT
+# ==============================================================================
+# Go to Dashboard first
+- tapOn: "Dashboard"
+
+    
+
+    
+
+# Open Workspace Settings
+- tapOn: "Workspace Settings"
+
+    
+
+    
+
+# Cycle through accent colors
+- tapOn: "Teal"
+
+    
+
+- tapOn: "Violet"
+
+    
+
+- tapOn: "Indigo"
+
+    
+
+# Save workspace details
+- tapOn: "Save Details"
+
+    
+
+# Scroll down to Team Members section
+- scroll
+
+    
+
+# Open Add Member sheet
+- tapOn: "Add Member"
+
+    
+
+    
+
+# Dismiss Invite sheet
+- hideKeyboard
+
+    
+- back
+
+    
+
+# Open member options menu (Promote/Demote/Remove)
+- tapOn:
+    text: "Edit"
+    index: 0
+
+    
+
+# Dismiss member options
+- back
+
+    
+
+# Return to Dashboard
+- tapOn: "Back"
+
+    
+
+    
+
+# ==============================================================================
+# ACT 12: MULTI-WORKSPACE SWITCHER & MEMBER RESTRICTED ACCESS
+# ==============================================================================
+# Open Workspace Switcher pill
+- tapOn:
+    text: ".*Owner.*"
+
+    
+
+    
+
+# Switch to Mobile Experience Hub (user is Member here)
+- tapOn:
+    text: ".*Mobile Experience Hub.*"
+
+    
+
+    
+
+# Navigate to Projects to show restricted access
+- tapOn: "Projects"
+
+    
+
+    
+
+# Open Design System 2.0 Kanban (has Read-only badge)
+- tapOn:
+    text: ".*Design System 2.0.*"
+
+    
+
+    
+
+# Open Project Details to show Read-only badge
+- tapOn: "Project Details"
+
+    
+
+# Return to Kanban
+- back
+
+    
+
+# Open task created by another user to test 403 guard
+- tapOn:
+    text: ".*Figma Token.*"
+
+    
+
+    
+
+# Attempt to delete task as Member (not task creator) → 403 Forbidden
+- tapOn: "Delete Task"
+
+    
+
+    
+
+# Confirm delete attempt
+- tapOn: "Delete"
+
+    
+
+# 403 SnackBar: "You do not have permission to perform this action"
+# Close task details sheet
+- back
+
+    
+
+# Return from Kanban to Projects list
+- tapOn:
+    point: "74,192"
+
+    
+
+    
+
+# Return to Dashboard
+- tapOn: "Dashboard"
+
+    
+
+    
+
+# Switch back to Owner workspace
+- tapOn:
+    text: ".*Member.*"
+
+    
+
+    
+
+- tapOn:
+    text: ".*FinTech Platform.*"
+
+    
+
+    
+
+# ==============================================================================
+# ACT 13: THEMING — LIGHT/DARK MODE & LOCALIZATION
+# ==============================================================================
+- tapOn: "Profile"
+
+    
+
+    
+
+# Toggle to Light theme
+- tapOn: "Light"
+
+    
+
+# Toggle back to Dark theme
+- tapOn: "Dark"
+
+    
+
+# Switch language to Arabic → RTL mirroring
+- tapOn: "العربية"
+
+    
+
+# Switch back to English → LTR restore
+- tapOn: "English"
+
+    
+
+# ==============================================================================
+# ACT 14: LOGOUT → LOGIN SCREEN (SOCIAL AUTH SHOWCASE)
+# ==============================================================================
+# Scroll to Log Out
+- scroll
+
+    
+
+# Tap Log Out
+- tapOn: "Log Out"
+
+    
+
+    
+
+# Confirm logout
+- tapOn:
+    text: "Log Out"
+    index: 1
+
+    
+
+    
+
+# Settle on Login screen (Google & GitHub social auth buttons visible)
+
+    
+
+# ==============================================================================
+# FINALIZE & STOP RECORDING
+# ==============================================================================
+- stopRecording

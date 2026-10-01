@@ -1,0 +1,45 @@
+appId: com.projecthub.client
+---
+- launchApp:
+    clearState: false
+
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# Try to switch to English if in Arabic
+- tapOn:
+    text: ".*Profile.*|.*الملف الشخصي.*"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 1000
+
+- tapOn:
+    text: "English"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# Switch to Dashboard
+- tapOn:
+    text: "Dashboard"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 1000
+
+# Ensure FinTech Platform V2 workspace
+- tapOn:
+    text: ".*Owner.*|.*Member.*"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 1000
+
+- tapOn:
+    text: ".*FinTech Platform.*"
+    optional: true
+
+- waitForAnimationToEnd:
+    timeout: 1000
