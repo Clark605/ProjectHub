@@ -25,6 +25,7 @@ import 'package:client/features/projects/ui/project_detail_screen.dart';
 import 'package:client/features/projects/ui/projects_screen.dart';
 import 'package:client/features/shell/ui/main_shell_screen.dart';
 import 'package:client/features/tasks/cubit/my_tasks_cubit.dart';
+import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/ui/my_tasks_screen.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
@@ -92,8 +93,11 @@ Widget buildWorkspaceSettingsRoute() => BlocProvider(
 );
 
 Widget buildKanbanRoute({required int projectId, ProjectDto? initialProject}) =>
-    BlocProvider(
-      create: (_) => getIt<KanbanCubit>(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<KanbanCubit>()),
+        BlocProvider(create: (_) => getIt<VoiceTaskCubit>()),
+      ],
       child: KanbanScreen(projectId: projectId, initialProject: initialProject),
     );
 

@@ -10,6 +10,9 @@ import 'package:client/features/kanban/ui/widgets/create_task_sheet.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_app_bar.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_fab.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_view_body.dart';
+import 'package:client/features/kanban/ui/widgets/kanban_voice_handler.dart';
+import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
+import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/project_status.dart';
 import 'package:client/features/projects/data/project_repository.dart';
@@ -26,12 +29,14 @@ class KanbanScreen extends StatefulWidget {
   final int projectId;
   final ProjectDto? initialProject;
   final KanbanCubit? cubit;
+  final VoiceTaskCubit? voiceCubit;
 
   const KanbanScreen({
     super.key,
     required this.projectId,
     this.initialProject,
     this.cubit,
+    this.voiceCubit,
   });
 
   @override
@@ -41,6 +46,7 @@ class KanbanScreen extends StatefulWidget {
 class _KanbanScreenState extends State<KanbanScreen>
     with WidgetsBindingObserver {
   late final KanbanCubit _cubit;
+  VoiceTaskCubit? _voiceCubit;
   late final bool _isInternalCubit;
   ProjectDto? _project;
   List<MemberDto> _members = [];
@@ -57,6 +63,11 @@ class _KanbanScreenState extends State<KanbanScreen>
         (getIt.isRegistered<KanbanCubit>()
             ? getIt<KanbanCubit>()
             : KanbanCubit(getIt(), getIt(), getIt()));
+    _voiceCubit =
+        widget.voiceCubit ??
+        (getIt.isRegistered<VoiceTaskCubit>()
+            ? getIt<VoiceTaskCubit>()
+            : null);
     _isInternalCubit = widget.cubit == null;
     _pageController = PageController(initialPage: 0);
     _project = widget.initialProject;
@@ -69,6 +80,7 @@ class _KanbanScreenState extends State<KanbanScreen>
     WidgetsBinding.instance.removeObserver(this);
     _pageController.dispose();
     if (_isInternalCubit) _cubit.close();
+    if (widget.voiceCubit == null) _voiceCubit?.close();
     super.dispose();
   }
 
@@ -147,7 +159,8 @@ class _KanbanScreenState extends State<KanbanScreen>
         (_isLoadingProject ? '...' : (l10n?.projectsTitle ?? 'Project'));
     final isArchived = _project?.statusEnum == ProjectStatus.archived;
 
-    return BlocProvider.value(
+    final voiceCubit = _voiceCubit;
+    Widget screen = BlocProvider.value(
       value: _cubit,
       child: BlocConsumer<KanbanCubit, KanbanState>(
         listener: (context, state) {
@@ -172,6 +185,61 @@ class _KanbanScreenState extends State<KanbanScreen>
             );
           } catch (_) {}
 
+          Widget fab = KanbanFab(
+            isArchived: isEffectivelyArchived,
+            onPressed: () => _openCreateTask('Backlog'),
+          );
+
+          if (voiceCubit != null) {
+            fab = BlocBuilder<VoiceTaskCubit, VoiceTaskState>(
+              builder: (context, voiceState) {
+                return KanbanFab(
+                  isArchived: isEffectivelyArchived,
+                  isListening: voiceState is VoiceTaskListening,
+                  onPressed: () => _openCreateTask('Backlog'),
+                  onVoicePressed: () {
+                    final wsId = _project?.workspaceId ?? 0;
+                    voiceCubit.toggleListening(
+                      projectId: widget.projectId,
+                      workspaceId: wsId,
+                    );
+                  },
+                );
+              },
+            );
+          }
+
+          Widget bodyContent = KanbanViewBody(
+            state: state,
+            projectId: widget.projectId,
+            isArchived: isEffectivelyArchived,
+            wsAccent: wsAccent,
+            pageController: _pageController,
+            currentColumnIndex: _currentColumnIndex,
+            members: _members,
+            cubit: _cubit,
+            onColumnChanged: (i) => setState(() => _currentColumnIndex = i),
+            onAddTask: (s) => _openCreateTask(s.toServerString()),
+            onTaskTap: (t) => _openTaskDetail(t, isEffectivelyArchived),
+            onTaskMove: (t) => MoveToStatusSheet.show(
+              context,
+              task: t,
+              onStatusSelected: (s) =>
+                  _cubit.moveTaskStatus(t.id, s.toServerString()),
+            ),
+            onTaskDelete: (t) => _cubit.deleteTask(t.id),
+          );
+
+          if (voiceCubit != null) {
+            bodyContent = KanbanVoiceHandler(
+              projectId: widget.projectId,
+              workspaceId: _project?.workspaceId ?? 0,
+              members: _members,
+              kanbanCubit: _cubit,
+              child: bodyContent,
+            );
+          }
+
           return Scaffold(
             appBar: KanbanAppBar(
               projectName: projectName,
@@ -179,33 +247,20 @@ class _KanbanScreenState extends State<KanbanScreen>
               workspaceId: _project?.workspaceId,
               onSettings: _openSettings,
             ),
-            floatingActionButton: KanbanFab(
-              isArchived: isEffectivelyArchived,
-              onPressed: () => _openCreateTask('Backlog'),
-            ),
-            body: KanbanViewBody(
-              state: state,
-              projectId: widget.projectId,
-              isArchived: isEffectivelyArchived,
-              wsAccent: wsAccent,
-              pageController: _pageController,
-              currentColumnIndex: _currentColumnIndex,
-              members: _members,
-              cubit: _cubit,
-              onColumnChanged: (i) => setState(() => _currentColumnIndex = i),
-              onAddTask: (s) => _openCreateTask(s.toServerString()),
-              onTaskTap: (t) => _openTaskDetail(t, isEffectivelyArchived),
-              onTaskMove: (t) => MoveToStatusSheet.show(
-                context,
-                task: t,
-                onStatusSelected: (s) =>
-                    _cubit.moveTaskStatus(t.id, s.toServerString()),
-              ),
-              onTaskDelete: (t) => _cubit.deleteTask(t.id),
-            ),
+            floatingActionButton: fab,
+            body: bodyContent,
           );
         },
       ),
     );
+
+    if (voiceCubit != null) {
+      screen = BlocProvider.value(
+        value: voiceCubit,
+        child: screen,
+      );
+    }
+
+    return screen;
   }
 }

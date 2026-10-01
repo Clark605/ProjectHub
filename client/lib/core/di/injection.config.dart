@@ -38,6 +38,9 @@ import '../../features/tags/data/tag_remote_data_source.dart' as _i749;
 import '../../features/tags/data/tag_repository.dart' as _i800;
 import '../../features/tags/data/tag_repository_impl.dart' as _i311;
 import '../../features/tasks/cubit/my_tasks_cubit.dart' as _i816;
+import '../../features/tasks/cubit/voice_task_cubit.dart' as _i513;
+import '../../features/tasks/data/ai_task_remote_data_source.dart' as _i63;
+import '../../features/tasks/data/ai_task_repository.dart' as _i437;
 import '../../features/tasks/data/task_remote_data_source.dart' as _i538;
 import '../../features/tasks/data/task_repository.dart' as _i241;
 import '../../features/tasks/data/task_repository_impl.dart' as _i382;
@@ -109,6 +112,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i568.ActivityRepository>(
       () => _i568.ActivityRepositoryImpl(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i63.AiTaskRemoteDataSource>(
+      () => _i63.AiTaskRemoteDataSourceImpl(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i800.TagRepository>(
       () => _i311.TagRepositoryImpl(gh<_i749.TagRemoteDataSource>()),
     );
@@ -142,6 +148,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i415.PrefsService>(),
       ),
     );
+    gh.lazySingleton<_i437.AiTaskRepository>(
+      () => _i437.AiTaskRepositoryImpl(gh<_i63.AiTaskRemoteDataSource>()),
+    );
     gh.lazySingleton<_i784.AppAuthCubit>(
       () => _i784.AppAuthCubit(gh<_i726.AuthRepository>()),
     );
@@ -159,6 +168,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i322.ProfileEditCubit>(
       () => _i322.ProfileEditCubit(gh<_i726.AuthRepository>()),
+    );
+    gh.factory<_i513.VoiceTaskCubit>(
+      () => _i513.VoiceTaskCubit(
+        gh<_i437.AiTaskRepository>(),
+        gh<_i241.TaskRepository>(),
+      ),
     );
     gh.factory<_i627.KanbanCubit>(
       () => _i627.KanbanCubit(
