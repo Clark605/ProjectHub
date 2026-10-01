@@ -49,14 +49,33 @@ List<InlineSpan> buildActivityEventSpans(
       final toStatus = event.newStatus ?? event.status;
       final spans = <InlineSpan>[];
       if (l10n != null) {
-        if (title != null && title.isNotEmpty && toStatus != null && toStatus.isNotEmpty) {
+        if (title != null &&
+            title.isNotEmpty &&
+            toStatus != null &&
+            toStatus.isNotEmpty) {
           final full = l10n.activityMovedTo(title, toStatus);
-          spans.addAll(_buildParameterizedSpans(full, [title, toStatus], mutedStyle, highlightStyle));
+          spans.addAll(
+            _buildParameterizedSpans(
+              full,
+              [title, toStatus],
+              mutedStyle,
+              highlightStyle,
+            ),
+          );
         } else if (toStatus != null && toStatus.isNotEmpty) {
           final full = l10n.activityTaskMovedToStatus(toStatus);
-          spans.addAll(_buildParameterizedSpans(full, [toStatus], mutedStyle, highlightStyle));
+          spans.addAll(
+            _buildParameterizedSpans(
+              full,
+              [toStatus],
+              mutedStyle,
+              highlightStyle,
+            ),
+          );
         } else {
-          spans.add(TextSpan(text: l10n.activityTaskStatusChanged, style: mutedStyle));
+          spans.add(
+            TextSpan(text: l10n.activityTaskStatusChanged, style: mutedStyle),
+          );
         }
       } else {
         if (title != null && title.isNotEmpty) {
@@ -84,13 +103,29 @@ List<InlineSpan> buildActivityEventSpans(
         if (assignee != null && assignee.isNotEmpty) {
           if (title != null && title.isNotEmpty) {
             final full = l10n.activityAssignedTo(title, assignee);
-            spans.addAll(_buildParameterizedSpans(full, [title, assignee], mutedStyle, highlightStyle));
+            spans.addAll(
+              _buildParameterizedSpans(
+                full,
+                [title, assignee],
+                mutedStyle,
+                highlightStyle,
+              ),
+            );
           } else {
             final full = l10n.activityAssignedTaskTo(assignee);
-            spans.addAll(_buildParameterizedSpans(full, [assignee], mutedStyle, highlightStyle));
+            spans.addAll(
+              _buildParameterizedSpans(
+                full,
+                [assignee],
+                mutedStyle,
+                highlightStyle,
+              ),
+            );
           }
         } else {
-          spans.add(TextSpan(text: l10n.activityTaskAssigned, style: mutedStyle));
+          spans.add(
+            TextSpan(text: l10n.activityTaskAssigned, style: mutedStyle),
+          );
           if (title != null && title.isNotEmpty) {
             spans.add(const TextSpan(text: ' '));
             spans.add(TextSpan(text: title, style: highlightStyle));
@@ -140,12 +175,23 @@ List<InlineSpan> buildActivityEventSpans(
     case 'ProjectStatusChanged':
       final toStatus = event.newStatus ?? event.status;
       if (l10n != null) {
-        if (title != null && title.isNotEmpty && toStatus != null && toStatus.isNotEmpty) {
+        if (title != null &&
+            title.isNotEmpty &&
+            toStatus != null &&
+            toStatus.isNotEmpty) {
           final full = l10n.activityUpdatedProjectTo(title, toStatus);
-          return _buildParameterizedSpans(full, [title, toStatus], mutedStyle, highlightStyle);
+          return _buildParameterizedSpans(
+            full,
+            [title, toStatus],
+            mutedStyle,
+            highlightStyle,
+          );
         } else {
           return [
-            TextSpan(text: l10n.activityProjectStatusChanged, style: mutedStyle),
+            TextSpan(
+              text: l10n.activityProjectStatusChanged,
+              style: mutedStyle,
+            ),
             if (toStatus != null && toStatus.isNotEmpty) ...[
               const TextSpan(text: ' '),
               TextSpan(text: toStatus, style: highlightStyle),
@@ -162,10 +208,7 @@ List<InlineSpan> buildActivityEventSpans(
             TextSpan(text: toStatus, style: highlightStyle),
           ],
         ] else ...[
-          TextSpan(
-            text: 'updated project status',
-            style: mutedStyle,
-          ),
+          TextSpan(text: 'updated project status', style: mutedStyle),
           if (toStatus != null && toStatus.isNotEmpty) ...[
             TextSpan(text: ' to ', style: mutedStyle),
             TextSpan(text: toStatus, style: highlightStyle),
@@ -204,15 +247,23 @@ List<InlineSpan> buildActivityEventSpans(
         if (member != null && member.isNotEmpty) {
           if (role != null && role.isNotEmpty) {
             final full = l10n.activityAddedMemberAsRole(member, role);
-            return _buildParameterizedSpans(full, [member, role], mutedStyle, highlightStyle);
+            return _buildParameterizedSpans(
+              full,
+              [member, role],
+              mutedStyle,
+              highlightStyle,
+            );
           } else {
             final full = l10n.activityAddedMemberToWorkspace(member);
-            return _buildParameterizedSpans(full, [member], mutedStyle, highlightStyle);
+            return _buildParameterizedSpans(
+              full,
+              [member],
+              mutedStyle,
+              highlightStyle,
+            );
           }
         } else {
-          return [
-            TextSpan(text: l10n.activityMemberAdded, style: mutedStyle),
-          ];
+          return [TextSpan(text: l10n.activityMemberAdded, style: mutedStyle)];
         }
       }
       return [
@@ -225,10 +276,7 @@ List<InlineSpan> buildActivityEventSpans(
             TextSpan(text: ' to the workspace', style: mutedStyle),
           ],
         ] else ...[
-          TextSpan(
-            text: 'joined the workspace',
-            style: mutedStyle,
-          ),
+          TextSpan(text: 'joined the workspace', style: mutedStyle),
         ],
       ];
 
@@ -237,7 +285,12 @@ List<InlineSpan> buildActivityEventSpans(
       if (l10n != null) {
         if (member != null && member.isNotEmpty) {
           final full = l10n.activityRemovedMemberFromWorkspace(member);
-          return _buildParameterizedSpans(full, [member], mutedStyle, highlightStyle);
+          return _buildParameterizedSpans(
+            full,
+            [member],
+            mutedStyle,
+            highlightStyle,
+          );
         } else {
           return [
             TextSpan(text: l10n.activityMemberRemoved, style: mutedStyle),
@@ -250,10 +303,7 @@ List<InlineSpan> buildActivityEventSpans(
           TextSpan(text: member, style: highlightStyle),
           TextSpan(text: ' from the workspace', style: mutedStyle),
         ] else ...[
-          TextSpan(
-            text: 'left the workspace',
-            style: mutedStyle,
-          ),
+          TextSpan(text: 'left the workspace', style: mutedStyle),
         ],
       ];
 
@@ -269,7 +319,12 @@ List<InlineSpan> buildActivityEventSpans(
       if (l10n != null) {
         if (title != null && title.isNotEmpty) {
           final full = l10n.activityRenamedWorkspaceTo(title);
-          return _buildParameterizedSpans(full, [title], mutedStyle, highlightStyle);
+          return _buildParameterizedSpans(
+            full,
+            [title],
+            mutedStyle,
+            highlightStyle,
+          );
         } else {
           return [
             TextSpan(text: l10n.activityWorkspaceUpdated, style: mutedStyle),
@@ -281,10 +336,7 @@ List<InlineSpan> buildActivityEventSpans(
           TextSpan(text: 'renamed workspace to ', style: mutedStyle),
           TextSpan(text: title, style: highlightStyle),
         ] else ...[
-          TextSpan(
-            text: 'updated workspace settings',
-            style: mutedStyle,
-          ),
+          TextSpan(text: 'updated workspace settings', style: mutedStyle),
         ],
       ];
 
@@ -292,10 +344,20 @@ List<InlineSpan> buildActivityEventSpans(
       if (l10n != null) {
         if (title != null && title.isNotEmpty) {
           final full = l10n.activityPerformedEventOn(event.eventType, title);
-          return _buildParameterizedSpans(full, [event.eventType, title], mutedStyle, highlightStyle);
+          return _buildParameterizedSpans(
+            full,
+            [event.eventType, title],
+            mutedStyle,
+            highlightStyle,
+          );
         } else {
           final full = l10n.activityPerformedEvent(event.eventType);
-          return _buildParameterizedSpans(full, [event.eventType], mutedStyle, highlightStyle);
+          return _buildParameterizedSpans(
+            full,
+            [event.eventType],
+            mutedStyle,
+            highlightStyle,
+          );
         }
       }
       return [
@@ -319,7 +381,9 @@ void _appendProjectContext(
     spans.add(const TextSpan(text: ' '));
     if (l10n != null) {
       final full = l10n.activityInProject(project);
-      spans.addAll(_buildParameterizedSpans(full, [project], mutedStyle, highlightStyle));
+      spans.addAll(
+        _buildParameterizedSpans(full, [project], mutedStyle, highlightStyle),
+      );
     } else {
       spans.add(TextSpan(text: 'in ', style: mutedStyle));
       spans.add(TextSpan(text: project, style: highlightStyle));
@@ -352,7 +416,8 @@ List<InlineSpan> _buildParameterizedSpans(
 
     for (final h in cleanHighlights) {
       final idxPlain = cleanText.indexOf(h, currentIndex);
-      if (idxPlain != -1 && (earliestStart == null || idxPlain < earliestStart)) {
+      if (idxPlain != -1 &&
+          (earliestStart == null || idxPlain < earliestStart)) {
         earliestStart = idxPlain;
         earliestMatch = h;
       }
@@ -360,18 +425,19 @@ List<InlineSpan> _buildParameterizedSpans(
 
     if (earliestStart != null && earliestMatch != null) {
       if (earliestStart > currentIndex) {
-        spans.add(TextSpan(
-          text: cleanText.substring(currentIndex, earliestStart),
-          style: mutedStyle,
-        ));
+        spans.add(
+          TextSpan(
+            text: cleanText.substring(currentIndex, earliestStart),
+            style: mutedStyle,
+          ),
+        );
       }
       spans.add(TextSpan(text: earliestMatch, style: highlightStyle));
       currentIndex = earliestStart + earliestMatch.length;
     } else {
-      spans.add(TextSpan(
-        text: cleanText.substring(currentIndex),
-        style: mutedStyle,
-      ));
+      spans.add(
+        TextSpan(text: cleanText.substring(currentIndex), style: mutedStyle),
+      );
       break;
     }
   }

@@ -17,6 +17,7 @@ using ProjectHub.Api.Services.Interfaces;
 using ProjectHub.Api.Middleware;
 using FluentValidation.AspNetCore;
 using ProjectHub.Api.Hubs;
+using ProjectHub.Api.Services.Ai;
 using StackExchange.Redis;
 // Load .env environment variables if present
 DotNetEnv.Env.TraversePath().Load();
@@ -38,6 +39,12 @@ var envGithubClientSecret = Environment.GetEnvironmentVariable("GITHUB_CLIENT_SE
 if (!string.IsNullOrWhiteSpace(envGithubClientSecret))
 {
     builder.Configuration["Authentication:GitHub:ClientSecret"] = envGithubClientSecret;
+}
+// Map .env AI variables to Configuration if present
+var envGeminiApiKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+if (!string.IsNullOrWhiteSpace(envGeminiApiKey))
+{
+    builder.Configuration["Ai:Gemini:ApiKey"] = envGeminiApiKey;
 }
 // Configure non-blocking async logging from appsettings
 builder.Host.UseSerilog((context, services, configuration) => configuration
@@ -162,6 +169,7 @@ builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<IActivityLogger, ActivityLogger>();
+builder.Services.AddScoped<IAiTextParser, GeminiTextParser>();
 
 // Two-Tier Rate Limiting (ADR-0013)
 builder.Services.AddRateLimiter(options =>
@@ -209,6 +217,15 @@ builder.Services.AddRateLimiter(options =>
     {
         opt.PermitLimit = 3;
         opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueLimit = 0;
+    });
+
+    // AI parse endpoint rate limiting (20 req/min per user)
+    options.AddSlidingWindowLimiter("AiParsePolicy", opt =>
+    {
+        opt.PermitLimit = 20;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.SegmentsPerWindow = 4;
         opt.QueueLimit = 0;
     });
 });
