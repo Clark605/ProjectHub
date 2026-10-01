@@ -34,7 +34,7 @@ public class WorkspaceServiceTests
         return new Mock<UserManager<AppUser>>(store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
     }
 
-    private WorkspaceService CreateService(AppDbContext context, Mock<UserManager<AppUser>>? userManagerMock = null)
+    private WorkspaceService CreateService(AppDbContext context, Mock<UserManager<AppUser>>? userManagerMock = null, Mock<IActivityLogger>? activityLoggerMock = null)
     {
         var userManager = userManagerMock ?? CreateMockUserManager();
 
@@ -44,7 +44,7 @@ public class WorkspaceServiceTests
 #pragma warning restore EXTEXP0018
         var cache = services.BuildServiceProvider().GetRequiredService<HybridCache>();
 
-        var mockActivityLogger = new Mock<IActivityLogger>();
+        var mockActivityLogger = activityLoggerMock ?? new Mock<IActivityLogger>();
         var mockLogger = new Mock<ILogger<WorkspaceService>>();
 
         return new WorkspaceService(
@@ -166,6 +166,80 @@ public class WorkspaceServiceTests
 
         var nonMemberRole = await service.GetMemberRoleAsync("random-user", 1);
         Assert.Null(nonMemberRole);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task UpdateWorkspaceAsync_WhenOnlyAccentColorChanges_DoesNotLogActivity()
+    {
+        using var context = CreateInMemoryDbContext();
+        var workspace = new WorkSpace { Id = 1, Name = "Workspace 1", Description = "Desc", AccentColor = "teal" };
+        var ownerUser = new AppUser { Id = "owner-1", Name = "Owner", Email = "owner@test.com" };
+
+        context.WorkSpaces.Add(workspace);
+        context.Users.Add(ownerUser);
+        context.WorkspaceMembers.Add(new WorkspaceMember { Id = 1, UserId = "owner-1", Workspace = workspace, Role = WorkspaceRoles.Owner.ToString() });
+        await context.SaveChangesAsync();
+
+        var mockActivityLogger = new Mock<IActivityLogger>();
+        var service = CreateService(context, activityLoggerMock: mockActivityLogger);
+
+        var request = new UpdateWorkspaceRequestDto
+        {
+            Name = "Workspace 1",
+            Description = "Desc",
+            AccentColor = "blue"
+        };
+
+        var result = await service.UpdateWorkspaceAsync("owner-1", 1, request);
+
+        Assert.Equal("blue", result.AccentColor);
+        mockActivityLogger.Verify(
+            a => a.LogAsync(
+                It.IsAny<int>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                ActivityEventType.WorkspaceUpdated,
+                It.IsAny<int?>(),
+                It.IsAny<int?>(),
+                It.IsAny<object?>()),
+            Times.Never);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task UpdateWorkspaceAsync_WhenNameChanges_LogsWorkspaceUpdated()
+    {
+        using var context = CreateInMemoryDbContext();
+        var workspace = new WorkSpace { Id = 1, Name = "Old Name", Description = "Desc", AccentColor = "teal" };
+        var ownerUser = new AppUser { Id = "owner-1", Name = "Owner", Email = "owner@test.com" };
+
+        context.WorkSpaces.Add(workspace);
+        context.Users.Add(ownerUser);
+        context.WorkspaceMembers.Add(new WorkspaceMember { Id = 1, UserId = "owner-1", Workspace = workspace, Role = WorkspaceRoles.Owner.ToString() });
+        await context.SaveChangesAsync();
+
+        var mockActivityLogger = new Mock<IActivityLogger>();
+        var service = CreateService(context, activityLoggerMock: mockActivityLogger);
+
+        var request = new UpdateWorkspaceRequestDto
+        {
+            Name = "New Name",
+            Description = "Desc",
+            AccentColor = "teal"
+        };
+
+        var result = await service.UpdateWorkspaceAsync("owner-1", 1, request);
+
+        Assert.Equal("New Name", result.Name);
+        mockActivityLogger.Verify(
+            a => a.LogAsync(
+                1,
+                "owner-1",
+                It.IsAny<string>(),
+                ActivityEventType.WorkspaceUpdated,
+                null,
+                null,
+                It.IsAny<object?>()),
+            Times.Once);
     }
 }
 

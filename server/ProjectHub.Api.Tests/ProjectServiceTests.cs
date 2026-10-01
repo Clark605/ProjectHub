@@ -35,7 +35,7 @@ public class ProjectServiceTests
         return new Mock<UserManager<AppUser>>(store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
     }
 
-    private ProjectService CreateService(AppDbContext context, Mock<UserManager<AppUser>>? userManagerMock = null)
+    private ProjectService CreateService(AppDbContext context, Mock<UserManager<AppUser>>? userManagerMock = null, Mock<IActivityLogger>? activityLoggerMock = null)
     {
         var userManager = userManagerMock ?? CreateMockUserManager();
 
@@ -45,7 +45,7 @@ public class ProjectServiceTests
 #pragma warning restore EXTEXP0018
         var cache = services.BuildServiceProvider().GetRequiredService<HybridCache>();
 
-        var mockActivityLogger = new Mock<IActivityLogger>();
+        var mockActivityLogger = activityLoggerMock ?? new Mock<IActivityLogger>();
         var mockLogger = new Mock<ILogger<ProjectService>>();
 
         return new ProjectService(
@@ -60,7 +60,8 @@ public class ProjectServiceTests
     public async Task DeleteProjectAsync_AsOwner_DeletesProjectSuccessfully()
     {
         using var context = CreateInMemoryDbContext();
-        var service = CreateService(context);
+        var mockActivityLogger = new Mock<IActivityLogger>();
+        var service = CreateService(context, activityLoggerMock: mockActivityLogger);
 
         var workspace = new WorkSpace { Id = 1, Name = "Workspace" };
         var member = new WorkspaceMember { Workspace = workspace, UserId = "user-1", Role = "Owner" };
@@ -92,6 +93,17 @@ public class ProjectServiceTests
 
         var deleted = await context.Projects.FindAsync(10);
         Assert.Null(deleted);
+
+        mockActivityLogger.Verify(
+            a => a.LogAsync(
+                1,
+                "user-1",
+                It.IsAny<string>(),
+                ActivityEventType.ProjectDeleted,
+                null,
+                null,
+                It.IsAny<object?>()),
+            Times.Once);
     }
 
     [Fact]

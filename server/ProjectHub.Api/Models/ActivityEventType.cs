@@ -9,6 +9,7 @@ public enum ActivityEventType
     ProjectCreated,
     ProjectStatusChanged,
     ProjectArchived,
+    ProjectDeleted,
     TaskCreated,
     TaskUpdated,
     TaskStatusChanged,
