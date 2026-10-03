@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using ProjectHub.Api.Data;
 using ProjectHub.Api.DTOs.AiDtos;
+using ProjectHub.Api.Exceptions;
 using ProjectHub.Api.Services.Interfaces;
 
 namespace ProjectHub.Api.Services.Ai;
@@ -44,20 +45,36 @@ public class GeminiTextParser : IAiTextParser
         string transcribedText,
         DateTimeOffset userLocalTime)
     {
-        // 1. Fetch workspace members for assignee resolution context
+        // 1. Validate project existence
+        var project = await _dbContext.Projects
+            .FirstOrDefaultAsync(p => p.Id == projectId)
+            ?? throw new KeyNotFoundException($"Project with ID {projectId} not found.");
+
+        // 2. Validate workspace ownership (IDOR check)
+        if (project.WorkspaceId != workspaceId)
+        {
+            throw new ArgumentException($"Project with ID {projectId} does not belong to workspace {workspaceId}.");
+        }
+
+        // 3. Validate caller membership in the workspace containing this project
+        var isMember = await _dbContext.WorkspaceMembers
+            .AnyAsync(wm => wm.UserId == callerUserId && EF.Property<int>(wm, "WorkspaceId") == project.WorkspaceId);
+
+        if (!isMember)
+        {
+            throw new ForbiddenException("You are not a member of the workspace containing this project.");
+        }
+
+        // 4. Fetch workspace members for assignee resolution context
         var members = await _dbContext.WorkspaceMembers
-            .Where(wm => EF.Property<int>(wm, "WorkspaceId") == workspaceId)
+            .Where(wm => EF.Property<int>(wm, "WorkspaceId") == project.WorkspaceId)
             .Join(_dbContext.Users,
                 wm => wm.UserId,
                 u => u.Id,
                 (wm, u) => new { u.Id, u.Name })
             .ToListAsync();
 
-        // 2. Fetch project name for context
-        var projectName = await _dbContext.Projects
-            .Where(p => p.Id == projectId)
-            .Select(p => p.Name)
-            .FirstOrDefaultAsync() ?? "Unknown Project";
+        var projectName = project.Name;
 
         // 3. Build the member context string
         var membersJson = JsonSerializer.Serialize(

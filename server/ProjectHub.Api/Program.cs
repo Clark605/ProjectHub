@@ -18,6 +18,7 @@ using ProjectHub.Api.Middleware;
 using FluentValidation.AspNetCore;
 using ProjectHub.Api.Hubs;
 using ProjectHub.Api.Services.Ai;
+using ProjectHub.Api.Extensions;
 using StackExchange.Redis;
 // Load .env environment variables if present
 DotNetEnv.Env.TraversePath().Load();
@@ -225,13 +226,22 @@ builder.Services.AddRateLimiter(options =>
         opt.QueueLimit = 0;
     });
 
-    // AI parse endpoint rate limiting (20 req/min per user)
-    options.AddSlidingWindowLimiter("AiParsePolicy", opt =>
+    // AI parse endpoint rate limiting (20 req/min partitioned per authenticated user)
+    options.AddPolicy("AiParsePolicy", httpContext =>
     {
-        opt.PermitLimit = 20;
-        opt.Window = TimeSpan.FromMinutes(1);
-        opt.SegmentsPerWindow = 4;
-        opt.QueueLimit = 0;
+        var partitionKey = httpContext.User.Identity?.IsAuthenticated == true
+            ? httpContext.User.GetUserId()
+            : httpContext.Connection.RemoteIpAddress?.ToString() ?? "anonymous";
+
+        return RateLimitPartition.GetSlidingWindowLimiter(
+            partitionKey: partitionKey,
+            factory: _ => new SlidingWindowRateLimiterOptions
+            {
+                PermitLimit = 20,
+                Window = TimeSpan.FromMinutes(1),
+                SegmentsPerWindow = 4,
+                QueueLimit = 0
+            });
     });
 });
 
