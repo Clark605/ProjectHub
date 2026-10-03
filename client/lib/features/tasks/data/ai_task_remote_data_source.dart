@@ -29,13 +29,20 @@ class AiTaskRemoteDataSourceImpl implements AiTaskRemoteDataSource {
     const op = 'Parsing task from voice text via AI';
     try {
       AppLogger.info(op, tag: 'AiTaskRemoteDataSource');
+      final now = DateTime.now();
+      final offset = now.timeZoneOffset;
+      final sign = offset.isNegative ? '-' : '+';
+      final hours = offset.inHours.abs().toString().padLeft(2, '0');
+      final minutes = (offset.inMinutes.abs() % 60).toString().padLeft(2, '0');
+      final userLocalTimeWithOffset = '${now.toIso8601String()}$sign$hours:$minutes';
+
       final response = await _dio.post<Map<String, dynamic>>(
         ApiConstants.aiParseTask,
         data: {
           'text': text,
           'projectId': projectId,
           'workspaceId': workspaceId,
-          'userLocalTime': DateTime.now().toIso8601String(),
+          'userLocalTime': userLocalTimeWithOffset,
         },
       );
       AppLogger.debug('Success: $op', tag: 'AiTaskRemoteDataSource');
