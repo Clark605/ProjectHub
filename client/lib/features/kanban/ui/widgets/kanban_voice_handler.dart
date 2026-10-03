@@ -9,6 +9,7 @@ import 'package:client/features/kanban/ui/widgets/voice_task_review_sheet.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanVoiceHandler extends StatelessWidget {
   final int projectId;
@@ -28,20 +29,23 @@ class KanbanVoiceHandler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return BlocListener<VoiceTaskCubit, VoiceTaskState>(
       listener: (context, state) {
         state.maybeWhen(
           permissionDenied: (permanentlyDenied) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text(
-                  'Microphone permission is required for voice tasks.',
+                content: Text(
+                  l10n?.voiceTaskMicPermissionRequired ??
+                      'Microphone permission is required for voice tasks.',
                 ),
                 backgroundColor: AppColors.warning,
                 behavior: SnackBarBehavior.floating,
                 action: permanentlyDenied
-                    ? const SnackBarAction(
-                        label: 'Settings',
+                    ? SnackBarAction(
+                        label: l10n?.voiceTaskSettings ?? 'Settings',
                         textColor: Colors.white,
                         onPressed: openAppSettings,
                       )
@@ -64,8 +68,12 @@ class KanbanVoiceHandler extends StatelessWidget {
               projectId: projectId,
               draft: draft,
               members: members,
-              onSubmit: (req, st) =>
-                  kanbanCubit.createTask(projectId, req, initialStatus: st),
+              onSubmit: (req, st) async {
+                await kanbanCubit.createTask(projectId, req, initialStatus: st);
+                if (context.mounted) {
+                  context.read<VoiceTaskCubit>().reset();
+                }
+              },
             );
           },
           orElse: () {},

@@ -6,9 +6,9 @@ import 'package:client/features/kanban/ui/widgets/create_task_header.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_priority_selector.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_tags_selector.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_text_fields.dart';
+import 'package:client/features/kanban/ui/widgets/task_form_state_mixin.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
-import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -59,61 +59,40 @@ class CreateTaskSheet extends StatefulWidget {
   State<CreateTaskSheet> createState() => _CreateTaskSheetState();
 }
 
-class _CreateTaskSheetState extends State<CreateTaskSheet> {
-  final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-
-  late TaskPriority _selectedPriority;
+class _CreateTaskSheetState extends State<CreateTaskSheet>
+    with TaskFormStateMixin<CreateTaskSheet> {
   late TaskStatus _selectedStatus;
-  String? _selectedAssigneeId;
-  DateTime? _selectedDueDate;
   final List<TagDto> _selectedTags = [];
-  bool _isSubmitting = false;
 
   @override
   void initState() {
     super.initState();
-    _selectedPriority = TaskPriority.medium;
+    initTaskFormState();
     _selectedStatus = TaskStatus.fromString(widget.initialStatus);
   }
 
   @override
   void dispose() {
-    _titleController.dispose();
-    _descriptionController.dispose();
+    disposeTaskFormState();
     super.dispose();
   }
 
-  Future<void> _pickDueDate() async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDueDate ?? now,
-      firstDate: now.subtract(const Duration(days: 365)),
-      lastDate: now.add(const Duration(days: 365 * 5)),
-    );
-    if (picked != null && mounted) {
-      setState(() => _selectedDueDate = picked);
-    }
-  }
-
   Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) return;
-    setState(() => _isSubmitting = true);
+    if (!formKey.currentState!.validate()) return;
+    setState(() => isSubmitting = true);
     try {
       final request = CreateTaskRequest(
-        title: _titleController.text.trim(),
-        description: _descriptionController.text.trim(),
-        priority: _selectedPriority.toServerString(),
-        assigneeId: _selectedAssigneeId,
-        dueDate: _selectedDueDate,
+        title: titleController.text.trim(),
+        description: descriptionController.text.trim(),
+        priority: selectedPriority.toServerString(),
+        assigneeId: selectedAssigneeId,
+        dueDate: selectedDueDate,
         tagIds: _selectedTags.map((t) => t.id).toList(),
       );
       await widget.onSubmit(request, _selectedStatus.toServerString());
       if (mounted) Navigator.of(context).pop();
     } catch (_) {
-      if (mounted) setState(() => _isSubmitting = false);
+      if (mounted) setState(() => isSubmitting = false);
     }
   }
 
@@ -128,7 +107,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -136,24 +115,24 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                 CreateTaskHeader(selectedStatus: _selectedStatus),
                 const SizedBox(height: 20),
                 CreateTaskTextFields(
-                  titleController: _titleController,
-                  descriptionController: _descriptionController,
+                  titleController: titleController,
+                  descriptionController: descriptionController,
                 ),
                 const SizedBox(height: 18),
                 CreateTaskPrioritySelector(
-                  selectedPriority: _selectedPriority,
+                  selectedPriority: selectedPriority,
                   onPriorityChanged: (p) =>
-                      setState(() => _selectedPriority = p),
+                      setState(() => selectedPriority = p),
                 ),
                 const SizedBox(height: 18),
                 CreateTaskAssigneeDueDateRow(
                   members: widget.members,
-                  selectedAssigneeId: _selectedAssigneeId,
-                  selectedDueDate: _selectedDueDate,
+                  selectedAssigneeId: selectedAssigneeId,
+                  selectedDueDate: selectedDueDate,
                   onAssigneeChanged: (val) =>
-                      setState(() => _selectedAssigneeId = val),
-                  onPickDueDate: _pickDueDate,
-                  onClearDueDate: () => setState(() => _selectedDueDate = null),
+                      setState(() => selectedAssigneeId = val),
+                  onPickDueDate: () => pickDueDate(context),
+                  onClearDueDate: clearDueDate,
                 ),
                 const SizedBox(height: 16),
                 CreateTaskTagsSelector(
@@ -167,9 +146,9 @@ class _CreateTaskSheetState extends State<CreateTaskSheet> {
                 const SizedBox(height: 24),
                 AppButton(
                   label: l10n?.createTask ?? 'Create Task',
-                  isLoading: _isSubmitting,
+                  isLoading: isSubmitting,
                   variant: AppButtonVariant.primary,
-                  onPressed: _isSubmitting ? null : _submit,
+                  onPressed: isSubmitting ? null : _submit,
                 ),
               ],
             ),
