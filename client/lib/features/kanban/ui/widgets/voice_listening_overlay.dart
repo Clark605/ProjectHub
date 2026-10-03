@@ -45,9 +45,11 @@ class VoiceListeningOverlay extends StatelessWidget {
               ),
             ],
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
               Container(
                 width: 40,
                 height: 4,
@@ -139,7 +141,8 @@ class VoiceListeningOverlay extends StatelessWidget {
                 ),
             ],
           ),
-        );
+        ),
+      );
       },
     );
   }

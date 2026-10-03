@@ -82,13 +82,28 @@ class KanbanVoiceHandler extends StatelessWidget {
               if (!isListening && !isParsing) return const SizedBox.shrink();
 
               final voiceCubit = context.read<VoiceTaskCubit>();
-              return Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: VoiceListeningOverlay(
-                  onCancel: voiceCubit.cancelListening,
-                  onDone: voiceCubit.stopListening,
+              return Positioned.fill(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: voiceCubit.cancelListening,
+                        child: Container(
+                          color: Colors.black.withValues(alpha: 0.55),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: VoiceListeningOverlay(
+                        onCancel: voiceCubit.cancelListening,
+                        onDone: voiceCubit.stopListening,
+                      ),
+                    ),
+                  ],
                 ),
               );
             },

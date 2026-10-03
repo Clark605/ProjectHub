@@ -68,9 +68,5 @@
 		</array>
 		<key>UIStatusBarHidden</key>
 		<false/>
-		<key>NSSpeechRecognitionUsageDescription</key>
-		<string>ProjectHub uses speech recognition to create tasks from your voice.</string>
-		<key>NSMicrophoneUsageDescription</key>
-		<string>ProjectHub needs microphone access to hear your voice commands.</string>
 	</dict>
 </plist>

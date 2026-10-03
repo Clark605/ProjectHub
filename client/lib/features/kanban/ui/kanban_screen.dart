@@ -193,9 +193,14 @@ class _KanbanScreenState extends State<KanbanScreen>
           if (voiceCubit != null) {
             fab = BlocBuilder<VoiceTaskCubit, VoiceTaskState>(
               builder: (context, voiceState) {
+                final isVoiceActive =
+                    voiceState is VoiceTaskListening ||
+                    voiceState is VoiceTaskParsing;
+                if (isVoiceActive) return const SizedBox.shrink();
+
                 return KanbanFab(
                   isArchived: isEffectivelyArchived,
-                  isListening: voiceState is VoiceTaskListening,
+                  isListening: false,
                   onPressed: () => _openCreateTask('Backlog'),
                   onVoicePressed: () {
                     final wsId = _project?.workspaceId ?? 0;
