@@ -1128,4 +1128,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noMatchingActivities => 'No activities match your filters';
+
+  @override
+  String get voiceTaskListening => 'Listening...';
+
+  @override
+  String get voiceTaskStructuring => 'Structuring task with AI...';
+
+  @override
+  String get voiceTaskPlaceholder =>
+      'Speak naturally (e.g. \"Add an urgent task to review metrics due tomorrow\")';
+
+  @override
+  String get voiceTaskDone => 'Done Speaking';
+
+  @override
+  String get voiceTaskCancel => 'Cancel';
+
+  @override
+  String get voiceTaskMicPermissionRequired =>
+      'Microphone permission is required for voice tasks.';
+
+  @override
+  String get voiceTaskSettings => 'Settings';
+
+  @override
+  String get voiceTaskAiDraftPreview => 'AI Draft Preview';
+
+  @override
+  String get voiceTaskConfirmCreate => 'Confirm & Create Task';
+
+  @override
+  String get voiceTaskSpeechUnavailable =>
+      'Speech recognition is not available on this device.';
+
+  @override
+  String get voiceTaskFailedToUnderstand =>
+      'Failed to understand task. Please try again.';
+
+  @override
+  String get voiceTaskInputUnclear =>
+      'Input was unclear. Please review the title.';
+
+  @override
+  String get voiceTaskCouldNotDetermineDueDate =>
+      'Could not determine due date';
 }

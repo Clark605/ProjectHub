@@ -2137,6 +2137,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No activities match your filters'**
   String get noMatchingActivities;
+
+  /// Voice task listening status
+  ///
+  /// In en, this message translates to:
+  /// **'Listening...'**
+  String get voiceTaskListening;
+
+  /// Voice task parsing status
+  ///
+  /// In en, this message translates to:
+  /// **'Structuring task with AI...'**
+  String get voiceTaskStructuring;
+
+  /// Voice task input placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Speak naturally (e.g. \"Add an urgent task to review metrics due tomorrow\")'**
+  String get voiceTaskPlaceholder;
+
+  /// Button to stop speaking and parse task
+  ///
+  /// In en, this message translates to:
+  /// **'Done Speaking'**
+  String get voiceTaskDone;
+
+  /// Button to cancel voice task listening
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get voiceTaskCancel;
+
+  /// SnackBar message when mic permission is denied
+  ///
+  /// In en, this message translates to:
+  /// **'Microphone permission is required for voice tasks.'**
+  String get voiceTaskMicPermissionRequired;
+
+  /// SnackBar action to open app settings
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get voiceTaskSettings;
+
+  /// Header badge in voice task review sheet
+  ///
+  /// In en, this message translates to:
+  /// **'AI Draft Preview'**
+  String get voiceTaskAiDraftPreview;
+
+  /// Button to submit draft task
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm & Create Task'**
+  String get voiceTaskConfirmCreate;
+
+  /// Error when STT is not available
+  ///
+  /// In en, this message translates to:
+  /// **'Speech recognition is not available on this device.'**
+  String get voiceTaskSpeechUnavailable;
+
+  /// Error when AI parse fails
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to understand task. Please try again.'**
+  String get voiceTaskFailedToUnderstand;
+
+  /// Warning when spoken input was unclear
+  ///
+  /// In en, this message translates to:
+  /// **'Input was unclear. Please review the title.'**
+  String get voiceTaskInputUnclear;
+
+  /// Warning when AI could not resolve due date
+  ///
+  /// In en, this message translates to:
+  /// **'Could not determine due date'**
+  String get voiceTaskCouldNotDetermineDueDate;
 }
 
 class _AppLocalizationsDelegate

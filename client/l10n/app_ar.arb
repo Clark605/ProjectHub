@@ -361,5 +361,18 @@
   "newestFirst": "الأحدث أولاً",
   "oldestFirst": "الأقدم أولاً",
   "applyFilters": "تطبيق التصفية",
-  "noMatchingActivities": "لا توجد أنشطة تطابق خيارات التصفية"
+  "noMatchingActivities": "لا توجد أنشطة تطابق خيارات التصفية",
+  "voiceTaskListening": "جارٍ الاستماع...",
+  "voiceTaskStructuring": "جارٍ هيكلة المهمة بالذكاء الاصطناعي...",
+  "voiceTaskPlaceholder": "تحدث بشكل طبيعي (مثال: \"أضف مهمة عاجلة لمراجعة المقاييس غداً\")",
+  "voiceTaskDone": "انتهيت من التحدث",
+  "voiceTaskCancel": "إلغاء",
+  "voiceTaskMicPermissionRequired": "إذن الميكروفون مطلوب لإنشاء المهام الصوتية.",
+  "voiceTaskSettings": "الإعدادات",
+  "voiceTaskAiDraftPreview": "معاينة مسودة الذكاء الاصطناعي",
+  "voiceTaskConfirmCreate": "تأكيد وإنشاء المهمة",
+  "voiceTaskSpeechUnavailable": "التعرف على الصوت غير متوفر على هذا الجهاز.",
+  "voiceTaskFailedToUnderstand": "تعذر فهم تفاصيل المهمة. يرجى المحاولة مرة أخرى.",
+  "voiceTaskInputUnclear": "المدخلات غير واضحة. يرجى مراجعة العنوان.",
+  "voiceTaskCouldNotDetermineDueDate": "تعذر تحديد تاريخ الاستحقاق"
 }

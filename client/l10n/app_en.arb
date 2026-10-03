@@ -741,5 +741,57 @@
   "noMatchingActivities": "No activities match your filters",
   "@noMatchingActivities": {
     "description": "Empty state message when filter returns no activities"
+  },
+  "voiceTaskListening": "Listening...",
+  "@voiceTaskListening": {
+    "description": "Voice task listening status"
+  },
+  "voiceTaskStructuring": "Structuring task with AI...",
+  "@voiceTaskStructuring": {
+    "description": "Voice task parsing status"
+  },
+  "voiceTaskPlaceholder": "Speak naturally (e.g. \"Add an urgent task to review metrics due tomorrow\")",
+  "@voiceTaskPlaceholder": {
+    "description": "Voice task input placeholder"
+  },
+  "voiceTaskDone": "Done Speaking",
+  "@voiceTaskDone": {
+    "description": "Button to stop speaking and parse task"
+  },
+  "voiceTaskCancel": "Cancel",
+  "@voiceTaskCancel": {
+    "description": "Button to cancel voice task listening"
+  },
+  "voiceTaskMicPermissionRequired": "Microphone permission is required for voice tasks.",
+  "@voiceTaskMicPermissionRequired": {
+    "description": "SnackBar message when mic permission is denied"
+  },
+  "voiceTaskSettings": "Settings",
+  "@voiceTaskSettings": {
+    "description": "SnackBar action to open app settings"
+  },
+  "voiceTaskAiDraftPreview": "AI Draft Preview",
+  "@voiceTaskAiDraftPreview": {
+    "description": "Header badge in voice task review sheet"
+  },
+  "voiceTaskConfirmCreate": "Confirm & Create Task",
+  "@voiceTaskConfirmCreate": {
+    "description": "Button to submit draft task"
+  },
+  "voiceTaskSpeechUnavailable": "Speech recognition is not available on this device.",
+  "@voiceTaskSpeechUnavailable": {
+    "description": "Error when STT is not available"
+  },
+  "voiceTaskFailedToUnderstand": "Failed to understand task. Please try again.",
+  "@voiceTaskFailedToUnderstand": {
+    "description": "Error when AI parse fails"
+  },
+  "voiceTaskInputUnclear": "Input was unclear. Please review the title.",
+  "@voiceTaskInputUnclear": {
+    "description": "Warning when spoken input was unclear"
+  },
+  "voiceTaskCouldNotDetermineDueDate": "Could not determine due date",
+  "@voiceTaskCouldNotDetermineDueDate": {
+    "description": "Warning when AI could not resolve due date"
   }
 }

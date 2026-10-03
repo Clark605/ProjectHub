@@ -1124,4 +1124,48 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noMatchingActivities => 'لا توجد أنشطة تطابق خيارات التصفية';
+
+  @override
+  String get voiceTaskListening => 'جارٍ الاستماع...';
+
+  @override
+  String get voiceTaskStructuring => 'جارٍ هيكلة المهمة بالذكاء الاصطناعي...';
+
+  @override
+  String get voiceTaskPlaceholder =>
+      'تحدث بشكل طبيعي (مثال: \"أضف مهمة عاجلة لمراجعة المقاييس غداً\")';
+
+  @override
+  String get voiceTaskDone => 'انتهيت من التحدث';
+
+  @override
+  String get voiceTaskCancel => 'إلغاء';
+
+  @override
+  String get voiceTaskMicPermissionRequired =>
+      'إذن الميكروفون مطلوب لإنشاء المهام الصوتية.';
+
+  @override
+  String get voiceTaskSettings => 'الإعدادات';
+
+  @override
+  String get voiceTaskAiDraftPreview => 'معاينة مسودة الذكاء الاصطناعي';
+
+  @override
+  String get voiceTaskConfirmCreate => 'تأكيد وإنشاء المهمة';
+
+  @override
+  String get voiceTaskSpeechUnavailable =>
+      'التعرف على الصوت غير متوفر على هذا الجهاز.';
+
+  @override
+  String get voiceTaskFailedToUnderstand =>
+      'تعذر فهم تفاصيل المهمة. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get voiceTaskInputUnclear =>
+      'المدخلات غير واضحة. يرجى مراجعة العنوان.';
+
+  @override
+  String get voiceTaskCouldNotDetermineDueDate => 'تعذر تحديد تاريخ الاستحقاق';
 }
