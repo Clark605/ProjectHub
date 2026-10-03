@@ -169,12 +169,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i322.ProfileEditCubit>(
       () => _i322.ProfileEditCubit(gh<_i726.AuthRepository>()),
     );
-    gh.factory<_i513.VoiceTaskCubit>(
-      () => _i513.VoiceTaskCubit(
-        gh<_i437.AiTaskRepository>(),
-        gh<_i241.TaskRepository>(),
-      ),
-    );
     gh.factory<_i627.KanbanCubit>(
       () => _i627.KanbanCubit(
         gh<_i241.TaskRepository>(),
@@ -184,6 +178,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i816.MyTasksCubit>(
       () => _i816.MyTasksCubit(gh<_i241.TaskRepository>()),
+    );
+    gh.factory<_i513.VoiceTaskCubit>(
+      () => _i513.VoiceTaskCubit(gh<_i437.AiTaskRepository>()),
     );
     gh.factory<_i949.DashboardCubit>(
       () => _i949.DashboardCubit(

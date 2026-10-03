@@ -55,7 +55,7 @@ extension VoiceTaskStatePatterns on VoiceTaskState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( VoiceTaskIdle value)?  idle,TResult Function( VoiceTaskRequestingPermission value)?  requestingPermission,TResult Function( VoiceTaskPermissionDenied value)?  permissionDenied,TResult Function( VoiceTaskListening value)?  listening,TResult Function( VoiceTaskParsing value)?  parsing,TResult Function( VoiceTaskReviewDraft value)?  reviewDraft,TResult Function( VoiceTaskCreating value)?  creating,TResult Function( VoiceTaskSuccess value)?  success,TResult Function( VoiceTaskError value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( VoiceTaskIdle value)?  idle,TResult Function( VoiceTaskRequestingPermission value)?  requestingPermission,TResult Function( VoiceTaskPermissionDenied value)?  permissionDenied,TResult Function( VoiceTaskListening value)?  listening,TResult Function( VoiceTaskParsing value)?  parsing,TResult Function( VoiceTaskReviewDraft value)?  reviewDraft,TResult Function( VoiceTaskError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case VoiceTaskIdle() when idle != null:
@@ -64,9 +64,7 @@ return requestingPermission(_that);case VoiceTaskPermissionDenied() when permiss
 return permissionDenied(_that);case VoiceTaskListening() when listening != null:
 return listening(_that);case VoiceTaskParsing() when parsing != null:
 return parsing(_that);case VoiceTaskReviewDraft() when reviewDraft != null:
-return reviewDraft(_that);case VoiceTaskCreating() when creating != null:
-return creating(_that);case VoiceTaskSuccess() when success != null:
-return success(_that);case VoiceTaskError() when error != null:
+return reviewDraft(_that);case VoiceTaskError() when error != null:
 return error(_that);case _:
   return orElse();
 
@@ -85,7 +83,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( VoiceTaskIdle value)  idle,required TResult Function( VoiceTaskRequestingPermission value)  requestingPermission,required TResult Function( VoiceTaskPermissionDenied value)  permissionDenied,required TResult Function( VoiceTaskListening value)  listening,required TResult Function( VoiceTaskParsing value)  parsing,required TResult Function( VoiceTaskReviewDraft value)  reviewDraft,required TResult Function( VoiceTaskCreating value)  creating,required TResult Function( VoiceTaskSuccess value)  success,required TResult Function( VoiceTaskError value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( VoiceTaskIdle value)  idle,required TResult Function( VoiceTaskRequestingPermission value)  requestingPermission,required TResult Function( VoiceTaskPermissionDenied value)  permissionDenied,required TResult Function( VoiceTaskListening value)  listening,required TResult Function( VoiceTaskParsing value)  parsing,required TResult Function( VoiceTaskReviewDraft value)  reviewDraft,required TResult Function( VoiceTaskError value)  error,}){
 final _that = this;
 switch (_that) {
 case VoiceTaskIdle():
@@ -94,9 +92,7 @@ return requestingPermission(_that);case VoiceTaskPermissionDenied():
 return permissionDenied(_that);case VoiceTaskListening():
 return listening(_that);case VoiceTaskParsing():
 return parsing(_that);case VoiceTaskReviewDraft():
-return reviewDraft(_that);case VoiceTaskCreating():
-return creating(_that);case VoiceTaskSuccess():
-return success(_that);case VoiceTaskError():
+return reviewDraft(_that);case VoiceTaskError():
 return error(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -114,7 +110,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( VoiceTaskIdle value)?  idle,TResult? Function( VoiceTaskRequestingPermission value)?  requestingPermission,TResult? Function( VoiceTaskPermissionDenied value)?  permissionDenied,TResult? Function( VoiceTaskListening value)?  listening,TResult? Function( VoiceTaskParsing value)?  parsing,TResult? Function( VoiceTaskReviewDraft value)?  reviewDraft,TResult? Function( VoiceTaskCreating value)?  creating,TResult? Function( VoiceTaskSuccess value)?  success,TResult? Function( VoiceTaskError value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( VoiceTaskIdle value)?  idle,TResult? Function( VoiceTaskRequestingPermission value)?  requestingPermission,TResult? Function( VoiceTaskPermissionDenied value)?  permissionDenied,TResult? Function( VoiceTaskListening value)?  listening,TResult? Function( VoiceTaskParsing value)?  parsing,TResult? Function( VoiceTaskReviewDraft value)?  reviewDraft,TResult? Function( VoiceTaskError value)?  error,}){
 final _that = this;
 switch (_that) {
 case VoiceTaskIdle() when idle != null:
@@ -123,9 +119,7 @@ return requestingPermission(_that);case VoiceTaskPermissionDenied() when permiss
 return permissionDenied(_that);case VoiceTaskListening() when listening != null:
 return listening(_that);case VoiceTaskParsing() when parsing != null:
 return parsing(_that);case VoiceTaskReviewDraft() when reviewDraft != null:
-return reviewDraft(_that);case VoiceTaskCreating() when creating != null:
-return creating(_that);case VoiceTaskSuccess() when success != null:
-return success(_that);case VoiceTaskError() when error != null:
+return reviewDraft(_that);case VoiceTaskError() when error != null:
 return error(_that);case _:
   return null;
 
@@ -143,7 +137,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  idle,TResult Function()?  requestingPermission,TResult Function( bool permanentlyDenied)?  permissionDenied,TResult Function( String recognizedText,  double soundLevel)?  listening,TResult Function( String fullText)?  parsing,TResult Function( ParsedTaskDraftDto draft,  String rawSpokenText)?  reviewDraft,TResult Function()?  creating,TResult Function( TaskDto createdTask)?  success,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  idle,TResult Function()?  requestingPermission,TResult Function( bool permanentlyDenied)?  permissionDenied,TResult Function( String recognizedText,  double soundLevel)?  listening,TResult Function( String fullText)?  parsing,TResult Function( ParsedTaskDraftDto draft,  String rawSpokenText)?  reviewDraft,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case VoiceTaskIdle() when idle != null:
 return idle();case VoiceTaskRequestingPermission() when requestingPermission != null:
@@ -151,9 +145,7 @@ return requestingPermission();case VoiceTaskPermissionDenied() when permissionDe
 return permissionDenied(_that.permanentlyDenied);case VoiceTaskListening() when listening != null:
 return listening(_that.recognizedText,_that.soundLevel);case VoiceTaskParsing() when parsing != null:
 return parsing(_that.fullText);case VoiceTaskReviewDraft() when reviewDraft != null:
-return reviewDraft(_that.draft,_that.rawSpokenText);case VoiceTaskCreating() when creating != null:
-return creating();case VoiceTaskSuccess() when success != null:
-return success(_that.createdTask);case VoiceTaskError() when error != null:
+return reviewDraft(_that.draft,_that.rawSpokenText);case VoiceTaskError() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -172,7 +164,7 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  idle,required TResult Function()  requestingPermission,required TResult Function( bool permanentlyDenied)  permissionDenied,required TResult Function( String recognizedText,  double soundLevel)  listening,required TResult Function( String fullText)  parsing,required TResult Function( ParsedTaskDraftDto draft,  String rawSpokenText)  reviewDraft,required TResult Function()  creating,required TResult Function( TaskDto createdTask)  success,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  idle,required TResult Function()  requestingPermission,required TResult Function( bool permanentlyDenied)  permissionDenied,required TResult Function( String recognizedText,  double soundLevel)  listening,required TResult Function( String fullText)  parsing,required TResult Function( ParsedTaskDraftDto draft,  String rawSpokenText)  reviewDraft,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case VoiceTaskIdle():
 return idle();case VoiceTaskRequestingPermission():
@@ -180,9 +172,7 @@ return requestingPermission();case VoiceTaskPermissionDenied():
 return permissionDenied(_that.permanentlyDenied);case VoiceTaskListening():
 return listening(_that.recognizedText,_that.soundLevel);case VoiceTaskParsing():
 return parsing(_that.fullText);case VoiceTaskReviewDraft():
-return reviewDraft(_that.draft,_that.rawSpokenText);case VoiceTaskCreating():
-return creating();case VoiceTaskSuccess():
-return success(_that.createdTask);case VoiceTaskError():
+return reviewDraft(_that.draft,_that.rawSpokenText);case VoiceTaskError():
 return error(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -200,7 +190,7 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  idle,TResult? Function()?  requestingPermission,TResult? Function( bool permanentlyDenied)?  permissionDenied,TResult? Function( String recognizedText,  double soundLevel)?  listening,TResult? Function( String fullText)?  parsing,TResult? Function( ParsedTaskDraftDto draft,  String rawSpokenText)?  reviewDraft,TResult? Function()?  creating,TResult? Function( TaskDto createdTask)?  success,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  idle,TResult? Function()?  requestingPermission,TResult? Function( bool permanentlyDenied)?  permissionDenied,TResult? Function( String recognizedText,  double soundLevel)?  listening,TResult? Function( String fullText)?  parsing,TResult? Function( ParsedTaskDraftDto draft,  String rawSpokenText)?  reviewDraft,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case VoiceTaskIdle() when idle != null:
 return idle();case VoiceTaskRequestingPermission() when requestingPermission != null:
@@ -208,9 +198,7 @@ return requestingPermission();case VoiceTaskPermissionDenied() when permissionDe
 return permissionDenied(_that.permanentlyDenied);case VoiceTaskListening() when listening != null:
 return listening(_that.recognizedText,_that.soundLevel);case VoiceTaskParsing() when parsing != null:
 return parsing(_that.fullText);case VoiceTaskReviewDraft() when reviewDraft != null:
-return reviewDraft(_that.draft,_that.rawSpokenText);case VoiceTaskCreating() when creating != null:
-return creating();case VoiceTaskSuccess() when success != null:
-return success(_that.createdTask);case VoiceTaskError() when error != null:
+return reviewDraft(_that.draft,_that.rawSpokenText);case VoiceTaskError() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -556,113 +544,6 @@ $ParsedTaskDraftDtoCopyWith<$Res> get draft {
   
   return $ParsedTaskDraftDtoCopyWith<$Res>(_self.draft, (value) {
     return _then(_self.copyWith(draft: value));
-  });
-}
-}
-
-/// @nodoc
-
-
-class VoiceTaskCreating implements VoiceTaskState {
-  const VoiceTaskCreating();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoiceTaskCreating);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'VoiceTaskState.creating()';
-}
-
-
-}
-
-
-
-
-/// @nodoc
-
-
-class VoiceTaskSuccess implements VoiceTaskState {
-  const VoiceTaskSuccess({required this.createdTask});
-  
-
- final  TaskDto createdTask;
-
-/// Create a copy of VoiceTaskState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-$VoiceTaskSuccessCopyWith<VoiceTaskSuccess> get copyWith => _$VoiceTaskSuccessCopyWithImpl<VoiceTaskSuccess>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoiceTaskSuccess&&(identical(other.createdTask, createdTask) || other.createdTask == createdTask));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,createdTask);
-
-@override
-String toString() {
-  return 'VoiceTaskState.success(createdTask: $createdTask)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class $VoiceTaskSuccessCopyWith<$Res> implements $VoiceTaskStateCopyWith<$Res> {
-  factory $VoiceTaskSuccessCopyWith(VoiceTaskSuccess value, $Res Function(VoiceTaskSuccess) _then) = _$VoiceTaskSuccessCopyWithImpl;
-@useResult
-$Res call({
- TaskDto createdTask
-});
-
-
-$TaskDtoCopyWith<$Res> get createdTask;
-
-}
-/// @nodoc
-class _$VoiceTaskSuccessCopyWithImpl<$Res>
-    implements $VoiceTaskSuccessCopyWith<$Res> {
-  _$VoiceTaskSuccessCopyWithImpl(this._self, this._then);
-
-  final VoiceTaskSuccess _self;
-  final $Res Function(VoiceTaskSuccess) _then;
-
-/// Create a copy of VoiceTaskState
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? createdTask = null,}) {
-  return _then(VoiceTaskSuccess(
-createdTask: null == createdTask ? _self.createdTask : createdTask // ignore: cast_nullable_to_non_nullable
-as TaskDto,
-  ));
-}
-
-/// Create a copy of VoiceTaskState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$TaskDtoCopyWith<$Res> get createdTask {
-  
-  return $TaskDtoCopyWith<$Res>(_self.createdTask, (value) {
-    return _then(_self.copyWith(createdTask: value));
   });
 }
 }
