@@ -46,6 +46,11 @@ if (!string.IsNullOrWhiteSpace(envGeminiApiKey))
 {
     builder.Configuration["Ai:Gemini:ApiKey"] = envGeminiApiKey;
 }
+var envGeminiModel = Environment.GetEnvironmentVariable("GEMINI_MODEL");
+if (!string.IsNullOrWhiteSpace(envGeminiModel))
+{
+    builder.Configuration["Ai:Gemini:Model"] = envGeminiModel;
+}
 // Configure non-blocking async logging from appsettings
 builder.Host.UseSerilog((context, services, configuration) => configuration
     .ReadFrom.Configuration(context.Configuration)

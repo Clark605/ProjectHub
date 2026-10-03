@@ -115,13 +115,34 @@ public class GeminiTextParser : IAiTextParser
             """;
     }
 
+    private static readonly string[] FallbackModels =
+    [
+        "gemini-flash-lite-latest",
+        "gemini-3.5-flash",
+        "gemini-3.1-flash-lite",
+        "gemini-3.8-flash"
+    ];
+
     private async Task<AiParsedTaskDraftDto> CallGeminiApiAsync(string systemPrompt, string userText)
     {
         var apiKey = _configuration["Ai:Gemini:ApiKey"]
             ?? throw new InvalidOperationException("Gemini API key is not configured. Set Ai:Gemini:ApiKey in configuration or GEMINI_API_KEY in .env.");
 
-        var model = _configuration["Ai:Gemini:Model"] ?? "gemini-2.5-flash";
-        var baseUrl = $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={apiKey}";
+        var configuredModel = _configuration["Ai:Gemini:Model"];
+        var modelsToTry = new List<string>();
+
+        if (!string.IsNullOrWhiteSpace(configuredModel))
+        {
+            modelsToTry.Add(configuredModel);
+        }
+
+        foreach (var m in FallbackModels)
+        {
+            if (!modelsToTry.Contains(m))
+            {
+                modelsToTry.Add(m);
+            }
+        }
 
         var requestBody = new
         {
@@ -159,39 +180,73 @@ public class GeminiTextParser : IAiTextParser
         };
 
         var jsonContent = JsonSerializer.Serialize(requestBody, JsonOptions);
-        var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
         var client = _httpClientFactory.CreateClient();
         client.Timeout = TimeSpan.FromSeconds(30);
 
-        _logger.LogInformation("Calling Gemini API model {Model} for task parsing", model);
+        string lastErrorBody = string.Empty;
+        System.Net.HttpStatusCode lastStatusCode = System.Net.HttpStatusCode.InternalServerError;
 
-        var response = await client.PostAsync(baseUrl, httpContent);
-
-        if (!response.IsSuccessStatusCode)
+        foreach (var model in modelsToTry)
         {
-            var errorBody = await response.Content.ReadAsStringAsync();
-            _logger.LogError("Gemini API request failed with status {StatusCode}: {ErrorBody}",
-                response.StatusCode, errorBody);
-            throw new InvalidOperationException(
-                $"AI service returned an error (HTTP {(int)response.StatusCode}). Please try again.");
+            var baseUrl = $"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={apiKey}";
+            var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            _logger.LogInformation("Calling Gemini API model {Model} for task parsing", model);
+
+            HttpResponseMessage response;
+            try
+            {
+                response = await client.PostAsync(baseUrl, httpContent);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "HTTP call to Gemini model {Model} failed with exception", model);
+                continue;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                lastStatusCode = response.StatusCode;
+                lastErrorBody = await response.Content.ReadAsStringAsync();
+                _logger.LogWarning("Gemini API model {Model} failed with status {StatusCode}: {ErrorBody}",
+                    model, response.StatusCode, lastErrorBody);
+
+                // If model is not found (404) or busy (503/429), try next fallback model
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound ||
+                    response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable ||
+                    (int)response.StatusCode == 429)
+                {
+                    continue;
+                }
+
+                // For auth or schema errors, stop trying
+                throw new InvalidOperationException(
+                    $"AI service returned an error (HTTP {(int)response.StatusCode}). Please try again.");
+            }
+
+            var responseJson = await response.Content.ReadAsStringAsync();
+            var geminiResponse = JsonSerializer.Deserialize<GeminiResponse>(responseJson, JsonOptions);
+            var textContent = geminiResponse?.GetFirstText();
+
+            if (string.IsNullOrWhiteSpace(textContent))
+            {
+                _logger.LogWarning("Gemini API model {Model} returned empty content", model);
+                continue;
+            }
+
+            var parsed = JsonSerializer.Deserialize<AiParsedTaskDraftDto>(textContent, JsonOptions);
+            if (parsed is not null)
+            {
+                _logger.LogInformation("Successfully parsed task draft using Gemini model {Model}", model);
+                return parsed;
+            }
         }
 
-        var responseJson = await response.Content.ReadAsStringAsync();
-        var geminiResponse = JsonSerializer.Deserialize<GeminiResponse>(responseJson, JsonOptions);
+        _logger.LogError("All Gemini model candidates failed. Last status {StatusCode}: {ErrorBody}",
+            lastStatusCode, lastErrorBody);
 
-        var textContent = geminiResponse?.Candidates?.FirstOrDefault()?.Content?.Parts?.FirstOrDefault()?.Text;
-
-        if (string.IsNullOrWhiteSpace(textContent))
-        {
-            _logger.LogWarning("Gemini API returned empty content for task parsing");
-            throw new InvalidOperationException("AI service returned an empty response. Please try again.");
-        }
-
-        var parsed = JsonSerializer.Deserialize<AiParsedTaskDraftDto>(textContent, JsonOptions);
-
-        return parsed ?? throw new InvalidOperationException(
-            "AI service returned an unparseable response. Please try again.");
+        throw new InvalidOperationException(
+            $"AI service returned an error (HTTP {(int)lastStatusCode}). Please try again.");
     }
 
     /// <summary>
@@ -241,6 +296,9 @@ public class GeminiTextParser : IAiTextParser
     private sealed class GeminiResponse
     {
         public List<GeminiCandidate>? Candidates { get; set; }
+
+        public string? GetFirstText() =>
+            Candidates?.FirstOrDefault()?.Content?.Parts?.FirstOrDefault()?.Text;
     }
 
     private sealed class GeminiCandidate
