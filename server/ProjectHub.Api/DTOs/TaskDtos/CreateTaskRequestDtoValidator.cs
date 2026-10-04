@@ -19,6 +19,11 @@ public class CreateTaskRequestDtoValidator : AbstractValidator<CreateTaskRequest
             .When(x => !string.IsNullOrWhiteSpace(x.Priority))
             .WithMessage("Invalid task priority. Valid values: Low, Medium, High, Urgent.");
 
+        RuleFor(x => x.Status)
+            .IsEnumName(typeof(TaskItemStatus), caseSensitive: false)
+            .When(x => !string.IsNullOrWhiteSpace(x.Status))
+            .WithMessage("Invalid task status. Valid values: Backlog, Todo, InProgress, Review, Done.");
+
         RuleFor(x => x.TagIds)
             .Must(tags => tags == null || tags.Distinct().Count() <= 5)
             .WithMessage("A task cannot have more than 5 tags.");

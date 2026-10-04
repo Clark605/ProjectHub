@@ -123,7 +123,7 @@ public class TaskService : ITaskService
             ProjectId = projectId,
             Title = request.Title.Trim(),
             Description = request.Description?.Trim() ?? string.Empty,
-            Status = TaskItemStatus.Backlog,
+            Status = request.Status.ToTaskItemStatus(TaskItemStatus.Backlog),
             Priority = priority,
             AssigneeId = string.IsNullOrWhiteSpace(request.AssigneeId) ? null : request.AssigneeId,
             CreatedBy = userId,

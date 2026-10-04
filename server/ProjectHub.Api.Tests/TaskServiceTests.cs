@@ -213,4 +213,55 @@ public class TaskServiceTests
         Assert.Equal("InProgress", tasks[0].Status);
         Assert.Equal("High", tasks[0].Priority);
     }
+
+    [Theory]
+    [InlineData("Todo", true)]
+    [InlineData("InProgress", true)]
+    [InlineData("Review", true)]
+    [InlineData("Done", true)]
+    [InlineData("Backlog", true)]
+    [InlineData("InvalidStatus", false)]
+    public void Validator_ValidatesStatus(string status, bool expectedValid)
+    {
+        var validator = new CreateTaskRequestDtoValidator();
+        var request = new CreateTaskRequestDto
+        {
+            Title = "Status test task",
+            Status = status
+        };
+
+        var result = validator.Validate(request);
+        Assert.Equal(expectedValid, result.IsValid);
+    }
+
+    [Fact]
+    public async System.Threading.Tasks.Task CreateTask_CreatesTaskWithSpecifiedStatus()
+    {
+        using var context = CreateInMemoryDbContext();
+        var workspace = new WorkSpace { Id = 1, Name = "Workspace 1" };
+        var project = new Project { Id = 10, WorkspaceId = 1, Name = "Project 1", CreatedBy = "user-1" };
+        var user = new AppUser { Id = "user-1", Name = "Alice", UserName = "alice@test.com" };
+
+        context.WorkSpaces.Add(workspace);
+        context.Projects.Add(project);
+        context.Users.Add(user);
+        context.WorkspaceMembers.Add(new WorkspaceMember { Id = 1, UserId = "user-1", Workspace = workspace, Role = WorkspaceRoles.Owner.ToString() });
+        await context.SaveChangesAsync();
+
+        var service = CreateService(context);
+        var request = new CreateTaskRequestDto
+        {
+            Title = "In Progress Task",
+            Status = "InProgress"
+        };
+
+        var result = await service.CreateTaskAsync("user-1", 10, request);
+
+        Assert.NotNull(result);
+        Assert.Equal("InProgress", result.Status);
+
+        var savedTask = await context.Tasks.FirstOrDefaultAsync(t => t.Id == result.Id);
+        Assert.NotNull(savedTask);
+        Assert.Equal(TaskItemStatus.InProgress, savedTask.Status);
+    }
 }
