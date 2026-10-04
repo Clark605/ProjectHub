@@ -8,6 +8,12 @@ import 'package:client/core/utils/app_logger.dart';
 abstract class SafeActionCubit<T> extends Cubit<T> {
   SafeActionCubit(super.initialState);
 
+  @override
+  void emit(T state) {
+    if (isClosed) return;
+    super.emit(state);
+  }
+
   /// Executes [action] within a standardized try/catch block.
   ///
   /// - Catches [AppException] and passes its `message` to [onError].
@@ -20,8 +26,11 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
     String? logTag,
   }) async {
     try {
-      return await action();
+      final result = await action();
+      if (isClosed) return null;
+      return result;
     } on AppException catch (e, st) {
+      if (isClosed) return null;
       if (logTag != null) {
         AppLogger.warning(
           'AppException caught in $logTag: ${e.message}',
@@ -33,6 +42,7 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
       onError?.call(e.message);
       return null;
     } catch (e, st) {
+      if (isClosed) return null;
       if (logTag != null) {
         AppLogger.error(
           'Unexpected error caught in $logTag: $e',
