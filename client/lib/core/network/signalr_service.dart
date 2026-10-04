@@ -16,6 +16,8 @@ class SignalRService {
   final SecureStorageService _secureStorage;
   HubConnection? _connection;
   int? _currentWorkspaceId;
+  Future<void>? _connectionFuture;
+  final Map<int, int> _workspaceRefCounts = {};
 
   final _taskCreated = StreamController<TaskCreatedEvent>.broadcast();
   final _taskUpdated = StreamController<TaskUpdatedEvent>.broadcast();
@@ -26,6 +28,7 @@ class SignalRService {
   final _commentAdded = StreamController<CommentAddedEvent>.broadcast();
   final _commentDeleted = StreamController<CommentDeletedEvent>.broadcast();
   final _presenceChanged = StreamController<PresenceChangedEvent>.broadcast();
+  final _reconnected = StreamController<String>.broadcast();
 
   Stream<TaskCreatedEvent> get taskCreated => _taskCreated.stream;
   Stream<TaskUpdatedEvent> get taskUpdated => _taskUpdated.stream;
@@ -36,8 +39,34 @@ class SignalRService {
   Stream<CommentAddedEvent> get commentAdded => _commentAdded.stream;
   Stream<CommentDeletedEvent> get commentDeleted => _commentDeleted.stream;
   Stream<PresenceChangedEvent> get presenceChanged => _presenceChanged.stream;
+  Stream<String> get reconnected => _reconnected.stream;
+
+  @visibleForTesting
+  int getWorkspaceRefCount(int workspaceId) =>
+      _workspaceRefCounts[workspaceId] ?? 0;
+
+  @visibleForTesting
+  HubConnection? get connection => _connection;
+
+  @visibleForTesting
+  void setConnectionForTesting(HubConnection connection) {
+    _connection = connection;
+    _registerHandlers();
+  }
 
   Future<void> ensureConnected() async {
+    if (_connection?.state == HubConnectionState.Connected) return;
+    if (_connectionFuture != null) return _connectionFuture!;
+
+    _connectionFuture = _connectInternal();
+    try {
+      await _connectionFuture;
+    } finally {
+      _connectionFuture = null;
+    }
+  }
+
+  Future<void> _connectInternal() async {
     if (_connection?.state == HubConnectionState.Connected) return;
 
     final token = await _secureStorage.getAccessToken();
@@ -58,8 +87,8 @@ class SignalRService {
 
     try {
       await _connection!.start();
-      if (_currentWorkspaceId != null) {
-        await joinWorkspace(_currentWorkspaceId!);
+      for (final wsId in _workspaceRefCounts.keys.toList()) {
+        await _invokeJoin(wsId);
       }
     } catch (e) {
       debugPrint('[SignalRService] Error connecting: $e');
@@ -127,18 +156,30 @@ class SignalRService {
     });
 
     conn.onreconnected(({connectionId}) async {
-      if (_currentWorkspaceId != null) {
-        await joinWorkspace(_currentWorkspaceId!);
+      for (final wsId in _workspaceRefCounts.keys.toList()) {
+        await _invokeJoin(wsId);
       }
+      _reconnected.add(connectionId ?? '');
     });
   }
 
   Future<void> joinWorkspace(int workspaceId) async {
+    final prevCount = _workspaceRefCounts[workspaceId] ?? 0;
+    _workspaceRefCounts[workspaceId] = prevCount + 1;
     _currentWorkspaceId = workspaceId;
+
     if (_connection?.state != HubConnectionState.Connected) {
       await ensureConnected();
       return;
     }
+
+    // Only invoke remote JoinWorkspace on the first reference
+    if (prevCount == 0) {
+      await _invokeJoin(workspaceId);
+    }
+  }
+
+  Future<void> _invokeJoin(int workspaceId) async {
     try {
       await _connection?.invoke('JoinWorkspace', args: [workspaceId]);
     } catch (e) {
@@ -147,20 +188,30 @@ class SignalRService {
   }
 
   Future<void> leaveWorkspace(int workspaceId) async {
-    if (_currentWorkspaceId == workspaceId) {
-      _currentWorkspaceId = null;
-    }
-    if (_connection?.state == HubConnectionState.Connected) {
-      try {
-        await _connection?.invoke('LeaveWorkspace', args: [workspaceId]);
-      } catch (e) {
-        debugPrint('[SignalRService] LeaveWorkspace error: $e');
+    final currentCount = _workspaceRefCounts[workspaceId] ?? 0;
+    if (currentCount <= 1) {
+      _workspaceRefCounts.remove(workspaceId);
+      if (_currentWorkspaceId == workspaceId) {
+        _currentWorkspaceId = _workspaceRefCounts.keys.isEmpty
+            ? null
+            : _workspaceRefCounts.keys.first;
       }
+      if (_connection?.state == HubConnectionState.Connected) {
+        try {
+          await _connection?.invoke('LeaveWorkspace', args: [workspaceId]);
+        } catch (e) {
+          debugPrint('[SignalRService] LeaveWorkspace error: $e');
+        }
+      }
+    } else {
+      _workspaceRefCounts[workspaceId] = currentCount - 1;
     }
   }
 
   Future<void> disconnect() async {
     _currentWorkspaceId = null;
+    _workspaceRefCounts.clear();
+    _connectionFuture = null;
     if (_connection != null) {
       await _connection!.stop();
       _connection = null;
@@ -177,5 +228,6 @@ class SignalRService {
     _commentAdded.close();
     _commentDeleted.close();
     _presenceChanged.close();
+    _reconnected.close();
   }
 }
