@@ -120,7 +120,22 @@ void main() {
       expect(requestCount, 2);
     });
 
-    test('createProject sends POST and invalidates workspace cache', () async {
+    test('createProject sends POST and updates workspace cache', () async {
+      // Seed cache first
+      adapter.handler = (options) => jsonResponse([
+        {
+          'id': 101,
+          'workspaceId': 10,
+          'name': 'Existing Project',
+          'description': 'Desc',
+          'status': 'Active',
+          'createdAt': '2026-01-01T00:00:00Z',
+          'createdBy': 'u_creator',
+        },
+      ]);
+      await repository.getProjects(10);
+      expect(repository.hasCachedProjects(10), isTrue);
+
       adapter.handler = (options) {
         expect(options.method, 'POST');
         expect(options.path, ApiConstants.workspaceProjects(10));
@@ -146,7 +161,9 @@ void main() {
 
       expect(created.id, 102);
       expect(created.name, 'New Project');
-      expect(repository.hasCachedProjects(10), isFalse);
+      expect(repository.hasCachedProjects(10), isTrue);
+      final cached = await repository.getProjects(10);
+      expect(cached.first.id, 102);
     });
 
     test('updateProject sends PUT and updates detail cache', () async {
@@ -180,6 +197,18 @@ void main() {
     });
 
     test('deleteProject sends DELETE and clears caches', () async {
+      // Seed detail cache first
+      adapter.handler = (options) => jsonResponse({
+        'id': 102,
+        'workspaceId': 10,
+        'name': 'Project 102',
+        'status': 'Active',
+        'createdAt': '2026-01-01T00:00:00Z',
+        'createdBy': 'u_creator',
+      });
+      await repository.getProject(102);
+      expect(repository.hasCachedProject(102), isTrue);
+
       adapter.handler = (options) {
         expect(options.method, 'DELETE');
         expect(options.path, ApiConstants.projectById(102));
@@ -190,9 +219,21 @@ void main() {
       expect(repository.hasCachedProject(102), isFalse);
     });
 
-    test('clearCache clears all project caches', () {
+    test('clearCache clears all project caches', () async {
+      adapter.handler = (options) => jsonResponse({
+        'id': 102,
+        'workspaceId': 10,
+        'name': 'Project 102',
+        'status': 'Active',
+        'createdAt': '2026-01-01T00:00:00Z',
+        'createdBy': 'u_creator',
+      });
+      await repository.getProject(102);
+      expect(repository.hasCachedProject(102), isTrue);
+
       repository.clearCache();
       expect(repository.hasCachedProjects(10), isFalse);
+      expect(repository.hasCachedProject(102), isFalse);
     });
   });
 }

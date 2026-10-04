@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:client/features/tasks/data/task_filter.dart';
 
 part 'kanban_state.freezed.dart';
 
@@ -9,23 +10,35 @@ part 'kanban_state.freezed.dart';
 abstract class KanbanState with _$KanbanState {
   const KanbanState._();
 
-  const factory KanbanState.initial() = _KanbanInitial;
-  const factory KanbanState.loading() = _KanbanLoading;
+  const factory KanbanState.initial() = KanbanInitial;
+  const factory KanbanState.loading() = KanbanLoading;
   const factory KanbanState.loaded({
     required int projectId,
     required List<TaskDto> tasks,
     required List<TaskDto> allTasks,
     @Default(false) bool isArchived,
-    String? searchFilter,
-    String? priorityFilter,
-    String? assigneeFilter,
+    @Default(TaskFilter()) TaskFilter filter,
     String? errorMessage,
   }) = KanbanLoaded;
   const factory KanbanState.empty({
     required int projectId,
     @Default(false) bool isArchived,
-  }) = _KanbanEmpty;
-  const factory KanbanState.error(String message) = _KanbanError;
+    String? errorMessage,
+  }) = KanbanEmpty;
+  const factory KanbanState.error(String message) = KanbanError;
+
+  bool get isArchived => maybeWhen(
+    loaded: (_, _, _, isArchived, _, _) => isArchived,
+    empty: (_, isArchived, _) => isArchived,
+    orElse: () => false,
+  );
+
+  String? get errorMessage => maybeWhen(
+    loaded: (_, _, _, _, _, errorMessage) => errorMessage,
+    empty: (_, _, errorMessage) => errorMessage,
+    error: (msg) => msg,
+    orElse: () => null,
+  );
 
   Map<TaskStatus, List<TaskDto>> get tasksByStatus {
     final map = <TaskStatus, List<TaskDto>>{
@@ -33,24 +46,21 @@ abstract class KanbanState with _$KanbanState {
     };
 
     maybeWhen(
-      loaded:
-          (
-            projectId,
-            tasks,
-            allTasks,
-            isArchived,
-            searchFilter,
-            priorityFilter,
-            assigneeFilter,
-            errorMessage,
-          ) {
-            for (final task in tasks) {
-              map[task.statusEnum]?.add(task);
-            }
-          },
+      loaded: (projectId, tasks, allTasks, isArchived, filter, errorMessage) {
+        for (final task in tasks) {
+          map[task.statusEnum]?.add(task);
+        }
+      },
       orElse: () {},
     );
 
     return map;
   }
+}
+
+extension KanbanLoadedX on KanbanLoaded {
+  String? get searchFilter => filter.search;
+  String? get priorityFilter => filter.priority;
+  String? get assigneeFilter => filter.assigneeId;
+  int? get tagFilter => filter.tagId;
 }

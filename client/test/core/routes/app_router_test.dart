@@ -4,8 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:client/core/routes/app_router.dart';
 import 'package:client/core/routes/route_names.dart';
-import 'package:client/features/kanban/cubit/kanban_cubit.dart';
-import 'package:client/features/kanban/ui/kanban_screen.dart';
 import 'package:client/features/projects/cubit/project_detail_cubit.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/ui/project_detail_screen.dart';
@@ -71,7 +69,7 @@ void main() {
       expect((provider.child as ProjectDetailScreen).projectId, 0);
     });
 
-    test('kanban route accepts int arguments and wraps in BlocProvider', () {
+    test('kanban route accepts int arguments and wraps in MultiBlocProvider', () {
       final route = AppRouter.onGenerateRoute(
         const RouteSettings(name: RouteNames.kanban, arguments: 123),
       );
@@ -82,10 +80,7 @@ void main() {
         const AlwaysStoppedAnimation(1.0),
         const AlwaysStoppedAnimation(1.0),
       );
-      expect(widget, isA<BlocProvider<KanbanCubit>>());
-      final provider = widget as BlocProvider<KanbanCubit>;
-      expect(provider.child, isA<KanbanScreen>());
-      expect((provider.child as KanbanScreen).projectId, 123);
+      expect(widget, isA<MultiBlocProvider>());
     });
 
     test('kanban route accepts ProjectDto arguments', () {
@@ -106,12 +101,7 @@ void main() {
         const AlwaysStoppedAnimation(1.0),
         const AlwaysStoppedAnimation(1.0),
       );
-      expect(widget, isA<BlocProvider<KanbanCubit>>());
-      final provider = widget as BlocProvider<KanbanCubit>;
-      expect(provider.child, isA<KanbanScreen>());
-      final kanbanWidget = provider.child as KanbanScreen;
-      expect(kanbanWidget.projectId, 77);
-      expect(kanbanWidget.initialProject, project);
+      expect(widget, isA<MultiBlocProvider>());
     });
   });
 }

@@ -4,15 +4,21 @@ import 'package:client/core/network/signalr_events.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
+import 'package:client/features/tasks/data/task_filter.dart';
 
 mixin KanbanRealtimeMixin {
   SignalRService? get signalRService;
   int? get currentProjectId;
   KanbanState get state;
   void emit(KanbanState state);
-  void emitLoaded(List<TaskDto> allTasks, {String? errorMessage});
+  void emitLoaded(
+    List<TaskDto> allTasks, {
+    TaskFilter? filter,
+    String? errorMessage,
+  });
   void updateTaskInLoaded(int taskId, TaskDto updated);
   bool get isArchived;
+  Future<void> refreshOnFocus();
 
   StreamSubscription<TaskCreatedEvent>? _taskCreatedSub;
   StreamSubscription<TaskUpdatedEvent>? _taskUpdatedSub;
@@ -21,17 +27,17 @@ mixin KanbanRealtimeMixin {
   StreamSubscription<TaskDeletedEvent>? _taskDeletedSub;
   StreamSubscription<CommentAddedEvent>? _commentAddedSub;
   StreamSubscription<CommentDeletedEvent>? _commentDeletedSub;
+  StreamSubscription<String>? _reconnectedSub;
 
   void onRealtimeTaskCreated(TaskDto task) {
-    state.maybeWhen(
-      loaded: (pId, tasks, allTasks, arch, sF, pF, aF, err) {
-        if (!allTasks.any((t) => t.id == task.id)) {
-          emitLoaded([task, ...allTasks]);
-        }
-      },
-      empty: (_, _) => emitLoaded([task]),
-      orElse: () {},
-    );
+    final current = state;
+    if (current is KanbanLoaded) {
+      if (!current.allTasks.any((t) => t.id == task.id)) {
+        emitLoaded([task, ...current.allTasks]);
+      }
+    } else if (current is KanbanEmpty) {
+      emitLoaded([task]);
+    }
   }
 
   void onRealtimeTaskUpdated(TaskDto task) => updateTaskInLoaded(task.id, task);
@@ -148,6 +154,10 @@ mixin KanbanRealtimeMixin {
     _commentDeletedSub = service.commentDeleted.listen((event) {
       onRealtimeCommentDeleted(event.taskId);
     });
+
+    _reconnectedSub = service.reconnected.listen((_) {
+      refreshOnFocus();
+    });
   }
 
   void unsubscribeFromRealtime() {
@@ -158,6 +168,7 @@ mixin KanbanRealtimeMixin {
     _taskDeletedSub?.cancel();
     _commentAddedSub?.cancel();
     _commentDeletedSub?.cancel();
+    _reconnectedSub?.cancel();
     _taskCreatedSub = null;
     _taskUpdatedSub = null;
     _taskStatusChangedSub = null;
@@ -165,5 +176,6 @@ mixin KanbanRealtimeMixin {
     _taskDeletedSub = null;
     _commentAddedSub = null;
     _commentDeletedSub = null;
+    _reconnectedSub = null;
   }
 }

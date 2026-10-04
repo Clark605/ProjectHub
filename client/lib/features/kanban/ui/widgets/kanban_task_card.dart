@@ -33,9 +33,7 @@ class KanbanTaskCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final priorityColor = task.priorityEnum.toColor();
 
-    return Hero(
-      tag: 'task_${task.id}',
-      child: Container(
+    return Container(
         margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainer,
@@ -93,11 +91,14 @@ class KanbanTaskCard extends StatelessWidget {
                                 PopupMenuButton<String>(
                                   icon: Icon(
                                     Icons.more_vert_rounded,
-                                    size: 16,
+                                    size: 20,
                                     color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                   padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 40,
+                                    minHeight: 40,
+                                  ),
                                   onSelected: (action) {
                                     if (action == 'move') onMove?.call();
                                     if (action == 'delete') onDelete?.call();
@@ -173,7 +174,6 @@ class KanbanTaskCard extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

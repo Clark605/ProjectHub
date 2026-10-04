@@ -146,6 +146,7 @@ class KanbanColumn extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final task = tasks[index];
                       return KanbanTaskCard(
+                        key: ValueKey(task.id),
                         task: task,
                         isArchived: isArchived,
                         onTap: () => onTaskTap?.call(task),

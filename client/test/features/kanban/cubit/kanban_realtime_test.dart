@@ -25,6 +25,7 @@ class _FakeSignalRService extends SignalRService {
   final _commentDeletedCtrl = StreamController<CommentDeletedEvent>.broadcast();
   final _presenceChangedCtrl =
       StreamController<PresenceChangedEvent>.broadcast();
+  final _reconnectedCtrl = StreamController<String>.broadcast();
 
   int? joinedWorkspaceId;
   int? leftWorkspaceId;
@@ -47,6 +48,8 @@ class _FakeSignalRService extends SignalRService {
   @override
   Stream<PresenceChangedEvent> get presenceChanged =>
       _presenceChangedCtrl.stream;
+  @override
+  Stream<String> get reconnected => _reconnectedCtrl.stream;
 
   @override
   Future<void> joinWorkspace(int workspaceId) async {
@@ -66,6 +69,8 @@ class _FakeSignalRService extends SignalRService {
   void emitCommentAdded(CommentDto comment) => _commentAddedCtrl.add(comment);
   void emitCommentDeleted(CommentDeletedEvent event) =>
       _commentDeletedCtrl.add(event);
+  void emitReconnected([String connectionId = 'conn-1']) =>
+      _reconnectedCtrl.add(connectionId);
 
   void disposeStreams() {
     _taskCreatedCtrl.close();
@@ -76,6 +81,7 @@ class _FakeSignalRService extends SignalRService {
     _commentAddedCtrl.close();
     _commentDeletedCtrl.close();
     _presenceChangedCtrl.close();
+    _reconnectedCtrl.close();
   }
 }
 
@@ -192,10 +198,28 @@ void main() {
       await pumpEventQueue();
 
       final isEmpty = cubit.state.maybeWhen(
-        empty: (_, _) => true,
+        empty: (_, _, _) => true,
         orElse: () => false,
       );
       expect(isEmpty, isTrue);
+    },
+  );
+
+  test(
+    'SignalR reconnected event triggers silent refresh without emitting KanbanLoading',
+    () async {
+      await cubit.loadTasks(1);
+      final states = <KanbanState>[];
+      final sub = cubit.stream.listen(states.add);
+
+      signalR.emitReconnected();
+      await pumpEventQueue();
+
+      // Should not emit KanbanLoading during silent refresh
+      expect(states.any((s) => s is KanbanLoading), isFalse);
+      expect(cubit.state is KanbanLoaded, isTrue);
+
+      await sub.cancel();
     },
   );
 
@@ -251,7 +275,7 @@ void main() {
         initialStatus: 'InProgress',
       );
 
-      expect(created?.status, 'InProgress');
+      expect(created.status, 'InProgress');
       final loaded = testCubit.state as KanbanLoaded;
       final occurrences = loaded.allTasks.where((t) => t.id == 200).length;
       expect(occurrences, 1);

@@ -10,6 +10,7 @@ import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
+import 'package:client/features/tasks/ui/widgets/delete_task_dialog.dart';
 import 'package:client/features/tasks/ui/widgets/move_to_status_sheet.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_sheet.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
@@ -87,6 +88,17 @@ class KanbanScreenActions {
       onDelete: () => cubit.deleteTask(task.id),
       onTaskUpdated: (t) => cubit.updateTaskInLoaded(t.id, t),
     );
+  }
+
+  static Future<void> confirmAndDeleteTask(
+    BuildContext context,
+    TaskDto task,
+    KanbanCubit cubit,
+  ) async {
+    final confirmed = await DeleteTaskDialog.show(context, task.title);
+    if (confirmed == true && context.mounted) {
+      await cubit.deleteTask(task.id);
+    }
   }
 
   static void openMoveToStatus(

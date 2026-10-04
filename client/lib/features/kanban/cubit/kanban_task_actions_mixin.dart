@@ -1,14 +1,20 @@
 import 'package:client/core/cubit/safe_action_cubit.dart';
+import 'package:client/core/errors/app_exception.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/update_task_request.dart';
+import 'package:client/features/tasks/data/task_filter.dart';
 import 'package:client/features/tasks/data/task_repository.dart';
 
 mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
   TaskRepository get taskRepository;
   bool get isArchived;
-  void emitLoaded(List<TaskDto> allTasks, {String? errorMessage});
+  void emitLoaded(
+    List<TaskDto> allTasks, {
+    TaskFilter? filter,
+    String? errorMessage,
+  });
   void updateTaskInLoaded(int taskId, TaskDto updated);
   void setLoadedError(String msg);
 
@@ -52,42 +58,69 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
     );
   }
 
-  Future<TaskDto?> createTask(
+  Future<TaskDto> createTask(
     int projectId,
     CreateTaskRequest req, {
     String? initialStatus,
   }) async {
-    if (isArchived) return null;
-    return await safeExecute<TaskDto>(
-      () async {
-        var created = await taskRepository.createTask(projectId, req);
-        if (initialStatus != null &&
-            initialStatus.toLowerCase() != 'backlog' &&
-            initialStatus.isNotEmpty) {
-          created = await taskRepository.updateTaskStatus(
-            created.id,
-            initialStatus,
-          );
-        }
-        final current = state;
-        if (current is KanbanLoaded) {
-          final existingIndex = current.allTasks.indexWhere(
-            (t) => t.id == created.id,
-          );
-          final updatedAll = existingIndex != -1
-              ? (List<TaskDto>.from(current.allTasks)
-                  ..[existingIndex] = created)
-              : [created, ...current.allTasks];
-          emitLoaded(updatedAll);
-        } else {
-          emitLoaded([created]);
-        }
-        return created;
-      },
-      onError: (msg) => setLoadedError(msg),
-      defaultErrorMessage: 'Failed to create task',
-      logTag: 'KanbanCubit',
-    );
+    if (isArchived) {
+      throw const AppException(
+        message: 'Cannot create tasks in an archived project',
+      );
+    }
+
+    final targetStatus = initialStatus ?? req.status;
+    final requestWithStatus =
+        (targetStatus != null && targetStatus.isNotEmpty && req.status == null)
+            ? req.copyWith(status: targetStatus)
+            : req;
+
+    TaskDto created;
+    try {
+      created = await taskRepository.createTask(projectId, requestWithStatus);
+    } on AppException catch (e) {
+      setLoadedError(e.message);
+      rethrow;
+    } catch (_) {
+      setLoadedError('Failed to create task');
+      rethrow;
+    }
+
+    // Fallback if backend didn't set target status or if initialStatus differs:
+    if (targetStatus != null &&
+        targetStatus.toLowerCase() != 'backlog' &&
+        targetStatus.isNotEmpty &&
+        created.status.toLowerCase() != targetStatus.toLowerCase()) {
+      try {
+        created = await taskRepository.updateTaskStatus(
+          created.id,
+          targetStatus,
+        );
+      } catch (e) {
+        // H3: Even if status update fails, emit the created task in state!
+        _insertTaskIntoState(created);
+        final errorMsg =
+            e is AppException ? e.message : 'Task created, but failed to set status';
+        setLoadedError(errorMsg);
+        rethrow;
+      }
+    }
+
+    _insertTaskIntoState(created);
+    return created;
+  }
+
+  void _insertTaskIntoState(TaskDto task) {
+    final current = state;
+    if (current is KanbanLoaded) {
+      final existingIndex = current.allTasks.indexWhere((t) => t.id == task.id);
+      final updatedAll = existingIndex != -1
+          ? (List<TaskDto>.from(current.allTasks)..[existingIndex] = task)
+          : [task, ...current.allTasks];
+      emitLoaded(updatedAll);
+    } else {
+      emitLoaded([task]);
+    }
   }
 
   Future<TaskDto?> updateTask(int taskId, UpdateTaskRequest request) async {

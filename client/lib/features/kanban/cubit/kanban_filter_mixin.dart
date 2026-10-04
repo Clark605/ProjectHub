@@ -1,27 +1,28 @@
+import 'package:client/core/cubit/safe_action_cubit.dart';
+import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/task_filter.dart';
 
-mixin KanbanFilterMixin {
-  String? _searchFilter;
-  String? _priorityFilter;
-  String? _assigneeFilter;
-  int? _tagFilter;
+mixin KanbanFilterMixin on SafeActionCubit<KanbanState> {
+  void emitLoaded(
+    List<TaskDto> allTasks, {
+    TaskFilter? filter,
+    String? errorMessage,
+  });
 
-  String? get searchFilter => _searchFilter;
-  String? get priorityFilter => _priorityFilter;
-  String? get assigneeFilter => _assigneeFilter;
-  int? get tagFilter => _tagFilter;
+  TaskFilter get currentFilter {
+    final s = state;
+    if (s is KanbanLoaded) return s.filter;
+    return const TaskFilter();
+  }
 
-  TaskFilter get currentFilter => TaskFilter(
-    search: _searchFilter,
-    priority: _priorityFilter,
-    assigneeId: _assigneeFilter,
-    tagId: _tagFilter,
-  );
+  String? get searchFilter => currentFilter.search;
+  String? get priorityFilter => currentFilter.priority;
+  String? get assigneeFilter => currentFilter.assigneeId;
+  int? get tagFilter => currentFilter.tagId;
 
-  List<TaskDto> applyFilters(List<TaskDto> tasks) => currentFilter.apply(tasks);
-
-  void onFiltersUpdated();
+  List<TaskDto> applyFilters(List<TaskDto> tasks, [TaskFilter? filter]) =>
+      (filter ?? currentFilter).apply(tasks);
 
   void setFilter({
     String? search,
@@ -33,37 +34,43 @@ mixin KanbanFilterMixin {
     bool clearAssignee = false,
     bool clearTag = false,
   }) {
-    if (clearSearch) {
-      _searchFilter = null;
-    } else if (search != null) {
-      _searchFilter = search.trim().isEmpty ? null : search.trim();
-    }
+    final existing = currentFilter;
+    final newSearch = clearSearch
+        ? null
+        : (search != null
+            ? (search.trim().isEmpty ? null : search.trim())
+            : existing.search);
+    final newPriority = clearPriority
+        ? null
+        : (priority != null
+            ? (priority.toLowerCase() == 'all' ? null : priority)
+            : existing.priority);
+    final newAssignee = clearAssignee
+        ? null
+        : (assigneeId != null
+            ? (assigneeId.toLowerCase() == 'all' ? null : assigneeId)
+            : existing.assigneeId);
+    final newTag = clearTag
+        ? null
+        : (tagId ?? existing.tagId);
 
-    if (clearPriority) {
-      _priorityFilter = null;
-    } else if (priority != null) {
-      _priorityFilter = priority.toLowerCase() == 'all' ? null : priority;
-    }
+    final nextFilter = TaskFilter(
+      search: newSearch,
+      priority: newPriority,
+      assigneeId: newAssignee,
+      tagId: newTag,
+    );
 
-    if (clearAssignee) {
-      _assigneeFilter = null;
-    } else if (assigneeId != null) {
-      _assigneeFilter = assigneeId.toLowerCase() == 'all' ? null : assigneeId;
+    final s = state;
+    if (s is KanbanLoaded) {
+      emitLoaded(s.allTasks, filter: nextFilter);
     }
-
-    if (clearTag) {
-      _tagFilter = null;
-    } else if (tagId != null) {
-      _tagFilter = tagId;
-    }
-    onFiltersUpdated();
   }
 
   void clearFilters() {
-    _searchFilter = null;
-    _priorityFilter = null;
-    _assigneeFilter = null;
-    _tagFilter = null;
-    onFiltersUpdated();
+    final s = state;
+    if (s is KanbanLoaded) {
+      emitLoaded(s.allTasks, filter: const TaskFilter());
+    }
   }
 }

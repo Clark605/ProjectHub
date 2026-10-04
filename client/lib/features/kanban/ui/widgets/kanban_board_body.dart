@@ -76,13 +76,17 @@ class KanbanBoardBody extends StatelessWidget {
           ),
         ),
       ),
-      empty: (projId, arch) => KanbanEmptyState(
+      empty: (projId, arch, err) => KanbanEmptyState(
         isArchived: arch,
         onCreateTask: () => onAddTask(TaskStatus.backlog),
       ),
-      loaded: (projId, tasks, allTasks, arch, search, priority, assignee, err) {
-        if (tasks.isEmpty &&
-            (search != null || priority != null || assignee != null)) {
+      loaded: (projId, tasks, allTasks, arch, filter, err) {
+        final hasActiveFilter =
+            (filter.search != null && filter.search!.isNotEmpty) ||
+            (filter.priority != null && filter.priority!.isNotEmpty) ||
+            (filter.assigneeId != null && filter.assigneeId!.isNotEmpty) ||
+            filter.tagId != null;
+        if (tasks.isEmpty && hasActiveFilter) {
           return Center(
             child: Padding(
               padding: const EdgeInsets.all(24),

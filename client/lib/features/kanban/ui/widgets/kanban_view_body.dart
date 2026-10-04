@@ -82,7 +82,8 @@ class KanbanViewBody extends StatelessWidget {
             Expanded(
               child: RefreshIndicator(
                 notificationPredicate: (n) => n.metrics.axis == Axis.vertical,
-                onRefresh: () => cubit.loadTasks(projectId, forceRefresh: true),
+                onRefresh: () =>
+                    cubit.refreshTasks(forceRefresh: true),
                 child: KanbanBoardBody(
                   state: state,
                   projectId: projectId,

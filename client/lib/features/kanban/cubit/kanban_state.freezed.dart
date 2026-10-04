@@ -55,14 +55,14 @@ extension KanbanStatePatterns on KanbanState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _KanbanInitial value)?  initial,TResult Function( _KanbanLoading value)?  loading,TResult Function( KanbanLoaded value)?  loaded,TResult Function( _KanbanEmpty value)?  empty,TResult Function( _KanbanError value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( KanbanInitial value)?  initial,TResult Function( KanbanLoading value)?  loading,TResult Function( KanbanLoaded value)?  loaded,TResult Function( KanbanEmpty value)?  empty,TResult Function( KanbanError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _KanbanInitial() when initial != null:
-return initial(_that);case _KanbanLoading() when loading != null:
+case KanbanInitial() when initial != null:
+return initial(_that);case KanbanLoading() when loading != null:
 return loading(_that);case KanbanLoaded() when loaded != null:
-return loaded(_that);case _KanbanEmpty() when empty != null:
-return empty(_that);case _KanbanError() when error != null:
+return loaded(_that);case KanbanEmpty() when empty != null:
+return empty(_that);case KanbanError() when error != null:
 return error(_that);case _:
   return orElse();
 
@@ -81,14 +81,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _KanbanInitial value)  initial,required TResult Function( _KanbanLoading value)  loading,required TResult Function( KanbanLoaded value)  loaded,required TResult Function( _KanbanEmpty value)  empty,required TResult Function( _KanbanError value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( KanbanInitial value)  initial,required TResult Function( KanbanLoading value)  loading,required TResult Function( KanbanLoaded value)  loaded,required TResult Function( KanbanEmpty value)  empty,required TResult Function( KanbanError value)  error,}){
 final _that = this;
 switch (_that) {
-case _KanbanInitial():
-return initial(_that);case _KanbanLoading():
+case KanbanInitial():
+return initial(_that);case KanbanLoading():
 return loading(_that);case KanbanLoaded():
-return loaded(_that);case _KanbanEmpty():
-return empty(_that);case _KanbanError():
+return loaded(_that);case KanbanEmpty():
+return empty(_that);case KanbanError():
 return error(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -106,14 +106,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _KanbanInitial value)?  initial,TResult? Function( _KanbanLoading value)?  loading,TResult? Function( KanbanLoaded value)?  loaded,TResult? Function( _KanbanEmpty value)?  empty,TResult? Function( _KanbanError value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( KanbanInitial value)?  initial,TResult? Function( KanbanLoading value)?  loading,TResult? Function( KanbanLoaded value)?  loaded,TResult? Function( KanbanEmpty value)?  empty,TResult? Function( KanbanError value)?  error,}){
 final _that = this;
 switch (_that) {
-case _KanbanInitial() when initial != null:
-return initial(_that);case _KanbanLoading() when loading != null:
+case KanbanInitial() when initial != null:
+return initial(_that);case KanbanLoading() when loading != null:
 return loading(_that);case KanbanLoaded() when loaded != null:
-return loaded(_that);case _KanbanEmpty() when empty != null:
-return empty(_that);case _KanbanError() when error != null:
+return loaded(_that);case KanbanEmpty() when empty != null:
+return empty(_that);case KanbanError() when error != null:
 return error(_that);case _:
   return null;
 
@@ -131,13 +131,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( int projectId,  List<TaskDto> tasks,  List<TaskDto> allTasks,  bool isArchived,  String? searchFilter,  String? priorityFilter,  String? assigneeFilter,  String? errorMessage)?  loaded,TResult Function( int projectId,  bool isArchived)?  empty,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( int projectId,  List<TaskDto> tasks,  List<TaskDto> allTasks,  bool isArchived,  TaskFilter filter,  String? errorMessage)?  loaded,TResult Function( int projectId,  bool isArchived,  String? errorMessage)?  empty,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _KanbanInitial() when initial != null:
-return initial();case _KanbanLoading() when loading != null:
+case KanbanInitial() when initial != null:
+return initial();case KanbanLoading() when loading != null:
 return loading();case KanbanLoaded() when loaded != null:
-return loaded(_that.projectId,_that.tasks,_that.allTasks,_that.isArchived,_that.searchFilter,_that.priorityFilter,_that.assigneeFilter,_that.errorMessage);case _KanbanEmpty() when empty != null:
-return empty(_that.projectId,_that.isArchived);case _KanbanError() when error != null:
+return loaded(_that.projectId,_that.tasks,_that.allTasks,_that.isArchived,_that.filter,_that.errorMessage);case KanbanEmpty() when empty != null:
+return empty(_that.projectId,_that.isArchived,_that.errorMessage);case KanbanError() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -156,13 +156,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( int projectId,  List<TaskDto> tasks,  List<TaskDto> allTasks,  bool isArchived,  String? searchFilter,  String? priorityFilter,  String? assigneeFilter,  String? errorMessage)  loaded,required TResult Function( int projectId,  bool isArchived)  empty,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( int projectId,  List<TaskDto> tasks,  List<TaskDto> allTasks,  bool isArchived,  TaskFilter filter,  String? errorMessage)  loaded,required TResult Function( int projectId,  bool isArchived,  String? errorMessage)  empty,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
-case _KanbanInitial():
-return initial();case _KanbanLoading():
+case KanbanInitial():
+return initial();case KanbanLoading():
 return loading();case KanbanLoaded():
-return loaded(_that.projectId,_that.tasks,_that.allTasks,_that.isArchived,_that.searchFilter,_that.priorityFilter,_that.assigneeFilter,_that.errorMessage);case _KanbanEmpty():
-return empty(_that.projectId,_that.isArchived);case _KanbanError():
+return loaded(_that.projectId,_that.tasks,_that.allTasks,_that.isArchived,_that.filter,_that.errorMessage);case KanbanEmpty():
+return empty(_that.projectId,_that.isArchived,_that.errorMessage);case KanbanError():
 return error(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -180,13 +180,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( int projectId,  List<TaskDto> tasks,  List<TaskDto> allTasks,  bool isArchived,  String? searchFilter,  String? priorityFilter,  String? assigneeFilter,  String? errorMessage)?  loaded,TResult? Function( int projectId,  bool isArchived)?  empty,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( int projectId,  List<TaskDto> tasks,  List<TaskDto> allTasks,  bool isArchived,  TaskFilter filter,  String? errorMessage)?  loaded,TResult? Function( int projectId,  bool isArchived,  String? errorMessage)?  empty,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
-case _KanbanInitial() when initial != null:
-return initial();case _KanbanLoading() when loading != null:
+case KanbanInitial() when initial != null:
+return initial();case KanbanLoading() when loading != null:
 return loading();case KanbanLoaded() when loaded != null:
-return loaded(_that.projectId,_that.tasks,_that.allTasks,_that.isArchived,_that.searchFilter,_that.priorityFilter,_that.assigneeFilter,_that.errorMessage);case _KanbanEmpty() when empty != null:
-return empty(_that.projectId,_that.isArchived);case _KanbanError() when error != null:
+return loaded(_that.projectId,_that.tasks,_that.allTasks,_that.isArchived,_that.filter,_that.errorMessage);case KanbanEmpty() when empty != null:
+return empty(_that.projectId,_that.isArchived,_that.errorMessage);case KanbanError() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -198,8 +198,8 @@ return error(_that.message);case _:
 /// @nodoc
 
 
-class _KanbanInitial extends KanbanState {
-  const _KanbanInitial(): super._();
+class KanbanInitial extends KanbanState {
+  const KanbanInitial(): super._();
   
 
 
@@ -209,7 +209,7 @@ class _KanbanInitial extends KanbanState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _KanbanInitial);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is KanbanInitial);
 }
 
 
@@ -230,8 +230,8 @@ String toString() {
 /// @nodoc
 
 
-class _KanbanLoading extends KanbanState {
-  const _KanbanLoading(): super._();
+class KanbanLoading extends KanbanState {
+  const KanbanLoading(): super._();
   
 
 
@@ -241,7 +241,7 @@ class _KanbanLoading extends KanbanState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _KanbanLoading);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is KanbanLoading);
 }
 
 
@@ -263,7 +263,7 @@ String toString() {
 
 
 class KanbanLoaded extends KanbanState {
-  const KanbanLoaded({required this.projectId, required final  List<TaskDto> tasks, required final  List<TaskDto> allTasks, this.isArchived = false, this.searchFilter, this.priorityFilter, this.assigneeFilter, this.errorMessage}): _tasks = tasks,_allTasks = allTasks,super._();
+  const KanbanLoaded({required this.projectId, required final  List<TaskDto> tasks, required final  List<TaskDto> allTasks, this.isArchived = false, this.filter = const TaskFilter(), this.errorMessage}): _tasks = tasks,_allTasks = allTasks,super._();
   
 
  final  int projectId;
@@ -282,9 +282,7 @@ class KanbanLoaded extends KanbanState {
 }
 
 @JsonKey() final  bool isArchived;
- final  String? searchFilter;
- final  String? priorityFilter;
- final  String? assigneeFilter;
+@JsonKey() final  TaskFilter filter;
  final  String? errorMessage;
 
 /// Create a copy of KanbanState
@@ -297,16 +295,16 @@ $KanbanLoadedCopyWith<KanbanLoaded> get copyWith => _$KanbanLoadedCopyWithImpl<K
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is KanbanLoaded&&(identical(other.projectId, projectId) || other.projectId == projectId)&&const DeepCollectionEquality().equals(other._tasks, _tasks)&&const DeepCollectionEquality().equals(other._allTasks, _allTasks)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.searchFilter, searchFilter) || other.searchFilter == searchFilter)&&(identical(other.priorityFilter, priorityFilter) || other.priorityFilter == priorityFilter)&&(identical(other.assigneeFilter, assigneeFilter) || other.assigneeFilter == assigneeFilter)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is KanbanLoaded&&(identical(other.projectId, projectId) || other.projectId == projectId)&&const DeepCollectionEquality().equals(other._tasks, _tasks)&&const DeepCollectionEquality().equals(other._allTasks, _allTasks)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.filter, filter) || other.filter == filter)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,projectId,const DeepCollectionEquality().hash(_tasks),const DeepCollectionEquality().hash(_allTasks),isArchived,searchFilter,priorityFilter,assigneeFilter,errorMessage);
+int get hashCode => Object.hash(runtimeType,projectId,const DeepCollectionEquality().hash(_tasks),const DeepCollectionEquality().hash(_allTasks),isArchived,filter,errorMessage);
 
 @override
 String toString() {
-  return 'KanbanState.loaded(projectId: $projectId, tasks: $tasks, allTasks: $allTasks, isArchived: $isArchived, searchFilter: $searchFilter, priorityFilter: $priorityFilter, assigneeFilter: $assigneeFilter, errorMessage: $errorMessage)';
+  return 'KanbanState.loaded(projectId: $projectId, tasks: $tasks, allTasks: $allTasks, isArchived: $isArchived, filter: $filter, errorMessage: $errorMessage)';
 }
 
 
@@ -317,7 +315,7 @@ abstract mixin class $KanbanLoadedCopyWith<$Res> implements $KanbanStateCopyWith
   factory $KanbanLoadedCopyWith(KanbanLoaded value, $Res Function(KanbanLoaded) _then) = _$KanbanLoadedCopyWithImpl;
 @useResult
 $Res call({
- int projectId, List<TaskDto> tasks, List<TaskDto> allTasks, bool isArchived, String? searchFilter, String? priorityFilter, String? assigneeFilter, String? errorMessage
+ int projectId, List<TaskDto> tasks, List<TaskDto> allTasks, bool isArchived, TaskFilter filter, String? errorMessage
 });
 
 
@@ -334,16 +332,14 @@ class _$KanbanLoadedCopyWithImpl<$Res>
 
 /// Create a copy of KanbanState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? projectId = null,Object? tasks = null,Object? allTasks = null,Object? isArchived = null,Object? searchFilter = freezed,Object? priorityFilter = freezed,Object? assigneeFilter = freezed,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? projectId = null,Object? tasks = null,Object? allTasks = null,Object? isArchived = null,Object? filter = null,Object? errorMessage = freezed,}) {
   return _then(KanbanLoaded(
 projectId: null == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
 as int,tasks: null == tasks ? _self._tasks : tasks // ignore: cast_nullable_to_non_nullable
 as List<TaskDto>,allTasks: null == allTasks ? _self._allTasks : allTasks // ignore: cast_nullable_to_non_nullable
 as List<TaskDto>,isArchived: null == isArchived ? _self.isArchived : isArchived // ignore: cast_nullable_to_non_nullable
-as bool,searchFilter: freezed == searchFilter ? _self.searchFilter : searchFilter // ignore: cast_nullable_to_non_nullable
-as String?,priorityFilter: freezed == priorityFilter ? _self.priorityFilter : priorityFilter // ignore: cast_nullable_to_non_nullable
-as String?,assigneeFilter: freezed == assigneeFilter ? _self.assigneeFilter : assigneeFilter // ignore: cast_nullable_to_non_nullable
-as String?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as bool,filter: null == filter ? _self.filter : filter // ignore: cast_nullable_to_non_nullable
+as TaskFilter,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -354,44 +350,45 @@ as String?,
 /// @nodoc
 
 
-class _KanbanEmpty extends KanbanState {
-  const _KanbanEmpty({required this.projectId, this.isArchived = false}): super._();
+class KanbanEmpty extends KanbanState {
+  const KanbanEmpty({required this.projectId, this.isArchived = false, this.errorMessage}): super._();
   
 
  final  int projectId;
 @JsonKey() final  bool isArchived;
+ final  String? errorMessage;
 
 /// Create a copy of KanbanState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$KanbanEmptyCopyWith<_KanbanEmpty> get copyWith => __$KanbanEmptyCopyWithImpl<_KanbanEmpty>(this, _$identity);
+$KanbanEmptyCopyWith<KanbanEmpty> get copyWith => _$KanbanEmptyCopyWithImpl<KanbanEmpty>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _KanbanEmpty&&(identical(other.projectId, projectId) || other.projectId == projectId)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is KanbanEmpty&&(identical(other.projectId, projectId) || other.projectId == projectId)&&(identical(other.isArchived, isArchived) || other.isArchived == isArchived)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,projectId,isArchived);
+int get hashCode => Object.hash(runtimeType,projectId,isArchived,errorMessage);
 
 @override
 String toString() {
-  return 'KanbanState.empty(projectId: $projectId, isArchived: $isArchived)';
+  return 'KanbanState.empty(projectId: $projectId, isArchived: $isArchived, errorMessage: $errorMessage)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$KanbanEmptyCopyWith<$Res> implements $KanbanStateCopyWith<$Res> {
-  factory _$KanbanEmptyCopyWith(_KanbanEmpty value, $Res Function(_KanbanEmpty) _then) = __$KanbanEmptyCopyWithImpl;
+abstract mixin class $KanbanEmptyCopyWith<$Res> implements $KanbanStateCopyWith<$Res> {
+  factory $KanbanEmptyCopyWith(KanbanEmpty value, $Res Function(KanbanEmpty) _then) = _$KanbanEmptyCopyWithImpl;
 @useResult
 $Res call({
- int projectId, bool isArchived
+ int projectId, bool isArchived, String? errorMessage
 });
 
 
@@ -399,20 +396,21 @@ $Res call({
 
 }
 /// @nodoc
-class __$KanbanEmptyCopyWithImpl<$Res>
-    implements _$KanbanEmptyCopyWith<$Res> {
-  __$KanbanEmptyCopyWithImpl(this._self, this._then);
+class _$KanbanEmptyCopyWithImpl<$Res>
+    implements $KanbanEmptyCopyWith<$Res> {
+  _$KanbanEmptyCopyWithImpl(this._self, this._then);
 
-  final _KanbanEmpty _self;
-  final $Res Function(_KanbanEmpty) _then;
+  final KanbanEmpty _self;
+  final $Res Function(KanbanEmpty) _then;
 
 /// Create a copy of KanbanState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? projectId = null,Object? isArchived = null,}) {
-  return _then(_KanbanEmpty(
+@pragma('vm:prefer-inline') $Res call({Object? projectId = null,Object? isArchived = null,Object? errorMessage = freezed,}) {
+  return _then(KanbanEmpty(
 projectId: null == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
 as int,isArchived: null == isArchived ? _self.isArchived : isArchived // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -422,8 +420,8 @@ as bool,
 /// @nodoc
 
 
-class _KanbanError extends KanbanState {
-  const _KanbanError(this.message): super._();
+class KanbanError extends KanbanState {
+  const KanbanError(this.message): super._();
   
 
  final  String message;
@@ -432,13 +430,13 @@ class _KanbanError extends KanbanState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$KanbanErrorCopyWith<_KanbanError> get copyWith => __$KanbanErrorCopyWithImpl<_KanbanError>(this, _$identity);
+$KanbanErrorCopyWith<KanbanError> get copyWith => _$KanbanErrorCopyWithImpl<KanbanError>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _KanbanError&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is KanbanError&&(identical(other.message, message) || other.message == message));
 }
 
 
@@ -454,8 +452,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$KanbanErrorCopyWith<$Res> implements $KanbanStateCopyWith<$Res> {
-  factory _$KanbanErrorCopyWith(_KanbanError value, $Res Function(_KanbanError) _then) = __$KanbanErrorCopyWithImpl;
+abstract mixin class $KanbanErrorCopyWith<$Res> implements $KanbanStateCopyWith<$Res> {
+  factory $KanbanErrorCopyWith(KanbanError value, $Res Function(KanbanError) _then) = _$KanbanErrorCopyWithImpl;
 @useResult
 $Res call({
  String message
@@ -466,17 +464,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$KanbanErrorCopyWithImpl<$Res>
-    implements _$KanbanErrorCopyWith<$Res> {
-  __$KanbanErrorCopyWithImpl(this._self, this._then);
+class _$KanbanErrorCopyWithImpl<$Res>
+    implements $KanbanErrorCopyWith<$Res> {
+  _$KanbanErrorCopyWithImpl(this._self, this._then);
 
-  final _KanbanError _self;
-  final $Res Function(_KanbanError) _then;
+  final KanbanError _self;
+  final $Res Function(KanbanError) _then;
 
 /// Create a copy of KanbanState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(_KanbanError(
+  return _then(KanbanError(
 null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,
   ));

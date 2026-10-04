@@ -134,7 +134,7 @@ void main() {
       final initialTasks = await repo.getTasksByProject(10);
       expect(initialTasks.length, 2);
 
-      final task3 = TaskDto(id: 3, projectId: 10, title: 'Task 3', status: 'Done');
+      const task3 = TaskDto(id: 3, projectId: 10, title: 'Task 3', status: 'Done');
       remoteDataSource.tasks.add(task3);
 
       await repo.getTask(3);

@@ -85,6 +85,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
         title: titleController.text.trim(),
         description: descriptionController.text.trim(),
         priority: selectedPriority.toServerString(),
+        status: _selectedStatus.toServerString(),
         assigneeId: selectedAssigneeId,
         dueDate: selectedDueDate,
         tagIds: _selectedTags.map((t) => t.id).toList(),
