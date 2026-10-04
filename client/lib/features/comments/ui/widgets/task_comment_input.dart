@@ -41,7 +41,6 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
       ),
       child: Row(
         children: [
@@ -60,9 +59,6 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
                   fontSize: 13,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
-                border: InputBorder.none,
-                isDense: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 4),
               ),
               onSubmitted: (_) => _submit(),
             ),

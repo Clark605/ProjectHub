@@ -25,3 +25,4 @@ abstract class VoiceTaskState with _$VoiceTaskState {
   const factory VoiceTaskState.error({required String message}) =
       VoiceTaskError;
 }
+
