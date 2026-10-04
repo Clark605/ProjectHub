@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreateTaskRequest {
 
- String get title; String get description; String get priority; String? get assigneeId; DateTime? get dueDate; List<int> get tagIds;
+ String get title; String get description; String get priority; String? get assigneeId; String? get status; DateTime? get dueDate; List<int> get tagIds;
 /// Create a copy of CreateTaskRequest
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CreateTaskRequestCopyWith<CreateTaskRequest> get copyWith => _$CreateTaskReques
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateTaskRequest&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.assigneeId, assigneeId) || other.assigneeId == assigneeId)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&const DeepCollectionEquality().equals(other.tagIds, tagIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateTaskRequest&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.assigneeId, assigneeId) || other.assigneeId == assigneeId)&&(identical(other.status, status) || other.status == status)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&const DeepCollectionEquality().equals(other.tagIds, tagIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,title,description,priority,assigneeId,dueDate,const DeepCollectionEquality().hash(tagIds));
+int get hashCode => Object.hash(runtimeType,title,description,priority,assigneeId,status,dueDate,const DeepCollectionEquality().hash(tagIds));
 
 @override
 String toString() {
-  return 'CreateTaskRequest(title: $title, description: $description, priority: $priority, assigneeId: $assigneeId, dueDate: $dueDate, tagIds: $tagIds)';
+  return 'CreateTaskRequest(title: $title, description: $description, priority: $priority, assigneeId: $assigneeId, status: $status, dueDate: $dueDate, tagIds: $tagIds)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $CreateTaskRequestCopyWith<$Res>  {
   factory $CreateTaskRequestCopyWith(CreateTaskRequest value, $Res Function(CreateTaskRequest) _then) = _$CreateTaskRequestCopyWithImpl;
 @useResult
 $Res call({
- String title, String description, String priority, String? assigneeId, DateTime? dueDate, List<int> tagIds
+ String title, String description, String priority, String? assigneeId, String? status, DateTime? dueDate, List<int> tagIds
 });
 
 
@@ -65,12 +65,13 @@ class _$CreateTaskRequestCopyWithImpl<$Res>
 
 /// Create a copy of CreateTaskRequest
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? description = null,Object? priority = null,Object? assigneeId = freezed,Object? dueDate = freezed,Object? tagIds = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? title = null,Object? description = null,Object? priority = null,Object? assigneeId = freezed,Object? status = freezed,Object? dueDate = freezed,Object? tagIds = null,}) {
   return _then(_self.copyWith(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
 as String,assigneeId: freezed == assigneeId ? _self.assigneeId : assigneeId // ignore: cast_nullable_to_non_nullable
+as String?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String?,dueDate: freezed == dueDate ? _self.dueDate : dueDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,tagIds: null == tagIds ? _self.tagIds : tagIds // ignore: cast_nullable_to_non_nullable
 as List<int>,
@@ -158,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String description,  String priority,  String? assigneeId,  DateTime? dueDate,  List<int> tagIds)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String title,  String description,  String priority,  String? assigneeId,  String? status,  DateTime? dueDate,  List<int> tagIds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateTaskRequest() when $default != null:
-return $default(_that.title,_that.description,_that.priority,_that.assigneeId,_that.dueDate,_that.tagIds);case _:
+return $default(_that.title,_that.description,_that.priority,_that.assigneeId,_that.status,_that.dueDate,_that.tagIds);case _:
   return orElse();
 
 }
@@ -179,10 +180,10 @@ return $default(_that.title,_that.description,_that.priority,_that.assigneeId,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String description,  String priority,  String? assigneeId,  DateTime? dueDate,  List<int> tagIds)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String title,  String description,  String priority,  String? assigneeId,  String? status,  DateTime? dueDate,  List<int> tagIds)  $default,) {final _that = this;
 switch (_that) {
 case _CreateTaskRequest():
-return $default(_that.title,_that.description,_that.priority,_that.assigneeId,_that.dueDate,_that.tagIds);case _:
+return $default(_that.title,_that.description,_that.priority,_that.assigneeId,_that.status,_that.dueDate,_that.tagIds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +200,10 @@ return $default(_that.title,_that.description,_that.priority,_that.assigneeId,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String description,  String priority,  String? assigneeId,  DateTime? dueDate,  List<int> tagIds)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String title,  String description,  String priority,  String? assigneeId,  String? status,  DateTime? dueDate,  List<int> tagIds)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateTaskRequest() when $default != null:
-return $default(_that.title,_that.description,_that.priority,_that.assigneeId,_that.dueDate,_that.tagIds);case _:
+return $default(_that.title,_that.description,_that.priority,_that.assigneeId,_that.status,_that.dueDate,_that.tagIds);case _:
   return null;
 
 }
@@ -214,13 +215,14 @@ return $default(_that.title,_that.description,_that.priority,_that.assigneeId,_t
 @JsonSerializable()
 
 class _CreateTaskRequest implements CreateTaskRequest {
-  const _CreateTaskRequest({required this.title, this.description = '', this.priority = 'Medium', this.assigneeId, this.dueDate, final  List<int> tagIds = const []}): _tagIds = tagIds;
+  const _CreateTaskRequest({required this.title, this.description = '', this.priority = 'Medium', this.assigneeId, this.status, this.dueDate, final  List<int> tagIds = const []}): _tagIds = tagIds;
   factory _CreateTaskRequest.fromJson(Map<String, dynamic> json) => _$CreateTaskRequestFromJson(json);
 
 @override final  String title;
 @override@JsonKey() final  String description;
 @override@JsonKey() final  String priority;
 @override final  String? assigneeId;
+@override final  String? status;
 @override final  DateTime? dueDate;
  final  List<int> _tagIds;
 @override@JsonKey() List<int> get tagIds {
@@ -243,16 +245,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateTaskRequest&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.assigneeId, assigneeId) || other.assigneeId == assigneeId)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&const DeepCollectionEquality().equals(other._tagIds, _tagIds));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateTaskRequest&&(identical(other.title, title) || other.title == title)&&(identical(other.description, description) || other.description == description)&&(identical(other.priority, priority) || other.priority == priority)&&(identical(other.assigneeId, assigneeId) || other.assigneeId == assigneeId)&&(identical(other.status, status) || other.status == status)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&const DeepCollectionEquality().equals(other._tagIds, _tagIds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,title,description,priority,assigneeId,dueDate,const DeepCollectionEquality().hash(_tagIds));
+int get hashCode => Object.hash(runtimeType,title,description,priority,assigneeId,status,dueDate,const DeepCollectionEquality().hash(_tagIds));
 
 @override
 String toString() {
-  return 'CreateTaskRequest(title: $title, description: $description, priority: $priority, assigneeId: $assigneeId, dueDate: $dueDate, tagIds: $tagIds)';
+  return 'CreateTaskRequest(title: $title, description: $description, priority: $priority, assigneeId: $assigneeId, status: $status, dueDate: $dueDate, tagIds: $tagIds)';
 }
 
 
@@ -263,7 +265,7 @@ abstract mixin class _$CreateTaskRequestCopyWith<$Res> implements $CreateTaskReq
   factory _$CreateTaskRequestCopyWith(_CreateTaskRequest value, $Res Function(_CreateTaskRequest) _then) = __$CreateTaskRequestCopyWithImpl;
 @override @useResult
 $Res call({
- String title, String description, String priority, String? assigneeId, DateTime? dueDate, List<int> tagIds
+ String title, String description, String priority, String? assigneeId, String? status, DateTime? dueDate, List<int> tagIds
 });
 
 
@@ -280,12 +282,13 @@ class __$CreateTaskRequestCopyWithImpl<$Res>
 
 /// Create a copy of CreateTaskRequest
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? description = null,Object? priority = null,Object? assigneeId = freezed,Object? dueDate = freezed,Object? tagIds = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? title = null,Object? description = null,Object? priority = null,Object? assigneeId = freezed,Object? status = freezed,Object? dueDate = freezed,Object? tagIds = null,}) {
   return _then(_CreateTaskRequest(
 title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,priority: null == priority ? _self.priority : priority // ignore: cast_nullable_to_non_nullable
 as String,assigneeId: freezed == assigneeId ? _self.assigneeId : assigneeId // ignore: cast_nullable_to_non_nullable
+as String?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as String?,dueDate: freezed == dueDate ? _self.dueDate : dueDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,tagIds: null == tagIds ? _self._tagIds : tagIds // ignore: cast_nullable_to_non_nullable
 as List<int>,

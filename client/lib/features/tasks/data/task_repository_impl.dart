@@ -58,7 +58,7 @@ class TaskRepositoryImpl implements TaskRepository {
         'Cache hit for project $projectId tasks',
         tag: 'TaskRepository',
       );
-      return _projectTasksCache[projectId]!;
+      return List<TaskDto>.unmodifiable(_projectTasksCache[projectId]!);
     }
 
     final tasks = await _remoteDataSource.getTasksByProject(
@@ -71,8 +71,10 @@ class TaskRepositoryImpl implements TaskRepository {
     for (final t in tasks) {
       _taskDetailCache[t.id] = t;
     }
-    if (!hasFilter) _projectTasksCache[projectId] = tasks;
-    return tasks;
+    if (!hasFilter) {
+      _projectTasksCache[projectId] = List<TaskDto>.from(tasks);
+    }
+    return List<TaskDto>.unmodifiable(tasks);
   }
 
   @override
@@ -85,15 +87,15 @@ class TaskRepositoryImpl implements TaskRepository {
         'Cache hit for workspace $workspaceId my-tasks',
         tag: 'TaskRepository',
       );
-      return _myTasksCache[workspaceId]!;
+      return List<TaskDto>.unmodifiable(_myTasksCache[workspaceId]!);
     }
 
     final tasks = await _remoteDataSource.getMyTasks(workspaceId);
     for (final t in tasks) {
       _taskDetailCache[t.id] = t;
     }
-    _myTasksCache[workspaceId] = tasks;
-    return tasks;
+    _myTasksCache[workspaceId] = List<TaskDto>.from(tasks);
+    return List<TaskDto>.unmodifiable(tasks);
   }
 
   @override
@@ -110,12 +112,16 @@ class TaskRepositoryImpl implements TaskRepository {
     _taskDetailCache[taskId] = task;
 
     if (_projectTasksCache.containsKey(task.projectId)) {
-      final list = _projectTasksCache[task.projectId]!;
-      final index = list.indexWhere((t) => t.id == taskId);
+      final oldList = _projectTasksCache[task.projectId]!;
+      final index = oldList.indexWhere((t) => t.id == taskId);
       if (index != -1) {
-        list[index] = task;
+        _projectTasksCache[task.projectId] = [
+          ...oldList.sublist(0, index),
+          task,
+          ...oldList.sublist(index + 1),
+        ];
       } else {
-        list.add(task);
+        _projectTasksCache[task.projectId] = [...oldList, task];
       }
     }
     return task;
@@ -176,14 +182,20 @@ class TaskRepositoryImpl implements TaskRepository {
     await _remoteDataSource.deleteTask(taskId);
     final cached = _taskDetailCache.remove(taskId);
     if (cached != null) {
-      _projectTasksCache[cached.projectId]?.removeWhere((t) => t.id == taskId);
+      final old = _projectTasksCache[cached.projectId];
+      if (old != null) {
+        _projectTasksCache[cached.projectId] =
+            old.where((t) => t.id != taskId).toList();
+      }
     } else {
-      for (final list in _projectTasksCache.values) {
-        list.removeWhere((t) => t.id == taskId);
+      for (final entry in _projectTasksCache.entries.toList()) {
+        _projectTasksCache[entry.key] =
+            entry.value.where((t) => t.id != taskId).toList();
       }
     }
-    for (final list in _myTasksCache.values) {
-      list.removeWhere((t) => t.id == taskId);
+    for (final entry in _myTasksCache.entries.toList()) {
+      _myTasksCache[entry.key] =
+          entry.value.where((t) => t.id != taskId).toList();
     }
   }
 

@@ -10,6 +10,7 @@ abstract class CreateTaskRequest with _$CreateTaskRequest {
     @Default('') String description,
     @Default('Medium') String priority,
     String? assigneeId,
+    String? status,
     DateTime? dueDate,
     @Default([]) List<int> tagIds,
   }) = _CreateTaskRequest;
