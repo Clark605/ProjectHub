@@ -1,43 +1,29 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/network/signalr_events.dart';
-import 'package:client/core/network/signalr_service.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_avatar_item.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_sheet.dart';
 
-class FakeSignalRService extends Fake implements SignalRService {
-  final _presenceController =
-      StreamController<PresenceChangedEvent>.broadcast();
-
-  @override
-  Stream<PresenceChangedEvent> get presenceChanged =>
-      _presenceController.stream;
-
-  @override
-  Future<void> joinWorkspace(int workspaceId) async {}
-
-  void emitPresence(PresenceChangedEvent event) {
-    _presenceController.add(event);
-  }
-
-  @override
-  void dispose() {
-    _presenceController.close();
-  }
-}
+import '../../../../helpers/mock_repositories.dart';
 
 void main() {
-  late FakeSignalRService fakeSignalR;
+  late MockSignalRService mockSignalR;
+  late StreamController<PresenceChangedEvent> presenceController;
 
   setUp(() {
-    fakeSignalR = FakeSignalRService();
+    mockSignalR = MockSignalRService();
+    presenceController = StreamController<PresenceChangedEvent>.broadcast();
+    when(() => mockSignalR.presenceChanged)
+        .thenAnswer((_) => presenceController.stream);
+    when(() => mockSignalR.joinWorkspace(any())).thenAnswer((_) async {});
   });
 
   tearDown(() {
-    fakeSignalR.dispose();
+    presenceController.close();
   });
 
   testWidgets(
@@ -48,7 +34,7 @@ void main() {
           home: Scaffold(
             body: WorkspacePresenceAvatars(
               workspaceId: 1,
-              signalRService: fakeSignalR,
+              signalRService: mockSignalR,
             ),
           ),
         ),
@@ -66,13 +52,13 @@ void main() {
           home: Scaffold(
             body: WorkspacePresenceAvatars(
               workspaceId: 1,
-              signalRService: fakeSignalR,
+              signalRService: mockSignalR,
             ),
           ),
         ),
       );
 
-      fakeSignalR.emitPresence(
+      presenceController.add(
         const PresenceChangedEvent(
           workspaceId: 1,
           onlineUserIds: ['user-alpha', 'user-beta'],
@@ -92,13 +78,13 @@ void main() {
           home: Scaffold(
             body: WorkspacePresenceAvatars(
               workspaceId: 1,
-              signalRService: fakeSignalR,
+              signalRService: mockSignalR,
             ),
           ),
         ),
       );
 
-      fakeSignalR.emitPresence(
+      presenceController.add(
         const PresenceChangedEvent(
           workspaceId: 1,
           onlineUserIds: ['u1', 'u2', 'u3', 'u4', 'u5'],
@@ -120,13 +106,13 @@ void main() {
         home: Scaffold(
           body: WorkspacePresenceAvatars(
             workspaceId: 1,
-            signalRService: fakeSignalR,
+            signalRService: mockSignalR,
           ),
         ),
       ),
     );
 
-    fakeSignalR.emitPresence(
+    presenceController.add(
       const PresenceChangedEvent(workspaceId: 1, onlineUserIds: ['user-1']),
     );
     await tester.pump();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/di/injection.dart';
@@ -10,11 +11,9 @@ import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 import 'package:client/features/workspaces/data/models/add_member_request.dart';
-import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
-import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/core/widgets/app_danger_zone.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_details_card.dart';
 import 'package:client/core/widgets/app_error_banner.dart';
@@ -23,82 +22,21 @@ import 'package:client/features/workspaces/ui/widgets/workspace_settings_skeleto
 import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-class _MockRepo extends Fake implements WorkspaceRepository {
-  WorkspaceDto workspace;
-  List<MemberDto> members;
-  Future<WorkspaceDto> Function(int id, UpdateWorkspaceRequest r)?
-  onUpdateWorkspace;
-
-  _MockRepo({required this.workspace, required this.members});
-
-  @override
-  WorkspaceDto? get activeWorkspace => workspace;
-
-  @override
-  Stream<WorkspaceDto?> get activeWorkspaceChanges => const Stream.empty();
-
-  @override
-  void setActiveWorkspace(WorkspaceDto? workspace) {}
-
-  @override
-  Future<List<WorkspaceDto>> getWorkspaces() async => [workspace];
-  @override
-  Future<WorkspaceDto> getWorkspace(
-    int id, {
-    bool forceRefresh = false,
-  }) async => workspace;
-  @override
-  Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest r) async =>
-      workspace;
-  @override
-  Future<WorkspaceDto> updateWorkspace(int id, UpdateWorkspaceRequest r) async {
-    if (onUpdateWorkspace != null) {
-      return onUpdateWorkspace!(id, r);
-    }
-    workspace = workspace.copyWith(name: r.name, description: r.description);
-    return workspace;
-  }
-
-  @override
-  Future<void> deleteWorkspace(int id) async {}
-  @override
-  Future<List<MemberDto>> getMembers(
-    int wid, {
-    bool forceRefresh = false,
-  }) async => members;
-  @override
-  Future<MemberDto> addMember(int wid, AddMemberRequest r) async => MemberDto(
-    userId: 'u_new',
-    name: 'New',
-    email: r.email,
-    role: 'Member',
-    joinedAt: DateTime.now(),
-  );
-  @override
-  Future<void> removeMember(int wid, String uid) async {
-    members.removeWhere((m) => m.userId == uid);
-  }
-
-  @override
-  Future<MemberDto> updateMemberRole(int wid, String uid, String role) async {
-    final index = members.indexWhere((m) => m.userId == uid);
-    if (index != -1) {
-      members[index] = members[index].copyWith(role: role);
-      return members[index];
-    }
-    throw Exception('Member not found');
-  }
-
-  @override
-  bool hasCachedSettings(int workspaceId) => false;
-  @override
-  void clearCache([int? workspaceId]) {}
-}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  late _MockRepo repo;
+  setUpAll(() {
+    registerFallbackValue(
+      const UpdateWorkspaceRequest(name: 'Fallback', accentColor: 'blue'),
+    );
+    registerFallbackValue(const AddMemberRequest(email: 'fallback@test.com'));
+  });
+
+  late MockWorkspaceRepository repo;
+  late WorkspaceDto currentWorkspace;
+  late List<MemberDto> currentMembers;
   late PrefsService prefs;
   late WorkspaceContextCubit contextCubit;
   late WorkspaceSettingsCubit settingsCubit;
@@ -109,30 +47,62 @@ void main() {
     final sp = await SharedPreferences.getInstance();
     prefs = PrefsService(sp);
 
-    repo = _MockRepo(
-      workspace: const WorkspaceDto(
-        id: 1,
-        name: 'Alpha Team',
-        description: 'Alpha description',
-        membership: WorkspaceMembershipDto(role: 'Owner'),
-      ),
-      members: [
-        MemberDto(
-          userId: 'u1',
-          name: 'Alice Owner',
-          email: 'alice@alpha.com',
-          role: 'Owner',
-          joinedAt: DateTime(2026, 1, 1),
-        ),
-        MemberDto(
-          userId: 'u2',
-          name: 'Bob Member',
-          email: 'bob@alpha.com',
-          role: 'Member',
-          joinedAt: DateTime(2026, 1, 2),
-        ),
-      ],
+    currentWorkspace = const WorkspaceDto(
+      id: 1,
+      name: 'Alpha Team',
+      description: 'Alpha description',
+      membership: WorkspaceMembershipDto(role: 'Owner'),
     );
+    currentMembers = [
+      MemberDto(
+        userId: 'u1',
+        name: 'Alice Owner',
+        email: 'alice@alpha.com',
+        role: 'Owner',
+        joinedAt: DateTime(2026, 1, 1),
+      ),
+      MemberDto(
+        userId: 'u2',
+        name: 'Bob Member',
+        email: 'bob@alpha.com',
+        role: 'Member',
+        joinedAt: DateTime(2026, 1, 2),
+      ),
+    ];
+
+    repo = MockWorkspaceRepository();
+    when(() => repo.activeWorkspace).thenAnswer((_) => currentWorkspace);
+    when(() => repo.activeWorkspaceChanges)
+        .thenAnswer((_) => const Stream.empty());
+    when(() => repo.setActiveWorkspace(any())).thenReturn(null);
+    when(() => repo.getWorkspaces()).thenAnswer((_) async => [currentWorkspace]);
+    when(
+      () => repo.getWorkspace(any(), forceRefresh: any(named: 'forceRefresh')),
+    ).thenAnswer((_) async => currentWorkspace);
+    when(
+      () => repo.getMembers(any(), forceRefresh: any(named: 'forceRefresh')),
+    ).thenAnswer((_) async => currentMembers);
+    when(() => repo.updateWorkspace(any(), any())).thenAnswer((inv) async {
+      final r = inv.positionalArguments[1] as UpdateWorkspaceRequest;
+      currentWorkspace = currentWorkspace.copyWith(
+        name: r.name,
+        description: r.description,
+      );
+      return currentWorkspace;
+    });
+    when(() => repo.updateMemberRole(any(), any(), any())).thenAnswer((inv) async {
+      final uid = inv.positionalArguments[1] as String;
+      final role = inv.positionalArguments[2] as String;
+      final index = currentMembers.indexWhere((m) => m.userId == uid);
+      if (index != -1) {
+        currentMembers[index] = currentMembers[index].copyWith(role: role);
+        return currentMembers[index];
+      }
+      throw Exception('Member not found');
+    });
+    when(() => repo.deleteWorkspace(any())).thenAnswer((_) async {});
+    when(() => repo.hasCachedSettings(any())).thenReturn(false);
+    when(() => repo.clearCache(any())).thenReturn(null);
 
     contextCubit = WorkspaceContextCubit(repo, prefs);
     await contextCubit.loadWorkspaces();
@@ -174,7 +144,7 @@ void main() {
   testWidgets(
     'WorkspaceSettingsScreen shows lock and denies access for Member role',
     (tester) async {
-      repo.workspace = repo.workspace.copyWith(
+      currentWorkspace = currentWorkspace.copyWith(
         membership: const WorkspaceMembershipDto(role: 'Member'),
       );
       await contextCubit.loadWorkspaces();
@@ -197,7 +167,7 @@ void main() {
     await tester.tap(find.text('Save Details'));
     await tester.pump(const Duration(milliseconds: 100));
 
-    expect(repo.workspace.name, 'Alpha Team Renamed');
+    expect(currentWorkspace.name, 'Alpha Team Renamed');
   });
 
   testWidgets(
@@ -290,7 +260,8 @@ void main() {
 
       expect(find.byType(AppErrorBanner), findsNothing);
 
-      repo.onUpdateWorkspace = (id, req) => throw Exception('Failed to update');
+      when(() => repo.updateWorkspace(any(), any()))
+          .thenThrow(Exception('Failed to update'));
       await settingsCubit.updateDetails('Bad Name', 'Bad Desc', 'teal');
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 250));
@@ -330,7 +301,7 @@ void main() {
       await tester.tap(find.text('Save'));
       await tester.pumpAndSettle();
 
-      expect(repo.members.firstWhere((m) => m.userId == 'u2').role, 'Owner');
+      expect(currentMembers.firstWhere((m) => m.userId == 'u2').role, 'Owner');
     },
   );
 
