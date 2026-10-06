@@ -1,282 +1,219 @@
-import 'dart:async';
 import 'dart:convert';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
-import 'package:client/features/workspaces/data/models/add_member_request.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
-import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 
-class _FakeWorkspaceRepository extends Fake implements WorkspaceRepository {
-  List<WorkspaceDto> workspaces = [];
-  bool shouldThrow = false;
-  String errorMessage = 'Server error';
-  WorkspaceDto? _activeWorkspace;
-  final _activeController = StreamController<WorkspaceDto?>.broadcast();
-
-  @override
-  Stream<WorkspaceDto?> get activeWorkspaceChanges => _activeController.stream;
-
-  @override
-  WorkspaceDto? get activeWorkspace => _activeWorkspace;
-
-  @override
-  void setActiveWorkspace(WorkspaceDto? workspace) {
-    _activeWorkspace = workspace;
-    _activeController.add(workspace);
-  }
-
-  @override
-  Future<List<WorkspaceDto>> getWorkspaces() async {
-    if (shouldThrow) throw ServerException(message: errorMessage);
-    return workspaces;
-  }
-
-  @override
-  Future<WorkspaceDto> getWorkspace(int id, {bool forceRefresh = false}) async {
-    if (shouldThrow) throw ServerException(message: errorMessage);
-    return workspaces.firstWhere((w) => w.id == id);
-  }
-
-  @override
-  Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async {
-    if (shouldThrow) throw ServerException(message: errorMessage);
-    return WorkspaceDto(
-      id: workspaces.length + 1,
-      name: request.name,
-      description: request.description,
-      membership: const WorkspaceMembershipDto(role: 'Owner'),
-    );
-  }
-
-  @override
-  Future<WorkspaceDto> updateWorkspace(
-    int id,
-    UpdateWorkspaceRequest request,
-  ) async {
-    if (shouldThrow) throw ServerException(message: errorMessage);
-    return WorkspaceDto(
-      id: id,
-      name: request.name,
-      description: request.description,
-      membership: const WorkspaceMembershipDto(role: 'Owner'),
-    );
-  }
-
-  @override
-  Future<void> deleteWorkspace(int id) async {
-    if (shouldThrow) throw ServerException(message: errorMessage);
-    workspaces.removeWhere((w) => w.id == id);
-  }
-
-  @override
-  Future<List<MemberDto>> getMembers(
-    int workspaceId, {
-    bool forceRefresh = false,
-  }) async {
-    if (shouldThrow) throw ServerException(message: errorMessage);
-    return [];
-  }
-
-  @override
-  Future<MemberDto> addMember(int workspaceId, AddMemberRequest request) async {
-    if (shouldThrow) throw ServerException(message: errorMessage);
-    return MemberDto(
-      userId: 'u_new',
-      name: 'New Member',
-      email: request.email,
-      role: 'Member',
-      joinedAt: DateTime.now(),
-    );
-  }
-
-  @override
-  Future<void> removeMember(int workspaceId, String userId) async {
-    if (shouldThrow) throw ServerException(message: errorMessage);
-  }
-
-  @override
-  bool hasCachedSettings(int workspaceId) => false;
-
-  bool clearCacheCalled = false;
-
-  @override
-  void clearCache([int? workspaceId]) {
-    clearCacheCalled = true;
-  }
-}
+class MockWorkspaceRepository extends Mock implements WorkspaceRepository {}
 
 void main() {
-  late _FakeWorkspaceRepository repository;
-  late PrefsService prefs;
-  late SharedPreferences sp;
-  late WorkspaceContextCubit cubit;
-
-  setUp(() async {
-    SharedPreferences.setMockInitialValues({});
-    sp = await SharedPreferences.getInstance();
-    prefs = PrefsService(sp);
-    repository = _FakeWorkspaceRepository();
-    cubit = WorkspaceContextCubit(repository, prefs);
+  setUpAll(() {
+    registerFallbackValue(
+      const CreateWorkspaceRequest(name: 'Test Workspace'),
+    );
+    registerFallbackValue(
+      const WorkspaceDto(id: 1, name: 'Fallback Workspace'),
+    );
   });
 
-  tearDown(() async {
-    await cubit.close();
-  });
+  group('WorkspaceContextCubit', () {
+    late MockWorkspaceRepository repository;
+    late PrefsService prefs;
+    late SharedPreferences sp;
 
-  group('WorkspaceContextCubit - Context Resolution Engine', () {
-    test('initial state is initial', () {
-      expect(cubit.state, const WorkspaceContextState.initial());
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      sp = await SharedPreferences.getInstance();
+      prefs = PrefsService(sp);
+      repository = MockWorkspaceRepository();
+
+      when(() => repository.activeWorkspaceChanges).thenAnswer(
+        (_) => const Stream.empty(),
+      );
+      when(() => repository.setActiveWorkspace(any())).thenReturn(null);
     });
 
-    test('emits [loading, empty] when user has 0 workspaces', () async {
-      repository.workspaces = [];
+    test('initial state is initial', () {
+      final cubit = WorkspaceContextCubit(repository, prefs);
+      expect(cubit.state, const WorkspaceContextState.initial());
+      cubit.close();
+    });
 
-      final expectedStates = [
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
+      'emits [loading, empty] when user has 0 workspaces',
+      build: () {
+        when(() => repository.getWorkspaces()).thenAnswer((_) async => []);
+        return WorkspaceContextCubit(repository, prefs);
+      },
+      act: (cubit) => cubit.loadWorkspaces(),
+      expect: () => [
         const WorkspaceContextState.loading(),
         const WorkspaceContextState.empty(),
-      ];
+      ],
+      verify: (_) {
+        verify(() => repository.setActiveWorkspace(null)).called(1);
+      },
+    );
 
-      expectLater(cubit.stream, emitsInOrder(expectedStates));
-      await cubit.loadWorkspaces();
-    });
+    const single = WorkspaceDto(
+      id: 101,
+      name: 'Alpha Team',
+      description: 'First team',
+      membership: WorkspaceMembershipDto(role: 'Owner'),
+    );
 
-    test(
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
       'auto-selects single workspace and persists ID when 1 workspace exists',
-      () async {
-        const single = WorkspaceDto(
-          id: 101,
-          name: 'Alpha Team',
-          description: 'First team',
-          membership: WorkspaceMembershipDto(role: 'Owner'),
-        );
-        repository.workspaces = [single];
-
-        expectLater(
-          cubit.stream,
-          emitsInOrder([
-            const WorkspaceContextState.loading(),
-            const WorkspaceContextState.loaded(
-              workspaces: [single],
-              activeWorkspace: single,
-            ),
-          ]),
-        );
-
-        await cubit.loadWorkspaces();
+      build: () {
+        when(() => repository.getWorkspaces()).thenAnswer((_) async => [single]);
+        return WorkspaceContextCubit(repository, prefs);
+      },
+      act: (cubit) => cubit.loadWorkspaces(),
+      expect: () => [
+        const WorkspaceContextState.loading(),
+        const WorkspaceContextState.loaded(
+          workspaces: [single],
+          activeWorkspace: single,
+        ),
+      ],
+      verify: (_) {
         expect(prefs.activeWorkspaceId, 101);
       },
     );
 
-    test(
+    const ws1 = WorkspaceDto(id: 1, name: 'Team One');
+    const ws2 = WorkspaceDto(id: 2, name: 'Team Two');
+
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
       'restores cached active workspace ID when multiple workspaces exist',
-      () async {
-        const ws1 = WorkspaceDto(id: 1, name: 'Team One');
-        const ws2 = WorkspaceDto(id: 2, name: 'Team Two');
-        repository.workspaces = [ws1, ws2];
-
+      setUp: () async {
         await prefs.setActiveWorkspaceId(2);
-
-        expectLater(
-          cubit.stream,
-          emitsInOrder([
-            const WorkspaceContextState.loading(),
-            const WorkspaceContextState.loaded(
-              workspaces: [ws1, ws2],
-              activeWorkspace: ws2,
-            ),
-          ]),
-        );
-
-        await cubit.loadWorkspaces();
-        expect(prefs.activeWorkspaceId, 2);
       },
-    );
-
-    test('selects first workspace when cached ID not found in list', () async {
-      const ws1 = WorkspaceDto(id: 10, name: 'Team 10');
-      const ws2 = WorkspaceDto(id: 20, name: 'Team 20');
-      repository.workspaces = [ws1, ws2];
-
-      await prefs.setActiveWorkspaceId(999); // Stale ID
-
-      expectLater(
-        cubit.stream,
-        emitsInOrder([
-          const WorkspaceContextState.loading(),
-          const WorkspaceContextState.loaded(
-            workspaces: [ws1, ws2],
-            activeWorkspace: ws1,
-          ),
-        ]),
-      );
-
-      await cubit.loadWorkspaces();
-      expect(prefs.activeWorkspaceId, 10);
-    });
-
-    test('selectWorkspace updates active workspace and prefs', () async {
-      const ws1 = WorkspaceDto(id: 1, name: 'A');
-      const ws2 = WorkspaceDto(id: 2, name: 'B');
-      repository.workspaces = [ws1, ws2];
-
-      await cubit.loadWorkspaces();
-
-      await cubit.selectWorkspace(ws2);
-      expect(prefs.activeWorkspaceId, 2);
-      expect(
-        cubit.state,
+      build: () {
+        when(() => repository.getWorkspaces()).thenAnswer((_) async => [ws1, ws2]);
+        return WorkspaceContextCubit(repository, prefs);
+      },
+      act: (cubit) => cubit.loadWorkspaces(),
+      expect: () => [
+        const WorkspaceContextState.loading(),
         const WorkspaceContextState.loaded(
           workspaces: [ws1, ws2],
           activeWorkspace: ws2,
         ),
-      );
-    });
-
-    test(
-      'createWorkspace adds new workspace and auto-selects as Owner',
-      () async {
-        const ws1 = WorkspaceDto(id: 1, name: 'Existing');
-        repository.workspaces = [ws1];
-
-        await cubit.loadWorkspaces();
-
-        await cubit.createWorkspace(
-          const CreateWorkspaceRequest(name: 'New Product Team'),
-        );
-
-        final state = cubit.state.whenOrNull(
-          loaded: (list, active) => (list, active),
-        );
-        expect(state, isNotNull);
-        expect(state!.$1.length, 2);
-        expect(state.$2.name, 'New Product Team');
-        expect(state.$2.membership?.role, 'Owner');
-        expect(prefs.activeWorkspaceId, state.$2.id);
+      ],
+      verify: (_) {
+        expect(prefs.activeWorkspaceId, 2);
       },
     );
 
-    test('emits error state when repository throws exception', () async {
-      repository.shouldThrow = true;
-      repository.errorMessage = 'Network connection failed';
+    const ws10 = WorkspaceDto(id: 10, name: 'Team 10');
+    const ws20 = WorkspaceDto(id: 20, name: 'Team 20');
 
-      expectLater(
-        cubit.stream,
-        emitsInOrder([
-          const WorkspaceContextState.loading(),
-          const WorkspaceContextState.error('Network connection failed'),
-        ]),
-      );
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
+      'selects first workspace when cached ID not found in list',
+      setUp: () async {
+        await prefs.setActiveWorkspaceId(999);
+      },
+      build: () {
+        when(
+          () => repository.getWorkspaces(),
+        ).thenAnswer((_) async => [ws10, ws20]);
+        return WorkspaceContextCubit(repository, prefs);
+      },
+      act: (cubit) => cubit.loadWorkspaces(),
+      expect: () => [
+        const WorkspaceContextState.loading(),
+        const WorkspaceContextState.loaded(
+          workspaces: [ws10, ws20],
+          activeWorkspace: ws10,
+        ),
+      ],
+      verify: (_) {
+        expect(prefs.activeWorkspaceId, 10);
+      },
+    );
 
-      await cubit.loadWorkspaces();
-    });
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
+      'selectWorkspace updates active workspace and prefs',
+      build: () => WorkspaceContextCubit(repository, prefs),
+      seed: () => const WorkspaceContextState.loaded(
+        workspaces: [ws1, ws2],
+        activeWorkspace: ws1,
+      ),
+      act: (cubit) => cubit.selectWorkspace(ws2),
+      expect: () => [
+        const WorkspaceContextState.loaded(
+          workspaces: [ws1, ws2],
+          activeWorkspace: ws2,
+        ),
+      ],
+      verify: (_) {
+        expect(prefs.activeWorkspaceId, 2);
+        verify(() => repository.setActiveWorkspace(ws2)).called(1);
+      },
+    );
+
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
+      'createWorkspace adds new workspace and auto-selects as Owner',
+      build: () {
+        when(
+          () => repository.createWorkspace(any()),
+        ).thenAnswer(
+          (_) async => const WorkspaceDto(
+            id: 2,
+            name: 'New Product Team',
+            membership: WorkspaceMembershipDto(role: 'Owner'),
+          ),
+        );
+        return WorkspaceContextCubit(repository, prefs);
+      },
+      seed: () => const WorkspaceContextState.loaded(
+        workspaces: [ws1],
+        activeWorkspace: ws1,
+      ),
+      act: (cubit) => cubit.createWorkspace(
+        const CreateWorkspaceRequest(name: 'New Product Team'),
+      ),
+      expect: () => [
+        isA<WorkspaceContextState>().having(
+          (s) => s.maybeWhen(
+            loaded: (list, active) =>
+                list.length == 2 &&
+                active.name == 'New Product Team' &&
+                active.membership?.role == 'Owner',
+            orElse: () => false,
+          ),
+          'loaded with new workspace as Owner',
+          isTrue,
+        ),
+      ],
+      verify: (_) {
+        expect(prefs.activeWorkspaceId, 2);
+      },
+    );
+
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
+      'emits error state when repository throws exception',
+      build: () {
+        when(
+          () => repository.getWorkspaces(),
+        ).thenThrow(const ServerException(message: 'Network connection failed'));
+        return WorkspaceContextCubit(repository, prefs);
+      },
+      act: (cubit) => cubit.loadWorkspaces(),
+      expect: () => [
+        const WorkspaceContextState.loading(),
+        const WorkspaceContextState.error('Network connection failed'),
+      ],
+    );
 
     test(
       'initializes with loaded state immediately when cached workspace exists',
@@ -296,146 +233,131 @@ void main() {
             activeWorkspace: cached,
           ),
         );
+        verify(() => repository.setActiveWorkspace(cached)).called(1);
         await newCubit.close();
       },
     );
 
-    test(
+    const cachedOrg = WorkspaceDto(
+      id: 42,
+      name: 'Cached Org',
+      membership: WorkspaceMembershipDto(role: 'Owner'),
+    );
+
+    const refreshedOrg = WorkspaceDto(
+      id: 42,
+      name: 'Refreshed Org',
+      membership: WorkspaceMembershipDto(role: 'Owner'),
+    );
+
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
       'loadWorkspaces does not emit loading when cached workspace exists',
-      () async {
-        const cached = WorkspaceDto(
-          id: 42,
-          name: 'Cached Org',
-          membership: WorkspaceMembershipDto(role: 'Owner'),
-        );
-        await prefs.setCachedActiveWorkspaceRaw(jsonEncode(cached.toJson()));
-
-        const refreshed = WorkspaceDto(
-          id: 42,
-          name: 'Refreshed Org',
-          membership: WorkspaceMembershipDto(role: 'Owner'),
-        );
-        repository.workspaces = [refreshed];
-
-        final newCubit = WorkspaceContextCubit(repository, prefs);
-
-        expectLater(
-          newCubit.stream,
-          emitsInOrder([
-            const WorkspaceContextState.loaded(
-              workspaces: [refreshed],
-              activeWorkspace: refreshed,
-            ),
-          ]),
-        );
-
-        await newCubit.loadWorkspaces();
+      setUp: () async {
+        await prefs.setCachedActiveWorkspaceRaw(jsonEncode(cachedOrg.toJson()));
+      },
+      build: () {
+        when(
+          () => repository.getWorkspaces(),
+        ).thenAnswer((_) async => [refreshedOrg]);
+        return WorkspaceContextCubit(repository, prefs);
+      },
+      act: (cubit) => cubit.loadWorkspaces(),
+      expect: () => [
+        const WorkspaceContextState.loaded(
+          workspaces: [refreshedOrg],
+          activeWorkspace: refreshedOrg,
+        ),
+      ],
+      verify: (_) {
         expect(
           WorkspaceDto.fromJson(
             jsonDecode(prefs.getCachedActiveWorkspaceRaw()!),
           ).name,
           'Refreshed Org',
         );
-        await newCubit.close();
       },
     );
 
-    test('retains cached loaded state when background refresh fails', () async {
-      const cached = WorkspaceDto(
-        id: 42,
-        name: 'Cached Org',
-        membership: WorkspaceMembershipDto(role: 'Owner'),
-      );
-      await prefs.setCachedActiveWorkspaceRaw(jsonEncode(cached.toJson()));
-
-      repository.shouldThrow = true;
-      repository.errorMessage = 'Network offline';
-
-      final newCubit = WorkspaceContextCubit(repository, prefs);
-
-      await newCubit.loadWorkspaces();
-
-      expect(
-        newCubit.state,
-        const WorkspaceContextState.loaded(
-          workspaces: [cached],
-          activeWorkspace: cached,
-        ),
-      );
-      await newCubit.close();
-    });
-
-    test(
-      'revalidates cached workspace role from Member to Owner on background refresh',
-      () async {
-        const cachedMember = WorkspaceDto(
-          id: 19,
-          name: 'ProjectHub',
-          membership: WorkspaceMembershipDto(role: 'Member'),
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
+      'retains cached loaded state when background refresh fails',
+      setUp: () async {
+        await prefs.setCachedActiveWorkspaceRaw(jsonEncode(cachedOrg.toJson()));
+      },
+      build: () {
+        when(
+          () => repository.getWorkspaces(),
+        ).thenThrow(const ServerException(message: 'Network offline'));
+        return WorkspaceContextCubit(repository, prefs);
+      },
+      act: (cubit) => cubit.loadWorkspaces(),
+      expect: () => [], // No states emitted because failure is suppressed when already loaded
+      verify: (cubit) {
+        expect(
+          cubit.state,
+          const WorkspaceContextState.loaded(
+            workspaces: [cachedOrg],
+            activeWorkspace: cachedOrg,
+          ),
         );
+      },
+    );
+
+    const cachedMember = WorkspaceDto(
+      id: 19,
+      name: 'ProjectHub',
+      membership: WorkspaceMembershipDto(role: 'Member'),
+    );
+    const serverOwner = WorkspaceDto(
+      id: 19,
+      name: 'ProjectHub',
+      membership: WorkspaceMembershipDto(role: 'Owner'),
+    );
+
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
+      'revalidates cached workspace role from Member to Owner on background refresh',
+      setUp: () async {
         await prefs.setActiveWorkspaceId(19);
         await prefs.setCachedActiveWorkspaceRaw(
           jsonEncode(cachedMember.toJson()),
         );
-
-        const serverOwner = WorkspaceDto(
-          id: 19,
-          name: 'ProjectHub',
-          membership: WorkspaceMembershipDto(role: 'Owner'),
-        );
-        repository.workspaces = [serverOwner];
-
-        final testCubit = WorkspaceContextCubit(repository, prefs);
-
-        // Initial state boots from cache with Member
-        expect(
-          testCubit.state,
-          const WorkspaceContextState.loaded(
-            workspaces: [cachedMember],
-            activeWorkspace: cachedMember,
-          ),
-        );
-
-        // Background revalidation loads fresh data from server
-        await testCubit.loadWorkspaces();
-
-        // State and prefs are updated with Owner
-        expect(
-          testCubit.state,
-          const WorkspaceContextState.loaded(
-            workspaces: [serverOwner],
-            activeWorkspace: serverOwner,
-          ),
-        );
+      },
+      build: () {
+        when(
+          () => repository.getWorkspaces(),
+        ).thenAnswer((_) async => [serverOwner]);
+        return WorkspaceContextCubit(repository, prefs);
+      },
+      act: (cubit) => cubit.loadWorkspaces(),
+      expect: () => [
+        const WorkspaceContextState.loaded(
+          workspaces: [serverOwner],
+          activeWorkspace: serverOwner,
+        ),
+      ],
+      verify: (_) {
         final updatedCache = WorkspaceDto.fromJson(
           jsonDecode(prefs.getCachedActiveWorkspaceRaw()!),
         );
         expect(updatedCache.membership?.role, 'Owner');
-        await testCubit.close();
       },
     );
 
-    test(
+    blocTest<WorkspaceContextCubit, WorkspaceContextState>(
       'reset clears repository cache, active workspace prefs, and emits initial state',
-      () async {
-        const active = WorkspaceDto(
-          id: 19,
-          name: 'ProjectHub',
-          membership: WorkspaceMembershipDto(role: 'Owner'),
-        );
-        repository.workspaces = [active];
-        await cubit.loadWorkspaces();
-        expect(
-          cubit.state.maybeWhen(loaded: (_, _) => true, orElse: () => false),
-          isTrue,
-        );
-
-        await cubit.reset();
-
-        expect(cubit.state, const WorkspaceContextState.initial());
+      build: () {
+        when(() => repository.clearCache()).thenReturn(null);
+        return WorkspaceContextCubit(repository, prefs);
+      },
+      seed: () => const WorkspaceContextState.loaded(
+        workspaces: [ws1],
+        activeWorkspace: ws1,
+      ),
+      act: (cubit) => cubit.reset(),
+      expect: () => [const WorkspaceContextState.initial()],
+      verify: (_) {
         expect(prefs.activeWorkspaceId, isNull);
         expect(prefs.getCachedActiveWorkspaceRaw(), isNull);
-        expect(repository.clearCacheCalled, isTrue);
+        verify(() => repository.clearCache()).called(1);
       },
     );
   });
