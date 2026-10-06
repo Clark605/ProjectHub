@@ -9,9 +9,10 @@ on:
     paths:
       - 'server/**'
       - '.github/workflows/server.yml'
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,3 +30,34 @@ jobs:
       - name: Build solution
         run: dotnet build server/ProjectHub.Api.sln --no-restore --configuration Release
 
+      - name: Run tests with code coverage
+        run: dotnet test server/ProjectHub.Api.sln --no-build --configuration Release --collect:"XPlat Code Coverage" --results-directory server/coverage
+
+      - name: Generate code coverage report
+        uses: danielpalme/ReportGenerator-GitHub-Action@v5
+        with:
+          reports: 'server/coverage/**/coverage.cobertura.xml'
+          targetdir: 'server/coverage/report'
+          reporttypes: 'HtmlInline;Cobertura;MarkdownSummaryGithub'
+          assemblyfilters: '+*;-*Tests*'
+
+      - name: Upload server coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: server-code-coverage
+          path: |
+            server/coverage/**/coverage.cobertura.xml
+            server/coverage/report
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v5
+        continue-on-error: true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: Clark605/ProjectHub
+          files: 'server/coverage/**/coverage.cobertura.xml'
+          flags: server
+          fail_ci_if_error: false
