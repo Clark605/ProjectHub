@@ -20,7 +20,7 @@ import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-import 'fakes/shell_test_fakes.dart';
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUp(() async {
@@ -30,24 +30,24 @@ void main() {
     final prefs = PrefsService(sp);
     getIt.registerSingleton<PrefsService>(prefs);
 
-    final authRepo = FakeAuthRepository();
+    final authRepo = createMockAuthRepository();
     final authCubit = AppAuthCubit(authRepo);
     getIt.registerSingleton<AppAuthCubit>(authCubit);
 
-    final workspaceRepo = FakeWorkspaceRepository();
+    final workspaceRepo = createMockWorkspaceRepository();
     final workspaceCubit = WorkspaceContextCubit(workspaceRepo, prefs);
     getIt.registerSingleton<WorkspaceContextCubit>(workspaceCubit);
 
-    final projectRepo = FakeProjectRepository();
+    final projectRepo = createMockProjectRepository();
     getIt.registerSingleton<ProjectRepository>(projectRepo);
     getIt.registerFactory<ProjectsListCubit>(
       () => ProjectsListCubit(projectRepo),
     );
 
-    final activityRepo = FakeActivityRepository();
+    final activityRepo = createMockActivityRepository();
     getIt.registerSingleton<ActivityRepository>(activityRepo);
 
-    final taskRepo = FakeTaskRepository();
+    final taskRepo = createMockTaskRepository();
     getIt.registerSingleton<TaskRepository>(taskRepo);
 
     getIt.registerFactory<DashboardCubit>(
@@ -129,7 +129,7 @@ void main() {
     (WidgetTester tester) async {
       final sp = await SharedPreferences.getInstance();
       final prefs = PrefsService(sp);
-      final emptyRepo = FakeWorkspaceRepository()..workspaces = [];
+      final emptyRepo = createMockWorkspaceRepository(workspaces: []);
       final emptyContextCubit = WorkspaceContextCubit(emptyRepo, prefs);
       getIt.unregister<WorkspaceContextCubit>();
       getIt.registerSingleton<WorkspaceContextCubit>(emptyContextCubit);
@@ -155,7 +155,7 @@ void main() {
     (WidgetTester tester) async {
       final sp = await SharedPreferences.getInstance();
       final prefs = PrefsService(sp);
-      final emptyRepo = FakeWorkspaceRepository()..workspaces = [];
+      final emptyRepo = createMockWorkspaceRepository(workspaces: []);
       final emptyContextCubit = WorkspaceContextCubit(emptyRepo, prefs);
       getIt.unregister<WorkspaceContextCubit>();
       getIt.registerSingleton<WorkspaceContextCubit>(emptyContextCubit);
