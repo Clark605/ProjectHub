@@ -8,7 +8,6 @@ import 'package:client/features/kanban/ui/widgets/board/kanban_archived_banner.d
 import 'package:client/features/kanban/ui/widgets/board/kanban_board_body.dart';
 import 'package:client/features/kanban/ui/widgets/filters/kanban_filter_bar.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
-import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/data/task_filter.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
@@ -24,9 +23,6 @@ class KanbanViewBody extends StatelessWidget {
   final KanbanCubit? cubit;
   final ValueChanged<int>? onColumnChanged;
   final ValueChanged<TaskStatus>? onAddTask;
-  final ValueChanged<TaskDto>? onTaskTap;
-  final ValueChanged<TaskDto>? onTaskMove;
-  final ValueChanged<TaskDto>? onTaskDelete;
 
   const KanbanViewBody({
     super.key,
@@ -40,9 +36,6 @@ class KanbanViewBody extends StatelessWidget {
     this.cubit,
     this.onColumnChanged,
     this.onAddTask,
-    this.onTaskTap,
-    this.onTaskMove,
-    this.onTaskDelete,
   });
 
   List<TagDto> _extractTags() {
@@ -104,18 +97,6 @@ class KanbanViewBody extends StatelessWidget {
                       effectiveCubit.loadTasks(projectId, forceRefresh: true),
                   onClearFilters: effectiveCubit.clearFilters,
                   onAddTask: onAddTask,
-                  onTaskTap: onTaskTap,
-                  onTaskMove: onTaskMove,
-                  onTaskDelete: onTaskDelete,
-                  onTagTap: (tag) {
-                    final currentTag = state is KanbanLoaded
-                        ? (state as KanbanLoaded).filter.tagId
-                        : null;
-                    effectiveCubit.setFilter(
-                      tagId: tag.id == currentTag ? null : tag.id,
-                      clearTag: tag.id == currentTag,
-                    );
-                  },
                 ),
               ),
             ),

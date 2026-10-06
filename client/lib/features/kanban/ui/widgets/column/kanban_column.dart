@@ -39,24 +39,30 @@ class KanbanColumn extends StatelessWidget {
     this.onTagTap,
   });
 
+  KanbanCubit? _tryGetCubit(BuildContext context) {
+    try {
+      return context.read<KanbanCubit>();
+    } catch (_) {
+      return null;
+    }
+  }
+
   void _handleAddTask(BuildContext context) {
     if (onAddTask != null) {
       onAddTask!();
       return;
     }
-    try {
-      final cubit = context.read<KanbanCubit>();
-      final pId = cubit.projectId;
-      if (pId != null) {
-        KanbanScreenActions.openCreateTask(
-          context,
-          projectId: pId,
-          members: cubit.members,
-          cubit: cubit,
-          status: status.toServerString(),
-        );
-      }
-    } catch (_) {}
+    final cubit = _tryGetCubit(context);
+    final pId = cubit?.projectId;
+    if (cubit != null && pId != null) {
+      KanbanScreenActions.openCreateTask(
+        context,
+        projectId: pId,
+        members: cubit.members,
+        cubit: cubit,
+        status: status.toServerString(),
+      );
+    }
   }
 
   @override
@@ -67,7 +73,8 @@ class KanbanColumn extends StatelessWidget {
     final statusName = l10n != null
         ? status.localizedName(l10n)
         : status.toDisplayString();
-    final columnAccent = accent ??
+    final columnAccent =
+        accent ??
         WorkspaceAccent.resolve(activeWorkspaceAccent, theme.brightness);
 
     return Container(
@@ -109,7 +116,9 @@ class KanbanColumn extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12),
-                        onTap: isArchived ? null : () => _handleAddTask(context),
+                        onTap: isArchived
+                            ? null
+                            : () => _handleAddTask(context),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -165,9 +174,15 @@ class KanbanColumn extends StatelessWidget {
                         key: ValueKey(task.id),
                         task: task,
                         isArchived: isArchived,
-                        onTap: onTaskTap != null ? () => onTaskTap!(task) : null,
-                        onMove: onTaskMove != null ? () => onTaskMove!(task) : null,
-                        onDelete: onTaskDelete != null ? () => onTaskDelete!(task) : null,
+                        onTap: onTaskTap != null
+                            ? () => onTaskTap!(task)
+                            : null,
+                        onMove: onTaskMove != null
+                            ? () => onTaskMove!(task)
+                            : null,
+                        onDelete: onTaskDelete != null
+                            ? () => onTaskDelete!(task)
+                            : null,
                         onTagTap: onTagTap,
                       );
                     },

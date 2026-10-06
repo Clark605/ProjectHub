@@ -7,8 +7,6 @@ import 'package:client/features/kanban/ui/widgets/board/kanban_board_skeleton.da
 import 'package:client/features/kanban/ui/widgets/board/kanban_desktop_board.dart';
 import 'package:client/features/kanban/ui/widgets/board/kanban_empty_state.dart';
 import 'package:client/features/kanban/ui/widgets/board/kanban_mobile_board.dart';
-import 'package:client/features/tags/data/models/tag_dto.dart';
-import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -23,10 +21,6 @@ class KanbanBoardBody extends StatelessWidget {
   final VoidCallback onRetry;
   final VoidCallback onClearFilters;
   final ValueChanged<TaskStatus>? onAddTask;
-  final ValueChanged<TaskDto>? onTaskTap;
-  final ValueChanged<TaskDto>? onTaskMove;
-  final ValueChanged<TaskDto>? onTaskDelete;
-  final ValueChanged<TagDto>? onTagTap;
 
   const KanbanBoardBody({
     super.key,
@@ -40,10 +34,6 @@ class KanbanBoardBody extends StatelessWidget {
     required this.onRetry,
     required this.onClearFilters,
     this.onAddTask,
-    this.onTaskTap,
-    this.onTaskMove,
-    this.onTaskDelete,
-    this.onTagTap,
   });
 
   @override
@@ -53,10 +43,8 @@ class KanbanBoardBody extends StatelessWidget {
     return state.when(
       initial: () => const KanbanBoardSkeleton(),
       loading: () => const KanbanBoardSkeleton(),
-      error: (message) => AppErrorState(
-        errorMessage: message,
-        onRetry: onRetry,
-      ),
+      error: (message) =>
+          AppErrorState(errorMessage: message, onRetry: onRetry),
       empty: (projId, arch, err) => KanbanEmptyState(
         isArchived: arch,
         onCreateTask: onAddTask != null
@@ -112,10 +100,6 @@ class KanbanBoardBody extends StatelessWidget {
                 isArchived: arch,
                 wsAccent: wsAccent,
                 onAddTask: onAddTask,
-                onTaskTap: onTaskTap,
-                onTaskMove: onTaskMove,
-                onTaskDelete: onTaskDelete,
-                onTagTap: onTagTap,
               );
             }
             return KanbanDesktopBoard(
@@ -124,10 +108,6 @@ class KanbanBoardBody extends StatelessWidget {
               availableHeight: constraints.maxHeight,
               wsAccent: wsAccent,
               onAddTask: onAddTask,
-              onTaskTap: onTaskTap,
-              onTaskMove: onTaskMove,
-              onTaskDelete: onTaskDelete,
-              onTagTap: onTagTap,
             );
           },
         );

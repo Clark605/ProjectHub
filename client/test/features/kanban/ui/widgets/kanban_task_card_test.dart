@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/ui/widgets/card/kanban_task_card.dart';
+import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import '../fakes/kanban_test_fakes.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -68,6 +72,88 @@ void main() {
       await tester.tap(find.text('Delete'));
       await tester.pumpAndSettle();
       expect(deleteCalled, isTrue);
+    },
+  );
+
+  testWidgets(
+    'KanbanTaskCard safely no-ops without callbacks when BlocProvider is omitted',
+    (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: KanbanTaskCard(
+              task: sampleTask,
+            ),
+          ),
+        ),
+      );
+
+      // Tap card
+      await tester.tap(find.text('Optimize layout passes'));
+      await tester.pump();
+
+      // Long press card
+      await tester.longPress(find.text('Optimize layout passes'));
+      await tester.pump();
+
+      // Tap tag chip
+      await tester.tap(find.text('Frontend'));
+      await tester.pump();
+
+      // Tap popup menu actions
+      await tester.tap(find.byIcon(Icons.more_vert_rounded));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Move Task'));
+      await tester.pumpAndSettle();
+
+      // No crash/exception thrown
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'KanbanTaskCard toggles filter on tag tap via KanbanCubit when callbacks are omitted',
+    (tester) async {
+      final fakeRepo = TestTaskRepository([sampleTask]);
+      final fakeProjectRepo = TestProjectRepository(
+        const ProjectDto(
+          id: 10,
+          workspaceId: 1,
+          name: 'P1',
+          status: 'Active',
+        ),
+      );
+      final cubit = KanbanCubit(fakeRepo, fakeProjectRepo);
+      await cubit.loadTasks(10);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: BlocProvider.value(
+            value: cubit,
+            child: const Scaffold(
+              body: KanbanTaskCard(
+                task: sampleTask,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      expect(cubit.tagFilter, isNull);
+
+      // Tap tag -> sets filter
+      await tester.tap(find.text('Frontend'));
+      await tester.pump();
+      expect(cubit.tagFilter, 99);
+
+      // Tap tag again -> clears filter
+      await tester.tap(find.text('Frontend'));
+      await tester.pump();
+      expect(cubit.tagFilter, isNull);
     },
   );
 }

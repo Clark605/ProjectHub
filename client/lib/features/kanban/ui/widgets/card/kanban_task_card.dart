@@ -29,21 +29,28 @@ class KanbanTaskCard extends StatelessWidget {
     this.onTagTap,
   });
 
+  KanbanCubit? _tryGetCubit(BuildContext context) {
+    try {
+      return context.read<KanbanCubit>();
+    } catch (_) {
+      return null;
+    }
+  }
+
   void _handleTap(BuildContext context) {
     if (onTap != null) {
       onTap!();
       return;
     }
-    try {
-      final cubit = context.read<KanbanCubit>();
-      KanbanScreenActions.openTaskDetail(
-        context,
-        task: task,
-        isArchived: isArchived,
-        members: cubit.members,
-        cubit: cubit,
-      );
-    } catch (_) {}
+    final cubit = _tryGetCubit(context);
+    if (cubit == null) return;
+    KanbanScreenActions.openTaskDetail(
+      context,
+      task: task,
+      isArchived: isArchived,
+      members: cubit.members,
+      cubit: cubit,
+    );
   }
 
   void _handleMove(BuildContext context) {
@@ -51,14 +58,9 @@ class KanbanTaskCard extends StatelessWidget {
       onMove!();
       return;
     }
-    try {
-      final cubit = context.read<KanbanCubit>();
-      KanbanScreenActions.openMoveToStatus(
-        context,
-        task: task,
-        cubit: cubit,
-      );
-    } catch (_) {}
+    final cubit = _tryGetCubit(context);
+    if (cubit == null) return;
+    KanbanScreenActions.openMoveToStatus(context, task: task, cubit: cubit);
   }
 
   void _handleDelete(BuildContext context) {
@@ -66,10 +68,9 @@ class KanbanTaskCard extends StatelessWidget {
       onDelete!();
       return;
     }
-    try {
-      final cubit = context.read<KanbanCubit>();
-      KanbanScreenActions.confirmAndDeleteTask(context, task, cubit);
-    } catch (_) {}
+    final cubit = _tryGetCubit(context);
+    if (cubit == null) return;
+    KanbanScreenActions.confirmAndDeleteTask(context, task, cubit);
   }
 
   void _handleTagTap(BuildContext context, TagDto tag) {
@@ -77,14 +78,13 @@ class KanbanTaskCard extends StatelessWidget {
       onTagTap!(tag);
       return;
     }
-    try {
-      final cubit = context.read<KanbanCubit>();
-      final currentTag = cubit.tagFilter;
-      cubit.setFilter(
-        tagId: tag.id == currentTag ? null : tag.id,
-        clearTag: tag.id == currentTag,
-      );
-    } catch (_) {}
+    final cubit = _tryGetCubit(context);
+    if (cubit == null) return;
+    final currentTag = cubit.tagFilter;
+    cubit.setFilter(
+      tagId: tag.id == currentTag ? null : tag.id,
+      clearTag: tag.id == currentTag,
+    );
   }
 
   @override

@@ -1,4 +1,3 @@
-import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -17,10 +16,6 @@ class KanbanMobileBoard extends StatefulWidget {
   final bool isArchived;
   final String? wsAccent;
   final ValueChanged<TaskStatus>? onAddTask;
-  final ValueChanged<TaskDto>? onTaskTap;
-  final ValueChanged<TaskDto>? onTaskMove;
-  final ValueChanged<TaskDto>? onTaskDelete;
-  final ValueChanged<TagDto>? onTagTap;
 
   const KanbanMobileBoard({
     super.key,
@@ -31,10 +26,6 @@ class KanbanMobileBoard extends StatefulWidget {
     required this.isArchived,
     this.wsAccent,
     this.onAddTask,
-    this.onTaskTap,
-    this.onTaskMove,
-    this.onTaskDelete,
-    this.onTagTap,
   });
 
   @override
@@ -190,10 +181,6 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                   onAddTask: widget.onAddTask != null
                       ? () => widget.onAddTask!(status)
                       : null,
-                  onTaskTap: widget.onTaskTap,
-                  onTaskMove: widget.onTaskMove,
-                  onTaskDelete: widget.onTaskDelete,
-                  onTagTap: widget.onTagTap,
                 ),
               );
             },
