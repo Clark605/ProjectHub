@@ -1,57 +1,43 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:client/features/tasks/data/ai_task_repository.dart';
-import 'package:client/features/tasks/data/models/parsed_task_draft_dto.dart';
 
-class _FakeAiTaskRepo implements AiTaskRepository {
-  ParsedTaskDraftDto? response;
-  Object? errorToThrow;
-
-  @override
-  Future<ParsedTaskDraftDto> parseTaskFromText({
-    required String text,
-    required int projectId,
-    required int workspaceId,
-  }) async {
-    if (errorToThrow != null) throw errorToThrow!;
-    return response ??
-        const ParsedTaskDraftDto(
-          title: 'Parsed Title',
-          description: 'Parsed Description',
-        );
-  }
-}
+class MockAiTaskRepository extends Mock implements AiTaskRepository {}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('VoiceTaskCubit', () {
-    late _FakeAiTaskRepo fakeAiRepo;
-    late VoiceTaskCubit cubit;
+    late MockAiTaskRepository mockAiRepo;
 
     setUp(() {
-      fakeAiRepo = _FakeAiTaskRepo();
-      cubit = VoiceTaskCubit(fakeAiRepo);
-    });
-
-    tearDown(() async {
-      await cubit.close();
+      mockAiRepo = MockAiTaskRepository();
     });
 
     test('initial state is idle', () {
+      final cubit = VoiceTaskCubit(mockAiRepo);
       expect(cubit.state, const VoiceTaskState.idle());
+      cubit.close();
     });
 
-    test('reset() emits idle', () {
-      cubit.reset();
-      expect(cubit.state, const VoiceTaskState.idle());
-    });
+    blocTest<VoiceTaskCubit, VoiceTaskState>(
+      'reset() emits idle',
+      build: () => VoiceTaskCubit(mockAiRepo),
+      seed: () => const VoiceTaskState.listening(),
+      act: (cubit) => cubit.reset(),
+      expect: () => [const VoiceTaskState.idle()],
+    );
 
-    test('cancelListening() emits idle', () async {
-      await cubit.cancelListening();
-      expect(cubit.state, const VoiceTaskState.idle());
-    });
+    blocTest<VoiceTaskCubit, VoiceTaskState>(
+      'cancelListening() emits idle',
+      build: () => VoiceTaskCubit(mockAiRepo),
+      seed: () => const VoiceTaskState.listening(),
+      act: (cubit) => cubit.cancelListening(),
+      expect: () => [const VoiceTaskState.idle()],
+    );
   });
 }
