@@ -1,15 +1,16 @@
-import 'package:client/features/tasks/data/task_filter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_archived_banner.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_board_body.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_filter_bar.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_archived_banner.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_board_body.dart';
+import 'package:client/features/kanban/ui/widgets/filters/kanban_filter_bar.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:client/features/tasks/data/task_filter.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 
 class KanbanViewBody extends StatelessWidget {
@@ -20,12 +21,12 @@ class KanbanViewBody extends StatelessWidget {
   final PageController? pageController;
   final int? currentColumnIndex;
   final List<MemberDto> members;
-  final KanbanCubit cubit;
+  final KanbanCubit? cubit;
   final ValueChanged<int>? onColumnChanged;
-  final ValueChanged<TaskStatus> onAddTask;
-  final ValueChanged<TaskDto> onTaskTap;
-  final ValueChanged<TaskDto> onTaskMove;
-  final ValueChanged<TaskDto> onTaskDelete;
+  final ValueChanged<TaskStatus>? onAddTask;
+  final ValueChanged<TaskDto>? onTaskTap;
+  final ValueChanged<TaskDto>? onTaskMove;
+  final ValueChanged<TaskDto>? onTaskDelete;
 
   const KanbanViewBody({
     super.key,
@@ -36,12 +37,12 @@ class KanbanViewBody extends StatelessWidget {
     this.pageController,
     this.currentColumnIndex,
     required this.members,
-    required this.cubit,
+    this.cubit,
     this.onColumnChanged,
-    required this.onAddTask,
-    required this.onTaskTap,
-    required this.onTaskMove,
-    required this.onTaskDelete,
+    this.onAddTask,
+    this.onTaskTap,
+    this.onTaskMove,
+    this.onTaskDelete,
   });
 
   List<TagDto> _extractTags() {
@@ -61,6 +62,7 @@ class KanbanViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveCubit = cubit ?? context.read<KanbanCubit>();
     final activeFilter = state is KanbanLoaded
         ? (state as KanbanLoaded).filter
         : const TaskFilter();
@@ -77,17 +79,19 @@ class KanbanViewBody extends StatelessWidget {
               availableTags: _extractTags(),
               searchQuery: activeFilter.search,
               members: members,
-              onPrioritySelected: (p) => cubit.setFilter(priority: p),
-              onAssigneeSelected: (a) => cubit.setFilter(assigneeId: a),
+              onPrioritySelected: (p) => effectiveCubit.setFilter(priority: p),
+              onAssigneeSelected: (a) =>
+                  effectiveCubit.setFilter(assigneeId: a),
               onTagSelected: (t) =>
-                  cubit.setFilter(tagId: t, clearTag: t == null),
-              onSearchChanged: (q) => cubit.setFilter(search: q),
-              onClearFilters: cubit.clearFilters,
+                  effectiveCubit.setFilter(tagId: t, clearTag: t == null),
+              onSearchChanged: (q) => effectiveCubit.setFilter(search: q),
+              onClearFilters: effectiveCubit.clearFilters,
             ),
             Expanded(
               child: RefreshIndicator(
                 notificationPredicate: (n) => n.metrics.axis == Axis.vertical,
-                onRefresh: () => cubit.refreshTasks(forceRefresh: true),
+                onRefresh: () =>
+                    effectiveCubit.refreshTasks(forceRefresh: true),
                 child: KanbanBoardBody(
                   state: state,
                   projectId: projectId,
@@ -96,8 +100,9 @@ class KanbanViewBody extends StatelessWidget {
                   pageController: pageController,
                   currentColumnIndex: currentColumnIndex,
                   onColumnChanged: onColumnChanged,
-                  onRetry: () => cubit.loadTasks(projectId, forceRefresh: true),
-                  onClearFilters: cubit.clearFilters,
+                  onRetry: () =>
+                      effectiveCubit.loadTasks(projectId, forceRefresh: true),
+                  onClearFilters: effectiveCubit.clearFilters,
                   onAddTask: onAddTask,
                   onTaskTap: onTaskTap,
                   onTaskMove: onTaskMove,
@@ -106,7 +111,7 @@ class KanbanViewBody extends StatelessWidget {
                     final currentTag = state is KanbanLoaded
                         ? (state as KanbanLoaded).filter.tagId
                         : null;
-                    cubit.setFilter(
+                    effectiveCubit.setFilter(
                       tagId: tag.id == currentTag ? null : tag.id,
                       clearTag: tag.id == currentTag,
                     );

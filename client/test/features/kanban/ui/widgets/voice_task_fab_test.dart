@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:client/features/kanban/ui/widgets/voice_task_fab.dart';
+import 'package:client/features/kanban/ui/widgets/voice/voice_task_fab.dart';
 
 void main() {
   group('VoiceTaskFab', () {

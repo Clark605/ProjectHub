@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/workspace_accent.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_column_header.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_task_card.dart';
+import 'package:client/features/kanban/cubit/kanban_cubit.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_screen_actions.dart';
+import 'package:client/features/kanban/ui/widgets/card/kanban_task_card.dart';
+import 'package:client/features/kanban/ui/widgets/column/kanban_column_header.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
@@ -36,6 +39,26 @@ class KanbanColumn extends StatelessWidget {
     this.onTagTap,
   });
 
+  void _handleAddTask(BuildContext context) {
+    if (onAddTask != null) {
+      onAddTask!();
+      return;
+    }
+    try {
+      final cubit = context.read<KanbanCubit>();
+      final pId = cubit.projectId;
+      if (pId != null) {
+        KanbanScreenActions.openCreateTask(
+          context,
+          projectId: pId,
+          members: cubit.members,
+          cubit: cubit,
+          status: status.toServerString(),
+        );
+      }
+    } catch (_) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -45,12 +68,7 @@ class KanbanColumn extends StatelessWidget {
         ? status.localizedName(l10n)
         : status.toDisplayString();
     final columnAccent = accent ??
-        (activeWorkspaceAccent != null &&
-            activeWorkspaceAccent!.trim().isNotEmpty
-        ? WorkspaceAccent.fromId(
-            activeWorkspaceAccent!,
-          ).resolvedColor(theme.brightness)
-        : null);
+        WorkspaceAccent.resolve(activeWorkspaceAccent, theme.brightness);
 
     return Container(
       decoration: BoxDecoration(
@@ -82,7 +100,7 @@ class KanbanColumn extends StatelessWidget {
             taskCount: tasks.length,
             isArchived: isArchived,
             accent: columnAccent,
-            onAddTask: onAddTask,
+            onAddTask: isArchived ? null : () => _handleAddTask(context),
           ),
           Expanded(
             child: tasks.isEmpty
@@ -91,7 +109,7 @@ class KanbanColumn extends StatelessWidget {
                       padding: const EdgeInsets.all(16),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(12),
-                        onTap: isArchived ? null : onAddTask,
+                        onTap: isArchived ? null : () => _handleAddTask(context),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -147,9 +165,9 @@ class KanbanColumn extends StatelessWidget {
                         key: ValueKey(task.id),
                         task: task,
                         isArchived: isArchived,
-                        onTap: () => onTaskTap?.call(task),
-                        onMove: () => onTaskMove?.call(task),
-                        onDelete: () => onTaskDelete?.call(task),
+                        onTap: onTaskTap != null ? () => onTaskTap!(task) : null,
+                        onMove: onTaskMove != null ? () => onTaskMove!(task) : null,
+                        onDelete: onTaskDelete != null ? () => onTaskDelete!(task) : null,
                         onTagTap: onTagTap,
                       );
                     },

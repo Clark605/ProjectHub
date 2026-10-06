@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:client/core/theme/app_theme.dart';
 import 'package:client/core/theme/workspace_accent.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_column.dart';
+import 'package:client/features/kanban/ui/widgets/column/kanban_column.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_nav_item.dart';
 import 'package:client/features/shell/ui/widgets/mobile_bottom_nav.dart';
 import 'package:client/features/shell/ui/widgets/shell_top_bar.dart';

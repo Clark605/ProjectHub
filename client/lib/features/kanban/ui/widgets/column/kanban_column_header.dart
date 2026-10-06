@@ -73,11 +73,7 @@ class KanbanColumnHeader extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
-                      color:
-                          accent ??
-                          (isDark
-                              ? AppColors.textSecondary
-                              : AppColors.lightTextSecondary),
+                      color: accent ?? AppColors.textSecondaryColor(isDark),
                     ),
                   ),
                 ),

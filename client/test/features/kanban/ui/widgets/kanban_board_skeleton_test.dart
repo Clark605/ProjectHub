@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_board_skeleton.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_board_skeleton.dart';
 
 void main() {
   group('KanbanBoardSkeleton', () {

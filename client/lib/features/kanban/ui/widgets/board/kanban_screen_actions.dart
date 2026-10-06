@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
-import 'package:client/features/kanban/ui/widgets/create_task_sheet.dart';
+import 'package:client/features/kanban/ui/widgets/create_task/create_task_sheet.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';

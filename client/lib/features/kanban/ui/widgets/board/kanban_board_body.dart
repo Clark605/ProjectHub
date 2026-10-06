@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_error_state.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_board_skeleton.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_desktop_board.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_empty_state.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_mobile_board.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_board_skeleton.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_desktop_board.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_empty_state.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_mobile_board.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
@@ -22,10 +22,10 @@ class KanbanBoardBody extends StatelessWidget {
   final ValueChanged<int>? onColumnChanged;
   final VoidCallback onRetry;
   final VoidCallback onClearFilters;
-  final ValueChanged<TaskStatus> onAddTask;
-  final ValueChanged<TaskDto> onTaskTap;
-  final ValueChanged<TaskDto> onTaskMove;
-  final ValueChanged<TaskDto> onTaskDelete;
+  final ValueChanged<TaskStatus>? onAddTask;
+  final ValueChanged<TaskDto>? onTaskTap;
+  final ValueChanged<TaskDto>? onTaskMove;
+  final ValueChanged<TaskDto>? onTaskDelete;
   final ValueChanged<TagDto>? onTagTap;
 
   const KanbanBoardBody({
@@ -39,10 +39,10 @@ class KanbanBoardBody extends StatelessWidget {
     this.onColumnChanged,
     required this.onRetry,
     required this.onClearFilters,
-    required this.onAddTask,
-    required this.onTaskTap,
-    required this.onTaskMove,
-    required this.onTaskDelete,
+    this.onAddTask,
+    this.onTaskTap,
+    this.onTaskMove,
+    this.onTaskDelete,
     this.onTagTap,
   });
 
@@ -59,7 +59,9 @@ class KanbanBoardBody extends StatelessWidget {
       ),
       empty: (projId, arch, err) => KanbanEmptyState(
         isArchived: arch,
-        onCreateTask: () => onAddTask(TaskStatus.backlog),
+        onCreateTask: onAddTask != null
+            ? () => onAddTask!(TaskStatus.backlog)
+            : null,
       ),
       loaded: (projId, tasks, allTasks, arch, filter, err) {
         final hasActiveFilter =

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/features/kanban/ui/widgets/kanban_assignee_filter_menu.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_priority_filter_menu.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_search_input_row.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_tag_filter_menu.dart';
+import 'package:client/features/kanban/ui/widgets/filters/kanban_assignee_filter_menu.dart';
+import 'package:client/features/kanban/ui/widgets/filters/kanban_priority_filter_menu.dart';
+import 'package:client/features/kanban/ui/widgets/filters/kanban_search_input_row.dart';
+import 'package:client/features/kanban/ui/widgets/filters/kanban_tag_filter_menu.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/features/kanban/ui/widgets/voice_task_fab.dart';
+import 'package:client/features/kanban/ui/widgets/voice/voice_task_fab.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanFab extends StatelessWidget {

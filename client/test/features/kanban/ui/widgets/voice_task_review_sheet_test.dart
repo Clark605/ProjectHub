@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:client/features/kanban/ui/widgets/voice_task_review_sheet.dart';
+import 'package:client/features/kanban/ui/widgets/voice/voice_task_review_sheet.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/parsed_task_draft_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';

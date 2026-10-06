@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/features/kanban/ui/widgets/kanban_column.dart';
+import 'package:client/features/kanban/ui/widgets/column/kanban_column.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
@@ -10,10 +10,10 @@ class KanbanDesktopBoard extends StatelessWidget {
   final bool isArchived;
   final double availableHeight;
   final String? wsAccent;
-  final ValueChanged<TaskStatus> onAddTask;
-  final ValueChanged<TaskDto> onTaskTap;
-  final ValueChanged<TaskDto> onTaskMove;
-  final ValueChanged<TaskDto> onTaskDelete;
+  final ValueChanged<TaskStatus>? onAddTask;
+  final ValueChanged<TaskDto>? onTaskTap;
+  final ValueChanged<TaskDto>? onTaskMove;
+  final ValueChanged<TaskDto>? onTaskDelete;
   final ValueChanged<TagDto>? onTagTap;
 
   const KanbanDesktopBoard({
@@ -22,10 +22,10 @@ class KanbanDesktopBoard extends StatelessWidget {
     required this.isArchived,
     required this.availableHeight,
     this.wsAccent,
-    required this.onAddTask,
-    required this.onTaskTap,
-    required this.onTaskMove,
-    required this.onTaskDelete,
+    this.onAddTask,
+    this.onTaskTap,
+    this.onTaskMove,
+    this.onTaskDelete,
     this.onTagTap,
   });
 
@@ -50,7 +50,7 @@ class KanbanDesktopBoard extends StatelessWidget {
                 tasks: columnTasks,
                 isArchived: isArchived,
                 activeWorkspaceAccent: wsAccent,
-                onAddTask: () => onAddTask(status),
+                onAddTask: onAddTask != null ? () => onAddTask!(status) : null,
                 onTaskTap: onTaskTap,
                 onTaskMove: onTaskMove,
                 onTaskDelete: onTaskDelete,

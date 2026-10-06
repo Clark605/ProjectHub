@@ -4,8 +4,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
-import 'package:client/features/kanban/ui/widgets/voice_listening_overlay.dart';
-import 'package:client/features/kanban/ui/widgets/voice_task_review_sheet.dart';
+import 'package:client/features/kanban/ui/widgets/voice/voice_listening_overlay.dart';
+import 'package:client/features/kanban/ui/widgets/voice/voice_task_review_sheet.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';

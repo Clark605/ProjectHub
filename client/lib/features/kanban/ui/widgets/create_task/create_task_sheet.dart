@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/widgets/app_button.dart';
-import 'package:client/features/kanban/ui/widgets/create_task_assignee_due_date_row.dart';
-import 'package:client/features/kanban/ui/widgets/create_task_priority_selector.dart';
-import 'package:client/features/kanban/ui/widgets/create_task_text_fields.dart';
-import 'package:client/features/kanban/ui/widgets/task_form_state_mixin.dart';
-import 'package:client/features/kanban/ui/widgets/voice_task_review_header.dart';
-import 'package:client/features/kanban/ui/widgets/voice_task_review_warnings.dart';
+import 'package:client/core/widgets/app_error_banner.dart';
+import 'package:client/features/kanban/ui/widgets/create_task/create_task_assignee_due_date_row.dart';
+import 'package:client/features/kanban/ui/widgets/create_task/create_task_header.dart';
+import 'package:client/features/kanban/ui/widgets/create_task/create_task_priority_selector.dart';
+import 'package:client/features/kanban/ui/widgets/create_task/create_task_tags_selector.dart';
+import 'package:client/features/kanban/ui/widgets/create_task/create_task_text_fields.dart';
+import 'package:client/features/kanban/ui/widgets/create_task/task_form_state_mixin.dart';
+import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
-import 'package:client/features/tasks/data/models/parsed_task_draft_dto.dart';
-import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-class VoiceTaskReviewSheet extends StatefulWidget {
+class CreateTaskSheet extends StatefulWidget {
   final int projectId;
-  final ParsedTaskDraftDto draft;
+  final String initialStatus;
   final List<MemberDto> members;
   final Future<void> Function(CreateTaskRequest request, String targetStatus)
   onSubmit;
 
-  const VoiceTaskReviewSheet({
+  const CreateTaskSheet({
     super.key,
     required this.projectId,
-    required this.draft,
+    this.initialStatus = 'Backlog',
     this.members = const [],
     required this.onSubmit,
   });
@@ -32,7 +33,7 @@ class VoiceTaskReviewSheet extends StatefulWidget {
   static Future<void> show(
     BuildContext context, {
     required int projectId,
-    required ParsedTaskDraftDto draft,
+    String initialStatus = 'Backlog',
     List<MemberDto> members = const [],
     required Future<void> Function(
       CreateTaskRequest request,
@@ -47,9 +48,9 @@ class VoiceTaskReviewSheet extends StatefulWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => VoiceTaskReviewSheet(
+      builder: (_) => CreateTaskSheet(
         projectId: projectId,
-        draft: draft,
+        initialStatus: initialStatus,
         members: members,
         onSubmit: onSubmit,
       ),
@@ -57,21 +58,20 @@ class VoiceTaskReviewSheet extends StatefulWidget {
   }
 
   @override
-  State<VoiceTaskReviewSheet> createState() => _VoiceTaskReviewSheetState();
+  State<CreateTaskSheet> createState() => _CreateTaskSheetState();
 }
 
-class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
-    with TaskFormStateMixin<VoiceTaskReviewSheet> {
+class _CreateTaskSheetState extends State<CreateTaskSheet>
+    with TaskFormStateMixin<CreateTaskSheet> {
+  late TaskStatus _selectedStatus;
+  final List<TagDto> _selectedTags = [];
+  String? _errorMessage;
+
   @override
   void initState() {
     super.initState();
-    initTaskFormState(
-      title: widget.draft.title,
-      description: widget.draft.description,
-      priority: TaskPriority.fromString(widget.draft.priority),
-      assigneeId: widget.draft.assigneeId,
-      dueDate: widget.draft.dueDate,
-    );
+    initTaskFormState();
+    _selectedStatus = TaskStatus.fromString(widget.initialStatus);
   }
 
   @override
@@ -82,19 +82,33 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
 
   Future<void> _submit() async {
     if (!formKey.currentState!.validate()) return;
-    setState(() => isSubmitting = true);
+    setState(() {
+      isSubmitting = true;
+      _errorMessage = null;
+    });
     try {
       final request = CreateTaskRequest(
         title: titleController.text.trim(),
         description: descriptionController.text.trim(),
         priority: selectedPriority.toServerString(),
+        status: _selectedStatus.toServerString(),
         assigneeId: selectedAssigneeId,
         dueDate: selectedDueDate,
+        tagIds: _selectedTags.map((t) => t.id).toList(),
       );
-      await widget.onSubmit(request, TaskStatus.backlog.toServerString());
+      await widget.onSubmit(request, _selectedStatus.toServerString());
       if (mounted) Navigator.of(context).pop();
-    } catch (_) {
-      if (mounted) setState(() => isSubmitting = false);
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isSubmitting = false;
+          _errorMessage = e is AppException
+              ? e.message
+              : (e.toString().isNotEmpty && !e.toString().startsWith('Exception:'))
+                  ? e.toString()
+                  : (AppLocalizations.of(context)?.somethingWentWrong ?? 'Failed to create task');
+        });
+      }
     }
   }
 
@@ -114,11 +128,15 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                VoiceTaskReviewHeader(
-                  onClose: () => Navigator.of(context).pop(),
-                ),
-                VoiceTaskReviewWarnings(warnings: widget.draft.warnings),
-                const SizedBox(height: 16),
+                CreateTaskHeader(selectedStatus: _selectedStatus),
+                if (_errorMessage != null) ...[
+                  const SizedBox(height: 12),
+                  AppErrorBanner(
+                    errorMessage: _errorMessage,
+                    onDismiss: () => setState(() => _errorMessage = null),
+                  ),
+                ],
+                const SizedBox(height: 20),
                 CreateTaskTextFields(
                   titleController: titleController,
                   descriptionController: descriptionController,
@@ -139,10 +157,18 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
                   onPickDueDate: () => pickDueDate(context),
                   onClearDueDate: clearDueDate,
                 ),
+                const SizedBox(height: 16),
+                CreateTaskTagsSelector(
+                  projectId: widget.projectId,
+                  selectedTags: _selectedTags,
+                  onTagAdded: (t) => setState(() => _selectedTags.add(t)),
+                  onTagRemoved: (t) => setState(
+                    () => _selectedTags.removeWhere((x) => x.id == t.id),
+                  ),
+                ),
                 const SizedBox(height: 24),
                 AppButton(
-                  label:
-                      l10n?.voiceTaskConfirmCreate ?? 'Confirm & Create Task',
+                  label: l10n?.createTask ?? 'Create Task',
                   isLoading: isSubmitting,
                   variant: AppButtonVariant.primary,
                   onPressed: isSubmitting ? null : _submit,

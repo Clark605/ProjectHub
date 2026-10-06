@@ -124,9 +124,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
         child: Icon(
           Icons.person_outline_rounded,
           size: 13,
-          color: isDark
-              ? AppColors.textSecondary
-              : AppColors.lightTextSecondary,
+          color: AppColors.textSecondaryColor(isDark),
         ),
       ),
     );

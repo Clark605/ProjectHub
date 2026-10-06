@@ -25,9 +25,7 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    final accentColor = wsAccent != null && wsAccent!.trim().isNotEmpty
-        ? WorkspaceAccent.fromId(wsAccent!).resolvedColor(theme.brightness)
-        : null;
+    final accentColor = WorkspaceAccent.resolve(wsAccent, theme.brightness);
 
     return AppBar(
       backgroundColor: Colors.transparent,

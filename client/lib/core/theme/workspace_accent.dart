@@ -116,4 +116,9 @@ class WorkspaceAccent {
     final normalized = id.trim().toLowerCase();
     return values.firstWhere((a) => a.id == normalized, orElse: () => teal);
   }
+
+  static Color? resolve(String? id, Brightness brightness) {
+    if (id == null || id.trim().isEmpty) return null;
+    return fromId(id).resolvedColor(brightness);
+  }
 }

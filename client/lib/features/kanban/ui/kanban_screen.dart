@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_app_bar.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_screen_actions.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_screen_fab.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_view_body.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_voice_handler.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_app_bar.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_screen_actions.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_screen_fab.dart';
+import 'package:client/features/kanban/ui/widgets/board/kanban_view_body.dart';
+import 'package:client/features/kanban/ui/widgets/voice/kanban_voice_handler.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -129,20 +129,6 @@ class _KanbanScreenState extends State<KanbanScreen>
             members: members,
             cubit: _cubit,
             onAddTask: (s) => _openCreateTask(s.toServerString()),
-            onTaskTap: (t) => KanbanScreenActions.openTaskDetail(
-              context,
-              task: t,
-              isArchived: isEffectivelyArchived,
-              members: members,
-              cubit: _cubit,
-            ),
-            onTaskMove: (t) => KanbanScreenActions.openMoveToStatus(
-              context,
-              task: t,
-              cubit: _cubit,
-            ),
-            onTaskDelete: (t) =>
-                KanbanScreenActions.confirmAndDeleteTask(context, t, _cubit),
           );
 
           if (voiceCubit != null) {

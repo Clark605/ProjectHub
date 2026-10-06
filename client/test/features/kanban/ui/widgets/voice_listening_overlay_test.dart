@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:client/core/theme/dark_theme.dart';
-import 'package:client/features/kanban/ui/widgets/voice_listening_overlay.dart';
+import 'package:client/features/kanban/ui/widgets/voice/voice_listening_overlay.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/data/ai_task_repository.dart';
 import 'package:client/features/tasks/data/models/parsed_task_draft_dto.dart';

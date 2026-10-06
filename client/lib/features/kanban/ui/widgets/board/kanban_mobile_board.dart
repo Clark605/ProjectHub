@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/workspace_accent.dart';
-import 'package:client/features/kanban/ui/widgets/kanban_column.dart';
+import 'package:client/features/kanban/ui/widgets/column/kanban_column.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
@@ -16,10 +16,10 @@ class KanbanMobileBoard extends StatefulWidget {
   final Map<TaskStatus, List<TaskDto>> tasksByStatus;
   final bool isArchived;
   final String? wsAccent;
-  final ValueChanged<TaskStatus> onAddTask;
-  final ValueChanged<TaskDto> onTaskTap;
-  final ValueChanged<TaskDto> onTaskMove;
-  final ValueChanged<TaskDto> onTaskDelete;
+  final ValueChanged<TaskStatus>? onAddTask;
+  final ValueChanged<TaskDto>? onTaskTap;
+  final ValueChanged<TaskDto>? onTaskMove;
+  final ValueChanged<TaskDto>? onTaskDelete;
   final ValueChanged<TagDto>? onTagTap;
 
   const KanbanMobileBoard({
@@ -30,10 +30,10 @@ class KanbanMobileBoard extends StatefulWidget {
     required this.tasksByStatus,
     required this.isArchived,
     this.wsAccent,
-    required this.onAddTask,
-    required this.onTaskTap,
-    required this.onTaskMove,
-    required this.onTaskDelete,
+    this.onAddTask,
+    this.onTaskTap,
+    this.onTaskMove,
+    this.onTaskDelete,
     this.onTagTap,
   });
 
@@ -92,12 +92,10 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
-    final accentColor =
-        widget.wsAccent != null && widget.wsAccent!.trim().isNotEmpty
-        ? WorkspaceAccent.fromId(
-            widget.wsAccent!,
-          ).resolvedColor(theme.brightness)
-        : null;
+    final accentColor = WorkspaceAccent.resolve(
+      widget.wsAccent,
+      theme.brightness,
+    );
 
     return Column(
       children: [
@@ -189,7 +187,9 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                   isArchived: widget.isArchived,
                   activeWorkspaceAccent: widget.wsAccent,
                   accent: accentColor,
-                  onAddTask: () => widget.onAddTask(status),
+                  onAddTask: widget.onAddTask != null
+                      ? () => widget.onAddTask!(status)
+                      : null,
                   onTaskTap: widget.onTaskTap,
                   onTaskMove: widget.onTaskMove,
                   onTaskDelete: widget.onTaskDelete,

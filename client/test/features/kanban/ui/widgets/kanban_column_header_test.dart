@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:client/features/kanban/ui/widgets/kanban_column_header.dart';
+import 'package:client/features/kanban/ui/widgets/column/kanban_column_header.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 
 void main() {
