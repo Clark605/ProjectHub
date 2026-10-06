@@ -9,6 +9,7 @@ on:
     paths:
       - 'client/**'
       - '.github/workflows/client.yml'
+  workflow_dispatch:
 
 jobs:
   test:
@@ -33,7 +34,48 @@ jobs:
         working-directory: client
         run: flutter analyze
 
-      - name: Run tests
+      - name: Run tests with code coverage
         working-directory: client
-        run: flutter test
+        run: flutter test --coverage
 
+      - name: Install lcov
+        run: sudo apt-get update && sudo apt-get install -y lcov
+
+      - name: Filter generated files from coverage
+        working-directory: client
+        run: |
+          lcov --remove coverage/lcov.info 'lib/**/*.g.dart' 'lib/**/*.freezed.dart' -o coverage/lcov.info --ignore-errors unused,empty || lcov --remove coverage/lcov.info 'lib/**/*.g.dart' 'lib/**/*.freezed.dart' -o coverage/lcov.info || true
+
+      - name: Generate HTML coverage report
+        working-directory: client
+        run: |
+          genhtml coverage/lcov.info -o coverage/html --ignore-errors source,empty || genhtml coverage/lcov.info -o coverage/html || true
+
+      - name: Publish coverage summary to GitHub Step Summary
+        working-directory: client
+        run: |
+          echo "### 📱 Client (Flutter) Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          lcov --summary coverage/lcov.info >> $GITHUB_STEP_SUMMARY || true
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload client coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: client-code-coverage
+          path: |
+            client/coverage/lcov.info
+            client/coverage/html
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v5
+        continue-on-error: true
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: Clark605/ProjectHub
+          files: 'client/coverage/lcov.info'
+          flags: client
+          fail_ci_if_error: false
