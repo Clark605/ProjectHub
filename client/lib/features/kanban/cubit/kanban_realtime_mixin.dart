@@ -1,16 +1,15 @@
 import 'dart:async';
 
+import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/network/signalr_events.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/task_filter.dart';
 
-mixin KanbanRealtimeMixin {
+mixin KanbanRealtimeMixin on SafeActionCubit<KanbanState> {
   SignalRService? get signalRService;
   int? get currentProjectId;
-  KanbanState get state;
-  void emit(KanbanState state);
   void emitLoaded(
     List<TaskDto> allTasks, {
     TaskFilter? filter,

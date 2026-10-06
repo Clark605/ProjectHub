@@ -55,7 +55,12 @@ class SignalRService {
   }
 
   Future<void> ensureConnected() async {
-    if (_connection?.state == HubConnectionState.Connected) return;
+    if (_connection?.state == HubConnectionState.Connected ||
+        _connection?.state == HubConnectionState.Connecting ||
+        _connection?.state == HubConnectionState.Reconnecting) {
+      if (_connectionFuture != null) return _connectionFuture!;
+      return;
+    }
     if (_connectionFuture != null) return _connectionFuture!;
 
     _connectionFuture = _connectInternal();
@@ -67,7 +72,11 @@ class SignalRService {
   }
 
   Future<void> _connectInternal() async {
-    if (_connection?.state == HubConnectionState.Connected) return;
+    if (_connection?.state == HubConnectionState.Connected ||
+        _connection?.state == HubConnectionState.Connecting ||
+        _connection?.state == HubConnectionState.Reconnecting) {
+      return;
+    }
 
     final token = await _secureStorage.getAccessToken();
     if (token == null) return;

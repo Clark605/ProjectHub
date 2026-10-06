@@ -445,6 +445,17 @@ void main() {
     );
   });
 
+  test('createTask with explicit status in req is overridden when initialStatus is provided', () async {
+    taskRepo.tasks = [];
+    await cubit.loadTasks(1);
+
+    const req = CreateTaskRequest(title: 'Conflict Feature', status: 'Backlog');
+    final created = await cubit.createTask(1, req, initialStatus: 'Done');
+
+    expect(created.title, 'Conflict Feature');
+    expect(created.status, 'Done');
+  });
+
   test(
     'deleteTask transitions to empty state when last task deleted',
     () async {

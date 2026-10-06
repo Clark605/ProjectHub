@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/widgets/app_button.dart';
+import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_assignee_due_date_row.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_header.dart';
 import 'package:client/features/kanban/ui/widgets/create_task_priority_selector.dart';
@@ -63,6 +65,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
     with TaskFormStateMixin<CreateTaskSheet> {
   late TaskStatus _selectedStatus;
   final List<TagDto> _selectedTags = [];
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -79,7 +82,10 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
 
   Future<void> _submit() async {
     if (!formKey.currentState!.validate()) return;
-    setState(() => isSubmitting = true);
+    setState(() {
+      isSubmitting = true;
+      _errorMessage = null;
+    });
     try {
       final request = CreateTaskRequest(
         title: titleController.text.trim(),
@@ -92,8 +98,17 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
       );
       await widget.onSubmit(request, _selectedStatus.toServerString());
       if (mounted) Navigator.of(context).pop();
-    } catch (_) {
-      if (mounted) setState(() => isSubmitting = false);
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isSubmitting = false;
+          _errorMessage = e is AppException
+              ? e.message
+              : (e.toString().isNotEmpty && !e.toString().startsWith('Exception:'))
+                  ? e.toString()
+                  : (AppLocalizations.of(context)?.somethingWentWrong ?? 'Failed to create task');
+        });
+      }
     }
   }
 
@@ -114,6 +129,13 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 CreateTaskHeader(selectedStatus: _selectedStatus),
+                if (_errorMessage != null) ...[
+                  const SizedBox(height: 12),
+                  AppErrorBanner(
+                    errorMessage: _errorMessage,
+                    onDismiss: () => setState(() => _errorMessage = null),
+                  ),
+                ],
                 const SizedBox(height: 20),
                 CreateTaskTextFields(
                   titleController: titleController,
