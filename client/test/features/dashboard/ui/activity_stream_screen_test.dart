@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
@@ -7,36 +8,34 @@ import 'package:client/features/dashboard/data/models/activity_filter.dart';
 import 'package:client/features/dashboard/ui/activity_stream_screen.dart';
 import 'package:client/features/dashboard/ui/widgets/activity_tile.dart';
 
-class FakeActivityRepository extends Fake implements ActivityRepository {
-  List<ActivityEventDto> activitiesToReturn = [];
-  bool shouldThrow = false;
-  int callCount = 0;
-
-  @override
-  Future<List<ActivityEventDto>> getWorkspaceActivities(
-    int workspaceId, {
-    int limit = 20,
-    ActivityFilter? filter,
-  }) async {
-    callCount++;
-    if (shouldThrow) {
-      throw Exception('Server unreachable');
-    }
-    return filter != null
-        ? filter.apply(activitiesToReturn)
-        : activitiesToReturn;
-  }
-}
+class MockActivityRepository extends Mock implements ActivityRepository {}
 
 void main() {
-  late FakeActivityRepository fakeRepo;
+  setUpAll(() {
+    registerFallbackValue(const ActivityFilter.empty());
+  });
+
+  late MockActivityRepository mockRepo;
+  late List<ActivityEventDto> activities;
 
   setUp(() {
-    fakeRepo = FakeActivityRepository();
+    mockRepo = MockActivityRepository();
+    activities = [];
+
+    when(
+      () => mockRepo.getWorkspaceActivities(
+        any(),
+        limit: any(named: 'limit'),
+        filter: any(named: 'filter'),
+      ),
+    ).thenAnswer((inv) async {
+      final filter = inv.namedArguments[#filter] as ActivityFilter?;
+      return filter != null ? filter.apply(activities) : activities;
+    });
   });
 
   testWidgets('ActivityStreamScreen renders activities list', (tester) async {
-    fakeRepo.activitiesToReturn = [
+    activities = [
       ActivityEventDto.fromJson({
         'id': 1,
         'workspaceId': 10,
@@ -61,7 +60,7 @@ void main() {
       MaterialApp(
         home: ActivityStreamScreen(
           workspaceId: 10,
-          activityRepository: fakeRepo,
+          activityRepository: mockRepo,
         ),
       ),
     );
@@ -77,13 +76,13 @@ void main() {
   testWidgets('ActivityStreamScreen renders empty state when no activities', (
     tester,
   ) async {
-    fakeRepo.activitiesToReturn = [];
+    activities = [];
 
     await tester.pumpWidget(
       MaterialApp(
         home: ActivityStreamScreen(
           workspaceId: 10,
-          activityRepository: fakeRepo,
+          activityRepository: mockRepo,
         ),
       ),
     );
@@ -96,38 +95,48 @@ void main() {
   testWidgets(
     'ActivityStreamScreen renders error state and retries on button tap',
     (tester) async {
-      fakeRepo.shouldThrow = true;
+      int callCount = 0;
+      when(
+        () => mockRepo.getWorkspaceActivities(
+          any(),
+          limit: any(named: 'limit'),
+          filter: any(named: 'filter'),
+        ),
+      ).thenAnswer((_) async {
+        callCount++;
+        if (callCount == 1) {
+          throw Exception('Server unreachable');
+        }
+        return [
+          ActivityEventDto.fromJson({
+            'id': 1,
+            'workspaceId': 10,
+            'actorId': 'u1',
+            'actorName': 'Alex',
+            'eventType': 'TaskCreated',
+            'metadata': {'Title': 'Done'},
+            'createdAt': DateTime.now().toIso8601String(),
+          }),
+        ];
+      });
 
       await tester.pumpWidget(
         MaterialApp(
           home: ActivityStreamScreen(
             workspaceId: 10,
-            activityRepository: fakeRepo,
+            activityRepository: mockRepo,
           ),
         ),
       );
       await tester.pump();
 
       expect(find.text('Retry'), findsOneWidget);
-      expect(fakeRepo.callCount, 1);
-
-      fakeRepo.shouldThrow = false;
-      fakeRepo.activitiesToReturn = [
-        ActivityEventDto.fromJson({
-          'id': 1,
-          'workspaceId': 10,
-          'actorId': 'u1',
-          'actorName': 'Alex',
-          'eventType': 'TaskCreated',
-          'metadata': {'Title': 'Done'},
-          'createdAt': DateTime.now().toIso8601String(),
-        }),
-      ];
+      expect(callCount, 1);
 
       await tester.tap(find.text('Retry'));
       await tester.pump();
 
-      expect(fakeRepo.callCount, 2);
+      expect(callCount, 2);
       expect(find.byType(ActivityTile), findsOneWidget);
     },
   );
@@ -135,7 +144,7 @@ void main() {
   testWidgets(
     'ActivityStreamScreen filters activities using quick filter chips',
     (tester) async {
-      fakeRepo.activitiesToReturn = [
+      activities = [
         ActivityEventDto.fromJson({
           'id': 1,
           'workspaceId': 10,
@@ -160,7 +169,7 @@ void main() {
         MaterialApp(
           home: ActivityStreamScreen(
             workspaceId: 10,
-            activityRepository: fakeRepo,
+            activityRepository: mockRepo,
           ),
         ),
       );
@@ -193,7 +202,7 @@ void main() {
   testWidgets(
     'ActivityStreamScreen shows filter empty state and resets filters',
     (tester) async {
-      fakeRepo.activitiesToReturn = [
+      activities = [
         ActivityEventDto.fromJson({
           'id': 1,
           'workspaceId': 10,
@@ -209,7 +218,7 @@ void main() {
         MaterialApp(
           home: ActivityStreamScreen(
             workspaceId: 10,
-            activityRepository: fakeRepo,
+            activityRepository: mockRepo,
           ),
         ),
       );
@@ -241,7 +250,7 @@ void main() {
   testWidgets('ActivityStreamScreen opens bottom sheet and applies search', (
     tester,
   ) async {
-    fakeRepo.activitiesToReturn = [
+    activities = [
       ActivityEventDto.fromJson({
         'id': 1,
         'workspaceId': 10,
@@ -266,7 +275,7 @@ void main() {
       MaterialApp(
         home: ActivityStreamScreen(
           workspaceId: 10,
-          activityRepository: fakeRepo,
+          activityRepository: mockRepo,
         ),
       ),
     );
