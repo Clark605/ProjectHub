@@ -8,7 +8,7 @@ import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
-import '../fakes/kanban_test_fakes.dart';
+import '../../../../helpers/mock_repositories.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -116,16 +116,16 @@ void main() {
   testWidgets(
     'KanbanTaskCard toggles filter on tag tap via KanbanCubit when callbacks are omitted',
     (tester) async {
-      final fakeRepo = TestTaskRepository([sampleTask]);
-      final fakeProjectRepo = TestProjectRepository(
-        const ProjectDto(
+      final mockRepo = createMockTaskRepository(tasks: [sampleTask]);
+      final mockProjectRepo = createMockProjectRepository(
+        project: const ProjectDto(
           id: 10,
           workspaceId: 1,
           name: 'P1',
           status: 'Active',
         ),
       );
-      final cubit = KanbanCubit(fakeRepo, fakeProjectRepo);
+      final cubit = KanbanCubit(mockRepo, mockProjectRepo);
       await cubit.loadTasks(10);
 
       await tester.pumpWidget(

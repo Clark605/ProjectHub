@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
@@ -7,7 +8,8 @@ import 'package:client/features/kanban/ui/kanban_screen.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
-import 'fakes/kanban_test_fakes.dart';
+
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -28,8 +30,8 @@ void main() {
     final effectiveCubit =
         cubit ??
         KanbanCubit(
-          TestTaskRepository([]),
-          TestProjectRepository(initialProject ?? testProject),
+          createMockTaskRepository(tasks: []),
+          createMockProjectRepository(project: initialProject ?? testProject),
         );
 
     return MaterialApp(
@@ -98,7 +100,7 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      final fakeTaskRepo = TestTaskRepository([
+      final mockTaskRepo = createMockTaskRepository(tasks: [
         const TaskDto(
           id: 101,
           projectId: 42,
@@ -107,8 +109,8 @@ void main() {
           priority: 'High',
         ),
       ]);
-      final fakeProjectRepo = TestProjectRepository(testProject);
-      final cubit = KanbanCubit(fakeTaskRepo, fakeProjectRepo);
+      final mockProjectRepo = createMockProjectRepository(project: testProject);
+      final cubit = KanbanCubit(mockTaskRepo, mockProjectRepo);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -140,7 +142,7 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      final fakeTaskRepo = TestTaskRepository([
+      final mockTaskRepo = createMockTaskRepository(tasks: [
         const TaskDto(
           id: 101,
           projectId: 42,
@@ -149,8 +151,8 @@ void main() {
           priority: 'High',
         ),
       ]);
-      final fakeProjectRepo = TestProjectRepository(testProject);
-      final cubit = KanbanCubit(fakeTaskRepo, fakeProjectRepo);
+      final mockProjectRepo = createMockProjectRepository(project: testProject);
+      final cubit = KanbanCubit(mockTaskRepo, mockProjectRepo);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -189,7 +191,7 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      final fakeTaskRepo = TestTaskRepository([
+      final mockTaskRepo = createMockTaskRepository(tasks: [
         const TaskDto(
           id: 101,
           projectId: 42,
@@ -198,8 +200,8 @@ void main() {
           priority: 'Medium',
         ),
       ]);
-      final fakeProjectRepo = TestProjectRepository(testProject);
-      final cubit = KanbanCubit(fakeTaskRepo, fakeProjectRepo);
+      final mockProjectRepo = createMockProjectRepository(project: testProject);
+      final cubit = KanbanCubit(mockTaskRepo, mockProjectRepo);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -226,12 +228,21 @@ void main() {
     'KanbanScreen settings pop without modifications does not reload tasks',
     (tester) async {
       int fetchCount = 0;
-      final fakeTaskRepo = _CountingTaskRepository(
-        onFetch: () => fetchCount++,
-        tasks: [],
-      );
-      final fakeProjectRepo = TestProjectRepository(testProject);
-      final cubit = KanbanCubit(fakeTaskRepo, fakeProjectRepo);
+      final mockTaskRepo = createMockTaskRepository(tasks: []);
+      when(
+        () => mockTaskRepo.getTasksByProject(
+          any(),
+          status: any(named: 'status'),
+          assigneeId: any(named: 'assigneeId'),
+          priority: any(named: 'priority'),
+          forceRefresh: any(named: 'forceRefresh'),
+        ),
+      ).thenAnswer((_) async {
+        fetchCount++;
+        return [];
+      });
+      final mockProjectRepo = createMockProjectRepository(project: testProject);
+      final cubit = KanbanCubit(mockTaskRepo, mockProjectRepo);
 
       await tester.pumpWidget(
         MaterialApp(
@@ -281,12 +292,21 @@ void main() {
     'KanbanScreen settings pop with updated project updates project name without reloading tasks',
     (tester) async {
       int fetchCount = 0;
-      final fakeTaskRepo = _CountingTaskRepository(
-        onFetch: () => fetchCount++,
-        tasks: [],
-      );
-      final fakeProjectRepo = TestProjectRepository(testProject);
-      final cubit = KanbanCubit(fakeTaskRepo, fakeProjectRepo);
+      final mockTaskRepo = createMockTaskRepository(tasks: []);
+      when(
+        () => mockTaskRepo.getTasksByProject(
+          any(),
+          status: any(named: 'status'),
+          assigneeId: any(named: 'assigneeId'),
+          priority: any(named: 'priority'),
+          forceRefresh: any(named: 'forceRefresh'),
+        ),
+      ).thenAnswer((_) async {
+        fetchCount++;
+        return [];
+      });
+      final mockProjectRepo = createMockProjectRepository(project: testProject);
+      final cubit = KanbanCubit(mockTaskRepo, mockProjectRepo);
 
       final updatedProject = testProject.copyWith(
         name: 'Updated Apollo Mission',
@@ -336,29 +356,4 @@ void main() {
       expect(fetchCount, 1);
     },
   );
-}
-
-class _CountingTaskRepository extends TestTaskRepository {
-  final VoidCallback onFetch;
-
-  _CountingTaskRepository({required this.onFetch, required List<TaskDto> tasks})
-    : super(tasks);
-
-  @override
-  Future<List<TaskDto>> getTasksByProject(
-    int projectId, {
-    String? status,
-    String? assigneeId,
-    String? priority,
-    bool forceRefresh = false,
-  }) async {
-    onFetch();
-    return super.getTasksByProject(
-      projectId,
-      status: status,
-      assigneeId: assigneeId,
-      priority: priority,
-      forceRefresh: forceRefresh,
-    );
-  }
 }
