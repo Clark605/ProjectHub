@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/app_exception.dart';
@@ -11,30 +11,20 @@ import 'package:client/features/workspaces/data/models/update_workspace_request.
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository_impl.dart';
 
-class FakeHttpClientAdapter implements HttpClientAdapter {
-  late ResponseBody Function(RequestOptions options) handler;
-
-  @override
-  Future<ResponseBody> fetch(
-    RequestOptions options,
-    Stream<Uint8List>? requestStream,
-    Future<void>? cancelFuture,
-  ) async {
-    return handler(options);
-  }
-
-  @override
-  void close({bool force = false}) {}
-}
+class MockHttpClientAdapter extends Mock implements HttpClientAdapter {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(RequestOptions(path: ''));
+  });
+
   late Dio dio;
-  late FakeHttpClientAdapter adapter;
+  late MockHttpClientAdapter adapter;
   late WorkspaceRepositoryImpl repository;
 
   setUp(() {
     dio = Dio(BaseOptions(baseUrl: 'http://test'));
-    adapter = FakeHttpClientAdapter();
+    adapter = MockHttpClientAdapter();
     dio.httpClientAdapter = adapter;
     repository = WorkspaceRepositoryImpl(dio);
   });
@@ -54,7 +44,8 @@ void main() {
     test(
       'getWorkspaces parses list with nested membership successfully',
       () async {
-        adapter.handler = (options) {
+        when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+          final options = inv.positionalArguments[0] as RequestOptions;
           expect(options.path, ApiConstants.workspaces);
           return jsonResponse([
             {
@@ -73,7 +64,7 @@ void main() {
               'membership': null,
             },
           ]);
-        };
+        });
 
         final result = await repository.getWorkspaces();
 
@@ -87,7 +78,8 @@ void main() {
     );
 
     test('getWorkspace parses single item successfully', () async {
-      adapter.handler = (options) {
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
         expect(options.path, ApiConstants.workspaceById(5));
         return jsonResponse({
           'id': 5,
@@ -95,7 +87,7 @@ void main() {
           'description': 'Tokens and UI',
           'membership': {'role': 'Member', 'joinedAt': '2026-02-15T00:00:00Z'},
         });
-      };
+      });
 
       final result = await repository.getWorkspace(5);
 
@@ -105,7 +97,8 @@ void main() {
     });
 
     test('createWorkspace sends request and parses response', () async {
-      adapter.handler = (options) {
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
         expect(options.path, ApiConstants.workspaces);
         expect(options.method, 'POST');
         return jsonResponse({
@@ -114,7 +107,7 @@ void main() {
           'description': 'Description',
           'membership': {'role': 'Owner', 'joinedAt': '2026-03-01T00:00:00Z'},
         }, statusCode: 201);
-      };
+      });
 
       final result = await repository.createWorkspace(
         const CreateWorkspaceRequest(
@@ -129,11 +122,11 @@ void main() {
     });
 
     test('throws NotFoundException on 404 response', () async {
-      adapter.handler = (options) {
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
         return jsonResponse({
           'message': 'Workspace not found',
         }, statusCode: 404);
-      };
+      });
 
       expect(
         () => repository.getWorkspace(999),
@@ -145,22 +138,22 @@ void main() {
       test(
         'getWorkspace returns cached workspace without extra HTTP call',
         () async {
-          int callCount = 0;
-          adapter.handler = (options) {
-            callCount++;
+          when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
             return jsonResponse({
               'id': 10,
               'name': 'Cached Org',
               'description': 'Cached Desc',
             });
-          };
+          });
 
           final first = await repository.getWorkspace(10);
+          verify(() => adapter.fetch(any(), any(), any())).called(1);
+
           final second = await repository.getWorkspace(10);
+          verifyNoMoreInteractions(adapter);
 
           expect(first.name, 'Cached Org');
           expect(second.name, 'Cached Org');
-          expect(callCount, 1);
         },
       );
 
@@ -168,35 +161,34 @@ void main() {
         'getWorkspace with forceRefresh: true calls API and updates cache',
         () async {
           int callCount = 0;
-          adapter.handler = (options) {
+          when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
             callCount++;
             return jsonResponse({
               'id': 10,
               'name': 'Name $callCount',
               'description': 'Desc',
             });
-          };
+          });
 
           final first = await repository.getWorkspace(10);
           expect(first.name, 'Name 1');
+          verify(() => adapter.fetch(any(), any(), any())).called(1);
 
           final refreshed = await repository.getWorkspace(
             10,
             forceRefresh: true,
           );
           expect(refreshed.name, 'Name 2');
-          expect(callCount, 2);
+          verify(() => adapter.fetch(any(), any(), any())).called(1);
 
           final cached = await repository.getWorkspace(10);
           expect(cached.name, 'Name 2');
-          expect(callCount, 2);
+          verifyNoMoreInteractions(adapter);
         },
       );
 
       test('getMembers caches member list on first call', () async {
-        int callCount = 0;
-        adapter.handler = (options) {
-          callCount++;
+        when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
           return jsonResponse([
             {
               'userId': 'u1',
@@ -206,31 +198,36 @@ void main() {
               'joinedAt': '2026-01-01T00:00:00Z',
             },
           ]);
-        };
+        });
 
         final first = await repository.getMembers(10);
+        verify(() => adapter.fetch(any(), any(), any())).called(1);
+
         final second = await repository.getMembers(10);
+        verifyNoMoreInteractions(adapter);
 
         expect(first.length, 1);
         expect(second.length, 1);
-        expect(callCount, 1);
       });
 
       test(
         'updateMemberRole updates role via PUT and updates cached member list',
         () async {
-          adapter.handler = (options) => jsonResponse([
-            {
-              'userId': 'u1',
-              'name': 'Member 1',
-              'email': 'm1@acme.com',
-              'role': 'Member',
-              'joinedAt': '2026-01-01T00:00:00Z',
-            },
-          ]);
+          when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+            (_) async => jsonResponse([
+              {
+                'userId': 'u1',
+                'name': 'Member 1',
+                'email': 'm1@acme.com',
+                'role': 'Member',
+                'joinedAt': '2026-01-01T00:00:00Z',
+              },
+            ]),
+          );
           await repository.getMembers(10);
 
-          adapter.handler = (options) {
+          when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+            final options = inv.positionalArguments[0] as RequestOptions;
             expect(options.method, 'PUT');
             expect(options.path, ApiConstants.updateMemberRole(10, 'u1'));
             expect(options.data, {'role': 'Owner'});
@@ -241,7 +238,7 @@ void main() {
               'role': 'Owner',
               'joinedAt': '2026-01-01T00:00:00Z',
             });
-          };
+          });
 
           final updated = await repository.updateMemberRole(10, 'u1', 'Owner');
           expect(updated.role, 'Owner');
@@ -252,22 +249,22 @@ void main() {
       );
 
       test('updateWorkspace updates the in-memory cache', () async {
-        adapter.handler = (options) {
-          return jsonResponse({
+        when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+          (_) async => jsonResponse({
             'id': 10,
             'name': 'Initial Name',
             'description': 'Desc',
-          });
-        };
+          }),
+        );
         await repository.getWorkspace(10);
 
-        adapter.handler = (options) {
-          return jsonResponse({
+        when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+          (_) async => jsonResponse({
             'id': 10,
             'name': 'Updated Name',
             'description': 'Desc',
-          });
-        };
+          }),
+        );
         await repository.updateWorkspace(
           10,
           const UpdateWorkspaceRequest(
@@ -282,24 +279,25 @@ void main() {
       });
 
       test('deleteWorkspace invalidates the cache', () async {
-        adapter.handler = (options) {
-          return jsonResponse({
+        when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+          (_) async => jsonResponse({
             'id': 10,
             'name': 'Initial Name',
             'description': 'Desc',
-          });
-        };
+          }),
+        );
         await repository.getWorkspace(10);
-        expect(
-          repository.hasCachedSettings(10),
-          isFalse,
-        ); // members not cached yet
+        expect(repository.hasCachedSettings(10), isFalse);
 
-        adapter.handler = (options) => jsonResponse([]);
+        when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+          (_) async => jsonResponse([]),
+        );
         await repository.getMembers(10);
         expect(repository.hasCachedSettings(10), isTrue);
 
-        adapter.handler = (options) => jsonResponse({});
+        when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+          (_) async => jsonResponse({}),
+        );
         await repository.deleteWorkspace(10);
         expect(repository.hasCachedSettings(10), isFalse);
       });

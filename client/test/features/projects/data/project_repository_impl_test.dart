@@ -1,38 +1,28 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/update_project_request.dart';
 import 'package:client/features/projects/data/project_repository_impl.dart';
 
-class _FakeHttpClientAdapter implements HttpClientAdapter {
-  late ResponseBody Function(RequestOptions options) handler;
-
-  @override
-  Future<ResponseBody> fetch(
-    RequestOptions options,
-    Stream<Uint8List>? requestStream,
-    Future<void>? cancelFuture,
-  ) async {
-    return handler(options);
-  }
-
-  @override
-  void close({bool force = false}) {}
-}
+class MockHttpClientAdapter extends Mock implements HttpClientAdapter {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(RequestOptions(path: ''));
+  });
+
   late Dio dio;
-  late _FakeHttpClientAdapter adapter;
+  late MockHttpClientAdapter adapter;
   late ProjectRepositoryImpl repository;
 
   setUp(() {
     dio = Dio(BaseOptions(baseUrl: 'http://test'));
-    adapter = _FakeHttpClientAdapter();
+    adapter = MockHttpClientAdapter();
     dio.httpClientAdapter = adapter;
     repository = ProjectRepositoryImpl(dio);
   });
@@ -50,9 +40,8 @@ void main() {
 
   group('ProjectRepositoryImpl', () {
     test('getProjects caches data and honors forceRefresh', () async {
-      int requestCount = 0;
-      adapter.handler = (options) {
-        requestCount++;
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
         expect(options.path, ApiConstants.workspaceProjects(10));
         return jsonResponse([
           {
@@ -66,18 +55,18 @@ void main() {
             'createdByName': 'Creator Name',
           },
         ]);
-      };
+      });
 
       // 1. First fetch - hits network
       final firstFetch = await repository.getProjects(10);
       expect(firstFetch.length, 1);
       expect(firstFetch.first.name, 'Project Alpha');
-      expect(requestCount, 1);
+      verify(() => adapter.fetch(any(), any(), any())).called(1);
 
       // 2. Second fetch without forceRefresh - cache hit
       final cachedFetch = await repository.getProjects(10);
       expect(cachedFetch.length, 1);
-      expect(requestCount, 1);
+      verifyNoMoreInteractions(adapter);
 
       // 3. Third fetch with forceRefresh - hits network
       final refreshedFetch = await repository.getProjects(
@@ -85,13 +74,12 @@ void main() {
         forceRefresh: true,
       );
       expect(refreshedFetch.length, 1);
-      expect(requestCount, 2);
+      verify(() => adapter.fetch(any(), any(), any())).called(1);
     });
 
     test('getProject detail caches and returns project', () async {
-      int requestCount = 0;
-      adapter.handler = (options) {
-        requestCount++;
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
         expect(options.path, ApiConstants.projectById(101));
         return jsonResponse({
           'id': 101,
@@ -103,40 +91,43 @@ void main() {
           'createdBy': 'u_creator',
           'createdByName': 'Creator Name',
         });
-      };
+      });
 
       final project1 = await repository.getProject(101);
       expect(project1.id, 101);
-      expect(requestCount, 1);
+      verify(() => adapter.fetch(any(), any(), any())).called(1);
 
       // Cache hit
       final project2 = await repository.getProject(101);
       expect(project2.id, 101);
-      expect(requestCount, 1);
+      verifyNoMoreInteractions(adapter);
 
       // Force refresh
       final project3 = await repository.getProject(101, forceRefresh: true);
       expect(project3.id, 101);
-      expect(requestCount, 2);
+      verify(() => adapter.fetch(any(), any(), any())).called(1);
     });
 
     test('createProject sends POST and updates workspace cache', () async {
       // Seed cache first
-      adapter.handler = (options) => jsonResponse([
-        {
-          'id': 101,
-          'workspaceId': 10,
-          'name': 'Existing Project',
-          'description': 'Desc',
-          'status': 'Active',
-          'createdAt': '2026-01-01T00:00:00Z',
-          'createdBy': 'u_creator',
-        },
-      ]);
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+        (_) async => jsonResponse([
+          {
+            'id': 101,
+            'workspaceId': 10,
+            'name': 'Existing Project',
+            'description': 'Desc',
+            'status': 'Active',
+            'createdAt': '2026-01-01T00:00:00Z',
+            'createdBy': 'u_creator',
+          },
+        ]),
+      );
       await repository.getProjects(10);
       expect(repository.hasCachedProjects(10), isTrue);
 
-      adapter.handler = (options) {
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
         expect(options.method, 'POST');
         expect(options.path, ApiConstants.workspaceProjects(10));
         return jsonResponse({
@@ -149,7 +140,7 @@ void main() {
           'createdBy': 'u_creator',
           'createdByName': 'Creator Name',
         });
-      };
+      });
 
       final created = await repository.createProject(
         10,
@@ -167,7 +158,8 @@ void main() {
     });
 
     test('updateProject sends PUT and updates detail cache', () async {
-      adapter.handler = (options) {
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
         expect(options.method, 'PUT');
         expect(options.path, ApiConstants.projectById(102));
         return jsonResponse({
@@ -180,7 +172,7 @@ void main() {
           'createdBy': 'u_creator',
           'createdByName': 'Creator Name',
         });
-      };
+      });
 
       final updated = await repository.updateProject(
         102,
@@ -198,36 +190,41 @@ void main() {
 
     test('deleteProject sends DELETE and clears caches', () async {
       // Seed detail cache first
-      adapter.handler = (options) => jsonResponse({
-        'id': 102,
-        'workspaceId': 10,
-        'name': 'Project 102',
-        'status': 'Active',
-        'createdAt': '2026-01-01T00:00:00Z',
-        'createdBy': 'u_creator',
-      });
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+        (_) async => jsonResponse({
+          'id': 102,
+          'workspaceId': 10,
+          'name': 'Project 102',
+          'status': 'Active',
+          'createdAt': '2026-01-01T00:00:00Z',
+          'createdBy': 'u_creator',
+        }),
+      );
       await repository.getProject(102);
       expect(repository.hasCachedProject(102), isTrue);
 
-      adapter.handler = (options) {
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
         expect(options.method, 'DELETE');
         expect(options.path, ApiConstants.projectById(102));
         return jsonResponse(null, statusCode: 204);
-      };
+      });
 
       await repository.deleteProject(102);
       expect(repository.hasCachedProject(102), isFalse);
     });
 
     test('clearCache clears all project caches', () async {
-      adapter.handler = (options) => jsonResponse({
-        'id': 102,
-        'workspaceId': 10,
-        'name': 'Project 102',
-        'status': 'Active',
-        'createdAt': '2026-01-01T00:00:00Z',
-        'createdBy': 'u_creator',
-      });
+      when(() => adapter.fetch(any(), any(), any())).thenAnswer(
+        (_) async => jsonResponse({
+          'id': 102,
+          'workspaceId': 10,
+          'name': 'Project 102',
+          'status': 'Active',
+          'createdAt': '2026-01-01T00:00:00Z',
+          'createdBy': 'u_creator',
+        }),
+      );
       await repository.getProject(102);
       expect(repository.hasCachedProject(102), isTrue);
 
