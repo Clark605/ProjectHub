@@ -10,13 +10,11 @@ import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/projects/ui/projects_screen.dart';
 import 'package:client/features/projects/ui/widgets/project_card.dart';
 import 'package:client/features/projects/ui/widgets/projects_skeleton.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
-import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 import '../../../helpers/mock_repositories.dart';
