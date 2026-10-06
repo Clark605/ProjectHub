@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:mocktail/mocktail.dart';
 
-import 'package:client/core/network/signalr_events.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/storage/secure_storage_service.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
@@ -18,13 +17,21 @@ import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
+
 class MockWorkspaceRepository extends Mock implements WorkspaceRepository {}
+
 class MockProjectRepository extends Mock implements ProjectRepository {}
+
 class MockTaskRepository extends Mock implements TaskRepository {}
+
 class MockActivityRepository extends Mock implements ActivityRepository {}
+
 class MockCommentRepository extends Mock implements CommentRepository {}
+
 class MockAiTaskRepository extends Mock implements AiTaskRepository {}
+
 class MockSignalRService extends Mock implements SignalRService {}
+
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
 /// Helper to create a configured [MockAuthRepository] with sensible test defaults.
@@ -48,7 +55,8 @@ MockWorkspaceRepository createMockWorkspaceRepository({
   WorkspaceDto? activeWorkspace,
 }) {
   final repo = MockWorkspaceRepository();
-  final list = workspaces ??
+  final list =
+      workspaces ??
       [
         const WorkspaceDto(
           id: 1,
@@ -60,7 +68,9 @@ MockWorkspaceRepository createMockWorkspaceRepository({
   final active = activeWorkspace ?? (list.isNotEmpty ? list.first : null);
 
   when(() => repo.activeWorkspace).thenReturn(active);
-  when(() => repo.activeWorkspaceChanges).thenAnswer((_) => const Stream.empty());
+  when(
+    () => repo.activeWorkspaceChanges,
+  ).thenAnswer((_) => const Stream.empty());
   when(() => repo.setActiveWorkspace(any())).thenReturn(null);
   when(() => repo.getWorkspaces()).thenAnswer((_) async => list);
   when(
@@ -84,8 +94,8 @@ MockProjectRepository createMockProjectRepository({
   ProjectDto? project,
 }) {
   final repo = MockProjectRepository();
-  final defaultProj = project ??
-      const ProjectDto(id: 1, name: 'Project 1', workspaceId: 1);
+  final defaultProj =
+      project ?? const ProjectDto(id: 1, name: 'Project 1', workspaceId: 1);
   final list = projects ?? [defaultProj];
 
   when(
@@ -109,9 +119,7 @@ MockProjectRepository createMockProjectRepository({
 }
 
 /// Helper to create a configured [MockTaskRepository] with sensible test defaults.
-MockTaskRepository createMockTaskRepository({
-  List<TaskDto>? tasks,
-}) {
+MockTaskRepository createMockTaskRepository({List<TaskDto>? tasks}) {
   final repo = MockTaskRepository();
   final list = tasks ?? [];
 

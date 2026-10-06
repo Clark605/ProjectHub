@@ -1,50 +1,34 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/network/auth_interceptor.dart';
 import 'package:client/core/storage/secure_storage_service.dart';
 
-class _FakeSecureStorageService extends SecureStorageService {
-  String? token;
-  String? refresh;
-  bool clearTokensCalled = false;
-
-  @override
-  Future<String?> getAccessToken() async => token;
-
-  @override
-  Future<String?> getRefreshToken() async => refresh;
-
-  @override
-  Future<void> saveTokens({
-    required String accessToken,
-    required String refreshToken,
-  }) async {
-    token = accessToken;
-    refresh = refreshToken;
-  }
-
-  @override
-  Future<void> clearTokens() async {
-    token = null;
-    refresh = null;
-    clearTokensCalled = true;
-  }
-}
+class MockSecureStorageService extends Mock implements SecureStorageService {}
 
 void main() {
-  late _FakeSecureStorageService storage;
+  late MockSecureStorageService storage;
   late AuthInterceptor interceptor;
 
   setUp(() {
-    storage = _FakeSecureStorageService();
+    storage = MockSecureStorageService();
+    when(() => storage.getAccessToken()).thenAnswer((_) async => null);
+    when(() => storage.getRefreshToken()).thenAnswer((_) async => null);
+    when(() => storage.clearTokens()).thenAnswer((_) async {});
+    when(
+      () => storage.saveTokens(
+        accessToken: any(named: 'accessToken'),
+        refreshToken: any(named: 'refreshToken'),
+      ),
+    ).thenAnswer((_) async {});
     interceptor = AuthInterceptor(storage);
   });
 
   group('AuthInterceptor onRequest', () {
     test('adds Authorization header for protected endpoints when token exists', () async {
-      storage.token = 'valid-jwt-token';
+      when(() => storage.getAccessToken()).thenAnswer((_) async => 'valid-jwt-token');
       final options = RequestOptions(path: '/api/tasks');
 
       RequestOptions? interceptedOptions;
@@ -60,7 +44,7 @@ void main() {
     });
 
     test('does not add Authorization header when token is null', () async {
-      storage.token = null;
+      when(() => storage.getAccessToken()).thenAnswer((_) async => null);
       final options = RequestOptions(path: '/api/tasks');
 
       RequestOptions? interceptedOptions;
@@ -76,7 +60,7 @@ void main() {
     });
 
     test('does not add Authorization header for public endpoints', () async {
-      storage.token = 'valid-jwt-token';
+      when(() => storage.getAccessToken()).thenAnswer((_) async => 'valid-jwt-token');
       final options = RequestOptions(path: ApiConstants.login);
 
       RequestOptions? interceptedOptions;
@@ -111,7 +95,7 @@ void main() {
       );
 
       expect(passedErr, err);
-      expect(storage.clearTokensCalled, isFalse);
+      verifyNever(() => storage.clearTokens());
     });
 
     test('passes 401 on public endpoints through without retry', () async {
@@ -132,11 +116,11 @@ void main() {
       );
 
       expect(passedErr, err);
-      expect(storage.clearTokensCalled, isFalse);
+      verifyNever(() => storage.clearTokens());
     });
 
     test('rejects and passes through when refresh token is null', () async {
-      storage.refresh = null;
+      when(() => storage.getRefreshToken()).thenAnswer((_) async => null);
       final err = DioException(
         requestOptions: RequestOptions(path: '/api/tasks'),
         response: Response(

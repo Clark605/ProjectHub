@@ -1,21 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/storage/secure_storage_service.dart';
 
-class _FakeSecureStorageService extends SecureStorageService {
-  String? token;
-
-  @override
-  Future<String?> getAccessToken() async => token;
-}
+class MockSecureStorageService extends Mock implements SecureStorageService {}
 
 void main() {
   group('SignalRService lifecycle & ref-counting', () {
-    late _FakeSecureStorageService secureStorage;
+    late MockSecureStorageService secureStorage;
     late SignalRService service;
 
     setUp(() {
-      secureStorage = _FakeSecureStorageService();
+      secureStorage = MockSecureStorageService();
+      when(() => secureStorage.getAccessToken()).thenAnswer((_) async => null);
       service = SignalRService(secureStorage);
     });
 
