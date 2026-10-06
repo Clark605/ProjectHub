@@ -9,7 +9,6 @@ import 'package:client/features/kanban/ui/widgets/kanban_screen_fab.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_view_body.dart';
 import 'package:client/features/kanban/ui/widgets/kanban_voice_handler.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/features/projects/data/models/project_status.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -37,7 +36,6 @@ class _KanbanScreenState extends State<KanbanScreen>
   ProjectDto? _project;
   bool _didInit = false;
   late final PageController _pageController;
-  int _currentColumnIndex = 0;
 
   @override
   void initState() {
@@ -53,6 +51,9 @@ class _KanbanScreenState extends State<KanbanScreen>
     if (!_didInit) {
       _didInit = true;
       _cubit = widget.cubit ?? context.read<KanbanCubit>();
+      if (widget.initialProject != null) {
+        _cubit.setProject(widget.initialProject!);
+      }
       _cubit.loadTasks(widget.projectId);
     }
   }
@@ -115,10 +116,7 @@ class _KanbanScreenState extends State<KanbanScreen>
               (state is KanbanLoading
                   ? '...'
                   : (l10n?.projectsTitle ?? 'Project'));
-          final isEffectivelyArchived =
-              _cubit.isArchived ||
-              (project?.statusEnum == ProjectStatus.archived) ||
-              state.isArchived;
+          final isEffectivelyArchived = state.isArchived || _cubit.isArchived;
           final wsAccent = KanbanScreenActions.getWorkspaceAccent(context);
           final members = _cubit.members;
 
@@ -128,10 +126,8 @@ class _KanbanScreenState extends State<KanbanScreen>
             isArchived: isEffectivelyArchived,
             wsAccent: wsAccent,
             pageController: _pageController,
-            currentColumnIndex: _currentColumnIndex,
             members: members,
             cubit: _cubit,
-            onColumnChanged: (i) => setState(() => _currentColumnIndex = i),
             onAddTask: (s) => _openCreateTask(s.toServerString()),
             onTaskTap: (t) => KanbanScreenActions.openTaskDetail(
               context,

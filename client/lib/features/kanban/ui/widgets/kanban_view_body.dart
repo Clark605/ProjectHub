@@ -1,3 +1,4 @@
+import 'package:client/features/tasks/data/task_filter.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/widgets/ambient_glow_background.dart';
@@ -16,11 +17,11 @@ class KanbanViewBody extends StatelessWidget {
   final int projectId;
   final bool isArchived;
   final String? wsAccent;
-  final PageController pageController;
-  final int currentColumnIndex;
+  final PageController? pageController;
+  final int? currentColumnIndex;
   final List<MemberDto> members;
   final KanbanCubit cubit;
-  final ValueChanged<int> onColumnChanged;
+  final ValueChanged<int>? onColumnChanged;
   final ValueChanged<TaskStatus> onAddTask;
   final ValueChanged<TaskDto> onTaskTap;
   final ValueChanged<TaskDto> onTaskMove;
@@ -32,11 +33,11 @@ class KanbanViewBody extends StatelessWidget {
     required this.projectId,
     required this.isArchived,
     required this.wsAccent,
-    required this.pageController,
-    required this.currentColumnIndex,
+    this.pageController,
+    this.currentColumnIndex,
     required this.members,
     required this.cubit,
-    required this.onColumnChanged,
+    this.onColumnChanged,
     required this.onAddTask,
     required this.onTaskTap,
     required this.onTaskMove,
@@ -60,17 +61,21 @@ class KanbanViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final activeFilter = state is KanbanLoaded
+        ? (state as KanbanLoaded).filter
+        : const TaskFilter();
+
     return AmbientGlowBackground(
       child: SafeArea(
         child: Column(
           children: [
             if (isArchived) const KanbanArchivedBanner(),
             KanbanFilterBar(
-              selectedPriority: cubit.priorityFilter,
-              selectedAssignee: cubit.assigneeFilter,
-              selectedTagId: cubit.tagFilter,
+              selectedPriority: activeFilter.priority,
+              selectedAssignee: activeFilter.assigneeId,
+              selectedTagId: activeFilter.tagId,
               availableTags: _extractTags(),
-              searchQuery: cubit.searchFilter,
+              searchQuery: activeFilter.search,
               members: members,
               onPrioritySelected: (p) => cubit.setFilter(priority: p),
               onAssigneeSelected: (a) => cubit.setFilter(assigneeId: a),
@@ -82,8 +87,7 @@ class KanbanViewBody extends StatelessWidget {
             Expanded(
               child: RefreshIndicator(
                 notificationPredicate: (n) => n.metrics.axis == Axis.vertical,
-                onRefresh: () =>
-                    cubit.refreshTasks(forceRefresh: true),
+                onRefresh: () => cubit.refreshTasks(forceRefresh: true),
                 child: KanbanBoardBody(
                   state: state,
                   projectId: projectId,
@@ -98,6 +102,15 @@ class KanbanViewBody extends StatelessWidget {
                   onTaskTap: onTaskTap,
                   onTaskMove: onTaskMove,
                   onTaskDelete: onTaskDelete,
+                  onTagTap: (tag) {
+                    final currentTag = state is KanbanLoaded
+                        ? (state as KanbanLoaded).filter.tagId
+                        : null;
+                    cubit.setFilter(
+                      tagId: tag.id == currentTag ? null : tag.id,
+                      clearTag: tag.id == currentTag,
+                    );
+                  },
                 ),
               ),
             ),

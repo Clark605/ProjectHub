@@ -15,6 +15,7 @@ class KanbanColumn extends StatelessWidget {
   final List<TaskDto> tasks;
   final bool isArchived;
   final String? activeWorkspaceAccent;
+  final Color? accent;
   final VoidCallback? onAddTask;
   final ValueChanged<TaskDto>? onTaskTap;
   final ValueChanged<TaskDto>? onTaskMove;
@@ -27,6 +28,7 @@ class KanbanColumn extends StatelessWidget {
     required this.tasks,
     this.isArchived = false,
     this.activeWorkspaceAccent,
+    this.accent,
     this.onAddTask,
     this.onTaskTap,
     this.onTaskMove,
@@ -42,13 +44,13 @@ class KanbanColumn extends StatelessWidget {
     final statusName = l10n != null
         ? status.localizedName(l10n)
         : status.toDisplayString();
-    final accent =
-        activeWorkspaceAccent != null &&
+    final columnAccent = accent ??
+        (activeWorkspaceAccent != null &&
             activeWorkspaceAccent!.trim().isNotEmpty
         ? WorkspaceAccent.fromId(
-            activeWorkspaceAccent,
+            activeWorkspaceAccent!,
           ).resolvedColor(theme.brightness)
-        : null;
+        : null);
 
     return Container(
       decoration: BoxDecoration(
@@ -57,8 +59,8 @@ class KanbanColumn extends StatelessWidget {
             : theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: accent != null
-              ? accent.withValues(alpha: isDark ? 0.35 : 0.25)
+          color: columnAccent != null
+              ? columnAccent.withValues(alpha: isDark ? 0.35 : 0.25)
               : theme.colorScheme.outlineVariant,
           width: 1,
         ),
@@ -66,12 +68,12 @@ class KanbanColumn extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (accent != null)
+          if (columnAccent != null)
             Container(
               height: 2.5,
               margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: accent.withValues(alpha: 0.8),
+                color: columnAccent.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(1.25),
               ),
             ),
@@ -79,7 +81,7 @@ class KanbanColumn extends StatelessWidget {
             status: status,
             taskCount: tasks.length,
             isArchived: isArchived,
-            accent: accent,
+            accent: columnAccent,
             onAddTask: onAddTask,
           ),
           Expanded(
@@ -111,9 +113,7 @@ class KanbanColumn extends StatelessWidget {
                                     ? Icons.inbox_outlined
                                     : Icons.add_circle_outline_rounded,
                                 size: 24,
-                                color: isDark
-                                    ? AppColors.textSecondary
-                                    : AppColors.lightTextSecondary,
+                                color: AppColors.textSecondaryColor(isDark),
                               ),
                               const SizedBox(height: 6),
                               Text(
@@ -125,9 +125,7 @@ class KanbanColumn extends StatelessWidget {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: isDark
-                                      ? AppColors.textSecondary
-                                      : AppColors.lightTextSecondary,
+                                  color: AppColors.textSecondaryColor(isDark),
                                 ),
                               ),
                             ],

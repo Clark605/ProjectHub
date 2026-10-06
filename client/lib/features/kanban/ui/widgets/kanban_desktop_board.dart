@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/features/kanban/ui/widgets/kanban_column.dart';
+import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 
@@ -13,6 +14,7 @@ class KanbanDesktopBoard extends StatelessWidget {
   final ValueChanged<TaskDto> onTaskTap;
   final ValueChanged<TaskDto> onTaskMove;
   final ValueChanged<TaskDto> onTaskDelete;
+  final ValueChanged<TagDto>? onTagTap;
 
   const KanbanDesktopBoard({
     super.key,
@@ -24,6 +26,7 @@ class KanbanDesktopBoard extends StatelessWidget {
     required this.onTaskTap,
     required this.onTaskMove,
     required this.onTaskDelete,
+    this.onTagTap,
   });
 
   @override
@@ -51,6 +54,7 @@ class KanbanDesktopBoard extends StatelessWidget {
                 onTaskTap: onTaskTap,
                 onTaskMove: onTaskMove,
                 onTaskDelete: onTaskDelete,
+                onTagTap: onTagTap,
               ),
             ),
           );

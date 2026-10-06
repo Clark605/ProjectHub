@@ -53,120 +53,115 @@ class KanbanTaskCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             onTap: onTap,
             onLongPress: isArchived ? null : onMove,
-            child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Stack(
                 children: [
-                  Container(
+                  Positioned(
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
                     width: 4,
-                    decoration: BoxDecoration(
-                      color: priorityColor,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        bottomLeft: Radius.circular(12),
-                      ),
-                    ),
+                    child: ColoredBox(color: priorityColor),
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 10, 10, 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  task.title,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    height: 1.3,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 10, 10, 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                task.title,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.3,
                                 ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              if (!isArchived)
-                                PopupMenuButton<String>(
-                                  icon: Icon(
-                                    Icons.more_vert_rounded,
-                                    size: 20,
-                                    color: theme.colorScheme.onSurfaceVariant,
-                                  ),
-                                  padding: EdgeInsets.zero,
-                                  constraints: const BoxConstraints(
-                                    minWidth: 40,
-                                    minHeight: 40,
-                                  ),
-                                  onSelected: (action) {
-                                    if (action == 'move') onMove?.call();
-                                    if (action == 'delete') onDelete?.call();
-                                  },
-                                  itemBuilder: (context) => [
-                                    PopupMenuItem(
-                                      value: 'move',
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.drive_file_move_outlined,
-                                            size: 18,
-                                            color: theme.colorScheme.onSurface,
-                                          ),
-                                          const SizedBox(width: 8),
-                                          Text(l10n?.moveTask ?? 'Move'),
-                                        ],
-                                      ),
+                            ),
+                            if (!isArchived)
+                              PopupMenuButton<String>(
+                                icon: Icon(
+                                  Icons.more_vert_rounded,
+                                  size: 20,
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(
+                                  minWidth: 48,
+                                  minHeight: 48,
+                                ),
+                                onSelected: (action) {
+                                  if (action == 'move') onMove?.call();
+                                  if (action == 'delete') onDelete?.call();
+                                },
+                                itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    value: 'move',
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.drive_file_move_outlined,
+                                          size: 18,
+                                          color: theme.colorScheme.onSurface,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(l10n?.moveTask ?? 'Move'),
+                                      ],
                                     ),
-                                    PopupMenuItem(
-                                      value: 'delete',
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.delete_outline_rounded,
-                                            size: 18,
+                                  ),
+                                  PopupMenuItem(
+                                    value: 'delete',
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.delete_outline_rounded,
+                                          size: 18,
+                                          color: AppColors.error,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          l10n?.delete ?? 'Delete',
+                                          style: const TextStyle(
                                             color: AppColors.error,
                                           ),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            l10n?.delete ?? 'Delete',
-                                            style: const TextStyle(
-                                              color: AppColors.error,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                            ],
-                          ),
-                          if (task.tags.isNotEmpty) ...[
-                            const SizedBox(height: 6),
-                            Wrap(
-                              spacing: 4,
-                              runSpacing: 4,
-                              children: task.tags
-                                  .map(
-                                    (t) => TagChip(
-                                      tag: t,
-                                      onTap: onTagTap != null
-                                          ? () => onTagTap!(t)
-                                          : null,
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
+                                  ),
+                                ],
+                              ),
                           ],
-                          const SizedBox(height: 10),
-                          KanbanTaskCardFooter(
-                            dueDate: task.dueDate,
-                            isOverdue: task.isOverdue,
-                            assigneeName: task.assigneeName,
-                            commentCount: task.commentCount,
+                        ),
+                        if (task.tags.isNotEmpty) ...[
+                          const SizedBox(height: 6),
+                          Wrap(
+                            spacing: 4,
+                            runSpacing: 4,
+                            children: task.tags
+                                .map(
+                                  (t) => TagChip(
+                                    tag: t,
+                                    onTap: onTagTap != null
+                                        ? () => onTagTap!(t)
+                                        : null,
+                                  ),
+                                )
+                                .toList(),
                           ),
                         ],
-                      ),
+                        const SizedBox(height: 10),
+                        KanbanTaskCardFooter(
+                          dueDate: task.dueDate,
+                          isOverdue: task.isOverdue,
+                          assigneeName: task.assigneeName,
+                          commentCount: task.commentCount,
+                        ),
+                      ],
                     ),
                   ),
                 ],

@@ -1,3 +1,4 @@
+import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -9,9 +10,9 @@ import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanMobileBoard extends StatefulWidget {
-  final PageController pageController;
-  final int currentColumnIndex;
-  final ValueChanged<int> onColumnChanged;
+  final PageController? pageController;
+  final int? currentColumnIndex;
+  final ValueChanged<int>? onColumnChanged;
   final Map<TaskStatus, List<TaskDto>> tasksByStatus;
   final bool isArchived;
   final String? wsAccent;
@@ -19,12 +20,13 @@ class KanbanMobileBoard extends StatefulWidget {
   final ValueChanged<TaskDto> onTaskTap;
   final ValueChanged<TaskDto> onTaskMove;
   final ValueChanged<TaskDto> onTaskDelete;
+  final ValueChanged<TagDto>? onTagTap;
 
   const KanbanMobileBoard({
     super.key,
-    required this.pageController,
-    required this.currentColumnIndex,
-    required this.onColumnChanged,
+    this.pageController,
+    this.currentColumnIndex,
+    this.onColumnChanged,
     required this.tasksByStatus,
     required this.isArchived,
     this.wsAccent,
@@ -32,6 +34,7 @@ class KanbanMobileBoard extends StatefulWidget {
     required this.onTaskTap,
     required this.onTaskMove,
     required this.onTaskDelete,
+    this.onTagTap,
   });
 
   @override
@@ -41,33 +44,33 @@ class KanbanMobileBoard extends StatefulWidget {
 class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
   final ScrollController _chipScrollController = ScrollController();
   late final List<GlobalKey> _chipKeys;
+  late int _currentColumnIndex;
+  late final PageController _pageController;
+  late final bool _ownsController;
+  bool _isAnimatingPage = false;
 
   @override
   void initState() {
     super.initState();
+    _currentColumnIndex = widget.currentColumnIndex ?? 0;
+    _ownsController = widget.pageController == null;
+    _pageController =
+        widget.pageController ??
+        PageController(initialPage: _currentColumnIndex);
     _chipKeys = List.generate(TaskStatus.values.length, (_) => GlobalKey());
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        _scrollToChip(widget.currentColumnIndex);
+        _scrollToChip(_currentColumnIndex);
       }
     });
   }
 
   @override
-  void didUpdateWidget(KanbanMobileBoard oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.currentColumnIndex != oldWidget.currentColumnIndex) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          _scrollToChip(widget.currentColumnIndex);
-        }
-      });
-    }
-  }
-
-  @override
   void dispose() {
     _chipScrollController.dispose();
+    if (_ownsController) {
+      _pageController.dispose();
+    }
     super.dispose();
   }
 
@@ -107,7 +110,7 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
               children: TaskStatus.values.asMap().entries.map((entry) {
                 final idx = entry.key;
                 final status = entry.value;
-                final isSelected = idx == widget.currentColumnIndex;
+                final isSelected = idx == _currentColumnIndex;
                 final count = widget.tasksByStatus[status]?.length ?? 0;
                 final statusName = l10n != null
                     ? status.localizedName(l10n)
@@ -141,19 +144,21 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                       color: isSelected
                           ? (accentColor ??
                                 (isDark ? Colors.white : Colors.black))
-                          : (isDark
-                                ? AppColors.textSecondary
-                                : AppColors.lightTextSecondary),
+                          : AppColors.textSecondaryColor(isDark),
                       fontSize: 12,
                     ),
-                    onSelected: (_) {
-                      widget.onColumnChanged(idx);
+                    onSelected: (_) async {
+                      if (_currentColumnIndex == idx) return;
+                      setState(() => _currentColumnIndex = idx);
                       _scrollToChip(idx);
-                      widget.pageController.animateToPage(
+                      widget.onColumnChanged?.call(idx);
+                      _isAnimatingPage = true;
+                      await _pageController.animateToPage(
                         idx,
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
                       );
+                      _isAnimatingPage = false;
                     },
                   ),
                 );
@@ -163,11 +168,15 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
         ),
         Expanded(
           child: PageView.builder(
-            controller: widget.pageController,
+            controller: _pageController,
             itemCount: TaskStatus.values.length,
             onPageChanged: (index) {
-              widget.onColumnChanged(index);
-              _scrollToChip(index);
+              if (_isAnimatingPage) return;
+              if (_currentColumnIndex != index) {
+                setState(() => _currentColumnIndex = index);
+                _scrollToChip(index);
+                widget.onColumnChanged?.call(index);
+              }
             },
             itemBuilder: (context, index) {
               final status = TaskStatus.values[index];
@@ -179,10 +188,12 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                   tasks: columnTasks,
                   isArchived: widget.isArchived,
                   activeWorkspaceAccent: widget.wsAccent,
+                  accent: accentColor,
                   onAddTask: () => widget.onAddTask(status),
                   onTaskTap: widget.onTaskTap,
                   onTaskMove: widget.onTaskMove,
                   onTaskDelete: widget.onTaskDelete,
+                  onTagTap: widget.onTagTap,
                 ),
               );
             },

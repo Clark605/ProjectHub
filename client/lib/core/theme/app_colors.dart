@@ -60,4 +60,8 @@ class AppColors {
   static const Color lightBorder = Color(0xFFE2E8F0);
   static const Color lightTextPrimary = Color(0xFF0F172A);
   static const Color lightTextSecondary = Color(0xFF475569);
+
+  /// Resolves the secondary text color based on brightness.
+  static Color textSecondaryColor(bool isDark) =>
+      isDark ? textSecondary : lightTextSecondary;
 }
