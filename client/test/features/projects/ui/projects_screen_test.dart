@@ -3,162 +3,29 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
-import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/features/projects/data/models/update_project_request.dart';
 import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/projects/ui/projects_screen.dart';
 import 'package:client/features/projects/ui/widgets/project_card.dart';
 import 'package:client/features/projects/ui/widgets/projects_skeleton.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
-import 'package:client/features/workspaces/data/models/add_member_request.dart';
-import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
-import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class _FakeWorkspaceRepo extends Fake implements WorkspaceRepository {
-  List<WorkspaceDto> workspaces = [];
-
-  @override
-  WorkspaceDto? get activeWorkspace => workspaces.firstOrNull;
-
-  @override
-  Stream<WorkspaceDto?> get activeWorkspaceChanges => const Stream.empty();
-
-  @override
-  void setActiveWorkspace(WorkspaceDto? workspace) {}
-
-  @override
-  Future<List<WorkspaceDto>> getWorkspaces({bool forceRefresh = false}) async =>
-      workspaces;
-
-  @override
-  Future<WorkspaceDto> getWorkspace(
-    int id, {
-    bool forceRefresh = false,
-  }) async => workspaces.firstWhere((w) => w.id == id);
-
-  @override
-  Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async =>
-      WorkspaceDto(
-        id: 99,
-        name: request.name,
-        description: request.description,
-        membership: const WorkspaceMembershipDto(role: 'Owner'),
-      );
-
-  @override
-  Future<WorkspaceDto> updateWorkspace(
-    int id,
-    UpdateWorkspaceRequest request,
-  ) async => WorkspaceDto(
-    id: id,
-    name: request.name,
-    description: request.description,
-    membership: const WorkspaceMembershipDto(role: 'Owner'),
-  );
-
-  @override
-  Future<void> deleteWorkspace(int id) async {}
-
-  @override
-  Future<List<MemberDto>> getMembers(
-    int workspaceId, {
-    bool forceRefresh = false,
-  }) async => [];
-
-  @override
-  Future<MemberDto> addMember(
-    int workspaceId,
-    AddMemberRequest request,
-  ) async => MemberDto(
-    userId: 'u_1',
-    name: 'Member',
-    email: request.email,
-    role: 'Member',
-    joinedAt: DateTime.now(),
-  );
-
-  @override
-  Future<void> removeMember(int workspaceId, String userId) async {}
-
-  @override
-  bool hasCachedSettings(int workspaceId) => false;
-
-  @override
-  void clearCache([int? workspaceId]) {}
-}
-
-class _FakeProjectRepo implements ProjectRepository {
-  List<ProjectDto> projects = [];
-  Future<List<ProjectDto>>? delayedFuture;
-
-  @override
-  Future<List<ProjectDto>> getProjects(
-    int workspaceId, {
-    String? status,
-    bool forceRefresh = false,
-  }) async {
-    if (delayedFuture != null) {
-      return await delayedFuture!;
-    }
-    return List.of(projects);
-  }
-
-  @override
-  Future<ProjectDto> getProject(int id, {bool forceRefresh = false}) async =>
-      projects.firstWhere((p) => p.id == id);
-
-  @override
-  Future<ProjectDto> createProject(
-    int workspaceId,
-    CreateProjectRequest request,
-  ) async {
-    final created = ProjectDto(
-      id: 99,
-      workspaceId: workspaceId,
-      name: request.name,
-      description: request.description,
-      status: 'Planning',
-    );
-    projects.add(created);
-    return created;
-  }
-
-  @override
-  Future<ProjectDto> updateProject(
-    int id,
-    UpdateProjectRequest request,
-  ) async => projects.firstWhere((p) => p.id == id);
-
-  @override
-  Future<void> deleteProject(int id) async {
-    projects.removeWhere((p) => p.id == id);
-  }
-
-  @override
-  void clearCache([int? workspaceId]) {}
-
-  @override
-  bool hasCachedProjects(int workspaceId) => false;
-
-  @override
-  bool hasCachedProject(int id) => false;
-}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  late _FakeProjectRepo projectRepo;
-  late _FakeWorkspaceRepo workspaceRepo;
+  late MockProjectRepository projectRepo;
+  late MockWorkspaceRepository workspaceRepo;
   late PrefsService prefs;
   late ProjectsListCubit projectsCubit;
   late WorkspaceContextCubit workspaceCubit;
@@ -185,18 +52,29 @@ void main() {
     final sp = await SharedPreferences.getInstance();
     prefs = PrefsService(sp);
 
-    projectRepo = _FakeProjectRepo()..projects = List.from(sampleProjects);
+    projectRepo = MockProjectRepository();
+    when(
+      () => projectRepo.getProjects(
+        any(),
+        status: any(named: 'status'),
+        forceRefresh: any(named: 'forceRefresh'),
+      ),
+    ).thenAnswer((_) async => List.from(sampleProjects));
+    when(() => projectRepo.hasCachedProjects(any())).thenReturn(false);
+    when(() => projectRepo.clearCache(any())).thenReturn(null);
+
     projectsCubit = ProjectsListCubit(projectRepo);
 
-    workspaceRepo = _FakeWorkspaceRepo()
-      ..workspaces = [
+    workspaceRepo = createMockWorkspaceRepository(
+      workspaces: [
         const WorkspaceDto(
           id: 1,
           name: 'Workspace One',
           description: 'Desc One',
           membership: WorkspaceMembershipDto(role: 'Owner'),
         ),
-      ];
+      ],
+    );
     workspaceCubit = WorkspaceContextCubit(workspaceRepo, prefs);
     await workspaceCubit.loadWorkspaces();
   });
@@ -225,7 +103,13 @@ void main() {
     tester,
   ) async {
     final completer = Completer<List<ProjectDto>>();
-    projectRepo.delayedFuture = completer.future;
+    when(
+      () => projectRepo.getProjects(
+        1,
+        status: any(named: 'status'),
+        forceRefresh: any(named: 'forceRefresh'),
+      ),
+    ).thenAnswer((_) => completer.future);
 
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.pump();
@@ -295,7 +179,14 @@ void main() {
   testWidgets('ProjectsScreen renders empty state when 0 projects exist', (
     tester,
   ) async {
-    projectRepo.projects = [];
+    when(
+      () => projectRepo.getProjects(
+        1,
+        status: any(named: 'status'),
+        forceRefresh: any(named: 'forceRefresh'),
+      ),
+    ).thenAnswer((_) async => []);
+
     await projectsCubit.loadProjects(1);
 
     await tester.pumpWidget(createWidgetUnderTest());

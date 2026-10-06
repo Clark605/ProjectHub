@@ -1,103 +1,35 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
-import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/projects/cubit/project_detail_cubit.dart';
-import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/features/projects/data/models/update_project_request.dart';
-import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/projects/ui/project_detail_screen.dart';
 import 'package:client/features/projects/ui/widgets/project_danger_zone.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
-import 'package:client/features/workspaces/data/models/add_member_request.dart';
-import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
-import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
-import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class _FakeAuthRepository extends Fake implements AuthRepository {
-  final _authStateController = StreamController<User?>.broadcast();
-  @override
-  Stream<User?> get authStateChanges => _authStateController.stream;
-  @override
-  Future<User?> restoreSession() async =>
-      const User(id: 'u1', name: 'User 1', email: 'u1@test.com');
-  @override
-  Future<User> getCurrentUser() async =>
-      const User(id: 'u1', name: 'User 1', email: 'u1@test.com');
-}
+import '../../../helpers/mock_repositories.dart';
 
-class _FakeWorkspaceRepo extends Fake implements WorkspaceRepository {
-  WorkspaceDto workspace = const WorkspaceDto(
-    id: 10,
-    name: 'Test WS',
-    membership: WorkspaceMembershipDto(role: 'Member'),
-  );
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-  @override
-  WorkspaceDto? get activeWorkspace => workspace;
+  late MockProjectRepository projectRepo;
+  late MockWorkspaceRepository workspaceRepo;
+  late MockAuthRepository authRepo;
+  late PrefsService prefs;
+  late AppAuthCubit authCubit;
+  late WorkspaceContextCubit workspaceCubit;
+  late ProjectDetailCubit detailCubit;
 
-  @override
-  Stream<WorkspaceDto?> get activeWorkspaceChanges => const Stream.empty();
-
-  @override
-  void setActiveWorkspace(WorkspaceDto? workspace) {}
-
-  @override
-  Future<List<WorkspaceDto>> getWorkspaces({bool forceRefresh = false}) async =>
-      [workspace];
-
-  @override
-  Future<WorkspaceDto> getWorkspace(
-    int id, {
-    bool forceRefresh = false,
-  }) async => workspace;
-  @override
-  Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request) async =>
-      workspace;
-  @override
-  Future<WorkspaceDto> updateWorkspace(
-    int id,
-    UpdateWorkspaceRequest request,
-  ) async => workspace;
-  @override
-  Future<void> deleteWorkspace(int id) async {}
-  @override
-  Future<List<MemberDto>> getMembers(
-    int workspaceId, {
-    bool forceRefresh = false,
-  }) async => [];
-  @override
-  Future<MemberDto> addMember(
-    int workspaceId,
-    AddMemberRequest request,
-  ) async => MemberDto(
-    userId: 'u',
-    name: 'M',
-    email: request.email,
-    role: 'Member',
-    joinedAt: DateTime.now(),
-  );
-  @override
-  Future<void> removeMember(int workspaceId, String userId) async {}
-  @override
-  bool hasCachedSettings(int workspaceId) => false;
-  @override
-  void clearCache([int? workspaceId]) {}
-}
-
-class _FakeProjectRepo implements ProjectRepository {
-  ProjectDto project = const ProjectDto(
+  const sampleProject = ProjectDto(
     id: 1,
     workspaceId: 10,
     name: 'Test Project',
@@ -106,61 +38,26 @@ class _FakeProjectRepo implements ProjectRepository {
     createdBy: 'u_creator',
   );
 
-  @override
-  Future<List<ProjectDto>> getProjects(
-    int workspaceId, {
-    String? status,
-    bool forceRefresh = false,
-  }) async => [project];
-
-  @override
-  Future<ProjectDto> getProject(int id, {bool forceRefresh = false}) async =>
-      project;
-
-  @override
-  Future<ProjectDto> createProject(
-    int workspaceId,
-    CreateProjectRequest request,
-  ) async => project;
-
-  @override
-  Future<ProjectDto> updateProject(
-    int id,
-    UpdateProjectRequest request,
-  ) async => project;
-
-  @override
-  Future<void> deleteProject(int id) async {}
-
-  @override
-  void clearCache([int? workspaceId]) {}
-
-  @override
-  bool hasCachedProjects(int workspaceId) => false;
-
-  @override
-  bool hasCachedProject(int id) => false;
-}
-
-void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  late _FakeProjectRepo projectRepo;
-  late _FakeWorkspaceRepo workspaceRepo;
-  late PrefsService prefs;
-  late AppAuthCubit authCubit;
-  late WorkspaceContextCubit workspaceCubit;
-  late ProjectDetailCubit detailCubit;
-
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
     final sp = await SharedPreferences.getInstance();
     prefs = PrefsService(sp);
 
-    authCubit = AppAuthCubit(_FakeAuthRepository());
-    workspaceRepo = _FakeWorkspaceRepo();
+    authRepo = createMockAuthRepository();
+    authCubit = AppAuthCubit(authRepo);
+
+    workspaceRepo = createMockWorkspaceRepository(
+      workspaces: [
+        const WorkspaceDto(
+          id: 10,
+          name: 'Test WS',
+          membership: WorkspaceMembershipDto(role: 'Member'),
+        ),
+      ],
+    );
     workspaceCubit = WorkspaceContextCubit(workspaceRepo, prefs);
-    projectRepo = _FakeProjectRepo();
+
+    projectRepo = createMockProjectRepository(project: sampleProject);
     detailCubit = ProjectDetailCubit(projectRepo);
   });
 
@@ -193,11 +90,15 @@ void main() {
         User(id: 'u_random', name: 'Owner User', email: 'owner@test.com'),
       ),
     );
-    workspaceRepo.workspace = const WorkspaceDto(
+    const ownerWs = WorkspaceDto(
       id: 10,
       name: 'WS',
       membership: WorkspaceMembershipDto(role: 'Owner'),
     );
+    when(() => workspaceRepo.getWorkspaces()).thenAnswer((_) async => [ownerWs]);
+    when(
+      () => workspaceRepo.getWorkspace(10, forceRefresh: any(named: 'forceRefresh')),
+    ).thenAnswer((_) async => ownerWs);
     await workspaceCubit.loadWorkspaces();
 
     await tester.pumpWidget(createWidgetUnderTest());
@@ -216,11 +117,15 @@ void main() {
         User(id: 'u_creator', name: 'Creator', email: 'creator@test.com'),
       ),
     );
-    workspaceRepo.workspace = const WorkspaceDto(
+    const memberWs = WorkspaceDto(
       id: 10,
       name: 'WS',
       membership: WorkspaceMembershipDto(role: 'Member'),
     );
+    when(() => workspaceRepo.getWorkspaces()).thenAnswer((_) async => [memberWs]);
+    when(
+      () => workspaceRepo.getWorkspace(10, forceRefresh: any(named: 'forceRefresh')),
+    ).thenAnswer((_) async => memberWs);
     await workspaceCubit.loadWorkspaces();
 
     await tester.pumpWidget(createWidgetUnderTest());
@@ -239,11 +144,15 @@ void main() {
         User(id: 'u_other', name: 'Other Member', email: 'other@test.com'),
       ),
     );
-    workspaceRepo.workspace = const WorkspaceDto(
+    const memberWs = WorkspaceDto(
       id: 10,
       name: 'WS',
       membership: WorkspaceMembershipDto(role: 'Member'),
     );
+    when(() => workspaceRepo.getWorkspaces()).thenAnswer((_) async => [memberWs]);
+    when(
+      () => workspaceRepo.getWorkspace(10, forceRefresh: any(named: 'forceRefresh')),
+    ).thenAnswer((_) async => memberWs);
     await workspaceCubit.loadWorkspaces();
 
     await tester.pumpWidget(createWidgetUnderTest());
