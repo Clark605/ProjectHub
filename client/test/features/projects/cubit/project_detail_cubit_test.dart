@@ -1,74 +1,25 @@
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/features/projects/cubit/project_detail_cubit.dart';
 import 'package:client/features/projects/cubit/project_detail_state.dart';
-import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/update_project_request.dart';
 import 'package:client/features/projects/data/project_repository.dart';
 
-class _FakeProjectRepo implements ProjectRepository {
-  ProjectDto? project;
-  bool shouldThrow = false;
-  String errorMessage = 'Failed';
-
-  @override
-  Future<List<ProjectDto>> getProjects(
-    int workspaceId, {
-    String? status,
-    bool forceRefresh = false,
-  }) async => [];
-
-  @override
-  Future<ProjectDto> getProject(int id, {bool forceRefresh = false}) async {
-    if (shouldThrow) {
-      throw ServerException(message: errorMessage);
-    }
-    return project!;
-  }
-
-  @override
-  Future<ProjectDto> createProject(
-    int workspaceId,
-    CreateProjectRequest request,
-  ) async => project!;
-
-  @override
-  Future<ProjectDto> updateProject(int id, UpdateProjectRequest request) async {
-    if (shouldThrow) {
-      throw ValidationException(message: errorMessage);
-    }
-    project = project!.copyWith(
-      name: request.name,
-      description: request.description,
-      status: request.status,
-    );
-    return project!;
-  }
-
-  @override
-  Future<void> deleteProject(int id) async {
-    if (shouldThrow) {
-      throw ServerException(message: errorMessage);
-    }
-    project = null;
-  }
-
-  @override
-  void clearCache([int? workspaceId]) {}
-
-  @override
-  bool hasCachedProjects(int workspaceId) => false;
-
-  @override
-  bool hasCachedProject(int id) => false;
-}
+class MockProjectRepository extends Mock implements ProjectRepository {}
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(
+      const UpdateProjectRequest(name: 'Fallback'),
+    );
+  });
+
   group('ProjectDetailCubit', () {
-    late _FakeProjectRepo repository;
-    late ProjectDetailCubit cubit;
+    late MockProjectRepository repository;
 
     const initialProject = ProjectDto(
       id: 50,
@@ -80,59 +31,112 @@ void main() {
     );
 
     setUp(() {
-      repository = _FakeProjectRepo()..project = initialProject;
-      cubit = ProjectDetailCubit(repository);
-    });
-
-    tearDown(() {
-      cubit.close();
+      repository = MockProjectRepository();
     });
 
     test('initial state is initial', () {
+      final cubit = ProjectDetailCubit(repository);
       expect(cubit.state, const ProjectDetailState.initial());
+      cubit.close();
     });
 
-    test('loadProject emits loading then loaded on success', () async {
-      await cubit.loadProject(50);
-      expect(cubit.state is ProjectDetailLoaded, isTrue);
-      final loaded = cubit.state as ProjectDetailLoaded;
-      expect(loaded.project.name, 'Alpha Project');
-      expect(loaded.isSaving, isFalse);
-      expect(loaded.isDeleting, isFalse);
-    });
+    blocTest<ProjectDetailCubit, ProjectDetailState>(
+      'loadProject emits loading then loaded on success',
+      build: () {
+        when(
+          () => repository.getProject(50, forceRefresh: any(named: 'forceRefresh')),
+        ).thenAnswer((_) async => initialProject);
+        return ProjectDetailCubit(repository);
+      },
+      act: (cubit) => cubit.loadProject(50),
+      expect: () => [
+        const ProjectDetailState.loading(),
+        const ProjectDetailState.loaded(project: initialProject),
+      ],
+      verify: (_) {
+        verify(() => repository.getProject(50, forceRefresh: false)).called(1);
+      },
+    );
 
-    test('loadProject handles error via SafeActionCubit', () async {
-      repository.shouldThrow = true;
-      repository.errorMessage = 'Project not found';
+    blocTest<ProjectDetailCubit, ProjectDetailState>(
+      'loadProject handles error via SafeActionCubit',
+      build: () {
+        when(
+          () => repository.getProject(50, forceRefresh: any(named: 'forceRefresh')),
+        ).thenThrow(const ServerException(message: 'Project not found'));
+        return ProjectDetailCubit(repository);
+      },
+      act: (cubit) => cubit.loadProject(50),
+      expect: () => [
+        const ProjectDetailState.loading(),
+        const ProjectDetailState.error('Project not found'),
+      ],
+    );
 
-      await cubit.loadProject(50);
-      expect(cubit.state, const ProjectDetailState.error('Project not found'));
-    });
-
-    test(
+    blocTest<ProjectDetailCubit, ProjectDetailState>(
       'updateProject updates project data and sets success message',
-      () async {
-        await cubit.loadProject(50);
-
-        await cubit.updateProject(
-          const UpdateProjectRequest(
+      build: () {
+        when(
+          () => repository.updateProject(50, any()),
+        ).thenAnswer(
+          (_) async => initialProject.copyWith(
             name: 'Renamed Project',
             description: 'Updated Desc',
             status: 'Active',
           ),
         );
-
-        final loaded = cubit.state as ProjectDetailLoaded;
-        expect(loaded.project.name, 'Renamed Project');
-        expect(loaded.project.status, 'Active');
-        expect(loaded.actionSuccessMessage, isNotNull);
+        return ProjectDetailCubit(repository);
+      },
+      seed: () => const ProjectDetailState.loaded(project: initialProject),
+      act: (cubit) => cubit.updateProject(
+        const UpdateProjectRequest(
+          name: 'Renamed Project',
+          description: 'Updated Desc',
+          status: 'Active',
+        ),
+      ),
+      expect: () => [
+        isA<ProjectDetailLoaded>().having((s) => s.isSaving, 'isSaving', true),
+        isA<ProjectDetailLoaded>()
+            .having((s) => s.project.name, 'name', 'Renamed Project')
+            .having((s) => s.project.status, 'status', 'Active')
+            .having((s) => s.isSaving, 'isSaving', false)
+            .having(
+              (s) => s.actionSuccessMessage,
+              'actionSuccessMessage',
+              'projectUpdated',
+            ),
+      ],
+      verify: (_) {
+        verify(
+          () => repository.updateProject(
+            50,
+            const UpdateProjectRequest(
+              name: 'Renamed Project',
+              description: 'Updated Desc',
+              status: 'Active',
+            ),
+          ),
+        ).called(1);
       },
     );
 
-    test('deleteProject emits deleted state on success', () async {
-      await cubit.loadProject(50);
-      await cubit.deleteProject();
-      expect(cubit.state, const ProjectDetailState.deleted());
-    });
+    blocTest<ProjectDetailCubit, ProjectDetailState>(
+      'deleteProject emits deleted state on success',
+      build: () {
+        when(() => repository.deleteProject(50)).thenAnswer((_) async {});
+        return ProjectDetailCubit(repository);
+      },
+      seed: () => const ProjectDetailState.loaded(project: initialProject),
+      act: (cubit) => cubit.deleteProject(),
+      expect: () => [
+        isA<ProjectDetailLoaded>()
+            .having((s) => s.isDeleting, 'isDeleting', true),
+        const ProjectDetailState.deleted(),
+      ],
+      verify: (_) {
+        verify(() => repository.deleteProject(50)).called(1);
+      },
+    );
   });
 }
