@@ -301,6 +301,71 @@ void main() {
       expect(handler.wasRejected, isTrue);
       expect(handler.rejectedError?.response?.statusCode, 500);
     });
+
+    test('clears tokens and forwards error when refresh returns malformed payload without hanging', () async {
+      when(() => storage.getRefreshToken()).thenAnswer((_) async => 'valid-refresh-token');
+
+      // Refresh returns 200 OK but with invalid schema (missing token strings)
+      when(() => refreshAdapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
+        if (options.path.contains(ApiConstants.refresh)) {
+          return jsonResponse({'unexpected': 'data'});
+        }
+        return jsonResponse({});
+      });
+
+      final originalRequest = RequestOptions(path: '/api/tasks');
+      final err = DioException(
+        requestOptions: originalRequest,
+        response: Response(statusCode: 401, requestOptions: originalRequest),
+      );
+      final handler = _CapturingErrorHandler();
+
+      await interceptor.onError(err, handler);
+
+      // Verify tokens were cleared on payload failure
+      verify(() => storage.clearTokens()).called(1);
+      expect(handler.wasNextCalled, isTrue);
+      expect(handler.nextError?.error, isA<FormatException>());
+    });
+
+    test('rejects handler and preserves tokens when retry throws an unexpected non-DioException error', () async {
+      when(() => storage.getRefreshToken()).thenAnswer((_) async => 'valid-refresh-token');
+
+      // Refresh succeeds, but retry adapter throws an unexpected non-Dio error
+      when(() => refreshAdapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
+        if (options.path.contains(ApiConstants.refresh)) {
+          return jsonResponse({
+            'token': 'new-token',
+            'refreshToken': 'new-refresh',
+          });
+        }
+        throw StateError('Unexpected platform channel failure during retry');
+      });
+
+      final originalRequest = RequestOptions(path: '/api/tasks');
+      final err = DioException(
+        requestOptions: originalRequest,
+        response: Response(statusCode: 401, requestOptions: originalRequest),
+      );
+      final handler = _CapturingErrorHandler();
+
+      await interceptor.onError(err, handler);
+
+      // Tokens were saved from successful refresh
+      verify(
+        () => storage.saveTokens(
+          accessToken: 'new-token',
+          refreshToken: 'new-refresh',
+        ),
+      ).called(1);
+
+      // Must NOT clear tokens for unrelated non-DioException during retry
+      verifyNever(() => storage.clearTokens());
+      expect(handler.wasRejected, isTrue);
+      expect(handler.rejectedError?.error, isA<StateError>());
+    });
   });
 }
 

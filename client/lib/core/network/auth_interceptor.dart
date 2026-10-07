@@ -95,19 +95,32 @@ class AuthInterceptor extends Interceptor {
         data: {'refreshToken': refreshToken},
       );
 
-      newToken = response.data['token'] as String;
-      final newRefreshToken = response.data['refreshToken'] as String;
+      final tokenData = response.data;
+      if (tokenData is! Map<String, dynamic> ||
+          tokenData['token'] is! String ||
+          tokenData['refreshToken'] is! String) {
+        throw const FormatException('Invalid refresh response payload');
+      }
+
+      newToken = tokenData['token'] as String;
+      final newRefreshToken = tokenData['refreshToken'] as String;
 
       await _secureStorage.saveTokens(
         accessToken: newToken,
         refreshToken: newRefreshToken,
       );
-    } on DioException catch (refreshErr) {
+    } catch (refreshErr) {
       // Refresh failed — clear tokens and reject everything
       await _secureStorage.clearTokens();
-      _rejectAll(refreshErr);
+      final dioError = refreshErr is DioException
+          ? refreshErr
+          : DioException(
+              requestOptions: err.requestOptions,
+              error: refreshErr,
+            );
+      _rejectAll(dioError);
       _isRefreshing = false;
-      return handler.next(refreshErr);
+      return handler.next(dioError);
     }
 
     // Refresh succeeded! Retry the original failed request
@@ -119,6 +132,13 @@ class AuthInterceptor extends Interceptor {
     } on DioException catch (retryErr) {
       // Unrelated retry failure must NOT clear tokens or log the user out
       handler.reject(retryErr);
+    } catch (e) {
+      handler.reject(
+        DioException(
+          requestOptions: err.requestOptions,
+          error: e,
+        ),
+      );
     } finally {
       // Replay queued requests and reset refreshing lock
       await _replayAll(newToken);
@@ -139,7 +159,7 @@ class AuthInterceptor extends Interceptor {
         } on DioException catch (e) {
           pending.handler.reject(e);
         } catch (e) {
-          pending.handler.next(
+          pending.handler.reject(
             DioException(
               requestOptions: pending.options,
               error: e,
