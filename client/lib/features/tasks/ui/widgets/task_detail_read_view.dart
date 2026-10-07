@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 import 'package:client/core/di/injection.dart';
+import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/comments/cubit/comments_cubit.dart';
@@ -85,7 +85,7 @@ class TaskDetailReadView extends StatelessWidget {
           icon: Icons.calendar_today_outlined,
           label: l10n?.dueDate ?? 'Due Date',
           value: task.dueDate != null
-              ? DateFormat('MMMM d, yyyy').format(task.dueDate!)
+              ? DateFormatter.formatDate(task.dueDate!, context: context)
               : (l10n?.dueDateNotSet ?? 'Not set'),
           valueColor: isOverdue ? AppColors.error : null,
           trailing: isOverdue ? _buildOverdueBadge(l10n) : null,
@@ -105,9 +105,10 @@ class TaskDetailReadView extends StatelessWidget {
             context,
             icon: Icons.access_time_rounded,
             label: l10n?.taskCreatedAt ?? 'Created',
-            value: DateFormat(
-              'MMM d, yyyy • h:mm a',
-            ).format(task.createdAt!.toLocal()),
+            value: DateFormatter.formatDateTime(
+              task.createdAt!,
+              context: context,
+            ),
           ),
         ],
         if (getIt.isRegistered<CommentRepository>()) ...[

@@ -36,8 +36,8 @@ class KanbanFab extends StatelessWidget {
         ],
         FloatingActionButton.extended(
           onPressed: onPressed,
-          backgroundColor: AppColors.electricVioletContainer,
-          foregroundColor: Colors.white,
+          backgroundColor: AppColors.electricViolet,
+          foregroundColor: AppColors.textOnPrimary,
           icon: const Icon(Icons.add_rounded),
           label: Text(
             l10n?.newTask ?? 'New Task',

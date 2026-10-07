@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -22,11 +24,8 @@ class WorkspacePresenceSheet extends StatelessWidget {
     required List<MemberDto> members,
     required String currentUserId,
   }) {
-    showModalBottomSheet<void>(
+    showAppBottomSheet<void>(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
       builder: (_) => WorkspacePresenceSheet(
         onlineUserIds: onlineUserIds,
         members: members,
@@ -42,102 +41,79 @@ class WorkspacePresenceSheet extends StatelessWidget {
     return 'Team Member';
   }
 
-  String _getInitials(String name) {
-    final parts = name.trim().split(' ');
-    if (parts.isEmpty || parts[0].isEmpty) return '?';
-    if (parts.length == 1) return parts[0][0].toUpperCase();
-    return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.onSurfaceVariant.withValues(
-                    alpha: 0.4,
-                  ),
-                  borderRadius: BorderRadius.circular(2),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const AppSheetDragHandle(),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: AppColors.success,
+                  shape: BoxShape.circle,
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: AppColors.success,
-                    shape: BoxShape.circle,
-                  ),
+              const SizedBox(width: 8),
+              Text(
+                l10n?.onlineMembersCount(onlineUserIds.length) ??
+                    'Online Members (${onlineUserIds.length})',
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  l10n?.onlineMembersCount(onlineUserIds.length) ??
-                      'Online Members (${onlineUserIds.length})',
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            ...onlineUserIds.map((userId) {
-              final isMe = userId == currentUserId;
-              final name = _getUserName(userId);
-              final initials = _getInitials(name);
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ...onlineUserIds.map((userId) {
+            final isMe = userId == currentUserId;
+            final name = _getUserName(userId);
 
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
-                child: Row(
-                  children: [
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        CircleAvatar(
-                          radius: 14,
-                          backgroundColor:
-                              theme.colorScheme.surfaceContainerHigh,
-                          child: Text(
-                            initials,
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.onSurface,
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              child: Row(
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      AppAvatar(
+                        userId: userId,
+                        name: name,
+                        size: 28,
+                        textStyle: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Positioned(
+                        right: -1,
+                        bottom: -1,
+                        child: Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: AppColors.success,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: theme.colorScheme.surface,
+                              width: 1.5,
                             ),
                           ),
                         ),
-                        Positioned(
-                          right: -1,
-                          bottom: -1,
-                          child: Container(
-                            width: 8,
-                            height: 8,
-                            decoration: BoxDecoration(
-                              color: AppColors.success,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: theme.colorScheme.surface,
-                                width: 1.5,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
@@ -156,7 +132,6 @@ class WorkspacePresenceSheet extends StatelessWidget {
             }),
           ],
         ),
-      ),
     );
   }
 }

@@ -64,4 +64,16 @@ class AppColors {
   /// Resolves the secondary text color based on brightness.
   static Color textSecondaryColor(bool isDark) =>
       isDark ? textSecondary : lightTextSecondary;
+
+  // ── Deterministic Avatar Palette ──
+  static const List<Color> avatarPalette = [
+    Color(0xFF6366F1), // Indigo
+    Color(0xFF06B6D4), // Cyan
+    Color(0xFF14B8A6), // Teal
+    Color(0xFF10B981), // Emerald
+    Color(0xFFF59E0B), // Amber
+    Color(0xFFF97316), // Orange
+    Color(0xFFF43F5E), // Rose
+    Color(0xFF8B5CF6), // Violet
+  ];
 }

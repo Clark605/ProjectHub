@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/widgets/realtime_status_badge.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_cubit.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_state.dart';
 import 'package:client/features/dashboard/data/activity_repository.dart';
@@ -102,6 +103,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
 
         return Scaffold(
           appBar: AppBar(
+            centerTitle: false,
             title: Text(
               l10n?.teamStream ?? 'Team Presence & Stream',
               style: theme.textTheme.titleMedium?.copyWith(
@@ -121,11 +123,11 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                 onPressed: () => _openFilterSheet(context, state),
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
               ),
-              Center(
-                child: WorkspacePresenceAvatars(
-                  workspaceId: widget.workspaceId,
-                ),
+              WorkspacePresenceAvatars(
+                workspaceId: widget.workspaceId,
               ),
+              const SizedBox(width: 8),
+              const RealtimeStatusBadge(),
               const SizedBox(width: 16),
             ],
           ),

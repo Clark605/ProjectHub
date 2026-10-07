@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/kanban/ui/widgets/create_task/create_task_assignee_due_date_row.dart';
 import 'package:client/features/kanban/ui/widgets/create_task/create_task_priority_selector.dart';
@@ -18,8 +19,10 @@ class VoiceTaskReviewSheet extends StatefulWidget {
   final int projectId;
   final ParsedTaskDraftDto draft;
   final List<MemberDto> members;
-  final Future<void> Function(CreateTaskRequest request, String targetStatus)
-  onSubmit;
+  final Future<void> Function(
+    CreateTaskRequest request,
+    String targetStatus,
+  ) onSubmit;
 
   const VoiceTaskReviewSheet({
     super.key,
@@ -37,16 +40,10 @@ class VoiceTaskReviewSheet extends StatefulWidget {
     required Future<void> Function(
       CreateTaskRequest request,
       String targetStatus,
-    )
-    onSubmit,
+    ) onSubmit,
   }) {
-    return showModalBottomSheet(
+    return showAppBottomSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
       builder: (_) => VoiceTaskReviewSheet(
         projectId: projectId,
         draft: draft,
@@ -101,22 +98,19 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: bottomInset),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                VoiceTaskReviewHeader(
-                  onClose: () => Navigator.of(context).pop(),
-                ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      child: Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const AppSheetDragHandle(),
+            VoiceTaskReviewHeader(
+              onClose: () => Navigator.of(context).pop(),
+            ),
                 VoiceTaskReviewWarnings(warnings: widget.draft.warnings),
                 const SizedBox(height: 16),
                 CreateTaskTextFields(
@@ -150,8 +144,6 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
               ],
             ),
           ),
-        ),
-      ),
-    );
+        );
   }
 }

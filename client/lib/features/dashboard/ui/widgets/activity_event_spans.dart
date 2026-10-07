@@ -1,7 +1,32 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
+import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+
+String _formatStatusName(String? status, AppLocalizations? l10n) {
+  if (status == null || status.isEmpty) return '';
+  final cleaned = status.replaceAll('"', '').trim();
+  final lower = cleaned
+      .toLowerCase()
+      .replaceAll(' ', '')
+      .replaceAll('-', '')
+      .replaceAll('_', '');
+
+  if (['backlog', 'todo', 'inprogress', 'review', 'inreview', 'done']
+      .contains(lower)) {
+    final taskStatus = TaskStatus.fromString(cleaned);
+    return l10n != null
+        ? taskStatus.localizedName(l10n)
+        : taskStatus.toDisplayString();
+  }
+
+  if (lower == 'inprogress') return 'In Progress';
+  if (lower == 'todo') return 'To Do';
+  if (lower == 'inreview') return 'In Review';
+  return cleaned;
+}
 
 List<InlineSpan> buildActivityEventSpans(
   ActivityEventDto event,
@@ -46,12 +71,11 @@ List<InlineSpan> buildActivityEventSpans(
       return spans;
 
     case 'TaskStatusChanged':
-      final toStatus = event.newStatus ?? event.status;
+      final toStatus = _formatStatusName(event.newStatus ?? event.status, l10n);
       final spans = <InlineSpan>[];
       if (l10n != null) {
         if (title != null &&
             title.isNotEmpty &&
-            toStatus != null &&
             toStatus.isNotEmpty) {
           final full = l10n.activityMovedTo(title, toStatus);
           spans.addAll(
@@ -62,7 +86,7 @@ List<InlineSpan> buildActivityEventSpans(
               highlightStyle,
             ),
           );
-        } else if (toStatus != null && toStatus.isNotEmpty) {
+        } else if (toStatus.isNotEmpty) {
           final full = l10n.activityTaskMovedToStatus(toStatus);
           spans.addAll(
             _buildParameterizedSpans(
@@ -81,13 +105,13 @@ List<InlineSpan> buildActivityEventSpans(
         if (title != null && title.isNotEmpty) {
           spans.add(TextSpan(text: 'moved ', style: mutedStyle));
           spans.add(TextSpan(text: title, style: highlightStyle));
-          if (toStatus != null && toStatus.isNotEmpty) {
+          if (toStatus.isNotEmpty) {
             spans.add(TextSpan(text: ' to ', style: mutedStyle));
             spans.add(TextSpan(text: toStatus, style: highlightStyle));
           }
         } else {
           spans.add(TextSpan(text: 'updated task status', style: mutedStyle));
-          if (toStatus != null && toStatus.isNotEmpty) {
+          if (toStatus.isNotEmpty) {
             spans.add(TextSpan(text: ' to ', style: mutedStyle));
             spans.add(TextSpan(text: toStatus, style: highlightStyle));
           }
@@ -173,11 +197,10 @@ List<InlineSpan> buildActivityEventSpans(
       ];
 
     case 'ProjectStatusChanged':
-      final toStatus = event.newStatus ?? event.status;
+      final toStatus = _formatStatusName(event.newStatus ?? event.status, l10n);
       if (l10n != null) {
         if (title != null &&
             title.isNotEmpty &&
-            toStatus != null &&
             toStatus.isNotEmpty) {
           final full = l10n.activityUpdatedProjectTo(title, toStatus);
           return _buildParameterizedSpans(
@@ -192,7 +215,7 @@ List<InlineSpan> buildActivityEventSpans(
               text: l10n.activityProjectStatusChanged,
               style: mutedStyle,
             ),
-            if (toStatus != null && toStatus.isNotEmpty) ...[
+            if (toStatus.isNotEmpty) ...[
               const TextSpan(text: ' '),
               TextSpan(text: toStatus, style: highlightStyle),
             ],
@@ -203,13 +226,13 @@ List<InlineSpan> buildActivityEventSpans(
         if (title != null && title.isNotEmpty) ...[
           TextSpan(text: 'updated project ', style: mutedStyle),
           TextSpan(text: title, style: highlightStyle),
-          if (toStatus != null && toStatus.isNotEmpty) ...[
+          if (toStatus.isNotEmpty) ...[
             TextSpan(text: ' to ', style: mutedStyle),
             TextSpan(text: toStatus, style: highlightStyle),
           ],
         ] else ...[
           TextSpan(text: 'updated project status', style: mutedStyle),
-          if (toStatus != null && toStatus.isNotEmpty) ...[
+          if (toStatus.isNotEmpty) ...[
             TextSpan(text: ' to ', style: mutedStyle),
             TextSpan(text: toStatus, style: highlightStyle),
           ],

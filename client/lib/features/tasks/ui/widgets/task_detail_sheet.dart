@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/core/di/injection.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
@@ -43,13 +44,8 @@ class TaskDetailSheet extends StatefulWidget {
     required Future<void> Function(String) onStatusChange,
     required Future<void> Function() onDelete,
     ValueChanged<TaskDto>? onTaskUpdated,
-  }) => showModalBottomSheet(
+  }) => showAppBottomSheet(
     context: context,
-    isScrollControlled: true,
-    backgroundColor: Theme.of(context).colorScheme.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
     builder: (_) => TaskDetailSheet(
       task: task,
       isArchived: isArchived,
@@ -139,7 +135,6 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final auth =
         context.read<AppAuthCubit?>()?.state ??
         (getIt.isRegistered<AppAuthCubit>()
@@ -152,29 +147,15 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
       (m) => m.userId == uid && m.role == 'Owner',
     );
 
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: isDark ? Colors.white24 : Colors.black26,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              TaskDetailHeader(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const AppSheetDragHandle(margin: EdgeInsets.only(top: 6, bottom: 6)),
+          const SizedBox(height: 8),
+          TaskDetailHeader(
                 task: _currentTask,
                 isArchived: widget.isArchived,
                 isEditMode: _isEditMode,
@@ -209,8 +190,6 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
                 ),
             ],
           ),
-        ),
-      ),
-    );
+        );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/dialog/app_confirm_dialog.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
@@ -16,27 +17,15 @@ class MemberTile extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final cubit = context.read<WorkspaceSettingsCubit>();
 
-    final confirm = await showDialog<bool>(
+    final confirm = await showAppConfirmDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.removeMemberTitle),
-        content: Text(
-          l10n.confirmRemoveMember(
-            member.name.isNotEmpty ? member.name : member.email,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.cancel),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: Text(l10n.removeMember),
-          ),
-        ],
+      title: l10n.removeMemberTitle,
+      message: l10n.confirmRemoveMember(
+        member.name.isNotEmpty ? member.name : member.email,
       ),
+      confirmLabel: l10n.removeMember,
+      cancelLabel: l10n.cancel,
+      isDestructive: true,
     );
 
     if (confirm == true) {
@@ -51,27 +40,15 @@ class MemberTile extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     final cubit = context.read<WorkspaceSettingsCubit>();
 
-    final confirm = await showDialog<bool>(
+    final confirm = await showAppConfirmDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.confirmChangeRoleTitle),
-        content: Text(
-          l10n.confirmChangeRole(
-            member.name.isNotEmpty ? member.name : member.email,
-            targetRole == 'Owner' ? l10n.roleOwner : l10n.roleMember,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(l10n.save),
-          ),
-        ],
+      title: l10n.confirmChangeRoleTitle,
+      message: l10n.confirmChangeRole(
+        member.name.isNotEmpty ? member.name : member.email,
+        targetRole == 'Owner' ? l10n.roleOwner : l10n.roleMember,
       ),
+      confirmLabel: l10n.save,
+      cancelLabel: l10n.cancel,
     );
 
     if (confirm == true) {
@@ -89,6 +66,7 @@ class MemberTile extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
       leading: AppAvatar(
+        userId: member.userId,
         name: member.name,
         size: 40,
         backgroundColor: isOwner

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:client/features/dashboard/data/models/workspace_dashboard_dto.dart';
 import 'package:client/features/workspaces/data/models/add_member_request.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
@@ -13,6 +14,7 @@ abstract class WorkspaceRepository {
 
   Future<List<WorkspaceDto>> getWorkspaces();
   Future<WorkspaceDto> getWorkspace(int id, {bool forceRefresh = false});
+  Future<WorkspaceDashboardDto> getWorkspaceDashboard(int workspaceId);
   Future<WorkspaceDto> createWorkspace(CreateWorkspaceRequest request);
   Future<WorkspaceDto> updateWorkspace(int id, UpdateWorkspaceRequest request);
   Future<void> deleteWorkspace(int id);

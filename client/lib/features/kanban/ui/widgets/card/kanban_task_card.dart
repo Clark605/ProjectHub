@@ -215,9 +215,11 @@ class KanbanTaskCard extends StatelessWidget {
                       ],
                       const SizedBox(height: 10),
                       KanbanTaskCardFooter(
+                        priority: task.priorityEnum,
                         dueDate: task.dueDate,
                         isOverdue: task.isOverdue,
                         assigneeName: task.assigneeName,
+                        assigneeId: task.assigneeId,
                         commentCount: task.commentCount,
                       ),
                     ],

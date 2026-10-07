@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
+import 'package:client/core/utils/date_formatter.dart';
+import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -18,47 +19,25 @@ class TaskCommentItem extends StatelessWidget {
   final bool isWorkspaceOwner;
   final VoidCallback onDelete;
 
-  String _formatDate(DateTime? dt) {
-    if (dt == null) return '';
-    final local = dt.toLocal();
-    final now = DateTime.now();
-    if (now.difference(local).inDays < 1 && now.day == local.day) {
-      return DateFormat.jm().format(local);
-    }
-    return DateFormat('MMM d, h:mm a').format(local);
-  }
-
-  String _getInitials(String name) {
-    final parts = name.trim().split(' ');
-    if (parts.isEmpty || parts[0].isEmpty) return '?';
-    if (parts.length == 1) return parts[0][0].toUpperCase();
-    return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     final canDelete = comment.authorId == currentUserId || isWorkspaceOwner;
-    final initials = _getInitials(comment.authorName);
-    final timeStr = _formatDate(comment.createdAt);
+    final timeStr = DateFormatter.formatRelativeTime(
+      comment.createdAt,
+      context: context,
+    );
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 14,
-            backgroundColor: theme.colorScheme.surfaceContainerHigh,
-            child: Text(
-              initials,
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: theme.colorScheme.onSurface,
-              ),
-            ),
+          AppAvatar(
+            name: comment.authorName,
+            userId: comment.authorId,
+            size: 28,
           ),
           const SizedBox(width: 10),
           Expanded(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
+import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -28,6 +27,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: Column(
@@ -44,33 +44,61 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
               DropdownButtonFormField<String?>(
                 initialValue: selectedAssigneeId,
                 isExpanded: true,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                ),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 12,
-                    vertical: 12,
+                    vertical: 13,
                   ),
+                  isDense: true,
                   filled: true,
                   fillColor: theme.colorScheme.surfaceContainer,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.outlineVariant,
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.outlineVariant,
+                    ),
                   ),
                 ),
-                hint: Text(l10n?.unassigned ?? 'Unassigned'),
+                hint: Text(
+                  l10n?.unassigned ?? 'Unassigned',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
                 items: [
                   DropdownMenuItem<String?>(
                     value: null,
-                    child: Text(l10n?.unassigned ?? 'Unassigned'),
+                    child: Text(
+                      l10n?.unassigned ?? 'Unassigned',
+                      style: theme.textTheme.bodyMedium,
+                    ),
                   ),
                   if (selectedAssigneeId != null &&
                       !members.any((m) => m.userId == selectedAssigneeId))
                     DropdownMenuItem<String?>(
                       value: selectedAssigneeId,
-                      child: Text(l10n?.assignedMember ?? 'Assigned Member'),
+                      child: Text(
+                        l10n?.assignedMember ?? 'Assigned Member',
+                        style: theme.textTheme.bodyMedium,
+                      ),
                     ),
                   ...members.map(
                     (m) => DropdownMenuItem<String?>(
                       value: m.userId,
-                      child: Text(m.name, overflow: TextOverflow.ellipsis),
+                      child: Text(
+                        m.name,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium,
+                      ),
                     ),
                   ),
                 ],
@@ -114,9 +142,10 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                       Expanded(
                         child: Text(
                           selectedDueDate != null
-                              ? DateFormat(
-                                  'MMM d, yyyy',
-                                ).format(selectedDueDate!)
+                              ? DateFormatter.formatDate(
+                                  selectedDueDate!,
+                                  context: context,
+                                )
                               : (l10n?.noDueDate ?? 'No date'),
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: selectedDueDate != null

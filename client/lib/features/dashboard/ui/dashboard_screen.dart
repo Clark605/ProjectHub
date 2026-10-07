@@ -143,6 +143,10 @@ class _DashboardViewState extends State<_DashboardView> {
                   urgentBlockers: state.urgentBlockers,
                   completedTasks: state.completedTasks,
                   isLoading: state.isLoading,
+                  onTapActiveProjects: widget.onNavigateToProjects,
+                  onTapInProgressTasks: widget.onNavigateToMyTasks,
+                  onTapUrgentTasks: widget.onNavigateToMyTasks,
+                  onTapCompletedTasks: widget.onNavigateToMyTasks,
                 ),
                 const SizedBox(height: 28),
                 LayoutBuilder(

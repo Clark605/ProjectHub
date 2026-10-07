@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
@@ -20,13 +21,8 @@ class MoveToStatusSheet extends StatelessWidget {
     required TaskDto task,
     required ValueChanged<TaskStatus> onStatusSelected,
   }) {
-    return showModalBottomSheet<TaskStatus>(
+    return showAppBottomSheet<TaskStatus>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
       builder: (sheetContext) => MoveToStatusSheet(
         task: task,
         onStatusSelected: (status) {
@@ -41,27 +37,16 @@ class MoveToStatusSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final currentStatus = task.statusEnum;
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: isDark ? Colors.white24 : Colors.black26,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const AppSheetDragHandle(),
+          const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Column(
@@ -162,7 +147,6 @@ class MoveToStatusSheet extends StatelessWidget {
             }),
           ],
         ),
-      ),
     );
   }
 }

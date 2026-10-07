@@ -69,15 +69,17 @@ class _AppTextFieldState extends State<AppTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          widget.label,
-          style: theme.textTheme.labelMedium?.copyWith(
-            color: textSecondaryColor,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.2,
+        if (widget.label.isNotEmpty) ...[
+          Text(
+            widget.label,
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: textSecondaryColor,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.2,
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
+          const SizedBox(height: 8),
+        ],
         TextFormField(
           controller: widget.controller,
           focusNode: widget.focusNode,

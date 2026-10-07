@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/dio_error_handler.dart';
 import 'package:client/core/utils/app_logger.dart';
+import 'package:client/features/dashboard/data/models/workspace_dashboard_dto.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
@@ -95,6 +96,22 @@ class WorkspaceRepositoryImpl
     } on DioException catch (e) {
       AppLogger.error(
         'Failed to fetch workspace $id: ${e.message}',
+        tag: 'WorkspaceRepository',
+      );
+      throw DioErrorHandler.handle(e);
+    }
+  }
+
+  @override
+  Future<WorkspaceDashboardDto> getWorkspaceDashboard(int workspaceId) async {
+    try {
+      final response = await dio.get(ApiConstants.workspaceDashboard(workspaceId));
+      return WorkspaceDashboardDto.fromJson(
+        response.data as Map<String, dynamic>,
+      );
+    } on DioException catch (e) {
+      AppLogger.error(
+        'Failed to fetch workspace dashboard $workspaceId: ${e.message}',
         tag: 'WorkspaceRepository',
       );
       throw DioErrorHandler.handle(e);

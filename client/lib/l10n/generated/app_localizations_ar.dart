@@ -468,11 +468,11 @@ class AppLocalizationsAr extends AppLocalizations {
       'يحق لمالك مساحة العمل أو منشئ المشروع فقط حذف هذا المشروع.';
 
   @override
-  String get sprintOverview => 'نظرة عامة على سير العمل';
+  String get sprintOverview => 'نظرة عامة على مساحة العمل';
 
   @override
   String get sprintOverviewSubtitle =>
-      'متابعة إنجاز الفريق وسير العمل والمهام اليومية.';
+      'متابعة إنجاز المشاريع والمهام النشطة وسير العمل اليومي.';
 
   @override
   String get velocityBadge => 'سرعة الإنجاز';
@@ -484,7 +484,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get inProgressTasks => 'مهام قيد التنفيذ';
 
   @override
-  String get urgentBlockers => 'مهام عاجلة / معطلة';
+  String get urgentBlockers => 'المهام العاجلة';
 
   @override
   String get completedTasks => 'المهام المكتملة';

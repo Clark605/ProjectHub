@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:client/core/dialog/dialog.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
@@ -22,10 +23,8 @@ class ActivityFilterBottomSheet extends StatefulWidget {
     required ValueChanged<ActivityFilter> onApply,
     List<ProjectDto> availableProjects = const [],
   }) {
-    return showModalBottomSheet<void>(
+    return showAppBottomSheet<void>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (ctx) => ActivityFilterBottomSheet(
         initialFilter: initialFilter,
         onApply: onApply,

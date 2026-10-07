@@ -971,19 +971,19 @@ abstract class AppLocalizations {
   /// No description provided for @sprintOverview.
   ///
   /// In en, this message translates to:
-  /// **'Sprint Overview'**
+  /// **'Workspace Overview'**
   String get sprintOverview;
 
   /// No description provided for @sprintOverviewSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Track team velocity, active deliverables, and daily workflow.'**
+  /// **'Track active deliverables, project progress, and daily workflow.'**
   String get sprintOverviewSubtitle;
 
   /// No description provided for @velocityBadge.
   ///
   /// In en, this message translates to:
-  /// **'Sprint Velocity'**
+  /// **'Team Velocity'**
   String get velocityBadge;
 
   /// No description provided for @activeProjects.
@@ -1001,7 +1001,7 @@ abstract class AppLocalizations {
   /// No description provided for @urgentBlockers.
   ///
   /// In en, this message translates to:
-  /// **'Urgent / Blockers'**
+  /// **'Urgent Tasks'**
   String get urgentBlockers;
 
   /// No description provided for @completedTasks.
@@ -1151,7 +1151,7 @@ abstract class AppLocalizations {
   /// No description provided for @myTasksSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Personal sprint backlog and assigned deliverables.'**
+  /// **'Personal tasks and assigned deliverables.'**
   String get myTasksSubtitle;
 
   /// No description provided for @overdueUrgent.

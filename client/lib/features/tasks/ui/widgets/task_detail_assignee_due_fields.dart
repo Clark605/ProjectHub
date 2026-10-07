@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:client/core/utils/date_formatter.dart';
 
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -110,7 +110,10 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
                 Expanded(
                   child: Text(
                     editDueDate != null
-                        ? DateFormat('MMM d, yyyy').format(editDueDate!)
+                        ? DateFormatter.formatDate(
+                            editDueDate!,
+                            context: context,
+                          )
                         : (l10n?.noDueDate ?? 'No due date'),
                   ),
                 ),

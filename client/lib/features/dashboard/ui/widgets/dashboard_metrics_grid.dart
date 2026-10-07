@@ -10,6 +10,10 @@ class DashboardMetricsGrid extends StatelessWidget {
   final int urgentBlockers;
   final int completedTasks;
   final bool isLoading;
+  final VoidCallback? onTapActiveProjects;
+  final VoidCallback? onTapInProgressTasks;
+  final VoidCallback? onTapUrgentTasks;
+  final VoidCallback? onTapCompletedTasks;
 
   const DashboardMetricsGrid({
     super.key,
@@ -18,6 +22,10 @@ class DashboardMetricsGrid extends StatelessWidget {
     this.urgentBlockers = 0,
     this.completedTasks = 0,
     this.isLoading = false,
+    this.onTapActiveProjects,
+    this.onTapInProgressTasks,
+    this.onTapUrgentTasks,
+    this.onTapCompletedTasks,
   });
 
   @override
@@ -33,40 +41,52 @@ class DashboardMetricsGrid extends StatelessWidget {
             : 1;
 
         final metrics = [
-          MetricData(
-            label: l10n?.activeProjects ?? 'Active Projects',
-            value: isLoading ? '...' : '$activeProjects',
-            trend: 'Ongoing projects',
-            icon: Icons.folder_open_rounded,
-            color: AppColors.primary,
+          (
+            MetricData(
+              label: l10n?.activeProjects ?? 'Active Projects',
+              value: isLoading ? '...' : '$activeProjects',
+              trend: 'Ongoing projects',
+              icon: Icons.folder_open_rounded,
+              color: AppColors.primary,
+            ),
+            onTapActiveProjects,
           ),
-          MetricData(
-            label: l10n?.inProgressTasks ?? 'In Progress Tasks',
-            value: isLoading ? '...' : '$inProgressTasks',
-            trend: 'Assigned to you',
-            icon: Icons.timelapse_rounded,
-            color: AppColors.skyBlue,
+          (
+            MetricData(
+              label: l10n?.inProgressTasks ?? 'In Progress Tasks',
+              value: isLoading ? '...' : '$inProgressTasks',
+              trend: 'Assigned to you',
+              icon: Icons.timelapse_rounded,
+              color: AppColors.skyBlue,
+            ),
+            onTapInProgressTasks,
           ),
-          MetricData(
-            label: l10n?.urgentBlockers ?? 'Urgent Blockers',
-            value: isLoading ? '...' : '$urgentBlockers',
-            trend: 'High priority queue',
-            icon: Icons.error_outline_rounded,
-            color: AppColors.priorityUrgent,
+          (
+            MetricData(
+              label: l10n?.urgentBlockers ?? 'Urgent Tasks',
+              value: isLoading ? '...' : '$urgentBlockers',
+              trend: 'High priority queue',
+              icon: Icons.error_outline_rounded,
+              color: AppColors.priorityUrgent,
+            ),
+            onTapUrgentTasks,
           ),
-          MetricData(
-            label: l10n?.completedTasks ?? 'Completed Tasks',
-            value: isLoading ? '...' : '$completedTasks',
-            trend: 'Finished tasks',
-            icon: Icons.check_circle_outline_rounded,
-            color: AppColors.success,
+          (
+            MetricData(
+              label: l10n?.completedTasks ?? 'Completed Tasks',
+              value: isLoading ? '...' : '$completedTasks',
+              trend: 'Finished tasks',
+              icon: Icons.check_circle_outline_rounded,
+              color: AppColors.success,
+            ),
+            onTapCompletedTasks,
           ),
         ];
 
         return Wrap(
           spacing: 16,
           runSpacing: 16,
-          children: metrics.map((m) {
+          children: metrics.map((entry) {
             final cardWidth = crossAxisCount == 1
                 ? constraints.maxWidth
                 : (constraints.maxWidth - (crossAxisCount - 1) * 16) /
@@ -74,7 +94,10 @@ class DashboardMetricsGrid extends StatelessWidget {
 
             return SizedBox(
               width: cardWidth,
-              child: MetricCard(data: m),
+              child: MetricCard(
+                data: entry.$1,
+                onTap: entry.$2,
+              ),
             );
           }).toList(),
         );

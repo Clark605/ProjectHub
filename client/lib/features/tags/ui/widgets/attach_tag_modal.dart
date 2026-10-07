@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
@@ -26,13 +27,8 @@ class AttachTagModal extends StatefulWidget {
     required List<TagDto> currentTags,
     required ValueChanged<TagDto> onTagSelected,
   }) {
-    return showModalBottomSheet<void>(
+    return showAppBottomSheet<void>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
       builder: (_) => AttachTagModal(
         projectId: projectId,
         currentTags: currentTags,
@@ -129,16 +125,13 @@ class _AttachTagModalState extends State<AttachTagModal> {
         !_availableTags.any((t) => t.name.toLowerCase() == query);
 
     return Padding(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const AppSheetDragHandle(),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

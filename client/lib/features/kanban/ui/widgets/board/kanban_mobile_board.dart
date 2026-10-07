@@ -178,6 +178,7 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                   isArchived: widget.isArchived,
                   activeWorkspaceAccent: widget.wsAccent,
                   accent: accentColor,
+                  showHeader: false,
                   onAddTask: widget.onAddTask != null
                       ? () => widget.onAddTask!(status)
                       : null,

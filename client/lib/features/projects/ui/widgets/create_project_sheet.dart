@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/dialog/dialog.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
@@ -17,10 +18,8 @@ class CreateProjectSheet extends StatefulWidget {
   const CreateProjectSheet({super.key, this.cubit});
 
   static void show(BuildContext context, {ProjectsListCubit? cubit}) {
-    showModalBottomSheet(
+    showAppBottomSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (_) => CreateProjectSheet(cubit: cubit),
     );
   }

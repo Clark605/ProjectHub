@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/dialog/dialog.dart';
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_error_banner.dart';
@@ -41,13 +42,8 @@ class CreateTaskSheet extends StatefulWidget {
     )
     onSubmit,
   }) {
-    return showModalBottomSheet(
+    return showAppBottomSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
       builder: (_) => CreateTaskSheet(
         projectId: projectId,
         initialStatus: initialStatus,

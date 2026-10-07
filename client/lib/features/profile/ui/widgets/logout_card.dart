@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:client/core/dialog/app_confirm_dialog.dart';
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/widgets/app_button.dart';
@@ -10,28 +11,14 @@ class LogoutCard extends StatelessWidget {
 
   void _onLogout(BuildContext context) async {
     final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showAppConfirmDialog(
       context: context,
-      builder: (dialogCtx) => AlertDialog(
-        title: Text(l10n?.logOut ?? 'Log Out'),
-        content: Text(
-          l10n?.logoutConfirmation ??
-              'Are you sure you want to log out of your session on this device?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogCtx).pop(false),
-            child: Text(l10n?.cancel ?? 'Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(dialogCtx).pop(true),
-            child: Text(
-              l10n?.logOut ?? 'Log Out',
-              style: const TextStyle(color: Colors.redAccent),
-            ),
-          ),
-        ],
-      ),
+      title: l10n?.logOut ?? 'Log Out',
+      message: l10n?.logoutConfirmation ??
+          'Are you sure you want to log out of your session on this device?',
+      confirmLabel: l10n?.logOut ?? 'Log Out',
+      cancelLabel: l10n?.cancel ?? 'Cancel',
+      isDestructive: true,
     );
 
     if (confirmed == true && context.mounted) {

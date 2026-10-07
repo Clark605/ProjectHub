@@ -27,7 +27,7 @@ class MyTasksHeader extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             l10n?.myTasksSubtitle ??
-                'Personal sprint backlog and assigned deliverables.',
+                'Personal tasks and assigned deliverables.',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: isDark
                   ? AppColors.textSecondary

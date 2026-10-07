@@ -24,6 +24,7 @@ class KanbanColumn extends StatelessWidget {
   final ValueChanged<TaskDto>? onTaskMove;
   final ValueChanged<TaskDto>? onTaskDelete;
   final ValueChanged<TagDto>? onTagTap;
+  final bool showHeader;
 
   const KanbanColumn({
     super.key,
@@ -37,6 +38,7 @@ class KanbanColumn extends StatelessWidget {
     this.onTaskMove,
     this.onTaskDelete,
     this.onTagTap,
+    this.showHeader = true,
   });
 
   KanbanCubit? _tryGetCubit(BuildContext context) {
@@ -102,13 +104,16 @@ class KanbanColumn extends StatelessWidget {
                 borderRadius: BorderRadius.circular(1.25),
               ),
             ),
-          KanbanColumnHeader(
-            status: status,
-            taskCount: tasks.length,
-            isArchived: isArchived,
-            accent: columnAccent,
-            onAddTask: isArchived ? null : () => _handleAddTask(context),
-          ),
+          if (showHeader)
+            KanbanColumnHeader(
+              status: status,
+              taskCount: tasks.length,
+              isArchived: isArchived,
+              accent: columnAccent,
+              onAddTask: isArchived ? null : () => _handleAddTask(context),
+            )
+          else
+            const SizedBox(height: 8),
           Expanded(
             child: tasks.isEmpty
                 ? Center(

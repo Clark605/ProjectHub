@@ -471,14 +471,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Only workspace owner or project creator can delete this project.';
 
   @override
-  String get sprintOverview => 'Sprint Overview';
+  String get sprintOverview => 'Workspace Overview';
 
   @override
   String get sprintOverviewSubtitle =>
-      'Track team velocity, active deliverables, and daily workflow.';
+      'Track active deliverables, project progress, and daily workflow.';
 
   @override
-  String get velocityBadge => 'Sprint Velocity';
+  String get velocityBadge => 'Team Velocity';
 
   @override
   String get activeProjects => 'Active Projects';
@@ -487,7 +487,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inProgressTasks => 'In Progress';
 
   @override
-  String get urgentBlockers => 'Urgent / Blockers';
+  String get urgentBlockers => 'Urgent Tasks';
 
   @override
   String get completedTasks => 'Completed';
@@ -568,8 +568,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get myTasksTitle => 'My Tasks';
 
   @override
-  String get myTasksSubtitle =>
-      'Personal sprint backlog and assigned deliverables.';
+  String get myTasksSubtitle => 'Personal tasks and assigned deliverables.';
 
   @override
   String get overdueUrgent => 'Overdue & Urgent';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/dialog/dialog.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
@@ -15,10 +16,8 @@ class WorkspaceSwitcherSheet extends StatefulWidget {
 
   static Future<void> show(BuildContext context) {
     final cubit = context.read<WorkspaceContextCubit>();
-    return showModalBottomSheet<void>(
+    return showAppBottomSheet<void>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (_) => BlocProvider.value(
         value: cubit,
         child: const WorkspaceSwitcherSheet(),
@@ -115,7 +114,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
             child: AppTextField(
-              label: l10n.searchWorkspaces,
+              label: '',
               hintText: l10n.searchWorkspaces,
               controller: _searchController,
               prefixIcon: Icons.search_rounded,

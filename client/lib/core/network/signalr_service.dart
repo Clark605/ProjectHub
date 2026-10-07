@@ -9,6 +9,8 @@ import 'package:client/core/storage/secure_storage_service.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 
+enum RealtimeStatus { connected, reconnecting, disconnected }
+
 @lazySingleton
 class SignalRService {
   SignalRService(this._secureStorage);
@@ -19,6 +21,7 @@ class SignalRService {
   Future<void>? _connectionFuture;
   final Map<int, int> _workspaceRefCounts = {};
 
+  final _realtimeStatus = StreamController<RealtimeStatus>.broadcast();
   final _taskCreated = StreamController<TaskCreatedEvent>.broadcast();
   final _taskUpdated = StreamController<TaskUpdatedEvent>.broadcast();
   final _taskStatusChanged =
@@ -29,6 +32,13 @@ class SignalRService {
   final _commentDeleted = StreamController<CommentDeletedEvent>.broadcast();
   final _presenceChanged = StreamController<PresenceChangedEvent>.broadcast();
   final _reconnected = StreamController<String>.broadcast();
+
+  Stream<RealtimeStatus> get realtimeStatus => _realtimeStatus.stream;
+  RealtimeStatus get currentStatus => switch (_connection?.state) {
+    HubConnectionState.Connected => RealtimeStatus.connected,
+    HubConnectionState.Reconnecting => RealtimeStatus.reconnecting,
+    _ => RealtimeStatus.disconnected,
+  };
 
   Stream<TaskCreatedEvent> get taskCreated => _taskCreated.stream;
   Stream<TaskUpdatedEvent> get taskUpdated => _taskUpdated.stream;
@@ -96,10 +106,12 @@ class SignalRService {
 
     try {
       await _connection!.start();
+      _realtimeStatus.add(RealtimeStatus.connected);
       for (final wsId in _workspaceRefCounts.keys.toList()) {
         await _invokeJoin(wsId);
       }
     } catch (e) {
+      _realtimeStatus.add(RealtimeStatus.disconnected);
       debugPrint('[SignalRService] Error connecting: $e');
     }
   }
@@ -164,11 +176,20 @@ class SignalRService {
       }
     });
 
+    conn.onreconnecting(({error}) {
+      _realtimeStatus.add(RealtimeStatus.reconnecting);
+    });
+
     conn.onreconnected(({connectionId}) async {
+      _realtimeStatus.add(RealtimeStatus.connected);
       for (final wsId in _workspaceRefCounts.keys.toList()) {
         await _invokeJoin(wsId);
       }
       _reconnected.add(connectionId ?? '');
+    });
+
+    conn.onclose(({error}) {
+      _realtimeStatus.add(RealtimeStatus.disconnected);
     });
   }
 
@@ -224,11 +245,13 @@ class SignalRService {
     if (_connection != null) {
       await _connection!.stop();
       _connection = null;
+      _realtimeStatus.add(RealtimeStatus.disconnected);
     }
   }
 
   void dispose() {
     disconnect();
+    _realtimeStatus.close();
     _taskCreated.close();
     _taskUpdated.close();
     _taskStatusChanged.close();

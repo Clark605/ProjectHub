@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/utils/date_formatter.dart';
+import 'package:client/core/widgets/app_avatar.dart';
+import 'package:client/features/tasks/data/models/task_priority.dart';
+import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanTaskCardFooter extends StatelessWidget {
+  final TaskPriority? priority;
   final DateTime? dueDate;
   final bool isOverdue;
   final String? assigneeName;
+  final String? assigneeId;
   final int commentCount;
 
   const KanbanTaskCardFooter({
     super.key,
+    this.priority,
     this.dueDate,
     required this.isOverdue,
     this.assigneeName,
+    this.assigneeId,
     this.commentCount = 0,
   });
 
@@ -26,7 +33,38 @@ class KanbanTaskCardFooter extends StatelessWidget {
 
     return Row(
       children: [
-        if (dueDate != null)
+        if (priority != null) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: priority!.toColor().withValues(alpha: isDark ? 0.2 : 0.12),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  priority!.toIcon(),
+                  size: 11,
+                  color: priority!.toColor(),
+                ),
+                const SizedBox(width: 3),
+                Text(
+                  l10n != null
+                      ? priority!.localizedName(l10n)
+                      : priority!.toDisplayString(),
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: priority!.toColor(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 6),
+        ],
+        if (dueDate != null) ...[
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
@@ -49,7 +87,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  DateFormat('MMM d').format(dueDate!),
+                  DateFormatter.formatShortDate(dueDate!, context: context),
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: isOverdue ? FontWeight.w700 : FontWeight.w500,
@@ -61,8 +99,9 @@ class KanbanTaskCardFooter extends StatelessWidget {
               ],
             ),
           ),
-        if (commentCount > 0) ...[
           const SizedBox(width: 6),
+        ],
+        if (commentCount > 0) ...[
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -95,22 +134,14 @@ class KanbanTaskCardFooter extends StatelessWidget {
     bool isDark,
     AppLocalizations? l10n,
   ) {
-    final name = assigneeName;
-    if (name != null && name.trim().isNotEmpty) {
-      final initial = name.trim().substring(0, 1).toUpperCase();
+    final name = assigneeName?.trim();
+    if (name != null && name.isNotEmpty) {
       return Tooltip(
         message: 'Assigned to $name',
-        child: CircleAvatar(
-          radius: 12,
-          backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.2),
-          child: Text(
-            initial,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: theme.colorScheme.primary,
-            ),
-          ),
+        child: AppAvatar(
+          name: name,
+          userId: assigneeId,
+          size: 24,
         ),
       );
     }

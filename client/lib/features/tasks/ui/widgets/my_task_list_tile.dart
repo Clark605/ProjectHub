@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
@@ -113,7 +113,10 @@ class MyTaskListTile extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  DateFormat('MMM d').format(task.dueDate!),
+                                  DateFormatter.formatShortDate(
+                                    task.dueDate!,
+                                    context: context,
+                                  ),
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: isOverdue

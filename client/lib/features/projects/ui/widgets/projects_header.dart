@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/app_button.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
+import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class ProjectsHeader extends StatelessWidget {
@@ -15,6 +19,15 @@ class ProjectsHeader extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final isDesktop = ResponsiveLayout.isDesktop(context);
+
+    int? activeWsId;
+    try {
+      final wsState = context.read<WorkspaceContextCubit>().state;
+      activeWsId = wsState.maybeMap(
+        loaded: (l) => l.activeWorkspace.id,
+        orElse: () => null,
+      );
+    } catch (_) {}
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
@@ -48,6 +61,10 @@ class ProjectsHeader extends StatelessWidget {
                   ],
                 ),
               ),
+              if (activeWsId != null) ...[
+                const SizedBox(width: 12),
+                WorkspacePresenceAvatars(workspaceId: activeWsId),
+              ],
               if (isDesktop) ...[
                 const SizedBox(width: 16),
                 AppButton(

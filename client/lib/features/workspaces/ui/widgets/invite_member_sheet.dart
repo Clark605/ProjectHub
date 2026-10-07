@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
@@ -11,10 +12,8 @@ class InviteMemberSheet extends StatefulWidget {
 
   static Future<void> show(BuildContext context) {
     final cubit = context.read<WorkspaceSettingsCubit>();
-    return showModalBottomSheet(
+    return showAppBottomSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
       builder: (_) =>
           BlocProvider.value(value: cubit, child: const InviteMemberSheet()),
     );
@@ -38,14 +37,9 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(24, 16, 24, 24 + bottomInset),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-      ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
       child: BlocConsumer<WorkspaceSettingsCubit, WorkspaceSettingsState>(
         listener: (context, state) {
           if (state is WorkspaceSettingsLoaded &&
@@ -64,19 +58,8 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Container(
-                    width: 36,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurfaceVariant.withValues(
-                        alpha: 0.3,
-                      ),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
+                const AppSheetDragHandle(),
+                const SizedBox(height: 16),
                 Text(
                   l10n.inviteMember,
                   style: theme.textTheme.titleLarge?.copyWith(

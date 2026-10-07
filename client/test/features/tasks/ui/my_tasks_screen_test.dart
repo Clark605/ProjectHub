@@ -31,7 +31,7 @@ void main() {
 
       expect(find.text('My Tasks'), findsOneWidget);
       expect(
-        find.text('Personal sprint backlog and assigned deliverables.'),
+        find.text('Personal tasks and assigned deliverables.'),
         findsOneWidget,
       );
       expect(find.text('No Assigned Tasks'), findsOneWidget);
