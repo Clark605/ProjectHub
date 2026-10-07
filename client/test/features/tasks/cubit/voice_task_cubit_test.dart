@@ -1,12 +1,10 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
-import 'package:client/features/tasks/data/ai_task_repository.dart';
 
-class MockAiTaskRepository extends Mock implements AiTaskRepository {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

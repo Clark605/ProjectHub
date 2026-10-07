@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
 import 'package:client/features/dashboard/ui/activity_stream_screen.dart';
 import 'package:client/features/dashboard/ui/widgets/activity_tile.dart';
 
-class MockActivityRepository extends Mock implements ActivityRepository {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {

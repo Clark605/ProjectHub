@@ -4,15 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/network/signalr_events.dart';
-import 'package:client/core/network/signalr_service.dart';
 import 'package:client/features/comments/cubit/comments_cubit.dart';
 import 'package:client/features/comments/cubit/comments_state.dart';
-import 'package:client/features/comments/data/comment_repository.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
 
-class MockCommentRepository extends Mock implements CommentRepository {}
-
-class MockSignalRService extends Mock implements SignalRService {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   group('CommentsCubit', () {

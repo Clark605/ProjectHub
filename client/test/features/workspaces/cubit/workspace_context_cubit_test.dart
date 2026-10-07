@@ -10,9 +10,8 @@ import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
-import 'package:client/features/workspaces/data/workspace_repository.dart';
 
-class MockWorkspaceRepository extends Mock implements WorkspaceRepository {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {
@@ -205,7 +204,7 @@ void main() {
       build: () {
         when(
           () => repository.getWorkspaces(),
-        ).thenThrow(const ServerException(message: 'Network connection failed'));
+        ).thenAnswer((_) async => throw const ServerException(message: 'Network connection failed'));
         return WorkspaceContextCubit(repository, prefs);
       },
       act: (cubit) => cubit.loadWorkspaces(),
@@ -286,7 +285,7 @@ void main() {
       build: () {
         when(
           () => repository.getWorkspaces(),
-        ).thenThrow(const ServerException(message: 'Network offline'));
+        ).thenAnswer((_) async => throw const ServerException(message: 'Network offline'));
         return WorkspaceContextCubit(repository, prefs);
       },
       act: (cubit) => cubit.loadWorkspaces(),

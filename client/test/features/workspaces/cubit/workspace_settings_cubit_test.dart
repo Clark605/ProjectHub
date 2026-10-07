@@ -9,9 +9,8 @@ import 'package:client/features/workspaces/data/models/add_member_request.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
-import 'package:client/features/workspaces/data/workspace_repository.dart';
 
-class MockWorkspaceRepository extends Mock implements WorkspaceRepository {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {
@@ -235,7 +234,7 @@ void main() {
       build: () {
         when(
           () => repository.updateMemberRole(1, 'u2', 'Owner'),
-        ).thenThrow(const ServerException(message: 'Role update failed'));
+        ).thenAnswer((_) async => throw const ServerException(message: 'Role update failed'));
         return WorkspaceSettingsCubit(repository);
       },
       seed: () => WorkspaceSettingsState.loaded(

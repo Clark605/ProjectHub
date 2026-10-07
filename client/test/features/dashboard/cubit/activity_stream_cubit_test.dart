@@ -4,11 +4,10 @@ import 'package:mocktail/mocktail.dart';
 
 import 'package:client/features/dashboard/cubit/activity_stream_cubit.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_state.dart';
-import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
 
-class MockActivityRepository extends Mock implements ActivityRepository {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {
@@ -97,7 +96,7 @@ void main() {
             limit: any(named: 'limit'),
             filter: any(named: 'filter'),
           ),
-        ).thenThrow(Exception('Network error'));
+        ).thenAnswer((_) async => throw Exception('Network error'));
         return ActivityStreamCubit(mockRepo);
       },
       act: (cubit) => cubit.loadActivities(10),

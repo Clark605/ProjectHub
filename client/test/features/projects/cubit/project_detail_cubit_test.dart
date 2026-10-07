@@ -7,9 +7,8 @@ import 'package:client/features/projects/cubit/project_detail_cubit.dart';
 import 'package:client/features/projects/cubit/project_detail_state.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/update_project_request.dart';
-import 'package:client/features/projects/data/project_repository.dart';
 
-class MockProjectRepository extends Mock implements ProjectRepository {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {
@@ -63,7 +62,7 @@ void main() {
       build: () {
         when(
           () => repository.getProject(50, forceRefresh: any(named: 'forceRefresh')),
-        ).thenThrow(const ServerException(message: 'Project not found'));
+        ).thenAnswer((_) async => throw const ServerException(message: 'Project not found'));
         return ProjectDetailCubit(repository);
       },
       act: (cubit) => cubit.loadProject(50),

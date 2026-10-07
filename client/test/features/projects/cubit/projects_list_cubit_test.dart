@@ -7,9 +7,8 @@ import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/features/projects/data/project_repository.dart';
 
-class MockProjectRepository extends Mock implements ProjectRepository {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {
@@ -124,7 +123,7 @@ void main() {
       build: () {
         when(
           () => repository.getProjects(10, forceRefresh: any(named: 'forceRefresh')),
-        ).thenThrow(const ServerException(message: 'Database down'));
+        ).thenAnswer((_) async => throw const ServerException(message: 'Database down'));
         return ProjectsListCubit(repository);
       },
       act: (cubit) => cubit.loadProjects(10),

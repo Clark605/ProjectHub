@@ -2,9 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/network/signalr_service.dart';
-import 'package:client/core/storage/secure_storage_service.dart';
 
-class MockSecureStorageService extends Mock implements SecureStorageService {}
+import '../../helpers/mock_repositories.dart';
 
 void main() {
   group('SignalRService lifecycle & ref-counting', () {

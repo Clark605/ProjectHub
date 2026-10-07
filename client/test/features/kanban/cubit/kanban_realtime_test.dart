@@ -3,19 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/network/signalr_events.dart';
-import 'package:client/core/network/signalr_service.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
-import 'package:client/features/tasks/data/task_repository.dart';
 
-class MockTaskRepository extends Mock implements TaskRepository {}
-class MockProjectRepository extends Mock implements ProjectRepository {}
-class MockSignalRService extends Mock implements SignalRService {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {

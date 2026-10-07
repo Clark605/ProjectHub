@@ -8,11 +8,10 @@ import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/auth/cubit/login_cubit.dart';
 import 'package:client/features/auth/cubit/login_state.dart';
-import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
 import 'package:client/features/auth/data/models/user.dart';
 
-class MockAuthRepository extends Mock implements AuthRepository {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -170,7 +169,9 @@ void main() {
       build: () {
         when(
           () => repository.login(any()),
-        ).thenThrow(const ValidationException(message: 'Invalid credentials'));
+        ).thenAnswer(
+          (_) async => throw const ValidationException(message: 'Invalid credentials'),
+        );
         return LoginCubit(repository);
       },
       act: (cubit) => cubit.login(
@@ -220,8 +221,8 @@ void main() {
             provider: 'GitHub',
             code: 'invalid_code',
           ),
-        ).thenThrow(
-          const ValidationException(message: 'External authentication failed.'),
+        ).thenAnswer(
+          (_) async => throw const ValidationException(message: 'External authentication failed.'),
         );
         return LoginCubit(repository);
       },
