@@ -9,7 +9,7 @@
 
 [![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![C# 13](https://img.shields.io/badge/C%23-13.0-239120?style=for-the-badge&logo=c-sharp&logoColor=white)](https://learn.microsoft.com/dotnet/csharp/)
-[![Flutter](https://img.shields.io/badge/Flutter-3.29+-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev/)
+[![Flutter](https://img.shields.io/badge/Flutter-3.41.1-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev/)
 [![Dart](https://img.shields.io/badge/Dart-3.11+-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Redis](https://img.shields.io/badge/Redis-7-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
@@ -17,10 +17,21 @@
 [![Architecture](https://img.shields.io/badge/Architecture-Clean%20%2F%20Feature--First-orange?style=for-the-badge)]()
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
 
-**An enterprise-grade, full-stack collaborative project and task management platform.**  
+**A full-stack collaborative project and task management platform.**  
 Featuring high-throughput **ASP.NET Core 10 Web API**, real-time **SignalR** synchronization with distributed **Redis 7** pub/sub, **HybridCache** resilient caching, **PostgreSQL 16**, and a responsive **Flutter 3** client engineered with **BLoC/Cubit**, **Material 3**, and the **Stitch Deep Slate** design system.
 
-[Explore Features](#-key-features) • [System Architecture](#-system-architecture) • [ADR Catalog](#-architectural-decision-records-adrs) • [API Reference](#-api-specification) • [Local Setup](#-getting-started)
+[Watch Demo Video](#-demo-walkthrough) • [Key Features](#-key-features) • [System Architecture](#-system-architecture) • [ADR Catalog](#-architectural-decision-records-adrs) • [API Reference](#-api-architecture--specification) • [Local Setup](#-getting-started)
+
+</div>
+
+---
+
+## 🎬 Demo Walkthrough
+
+<div align="center">
+
+> 📹 **[Watch the 60-Second Full Walkthrough (docs/assets/projecthub_demo_walkthrough.mp4)](./docs/assets/projecthub_demo_walkthrough.mp4)**  
+> *Demonstrating real-time multi-client SignalR sync, fluid Kanban drag-and-drop, voice-to-task AI processing, and English/Arabic RTL dynamic layout switching.*
 
 </div>
 
@@ -72,13 +83,13 @@ Designed from the ground up as a **Polyglot Monorepo**, ProjectHub couples a hig
 - **External OAuth Integration:** Native client token exchange with identity providers (Google & GitHub) backed by server-side verification ([ADR-0012](docs/adr/0012-native-client-external-oauth-integration.md)).
 
 ### 🗄 High-Efficiency Database Enums & Resilient Caching
-- **PostgreSQL Smallint Enum Migration:** `Task.Status` and `Task.Priority` stored as PostgreSQL `smallint` (2 bytes) via EF Core value conversion with composite indexing on `(ProjectId, Status)`, reducing index storage by >80% while preserving backward-compatible JSON string contracts over HTTP ([ADR-0018](docs/adr/0018-enum-schema-migration-and-resilient-caching.md)).
+- **PostgreSQL Smallint Enum Migration:** `Task.Status` and `Task.Priority` stored as PostgreSQL `smallint` (2 bytes) via EF Core value conversion with composite indexing on `(ProjectId, Status)`, minimizing index footprint while preserving backward-compatible JSON string contracts over HTTP ([ADR-0018](docs/adr/0018-enum-schema-migration-and-resilient-caching.md)).
 - **Startup Tolerance & L1 Fallback:** Non-blocking asynchronous Redis connection (`AbortOnConnectFail = false`) allowing API boot and full traffic serving via L1 in-memory fallback during Redis downtime ([ADR-0018](docs/adr/0018-enum-schema-migration-and-resilient-caching.md)).
 - **Observable Diagnostic Health:** Live health endpoint (`/api/v1/health`) distinguishing `Healthy`, `Degraded` (PostgreSQL up, Redis down), and `Unhealthy` (PostgreSQL down) states.
 
 ### 🎨 Stitch Deep Slate Design System & Clean Architecture
 - **Dual Theme Support:** Material 3 implementation with a cyberpunk-inspired Deep Slate dark mode canvas (`#0F172A`), luminous Electric Violet (`#C0C1FF`) and Sky Blue (`#89CEFF`) brand accents, accompanied by a calibrated light mode counterpart.
-- **Strict Clean Architecture (<200 lines/file):** Presentation (UI + Cubits) and Data (Repositories + Models) layers with zero domain pass-through overhead, strictly decoupled UI extensions, and route-scoped DI ([ADR-0016](docs/adr/0016-strict-clean-architecture-without-domain-layer.md)).
+- **Strict Clean Architecture:** Presentation (UI + Cubits) and Data (Repositories + Models) layers with zero domain pass-through overhead, strictly decoupled UI extensions, and route-scoped DI ([ADR-0016](docs/adr/0016-strict-clean-architecture-without-domain-layer.md)).
 - **Ambient Glow Shaders:** Custom background canvas glow shaders rendering depth-aware radial gradients.
 - **Internationalization (i18n):** Complete native English (`en`) and Arabic (`ar`) RTL support with localized dialogs, sheets, and layout flipping.
 
@@ -213,11 +224,11 @@ graph TD
 | **Real-Time Engine** | **ASP.NET Core SignalR**, **StackExchange.Redis Backplane** | Bidirectional push synchronization for tasks/comments, distributed presence sets |
 | **ORM & Database** | **Entity Framework Core 10**, **Npgsql**, **PostgreSQL 16** | Code-first migrations, composite indexing, smallint enums, cascade rules |
 | **Caching Tier** | **Microsoft.Extensions.Caching.Hybrid**, **StackExchange.Redis** | Two-tier L1 memory + L2 Redis caching with stampede prevention & L1 fallback |
-| **Identity & Security** | **ASP.NET Core Identity**, **JWT Bearer**, **SHA-256 Rotation** | Multi-session token rotation, revocation list, Bcrypt password hashing |
+| **Identity & Security** | **ASP.NET Core Identity**, **JWT Bearer**, **SHA-256 Rotation** | Multi-session token rotation, revocation list, PBKDF2 (HMAC-SHA512) hashing |
 | **Resilience & Protection** | **System.Threading.RateLimiting** | Two-tier sliding/fixed window rate limiters |
 | **Validation & Mapping** | **FluentValidation 11**, **AutoMapper 12** | Automatic request DTO validation, entity-to-DTO mapping |
 | **Logging & Telemetry** | **Serilog**, **Async File Sink**, **Console Sink** | Structured JSON logging with trace ID correlation |
-| **Frontend Framework** | **Flutter 3.29+**, **Dart 3.11+** | Cross-platform UI compilation (Android, iOS, Web, Desktop) |
+| **Frontend Framework** | **Flutter 3.41.1**, **Dart 3.11+** | Cross-platform UI compilation (Android, iOS, Web, Desktop) |
 | **State Management** | **flutter_bloc 9.1** (`Cubit`) | Predictable, testable unidirectional state flows |
 | **Dependency Injection** | **get_it 8.0**, **injectable 2.5** | Compile-time service locator and inversion of control |
 | **Networking** | **Dio 5.8**, Custom `AuthInterceptor` | Token auto-refresh on 401, global error transformation, retries |
@@ -248,90 +259,25 @@ ProjectHub enforces technical rigor via 18 formal Architecture Decision Records 
 | **[ADR-0013](docs/adr/0013-two-tier-rate-limiting.md)** | Two-Tier Rate Limiting | Global IP sliding window (100 req/min) combined with tight fixed windows on sensitive auth endpoints. |
 | **[ADR-0014](docs/adr/0014-unified-profile-settings-and-dynamic-theming.md)** | Unified Profile Settings & Dynamic Theming | Single profile view managing user details, theme switching (Light/Dark), and language selection. |
 | **[ADR-0015](docs/adr/0015-workspace-accent-color-replaces-personal-palette.md)** | Workspace Accent Color Replaces Personal Palette | Workspace-level curated 10-accent palette used exclusively as a wayfinding signal without polluting UI semantics. |
-| **[ADR-0016](docs/adr/0016-strict-clean-architecture-without-domain-layer.md)** | Strict Clean Architecture Without Domain Layer | Flutter client adopts strict 2-layer Presentation & Data architecture (<200 lines/file, route-scoped DI, dumb widgets). |
+| **[ADR-0016](docs/adr/0016-strict-clean-architecture-without-domain-layer.md)** | Strict Clean Architecture Without Domain Layer | Flutter client adopts strict 2-layer Presentation & Data architecture (route-scoped DI, dumb widgets, decoupled state). |
 | **[ADR-0017](docs/adr/0017-signalr-realtime-collaboration-and-dual-scope-tags.md)** | SignalR Real-Time Collaboration & Dual-Scope Tags | ASP.NET Core SignalR push synchronization, Redis online presence sets, chronological task comments, and dual-scope tags. |
 | **[ADR-0018](docs/adr/0018-enum-schema-migration-and-resilient-caching.md)** | Enum Schema Migration, Atomic Task Creation & Resilient Caching | PostgreSQL `smallint` status/priority enums with composite indexing, atomic tag attachment, and non-blocking Redis L1 fallback. |
 
 ---
 
-## 📡 API Specification
+## 📡 API Architecture & Specification
 
-All endpoints are versioned under `/api/v1` and return standardized JSON envelopes.
+The backend exposes a strongly typed, versioned RESTful API (`/api/v1`) paired with a SignalR collaboration hub (`/api/v1/hubs/workspace`). Every endpoint adheres to strict HTTP semantics, granular resource boundaries, and standardized JSON envelopes.
 
-### Authentication & Identity (`/api/v1/auth`)
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :---: |
-| `POST` | `/api/v1/auth/register` | Register new user account | No |
-| `POST` | `/api/v1/auth/login` | Authenticate with credentials, returns Access + Refresh token | No |
-| `POST` | `/api/v1/auth/refresh` | Rotate refresh token and issue new JWT | No |
-| `POST` | `/api/v1/auth/logout` | Revoke current session refresh token | Yes |
-| `POST` | `/api/v1/auth/forgot-password` | Request password reset token | No |
-| `POST` | `/api/v1/auth/reset-password` | Complete password reset using token | No |
-| `POST` | `/api/v1/auth/external-login` | Authenticate via external OAuth provider token | No |
+### High-Level Service Domains
+- **Authentication & Security (`/api/v1/auth`)**: Credential registration & login, multi-session SHA-256 token rotation, password reset, and external OAuth token exchange (Google & GitHub).
+- **Workspaces & Access Control (`/api/v1/workspaces`)**: Tenant boundary management, Single-Source-of-Truth RBAC (`Owner` / `Member`), member role promotions, and automatic task unassignment upon departure.
+- **Projects & Kanban Tasks (`/api/v1/projects`, `/api/v1/tasks`)**: Scoped project lifecycles, dedicated granular PATCH endpoints (`/status`, `/assignee`) for collision-free optimistic UI Kanban movements, and atomic tag assignment.
+- **Discussions & Categorization (`/api/v1/comments`, `/api/v1/tags`)**: Real-time flat task comments, project-scoped and workspace-scoped dual tags.
+- **Real-Time Hub (`/api/v1/hubs/workspace`)**: SignalR WebSocket/SSE transport backed by Redis pub/sub for real-time task mutations and live presence avatar stacks.
+- **Diagnostics (`/api/v1/health`)**: Tri-state observable diagnostic health reporting (`Healthy`, `Degraded` with L1 cache fallback, `Unhealthy`).
 
-### Workspaces (`/api/v1/workspaces`)
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :---: |
-| `GET` | `/api/v1/workspaces` | List all workspaces where user is a member | Yes |
-| `POST` | `/api/v1/workspaces` | Create a new workspace (creator becomes `Owner`) | Yes |
-| `GET` | `/api/v1/workspaces/{id}` | Get workspace details and settings | Yes |
-| `PUT` | `/api/v1/workspaces/{id}` | Update workspace name, description, or accent color | Yes (Owner) |
-| `DELETE` | `/api/v1/workspaces/{id}` | Delete workspace and all contained assets | Yes (Owner) |
-| `GET` | `/api/v1/workspaces/{id}/members` | List members and their assigned roles | Yes |
-| `POST` | `/api/v1/workspaces/{id}/members` | Add user to workspace as `Member` or `Owner` | Yes (Owner) |
-| `PUT` | `/api/v1/workspaces/{id}/members/{userId}/role` | Update member role (`Owner` or `Member`) | Yes (Owner) |
-| `DELETE` | `/api/v1/workspaces/{id}/members/{userId}` | Remove member (triggers task unassignment) | Yes (Owner) |
-| `GET` | `/api/v1/workspaces/{id}/projects` | List projects in workspace | Yes |
-| `GET` | `/api/v1/workspaces/{id}/my-tasks` | Aggregated personal task list in active workspace | Yes |
-| `GET` | `/api/v1/workspaces/{id}/activity` | Fetch workspace-wide activity audit trail | Yes |
-
-### Dual-Scope Tags (`/api/v1/workspaces` & `/api/v1/projects` & `/api/v1/tasks`)
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :---: |
-| `GET` | `/api/v1/workspaces/{id}/tags` | List reusable workspace-level tags | Yes |
-| `POST` | `/api/v1/workspaces/{id}/tags` | Create workspace-wide tag | Yes (Owner) |
-| `GET` | `/api/v1/projects/{id}/available-tags` | List all tags applicable to project (workspace + project scoped) | Yes |
-| `POST` | `/api/v1/projects/{id}/tags` | Create project-scoped tag | Yes (Owner/Creator) |
-| `DELETE` | `/api/v1/tags/{id}` | Delete tag (cascades from tasks without deleting tasks) | Yes (Owner/Creator) |
-| `POST` | `/api/v1/tasks/{id}/tags` | Attach existing tag to task (max 5 tags per task) | Yes |
-| `DELETE` | `/api/v1/tasks/{id}/tags/{tagId}` | Detach tag from task | Yes |
-
-### Task Comments (`/api/v1/tasks` & `/api/v1/comments`)
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :---: |
-| `GET` | `/api/v1/tasks/{id}/comments` | List flat chronological comments on task | Yes |
-| `POST` | `/api/v1/tasks/{id}/comments` | Add comment to task | Yes |
-| `PUT` | `/api/v1/comments/{id}` | Edit comment content | Yes (Author) |
-| `DELETE` | `/api/v1/comments/{id}` | Delete comment | Yes (Author/Owner) |
-
-### Projects (`/api/v1/projects`)
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :---: |
-| `GET` | `/api/v1/projects/{id}` | Get project details, metrics, and lifecycle status | Yes |
-| `PUT` | `/api/v1/projects/{id}` | Update project metadata or status | Yes (Owner/Creator) |
-| `DELETE` | `/api/v1/projects/{id}` | Delete project and cascade tasks | Yes (Owner/Creator) |
-| `GET` | `/api/v1/projects/{id}/tasks` | Get all tasks belonging to the project | Yes |
-| `POST` | `/api/v1/projects/{id}/tasks` | Create task within project (supports optional `tagIds`) | Yes |
-| `GET` | `/api/v1/projects/{id}/activity` | Project-scoped activity audit trail | Yes |
-
-### Tasks (`/api/v1/tasks`)
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :---: |
-| `GET` | `/api/v1/tasks/{id}` | Get task details | Yes |
-| `PUT` | `/api/v1/tasks/{id}` | Update task title, description, priority, due date | Yes |
-| `PATCH` | `/api/v1/tasks/{id}/status` | Fast status transition (Kanban movement) | Yes |
-| `PATCH` | `/api/v1/tasks/{id}/assignee` | Reassign task to workspace member or unassign | Yes |
-| `DELETE` | `/api/v1/tasks/{id}` | Delete task | Yes (Owner/Creator) |
-
-### Real-Time Synchronization Hub (`/api/v1/hubs/workspace`)
-| Transport | Hub Route | Protocol & Payload Contracts | Auth Required |
-| :--- | :--- | :--- | :---: |
-| `WebSockets` / `SSE` | `/api/v1/hubs/workspace` | Group join/leave (`JoinWorkspace`, `LeaveWorkspace`) and real-time broadcasts (`PresenceChanged`, `TaskCreated`, `TaskStatusChanged`, `TaskAssigned`, `TaskDeleted`, `CommentAdded`, `CommentDeleted`) | Bearer (`?access_token=...`) |
-
-### System & Diagnostics (`/api/v1/health`)
-| Method | Endpoint | Description | Auth Required |
-| :--- | :--- | :--- | :---: |
-| `GET` | `/api/v1/health` | Live diagnostic health: reports `Healthy` (200), `Degraded` with L1 fallback (200), or `Unhealthy` (503) | No |
+> 📖 **Full Endpoint Schemas & Contracts:** For exhaustive request/response JSON payloads, rate limits, and header specifications, consult the complete [**API Reference Specification (docs/api-reference.md)**](docs/api-reference.md).
 
 ---
 
@@ -339,7 +285,7 @@ All endpoints are versioned under `/api/v1` and return standardized JSON envelop
 
 ### Prerequisites
 - [.NET 10 SDK](https://dotnet.microsoft.com/download)
-- [Flutter SDK 3.29+](https://flutter.dev/docs/get-started/install) (stable channel)
+- [Flutter SDK 3.41.1+](https://flutter.dev/docs/get-started/install) (stable channel)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) (must be running for automated container provisioning)
 - [Visual Studio Code](https://code.visualstudio.com/) with C# Dev Kit & Flutter extensions
 
