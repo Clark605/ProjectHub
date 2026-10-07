@@ -58,7 +58,7 @@ class ProjectCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Ink(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerLow,
           borderRadius: BorderRadius.circular(16),
@@ -156,7 +156,7 @@ class ProjectCard extends StatelessWidget {
               ),
             ),
             if (members.isNotEmpty) ...[
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   SizedBox(
@@ -204,9 +204,9 @@ class ProjectCard extends StatelessWidget {
                 ],
               ),
             ],
-            const SizedBox(height: 12),
-            const Divider(height: 1, thickness: 1),
             const SizedBox(height: 10),
+            const Divider(height: 1, thickness: 1),
+            const SizedBox(height: 8),
             Row(
               children: [
                 if (project.dueDate != null) ...[

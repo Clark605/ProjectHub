@@ -100,9 +100,11 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
           isSubmitting = false;
           _errorMessage = e is AppException
               ? e.message
-              : (e.toString().isNotEmpty && !e.toString().startsWith('Exception:'))
-                  ? e.toString()
-                  : (AppLocalizations.of(context)?.somethingWentWrong ?? 'Failed to create task');
+              : (e.toString().isNotEmpty &&
+                    !e.toString().startsWith('Exception:'))
+              ? e.toString()
+              : (AppLocalizations.of(context)?.somethingWentWrong ??
+                    'Failed to create task');
         });
       }
     }
@@ -111,66 +113,61 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: bottomInset),
-      child: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                CreateTaskHeader(selectedStatus: _selectedStatus),
-                if (_errorMessage != null) ...[
-                  const SizedBox(height: 12),
-                  AppErrorBanner(
-                    errorMessage: _errorMessage,
-                    onDismiss: () => setState(() => _errorMessage = null),
-                  ),
-                ],
-                const SizedBox(height: 20),
-                CreateTaskTextFields(
-                  titleController: titleController,
-                  descriptionController: descriptionController,
-                ),
-                const SizedBox(height: 18),
-                CreateTaskPrioritySelector(
-                  selectedPriority: selectedPriority,
-                  onPriorityChanged: (p) =>
-                      setState(() => selectedPriority = p),
-                ),
-                const SizedBox(height: 18),
-                CreateTaskAssigneeDueDateRow(
-                  members: widget.members,
-                  selectedAssigneeId: selectedAssigneeId,
-                  selectedDueDate: selectedDueDate,
-                  onAssigneeChanged: (val) =>
-                      setState(() => selectedAssigneeId = val),
-                  onPickDueDate: () => pickDueDate(context),
-                  onClearDueDate: clearDueDate,
-                ),
-                const SizedBox(height: 16),
-                CreateTaskTagsSelector(
-                  projectId: widget.projectId,
-                  selectedTags: _selectedTags,
-                  onTagAdded: (t) => setState(() => _selectedTags.add(t)),
-                  onTagRemoved: (t) => setState(
-                    () => _selectedTags.removeWhere((x) => x.id == t.id),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                AppButton(
-                  label: l10n?.createTask ?? 'Create Task',
-                  isLoading: isSubmitting,
-                  variant: AppButtonVariant.primary,
-                  onPressed: isSubmitting ? null : _submit,
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              CreateTaskHeader(selectedStatus: _selectedStatus),
+              if (_errorMessage != null) ...[
+                const SizedBox(height: 10),
+                AppErrorBanner(
+                  errorMessage: _errorMessage,
+                  onDismiss: () => setState(() => _errorMessage = null),
                 ),
               ],
-            ),
+              const SizedBox(height: 14),
+              CreateTaskTextFields(
+                titleController: titleController,
+                descriptionController: descriptionController,
+              ),
+              const SizedBox(height: 12),
+              CreateTaskPrioritySelector(
+                selectedPriority: selectedPriority,
+                onPriorityChanged: (p) => setState(() => selectedPriority = p),
+              ),
+              const SizedBox(height: 12),
+              CreateTaskAssigneeDueDateRow(
+                members: widget.members,
+                selectedAssigneeId: selectedAssigneeId,
+                selectedDueDate: selectedDueDate,
+                onAssigneeChanged: (val) =>
+                    setState(() => selectedAssigneeId = val),
+                onPickDueDate: () => pickDueDate(context),
+                onClearDueDate: clearDueDate,
+              ),
+              const SizedBox(height: 12),
+              CreateTaskTagsSelector(
+                projectId: widget.projectId,
+                selectedTags: _selectedTags,
+                onTagAdded: (t) => setState(() => _selectedTags.add(t)),
+                onTagRemoved: (t) => setState(
+                  () => _selectedTags.removeWhere((x) => x.id == t.id),
+                ),
+              ),
+              const SizedBox(height: 16),
+              AppButton(
+                label: l10n?.createTask ?? 'Create Task',
+                isLoading: isSubmitting,
+                variant: AppButtonVariant.primary,
+                onPressed: isSubmitting ? null : _submit,
+              ),
+            ],
           ),
         ),
       ),

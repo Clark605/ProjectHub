@@ -148,13 +148,13 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
     );
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+      padding: const EdgeInsets.fromLTRB(20, 2, 20, 4),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const AppSheetDragHandle(margin: EdgeInsets.only(top: 6, bottom: 6)),
-          const SizedBox(height: 8),
+          const AppSheetDragHandle(margin: EdgeInsets.only(top: 2, bottom: 2)),
+          const SizedBox(height: 2),
           TaskDetailHeader(
                 task: _currentTask,
                 isArchived: widget.isArchived,

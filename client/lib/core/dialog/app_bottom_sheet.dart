@@ -14,13 +14,16 @@ Future<T?> showAppBottomSheet<T>({
 }) {
   final theme = Theme.of(context);
   final isDark = theme.brightness == Brightness.dark;
+  final screenHeight = MediaQuery.sizeOf(context).height;
 
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: isScrollControlled,
     isDismissible: isDismissible,
     enableDrag: enableDrag,
-    backgroundColor: backgroundColor ?? (isDark ? AppColors.surface : AppColors.lightSurface),
+    backgroundColor:
+        backgroundColor ??
+        (isDark ? AppColors.surface : AppColors.lightSurface),
     elevation: 0,
     barrierColor: Colors.black54,
     shape: RoundedRectangleBorder(
@@ -30,29 +33,18 @@ Future<T?> showAppBottomSheet<T>({
         width: 1,
       ),
     ),
+    constraints: BoxConstraints(
+      maxWidth: 580,
+      maxHeight: screenHeight * (maxHeightFraction ?? 0.88),
+    ),
     builder: (ctx) {
       final viewInsets = MediaQuery.viewInsetsOf(ctx);
-      final screenHeight = MediaQuery.sizeOf(ctx).height;
 
-      Widget content = Padding(
-        padding: EdgeInsets.only(bottom: viewInsets.bottom),
-        child: builder(ctx),
-      );
-
-      if (maxHeightFraction != null) {
-        content = ConstrainedBox(
-          constraints: BoxConstraints(
-            maxHeight: screenHeight * maxHeightFraction,
-          ),
-          child: content,
-        );
-      }
-
-      return Center(
-        widthFactor: 1.0,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 580),
-          child: content,
+      return SafeArea(
+        top: false,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: viewInsets.bottom),
+          child: builder(ctx),
         ),
       );
     },
@@ -127,7 +119,9 @@ class AppSheetHeader extends StatelessWidget {
                   title,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
-                    color: isDark ? AppColors.textPrimary : AppColors.lightTextPrimary,
+                    color: isDark
+                        ? AppColors.textPrimary
+                        : AppColors.lightTextPrimary,
                   ),
                 ),
                 if (subtitle != null) ...[
@@ -135,7 +129,9 @@ class AppSheetHeader extends StatelessWidget {
                   Text(
                     subtitle!,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
+                      color: isDark
+                          ? AppColors.textSecondary
+                          : AppColors.lightTextSecondary,
                     ),
                   ),
                 ],
@@ -146,7 +142,9 @@ class AppSheetHeader extends StatelessWidget {
           if (showCloseButton)
             IconButton(
               icon: const Icon(Icons.close_rounded, size: 20),
-              color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
+              color: isDark
+                  ? AppColors.textSecondary
+                  : AppColors.lightTextSecondary,
               onPressed: onClose ?? () => Navigator.of(context).pop(),
               tooltip: 'Close',
             ),
@@ -155,4 +153,3 @@ class AppSheetHeader extends StatelessWidget {
     );
   }
 }
-

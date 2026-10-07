@@ -91,8 +91,6 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-
     final isDark = theme.brightness == Brightness.dark;
     final selectedBgColor = isDark
         ? AppColors.primary.withValues(alpha: 0.22)
@@ -117,32 +115,16 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
       {'key': 'Members', 'label': l10n?.memberActivities ?? 'Members'},
     ];
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      padding: EdgeInsets.only(bottom: bottomInset),
-      child: SafeArea(
-        top: false,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Top drag pill
-              Center(
-                child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 12),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.outlineVariant,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ),
+    return SafeArea(
+      top: false,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const AppSheetDragHandle(),
+            const SizedBox(height: 8),
 
               // Header Row
               Row(
@@ -443,7 +425,6 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

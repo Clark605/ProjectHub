@@ -65,32 +65,10 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
-    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
-
-    return Container(
-      constraints: BoxConstraints(
-        maxHeight: MediaQuery.sizeOf(context).height * 0.82,
-      ),
-      padding: EdgeInsets.only(bottom: bottomInset),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        border: Border.all(color: theme.colorScheme.outlineVariant),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Center(
-            child: Container(
-              margin: const EdgeInsets.only(top: 12, bottom: 8),
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: theme.colorScheme.outlineVariant,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const AppSheetDragHandle(),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
             child: Row(
@@ -192,7 +170,6 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 }

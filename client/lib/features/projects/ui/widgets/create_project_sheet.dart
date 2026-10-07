@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/dialog/dialog.dart';
-import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/core/widgets/app_date_field.dart';
@@ -62,8 +61,6 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    final isDesktop = ResponsiveLayout.isDesktop(context);
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final cubit = widget.cubit ?? context.read<ProjectsListCubit>();
 
     return BlocBuilder<ProjectsListCubit, ProjectsListState>(
@@ -72,38 +69,16 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
         final isLoading = state.mapOrNull(loading: (_) => true) ?? false;
         final errorMessage = state.mapOrNull(error: (s) => s.message);
 
-        return Container(
-          width: isDesktop ? 600 : double.infinity,
-          margin: isDesktop ? const EdgeInsets.all(24) : EdgeInsets.zero,
-          padding: EdgeInsets.fromLTRB(24, 20, 24, 24 + bottomInset),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            borderRadius: isDesktop
-                ? BorderRadius.circular(24)
-                : const BorderRadius.vertical(top: Radius.circular(24)),
-            border: isDesktop
-                ? Border.all(color: theme.colorScheme.outlineVariant)
-                : null,
-          ),
+        return SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onSurfaceVariant.withValues(
-                        alpha: 0.3,
-                      ),
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
+                const AppSheetDragHandle(),
+                const SizedBox(height: 12),
                 Text(
                   l10n.newProject,
                   style: theme.textTheme.titleLarge?.copyWith(

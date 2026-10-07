@@ -115,11 +115,11 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
                 ? (l10n?.taskTitleRequired ?? 'Title is required')
                 : null,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           TextFormField(
             controller: _descController,
-            minLines: 3,
-            maxLines: 5,
+            minLines: 1,
+            maxLines: 3,
             decoration: InputDecoration(
               labelText: l10n?.taskDescription ?? 'Description',
               hintText: l10n?.taskDescriptionPlaceholder,
@@ -135,12 +135,12 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           TaskPrioritySelector(
             selectedPriority: _editPriority,
             onSelected: (p) => setState(() => _editPriority = p),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           TaskDetailAssigneeDueFields(
             members: widget.members,
             editAssigneeId: _editAssigneeId,
@@ -150,7 +150,7 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
             onPickDueDate: _pickDueDate,
             onClearDueDate: () => setState(() => _editDueDate = null),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
           AppButton(
             label: l10n?.saveChanges ?? (l10n?.save ?? 'Save Changes'),
             isLoading: _isSaving,

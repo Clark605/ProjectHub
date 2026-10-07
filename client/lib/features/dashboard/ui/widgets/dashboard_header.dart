@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/widgets/realtime_status_badge.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
@@ -49,8 +48,6 @@ class DashboardHeader extends StatelessWidget {
         if (activeWsId != null) ...[
           const SizedBox(width: 12),
           WorkspacePresenceAvatars(workspaceId: activeWsId),
-          const SizedBox(width: 8),
-          const RealtimeStatusBadge(),
         ],
       ],
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/core/utils/responsive_layout.dart';
+import 'package:client/core/widgets/realtime_status_badge.dart';
 import 'package:client/features/shell/ui/widgets/shell_presence_indicator.dart';
 import 'package:client/features/shell/ui/widgets/workspace_switcher_pill.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -86,7 +87,9 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 8),
+              const RealtimeStatusBadge(),
+              const SizedBox(width: 4),
               if (!isMobile) ...[
                 const ShellPresenceIndicator(),
                 const SizedBox(width: 16),
