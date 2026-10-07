@@ -9,12 +9,18 @@ import 'package:client/core/storage/secure_storage_service.dart';
 @lazySingleton
 class AuthInterceptor extends Interceptor {
   final SecureStorageService _secureStorage;
+  final Dio Function() _dioFactory;
 
   bool _isRefreshing = false;
   final List<({RequestOptions options, ErrorInterceptorHandler handler})>
   _pendingRequests = [];
 
-  AuthInterceptor(this._secureStorage);
+  AuthInterceptor(
+    this._secureStorage, {
+    Dio Function()? dioFactory,
+  }) : _dioFactory =
+           dioFactory ??
+           (() => Dio(BaseOptions(baseUrl: ApiConstants.baseUrl)));
 
   @override
   Future<void> onRequest(
@@ -72,59 +78,76 @@ class AuthInterceptor extends Interceptor {
 
     _isRefreshing = true;
 
+    final String newToken;
     try {
       final refreshToken = await _secureStorage.getRefreshToken();
       if (refreshToken == null) {
         _rejectAll(err);
+        _isRefreshing = false;
         return handler.next(err);
       }
 
       // Use a fresh Dio instance to avoid interceptor loop
-      final refreshDio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
+      final refreshDio = _dioFactory();
 
       final response = await refreshDio.post(
         ApiConstants.refresh,
         data: {'refreshToken': refreshToken},
       );
 
-      final newToken = response.data['token'] as String;
+      newToken = response.data['token'] as String;
       final newRefreshToken = response.data['refreshToken'] as String;
 
       await _secureStorage.saveTokens(
         accessToken: newToken,
         refreshToken: newRefreshToken,
       );
-
-      // Retry the original failed request
-      err.requestOptions.headers['Authorization'] = 'Bearer $newToken';
-      final retryDio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
-      final retryResponse = await retryDio.fetch(err.requestOptions);
-      handler.resolve(retryResponse);
-
-      // Replay queued requests
-      _replayAll(newToken);
-    } on DioException {
+    } on DioException catch (refreshErr) {
       // Refresh failed — clear tokens and reject everything
       await _secureStorage.clearTokens();
-      _rejectAll(err);
-      handler.next(err);
+      _rejectAll(refreshErr);
+      _isRefreshing = false;
+      return handler.next(refreshErr);
+    }
+
+    // Refresh succeeded! Retry the original failed request
+    try {
+      err.requestOptions.headers['Authorization'] = 'Bearer $newToken';
+      final retryDio = _dioFactory();
+      final retryResponse = await retryDio.fetch(err.requestOptions);
+      handler.resolve(retryResponse);
+    } on DioException catch (retryErr) {
+      // Unrelated retry failure must NOT clear tokens or log the user out
+      handler.reject(retryErr);
     } finally {
+      // Replay queued requests and reset refreshing lock
+      await _replayAll(newToken);
       _isRefreshing = false;
     }
   }
 
-  void _replayAll(String newToken) {
-    for (final pending in _pendingRequests) {
-      pending.options.headers['Authorization'] = 'Bearer $newToken';
-      final dio = Dio(BaseOptions(baseUrl: ApiConstants.baseUrl));
-      dio
-          .fetch(pending.options)
-          .then(
-            (response) => pending.handler.resolve(response),
-            onError: (error) => pending.handler.reject(error as DioException),
-          );
-    }
+  Future<void> _replayAll(String newToken) async {
+    final pendingCopy = List.of(_pendingRequests);
     _pendingRequests.clear();
+    await Future.wait(
+      pendingCopy.map((pending) async {
+        pending.options.headers['Authorization'] = 'Bearer $newToken';
+        final dio = _dioFactory();
+        try {
+          final response = await dio.fetch(pending.options);
+          pending.handler.resolve(response);
+        } on DioException catch (e) {
+          pending.handler.reject(e);
+        } catch (e) {
+          pending.handler.next(
+            DioException(
+              requestOptions: pending.options,
+              error: e,
+            ),
+          );
+        }
+      }),
+    );
   }
 
   void _rejectAll(DioException error) {
