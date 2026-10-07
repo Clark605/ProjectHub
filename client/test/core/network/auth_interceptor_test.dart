@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -259,6 +260,90 @@ void main() {
       // Verify tokens were cleared
       verify(() => storage.clearTokens()).called(1);
       expect(handler.wasNextCalled, isTrue);
+    });
+
+    test('does NOT clear tokens when refresh call fails due to network timeout', () async {
+      when(() => storage.getRefreshToken()).thenAnswer((_) async => 'valid-refresh-token');
+
+      // Refresh call fails with connection timeout (transient network failure)
+      when(() => refreshAdapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
+        if (options.path.contains(ApiConstants.refresh)) {
+          throw DioException(
+            requestOptions: options,
+            type: DioExceptionType.connectionTimeout,
+            error: 'Connection timed out',
+          );
+        }
+        return jsonResponse({});
+      });
+
+      final originalRequest = RequestOptions(path: '/api/tasks');
+      final err = DioException(
+        requestOptions: originalRequest,
+        response: Response(statusCode: 401, requestOptions: originalRequest),
+      );
+      final handler = _CapturingErrorHandler();
+
+      await interceptor.onError(err, handler);
+
+      // CRITICAL: Transient network timeout must NOT clear tokens or log the user out!
+      verifyNever(() => storage.clearTokens());
+      expect(handler.wasNextCalled, isTrue);
+      expect(handler.nextError?.type, DioExceptionType.connectionTimeout);
+    });
+
+    test('replays requests that arrive while replay is already in flight without hanging', () async {
+      when(() => storage.getRefreshToken()).thenAnswer((_) async => 'valid-refresh-token');
+
+      final req1 = RequestOptions(path: '/api/tasks/1');
+      final err1 = DioException(
+        requestOptions: req1,
+        response: Response(statusCode: 401, requestOptions: req1),
+      );
+      final handler1 = _CapturingErrorHandler();
+
+      final req2 = RequestOptions(path: '/api/tasks/2');
+      final err2 = DioException(
+        requestOptions: req2,
+        response: Response(statusCode: 401, requestOptions: req2),
+      );
+      final handler2 = _CapturingErrorHandler();
+
+      final req3 = RequestOptions(path: '/api/tasks/3');
+      final err3 = DioException(
+        requestOptions: req3,
+        response: Response(statusCode: 401, requestOptions: req3),
+      );
+      final handler3 = _CapturingErrorHandler();
+
+      when(() => refreshAdapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
+        if (options.path.contains(ApiConstants.refresh)) {
+          return jsonResponse({
+            'token': 'streamed-token',
+            'refreshToken': 'streamed-refresh',
+          });
+        }
+        // When replaying req2, inject req3 into onError mid-replay
+        if (options.path == '/api/tasks/2') {
+          // This arrives while _replayAll is executing for req2
+          unawaited(interceptor.onError(err3, handler3));
+        }
+        return jsonResponse({'path': options.path});
+      });
+
+      // Start req1 (triggers refresh), then immediately queue req2
+      final future1 = interceptor.onError(err1, handler1);
+      final future2 = interceptor.onError(err2, handler2);
+
+      await Future.wait([future1, future2]);
+
+      // All three handlers must be resolved!
+      expect(handler1.wasResolved, isTrue);
+      expect(handler2.wasResolved, isTrue);
+      expect(handler3.wasResolved, isTrue);
+      expect(req3.headers['Authorization'], 'Bearer streamed-token');
     });
 
     test('does NOT clear tokens when retry of original request fails with 500 error', () async {

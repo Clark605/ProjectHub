@@ -110,8 +110,16 @@ class AuthInterceptor extends Interceptor {
         refreshToken: newRefreshToken,
       );
     } catch (refreshErr) {
-      // Refresh failed — clear tokens and reject everything
-      await _secureStorage.clearTokens();
+      // Clear tokens only on a real auth/payload invalidation, not on transient network/timeout failures
+      final status =
+          refreshErr is DioException ? refreshErr.response?.statusCode : null;
+      if (refreshErr is FormatException ||
+          status == 400 ||
+          status == 401 ||
+          status == 403) {
+        await _secureStorage.clearTokens();
+      }
+
       final dioError = refreshErr is DioException
           ? refreshErr
           : DioException(
@@ -140,8 +148,10 @@ class AuthInterceptor extends Interceptor {
         ),
       );
     } finally {
-      // Replay queued requests and reset refreshing lock
-      await _replayAll(newToken);
+      // Replay queued requests and eliminate hang window for requests arriving during replay
+      while (_pendingRequests.isNotEmpty) {
+        await _replayAll(newToken);
+      }
       _isRefreshing = false;
     }
   }
