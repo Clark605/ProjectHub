@@ -77,7 +77,7 @@ Designed from the ground up as a **Polyglot Monorepo**, ProjectHub couples a hig
 - **Categorized Queues:** Intelligently grouped by priority tiers and due dates (`Overdue`, `Due Today`, `Upcoming`).
 - **Dedicated Activity Stream:** Dedicated full activity stream route (`/activity-stream`) complementing the dashboard summary card.
 
-### 🔒 Enterprise-Grade Security & Auth
+### 🔒 Authentication & Security Architecture
 - **Multi-Session SHA-256 Token Rotation:** Refresh tokens hashed using SHA-256 with rotation and automatic reuse-detection that instantly revokes compromised session families ([ADR-0005](docs/adr/0005-multi-session-sha256-refresh-token-rotation.md)).
 - **Two-Tier Rate Limiting:** Global sliding window (100 req/min per IP) paired with strict partitioned fixed windows on sensitive authentication endpoints (Login: 5/min, Register: 3/min, Password Reset: 2/min) to prevent brute-force attacks ([ADR-0013](docs/adr/0013-two-tier-rate-limiting.md)).
 - **External OAuth Integration:** Native client token exchange with identity providers (Google & GitHub) backed by server-side verification ([ADR-0012](docs/adr/0012-native-client-external-oauth-integration.md)).
@@ -88,7 +88,7 @@ Designed from the ground up as a **Polyglot Monorepo**, ProjectHub couples a hig
 - **Observable Diagnostic Health:** Live health endpoint (`/api/v1/health`) distinguishing `Healthy`, `Degraded` (PostgreSQL up, Redis down), and `Unhealthy` (PostgreSQL down) states.
 
 ### 🎨 Stitch Deep Slate Design System & Clean Architecture
-- **Dual Theme Support:** Material 3 implementation with a cyberpunk-inspired Deep Slate dark mode canvas (`#0F172A`), luminous Electric Violet (`#C0C1FF`) and Sky Blue (`#89CEFF`) brand accents, accompanied by a calibrated light mode counterpart.
+- **Dual Theme Support:** Material 3 implementation with a Deep Slate dark mode canvas (`#0F172A`), luminous Electric Violet (`#C0C1FF`) and Sky Blue (`#89CEFF`) brand accents, accompanied by a calibrated light mode counterpart.
 - **Strict Clean Architecture:** Presentation (UI + Cubits) and Data (Repositories + Models) layers with zero domain pass-through overhead, strictly decoupled UI extensions, and route-scoped DI ([ADR-0016](docs/adr/0016-strict-clean-architecture-without-domain-layer.md)).
 - **Ambient Glow Shaders:** Custom background canvas glow shaders rendering depth-aware radial gradients.
 - **Internationalization (i18n):** Complete native English (`en`) and Arabic (`ar`) RTL support with localized dialogs, sheets, and layout flipping.
@@ -128,7 +128,7 @@ ProjectHub/
 └── client/                         # Flutter Client (Android, iOS, Web, Desktop)
     ├── lib/
     │   ├── core/                   # Network (Dio), Realtime (SignalRService), Storage, Theming, DI
-    │   ├── features/               # Feature-First Modules (<200 lines/file: Auth, Workspaces, Projects, Kanban, Tasks)
+    │   ├── features/               # Feature-First Modules (Auth, Workspaces, Projects, Kanban, Tasks)
     │   ├── l10n/                   # ARB localization files (English & Arabic RTL)
     │   ├── app.dart                # App routing & theme container
     │   └── main.dart               # Startup sequence & dependency bootstrapping
@@ -179,7 +179,7 @@ graph TD
 graph TD
     subgraph FeatureModule ["Feature Module (e.g. features/kanban/)"]
         subgraph UILayer ["UI / Presentation Layer"]
-            Screen["Views / Screens (< 200 lines)"]
+            Screen["Views / Screens"]
             Widgets["Private UI Atoms & Sheets"]
             UIExtensions["Presentation Extensions (Colors, Icons)"]
             Guards["Permission / Role Guards"]
@@ -392,4 +392,4 @@ flutter test
 
 This project is licensed under the [MIT License](LICENSE).
 
-Developed with passion by **Clark Remon** as an enterprise-grade polyglot portfolio system demonstrating modern cloud architecture, clean domain boundaries, and responsive mobile-first UI engineering.
+Engineered by **Clark Remon** as a polyglot portfolio project demonstrating real-time SignalR synchronization, clean architecture, and responsive mobile-first Flutter engineering.
