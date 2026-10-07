@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -6,18 +8,13 @@ import 'package:client/core/errors/app_exception.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/update_task_request.dart';
-import 'package:client/features/tasks/data/task_repository.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/features/workspaces/data/workspace_repository.dart';
 
-class MockTaskRepository extends Mock implements TaskRepository {}
-class MockProjectRepository extends Mock implements ProjectRepository {}
-class MockWorkspaceRepository extends Mock implements WorkspaceRepository {}
+import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {
@@ -40,6 +37,14 @@ void main() {
       status: 'Active',
     );
 
+    void stubTasks([List<TaskDto> tasks = const []]) {
+      when(
+        () => taskRepo.getTasksByProject(any(), forceRefresh: any(named: 'forceRefresh')),
+      ).thenAnswer((_) async => tasks);
+    }
+
+    KanbanCubit createCubit() => KanbanCubit(taskRepo, projectRepo, null, workspaceRepo);
+
     setUp(() {
       taskRepo = MockTaskRepository();
       projectRepo = MockProjectRepository();
@@ -52,7 +57,7 @@ void main() {
         () => workspaceRepo.getMembers(10, forceRefresh: any(named: 'forceRefresh')),
       ).thenAnswer((_) async => []);
 
-      cubit = KanbanCubit(taskRepo, projectRepo, null, workspaceRepo);
+      cubit = createCubit();
     });
 
     tearDown(() {
@@ -66,10 +71,8 @@ void main() {
     blocTest<KanbanCubit, KanbanState>(
       'loadTasks emits loading then empty when project has no tasks',
       build: () {
-        when(
-          () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-        ).thenAnswer((_) async => []);
-        return KanbanCubit(taskRepo, projectRepo, null, workspaceRepo);
+        stubTasks([]);
+        return createCubit();
       },
       act: (cubit) => cubit.loadTasks(1),
       expect: () => [
@@ -84,25 +87,14 @@ void main() {
         when(
           () => projectRepo.getProject(1, forceRefresh: any(named: 'forceRefresh')),
         ).thenAnswer((_) async => testProject.copyWith(status: 'Archived'));
-        when(
-          () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-        ).thenAnswer((_) async => []);
-        return KanbanCubit(taskRepo, projectRepo, null, workspaceRepo);
+        stubTasks([]);
+        return createCubit();
       },
       act: (cubit) => cubit.loadTasks(1),
       expect: () => [
         const KanbanState.loading(),
         const KanbanState.empty(projectId: 1, isArchived: true),
       ],
-      verify: (cubit) {
-        cubit.state.maybeWhen(
-          empty: (projectId, isArchived, _) {
-            expect(projectId, 1);
-            expect(isArchived, true);
-          },
-          orElse: () => fail('State should be empty with isArchived: true'),
-        );
-      },
     );
 
     const moveTask = TaskDto(
@@ -115,13 +107,11 @@ void main() {
     blocTest<KanbanCubit, KanbanState>(
       'moveTaskStatus updates optimistically and preserves change on success',
       build: () {
-        when(
-          () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-        ).thenAnswer((_) async => [moveTask]);
+        stubTasks([moveTask]);
         when(
           () => taskRepo.updateTaskStatus(101, 'InProgress'),
         ).thenAnswer((_) async => moveTask.copyWith(status: 'InProgress'));
-        return KanbanCubit(taskRepo, projectRepo, null, workspaceRepo);
+        return createCubit();
       },
       act: (cubit) async {
         await cubit.loadTasks(1);
@@ -133,28 +123,16 @@ void main() {
             .having((s) => s.tasks.first.status, 'status', 'InProgress')
             .having((s) => s.errorMessage, 'error', isNull),
       ],
-      verify: (cubit) {
-        cubit.state.maybeWhen(
-          loaded: (projectId, tasks, allTasks, isArchived, filter, errorMessage) {
-            expect(errorMessage, isNull);
-            expect(allTasks.first.status, 'InProgress');
-            expect(tasks.first.status, 'InProgress');
-          },
-          orElse: () => fail('State should be KanbanLoaded'),
-        );
-      },
     );
 
     blocTest<KanbanCubit, KanbanState>(
       'moveTaskStatus rolls back state and emits errorMessage on failure',
       build: () {
-        when(
-          () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-        ).thenAnswer((_) async => [moveTask]);
+        stubTasks([moveTask]);
         when(
           () => taskRepo.updateTaskStatus(101, 'Done'),
-        ).thenThrow(const AppException(message: 'Status transition failed'));
-        return KanbanCubit(taskRepo, projectRepo, null, workspaceRepo);
+        ).thenAnswer((_) async => throw const AppException(message: 'Status transition failed'));
+        return createCubit();
       },
       act: (cubit) async {
         await cubit.loadTasks(1);
@@ -196,82 +174,66 @@ void main() {
     ];
 
     test('setFilter filters tasks by search query, priority, and assignee', () async {
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer((_) async => filterTasks);
-
+      stubTasks(filterTasks);
       await cubit.loadTasks(1);
 
       // Filter by search
       cubit.setFilter(search: 'Fix');
-      cubit.state.maybeWhen(
-        loaded: (_, tasks, _, _, _, _) {
-          expect(tasks.length, 2);
-          expect(tasks.map((t) => t.id), containsAll([1, 3]));
-        },
-        orElse: () => fail('Should be loaded'),
-      );
+      final searchFiltered = cubit.state as KanbanLoaded;
+      expect(searchFiltered.tasks.length, 2);
+      expect(searchFiltered.tasks.map((t) => t.id), containsAll([1, 3]));
 
       // Filter by priority
       cubit.setFilter(priority: 'High');
-      cubit.state.maybeWhen(
-        loaded: (_, tasks, _, _, _, _) {
-          expect(tasks.length, 1);
-          expect(tasks.first.id, 1);
-        },
-        orElse: () => fail('Should be loaded'),
-      );
+      final priorityFiltered = cubit.state as KanbanLoaded;
+      expect(priorityFiltered.tasks.length, 1);
+      expect(priorityFiltered.tasks.first.id, 1);
 
       // Clear filters
       cubit.clearFilters();
-      cubit.state.maybeWhen(
-        loaded: (_, tasks, _, _, _, _) {
-          expect(tasks.length, 3);
-        },
-        orElse: () => fail('Should be loaded'),
-      );
+      final cleared = cubit.state as KanbanLoaded;
+      expect(cleared.tasks.length, 3);
     });
 
     test('moveTaskStatus preserves subsequent moves when a previous move fails', () async {
       const task1 = TaskDto(id: 1, projectId: 1, title: 'Task 1', status: 'Backlog');
       const task2 = TaskDto(id: 2, projectId: 1, title: 'Task 2', status: 'Backlog');
 
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer((_) async => [task1, task2]);
-
+      stubTasks([task1, task2]);
       await cubit.loadTasks(1);
 
+      final move1Completer = Completer<TaskDto>();
       when(
         () => taskRepo.updateTaskStatus(1, 'InProgress'),
-      ).thenThrow(const AppException(message: 'Status transition failed'));
+      ).thenAnswer((_) => move1Completer.future);
+
       when(
         () => taskRepo.updateTaskStatus(2, 'Done'),
       ).thenAnswer((_) async => task2.copyWith(status: 'Done'));
 
-      // Optimistically move Task 1 to InProgress, then Task 2 to Done
+      // Optimistically move Task 1 to InProgress (stays in flight)
       final move1 = cubit.moveTaskStatus(1, 'InProgress');
+      // Optimistically move Task 2 to Done while move1 is in flight
       final move2 = cubit.moveTaskStatus(2, 'Done');
 
-      await Future.wait([move1, move2]);
+      // Wait for move2 to complete
+      await move2;
+
+      // Fail move1
+      move1Completer.completeError(const AppException(message: 'Status transition failed'));
+      await move1;
 
       // State should have Task 1 reverted to Backlog, but Task 2 preserved at Done
-      cubit.state.maybeWhen(
-        loaded: (_, tasks, allTasks, _, _, errorMessage) {
-          final t1 = allTasks.firstWhere((t) => t.id == 1);
-          final t2 = allTasks.firstWhere((t) => t.id == 2);
-          expect(t1.status, 'Backlog');
-          expect(t2.status, 'Done');
-          expect(errorMessage, contains('Status transition failed'));
-        },
-        orElse: () => fail('State should be KanbanLoaded'),
-      );
+      final state = cubit.state as KanbanLoaded;
+      final t1 = state.allTasks.firstWhere((t) => t.id == 1);
+      final t2 = state.allTasks.firstWhere((t) => t.id == 2);
+      expect(t1.status, 'Backlog');
+      expect(t2.status, 'Done');
+      expect(state.errorMessage, contains('Status transition failed'));
     });
 
     test('createTask with initialStatus moves task to target status', () async {
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer((_) async => []);
+      stubTasks([]);
       await cubit.loadTasks(1);
 
       when(
@@ -290,19 +252,13 @@ void main() {
 
       expect(created.title, 'New Feature');
 
-      cubit.state.maybeWhen(
-        loaded: (_, tasks, allTasks, _, _, _) {
-          expect(allTasks.length, 1);
-          expect(allTasks.first.status, 'InProgress');
-        },
-        orElse: () => fail('Should transition from empty to loaded'),
-      );
+      final state = cubit.state as KanbanLoaded;
+      expect(state.allTasks.length, 1);
+      expect(state.allTasks.first.status, 'InProgress');
     });
 
     test('createTask with explicit status in req is overridden when initialStatus is provided', () async {
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer((_) async => []);
+      stubTasks([]);
       await cubit.loadTasks(1);
 
       when(
@@ -333,22 +289,14 @@ void main() {
         title: 'Single Task',
         status: 'Backlog',
       );
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer((_) async => [singleTask]);
+      stubTasks([singleTask]);
       await cubit.loadTasks(1);
 
       when(() => taskRepo.deleteTask(99)).thenAnswer((_) async {});
 
       await cubit.deleteTask(99);
 
-      cubit.state.maybeWhen(
-        empty: (projectId, isArchived, _) {
-          expect(projectId, 1);
-          expect(isArchived, false);
-        },
-        orElse: () => fail('State should be KanbanState.empty'),
-      );
+      expect(cubit.state, const KanbanState.empty(projectId: 1, isArchived: false));
     });
 
     test('TaskDto isOverdue treats date-only today as not overdue and yesterday as overdue', () {
@@ -398,15 +346,13 @@ void main() {
     });
 
     test('createTask failure on KanbanEmpty rethrows and sets errorMessage in empty state', () async {
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer((_) async => []);
+      stubTasks([]);
       await cubit.loadTasks(1);
       expect(cubit.state, isA<KanbanEmpty>());
 
       when(
         () => taskRepo.createTask(1, any()),
-      ).thenThrow(const AppException(message: 'Task creation failed'));
+      ).thenAnswer((_) async => throw const AppException(message: 'Task creation failed'));
 
       await expectLater(
         cubit.createTask(1, const CreateTaskRequest(title: 'Fail Task')),
@@ -419,19 +365,15 @@ void main() {
     });
 
     test('createTask failure on KanbanLoaded rethrows and sets errorMessage in loaded state', () async {
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer(
-        (_) async => [
-          const TaskDto(id: 1, projectId: 1, title: 'Existing', status: 'Backlog'),
-        ],
-      );
+      stubTasks([
+        const TaskDto(id: 1, projectId: 1, title: 'Existing', status: 'Backlog'),
+      ]);
       await cubit.loadTasks(1);
       expect(cubit.state, isA<KanbanLoaded>());
 
       when(
         () => taskRepo.createTask(1, any()),
-      ).thenThrow(const AppException(message: 'Task creation failed'));
+      ).thenAnswer((_) async => throw const AppException(message: 'Task creation failed'));
 
       await expectLater(
         cubit.createTask(1, const CreateTaskRequest(title: 'Fail Task')),
@@ -445,9 +387,7 @@ void main() {
     });
 
     test('createTask with fallback status update failure retains created task in state and rethrows (H3)', () async {
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer((_) async => []);
+      stubTasks([]);
       await cubit.loadTasks(1);
 
       // Backend returns Backlog even though InProgress requested
@@ -467,7 +407,7 @@ void main() {
       // Status update fails
       when(
         () => taskRepo.updateTaskStatus(55, 'InProgress'),
-      ).thenThrow(const AppException(message: 'Status transition failed'));
+      ).thenAnswer((_) async => throw const AppException(message: 'Status transition failed'));
 
       await expectLater(
         cubit.createTask(
@@ -490,7 +430,7 @@ void main() {
     test('loadTasks emits error state when project fetch fails (M6)', () async {
       when(
         () => projectRepo.getProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenThrow(const AppException(message: 'Project not found'));
+      ).thenAnswer((_) async => throw const AppException(message: 'Project not found'));
 
       await cubit.loadTasks(1);
 
@@ -511,9 +451,7 @@ void main() {
           ),
         ],
       );
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer((_) async => []);
+      stubTasks([]);
 
       await cubit.loadTasks(1);
 
@@ -543,9 +481,7 @@ void main() {
         const TaskDto(id: 3, projectId: 1, title: 'No tags'),
       ];
 
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer((_) async => tagTasks);
+      stubTasks(tagTasks);
 
       await cubit.loadTasks(1);
 
@@ -562,13 +498,9 @@ void main() {
     });
 
     test('refreshTasks does not emit KanbanLoading and updates tasks silently (M8)', () async {
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer(
-        (_) async => [
-          const TaskDto(id: 1, projectId: 1, title: 'Original Task', status: 'Backlog'),
-        ],
-      );
+      stubTasks([
+        const TaskDto(id: 1, projectId: 1, title: 'Original Task', status: 'Backlog'),
+      ]);
 
       await cubit.loadTasks(1);
       expect(cubit.state, isA<KanbanLoaded>());
@@ -597,9 +529,7 @@ void main() {
     });
 
     test('clearErrorMessage clears error on both KanbanLoaded and KanbanEmpty', () async {
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer((_) async => []);
+      stubTasks([]);
       await cubit.loadTasks(1);
       cubit.setLoadedError('Some empty error');
       expect(cubit.state.errorMessage, 'Some empty error');
@@ -607,13 +537,9 @@ void main() {
       cubit.clearErrorMessage();
       expect(cubit.state.errorMessage, isNull);
 
-      when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
-      ).thenAnswer(
-        (_) async => [
-          const TaskDto(id: 1, projectId: 1, title: 'T1', status: 'Backlog'),
-        ],
-      );
+      stubTasks([
+        const TaskDto(id: 1, projectId: 1, title: 'T1', status: 'Backlog'),
+      ]);
       await cubit.loadTasks(1);
       cubit.setLoadedError('Some loaded error');
       expect(cubit.state.errorMessage, 'Some loaded error');
