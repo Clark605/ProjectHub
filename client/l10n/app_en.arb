@@ -793,5 +793,17 @@
   "voiceTaskCouldNotDetermineDueDate": "Could not determine due date",
   "@voiceTaskCouldNotDetermineDueDate": {
     "description": "Warning when AI could not resolve due date"
+  },
+  "sessionExpiredTitle": "Session Expired",
+  "@sessionExpiredTitle": {
+    "description": "Title of the alert dialog when a user session has expired"
+  },
+  "sessionExpiredMessage": "Your session has expired. Please log in again to continue.",
+  "@sessionExpiredMessage": {
+    "description": "Message explaining that re-authentication is required"
+  },
+  "reauthenticate": "Log In",
+  "@reauthenticate": {
+    "description": "Button to redirect user to log in screen"
   }
 }

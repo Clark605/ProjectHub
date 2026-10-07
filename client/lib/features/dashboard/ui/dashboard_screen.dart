@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
+import 'package:client/core/widgets/app_error_state.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client/features/dashboard/cubit/dashboard_state.dart';
 import 'package:client/features/dashboard/ui/widgets/dashboard_header.dart';
@@ -91,6 +92,35 @@ class _DashboardViewState extends State<_DashboardView> {
 
     Widget view = BlocBuilder<DashboardCubit, DashboardState>(
       builder: (context, state) {
+        if (state.errorMessage != null && !state.isLoading) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              if (_activeWorkspaceId != null) {
+                await context.read<DashboardCubit>().loadDashboard(
+                  _activeWorkspaceId!,
+                );
+              }
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.65,
+                child: AppErrorState(
+                  errorMessage: state.errorMessage!,
+                  onRetry: () {
+                    if (_activeWorkspaceId != null) {
+                      context.read<DashboardCubit>().loadDashboard(
+                        _activeWorkspaceId!,
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+          );
+        }
+
         return RefreshIndicator(
           onRefresh: () async {
             if (_activeWorkspaceId != null) {

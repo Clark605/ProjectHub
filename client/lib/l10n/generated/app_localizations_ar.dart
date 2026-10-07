@@ -1168,4 +1168,14 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get voiceTaskCouldNotDetermineDueDate => 'تعذر تحديد تاريخ الاستحقاق';
+
+  @override
+  String get sessionExpiredTitle => 'انتهت الجلسة';
+
+  @override
+  String get sessionExpiredMessage =>
+      'انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى للمتابعة.';
+
+  @override
+  String get reauthenticate => 'تسجيل الدخول';
 }

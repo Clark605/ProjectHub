@@ -374,5 +374,8 @@
   "voiceTaskSpeechUnavailable": "التعرف على الصوت غير متوفر على هذا الجهاز.",
   "voiceTaskFailedToUnderstand": "تعذر فهم تفاصيل المهمة. يرجى المحاولة مرة أخرى.",
   "voiceTaskInputUnclear": "المدخلات غير واضحة. يرجى مراجعة العنوان.",
-  "voiceTaskCouldNotDetermineDueDate": "تعذر تحديد تاريخ الاستحقاق"
+  "voiceTaskCouldNotDetermineDueDate": "تعذر تحديد تاريخ الاستحقاق",
+  "sessionExpiredTitle": "انتهت الجلسة",
+  "sessionExpiredMessage": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى للمتابعة.",
+  "reauthenticate": "تسجيل الدخول"
 }

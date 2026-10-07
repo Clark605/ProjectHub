@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:client/core/errors/app_exception.dart';
 import 'package:client/features/dashboard/cubit/dashboard_state.dart';
 import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
@@ -60,6 +61,8 @@ class DashboardCubit extends Cubit<DashboardState> {
           recentActivities: activities,
         ),
       );
+    } on AppException catch (e) {
+      emit(state.copyWith(isLoading: false, errorMessage: e.message));
     } catch (e) {
       emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
     }

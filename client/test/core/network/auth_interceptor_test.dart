@@ -51,6 +51,7 @@ void main() {
       ),
     ).thenAnswer((_) async {});
 
+    AuthInterceptor.resetSessionExpiredThrottle();
     interceptor = AuthInterceptor(
       storage,
       dioFactory: createTestDio,
@@ -450,6 +451,100 @@ void main() {
       verifyNever(() => storage.clearTokens());
       expect(handler.wasRejected, isTrue);
       expect(handler.rejectedError?.error, isA<StateError>());
+    });
+  });
+
+  group('AuthInterceptor session expiration broadcast', () {
+    test('emits onSessionExpired when refresh token is null', () async {
+      when(() => storage.getRefreshToken()).thenAnswer((_) async => null);
+      final err = DioException(
+        requestOptions: RequestOptions(path: '/api/tasks'),
+        response: Response(
+          statusCode: 401,
+          requestOptions: RequestOptions(path: '/api/tasks'),
+        ),
+      );
+      final handler = _CapturingErrorHandler();
+
+      var sessionExpiredEmitted = false;
+      final sub = AuthInterceptor.onSessionExpired.listen((_) {
+        sessionExpiredEmitted = true;
+      });
+
+      await interceptor.onError(err, handler);
+      await pumpEventQueue();
+
+      expect(sessionExpiredEmitted, isTrue);
+      await sub.cancel();
+    });
+
+    test('emits onSessionExpired when refresh endpoint fails with 401', () async {
+      when(() => storage.getRefreshToken()).thenAnswer((_) async => 'expired-rt');
+      when(() => refreshAdapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
+        if (options.path.contains(ApiConstants.refresh)) {
+          throw DioException(
+            requestOptions: options,
+            response: Response(statusCode: 401, requestOptions: options),
+          );
+        }
+        return jsonResponse({});
+      });
+
+      final err = DioException(
+        requestOptions: RequestOptions(path: '/api/tasks'),
+        response: Response(
+          statusCode: 401,
+          requestOptions: RequestOptions(path: '/api/tasks'),
+        ),
+      );
+      final handler = _CapturingErrorHandler();
+
+      var sessionExpiredEmitted = false;
+      final sub = AuthInterceptor.onSessionExpired.listen((_) {
+        sessionExpiredEmitted = true;
+      });
+
+      await interceptor.onError(err, handler);
+      await pumpEventQueue();
+
+      expect(sessionExpiredEmitted, isTrue);
+      await sub.cancel();
+    });
+
+    test('does NOT emit onSessionExpired when refresh fails due to network timeout', () async {
+      when(() => storage.getRefreshToken()).thenAnswer((_) async => 'valid-rt');
+      when(() => refreshAdapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+        final options = inv.positionalArguments[0] as RequestOptions;
+        if (options.path.contains(ApiConstants.refresh)) {
+          throw DioException(
+            requestOptions: options,
+            type: DioExceptionType.connectionTimeout,
+            error: 'Connection timed out',
+          );
+        }
+        return jsonResponse({});
+      });
+
+      final err = DioException(
+        requestOptions: RequestOptions(path: '/api/tasks'),
+        response: Response(
+          statusCode: 401,
+          requestOptions: RequestOptions(path: '/api/tasks'),
+        ),
+      );
+      final handler = _CapturingErrorHandler();
+
+      var sessionExpiredEmitted = false;
+      final sub = AuthInterceptor.onSessionExpired.listen((_) {
+        sessionExpiredEmitted = true;
+      });
+
+      await interceptor.onError(err, handler);
+      await pumpEventQueue();
+
+      expect(sessionExpiredEmitted, isFalse);
+      await sub.cancel();
     });
   });
 }

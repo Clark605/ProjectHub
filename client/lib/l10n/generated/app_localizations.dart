@@ -2215,6 +2215,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not determine due date'**
   String get voiceTaskCouldNotDetermineDueDate;
+
+  /// Title of the alert dialog when a user session has expired
+  ///
+  /// In en, this message translates to:
+  /// **'Session Expired'**
+  String get sessionExpiredTitle;
+
+  /// Message explaining that re-authentication is required
+  ///
+  /// In en, this message translates to:
+  /// **'Your session has expired. Please log in again to continue.'**
+  String get sessionExpiredMessage;
+
+  /// Button to redirect user to log in screen
+  ///
+  /// In en, this message translates to:
+  /// **'Log In'**
+  String get reauthenticate;
 }
 
 class _AppLocalizationsDelegate

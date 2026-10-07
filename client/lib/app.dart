@@ -1,17 +1,21 @@
-import 'package:client/core/di/injection.dart';
-import 'package:client/features/auth/cubit/app_auth_cubit.dart';
-import 'package:flutter/material.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'dart:async';
 
-import 'package:client/core/routes/app_router.dart';
-import 'package:client/core/routes/app_navigator.dart';
-import 'package:client/core/network/global_network_error_handler.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/app_theme.dart';
 import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/cubit/app_settings_state.dart';
+import 'package:client/core/di/injection.dart';
+import 'package:client/core/network/auth_interceptor.dart';
+import 'package:client/core/network/global_network_error_handler.dart';
+import 'package:client/core/routes/app_navigator.dart';
+import 'package:client/core/routes/app_router.dart';
+import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/theme/app_theme.dart';
+import 'package:client/features/auth/cubit/app_auth_cubit.dart';
+import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class ProjectHubApp extends StatefulWidget {
   final String initialRoute;
@@ -23,37 +27,104 @@ class ProjectHubApp extends StatefulWidget {
 }
 
 class _ProjectHubAppState extends State<ProjectHubApp> {
+  StreamSubscription<String>? _networkErrorSubscription;
+  StreamSubscription<void>? _sessionExpiredSubscription;
+  bool _isSessionExpiredDialogShowing = false;
+
   @override
   void initState() {
     super.initState();
-    GlobalNetworkErrorHandler.onNetworkError.listen((message) {
-      final context = AppNavigator.navigatorKey.currentState?.overlay?.context;
-      if (context != null && context.mounted) {
-        showDialog<void>(
+    _networkErrorSubscription = GlobalNetworkErrorHandler.onNetworkError.listen(
+      (message) {
+        final navState = AppNavigator.navigatorKey.currentState;
+        final context = AppNavigator.navigatorKey.currentContext;
+        if (navState != null && context != null && context.mounted) {
+          navState.push<void>(
+            DialogRoute<void>(
+              context: context,
+              barrierDismissible: false,
+              builder: (dialogContext) {
+                final l10n = AppLocalizations.of(dialogContext);
+                return AlertDialog(
+                  title: Text(
+                    l10n?.connectionUnavailable ?? 'Connection unavailable',
+                  ),
+                  content: Text(
+                    message.contains('Unable to connect to the server')
+                        ? (l10n?.connectionErrorMessage ?? message)
+                        : message,
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(dialogContext).pop(),
+                      child: Text(l10n?.ok ?? 'OK'),
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        }
+      },
+    );
+
+    _sessionExpiredSubscription = AuthInterceptor.onSessionExpired.listen((_) {
+      if (_isSessionExpiredDialogShowing) return;
+
+      final authCubit = getIt<AppAuthCubit>();
+      final isAuthenticated = authCubit.state.maybeWhen(
+        authenticated: (_) => true,
+        orElse: () => false,
+      );
+      if (!isAuthenticated) return;
+
+      final navState = AppNavigator.navigatorKey.currentState;
+      final context = AppNavigator.navigatorKey.currentContext;
+      if (navState == null || context == null || !context.mounted) return;
+
+      _isSessionExpiredDialogShowing = true;
+      navState.push<void>(
+        DialogRoute<void>(
           context: context,
           barrierDismissible: false,
           builder: (dialogContext) {
             final l10n = AppLocalizations.of(dialogContext);
             return AlertDialog(
               title: Text(
-                l10n?.connectionUnavailable ?? 'Connection unavailable',
+                l10n?.sessionExpiredTitle ?? 'Session Expired',
               ),
               content: Text(
-                message.contains('Unable to connect to the server')
-                    ? (l10n?.connectionErrorMessage ?? message)
-                    : message,
+                l10n?.sessionExpiredMessage ??
+                    'Your session has expired. Please log in again to continue.',
               ),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(),
-                  child: Text(l10n?.ok ?? 'OK'),
+                  onPressed: () async {
+                    Navigator.of(dialogContext).pop();
+                    _isSessionExpiredDialogShowing = false;
+                    await authCubit.logout();
+                    navState.pushNamedAndRemoveUntil(
+                      RouteNames.login,
+                      (route) => false,
+                    );
+                  },
+                  child: Text(l10n?.reauthenticate ?? 'Log In'),
                 ),
               ],
             );
           },
-        );
-      }
+        ),
+      ).then((_) {
+        _isSessionExpiredDialogShowing = false;
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    _networkErrorSubscription?.cancel();
+    _sessionExpiredSubscription?.cancel();
+    super.dispose();
   }
 
   @override

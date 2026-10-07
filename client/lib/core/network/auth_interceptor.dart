@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:client/core/constants/api_constants.dart';
@@ -10,6 +11,27 @@ import 'package:client/core/storage/secure_storage_service.dart';
 class AuthInterceptor extends Interceptor {
   final SecureStorageService _secureStorage;
   final Dio Function() _dioFactory;
+
+  static final StreamController<void> _sessionExpiredController =
+      StreamController<void>.broadcast();
+  static Stream<void> get onSessionExpired => _sessionExpiredController.stream;
+
+  static DateTime? _lastSessionExpiredNotification;
+
+  static void notifySessionExpired() {
+    final now = DateTime.now();
+    if (_lastSessionExpiredNotification != null &&
+        now.difference(_lastSessionExpiredNotification!).inMilliseconds < 1000) {
+      return;
+    }
+    _lastSessionExpiredNotification = now;
+    _sessionExpiredController.add(null);
+  }
+
+  @visibleForTesting
+  static void resetSessionExpiredThrottle() {
+    _lastSessionExpiredNotification = null;
+  }
 
   bool _isRefreshing = false;
   final List<({RequestOptions options, ErrorInterceptorHandler handler})>
@@ -82,6 +104,7 @@ class AuthInterceptor extends Interceptor {
     try {
       final refreshToken = await _secureStorage.getRefreshToken();
       if (refreshToken == null) {
+        notifySessionExpired();
         _rejectAll(err);
         _isRefreshing = false;
         return handler.next(err);
@@ -118,6 +141,7 @@ class AuthInterceptor extends Interceptor {
           status == 401 ||
           status == 403) {
         await _secureStorage.clearTokens();
+        notifySessionExpired();
       }
 
       final dioError = refreshErr is DioException
@@ -139,6 +163,10 @@ class AuthInterceptor extends Interceptor {
       handler.resolve(retryResponse);
     } on DioException catch (retryErr) {
       // Unrelated retry failure must NOT clear tokens or log the user out
+      if (retryErr.response?.statusCode == 401) {
+        await _secureStorage.clearTokens();
+        notifySessionExpired();
+      }
       handler.reject(retryErr);
     } catch (e) {
       handler.reject(
@@ -167,6 +195,10 @@ class AuthInterceptor extends Interceptor {
           final response = await dio.fetch(pending.options);
           pending.handler.resolve(response);
         } on DioException catch (e) {
+          if (e.response?.statusCode == 401) {
+            await _secureStorage.clearTokens();
+            notifySessionExpired();
+          }
           pending.handler.reject(e);
         } catch (e) {
           pending.handler.reject(

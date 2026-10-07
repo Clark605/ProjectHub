@@ -1173,4 +1173,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get voiceTaskCouldNotDetermineDueDate =>
       'Could not determine due date';
+
+  @override
+  String get sessionExpiredTitle => 'Session Expired';
+
+  @override
+  String get sessionExpiredMessage =>
+      'Your session has expired. Please log in again to continue.';
+
+  @override
+  String get reauthenticate => 'Log In';
 }
