@@ -142,7 +142,26 @@ public class ProjectService : IProjectService
                         CreatedBy = p.CreatedBy,
                         CreatedByName = p.Creator.Name,
                         CreatedAt = p.CreatedAt,
-                        UpdatedAt = p.UpdatedAt
+                        UpdatedAt = p.UpdatedAt,
+                        TaskCounts = new ProjectTaskCountsDto
+                        {
+                            Total = p.Tasks.Count,
+                            Backlog = p.Tasks.Count(t => t.Status == TaskItemStatus.Backlog),
+                            Todo = p.Tasks.Count(t => t.Status == TaskItemStatus.Todo),
+                            InProgress = p.Tasks.Count(t => t.Status == TaskItemStatus.InProgress),
+                            Review = p.Tasks.Count(t => t.Status == TaskItemStatus.Review),
+                            Done = p.Tasks.Count(t => t.Status == TaskItemStatus.Done)
+                        },
+                        Members = p.Tasks
+                            .Where(t => t.Assignee != null)
+                            .Select(t => new ProjectMemberSummaryDto
+                            {
+                                Id = t.Assignee!.Id,
+                                Name = t.Assignee!.Name
+                            })
+                            .Distinct()
+                            .Take(5)
+                            .ToList()
                     })
                     .ToListAsync(token);
             },
@@ -189,7 +208,26 @@ public class ProjectService : IProjectService
                     CreatedBy = p.CreatedBy,
                     CreatedByName = p.Creator.Name,
                     CreatedAt = p.CreatedAt,
-                    UpdatedAt = p.UpdatedAt
+                    UpdatedAt = p.UpdatedAt,
+                    TaskCounts = new ProjectTaskCountsDto
+                    {
+                        Total = p.Tasks.Count,
+                        Backlog = p.Tasks.Count(t => t.Status == TaskItemStatus.Backlog),
+                        Todo = p.Tasks.Count(t => t.Status == TaskItemStatus.Todo),
+                        InProgress = p.Tasks.Count(t => t.Status == TaskItemStatus.InProgress),
+                        Review = p.Tasks.Count(t => t.Status == TaskItemStatus.Review),
+                        Done = p.Tasks.Count(t => t.Status == TaskItemStatus.Done)
+                    },
+                    Members = p.Tasks
+                        .Where(t => t.Assignee != null)
+                        .Select(t => new ProjectMemberSummaryDto
+                        {
+                            Id = t.Assignee!.Id,
+                            Name = t.Assignee!.Name
+                        })
+                        .Distinct()
+                        .Take(5)
+                        .ToList()
                 })
                 .FirstOrDefaultAsync(token),
             tags: [$"project:{projectId}", $"workspace:{projectInfo.WorkspaceId}"]

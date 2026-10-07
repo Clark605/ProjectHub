@@ -153,4 +153,69 @@ public class ProjectServiceTests
 
         await Assert.ThrowsAsync<ForbiddenException>(() => service.DeleteProjectAsync("user-2", 10));
     }
+
+    [Fact]
+    public async Task GetProjectsByWorkspaceAsync_IncludesTaskCountsAndMembers()
+    {
+        using var context = CreateInMemoryDbContext();
+        var service = CreateService(context);
+
+        var workspace = new WorkSpace { Id = 1, Name = "Workspace" };
+        var member = new WorkspaceMember { Workspace = workspace, UserId = "user-1", Role = "Owner" };
+        var creator = new AppUser { Id = "user-1", Name = "User One", Email = "one@test.com" };
+        var assignee = new AppUser { Id = "user-2", Name = "User Two", Email = "two@test.com" };
+
+        var project = new Project
+        {
+            Id = 10,
+            WorkspaceId = 1,
+            Name = "Project Alpha",
+            CreatedBy = "user-1",
+            Creator = creator,
+            Status = "Active"
+        };
+
+        var task1 = new Models.Task
+        {
+            Id = 1,
+            ProjectId = 10,
+            Project = project,
+            Title = "Task 1",
+            Status = TaskItemStatus.Done,
+            AssigneeId = "user-2",
+            Assignee = assignee,
+            CreatedBy = "user-1",
+            Creator = creator
+        };
+        var task2 = new Models.Task
+        {
+            Id = 2,
+            ProjectId = 10,
+            Project = project,
+            Title = "Task 2",
+            Status = TaskItemStatus.InProgress,
+            AssigneeId = "user-2",
+            Assignee = assignee,
+            CreatedBy = "user-1",
+            Creator = creator
+        };
+
+        context.WorkSpaces.Add(workspace);
+        context.WorkspaceMembers.Add(member);
+        context.Users.AddRange(creator, assignee);
+        context.Projects.Add(project);
+        context.Tasks.AddRange(task1, task2);
+        await context.SaveChangesAsync();
+
+        var result = (await service.GetProjectsByWorkspaceAsync("user-1", 1, null)).ToList();
+
+        Assert.Single(result);
+        var projDto = result[0];
+        Assert.Equal(2, projDto.TaskCounts.Total);
+        Assert.Equal(1, projDto.TaskCounts.Done);
+        Assert.Equal(1, projDto.TaskCounts.InProgress);
+        Assert.Single(projDto.Members);
+        Assert.Equal("user-2", projDto.Members[0].Id);
+        Assert.Equal("User Two", projDto.Members[0].Name);
+    }
 }

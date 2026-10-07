@@ -487,5 +487,87 @@ public class WorkspaceService : IWorkspaceService
             tags: [$"user:{userId}:roles", $"workspace:{workspaceId}:members"]
         );
     }
+
+    public async Task<ProjectHub.Api.DTOs.DashboardDtos.WorkspaceDashboardDto> GetWorkspaceDashboardAsync(string userId, int workspaceId)
+    {
+        var isMember = await _context.WorkspaceMembers
+            .AnyAsync(wm => wm.UserId == userId && wm.Workspace.Id == workspaceId);
+
+        if (!isMember)
+        {
+            _logger.LogWarning("User {UserId} is not a member of workspace {WorkspaceId}", userId, workspaceId);
+            throw new KeyNotFoundException($"Workspace with ID {workspaceId} not found for user {userId}");
+        }
+
+        var now = DateTime.UtcNow;
+        var diff = (7 + (now.DayOfWeek - DayOfWeek.Monday)) % 7;
+        var startOfWeek = now.Date.AddDays(-1 * diff);
+        var endOfWeek = startOfWeek.AddDays(7);
+
+        var activeProjectsCount = await _context.Projects
+            .CountAsync(p => p.WorkspaceId == workspaceId && p.Status != ProjectStatus.Archived.ToString());
+
+        var inProgressTasksCount = await _context.Tasks
+            .CountAsync(t => t.Project.WorkspaceId == workspaceId && t.Status == TaskItemStatus.InProgress);
+
+        var urgentTasksCount = await _context.Tasks
+            .CountAsync(t => t.Project.WorkspaceId == workspaceId && t.Priority == TaskItemPriority.Urgent && t.Status != TaskItemStatus.Done);
+
+        var completedTasksCount = await _context.Tasks
+            .CountAsync(t => t.Project.WorkspaceId == workspaceId && t.Status == TaskItemStatus.Done);
+
+        var overdueTasksCount = await _context.Tasks
+            .CountAsync(t => t.Project.WorkspaceId == workspaceId && t.Status != TaskItemStatus.Done && t.DueDate != null && t.DueDate < now);
+
+        var dueThisWeekTasksCount = await _context.Tasks
+            .CountAsync(t => t.Project.WorkspaceId == workspaceId && t.Status != TaskItemStatus.Done && t.DueDate != null && t.DueDate >= startOfWeek && t.DueDate <= endOfWeek);
+
+        var focusTasks = await _context.Tasks
+            .Where(t => t.Project.WorkspaceId == workspaceId && t.AssigneeId == userId && t.Status != TaskItemStatus.Done)
+            .OrderByDescending(t => t.Priority)
+            .ThenBy(t => t.DueDate)
+            .Take(5)
+            .Select(t => new ProjectHub.Api.DTOs.TaskDtos.TaskResponseDto
+            {
+                Id = t.Id,
+                ProjectId = t.ProjectId,
+                ProjectName = t.Project.Name,
+                Title = t.Title,
+                Description = t.Description,
+                Status = t.Status.ToString(),
+                Priority = t.Priority.ToString(),
+                AssigneeId = t.AssigneeId,
+                AssigneeName = t.Assignee != null ? t.Assignee.Name : null,
+                CreatedBy = t.CreatedBy,
+                CreatedByName = t.Creator.Name,
+                DueDate = t.DueDate,
+                CreatedAt = t.CreatedAt,
+                UpdatedAt = t.UpdatedAt,
+                CommentCount = t.Comments.Count,
+                Tags = t.TaskTags.Select(tt => new ProjectHub.Api.DTOs.TagDtos.TagResponseDto
+                {
+                    Id = tt.Tag.Id,
+                    Name = tt.Tag.Name,
+                    Color = tt.Tag.Color,
+                    WorkspaceId = tt.Tag.WorkspaceId,
+                    ProjectId = tt.Tag.ProjectId
+                }).ToList()
+            })
+            .ToListAsync();
+
+        var recentActivities = (await _activityLogger.GetWorkspaceActivitiesAsync(workspaceId, limit: 15)).ToList();
+
+        return new ProjectHub.Api.DTOs.DashboardDtos.WorkspaceDashboardDto
+        {
+            ActiveProjectsCount = activeProjectsCount,
+            InProgressTasksCount = inProgressTasksCount,
+            UrgentTasksCount = urgentTasksCount,
+            CompletedTasksCount = completedTasksCount,
+            OverdueTasksCount = overdueTasksCount,
+            DueThisWeekTasksCount = dueThisWeekTasksCount,
+            FocusTasks = focusTasks,
+            RecentActivities = recentActivities
+        };
+    }
 }
 

@@ -151,5 +151,13 @@ namespace ProjectHub.Api.Controllers
                 sortDescending);
             return Ok(activities);
         }
+
+        [HttpGet("{id}/dashboard")]
+        public async Task<IActionResult> GetWorkspaceDashboard(int id)
+        {
+            var userId = User.GetUserId();
+            var dashboard = await _workspaceService.GetWorkspaceDashboardAsync(userId, id);
+            return Ok(dashboard);
+        }
     }
 }

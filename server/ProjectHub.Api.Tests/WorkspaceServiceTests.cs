@@ -241,5 +241,65 @@ public class WorkspaceServiceTests
                 It.IsAny<object?>()),
             Times.Once);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task GetWorkspaceDashboardAsync_ReturnsAggregates()
+    {
+        using var context = CreateInMemoryDbContext();
+        var workspace = new WorkSpace { Id = 10, Name = "Dashboard WS", AccentColor = "teal" };
+        var user = new AppUser { Id = "user-dash", Name = "Dash User", Email = "dash@test.com" };
+        var project = new Project { Id = 101, WorkspaceId = 10, Name = "P1", Status = ProjectStatus.Active.ToString(), CreatedBy = user.Id, Creator = user };
+        
+        context.WorkSpaces.Add(workspace);
+        context.Users.Add(user);
+        context.Projects.Add(project);
+        context.WorkspaceMembers.Add(new WorkspaceMember { Id = 10, UserId = user.Id, Workspace = workspace, Role = WorkspaceRoles.Owner.ToString() });
+        
+        // Add tasks
+        context.Tasks.Add(new Models.Task
+        {
+            Id = 1,
+            ProjectId = 101,
+            Project = project,
+            Title = "Task 1",
+            Status = TaskItemStatus.InProgress,
+            Priority = TaskItemPriority.Urgent,
+            AssigneeId = user.Id,
+            Assignee = user,
+            CreatedBy = user.Id,
+            Creator = user,
+            DueDate = DateTime.UtcNow.AddDays(1)
+        });
+        context.Tasks.Add(new Models.Task
+        {
+            Id = 2,
+            ProjectId = 101,
+            Project = project,
+            Title = "Task 2",
+            Status = TaskItemStatus.Done,
+            Priority = TaskItemPriority.Low,
+            AssigneeId = user.Id,
+            Assignee = user,
+            CreatedBy = user.Id,
+            Creator = user,
+            DueDate = DateTime.UtcNow.AddDays(-1)
+        });
+        await context.SaveChangesAsync();
+
+        var mockActivityLogger = new Mock<IActivityLogger>();
+        mockActivityLogger.Setup(a => a.GetWorkspaceActivitiesAsync(10, It.IsAny<int>(), null, null, null, null, null, null, true))
+            .ReturnsAsync(new List<DTOs.ActivityDtos.ActivityEventDto>());
+
+        var service = CreateService(context, activityLoggerMock: mockActivityLogger);
+
+        var result = await service.GetWorkspaceDashboardAsync("user-dash", 10);
+
+        Assert.Equal(1, result.ActiveProjectsCount);
+        Assert.Equal(1, result.InProgressTasksCount);
+        Assert.Equal(1, result.UrgentTasksCount);
+        Assert.Equal(1, result.CompletedTasksCount);
+        Assert.Single(result.FocusTasks);
+        Assert.Equal("Task 1", result.FocusTasks[0].Title);
+    }
 }
 

@@ -14,5 +14,23 @@ public class ProjectResponseDto
     public string CreatedByName { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public ProjectTaskCountsDto TaskCounts { get; set; } = new();
+    public List<ProjectMemberSummaryDto> Members { get; set; } = [];
+}
+
+public class ProjectTaskCountsDto
+{
+    public int Total { get; set; }
+    public int Backlog { get; set; }
+    public int Todo { get; set; }
+    public int InProgress { get; set; }
+    public int Review { get; set; }
+    public int Done { get; set; }
+}
+
+public class ProjectMemberSummaryDto
+{
+    public string Id { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 }
 
