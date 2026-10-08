@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-import 'package:client/features/auth/ui/widgets/github_logo_painter.dart';
-import 'package:client/features/auth/ui/widgets/google_logo_painter.dart';
+import 'package:client/features/auth/ui/widgets/github_logo.dart';
+import 'package:client/features/auth/ui/widgets/google_logo.dart';
 
 class SocialAuthSection extends StatelessWidget {
   const SocialAuthSection({
@@ -52,10 +52,7 @@ class SocialAuthSection extends StatelessWidget {
           children: [
             Expanded(
               child: _SocialButton(
-                iconWidget: const CustomPaint(
-                  painter: GoogleLogoPainter(),
-                  size: Size(20, 20),
-                ),
+                iconWidget: const GoogleLogo(size: 20),
                 label: 'Google',
                 onPressed: onGooglePressed ?? () {},
               ),
@@ -63,13 +60,11 @@ class SocialAuthSection extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _SocialButton(
-                iconWidget: CustomPaint(
-                  painter: GithubLogoPainter(
-                    color: isDark
-                        ? AppColors.textPrimary
-                        : AppColors.lightTextPrimary,
-                  ),
-                  size: const Size(20, 20),
+                iconWidget: GithubLogo(
+                  size: 20,
+                  color: isDark
+                      ? AppColors.textPrimary
+                      : AppColors.lightTextPrimary,
                 ),
                 label: 'GitHub',
                 onPressed: onGithubPressed ?? () {},
