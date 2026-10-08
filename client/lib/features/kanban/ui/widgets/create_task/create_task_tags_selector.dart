@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/tags/data/models/tag_dto.dart';
@@ -34,7 +35,7 @@ class CreateTaskTagsSelector extends StatelessWidget {
         ),
         if (selectedTags.length < 5)
           InkWell(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: AppRadius.r6,
             onTap: () {
               AttachTagModal.show(
                 context,
@@ -46,7 +47,7 @@ class CreateTaskTagsSelector extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: AppRadius.r6,
                 border: Border.all(
                   color: theme.colorScheme.outlineVariant,
                   style: BorderStyle.solid,
@@ -64,7 +65,6 @@ class CreateTaskTagsSelector extends StatelessWidget {
                   Text(
                     l10n.tagLabel,
                     style: TextStyle(
-                      fontSize: 12,
                       fontWeight: FontWeight.w500,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),

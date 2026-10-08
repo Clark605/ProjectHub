@@ -42,7 +42,6 @@ class KanbanTagFilterMenu extends StatelessWidget {
               ? (l10n.tagPrefix(selectedTag.name))
               : (l10n.tagsMenuLabel),
           style: TextStyle(
-            fontSize: 12,
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
           ),
         ),

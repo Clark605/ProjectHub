@@ -39,7 +39,7 @@ class TaskCommentsList extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
               l10n.failedToLoadComments(message),
-              style: const TextStyle(color: AppColors.error, fontSize: 12),
+              style: const TextStyle(color: AppColors.error),
             ),
           ),
           loaded: (comments, isSending, errorMessage) {
@@ -70,10 +70,7 @@ class TaskCommentsList extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
                       errorMessage,
-                      style: const TextStyle(
-                        color: AppColors.error,
-                        fontSize: 12,
-                      ),
+                      style: const TextStyle(color: AppColors.error),
                     ),
                   ),
                 if (comments.isEmpty)
@@ -82,7 +79,6 @@ class TaskCommentsList extends StatelessWidget {
                     child: Text(
                       l10n.noCommentsYet,
                       style: TextStyle(
-                        fontSize: 12,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),

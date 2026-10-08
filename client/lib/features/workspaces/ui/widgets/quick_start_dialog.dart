@@ -94,7 +94,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
           border: Border.all(color: theme.colorScheme.outlineVariant),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.4),
+              color: AppColors.pureBlack.withValues(alpha: 0.4),
               blurRadius: 24,
               offset: const Offset(0, 12),
             ),
@@ -195,12 +195,12 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AppColors.error.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppRadius.r8,
         border: Border.all(color: AppColors.error),
       ),
       child: Text(
         _errorMessage!,
-        style: const TextStyle(color: AppColors.error, fontSize: 13),
+        style: const TextStyle(color: AppColors.error),
         textAlign: TextAlign.center,
       ),
     );

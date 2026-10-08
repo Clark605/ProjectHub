@@ -41,7 +41,6 @@ class VoiceTaskReviewWarnings extends StatelessWidget {
                     child: Text(
                       w,
                       style: TextStyle(
-                        fontSize: 12,
                         fontWeight: FontWeight.w500,
                         color: warningColor,
                       ),

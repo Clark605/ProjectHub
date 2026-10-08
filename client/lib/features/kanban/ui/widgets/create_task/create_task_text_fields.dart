@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -38,19 +39,16 @@ class CreateTaskTextFields extends StatelessWidget {
             filled: true,
             fillColor: fillColor,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               borderSide: BorderSide(color: borderColor),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               borderSide: BorderSide(color: borderColor),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.primary,
-                width: 1.5,
-              ),
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: AppRadius.r12,
+              borderSide: BorderSide(color: AppColors.primary, width: 1.5),
             ),
           ),
           validator: (val) => (val == null || val.trim().isEmpty)
@@ -68,19 +66,16 @@ class CreateTaskTextFields extends StatelessWidget {
             filled: true,
             fillColor: fillColor,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               borderSide: BorderSide(color: borderColor),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               borderSide: BorderSide(color: borderColor),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.primary,
-                width: 1.5,
-              ),
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: AppRadius.r12,
+              borderSide: BorderSide(color: AppColors.primary, width: 1.5),
             ),
           ),
         ),

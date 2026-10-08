@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/utils/date_formatter.dart';
 
@@ -47,11 +48,11 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
             filled: true,
             fillColor: theme.colorScheme.surfaceContainer,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
             ),
           ),
@@ -87,13 +88,13 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
         const SizedBox(height: 8),
         InkWell(
           onTap: onPickDueDate,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppRadius.r12,
           child: Container(
             height: 48,
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainer,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               border: Border.all(color: theme.colorScheme.outlineVariant),
             ),
             child: Row(

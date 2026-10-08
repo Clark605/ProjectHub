@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -26,7 +27,7 @@ class KanbanSearchInputRow extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: AppRadius.r10,
               border: Border.all(color: theme.colorScheme.outlineVariant),
             ),
             child: TextField(
@@ -36,10 +37,7 @@ class KanbanSearchInputRow extends StatelessWidget {
               style: theme.textTheme.bodyMedium,
               decoration: InputDecoration(
                 hintText: l10n.taskTitlePlaceholder,
-                hintStyle: TextStyle(
-                  fontSize: 13,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+                hintStyle: TextStyle(color: theme.colorScheme.onSurfaceVariant),
                 prefixIcon: const Icon(Icons.search_rounded, size: 18),
                 suffixIcon: controller.text.isNotEmpty
                     ? IconButton(

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 class DesktopSidebarNavItem extends StatelessWidget {
@@ -27,14 +28,14 @@ class DesktopSidebarNavItem extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: AppRadius.r10,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: isSelected
               ? activeColor.withValues(alpha: 0.15)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: AppRadius.r10,
           border: isSelected
               ? Border.all(color: activeColor.withValues(alpha: 0.4), width: 1)
               : null,
@@ -55,7 +56,6 @@ class DesktopSidebarNavItem extends StatelessWidget {
                 style: TextStyle(
                   color: isSelected ? activeColor : theme.colorScheme.onSurface,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                  fontSize: 13,
                 ),
               ),
             ),
@@ -64,14 +64,13 @@ class DesktopSidebarNavItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
                   color: (badgeColor ?? activeColor).withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: AppRadius.r10,
                 ),
                 child: Text(
                   badge!,
                   style: TextStyle(
                     color: badgeColor ?? activeColor,
                     fontWeight: FontWeight.bold,
-                    fontSize: 10,
                   ),
                 ),
               ),

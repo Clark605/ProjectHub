@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -53,12 +54,12 @@ class MyTasksSection extends StatelessWidget {
         // Section Header
         InkWell(
           onTap: isCollapsible ? onToggleCollapse : null,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: AppRadius.r8,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             child: Row(
               children: [
-                Text(emoji, style: const TextStyle(fontSize: 16)),
+                Text(emoji, style: theme.textTheme.titleMedium),
                 const SizedBox(width: 8),
                 Text(
                   title,
@@ -76,13 +77,14 @@ class MyTasksSection extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: accent != null
                         ? accent.withValues(alpha: 0.12)
-                        : (isDark ? Colors.white12 : Colors.black12),
-                    borderRadius: BorderRadius.circular(10),
+                        : (isDark
+                              ? AppColors.pureWhite.withValues(alpha: 0.12)
+                              : AppColors.pureBlack.withValues(alpha: 0.12)),
+                    borderRadius: AppRadius.r10,
                   ),
                   child: Text(
                     '${tasks.length}',
                     style: TextStyle(
-                      fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color:
                           accent ??
@@ -117,7 +119,6 @@ class MyTasksSection extends StatelessWidget {
               child: Text(
                 l10n.noTasksInSection,
                 style: TextStyle(
-                  fontSize: 12,
                   color: isDark
                       ? AppColors.textSecondary
                       : AppColors.lightTextSecondary,

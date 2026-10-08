@@ -57,7 +57,10 @@ class AppFailure {
     if (error is AppException) {
       return AppFailure(kind: FailureKind.server, serverMessage: error.message);
     }
-    return const AppFailure(kind: FailureKind.unknown);
+    final msg = error is Exception
+        ? error.toString().replaceFirst(RegExp(r'^Exception:\s*'), '')
+        : null;
+    return AppFailure(kind: FailureKind.unknown, serverMessage: msg);
   }
 
   /// Maps the failure into a localized user-facing message string.

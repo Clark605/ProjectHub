@@ -47,7 +47,7 @@ class AttachTagResults extends StatelessWidget {
             ),
             title: Text(
               l10n.createTagQuery(query),
-              style: TextStyle(color: theme.colorScheme.primary, fontSize: 13),
+              style: TextStyle(color: theme.colorScheme.primary),
             ),
             onTap: () => onCreateTag(query),
           ),
@@ -57,10 +57,7 @@ class AttachTagResults extends StatelessWidget {
             child: Center(
               child: Text(
                 l10n.noTagsAvailable,
-                style: TextStyle(
-                  color: theme.colorScheme.onSurfaceVariant,
-                  fontSize: 13,
-                ),
+                style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
               ),
             ),
           )

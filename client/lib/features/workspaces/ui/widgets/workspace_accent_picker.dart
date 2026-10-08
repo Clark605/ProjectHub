@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/workspace_accent.dart';
@@ -59,7 +60,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
                 message: accent.name,
                 child: InkWell(
                   onTap: () => onAccentSelected(accent.id),
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: AppRadius.r22,
                   child: Container(
                     width: 40,
                     height: 40,

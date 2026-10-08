@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -38,9 +39,7 @@ class TermsCheckbox extends StatelessWidget {
               child: Checkbox(
                 value: value,
                 onChanged: onChanged,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
+                shape: const RoundedRectangleBorder(borderRadius: AppRadius.r4),
                 activeColor: AppColors.electricViolet,
               ),
             ),
@@ -89,7 +88,6 @@ class TermsCheckbox extends StatelessWidget {
               l10n.termsRequired,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: AppColors.error,
-                fontSize: 12,
               ),
             ),
           ),

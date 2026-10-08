@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -17,45 +18,37 @@ class ProjectsSkeleton extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: AppRadius.r16,
           border: Border.all(color: theme.colorScheme.outlineVariant, width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
+            const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Expanded(child: Bone.text(words: 3, fontSize: 16)),
-                const SizedBox(width: 8),
-                Bone(
-                  width: 60,
-                  height: 22,
-                  borderRadius: BorderRadius.circular(20),
-                ),
+                Expanded(child: Bone.text(words: 3)),
+                SizedBox(width: 8),
+                Bone(width: 60, height: 22, borderRadius: AppRadius.r20),
               ],
             ),
             const SizedBox(height: 6),
-            const Bone.text(words: 10, fontSize: 12),
+            const Bone.text(words: 10),
             const SizedBox(height: 12),
             // Progress Bar & Task Count
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Bone.text(words: 4, fontSize: 11),
-                Bone(
-                  width: 28,
-                  height: 14,
-                  borderRadius: BorderRadius.circular(3),
-                ),
+                Bone.text(words: 4),
+                Bone(width: 28, height: 14, borderRadius: AppRadius.r3),
               ],
             ),
             const SizedBox(height: 6),
-            Bone(
+            const Bone(
               height: 5,
               width: double.infinity,
-              borderRadius: BorderRadius.circular(3),
+              borderRadius: AppRadius.r3,
             ),
             const SizedBox(height: 10),
             // Member avatars stack
@@ -80,19 +73,11 @@ class ProjectsSkeleton extends StatelessWidget {
             const SizedBox(height: 10),
             const Divider(height: 1, thickness: 1),
             const SizedBox(height: 8),
-            Row(
+            const Row(
               children: [
-                Bone(
-                  width: 80,
-                  height: 14,
-                  borderRadius: BorderRadius.circular(3),
-                ),
-                const Spacer(),
-                Bone(
-                  width: 70,
-                  height: 14,
-                  borderRadius: BorderRadius.circular(3),
-                ),
+                Bone(width: 80, height: 14, borderRadius: AppRadius.r3),
+                Spacer(),
+                Bone(width: 70, height: 14, borderRadius: AppRadius.r3),
               ],
             ),
           ],

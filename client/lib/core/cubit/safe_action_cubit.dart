@@ -58,8 +58,8 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
       final failure = AppFailure.fromException(e);
       onFailure?.call(failure);
       onError?.call(
-        failure.serverMessage ??
-            defaultErrorMessage ??
+        defaultErrorMessage ??
+            failure.serverMessage ??
             'An unexpected error occurred',
       );
       return null;

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -15,9 +16,9 @@ class WorkspaceVisual extends StatelessWidget {
 
     final cardBg = isDark
         ? AppColors.surfaceContainerHigh.withValues(alpha: 0.9)
-        : Colors.white;
+        : AppColors.pureWhite;
     final cardBorder = isDark
-        ? Colors.white.withValues(alpha: 0.1)
+        ? AppColors.pureWhite.withValues(alpha: 0.1)
         : AppColors.lightBorder;
 
     return VisualCanvasCard(
@@ -37,7 +38,7 @@ class WorkspaceVisual extends StatelessWidget {
                   color: isDark
                       ? AppColors.surfaceContainerLow.withValues(alpha: 0.8)
                       : AppColors.lightSurfaceContainer,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: AppRadius.r16,
                   border: Border.all(color: cardBorder),
                 ),
                 child: Row(
@@ -47,7 +48,7 @@ class WorkspaceVisual extends StatelessWidget {
                       height: 32,
                       decoration: BoxDecoration(
                         color: AppColors.electricViolet.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: AppRadius.r10,
                       ),
                       child: const Icon(
                         Icons.dashboard_customize_rounded,
@@ -64,7 +65,6 @@ class WorkspaceVisual extends StatelessWidget {
                             'Quantum Mobile App',
                             style: theme.textTheme.labelLarge?.copyWith(
                               fontWeight: FontWeight.w700,
-                              fontSize: 13,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -75,7 +75,6 @@ class WorkspaceVisual extends StatelessWidget {
                               color: isDark
                                   ? AppColors.textSecondary
                                   : AppColors.lightTextSecondary,
-                              fontSize: 11,
                             ),
                           ),
                         ],
@@ -88,7 +87,7 @@ class WorkspaceVisual extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.success.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: AppRadius.r8,
                         border: Border.all(
                           color: AppColors.success.withValues(alpha: 0.3),
                         ),
@@ -119,7 +118,6 @@ class WorkspaceVisual extends StatelessWidget {
                             style: theme.textTheme.labelSmall?.copyWith(
                               color: AppColors.success,
                               fontWeight: FontWeight.w800,
-                              fontSize: 10,
                             ),
                           ),
                         ],
@@ -142,7 +140,7 @@ class WorkspaceVisual extends StatelessWidget {
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
                       color: cardBg,
-                      borderRadius: BorderRadius.circular(18),
+                      borderRadius: AppRadius.r18,
                       border: Border.all(
                         color: isDark
                             ? AppColors.electricViolet.withValues(alpha: 0.25)
@@ -176,14 +174,13 @@ class WorkspaceVisual extends StatelessWidget {
                                     color: AppColors.electricViolet.withValues(
                                       alpha: 0.18,
                                     ),
-                                    borderRadius: BorderRadius.circular(6),
+                                    borderRadius: AppRadius.r6,
                                   ),
                                   child: Text(
                                     'SPRINT 04',
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: AppColors.electricViolet,
                                       fontWeight: FontWeight.w800,
-                                      fontSize: 10,
                                       letterSpacing: 0.5,
                                     ),
                                   ),
@@ -198,14 +195,13 @@ class WorkspaceVisual extends StatelessWidget {
                                     color: AppColors.priorityHigh.withValues(
                                       alpha: 0.15,
                                     ),
-                                    borderRadius: BorderRadius.circular(6),
+                                    borderRadius: AppRadius.r6,
                                   ),
                                   child: Text(
                                     l10n.priorityHigh.toUpperCase(),
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: AppColors.priorityHigh,
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 9,
                                     ),
                                   ),
                                 ),
@@ -225,21 +221,22 @@ class WorkspaceVisual extends StatelessWidget {
                           'Design System & UI Components',
                           style: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.w700,
-                            fontSize: 14,
                           ),
                         ),
                         const SizedBox(height: 8),
 
                         // Animated Progress Bar
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: AppRadius.r6,
                           child: Stack(
                             children: [
                               Container(
                                 height: 6,
                                 width: double.infinity,
                                 color: isDark
-                                    ? Colors.white.withValues(alpha: 0.08)
+                                    ? AppColors.pureWhite.withValues(
+                                        alpha: 0.08,
+                                      )
                                     : AppColors.lightBorder,
                               ),
                               FractionallySizedBox(
@@ -281,19 +278,19 @@ class WorkspaceVisual extends StatelessWidget {
                                     0,
                                     'AK',
                                     AppColors.electricViolet,
-                                    Colors.white,
+                                    AppColors.pureWhite,
                                   ),
                                   _buildAvatar(
                                     16,
                                     'SL',
                                     AppColors.skyBlue,
-                                    const Color(0xFF0F172A),
+                                    AppColors.lightTextPrimary,
                                   ),
                                   _buildAvatar(
                                     32,
                                     'MD',
-                                    const Color(0xFFF43F5E),
-                                    Colors.white,
+                                    AppColors.priorityHigh,
+                                    AppColors.pureWhite,
                                   ),
                                   Positioned(
                                     left: 48,
@@ -315,7 +312,6 @@ class WorkspaceVisual extends StatelessWidget {
                                           '+4',
                                           style: theme.textTheme.labelSmall
                                               ?.copyWith(
-                                                fontSize: 9,
                                                 fontWeight: FontWeight.w700,
                                               ),
                                         ),
@@ -342,7 +338,6 @@ class WorkspaceVisual extends StatelessWidget {
                                         ? AppColors.textSecondary
                                         : AppColors.lightTextSecondary,
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 11,
                                   ),
                                 ),
                               ],
@@ -374,7 +369,7 @@ class WorkspaceVisual extends StatelessWidget {
                                   AppColors.skyBlueContainer,
                                 ],
                               ),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: AppRadius.r20,
                               boxShadow: [
                                 BoxShadow(
                                   color: AppColors.electricViolet.withValues(
@@ -391,15 +386,14 @@ class WorkspaceVisual extends StatelessWidget {
                                 const Icon(
                                   Icons.bolt_rounded,
                                   size: 14,
-                                  color: Colors.white,
+                                  color: AppColors.pureWhite,
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
                                   '+42% Velocity',
                                   style: theme.textTheme.labelSmall?.copyWith(
-                                    color: Colors.white,
+                                    color: AppColors.pureWhite,
                                     fontWeight: FontWeight.w800,
-                                    fontSize: 10,
                                   ),
                                 ),
                               ],
@@ -437,7 +431,7 @@ class WorkspaceVisual extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: cardBg.withValues(alpha: 0.7),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: AppRadius.r14,
                   border: Border.all(color: cardBorder),
                 ),
                 child: Row(
@@ -453,7 +447,6 @@ class WorkspaceVisual extends StatelessWidget {
                         'API Core Engine v2',
                         style: theme.textTheme.labelMedium?.copyWith(
                           fontWeight: FontWeight.w600,
-                          fontSize: 12,
                         ),
                       ),
                     ),
@@ -462,7 +455,6 @@ class WorkspaceVisual extends StatelessWidget {
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: AppColors.electricViolet,
                         fontWeight: FontWeight.w700,
-                        fontSize: 10,
                       ),
                     ),
                   ],
@@ -486,18 +478,14 @@ class WorkspaceVisual extends StatelessWidget {
           shape: BoxShape.circle,
           color: bg,
           border: Border.all(
-            color: Colors.white.withValues(alpha: 0.8),
+            color: AppColors.pureWhite.withValues(alpha: 0.8),
             width: 1.5,
           ),
         ),
         child: Center(
           child: Text(
             initials,
-            style: TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.w800,
-              color: textColor,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w800, color: textColor),
           ),
         ),
       ),

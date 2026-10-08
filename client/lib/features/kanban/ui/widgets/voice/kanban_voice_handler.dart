@@ -43,7 +43,7 @@ class KanbanVoiceHandler extends StatelessWidget {
               action: permanentlyDenied
                   ? SnackBarAction(
                       label: l10n.voiceTaskSettings,
-                      textColor: Colors.white,
+                      textColor: AppColors.pureWhite,
                       onPressed: openAppSettings,
                     )
                   : null,
@@ -88,7 +88,7 @@ class KanbanVoiceHandler extends StatelessWidget {
                         behavior: HitTestBehavior.opaque,
                         onTap: voiceCubit.cancelListening,
                         child: Container(
-                          color: Colors.black.withValues(alpha: 0.55),
+                          color: AppColors.pureBlack.withValues(alpha: 0.55),
                         ),
                       ),
                     ),

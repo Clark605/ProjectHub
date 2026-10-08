@@ -61,7 +61,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _openCreateSheet(context),
           backgroundColor: AppColors.electricVioletContainer,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.pureWhite,
           icon: const Icon(Icons.add_rounded),
           label: Text(l10n.newProject),
         ),

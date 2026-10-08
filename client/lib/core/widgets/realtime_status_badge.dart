@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/network/signalr_service.dart';
@@ -74,7 +75,7 @@ class RealtimeStatusBadge extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: dotColor.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               border: Border.all(
                 color: dotColor.withValues(alpha: 0.3),
                 width: 1,
@@ -105,7 +106,6 @@ class RealtimeStatusBadge extends StatelessWidget {
                   Text(
                     label,
                     style: TextStyle(
-                      fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: dotColor,
                     ),

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -16,7 +17,7 @@ class AttachTagSearchField extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
     final border = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: AppRadius.r10,
       borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
     );
 
@@ -24,13 +25,10 @@ class AttachTagSearchField extends StatelessWidget {
       controller: controller,
       autofocus: true,
       onChanged: onChanged,
-      style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface),
+      style: TextStyle(color: theme.colorScheme.onSurface),
       decoration: InputDecoration(
         hintText: l10n.searchOrCreateTag,
-        hintStyle: TextStyle(
-          color: theme.colorScheme.onSurfaceVariant,
-          fontSize: 13,
-        ),
+        hintStyle: TextStyle(color: theme.colorScheme.onSurfaceVariant),
         prefixIcon: Icon(
           Icons.search,
           size: 18,

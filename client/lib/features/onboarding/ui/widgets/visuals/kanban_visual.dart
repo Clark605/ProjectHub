@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -41,9 +42,9 @@ class _KanbanVisualState extends State<KanbanVisual>
         : AppColors.lightSurfaceContainer;
     final cardBg = isDark
         ? AppColors.surfaceContainerHigh.withValues(alpha: 0.95)
-        : Colors.white;
+        : AppColors.pureWhite;
     final cardBorder = isDark
-        ? Colors.white.withValues(alpha: 0.08)
+        ? AppColors.pureWhite.withValues(alpha: 0.08)
         : AppColors.lightBorder;
 
     return VisualCanvasCard(
@@ -95,7 +96,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: columnBg,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: AppRadius.r14,
                         border: Border.all(color: cardBorder),
                       ),
                       child: Column(
@@ -123,7 +124,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: columnBg,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: AppRadius.r14,
                         border: Border.all(
                           color: isDark
                               ? AppColors.electricViolet.withValues(alpha: 0.25)
@@ -155,7 +156,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: columnBg,
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: AppRadius.r14,
                         border: Border.all(color: cardBorder),
                       ),
                       child: Column(
@@ -219,10 +220,10 @@ class _KanbanVisualState extends State<KanbanVisual>
                         decoration: BoxDecoration(
                           color: isDoneState
                               ? (isDark
-                                    ? const Color(0xFF132E22)
-                                    : const Color(0xFFEBFDF2))
+                                    ? AppColors.greenEmeraldSubtleDark
+                                    : AppColors.greenEmeraldSubtleLight)
                               : cardBg,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: AppRadius.r10,
                           border: Border.all(
                             color: isDoneState
                                 ? AppColors.success
@@ -252,7 +253,6 @@ class _KanbanVisualState extends State<KanbanVisual>
                                   'Telemetry',
                                   style: theme.textTheme.labelSmall?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 10,
                                   ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -285,7 +285,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                                         : AppColors.electricViolet.withValues(
                                             alpha: 0.15,
                                           ),
-                                    borderRadius: BorderRadius.circular(4),
+                                    borderRadius: AppRadius.r4,
                                   ),
                                   child: Text(
                                     isDoneState
@@ -295,7 +295,6 @@ class _KanbanVisualState extends State<KanbanVisual>
                                       color: isDoneState
                                           ? AppColors.success
                                           : AppColors.electricViolet,
-                                      fontSize: 8,
                                       fontWeight: FontWeight.w800,
                                     ),
                                   ),
@@ -311,9 +310,8 @@ class _KanbanVisualState extends State<KanbanVisual>
                                     child: Text(
                                       'JD',
                                       style: TextStyle(
-                                        fontSize: 7,
                                         fontWeight: FontWeight.w800,
-                                        color: Color(0xFF0F172A),
+                                        color: AppColors.lightTextPrimary,
                                       ),
                                     ),
                                   ),
@@ -343,9 +341,9 @@ class _KanbanVisualState extends State<KanbanVisual>
                         ),
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [Color(0xFF0284C7), Color(0xFF22C55E)],
+                            colors: [AppColors.skyBlueDeep, AppColors.success],
                           ),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: AppRadius.r20,
                           boxShadow: [
                             BoxShadow(
                               color: AppColors.success.withValues(alpha: 0.35),
@@ -360,15 +358,14 @@ class _KanbanVisualState extends State<KanbanVisual>
                             const Icon(
                               Icons.trending_up_rounded,
                               size: 14,
-                              color: Colors.white,
+                              color: AppColors.pureWhite,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               'Sprint 14 · 92% Done',
                               style: theme.textTheme.labelSmall?.copyWith(
-                                color: Colors.white,
+                                color: AppColors.pureWhite,
                                 fontWeight: FontWeight.w800,
-                                fontSize: 10,
                               ),
                             ),
                           ],
@@ -407,7 +404,7 @@ class _KanbanVisualState extends State<KanbanVisual>
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+        decoration: const BoxDecoration(borderRadius: AppRadius.r8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -426,7 +423,6 @@ class _KanbanVisualState extends State<KanbanVisual>
                   name,
                   style: theme.textTheme.labelSmall?.copyWith(
                     fontWeight: FontWeight.w800,
-                    fontSize: 9,
                     letterSpacing: 0.4,
                   ),
                 ),
@@ -437,7 +433,6 @@ class _KanbanVisualState extends State<KanbanVisual>
               style: theme.textTheme.labelSmall?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: dotColor,
-                fontSize: 9,
               ),
             ),
           ],
@@ -460,7 +455,7 @@ class _KanbanVisualState extends State<KanbanVisual>
       padding: const EdgeInsets.all(7),
       decoration: BoxDecoration(
         color: cardBg,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: AppRadius.r10,
         border: Border.all(color: cardBorder),
       ),
       child: Column(
@@ -470,7 +465,6 @@ class _KanbanVisualState extends State<KanbanVisual>
             title,
             style: theme.textTheme.labelSmall?.copyWith(
               fontWeight: FontWeight.w700,
-              fontSize: 10,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -486,13 +480,12 @@ class _KanbanVisualState extends State<KanbanVisual>
                 ),
                 decoration: BoxDecoration(
                   color: tagColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: AppRadius.r4,
                 ),
                 child: Text(
                   tag,
                   style: TextStyle(
                     color: tagColor,
-                    fontSize: 8,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -508,9 +501,8 @@ class _KanbanVisualState extends State<KanbanVisual>
                   child: Text(
                     avatarInitials,
                     style: const TextStyle(
-                      fontSize: 7,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
+                      color: AppColors.pureWhite,
                     ),
                   ),
                 ),
@@ -533,7 +525,7 @@ class _KanbanVisualState extends State<KanbanVisual>
       padding: const EdgeInsets.all(7),
       decoration: BoxDecoration(
         color: cardBg,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: AppRadius.r10,
         border: Border.all(color: cardBorder),
       ),
       child: Row(
@@ -544,7 +536,6 @@ class _KanbanVisualState extends State<KanbanVisual>
               title,
               style: theme.textTheme.labelSmall?.copyWith(
                 fontWeight: FontWeight.w600,
-                fontSize: 10,
                 decoration: TextDecoration.lineThrough,
                 color: theme.textTheme.labelSmall?.color?.withValues(
                   alpha: 0.5,
@@ -569,7 +560,7 @@ class _KanbanVisualState extends State<KanbanVisual>
       height: 28,
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppRadius.r8,
         border: Border.all(
           color: borderColor.withValues(alpha: 0.5),
           style: BorderStyle.solid,

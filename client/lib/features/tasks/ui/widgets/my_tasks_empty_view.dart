@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -23,7 +24,7 @@ class MyTasksEmptyView extends StatelessWidget {
                       ? theme.colorScheme.surfaceContainerLow
                       : theme.colorScheme.surface)
                   .withValues(alpha: 0.8),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: AppRadius.r20,
           border: Border.all(color: theme.colorScheme.outlineVariant),
         ),
         child: Column(

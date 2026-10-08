@@ -49,7 +49,6 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                     textStyle: TextStyle(
                       color: theme.colorScheme.primary,
                       fontWeight: FontWeight.bold,
-                      fontSize: 12,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -70,7 +69,6 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                           user?.email ?? '',
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
-                            fontSize: 10,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

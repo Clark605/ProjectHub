@@ -48,6 +48,17 @@ class AppColors {
   static const Color onError = Color(0xFF690005);
   static const Color info = Color(0xFF89CEFF); // Sky
 
+  // ── Neutral Foundations ──
+  static const Color pureWhite = Color(0xFFFFFFFF);
+  static const Color pureBlack = Color(0xFF000000);
+
+  // ── Illustration & Gradient Accents ──
+  static const Color violetGradientEnd = Color(0xFF9E77ED);
+  static const Color indigoDeep = Color(0xFF3730A3);
+  static const Color greenEmeraldSubtleDark = Color(0xFF132E22);
+  static const Color greenEmeraldSubtleLight = Color(0xFFEBFDF2);
+  static const Color skyBlueDeep = Color(0xFF0284C7);
+
   // ── Text ──
   static const Color textPrimary = Color(0xFFE4E1ED); // Soft high-contrast text
   static const Color textSecondary = Color(0xFF908FA0); // Muted slate / outline

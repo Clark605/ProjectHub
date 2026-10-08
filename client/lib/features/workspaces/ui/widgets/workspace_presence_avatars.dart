@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'dart:async';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:flutter/material.dart';
@@ -156,7 +157,6 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
               child: Text(
                 '+$overflowCount',
                 style: TextStyle(
-                  fontSize: 10,
                   fontWeight: FontWeight.w700,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -178,7 +178,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
     return Tooltip(
       message: '${_onlineUserIds.length} online member(s)',
       child: InkWell(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: AppRadius.r20,
         onTap: () {
           WorkspacePresenceSheet.show(
             context,
@@ -193,7 +193,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
             color: theme.colorScheme.surfaceContainerHigh.withValues(
               alpha: 0.6,
             ),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: AppRadius.r20,
             border: Border.all(
               color: AppColors.success.withValues(alpha: 0.35),
               width: 1,

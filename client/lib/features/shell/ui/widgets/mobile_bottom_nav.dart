@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/workspace_accent.dart';
@@ -82,7 +83,7 @@ class _BottomNavItem extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: AppRadius.r10,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Column(
@@ -98,7 +99,6 @@ class _BottomNavItem extends StatelessWidget {
               label,
               style: TextStyle(
                 color: isSelected ? activeColor : inactiveColor,
-                fontSize: 11,
                 fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),
             ),

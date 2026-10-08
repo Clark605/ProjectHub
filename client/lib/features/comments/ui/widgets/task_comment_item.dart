@@ -49,7 +49,6 @@ class TaskCommentItem extends StatelessWidget {
                     Text(
                       comment.authorName,
                       style: TextStyle(
-                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,
                       ),
@@ -58,7 +57,6 @@ class TaskCommentItem extends StatelessWidget {
                     Text(
                       timeStr,
                       style: TextStyle(
-                        fontSize: 11,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
@@ -81,7 +79,6 @@ class TaskCommentItem extends StatelessWidget {
                 Text(
                   comment.content,
                   style: TextStyle(
-                    fontSize: 13,
                     color: theme.colorScheme.onSurface,
                     height: 1.35,
                   ),

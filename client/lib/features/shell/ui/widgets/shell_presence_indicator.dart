@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -16,7 +17,7 @@ class ShellPresenceIndicator extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: AppRadius.r20,
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
         ),
@@ -43,7 +44,6 @@ class ShellPresenceIndicator extends StatelessWidget {
             l10n.onlineCount(3),
             style: TextStyle(
               color: theme.colorScheme.onSurfaceVariant,
-              fontSize: 11,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -70,11 +70,7 @@ class ShellPresenceIndicator extends StatelessWidget {
       child: Center(
         child: Text(
           text,
-          style: TextStyle(
-            color: color,
-            fontWeight: FontWeight.bold,
-            fontSize: 9,
-          ),
+          style: TextStyle(color: color, fontWeight: FontWeight.bold),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -31,7 +32,7 @@ class OnboardingTopBar extends StatelessWidget {
                 height: 32,
                 decoration: BoxDecoration(
                   color: AppColors.electricViolet.withValues(alpha: 0.18),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: AppRadius.r10,
                   border: Border.all(
                     color: AppColors.electricViolet.withValues(alpha: 0.35),
                   ),
@@ -70,16 +71,13 @@ class OnboardingTopBar extends StatelessWidget {
                     horizontal: 14,
                     vertical: 8,
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: AppRadius.r12,
                   ),
                 ),
                 child: Text(
                   l10n.skip,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
               ),
             ),

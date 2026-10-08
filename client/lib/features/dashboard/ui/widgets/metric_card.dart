@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 class MetricData {
@@ -30,12 +31,12 @@ class MetricCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: AppRadius.r14,
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.8),
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: AppRadius.r14,
             border: Border.all(
               color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
               width: 1,
@@ -52,7 +53,7 @@ class MetricCard extends StatelessWidget {
                     height: 32,
                     decoration: BoxDecoration(
                       color: data.color.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: AppRadius.r8,
                     ),
                     child: Icon(data.icon, color: data.color, size: 18),
                   ),

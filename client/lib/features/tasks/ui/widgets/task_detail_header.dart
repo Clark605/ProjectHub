@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -34,12 +35,12 @@ class TaskDetailHeader extends StatelessWidget {
       children: [
         InkWell(
           onTap: isArchived ? null : onOpenStatusMove,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppRadius.r12,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
               color: task.statusEnum.toColor().withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               border: Border.all(
                 color: task.statusEnum.toColor().withValues(alpha: 0.4),
               ),
@@ -56,7 +57,6 @@ class TaskDetailHeader extends StatelessWidget {
                 Text(
                   task.statusEnum.localizedName(l10n),
                   style: TextStyle(
-                    fontSize: 12,
                     fontWeight: FontWeight.w700,
                     color: task.statusEnum.toColor(),
                   ),
@@ -78,7 +78,7 @@ class TaskDetailHeader extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
           decoration: BoxDecoration(
             color: task.priorityEnum.toColor().withValues(alpha: 0.15),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppRadius.r12,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -92,7 +92,6 @@ class TaskDetailHeader extends StatelessWidget {
               Text(
                 task.priorityEnum.localizedName(l10n),
                 style: TextStyle(
-                  fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: task.priorityEnum.toColor(),
                 ),

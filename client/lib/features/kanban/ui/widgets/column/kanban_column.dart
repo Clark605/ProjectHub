@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -83,7 +84,7 @@ class KanbanColumn extends StatelessWidget {
         color: isDark
             ? theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.5)
             : theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadius.r16,
         border: Border.all(
           color: columnAccent != null
               ? columnAccent.withValues(alpha: isDark ? 0.35 : 0.25)
@@ -100,7 +101,7 @@ class KanbanColumn extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: columnAccent.withValues(alpha: 0.8),
-                borderRadius: BorderRadius.circular(1.25),
+                borderRadius: const BorderRadius.all(Radius.circular(1.25)),
               ),
             ),
           if (showHeader)
@@ -119,7 +120,7 @@ class KanbanColumn extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: AppRadius.r12,
                         onTap: isArchived
                             ? null
                             : () => _handleAddTask(context),
@@ -129,7 +130,7 @@ class KanbanColumn extends StatelessWidget {
                             vertical: 20,
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: AppRadius.r12,
                             border: Border.all(
                               color: theme.colorScheme.outlineVariant
                                   .withValues(alpha: 0.5),
@@ -153,7 +154,6 @@ class KanbanColumn extends StatelessWidget {
                                     : l10n.addTaskToStatus(statusName),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontSize: 12,
                                   color: AppColors.textSecondaryColor(isDark),
                                 ),
                               ),

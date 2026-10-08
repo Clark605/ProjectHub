@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -70,9 +71,8 @@ class WorkspaceAvatarItem extends StatelessWidget {
           backgroundColor: _getBackgroundColor(context),
           child: Text(
             _initials,
-            style: TextStyle(
-              fontSize: radius * 0.75,
-              fontWeight: FontWeight.w700,
+            style: AppTypography.avatarStyle(
+              size: radius * 2,
               color: _getTextColor(context),
             ),
           ),

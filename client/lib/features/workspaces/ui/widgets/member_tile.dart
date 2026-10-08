@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -74,7 +75,6 @@ class MemberTile extends StatelessWidget {
             : theme.colorScheme.surfaceContainerHigh,
         textStyle: TextStyle(
           fontWeight: FontWeight.w700,
-          fontSize: 13,
           color: isOwner ? primaryColor : theme.colorScheme.onSurface,
         ),
       ),
@@ -82,7 +82,6 @@ class MemberTile extends StatelessWidget {
         member.name,
         style: TextStyle(
           fontWeight: FontWeight.w600,
-          fontSize: 14,
           color: theme.colorScheme.onSurface,
         ),
         maxLines: 1,
@@ -90,10 +89,7 @@ class MemberTile extends StatelessWidget {
       ),
       subtitle: Text(
         member.email,
-        style: TextStyle(
-          color: theme.colorScheme.onSurfaceVariant,
-          fontSize: 12,
-        ),
+        style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -106,7 +102,7 @@ class MemberTile extends StatelessWidget {
               color: isOwner
                   ? primaryColor.withValues(alpha: 0.15)
                   : theme.colorScheme.surfaceContainerHigh,
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: AppRadius.r6,
               border: Border.all(
                 color: isOwner
                     ? primaryColor.withValues(alpha: 0.3)
@@ -116,7 +112,6 @@ class MemberTile extends StatelessWidget {
             child: Text(
               isOwner ? l10n.roleOwner : l10n.roleMember,
               style: TextStyle(
-                fontSize: 11,
                 fontWeight: FontWeight.w700,
                 color: isOwner
                     ? primaryColor

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/workspace_accent.dart';
@@ -31,7 +32,7 @@ class WorkspaceCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.r12,
         child: Container(
           constraints: const BoxConstraints(minHeight: 56),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -39,7 +40,7 @@ class WorkspaceCard extends StatelessWidget {
             color: isActive
                 ? accentColor.withValues(alpha: 0.1)
                 : theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppRadius.r12,
             border: Border.all(
               color: isActive
                   ? accentColor.withValues(alpha: 0.6)
@@ -116,7 +117,7 @@ class WorkspaceCard extends StatelessWidget {
                   color: isOwner
                       ? theme.colorScheme.primary.withValues(alpha: 0.15)
                       : theme.colorScheme.secondary.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: AppRadius.r6,
                   border: Border.all(
                     color: isOwner
                         ? theme.colorScheme.primary.withValues(alpha: 0.3)
@@ -130,7 +131,6 @@ class WorkspaceCard extends StatelessWidget {
                     color: isOwner
                         ? theme.colorScheme.primary
                         : theme.colorScheme.secondary,
-                    fontSize: 11,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.3,
                   ),

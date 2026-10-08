@@ -51,7 +51,7 @@ class VoiceTaskFab extends StatelessWidget {
           onTap: onPressed,
           child: Icon(
             isListening ? Icons.stop_rounded : Icons.mic_rounded,
-            color: Colors.white,
+            color: AppColors.pureWhite,
             size: 24,
           ),
         ),

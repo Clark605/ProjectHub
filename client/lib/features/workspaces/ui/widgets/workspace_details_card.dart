@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -67,7 +68,7 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerLow,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppRadius.r16,
             border: Border.all(color: theme.colorScheme.outlineVariant),
           ),
           child: Form(

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -100,13 +101,13 @@ class Sidebar extends StatelessWidget {
                 Container(
                   width: 32,
                   height: 32,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
                       colors: [AppColors.electricViolet, AppColors.skyBlue],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: AppRadius.r8,
                   ),
                   child: const Center(
                     child: Icon(
@@ -142,7 +143,7 @@ class Sidebar extends StatelessWidget {
                   color: theme.colorScheme.surfaceContainerHigh.withValues(
                     alpha: 0.45,
                   ),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: AppRadius.r8,
                   border: BorderDirectional(
                     start: BorderSide(
                       color: WorkspaceAccent.fromId(

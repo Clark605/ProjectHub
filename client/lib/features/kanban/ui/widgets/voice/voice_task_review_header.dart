@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -25,7 +26,7 @@ class VoiceTaskReviewHeader extends StatelessWidget {
             color: AppColors.electricVioletContainer.withValues(
               alpha: isDark ? 0.2 : 0.12,
             ),
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppRadius.r16,
             border: Border.all(
               color: isDark
                   ? AppColors.electricVioletContainer
@@ -40,7 +41,6 @@ class VoiceTaskReviewHeader extends StatelessWidget {
               Text(
                 l10n.voiceTaskAiDraftPreview,
                 style: TextStyle(
-                  fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: badgeColor,
                 ),

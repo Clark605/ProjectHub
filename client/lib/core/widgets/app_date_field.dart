@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 
@@ -58,14 +59,14 @@ class AppDateField extends StatelessWidget {
         ],
         InkWell(
           onTap: () => _selectDate(context),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: AppRadius.r8,
           child: Container(
             width: double.infinity,
             height: 51,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.border),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppRadius.r8,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,

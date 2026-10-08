@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/widgets/app_button.dart';
@@ -99,11 +100,11 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
               filled: true,
               fillColor: theme.colorScheme.surfaceContainer,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppRadius.r12,
                 borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppRadius.r12,
                 borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
             ),
@@ -121,11 +122,11 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
               filled: true,
               fillColor: theme.colorScheme.surfaceContainer,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppRadius.r12,
                 borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppRadius.r12,
                 borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
             ),

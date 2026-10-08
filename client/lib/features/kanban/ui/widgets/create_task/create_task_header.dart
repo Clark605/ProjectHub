@@ -1,3 +1,5 @@
+import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/tasks/data/models/task_status.dart';
@@ -24,8 +26,10 @@ class CreateTaskHeader extends StatelessWidget {
             width: 36,
             height: 4,
             decoration: BoxDecoration(
-              color: isDark ? Colors.white24 : Colors.black26,
-              borderRadius: BorderRadius.circular(2),
+              color: isDark
+                  ? AppColors.pureWhite.withValues(alpha: 0.24)
+                  : AppColors.pureBlack.withValues(alpha: 0.26),
+              borderRadius: AppRadius.r2,
             ),
           ),
         ),
@@ -43,12 +47,11 @@ class CreateTaskHeader extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: selectedStatus.toColor().withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppRadius.r12,
               ),
               child: Text(
                 selectedStatus.localizedName(l10n),
                 style: TextStyle(
-                  fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: selectedStatus.toColor(),
                 ),

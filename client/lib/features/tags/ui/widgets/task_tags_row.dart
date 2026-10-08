@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -44,7 +45,7 @@ class TaskTagsRow extends StatelessWidget {
         ),
         if (canEdit && tags.length < 5 && onTagAdded != null)
           InkWell(
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: AppRadius.r6,
             onTap: () => AttachTagModal.show(
               context,
               projectId: projectId,
@@ -54,7 +55,7 @@ class TaskTagsRow extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: AppRadius.r6,
                 border: Border.all(
                   color: AppColors.textSecondary.withValues(alpha: 0.4),
                   style: BorderStyle.solid,
@@ -72,7 +73,6 @@ class TaskTagsRow extends StatelessWidget {
                   Text(
                     l10n.tagLabel,
                     style: const TextStyle(
-                      fontSize: 11,
                       color: AppColors.textSecondary,
                       fontWeight: FontWeight.w500,
                     ),

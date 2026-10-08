@@ -38,7 +38,6 @@ class KanbanAssigneeFilterMenu extends StatelessWidget {
         label: Text(
           _resolveAssigneeLabel(selectedAssignee, l10n),
           style: TextStyle(
-            fontSize: 12,
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
           ),
         ),

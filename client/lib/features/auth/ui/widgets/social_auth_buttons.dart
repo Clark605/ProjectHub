@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -22,7 +23,7 @@ class SocialAuthSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     final borderColor = isDark
-        ? Colors.white.withValues(alpha: 0.1)
+        ? AppColors.pureWhite.withValues(alpha: 0.1)
         : AppColors.lightBorder;
     final textSecondary = isDark
         ? AppColors.textSecondary
@@ -40,7 +41,6 @@ class SocialAuthSection extends StatelessWidget {
                 style: theme.textTheme.labelMedium?.copyWith(
                   color: textSecondary,
                   fontWeight: FontWeight.w600,
-                  fontSize: 12.5,
                 ),
               ),
             ),
@@ -97,7 +97,7 @@ class _SocialButton extends StatelessWidget {
         ? AppColors.surfaceContainerHigh
         : AppColors.lightSurface;
     final borderColor = isDark
-        ? Colors.white.withValues(alpha: 0.12)
+        ? AppColors.pureWhite.withValues(alpha: 0.12)
         : AppColors.lightBorder;
     final textColor = isDark
         ? AppColors.textPrimary
@@ -107,16 +107,18 @@ class _SocialButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onPressed,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: AppRadius.r14,
         child: Container(
           height: 48,
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: AppRadius.r14,
             border: Border.all(color: borderColor, width: 1.1),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
+                color: AppColors.pureBlack.withValues(
+                  alpha: isDark ? 0.2 : 0.04,
+                ),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -131,7 +133,6 @@ class _SocialButton extends StatelessWidget {
                 label,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w700,
-                  fontSize: 14,
                   color: textColor,
                 ),
               ),

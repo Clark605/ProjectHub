@@ -46,7 +46,6 @@ class ActivityTile extends StatelessWidget {
           timeStr,
           style: theme.textTheme.labelSmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
-            fontSize: 11,
           ),
         ),
       ],

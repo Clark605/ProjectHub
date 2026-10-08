@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/tasks/data/models/task_priority.dart';
@@ -39,12 +40,12 @@ class TaskPrioritySelector extends StatelessWidget {
               avatar: Icon(
                 priority.toIcon(),
                 size: 16,
-                color: isSelected ? Colors.white : priority.toColor(),
+                color: isSelected ? AppColors.pureWhite : priority.toColor(),
               ),
               label: Text(priority.localizedName(l10n)),
               selectedColor: priority.toColor(),
               labelStyle: TextStyle(
-                color: isSelected ? Colors.white : null,
+                color: isSelected ? AppColors.pureWhite : null,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
               onSelected: (selected) {

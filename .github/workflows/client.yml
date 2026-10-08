@@ -34,6 +34,10 @@ jobs:
         working-directory: client
         run: flutter analyze
 
+      - name: Verify design tokens
+        working-directory: client
+        run: bash tool/check_design_tokens.sh
+
       - name: Run tests with code coverage
         working-directory: client
         run: flutter test --coverage

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 
@@ -25,7 +26,7 @@ class VisualCanvasCard extends StatelessWidget {
       height: height,
       constraints: const BoxConstraints(maxWidth: 440),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: AppRadius.r28,
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -38,7 +39,7 @@ class VisualCanvasCard extends StatelessWidget {
         ),
         border: Border.all(
           color: isDark
-              ? Colors.white.withValues(alpha: 0.12)
+              ? AppColors.pureWhite.withValues(alpha: 0.12)
               : AppColors.lightBorder,
           width: 1.2,
         ),
@@ -46,7 +47,7 @@ class VisualCanvasCard extends StatelessWidget {
           BoxShadow(
             color: isDark
                 ? primaryGlow.withValues(alpha: 0.08)
-                : Colors.black.withValues(alpha: 0.04),
+                : AppColors.pureBlack.withValues(alpha: 0.04),
             blurRadius: 32,
             offset: const Offset(0, 16),
             spreadRadius: -4,
@@ -54,7 +55,7 @@ class VisualCanvasCard extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(27),
+        borderRadius: AppRadius.r28,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -62,8 +63,8 @@ class VisualCanvasCard extends StatelessWidget {
             CustomPaint(
               painter: _GridBackgroundPainter(
                 gridColor: isDark
-                    ? Colors.white.withValues(alpha: 0.035)
-                    : Colors.black.withValues(alpha: 0.03),
+                    ? AppColors.pureWhite.withValues(alpha: 0.035)
+                    : AppColors.pureBlack.withValues(alpha: 0.03),
               ),
             ),
 

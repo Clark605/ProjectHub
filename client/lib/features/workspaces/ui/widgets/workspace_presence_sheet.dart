@@ -89,10 +89,7 @@ class WorkspacePresenceSheet extends StatelessWidget {
                         userId: userId,
                         name: name,
                         size: 28,
-                        textStyle: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        textStyle: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       Positioned(
                         right: -1,

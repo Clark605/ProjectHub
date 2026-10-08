@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -99,11 +100,11 @@ class KanbanTaskCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.r12,
         border: Border.all(color: theme.colorScheme.outlineVariant, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
+            color: AppColors.pureBlack.withValues(alpha: isDark ? 0.2 : 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -112,11 +113,11 @@ class KanbanTaskCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppRadius.r12,
           onTap: () => _handleTap(context),
           onLongPress: isArchived ? null : () => _handleMove(context),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppRadius.r12,
             child: Stack(
               children: [
                 Positioned(

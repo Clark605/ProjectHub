@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -101,7 +102,7 @@ class _ViewState extends State<_View> {
                   ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: AppRadius.r8,
                     border: Border.all(
                       color: theme.colorScheme.primary.withValues(alpha: 0.3),
                     ),
@@ -109,7 +110,6 @@ class _ViewState extends State<_View> {
                   child: Text(
                     active.name,
                     style: TextStyle(
-                      fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: theme.colorScheme.primary,
                     ),

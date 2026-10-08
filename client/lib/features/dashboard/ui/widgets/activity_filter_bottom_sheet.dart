@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/dialog/dialog.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -183,9 +184,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   horizontal: 16,
                   vertical: 14,
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                border: const OutlineInputBorder(borderRadius: AppRadius.r12),
               ),
               onChanged: (_) => setState(() {}),
             ),
@@ -218,7 +217,6 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   labelStyle: TextStyle(
                     color: isSelected ? selectedTextColor : unselectedTextColor,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                    fontSize: 13,
                   ),
                   onSelected: (selected) {
                     if (selected) {
@@ -264,7 +262,6 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                       fontWeight: _selectedProjectId == null
                           ? FontWeight.w600
                           : FontWeight.w500,
-                      fontSize: 13,
                     ),
                     onSelected: (selected) {
                       if (selected) {
@@ -295,7 +292,6 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                         fontWeight: isSelected
                             ? FontWeight.w600
                             : FontWeight.w500,
-                        fontSize: 13,
                       ),
                       onSelected: (selected) {
                         setState(() {
@@ -343,7 +339,6 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                         _selectedSortOrder == ActivitySortOrder.newestFirst
                         ? FontWeight.w600
                         : FontWeight.w500,
-                    fontSize: 13,
                   ),
                   onSelected: (selected) {
                     if (selected) {
@@ -375,7 +370,6 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                         _selectedSortOrder == ActivitySortOrder.oldestFirst
                         ? FontWeight.w600
                         : FontWeight.w500,
-                    fontSize: 13,
                   ),
                   onSelected: (selected) {
                     if (selected) {
@@ -401,9 +395,9 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                       : AppColors.primaryContainer,
                   foregroundColor: isDark
                       ? AppColors.textOnPrimary
-                      : Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                      : AppColors.pureWhite,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: AppRadius.r12,
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
@@ -411,8 +405,9 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   l10n.applyFilters,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: isDark ? AppColors.textOnPrimary : Colors.white,
+                    color: isDark
+                        ? AppColors.textOnPrimary
+                        : AppColors.pureWhite,
                   ),
                 ),
               ),

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -39,34 +40,26 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadius.r16,
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
         ),
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Bone.text(words: 2, fontSize: 18),
-          const SizedBox(height: 16),
-          Bone(
-            width: double.infinity,
-            height: 48,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          const SizedBox(height: 16),
-          Bone(
-            width: double.infinity,
-            height: 80,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          const SizedBox(height: 20),
+          Bone.text(words: 2),
+          SizedBox(height: 16),
+          Bone(width: double.infinity, height: 48, borderRadius: AppRadius.r12),
+          SizedBox(height: 16),
+          Bone(width: double.infinity, height: 80, borderRadius: AppRadius.r12),
+          SizedBox(height: 20),
           Align(
             alignment: Alignment.centerRight,
             child: Bone.button(
               width: 120,
               height: 40,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppRadius.r8,
             ),
           ),
         ],
@@ -78,7 +71,7 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadius.r16,
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
         ),
@@ -86,23 +79,15 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
+          const Padding(
+            padding: EdgeInsets.all(20),
             child: Row(
               children: [
-                const Bone.text(words: 2, fontSize: 16),
-                const SizedBox(width: 8),
-                Bone(
-                  width: 60,
-                  height: 20,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                const Spacer(),
-                Bone(
-                  width: 100,
-                  height: 32,
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                Bone.text(words: 2),
+                SizedBox(width: 8),
+                Bone(width: 60, height: 20, borderRadius: AppRadius.r10),
+                Spacer(),
+                Bone(width: 100, height: 32, borderRadius: AppRadius.r8),
               ],
             ),
           ),
@@ -111,31 +96,24 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
             3,
             (index) => Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 12,
-                  ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   child: Row(
                     children: [
-                      const Bone.circle(size: 40),
-                      const SizedBox(width: 16),
-                      const Expanded(
+                      Bone.circle(size: 40),
+                      SizedBox(width: 16),
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Bone.text(words: 2, fontSize: 14),
+                            Bone.text(words: 2),
                             SizedBox(height: 4),
-                            Bone.text(words: 3, fontSize: 12),
+                            Bone.text(words: 3),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Bone(
-                        width: 50,
-                        height: 24,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
+                      SizedBox(width: 16),
+                      Bone(width: 50, height: 24, borderRadius: AppRadius.r6),
                     ],
                   ),
                 ),
@@ -154,22 +132,22 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppRadius.r16,
         border: Border.all(color: AppColors.error.withValues(alpha: 0.4)),
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Bone.text(words: 2, fontSize: 16),
-          const SizedBox(height: 8),
-          const Bone.text(words: 10, fontSize: 13),
-          const SizedBox(height: 16),
+          Bone.text(words: 2),
+          SizedBox(height: 8),
+          Bone.text(words: 10),
+          SizedBox(height: 16),
           Align(
             alignment: Alignment.centerRight,
             child: Bone.button(
               width: 140,
               height: 38,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppRadius.r8,
             ),
           ),
         ],

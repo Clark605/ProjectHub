@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +24,7 @@ class WorkspaceMembersCard extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerLow,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: AppRadius.r16,
             border: Border.all(color: theme.colorScheme.outlineVariant),
           ),
           child: Column(
@@ -42,12 +43,11 @@ class WorkspaceMembersCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceContainerHigh,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: AppRadius.r12,
                       ),
                       child: Text(
                         l10n.membersCount(state.members.length),
                         style: TextStyle(
-                          fontSize: 11,
                           fontWeight: FontWeight.w600,
                           color: theme.colorScheme.onSurfaceVariant,
                         ),

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -56,7 +57,7 @@ class OnboardingPageItem extends StatelessWidget {
                   color: isDark
                       ? AppColors.electricViolet.withValues(alpha: 0.12)
                       : AppColors.electricViolet.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: AppRadius.r20,
                   border: Border.all(
                     color: AppColors.electricViolet.withValues(
                       alpha: isDark ? 0.35 : 0.45,
@@ -81,10 +82,9 @@ class OnboardingPageItem extends StatelessWidget {
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: isDark
                             ? AppColors.electricViolet
-                            : const Color(0xFF3730A3),
+                            : AppColors.indigoDeep,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0.8,
-                        fontSize: 10.5,
                       ),
                     ),
                   ],
@@ -125,7 +125,6 @@ class OnboardingPageItem extends StatelessWidget {
                         ? AppColors.textSecondary
                         : AppColors.lightTextSecondary,
                     height: 1.45,
-                    fontSize: 14.5,
                   ),
                 ),
               )

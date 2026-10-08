@@ -130,9 +130,10 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                           : FontWeight.w500,
                       color: isSelected
                           ? (accentColor ??
-                                (isDark ? Colors.white : Colors.black))
+                                (isDark
+                                    ? AppColors.pureWhite
+                                    : AppColors.pureBlack))
                           : AppColors.textSecondaryColor(isDark),
-                      fontSize: 12,
                     ),
                     onSelected: (_) async {
                       if (_currentColumnIndex == idx) return;

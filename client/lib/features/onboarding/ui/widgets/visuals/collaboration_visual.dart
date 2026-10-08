@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -37,9 +38,9 @@ class _CollaborationVisualState extends State<CollaborationVisual>
 
     final cardBg = isDark
         ? AppColors.surfaceContainerHigh.withValues(alpha: 0.9)
-        : Colors.white;
+        : AppColors.pureWhite;
     final cardBorder = isDark
-        ? Colors.white.withValues(alpha: 0.1)
+        ? AppColors.pureWhite.withValues(alpha: 0.1)
         : AppColors.lightBorder;
 
     return VisualCanvasCard(
@@ -76,7 +77,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                     color: isDark
                         ? AppColors.surfaceContainerLow.withValues(alpha: 0.85)
                         : AppColors.lightSurfaceContainer,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: AppRadius.r16,
                     border: Border.all(color: cardBorder),
                   ),
                   child: Row(
@@ -104,7 +105,6 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                         '5 Team Members Online',
                         style: theme.textTheme.labelSmall?.copyWith(
                           fontWeight: FontWeight.w700,
-                          fontSize: 11,
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -131,7 +131,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                   ),
                   decoration: BoxDecoration(
                     color: cardBg,
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: AppRadius.r18,
                     border: Border.all(
                       color: isDark
                           ? AppColors.skyBlue.withValues(alpha: 0.25)
@@ -158,7 +158,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               color: AppColors.skyBlue.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: AppRadius.r8,
                             ),
                             child: const Icon(
                               Icons.chat_bubble_outline_rounded,
@@ -175,7 +175,6 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                                   'Sprint Planning Thread',
                                   style: theme.textTheme.labelMedium?.copyWith(
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 12,
                                   ),
                                 ),
                                 Text(
@@ -184,7 +183,6 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                                     color: isDark
                                         ? AppColors.textSecondary
                                         : AppColors.lightTextSecondary,
-                                    fontSize: 10,
                                   ),
                                 ),
                               ],
@@ -199,7 +197,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                           color: isDark
                               ? AppColors.surfaceContainer
                               : AppColors.lightSurfaceContainer,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: AppRadius.r12,
                         ),
                         child: Row(
                           children: [
@@ -214,7 +212,6 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                                 '"PR #104 merged! All tests passed 🚀"',
                                 style: theme.textTheme.labelSmall?.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 11,
                                 ),
                               ),
                             ),
@@ -291,8 +288,8 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                   decoration: BoxDecoration(
                     color: isDark
                         ? AppColors.surfaceContainerLow.withValues(alpha: 0.9)
-                        : Colors.white,
-                    borderRadius: BorderRadius.circular(14),
+                        : AppColors.pureWhite,
+                    borderRadius: AppRadius.r14,
                     border: Border.all(
                       color: AppColors.success.withValues(alpha: 0.3),
                     ),
@@ -330,7 +327,6 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                         style: theme.textTheme.labelSmall?.copyWith(
                           color: AppColors.success,
                           fontWeight: FontWeight.w700,
-                          fontSize: 10.5,
                         ),
                       ),
                     ],
@@ -352,15 +348,14 @@ class _CollaborationVisualState extends State<CollaborationVisual>
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color,
-        border: Border.all(color: Colors.white, width: 1),
+        border: Border.all(color: AppColors.pureWhite, width: 1),
       ),
       child: Center(
         child: Text(
           initials,
           style: const TextStyle(
-            fontSize: 8,
             fontWeight: FontWeight.w800,
-            color: Colors.white,
+            color: AppColors.pureWhite,
           ),
         ),
       ),
@@ -390,7 +385,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
               decoration: BoxDecoration(
                 color: color,
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: AppRadius.r6,
                 boxShadow: [
                   BoxShadow(
                     color: color.withValues(alpha: 0.35),
@@ -402,9 +397,8 @@ class _CollaborationVisualState extends State<CollaborationVisual>
               child: Text(
                 name,
                 style: const TextStyle(
-                  color: Color(0xFF0D0096),
+                  color: AppColors.onElectricVioletContainer,
                   fontWeight: FontWeight.w800,
-                  fontSize: 8.5,
                 ),
               ),
             ),
@@ -416,10 +410,13 @@ class _CollaborationVisualState extends State<CollaborationVisual>
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.9),
-                borderRadius: BorderRadius.circular(6),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black12, blurRadius: 4),
+                color: AppColors.pureWhite.withValues(alpha: 0.9),
+                borderRadius: AppRadius.r6,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.pureBlack.withValues(alpha: 0.12),
+                    blurRadius: 4,
+                  ),
                 ],
               ),
               child: Row(
@@ -478,7 +475,7 @@ class _CursorPointerPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final borderPaint = Paint()
-      ..color = Colors.white
+      ..color = AppColors.pureWhite
       ..strokeWidth = 1.0
       ..style = PaintingStyle.stroke;
 

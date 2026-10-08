@@ -1,3 +1,4 @@
+import 'package:client/core/theme/breakpoints.dart';
 import 'package:flutter/material.dart';
 
 class ResponsiveLayout extends StatelessWidget {
@@ -12,8 +13,8 @@ class ResponsiveLayout extends StatelessWidget {
   final Widget desktop;
   final Widget? tablet;
 
-  static const double mobileBreakpoint = 768;
-  static const double desktopBreakpoint = 1200;
+  static const double mobileBreakpoint = Breakpoints.mobile;
+  static const double desktopBreakpoint = Breakpoints.desktop;
 
   static bool isMobile(BuildContext context) =>
       MediaQuery.sizeOf(context).width < mobileBreakpoint;

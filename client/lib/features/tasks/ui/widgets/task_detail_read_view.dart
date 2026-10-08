@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -166,12 +167,11 @@ class TaskDetailReadView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: AppColors.error.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: AppRadius.r6,
       ),
       child: Text(
         l10n.taskOverdue,
         style: const TextStyle(
-          fontSize: 11,
           fontWeight: FontWeight.w700,
           color: AppColors.error,
         ),

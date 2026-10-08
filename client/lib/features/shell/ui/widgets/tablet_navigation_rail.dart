@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -34,13 +35,13 @@ class TabletNavigationRail extends StatelessWidget {
           Container(
             width: 36,
             height: 36,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
                 colors: [AppColors.electricViolet, AppColors.skyBlue],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: AppRadius.r10,
             ),
             child: const Center(
               child: Icon(
@@ -97,7 +98,7 @@ class _RailItem extends StatelessWidget {
       preferBelow: false,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.r12,
         child: Container(
           width: 48,
           height: 48,
@@ -105,7 +106,7 @@ class _RailItem extends StatelessWidget {
             color: isSelected
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.15)
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppRadius.r12,
             border: isSelected
                 ? Border.all(
                     color: Theme.of(

@@ -131,12 +131,64 @@ class AppTypography {
       ),
     );
   }
+
+  /// Generates avatar initials text style sized proportionally to avatar diameter.
+  static TextStyle avatarStyle({required double size, Color? color}) =>
+      TextStyle(
+        fontSize: (size * 0.4).clamp(7.0, 36.0),
+        fontWeight: FontWeight.w700,
+        color: color,
+      );
+  // Static semantic styles for const contexts or standalone helpers
+  static const TextStyle nano = TextStyle(
+    fontSize: 7,
+    fontWeight: FontWeight.w700,
+  );
+  static const TextStyle tiny = TextStyle(
+    fontSize: 8,
+    fontWeight: FontWeight.w700,
+  );
+  static const TextStyle micro = TextStyle(
+    fontSize: 9,
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle badge = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle caption = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+  );
+  static const TextStyle chip = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
+  static const TextStyle subhead = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w500,
+  );
 }
 
 /// Semantic text extensions on [TextTheme] for consistent micro-copy and tags.
 extension AppTypographyX on TextTheme {
+  TextStyle get nano => (labelSmall ?? const TextStyle()).copyWith(
+    fontSize: 7,
+    fontWeight: FontWeight.w700,
+  );
+
   TextStyle get badge => (labelSmall ?? const TextStyle()).copyWith(
     fontSize: 10,
+    fontWeight: FontWeight.w600,
+  );
+
+  TextStyle get micro => (labelSmall ?? const TextStyle()).copyWith(
+    fontSize: 9,
+    fontWeight: FontWeight.w600,
+  );
+
+  TextStyle get tiny => (labelSmall ?? const TextStyle()).copyWith(
+    fontSize: 8,
     fontWeight: FontWeight.w600,
   );
 
@@ -147,6 +199,11 @@ extension AppTypographyX on TextTheme {
 
   TextStyle get chip => (labelMedium ?? const TextStyle()).copyWith(
     fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
+
+  TextStyle get subhead => (bodyMedium ?? const TextStyle()).copyWith(
+    fontSize: 13,
     fontWeight: FontWeight.w500,
   );
 }

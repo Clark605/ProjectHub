@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 
@@ -70,13 +71,7 @@ class AppAvatar extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         _initials,
-        style:
-            textStyle ??
-            TextStyle(
-              color: fg,
-              fontSize: size * 0.4,
-              fontWeight: FontWeight.w700,
-            ),
+        style: textStyle ?? AppTypography.avatarStyle(size: size, color: fg),
       ),
     );
   }

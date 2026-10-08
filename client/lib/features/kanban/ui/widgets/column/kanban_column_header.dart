@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -63,13 +64,14 @@ class KanbanColumnHeader extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: accent != null
                         ? accent!.withValues(alpha: 0.12)
-                        : (isDark ? Colors.white12 : Colors.black12),
-                    borderRadius: BorderRadius.circular(10),
+                        : (isDark
+                              ? AppColors.pureWhite.withValues(alpha: 0.12)
+                              : AppColors.pureBlack.withValues(alpha: 0.12)),
+                    borderRadius: AppRadius.r10,
                   ),
                   child: Text(
                     '$taskCount',
                     style: TextStyle(
-                      fontSize: 11,
                       fontWeight: FontWeight.w600,
                       color: accent ?? AppColors.textSecondaryColor(isDark),
                     ),

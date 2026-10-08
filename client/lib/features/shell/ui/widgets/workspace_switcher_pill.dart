@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:client/core/theme/workspace_accent.dart';
@@ -34,12 +35,12 @@ class WorkspaceSwitcherPill extends StatelessWidget {
 
     return InkWell(
       onTap: isLoading ? null : onWorkspaceTap,
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: AppRadius.r10,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.6),
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: AppRadius.r10,
           border: Border.all(
             color: theme.colorScheme.outlineVariant.withValues(alpha: 0.8),
           ),
@@ -98,13 +99,12 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: accentColor.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: AppRadius.r4,
                       ),
                       child: Text(
                         activeWorkspaceRole!,
                         style: TextStyle(
                           color: accentColor,
-                          fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

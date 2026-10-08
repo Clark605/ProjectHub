@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -26,7 +27,7 @@ class VersionInfoTile extends StatelessWidget {
                   height: 44,
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: AppRadius.r10,
                   ),
                   child: Center(
                     child: Icon(

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/dialog/app_bottom_sheet.dart';
@@ -78,7 +79,7 @@ class MoveToStatusSheet extends StatelessWidget {
             return Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppRadius.r12,
                 onTap: isCurrent ? null : () => onStatusSelected(status),
                 child: Container(
                   height: 52,
@@ -90,7 +91,7 @@ class MoveToStatusSheet extends StatelessWidget {
                         height: 36,
                         decoration: BoxDecoration(
                           color: status.toColor().withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: AppRadius.r8,
                         ),
                         child: Icon(
                           status.toIcon(),
@@ -120,12 +121,11 @@ class MoveToStatusSheet extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: status.toColor().withValues(alpha: 0.15),
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: AppRadius.r10,
                           ),
                           child: Text(
                             l10n.currentStatus,
                             style: TextStyle(
-                              fontSize: 11,
                               fontWeight: FontWeight.w600,
                               color: status.toColor(),
                             ),

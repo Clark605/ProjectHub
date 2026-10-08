@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/dashboard/ui/widgets/focus_task_tile.dart';
@@ -25,7 +26,7 @@ class SprintFocusCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: AppRadius.r18,
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
           width: 1,
@@ -47,7 +48,7 @@ class SprintFocusCard extends StatelessWidget {
                         color: theme.colorScheme.primary.withValues(
                           alpha: 0.15,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: AppRadius.r10,
                         border: Border.all(
                           color: theme.colorScheme.primary.withValues(
                             alpha: 0.3,

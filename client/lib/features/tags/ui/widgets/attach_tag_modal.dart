@@ -160,7 +160,6 @@ class _AttachTagModalState extends State<AttachTagModal> {
               Text(
                 l10n.attachTagMax,
                 style: TextStyle(
-                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.onSurface,
                 ),
@@ -182,10 +181,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
           ),
           if (_error != null) ...[
             const SizedBox(height: 8),
-            Text(
-              _error!,
-              style: const TextStyle(color: AppColors.error, fontSize: 12),
-            ),
+            Text(_error!, style: const TextStyle(color: AppColors.error)),
           ],
           const SizedBox(height: 14),
           AttachTagResults(

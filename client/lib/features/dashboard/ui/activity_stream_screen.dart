@@ -235,7 +235,6 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
             labelStyle: TextStyle(
               color: isSelected ? selectedTextColor : unselectedTextColor,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-              fontSize: 13,
             ),
             onSelected: (selected) {
               if (selected) {

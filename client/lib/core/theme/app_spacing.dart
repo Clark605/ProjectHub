@@ -18,10 +18,12 @@ class AppSpacing {
   static const SizedBox gapW4 = SizedBox(width: xs);
   static const SizedBox gapW6 = SizedBox(width: 6.0);
   static const SizedBox gapW8 = SizedBox(width: sm);
+  static const SizedBox gapW10 = SizedBox(width: 10.0);
   static const SizedBox gapW12 = SizedBox(width: md);
   static const SizedBox gapW16 = SizedBox(width: lg);
   static const SizedBox gapW20 = SizedBox(width: xl);
   static const SizedBox gapW24 = SizedBox(width: xxl);
+  static const SizedBox gapW32 = SizedBox(width: xxxl);
 
   static const SizedBox gapH2 = SizedBox(height: xxs);
   static const SizedBox gapH4 = SizedBox(height: xs);
@@ -33,12 +35,25 @@ class AppSpacing {
   static const SizedBox gapH18 = SizedBox(height: 18.0);
   static const SizedBox gapH20 = SizedBox(height: xl);
   static const SizedBox gapH24 = SizedBox(height: xxl);
+  static const SizedBox gapH28 = SizedBox(height: 28.0);
   static const SizedBox gapH32 = SizedBox(height: xxxl);
+  static const SizedBox gapH40 = SizedBox(height: 40.0);
+  static const SizedBox gapH48 = SizedBox(height: 48.0);
 
   // Common EdgeInsets
+  static const EdgeInsets edgeInsetsAll4 = EdgeInsets.all(xs);
   static const EdgeInsets edgeInsetsAll8 = EdgeInsets.all(sm);
   static const EdgeInsets edgeInsetsAll12 = EdgeInsets.all(md);
   static const EdgeInsets edgeInsetsAll16 = EdgeInsets.all(lg);
   static const EdgeInsets edgeInsetsAll20 = EdgeInsets.all(xl);
   static const EdgeInsets edgeInsetsAll24 = EdgeInsets.all(xxl);
+  static const EdgeInsets edgeInsetsAll32 = EdgeInsets.all(xxxl);
+
+  // Symmetric EdgeInsets
+  static const EdgeInsets edgeInsetsH16 = EdgeInsets.symmetric(horizontal: lg);
+  static const EdgeInsets edgeInsetsH20 = EdgeInsets.symmetric(horizontal: xl);
+  static const EdgeInsets edgeInsetsH24 = EdgeInsets.symmetric(horizontal: xxl);
+  static const EdgeInsets edgeInsetsV8 = EdgeInsets.symmetric(vertical: sm);
+  static const EdgeInsets edgeInsetsV12 = EdgeInsets.symmetric(vertical: md);
+  static const EdgeInsets edgeInsetsV16 = EdgeInsets.symmetric(vertical: lg);
 }

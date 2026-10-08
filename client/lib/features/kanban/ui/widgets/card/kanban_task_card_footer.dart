@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -50,7 +51,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                     color: priority!.toColor().withValues(
                       alpha: isDark ? 0.2 : 0.12,
                     ),
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: AppRadius.r6,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -64,7 +65,6 @@ class KanbanTaskCardFooter extends StatelessWidget {
                       Text(
                         priority!.localizedName(l10n),
                         style: TextStyle(
-                          fontSize: 10,
                           fontWeight: FontWeight.w600,
                           color: priority!.toColor(),
                         ),
@@ -82,9 +82,9 @@ class KanbanTaskCardFooter extends StatelessWidget {
                     color: isOverdue
                         ? AppColors.error.withValues(alpha: 0.15)
                         : (isDark
-                              ? Colors.white10
-                              : Colors.black.withValues(alpha: 0.05)),
-                    borderRadius: BorderRadius.circular(6),
+                              ? AppColors.pureWhite.withValues(alpha: 0.1)
+                              : AppColors.pureBlack.withValues(alpha: 0.05)),
+                    borderRadius: AppRadius.r6,
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -103,7 +103,6 @@ class KanbanTaskCardFooter extends StatelessWidget {
                           context: context,
                         ),
                         style: TextStyle(
-                          fontSize: 11,
                           fontWeight: isOverdue
                               ? FontWeight.w700
                               : FontWeight.w500,
@@ -128,7 +127,6 @@ class KanbanTaskCardFooter extends StatelessWidget {
                     Text(
                       '$commentCount',
                       style: TextStyle(
-                        fontSize: 11,
                         fontWeight: FontWeight.w500,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -162,8 +160,8 @@ class KanbanTaskCardFooter extends StatelessWidget {
       child: CircleAvatar(
         radius: 12,
         backgroundColor: isDark
-            ? Colors.white10
-            : Colors.black.withValues(alpha: 0.06),
+            ? AppColors.pureWhite.withValues(alpha: 0.1)
+            : AppColors.pureBlack.withValues(alpha: 0.06),
         child: Icon(
           Icons.person_outline_rounded,
           size: 13,

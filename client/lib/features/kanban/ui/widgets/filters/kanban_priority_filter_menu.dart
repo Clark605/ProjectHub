@@ -36,7 +36,6 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
               ? '${l10n.taskPriority}: $selectedPriority'
               : (l10n.taskPriority),
           style: TextStyle(
-            fontSize: 12,
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
           ),
         ),

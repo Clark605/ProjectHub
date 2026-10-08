@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -36,7 +37,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
                   child: Bone(
                     width: index == 0 ? 92 : 82,
                     height: 32,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: AppRadius.r20,
                   ),
                 );
               }),
@@ -68,7 +69,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerLow,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: AppRadius.r16,
                 border: Border.all(
                   color: Theme.of(context).colorScheme.outlineVariant,
                   width: 1,
@@ -97,15 +98,19 @@ class KanbanBoardSkeleton extends StatelessWidget {
   }
 
   Widget _buildColumnHeaderSkeleton(BuildContext context) {
-    return Row(
+    return const Row(
       children: [
-        const Bone.circle(size: 10),
-        const SizedBox(width: 8),
-        const Flexible(child: Bone.text(words: 2, fontSize: 14)),
-        const SizedBox(width: 8),
-        Bone(width: 24, height: 18, borderRadius: BorderRadius.circular(9)),
-        const Spacer(),
-        const Bone.icon(size: 18),
+        Bone.circle(size: 10),
+        SizedBox(width: 8),
+        Flexible(child: Bone.text(words: 2)),
+        SizedBox(width: 8),
+        Bone(
+          width: 24,
+          height: 18,
+          borderRadius: BorderRadius.all(Radius.circular(9)),
+        ),
+        Spacer(),
+        Bone.icon(size: 18),
       ],
     );
   }
@@ -116,14 +121,14 @@ class KanbanBoardSkeleton extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.r12,
         border: Border.all(color: theme.colorScheme.outlineVariant, width: 1),
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+      child: const ClipRRect(
+        borderRadius: AppRadius.r12,
         child: Stack(
           children: [
-            const Positioned(
+            Positioned(
               top: 0,
               bottom: 0,
               left: 0,
@@ -135,25 +140,21 @@ class KanbanBoardSkeleton extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 10, 10),
+              padding: EdgeInsets.fromLTRB(16, 10, 10, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: Bone.text(words: 3, fontSize: 14)),
+                      Expanded(child: Bone.text(words: 3)),
                       SizedBox(width: 8),
                       Bone.icon(size: 18),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Bone(
-                    width: 52,
-                    height: 18,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 8),
+                  Bone(width: 52, height: 18, borderRadius: AppRadius.r10),
+                  SizedBox(height: 12),
                   Row(
                     children: [
                       Expanded(
@@ -164,18 +165,18 @@ class KanbanBoardSkeleton extends StatelessWidget {
                             Bone(
                               width: 44,
                               height: 16,
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: AppRadius.r6,
                             ),
                             Bone(
                               width: 38,
                               height: 16,
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: AppRadius.r6,
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 6),
-                      const Bone.circle(size: 22),
+                      SizedBox(width: 6),
+                      Bone.circle(size: 22),
                     ],
                   ),
                 ],

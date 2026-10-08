@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -67,14 +68,13 @@ class ProjectsFilterBar extends StatelessWidget {
                   selectedColor: AppColors.electricVioletContainer,
                   labelStyle: TextStyle(
                     color: isSelected
-                        ? Colors.white
+                        ? AppColors.pureWhite
                         : theme.colorScheme.onSurfaceVariant,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                    fontSize: 13,
                   ),
                   backgroundColor: theme.colorScheme.surfaceContainerLow,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: AppRadius.r20,
                     side: BorderSide(
                       color: isSelected
                           ? AppColors.electricVioletContainer

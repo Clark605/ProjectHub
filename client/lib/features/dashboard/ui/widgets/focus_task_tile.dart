@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/tasks/data/models/task_dto.dart';
@@ -19,7 +20,7 @@ class FocusTaskTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: AppRadius.r10,
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
           width: 1,
@@ -53,7 +54,6 @@ class FocusTaskTile extends StatelessWidget {
                   task.projectName ?? 'Task #${task.id}',
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
-                    fontSize: 12,
                   ),
                 ),
               ],
@@ -64,14 +64,13 @@ class FocusTaskTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
               color: priorityColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: AppRadius.r6,
             ),
             child: Text(
               task.priorityEnum.localizedName(l10n),
               style: TextStyle(
                 color: priorityColor,
                 fontWeight: FontWeight.w700,
-                fontSize: 11,
               ),
             ),
           ),

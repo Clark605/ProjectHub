@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
@@ -48,7 +49,7 @@ class OnboardingBottomBar extends StatelessWidget {
                     height: 8,
                     width: isActive ? 30 : 8,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: AppRadius.r6,
                       gradient: isActive
                           ? const LinearGradient(
                               colors: [
@@ -60,7 +61,7 @@ class OnboardingBottomBar extends StatelessWidget {
                       color: isActive
                           ? null
                           : (isDark
-                                ? Colors.white.withValues(alpha: 0.18)
+                                ? AppColors.pureWhite.withValues(alpha: 0.18)
                                 : AppColors.lightBorder),
                       boxShadow: isActive
                           ? [
@@ -97,9 +98,12 @@ class OnboardingBottomBar extends StatelessWidget {
                     key: const ValueKey('get_started_btn'),
                     height: 52,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: AppRadius.r16,
                       gradient: const LinearGradient(
-                        colors: [AppColors.electricViolet, Color(0xFF9E77ED)],
+                        colors: [
+                          AppColors.electricViolet,
+                          AppColors.violetGradientEnd,
+                        ],
                       ),
                       boxShadow: [
                         BoxShadow(
@@ -115,7 +119,7 @@ class OnboardingBottomBar extends StatelessWidget {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: onGetStarted,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: AppRadius.r16,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 22),
                           child: Row(
@@ -124,7 +128,6 @@ class OnboardingBottomBar extends StatelessWidget {
                               Text(
                                 l10n.getStarted,
                                 style: const TextStyle(
-                                  fontSize: 15,
                                   fontWeight: FontWeight.w800,
                                   letterSpacing: 0.2,
                                   color: AppColors.textOnPrimary,
@@ -149,10 +152,10 @@ class OnboardingBottomBar extends StatelessWidget {
                       color: isDark
                           ? AppColors.surfaceContainerHigh
                           : AppColors.lightSurfaceContainer,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: AppRadius.r16,
                       border: Border.all(
                         color: isDark
-                            ? Colors.white.withValues(alpha: 0.12)
+                            ? AppColors.pureWhite.withValues(alpha: 0.12)
                             : AppColors.lightBorder,
                       ),
                     ),
@@ -160,7 +163,7 @@ class OnboardingBottomBar extends StatelessWidget {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: onNext,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: AppRadius.r16,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Row(
@@ -170,7 +173,6 @@ class OnboardingBottomBar extends StatelessWidget {
                                 l10n.next,
                                 style: theme.textTheme.labelLarge?.copyWith(
                                   fontWeight: FontWeight.w700,
-                                  fontSize: 14.5,
                                   color: isDark
                                       ? AppColors.textPrimary
                                       : AppColors.lightTextPrimary,

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -40,7 +41,7 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.r12,
       ),
       child: Row(
         children: [
@@ -49,16 +50,10 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
               controller: _controller,
               minLines: 1,
               maxLines: 3,
-              style: TextStyle(
-                fontSize: 13,
-                color: theme.colorScheme.onSurface,
-              ),
+              style: TextStyle(color: theme.colorScheme.onSurface),
               decoration: InputDecoration(
                 hintText: l10n.writeAComment,
-                hintStyle: TextStyle(
-                  fontSize: 13,
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+                hintStyle: TextStyle(color: theme.colorScheme.onSurfaceVariant),
               ),
               onSubmitted: (_) => _submit(),
             ),

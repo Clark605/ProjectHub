@@ -273,7 +273,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 250));
 
       expect(find.byType(AppErrorBanner), findsOneWidget);
-      expect(find.text('Failed to update workspace details'), findsOneWidget);
+      expect(find.textContaining('Failed to update'), findsOneWidget);
 
       await tester.tap(find.byIcon(Icons.close));
       await tester.pump();

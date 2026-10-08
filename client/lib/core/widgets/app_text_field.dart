@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 
@@ -138,31 +139,27 @@ class _AppTextFieldState extends State<AppTextField> {
                   )
                 : widget.suffixIcon,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               borderSide: BorderSide(color: baseBorderColor),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: AppRadius.r12,
               borderSide: BorderSide(color: baseBorderColor),
             ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppColors.primary,
-                width: 1.5,
-              ),
+            focusedBorder: const OutlineInputBorder(
+              borderRadius: AppRadius.r12,
+              borderSide: BorderSide(color: AppColors.primary, width: 1.5),
             ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.error, width: 1.5),
+            errorBorder: const OutlineInputBorder(
+              borderRadius: AppRadius.r12,
+              borderSide: BorderSide(color: AppColors.error, width: 1.5),
             ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.error, width: 2),
+            focusedErrorBorder: const OutlineInputBorder(
+              borderRadius: AppRadius.r12,
+              borderSide: BorderSide(color: AppColors.error, width: 2),
             ),
             errorStyle: theme.textTheme.bodySmall?.copyWith(
               color: AppColors.error,
-              fontSize: 12,
             ),
           ),
         ),

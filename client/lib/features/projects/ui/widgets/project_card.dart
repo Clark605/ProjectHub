@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -58,12 +59,12 @@ class ProjectCard extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: AppRadius.r16,
       child: Ink(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerLow,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: AppRadius.r16,
           border: Border.all(color: theme.colorScheme.outlineVariant, width: 1),
         ),
         child: Column(
@@ -92,7 +93,7 @@ class ProjectCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: AppRadius.r20,
                     border: Border.all(
                       color: statusColor.withValues(alpha: 0.3),
                       width: 1,
@@ -127,7 +128,6 @@ class ProjectCard extends StatelessWidget {
                       ? '$doneTasks of $totalTasks tasks completed'
                       : 'No tasks yet',
                   style: theme.textTheme.bodySmall?.copyWith(
-                    fontSize: 11,
                     fontWeight: FontWeight.w500,
                     color: isDark
                         ? AppColors.textSecondary
@@ -138,7 +138,6 @@ class ProjectCard extends StatelessWidget {
                   Text(
                     '${(progress * 100).toInt()}%',
                     style: theme.textTheme.bodySmall?.copyWith(
-                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: AppColors.success,
                     ),
@@ -147,7 +146,7 @@ class ProjectCard extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             ClipRRect(
-              borderRadius: BorderRadius.circular(3),
+              borderRadius: AppRadius.r3,
               child: LinearProgressIndicator(
                 value: totalTasks > 0 ? progress : 0.0,
                 minHeight: 5,
@@ -198,12 +197,11 @@ class ProjectCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: AppRadius.r10,
                       ),
                       child: Text(
                         '+${members.length - 4}',
                         style: TextStyle(
-                          fontSize: 10,
                           fontWeight: FontWeight.w700,
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
@@ -232,7 +230,6 @@ class ProjectCard extends StatelessWidget {
                     ),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
-                      fontSize: 11,
                     ),
                   ),
                 ],
@@ -252,7 +249,6 @@ class ProjectCard extends StatelessWidget {
                           : project.createdBy,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
-                        fontSize: 11,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

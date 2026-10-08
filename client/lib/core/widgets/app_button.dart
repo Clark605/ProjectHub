@@ -66,7 +66,7 @@ class AppButton extends StatelessWidget {
             ],
           );
 
-    final radius = BorderRadius.circular(borderRadius);
+    final radius = BorderRadius.all(Radius.circular(borderRadius));
 
     final buttonStyle = switch (variant) {
       AppButtonVariant.primary => ElevatedButton.styleFrom(

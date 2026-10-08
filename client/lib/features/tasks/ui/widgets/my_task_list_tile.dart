@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -31,7 +32,7 @@ class MyTaskListTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceContainer : AppColors.lightSurface,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.r12,
         border: Border.all(
           color: isDark ? AppColors.border : AppColors.lightBorder,
         ),
@@ -39,7 +40,7 @@ class MyTaskListTile extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppRadius.r12,
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -51,7 +52,7 @@ class MyTaskListTile extends StatelessWidget {
                   height: 36,
                   decoration: BoxDecoration(
                     color: priorityColor,
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: AppRadius.r2,
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -118,7 +119,6 @@ class MyTaskListTile extends StatelessWidget {
                                     context: context,
                                   ),
                                   style: TextStyle(
-                                    fontSize: 12,
                                     fontWeight: isOverdue
                                         ? FontWeight.w700
                                         : FontWeight.w500,
@@ -157,12 +157,11 @@ class MyTaskListTile extends StatelessWidget {
                         color: task.statusEnum.toColor().withValues(
                           alpha: 0.15,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: AppRadius.r8,
                       ),
                       child: Text(
                         task.statusEnum.localizedName(l10n),
                         style: TextStyle(
-                          fontSize: 11,
                           fontWeight: FontWeight.w600,
                           color: task.statusEnum.toColor(),
                         ),

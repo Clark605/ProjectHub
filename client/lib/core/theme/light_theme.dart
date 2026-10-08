@@ -145,20 +145,18 @@ ThemeData buildLightTheme([Locale? locale]) {
       ),
       behavior: SnackBarBehavior.floating,
     ),
-    dialogTheme: const DialogThemeData(
+    dialogTheme: DialogThemeData(
       backgroundColor: AppColors.lightSurface,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16)),
       ),
-      titleTextStyle: TextStyle(
+      titleTextStyle: AppTypography.getTextTheme(locale).titleLarge?.copyWith(
         color: AppColors.lightTextPrimary,
-        fontSize: 20,
         fontWeight: FontWeight.w600,
       ),
-      contentTextStyle: TextStyle(
-        color: AppColors.lightTextSecondary,
-        fontSize: 16,
-      ),
+      contentTextStyle: AppTypography.getTextTheme(
+        locale,
+      ).bodyLarge?.copyWith(color: AppColors.lightTextSecondary),
     ),
     bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColors.lightSurface,

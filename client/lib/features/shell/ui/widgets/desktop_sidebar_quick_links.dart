@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/projects/data/models/project_dto.dart';
@@ -21,7 +22,7 @@ class DesktopSidebarProjectQuickLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: AppRadius.r8,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
         child: Row(
@@ -37,7 +38,6 @@ class DesktopSidebarProjectQuickLink extends StatelessWidget {
                 title,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
                 maxLines: 1,
@@ -86,7 +86,6 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
               color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.bold,
               letterSpacing: 0.8,
-              fontSize: 10,
             ),
           ),
         ),
@@ -107,7 +106,6 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
               l10n.noProjectsYet,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
-                fontSize: 11,
               ),
             ),
           )

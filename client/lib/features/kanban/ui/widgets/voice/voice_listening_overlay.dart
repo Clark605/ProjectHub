@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,7 +68,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 16),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.outlineVariant,
-                    borderRadius: BorderRadius.circular(2),
+                    borderRadius: AppRadius.r2,
                   ),
                 ),
                 GestureDetector(
@@ -80,7 +81,6 @@ class VoiceListeningOverlay extends StatelessWidget {
                       ? (l10n.voiceTaskStructuring)
                       : (l10n.voiceTaskListening),
                   style: TextStyle(
-                    fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.onSurface,
                   ),
@@ -100,7 +100,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                     color: isDark
                         ? AppColors.surfaceContainerLowest
                         : theme.colorScheme.surfaceContainer,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: AppRadius.r12,
                     border: Border.all(color: theme.colorScheme.outlineVariant),
                   ),
                   child: SingleChildScrollView(
@@ -109,7 +109,6 @@ class VoiceListeningOverlay extends StatelessWidget {
                           ? (l10n.voiceTaskPlaceholder)
                           : recognizedText,
                       style: TextStyle(
-                        fontSize: 14,
                         color: recognizedText.isEmpty
                             ? theme.colorScheme.onSurfaceVariant
                             : theme.colorScheme.onSurface,
@@ -147,14 +146,14 @@ class VoiceListeningOverlay extends StatelessWidget {
                         label: Text(l10n.voiceTaskDone),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.electricVioletContainer,
-                          foregroundColor: Colors.white,
+                          foregroundColor: AppColors.pureWhite,
                           minimumSize: const Size(0, 42),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 10,
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: AppRadius.r10,
                           ),
                         ),
                       ),
@@ -196,7 +195,7 @@ class VoiceListeningOverlay extends StatelessWidget {
       ),
       child: Icon(
         isParsing ? Icons.auto_awesome : Icons.mic_rounded,
-        color: Colors.white,
+        color: AppColors.pureWhite,
         size: 32,
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 
@@ -27,9 +28,9 @@ class AppErrorBanner extends StatelessWidget {
               key: ValueKey<String>(errorMessage!),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               margin: const EdgeInsets.symmetric(vertical: 8),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.error,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: AppRadius.r8,
               ),
               child: Row(
                 children: [

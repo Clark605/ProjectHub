@@ -65,10 +65,7 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          Text(
-            l10n.kanbanBoard,
-            style: theme.textTheme.bodySmall?.copyWith(fontSize: 12),
-          ),
+          Text(l10n.kanbanBoard, style: theme.textTheme.bodySmall),
         ],
       ),
       actions: [
