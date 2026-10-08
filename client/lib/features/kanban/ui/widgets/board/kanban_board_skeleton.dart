@@ -22,17 +22,32 @@ class KanbanBoardSkeleton extends StatelessWidget {
 
   Widget _buildMobileSkeleton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildColumnHeaderSkeleton(context),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
+            child: Row(
+              children: List.generate(4, (index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Bone(
+                    width: index == 0 ? 92 : 82,
+                    height: 32,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                );
+              }),
+            ),
+          ),
           const SizedBox(height: 12),
           Expanded(
             child: ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               itemCount: 4,
-              separatorBuilder: (_, _) => const SizedBox(height: 10),
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (_, _) => _buildTaskCardSkeleton(context),
             ),
           ),
@@ -55,9 +70,8 @@ class KanbanBoardSkeleton extends StatelessWidget {
                 color: Theme.of(context).colorScheme.surfaceContainerLow,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.outlineVariant.withValues(alpha: 0.6),
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                  width: 1,
                 ),
               ),
               child: Column(
@@ -69,7 +83,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
                     child: ListView.separated(
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: 3,
-                      separatorBuilder: (_, _) => const SizedBox(height: 10),
+                      separatorBuilder: (_, _) => const SizedBox(height: 8),
                       itemBuilder: (_, _) => _buildTaskCardSkeleton(context),
                     ),
                   ),
@@ -99,61 +113,81 @@ class KanbanBoardSkeleton extends StatelessWidget {
   Widget _buildTaskCardSkeleton(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
+          color: theme.colorScheme.outlineVariant,
+          width: 1,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Bone(
-                width: 56,
-                height: 20,
-                borderRadius: BorderRadius.circular(6),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Stack(
+          children: [
+            const Positioned(
+              top: 0,
+              bottom: 0,
+              left: 0,
+              width: 4,
+              child: Bone(
+                width: 4,
+                height: double.infinity,
+                borderRadius: BorderRadius.zero,
               ),
-              const Bone.icon(size: 16),
-            ],
-          ),
-          const SizedBox(height: 10),
-          const Bone.text(words: 4, fontSize: 14),
-          const SizedBox(height: 6),
-          const Bone.text(words: 8, fontSize: 12),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Bone(
-                width: 32,
-                height: 16,
-                borderRadius: BorderRadius.circular(4),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 10, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Bone.text(words: 3, fontSize: 14),
+                      ),
+                      SizedBox(width: 8),
+                      Bone.icon(size: 18),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Bone(
+                    width: 52,
+                    height: 18,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Wrap(
+                          spacing: 6,
+                          runSpacing: 4,
+                          children: [
+                            Bone(
+                              width: 44,
+                              height: 16,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            Bone(
+                              width: 38,
+                              height: 16,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      const Bone.circle(size: 22),
+                    ],
+                  ),
+                ],
               ),
-              const SizedBox(width: 6),
-              Bone(
-                width: 38,
-                height: 16,
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Bone.circle(size: 18),
-              Bone(
-                width: 48,
-                height: 12,
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

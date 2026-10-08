@@ -132,9 +132,9 @@ class _ProjectsViewState extends State<_ProjectsView> {
                   ),
                   state.when(
                     initial: () =>
-                        const SliverFillRemaining(child: ProjectsSkeleton()),
+                        const SliverToBoxAdapter(child: ProjectsSkeleton()),
                     loading: () =>
-                        const SliverFillRemaining(child: ProjectsSkeleton()),
+                        const SliverToBoxAdapter(child: ProjectsSkeleton()),
                     error: (message) => SliverFillRemaining(
                       child: AppErrorState(
                         errorMessage: message,

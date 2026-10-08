@@ -11,13 +11,19 @@ class VoiceTaskReviewWarnings extends StatelessWidget {
   Widget build(BuildContext context) {
     if (warnings.isEmpty) return const SizedBox.shrink();
 
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final warningColor = isDark ? AppColors.warning : const Color(0xFFD97706);
+
     return Container(
       margin: const EdgeInsets.only(top: 12),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.warning.withValues(alpha: 0.12),
+        color: warningColor.withValues(alpha: isDark ? 0.12 : 0.08),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AppColors.warning.withValues(alpha: 0.4)),
+        border: Border.all(
+          color: warningColor.withValues(alpha: isDark ? 0.4 : 0.35),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,18 +31,19 @@ class VoiceTaskReviewWarnings extends StatelessWidget {
             .map(
               (w) => Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.info_outline_rounded,
                     size: 14,
-                    color: AppColors.warning,
+                    color: warningColor,
                   ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       w,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.warning,
+                        fontWeight: FontWeight.w500,
+                        color: warningColor,
                       ),
                     ),
                   ),

@@ -11,31 +11,42 @@ class VoiceTaskReviewHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final badgeColor = isDark
+        ? AppColors.electricViolet
+        : AppColors.electricVioletContainer;
 
     return Row(
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: AppColors.electricVioletContainer.withValues(alpha: 0.2),
+            color: AppColors.electricVioletContainer.withValues(
+              alpha: isDark ? 0.2 : 0.12,
+            ),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.electricVioletContainer),
+            border: Border.all(
+              color: isDark
+                  ? AppColors.electricVioletContainer
+                  : AppColors.electricVioletContainer.withValues(alpha: 0.5),
+            ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.auto_awesome,
                 size: 14,
-                color: AppColors.electricViolet,
+                color: badgeColor,
               ),
               const SizedBox(width: 4),
               Text(
                 l10n?.voiceTaskAiDraftPreview ?? 'AI Draft Preview',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.electricViolet,
+                  color: badgeColor,
                 ),
               ),
             ],
@@ -44,6 +55,7 @@ class VoiceTaskReviewHeader extends StatelessWidget {
         const Spacer(),
         IconButton(
           icon: const Icon(Icons.close_rounded),
+          color: theme.colorScheme.onSurfaceVariant,
           onPressed: onClose,
         ),
       ],

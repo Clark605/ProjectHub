@@ -22,6 +22,8 @@ class VoiceListeningOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return BlocBuilder<VoiceTaskCubit, VoiceTaskState>(
       builder: (context, state) {
@@ -33,15 +35,21 @@ class VoiceListeningOverlay extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
           decoration: BoxDecoration(
-            color: AppColors.surfaceContainerHigh.withValues(alpha: 0.95),
+            color: isDark
+                ? AppColors.surfaceContainerHigh.withValues(alpha: 0.95)
+                : theme.colorScheme.surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
             border: Border.all(
-              color: AppColors.electricViolet.withValues(alpha: 0.3),
+              color: isDark
+                  ? AppColors.electricViolet.withValues(alpha: 0.3)
+                  : AppColors.electricVioletContainer.withValues(alpha: 0.35),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.electricVioletContainer.withValues(alpha: 0.25),
+                color: AppColors.electricVioletContainer.withValues(
+                  alpha: isDark ? 0.25 : 0.15,
+                ),
                 blurRadius: 24,
                 spreadRadius: 2,
                 offset: const Offset(0, -4),
@@ -53,100 +61,105 @@ class VoiceListeningOverlay extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-              Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.border,
-                  borderRadius: BorderRadius.circular(2),
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.outlineVariant,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
-              ),
-              GestureDetector(
-                onTap: isParsing ? null : onDone,
-                child: _buildPulseOrb(isParsing),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                isParsing
-                    ? (l10n?.voiceTaskStructuring ?? 'Structuring task with AI...')
-                    : (l10n?.voiceTaskListening ?? 'Listening...'),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
+                GestureDetector(
+                  onTap: isParsing ? null : onDone,
+                  child: _buildPulseOrb(isParsing),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Container(
-                constraints: const BoxConstraints(
-                  minHeight: 56,
-                  maxHeight: 100,
+                const SizedBox(height: 16),
+                Text(
+                  isParsing
+                      ? (l10n?.voiceTaskStructuring ?? 'Structuring task with AI...')
+                      : (l10n?.voiceTaskListening ?? 'Listening...'),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceContainerLowest,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: SingleChildScrollView(
-                  child: Text(
-                    recognizedText.isEmpty
-                        ? (l10n?.voiceTaskPlaceholder ??
-                            'Speak naturally (e.g. "Add an urgent task to review metrics due tomorrow")')
-                        : recognizedText,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: recognizedText.isEmpty
-                          ? AppColors.textTertiary
-                          : AppColors.textPrimary,
-                      fontStyle: recognizedText.isEmpty
-                          ? FontStyle.italic
-                          : FontStyle.normal,
+                const SizedBox(height: 12),
+                Container(
+                  constraints: const BoxConstraints(
+                    minHeight: 56,
+                    maxHeight: 100,
+                  ),
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? AppColors.surfaceContainerLowest
+                        : theme.colorScheme.surfaceContainer,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: theme.colorScheme.outlineVariant),
+                  ),
+                  child: SingleChildScrollView(
+                    child: Text(
+                      recognizedText.isEmpty
+                          ? (l10n?.voiceTaskPlaceholder ??
+                              'Speak naturally (e.g. "Add an urgent task to review metrics due tomorrow")')
+                          : recognizedText,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: recognizedText.isEmpty
+                            ? theme.colorScheme.onSurfaceVariant
+                            : theme.colorScheme.onSurface,
+                        fontStyle: recognizedText.isEmpty
+                            ? FontStyle.italic
+                            : FontStyle.normal,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 18),
-              if (isParsing)
-                const LinearProgressIndicator(
-                  color: AppColors.electricVioletContainer,
-                  backgroundColor: AppColors.surfaceContainerLow,
-                )
-              else
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: onCancel,
-                      child: Text(
-                        l10n?.voiceTaskCancel ?? 'Cancel',
-                        style: const TextStyle(color: AppColors.textSecondary),
+                const SizedBox(height: 18),
+                if (isParsing)
+                  LinearProgressIndicator(
+                    color: AppColors.electricVioletContainer,
+                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                  )
+                else
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: onCancel,
+                        child: Text(
+                          l10n?.voiceTaskCancel ?? 'Cancel',
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton.icon(
-                      onPressed: onDone,
-                      icon: const Icon(Icons.check_rounded, size: 18),
-                      label: Text(l10n?.voiceTaskDone ?? 'Done Speaking'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.electricVioletContainer,
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size(0, 42),
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      const SizedBox(width: 8),
+                      ElevatedButton.icon(
+                        onPressed: onDone,
+                        icon: const Icon(Icons.check_rounded, size: 18),
+                        label: Text(l10n?.voiceTaskDone ?? 'Done Speaking'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.electricVioletContainer,
+                          foregroundColor: Colors.white,
+                          minimumSize: const Size(0, 42),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-            ],
+                    ],
+                  ),
+              ],
+            ),
           ),
-        ),
-      );
+        );
       },
     );
   }
