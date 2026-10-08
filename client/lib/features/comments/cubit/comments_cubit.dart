@@ -80,7 +80,6 @@ class CommentsCubit extends SafeActionCubit<CommentsState> {
         emit(CommentsState.loaded(comments: comments));
       },
       onError: (err) => emit(CommentsState.error(err)),
-      defaultErrorMessage: 'Failed to load comments',
       logTag: 'CommentsCubit',
     );
   }
@@ -114,7 +113,6 @@ class CommentsCubit extends SafeActionCubit<CommentsState> {
           ),
         );
       },
-      defaultErrorMessage: 'Failed to post comment',
       logTag: 'CommentsCubit',
     );
     return result ?? false;
@@ -140,7 +138,6 @@ class CommentsCubit extends SafeActionCubit<CommentsState> {
           CommentsState.loaded(comments: currentComments, errorMessage: err),
         );
       },
-      defaultErrorMessage: 'Failed to delete comment',
       logTag: 'CommentsCubit',
     );
   }

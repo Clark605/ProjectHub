@@ -31,7 +31,7 @@ class LanguageSelectorTile extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      l10n?.language ?? 'Language',
+                      l10n.language,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
@@ -40,8 +40,7 @@ class LanguageSelectorTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  l10n?.languageSubtitle ??
-                      'Switch the application language and reading layout (LTR / RTL).',
+                  l10n.languageSubtitle,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                   ),

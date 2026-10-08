@@ -160,9 +160,7 @@ class MyTaskListTile extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        l10n != null
-                            ? task.statusEnum.localizedName(l10n)
-                            : task.statusEnum.toDisplayString(),
+                        task.statusEnum.localizedName(l10n),
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,

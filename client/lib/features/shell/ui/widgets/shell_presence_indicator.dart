@@ -40,7 +40,7 @@ class ShellPresenceIndicator extends StatelessWidget {
               ),
           const SizedBox(width: 8),
           Text(
-            l10n?.onlineCount(3) ?? '3 Online',
+            l10n.onlineCount(3),
             style: TextStyle(
               color: theme.colorScheme.onSurfaceVariant,
               fontSize: 11,

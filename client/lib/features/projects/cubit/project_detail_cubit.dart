@@ -24,7 +24,6 @@ class ProjectDetailCubit extends SafeActionCubit<ProjectDetailState> {
         emit(ProjectDetailState.loaded(project: project));
       },
       onError: (message) => emit(ProjectDetailState.error(message)),
-      defaultErrorMessage: 'Failed to load project details',
       logTag: 'ProjectDetailCubit',
     );
   }
@@ -59,7 +58,6 @@ class ProjectDetailCubit extends SafeActionCubit<ProjectDetailState> {
       onError: (message) {
         emit(currentState.copyWith(isSaving: false, errorMessage: message));
       },
-      defaultErrorMessage: 'Failed to update project',
       logTag: 'ProjectDetailCubit',
     );
 
@@ -87,7 +85,6 @@ class ProjectDetailCubit extends SafeActionCubit<ProjectDetailState> {
       onError: (message) {
         emit(currentState.copyWith(isDeleting: false, errorMessage: message));
       },
-      defaultErrorMessage: 'Failed to delete project',
       logTag: 'ProjectDetailCubit',
     );
 

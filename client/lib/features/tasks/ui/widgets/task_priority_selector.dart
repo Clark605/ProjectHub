@@ -23,7 +23,7 @@ class TaskPrioritySelector extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          l10n?.taskPriority ?? 'Priority',
+          l10n.taskPriority,
           style: theme.textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.w600,
             color: theme.colorScheme.onSurfaceVariant,
@@ -41,11 +41,7 @@ class TaskPrioritySelector extends StatelessWidget {
                 size: 16,
                 color: isSelected ? Colors.white : priority.toColor(),
               ),
-              label: Text(
-                l10n != null
-                    ? priority.localizedName(l10n)
-                    : priority.toDisplayString(),
-              ),
+              label: Text(priority.localizedName(l10n)),
               selectedColor: priority.toColor(),
               labelStyle: TextStyle(
                 color: isSelected ? Colors.white : null,

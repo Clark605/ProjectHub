@@ -47,15 +47,14 @@ class MyTasksEmptyView extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              l10n?.noAssignedTasks ?? 'No Assigned Tasks',
+              l10n.noAssignedTasks,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              l10n?.noAssignedTasksSubtitle ??
-                  'You have no pending tasks assigned in this workspace. Take a break or check project boards!',
+              l10n.noAssignedTasksSubtitle,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: isDark
                     ? AppColors.textSecondary

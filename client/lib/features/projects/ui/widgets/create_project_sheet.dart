@@ -59,7 +59,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final cubit = widget.cubit ?? context.read<ProjectsListCubit>();
 

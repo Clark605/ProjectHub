@@ -73,7 +73,7 @@ class TaskCommentItem extends StatelessWidget {
                         padding: EdgeInsets.zero,
                         constraints: const BoxConstraints(),
                         onPressed: onDelete,
-                        tooltip: l10n?.deleteCommentTooltip ?? 'Delete comment',
+                        tooltip: l10n.deleteCommentTooltip,
                       ),
                   ],
                 ),

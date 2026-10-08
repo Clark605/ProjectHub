@@ -61,8 +61,8 @@ class Sidebar extends StatelessWidget {
                 DesktopSidebarNavItem(
                   icon: tab.selectedIcon,
                   label: tab == ShellTab.profile
-                      ? (l10n?.profileAndSettings ?? 'Profile & Settings')
-                      : (l10n != null ? tab.localizedName(l10n) : tab.label),
+                      ? (l10n.profileAndSettings)
+                      : (tab.localizedName(l10n)),
                   isSelected: selectedIndex == tab.index,
                   badge: tab == ShellTab.projects ? projectsCount : null,
                   badgeColor: null,

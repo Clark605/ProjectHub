@@ -20,15 +20,15 @@ class ProjectsFilterBar extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     switch (filter.toLowerCase()) {
       case 'all':
-        return l10n?.statusAll ?? 'All';
+        return l10n.statusAll;
       case 'planning':
-        return l10n?.statusPlanning ?? 'Planning';
+        return l10n.statusPlanning;
       case 'active':
-        return l10n?.statusActive ?? 'Active';
+        return l10n.statusActive;
       case 'completed':
-        return l10n?.statusCompleted ?? 'Completed';
+        return l10n.statusCompleted;
       case 'archived':
-        return l10n?.statusArchived ?? 'Archived';
+        return l10n.statusArchived;
       default:
         return filter;
     }

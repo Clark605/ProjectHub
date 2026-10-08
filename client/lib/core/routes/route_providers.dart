@@ -27,16 +27,9 @@ import 'package:client/features/shell/ui/main_shell_screen.dart';
 import 'package:client/features/tasks/cubit/my_tasks_cubit.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/ui/my_tasks_screen.dart';
-import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/storage/prefs_service.dart';
-import 'package:client/features/comments/data/comment_repository.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_cubit.dart';
-import 'package:client/features/dashboard/data/activity_repository.dart';
-import 'package:client/features/projects/data/project_repository.dart';
-import 'package:client/features/tags/data/tag_repository.dart';
-import 'package:client/features/tasks/data/task_repository.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
-import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
 
 /// Builds tab content for the main navigation shell.
@@ -102,10 +95,7 @@ Widget buildWorkspaceSettingsRoute() => BlocProvider(
   child: const WorkspaceSettingsScreen(),
 );
 
-Widget buildKanbanRoute({
-  required int projectId,
-  ProjectDto? initialProject,
-}) =>
+Widget buildKanbanRoute({required int projectId, ProjectDto? initialProject}) =>
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => getIt<KanbanCubit>()),

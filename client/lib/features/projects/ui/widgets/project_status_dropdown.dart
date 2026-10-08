@@ -25,10 +25,7 @@ class ProjectStatusDropdown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          l10n?.projectStatus ?? 'Status',
-          style: theme.textTheme.labelMedium,
-        ),
+        Text(l10n.projectStatus, style: theme.textTheme.labelMedium),
         const SizedBox(height: 8),
         DropdownButtonFormField<ProjectStatus>(
           initialValue: currentStatus,
@@ -53,11 +50,7 @@ class ProjectStatusDropdown extends StatelessWidget {
           items: ProjectStatus.values.map((status) {
             return DropdownMenuItem(
               value: status,
-              child: Text(
-                l10n != null
-                    ? status.localizedName(l10n)
-                    : status.toDisplayString(),
-              ),
+              child: Text(status.localizedName(l10n)),
             );
           }).toList(),
           onChanged: enabled

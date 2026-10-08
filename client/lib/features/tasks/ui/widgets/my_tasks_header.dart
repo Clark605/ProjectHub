@@ -18,7 +18,7 @@ class MyTasksHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            l10n?.myTasksTitle ?? 'My Tasks',
+            l10n.myTasksTitle,
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.w700,
               letterSpacing: -0.5,
@@ -26,8 +26,7 @@ class MyTasksHeader extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            l10n?.myTasksSubtitle ??
-                'Personal tasks and assigned deliverables.',
+            l10n.myTasksSubtitle,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: isDark
                   ? AppColors.textSecondary

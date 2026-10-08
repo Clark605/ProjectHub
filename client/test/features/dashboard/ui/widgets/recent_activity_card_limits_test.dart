@@ -1,3 +1,4 @@
+import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
@@ -29,6 +30,8 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: SingleChildScrollView(
                 child: RecentActivityCard(
@@ -41,7 +44,7 @@ void main() {
         );
 
         expect(find.byType(ActivityTile), findsNWidgets(5));
-        expect(find.text('View all'), findsOneWidget);
+        expect(find.text('View All'), findsOneWidget);
       },
     );
 
@@ -53,6 +56,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
             body: SingleChildScrollView(
               child: RecentActivityCard(
@@ -64,8 +69,8 @@ void main() {
         ),
       );
 
-      expect(find.text('View all'), findsOneWidget);
-      await tester.tap(find.text('View all'));
+      expect(find.text('View All'), findsOneWidget);
+      await tester.tap(find.text('View All'));
       await tester.pump();
 
       expect(tapped, isTrue);
@@ -78,6 +83,8 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: SingleChildScrollView(
                 child: RecentActivityCard(activities: activities),
@@ -86,7 +93,7 @@ void main() {
           ),
         );
 
-        expect(find.text('View all'), findsNothing);
+        expect(find.text('View All'), findsNothing);
       },
     );
   });

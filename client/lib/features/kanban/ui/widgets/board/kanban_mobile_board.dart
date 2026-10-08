@@ -101,9 +101,7 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                 final status = entry.value;
                 final isSelected = idx == _currentColumnIndex;
                 final count = widget.tasksByStatus[status]?.length ?? 0;
-                final statusName = l10n != null
-                    ? status.localizedName(l10n)
-                    : status.toDisplayString();
+                final statusName = status.localizedName(l10n);
 
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),

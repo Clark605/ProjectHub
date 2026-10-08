@@ -77,9 +77,8 @@ class VoiceListeningOverlay extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   isParsing
-                      ? (l10n?.voiceTaskStructuring ??
-                            'Structuring task with AI...')
-                      : (l10n?.voiceTaskListening ?? 'Listening...'),
+                      ? (l10n.voiceTaskStructuring)
+                      : (l10n.voiceTaskListening),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
@@ -107,8 +106,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: Text(
                       recognizedText.isEmpty
-                          ? (l10n?.voiceTaskPlaceholder ??
-                                'Speak naturally (e.g. "Add an urgent task to review metrics due tomorrow")')
+                          ? (l10n.voiceTaskPlaceholder)
                           : recognizedText,
                       style: TextStyle(
                         fontSize: 14,
@@ -135,7 +133,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                       TextButton(
                         onPressed: onCancel,
                         child: Text(
-                          l10n?.voiceTaskCancel ?? 'Cancel',
+                          l10n.voiceTaskCancel,
                           style: TextStyle(
                             color: theme.colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w500,
@@ -146,7 +144,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                       ElevatedButton.icon(
                         onPressed: onDone,
                         icon: const Icon(Icons.check_rounded, size: 18),
-                        label: Text(l10n?.voiceTaskDone ?? 'Done Speaking'),
+                        label: Text(l10n.voiceTaskDone),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.electricVioletContainer,
                           foregroundColor: Colors.white,

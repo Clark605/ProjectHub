@@ -1,3 +1,4 @@
+import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -57,6 +58,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: ActivityStreamScreen(
           workspaceId: 10,
           activityRepository: mockRepo,
@@ -79,6 +82,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: ActivityStreamScreen(
           workspaceId: 10,
           activityRepository: mockRepo,
@@ -121,6 +126,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: ActivityStreamScreen(
             workspaceId: 10,
             activityRepository: mockRepo,
@@ -166,6 +173,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: ActivityStreamScreen(
             workspaceId: 10,
             activityRepository: mockRepo,
@@ -215,6 +224,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: ActivityStreamScreen(
             workspaceId: 10,
             activityRepository: mockRepo,
@@ -272,6 +283,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: ActivityStreamScreen(
           workspaceId: 10,
           activityRepository: mockRepo,

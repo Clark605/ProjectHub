@@ -26,7 +26,7 @@ class AttachTagSearchField extends StatelessWidget {
       onChanged: onChanged,
       style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface),
       decoration: InputDecoration(
-        hintText: l10n?.searchOrCreateTag ?? 'Search or create tag...',
+        hintText: l10n.searchOrCreateTag,
         hintStyle: TextStyle(
           color: theme.colorScheme.onSurfaceVariant,
           fontSize: 13,

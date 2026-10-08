@@ -113,9 +113,7 @@ class _KanbanScreenState extends State<KanbanScreen>
           final project = _cubit.project ?? _project;
           final projectName =
               project?.name ??
-              (state is KanbanLoading
-                  ? '...'
-                  : (l10n?.projectsTitle ?? 'Project'));
+              (state is KanbanLoading ? '...' : (l10n.projectsTitle));
           final isEffectivelyArchived = state.isArchived || _cubit.isArchived;
           final wsAccent = KanbanScreenActions.getWorkspaceAccent(context);
           final members = _cubit.members;

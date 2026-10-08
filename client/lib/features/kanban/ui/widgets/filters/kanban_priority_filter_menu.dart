@@ -21,7 +21,7 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
         selectedPriority != null && selectedPriority!.isNotEmpty;
 
     return PopupMenuButton<String>(
-      tooltip: l10n?.filterByPriority ?? 'Filter by priority',
+      tooltip: l10n.filterByPriority,
       onSelected: (val) => onPrioritySelected(val == 'all' ? null : val),
       child: Chip(
         avatar: Icon(
@@ -33,8 +33,8 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
         ),
         label: Text(
           hasSelection
-              ? '${l10n?.taskPriority ?? 'Priority'}: $selectedPriority'
-              : (l10n?.taskPriority ?? 'Priority'),
+              ? '${l10n.taskPriority}: $selectedPriority'
+              : (l10n.taskPriority),
           style: TextStyle(
             fontSize: 12,
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
@@ -46,10 +46,7 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
         onDeleted: hasSelection ? () => onPrioritySelected(null) : null,
       ),
       itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'all',
-          child: Text(l10n?.allPriorities ?? 'All Priorities'),
-        ),
+        PopupMenuItem(value: 'all', child: Text(l10n.allPriorities)),
         ...TaskPriority.values.map(
           (p) => PopupMenuItem(
             value: p.toServerString(),
@@ -57,9 +54,7 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
               children: [
                 Icon(p.toIcon(), size: 16, color: p.toColor()),
                 const SizedBox(width: 8),
-                Text(
-                  l10n != null ? p.localizedName(l10n) : p.toDisplayString(),
-                ),
+                Text(p.localizedName(l10n)),
               ],
             ),
           ),

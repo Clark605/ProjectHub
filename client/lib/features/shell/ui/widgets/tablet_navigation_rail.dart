@@ -60,7 +60,7 @@ class TabletNavigationRail extends StatelessWidget {
               children: [
                 _RailItem(
                   icon: tab.selectedIcon,
-                  label: l10n != null ? tab.localizedName(l10n) : tab.label,
+                  label: tab.localizedName(l10n),
                   isSelected: selectedIndex == tab.index,
                   onTap: () => onItemSelected(tab.index),
                 ),

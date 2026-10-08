@@ -69,7 +69,6 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
           ),
         );
       },
-      defaultErrorMessage: 'Failed to load activity stream',
       logTag: 'ActivityStreamCubit',
     );
   }
@@ -129,7 +128,6 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
         if (requestId != _requestId) return;
         emit(state.copyWith(errorMessage: message));
       },
-      defaultErrorMessage: 'Failed to filter activity stream',
       logTag: 'ActivityStreamCubit',
     );
   }

@@ -54,7 +54,7 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
                 color: theme.colorScheme.onSurface,
               ),
               decoration: InputDecoration(
-                hintText: l10n?.writeAComment ?? 'Write a comment...',
+                hintText: l10n.writeAComment,
                 hintStyle: TextStyle(
                   fontSize: 13,
                   color: theme.colorScheme.onSurfaceVariant,

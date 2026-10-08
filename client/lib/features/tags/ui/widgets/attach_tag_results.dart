@@ -46,7 +46,7 @@ class AttachTagResults extends StatelessWidget {
               color: theme.colorScheme.primary,
             ),
             title: Text(
-              l10n?.createTagQuery(query) ?? 'Create "$query"',
+              l10n.createTagQuery(query),
               style: TextStyle(color: theme.colorScheme.primary, fontSize: 13),
             ),
             onTap: () => onCreateTag(query),
@@ -56,7 +56,7 @@ class AttachTagResults extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Center(
               child: Text(
-                l10n?.noTagsAvailable ?? 'No tags available',
+                l10n.noTagsAvailable,
                 style: TextStyle(
                   color: theme.colorScheme.onSurfaceVariant,
                   fontSize: 13,

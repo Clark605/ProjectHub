@@ -38,8 +38,7 @@ class TaskCommentsList extends StatelessWidget {
           error: (message) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
-              l10n?.failedToLoadComments(message) ??
-                  'Failed to load comments: $message',
+              l10n.failedToLoadComments(message),
               style: const TextStyle(color: AppColors.error, fontSize: 12),
             ),
           ),
@@ -57,8 +56,7 @@ class TaskCommentsList extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     Text(
-                      l10n?.commentsCount(comments.length) ??
-                          'Comments (${comments.length})',
+                      l10n.commentsCount(comments.length),
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,
@@ -82,8 +80,7 @@ class TaskCommentsList extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                     child: Text(
-                      l10n?.noCommentsYet ??
-                          'No comments yet. Start the conversation!',
+                      l10n.noCommentsYet,
                       style: TextStyle(
                         fontSize: 12,
                         color: theme.colorScheme.onSurfaceVariant,

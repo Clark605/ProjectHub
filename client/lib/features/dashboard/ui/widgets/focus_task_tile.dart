@@ -67,9 +67,7 @@ class FocusTaskTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(
-              l10n != null
-                  ? task.priorityEnum.localizedName(l10n)
-                  : task.priority,
+              task.priorityEnum.localizedName(l10n),
               style: TextStyle(
                 color: priorityColor,
                 fontWeight: FontWeight.w700,

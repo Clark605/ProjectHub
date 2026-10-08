@@ -38,12 +38,11 @@ class KanbanVoiceHandler extends StatelessWidget {
           permissionDenied: (permanentlyDenied) {
             showAppSnackBar(
               context,
-              l10n?.voiceTaskMicPermissionRequired ??
-                  'Microphone permission is required for voice tasks.',
+              l10n.voiceTaskMicPermissionRequired,
               backgroundColor: AppColors.warning,
               action: permanentlyDenied
                   ? SnackBarAction(
-                      label: l10n?.voiceTaskSettings ?? 'Settings',
+                      label: l10n.voiceTaskSettings,
                       textColor: Colors.white,
                       onPressed: openAppSettings,
                     )

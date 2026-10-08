@@ -3,7 +3,6 @@ import 'package:client/features/tasks/data/models/task_dto.dart';
 
 class DashboardState {
   final bool isLoading;
-  final int totalProjects;
   final int activeProjects;
   final int inProgressTasks;
   final int urgentTasks;
@@ -14,7 +13,6 @@ class DashboardState {
 
   const DashboardState({
     this.isLoading = false,
-    this.totalProjects = 0,
     this.activeProjects = 0,
     this.inProgressTasks = 0,
     this.urgentTasks = 0,
@@ -29,7 +27,6 @@ class DashboardState {
 
   DashboardState copyWith({
     bool? isLoading,
-    int? totalProjects,
     int? activeProjects,
     int? inProgressTasks,
     int? urgentTasks,
@@ -40,7 +37,6 @@ class DashboardState {
   }) {
     return DashboardState(
       isLoading: isLoading ?? this.isLoading,
-      totalProjects: totalProjects ?? this.totalProjects,
       activeProjects: activeProjects ?? this.activeProjects,
       inProgressTasks: inProgressTasks ?? this.inProgressTasks,
       urgentTasks: urgentTasks ?? this.urgentTasks,

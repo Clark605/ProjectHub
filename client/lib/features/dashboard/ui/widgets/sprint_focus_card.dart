@@ -63,7 +63,7 @@ class SprintFocusCard extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        l10n?.myActiveFocus ?? 'My Active Focus',
+                        l10n.myActiveFocus,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
@@ -77,7 +77,7 @@ class SprintFocusCard extends StatelessWidget {
               if (onNavigateToMyTasks != null)
                 TextButton(
                   onPressed: onNavigateToMyTasks,
-                  child: Text(l10n?.viewAll ?? 'View All'),
+                  child: Text(l10n.viewAll),
                 ),
             ],
           ),
@@ -97,8 +97,7 @@ class SprintFocusCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      l10n?.allCaughtUp ??
-                          'All caught up! No active tasks assigned.',
+                      l10n.allCaughtUp,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),

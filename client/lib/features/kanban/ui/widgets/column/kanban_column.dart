@@ -73,9 +73,7 @@ class KanbanColumn extends StatelessWidget {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
-    final statusName = l10n != null
-        ? status.localizedName(l10n)
-        : status.toDisplayString();
+    final statusName = status.localizedName(l10n);
     final columnAccent =
         accent ??
         WorkspaceAccent.resolve(activeWorkspaceAccent, theme.brightness);
@@ -151,10 +149,8 @@ class KanbanColumn extends StatelessWidget {
                               const SizedBox(height: 6),
                               Text(
                                 isArchived
-                                    ? (l10n?.noTasksInColumn ?? 'No tasks')
-                                    : (l10n != null
-                                          ? l10n.addTaskToStatus(statusName)
-                                          : 'Add task'),
+                                    ? l10n.noTasksInColumn
+                                    : l10n.addTaskToStatus(statusName),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 12,

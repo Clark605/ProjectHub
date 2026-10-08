@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/errors/app_exception.dart';
+import 'package:client/core/errors/app_failure.dart';
 
 class _TestState {
   final String status;
@@ -93,6 +94,17 @@ void main() {
         () => cubit.emit(const _TestState(status: 'after_close')),
         returnsNormally,
       );
+    });
+
+    test('passes typed AppFailure to onFailure callback', () async {
+      AppFailure? capturedFailure;
+      await cubit.safeExecute<int>(
+        () async => throw const ValidationException(message: 'Invalid input'),
+        onFailure: (failure) => capturedFailure = failure,
+      );
+      expect(capturedFailure, isNotNull);
+      expect(capturedFailure!.kind, FailureKind.validation);
+      expect(capturedFailure!.serverMessage, 'Invalid input');
     });
 
     test(

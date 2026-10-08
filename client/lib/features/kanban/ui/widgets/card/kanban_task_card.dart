@@ -172,7 +172,7 @@ class KanbanTaskCard extends StatelessWidget {
                                         color: theme.colorScheme.onSurface,
                                       ),
                                       const SizedBox(width: 8),
-                                      Text(l10n?.moveTask ?? 'Move'),
+                                      Text(l10n.moveTask),
                                     ],
                                   ),
                                 ),
@@ -187,7 +187,7 @@ class KanbanTaskCard extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
-                                        l10n?.delete ?? 'Delete',
+                                        l10n.delete,
                                         style: const TextStyle(
                                           color: AppColors.error,
                                         ),

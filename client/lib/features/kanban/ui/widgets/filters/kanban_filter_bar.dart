@@ -110,7 +110,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                     padding: const EdgeInsets.only(right: 8),
                     child: ActionChip(
                       avatar: const Icon(Icons.search_rounded, size: 16),
-                      label: Text(l10n?.search ?? 'Search'),
+                      label: Text(l10n.search),
                       onPressed: () => setState(() => _isSearchExpanded = true),
                     ),
                   ),
@@ -140,7 +140,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                 if (hasActiveFilter)
                   ActionChip(
                     avatar: const Icon(Icons.filter_alt_off_rounded, size: 16),
-                    label: Text(l10n?.clearFilters ?? 'Clear Filters'),
+                    label: Text(l10n.clearFilters),
                     onPressed: () {
                       _searchController.clear();
                       widget.onClearFilters();

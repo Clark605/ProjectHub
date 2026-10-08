@@ -83,7 +83,6 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
         );
       },
       onError: (message) => emit(WorkspaceSettingsState.error(message)),
-      defaultErrorMessage: 'Failed to load workspace settings',
       logTag: 'WorkspaceSettings',
     );
   }
@@ -127,7 +126,6 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
       onError: (message) {
         emit(currentState.copyWith(isSaving: false, errorMessage: message));
       },
-      defaultErrorMessage: 'Failed to update workspace details',
       logTag: 'WorkspaceSettings',
     );
 
@@ -149,7 +147,6 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
       onError: (message) {
         emit(currentState.copyWith(errorMessage: message));
       },
-      defaultErrorMessage: 'Failed to delete workspace',
       logTag: 'WorkspaceSettings',
     );
 

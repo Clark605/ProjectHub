@@ -115,7 +115,7 @@ class MyTasksSection extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               child: Text(
-                l10n?.noTasksInSection ?? 'No tasks in this section',
+                l10n.noTasksInSection,
                 style: TextStyle(
                   fontSize: 12,
                   color: isDark

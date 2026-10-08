@@ -95,11 +95,7 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
             controller: _titleController,
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(
-              labelText:
-                  l10n?.taskTitleRequiredLabel ??
-                  (l10n?.taskTitle != null
-                      ? '${l10n!.taskTitle} *'
-                      : 'Title *'),
+              labelText: l10n.taskTitleRequiredLabel,
               filled: true,
               fillColor: theme.colorScheme.surfaceContainer,
               border: OutlineInputBorder(
@@ -111,9 +107,8 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
                 borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
             ),
-            validator: (v) => v == null || v.trim().isEmpty
-                ? (l10n?.taskTitleRequired ?? 'Title is required')
-                : null,
+            validator: (v) =>
+                v == null || v.trim().isEmpty ? (l10n.taskTitleRequired) : null,
           ),
           const SizedBox(height: 10),
           TextFormField(
@@ -121,8 +116,8 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
             minLines: 1,
             maxLines: 3,
             decoration: InputDecoration(
-              labelText: l10n?.taskDescription ?? 'Description',
-              hintText: l10n?.taskDescriptionPlaceholder,
+              labelText: l10n.taskDescription,
+              hintText: l10n.taskDescriptionPlaceholder,
               filled: true,
               fillColor: theme.colorScheme.surfaceContainer,
               border: OutlineInputBorder(
@@ -152,7 +147,7 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
           ),
           const SizedBox(height: 12),
           AppButton(
-            label: l10n?.saveChanges ?? (l10n?.save ?? 'Save Changes'),
+            label: l10n.saveChanges,
             isLoading: _isSaving,
             variant: AppButtonVariant.primary,
             onPressed: _isSaving ? null : _handleSave,

@@ -53,7 +53,7 @@ class MyTasksContentSlivers {
                   ElevatedButton.icon(
                     onPressed: onRetry,
                     icon: const Icon(Icons.refresh_rounded),
-                    label: Text(l10n?.retry ?? 'Retry'),
+                    label: Text(l10n.retry),
                   ),
                 ],
               ),
@@ -80,7 +80,7 @@ class MyTasksContentSlivers {
                 if (urgent.isNotEmpty)
                   MyTasksSection(
                     emoji: '🚨',
-                    title: l10n?.overdueUrgent ?? 'Overdue & Urgent',
+                    title: l10n.overdueUrgent,
                     tasks: urgent,
                     activeWorkspaceAccent: wsAccent,
                     onTaskTap: onTaskTap,
@@ -89,7 +89,7 @@ class MyTasksContentSlivers {
                 if (inProgress.isNotEmpty)
                   MyTasksSection(
                     emoji: '⚡',
-                    title: l10n?.inProgress ?? 'In Progress',
+                    title: l10n.inProgress,
                     tasks: inProgress,
                     activeWorkspaceAccent: wsAccent,
                     onTaskTap: onTaskTap,
@@ -98,7 +98,7 @@ class MyTasksContentSlivers {
                 if (todo.isNotEmpty)
                   MyTasksSection(
                     emoji: '📋',
-                    title: l10n?.upNext ?? 'Up Next',
+                    title: l10n.upNext,
                     tasks: todo,
                     activeWorkspaceAccent: wsAccent,
                     onTaskTap: onTaskTap,
@@ -106,7 +106,7 @@ class MyTasksContentSlivers {
                   ),
                 MyTasksSection(
                   emoji: '✅',
-                  title: l10n?.recentlyDone ?? 'Recently Done',
+                  title: l10n.recentlyDone,
                   tasks: done,
                   isCollapsible: true,
                   isCollapsed: !showDone,

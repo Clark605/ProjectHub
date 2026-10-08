@@ -28,7 +28,7 @@ class ProjectCard extends StatelessWidget {
   }
 
   String _getLocalizedStatus(BuildContext context, String status) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     switch (status.toLowerCase()) {
       case 'planning':
         return l10n.statusPlanning;

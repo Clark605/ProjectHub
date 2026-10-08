@@ -47,12 +47,11 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
               builder: (dialogContext) {
                 final l10n = AppLocalizations.of(dialogContext);
                 return AppConfirmDialog(
-                  title:
-                      l10n?.connectionUnavailable ?? 'Connection unavailable',
+                  title: l10n.connectionUnavailable,
                   message: message.contains('Unable to connect to the server')
-                      ? (l10n?.connectionErrorMessage ?? message)
+                      ? (l10n.connectionErrorMessage)
                       : message,
-                  confirmLabel: l10n?.ok ?? 'OK',
+                  confirmLabel: l10n.ok,
                   showCancelButton: false,
                 );
               },
@@ -85,11 +84,9 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
               builder: (dialogContext) {
                 final l10n = AppLocalizations.of(dialogContext);
                 return AppConfirmDialog(
-                  title: l10n?.sessionExpiredTitle ?? 'Session Expired',
-                  message:
-                      l10n?.sessionExpiredMessage ??
-                      'Your session has expired. Please log in again to continue.',
-                  confirmLabel: l10n?.reauthenticate ?? 'Log In',
+                  title: l10n.sessionExpiredTitle,
+                  message: l10n.sessionExpiredMessage,
+                  confirmLabel: l10n.reauthenticate,
                   showCancelButton: false,
                   onConfirm: () async {
                     Navigator.of(dialogContext).pop();

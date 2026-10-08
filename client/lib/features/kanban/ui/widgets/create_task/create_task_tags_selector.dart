@@ -62,7 +62,7 @@ class CreateTaskTagsSelector extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    l10n?.tagLabel ?? 'Tag',
+                    l10n.tagLabel,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w500,

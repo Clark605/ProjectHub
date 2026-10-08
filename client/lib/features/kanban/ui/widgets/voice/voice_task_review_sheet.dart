@@ -132,7 +132,7 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
             ),
             const SizedBox(height: 24),
             AppButton(
-              label: l10n?.voiceTaskConfirmCreate ?? 'Confirm & Create Task',
+              label: l10n.voiceTaskConfirmCreate,
               isLoading: isSubmitting,
               variant: AppButtonVariant.primary,
               onPressed: isSubmitting ? null : _submit,

@@ -27,7 +27,7 @@ class KanbanTagFilterMenu extends StatelessWidget {
         .firstOrNull;
 
     return PopupMenuButton<int?>(
-      tooltip: l10n?.filterByTag ?? 'Filter by tag',
+      tooltip: l10n.filterByTag,
       onSelected: onTagSelected,
       child: Chip(
         avatar: Icon(
@@ -39,9 +39,8 @@ class KanbanTagFilterMenu extends StatelessWidget {
         ),
         label: Text(
           selectedTag != null
-              ? (l10n?.tagPrefix(selectedTag.name) ??
-                    'Tag: ${selectedTag.name}')
-              : (l10n?.tagsMenuLabel ?? 'Tags'),
+              ? (l10n.tagPrefix(selectedTag.name))
+              : (l10n.tagsMenuLabel),
           style: TextStyle(
             fontSize: 12,
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
@@ -53,10 +52,7 @@ class KanbanTagFilterMenu extends StatelessWidget {
         onDeleted: hasSelection ? () => onTagSelected(null) : null,
       ),
       itemBuilder: (context) => [
-        PopupMenuItem<int?>(
-          value: null,
-          child: Text(l10n?.allTags ?? 'All Tags'),
-        ),
+        PopupMenuItem<int?>(value: null, child: Text(l10n.allTags)),
         ...availableTags.map(
           (t) => PopupMenuItem<int?>(
             value: t.id,

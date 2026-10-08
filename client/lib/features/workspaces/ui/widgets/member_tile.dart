@@ -14,7 +14,7 @@ class MemberTile extends StatelessWidget {
   const MemberTile({super.key, required this.member});
 
   Future<void> _confirmRemoval(BuildContext context) async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final cubit = context.read<WorkspaceSettingsCubit>();
 
     final confirm = await showAppConfirmDialog(
@@ -37,7 +37,7 @@ class MemberTile extends StatelessWidget {
     BuildContext context,
     String targetRole,
   ) async {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final cubit = context.read<WorkspaceSettingsCubit>();
 
     final confirm = await showAppConfirmDialog(
@@ -58,7 +58,7 @@ class MemberTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
     final isOwner = member.role.toLowerCase() == 'owner';

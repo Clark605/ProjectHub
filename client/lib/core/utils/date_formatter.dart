@@ -68,7 +68,7 @@ class DateFormatter {
     final l10n = context != null ? AppLocalizations.of(context) : null;
 
     if (difference.isNegative || difference.inSeconds < 45) {
-      return l10n?.timeJustNow ?? 'Just now';
+      return l10n != null ? l10n.timeJustNow : 'Just now';
     } else if (difference.inMinutes < 60) {
       return l10n != null
           ? l10n.timeMinutesAgo(difference.inMinutes)

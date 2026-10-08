@@ -38,7 +38,6 @@ class MyTasksCubit extends SafeActionCubit<MyTasksState> {
         _emitGroupedTasks(workspaceId, tasks);
       },
       onError: (message) => emit(MyTasksState.error(message)),
-      defaultErrorMessage: 'Failed to load My Tasks',
       logTag: 'MyTasksCubit',
     );
   }
@@ -88,7 +87,6 @@ class MyTasksCubit extends SafeActionCubit<MyTasksState> {
           emit(current.copyWith(errorMessage: message));
         }
       },
-      defaultErrorMessage: 'Failed to update task status',
       logTag: 'MyTasksCubit',
     );
   }
@@ -111,7 +109,6 @@ class MyTasksCubit extends SafeActionCubit<MyTasksState> {
           emit(current.copyWith(errorMessage: message));
         }
       },
-      defaultErrorMessage: 'Failed to update task',
       logTag: 'MyTasksCubit',
     );
   }
@@ -138,7 +135,6 @@ class MyTasksCubit extends SafeActionCubit<MyTasksState> {
           emit(current.copyWith(errorMessage: message));
         }
       },
-      defaultErrorMessage: 'Failed to delete task',
       logTag: 'MyTasksCubit',
     );
   }

@@ -141,7 +141,6 @@ class VoiceTaskCubit extends SafeActionCubit<VoiceTaskState> {
       onError: (msg) {
         emit(VoiceTaskState.error(message: msg));
       },
-      defaultErrorMessage: 'Failed to understand task. Please try again.',
       logTag: 'VoiceTaskCubit',
     );
   }

@@ -19,16 +19,12 @@ class KanbanEmptyState extends StatelessWidget {
 
     return AppEmptyState(
       icon: Icons.view_kanban_outlined,
-      title: isArchived
-          ? (l10n?.noTasksArchived ?? 'No Tasks')
-          : (l10n?.boardIsEmpty ?? 'Board is Empty'),
+      title: isArchived ? (l10n.noTasksArchived) : (l10n.boardIsEmpty),
       description: isArchived
-          ? (l10n?.noTasksArchivedSubtitle ??
-                'This project is archived and has no tasks recorded.')
-          : (l10n?.boardIsEmptySubtitle ??
-                'Start organizing your workflow by creating the first task for this project.'),
+          ? (l10n.noTasksArchivedSubtitle)
+          : (l10n.boardIsEmptySubtitle),
       ctaText: !isArchived && onCreateTask != null
-          ? (l10n?.createFirstTask ?? 'Create First Task')
+          ? (l10n.createFirstTask)
           : null,
       onCtaPressed: !isArchived ? onCreateTask : null,
     );

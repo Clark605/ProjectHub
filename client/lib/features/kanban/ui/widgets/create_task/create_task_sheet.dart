@@ -103,8 +103,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
               : (e.toString().isNotEmpty &&
                     !e.toString().startsWith('Exception:'))
               ? e.toString()
-              : (AppLocalizations.of(context)?.somethingWentWrong ??
-                    'Failed to create task');
+              : AppLocalizations.of(context).somethingWentWrong;
         });
       }
     }
@@ -162,7 +161,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
               ),
               const SizedBox(height: 16),
               AppButton(
-                label: l10n?.createTask ?? 'Create Task',
+                label: l10n.createTask,
                 isLoading: isSubmitting,
                 variant: AppButtonVariant.primary,
                 onPressed: isSubmitting ? null : _submit,

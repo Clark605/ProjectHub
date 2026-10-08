@@ -75,7 +75,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
     return BlocConsumer<ProjectDetailCubit, ProjectDetailState>(

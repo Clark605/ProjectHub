@@ -64,7 +64,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

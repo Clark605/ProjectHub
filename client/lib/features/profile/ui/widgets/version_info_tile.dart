@@ -42,14 +42,14 @@ class VersionInfoTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        l10n?.appTitle ?? 'ProjectHub',
+                        l10n.appTitle,
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '${l10n?.appVersionFormat(version, buildNumber) ?? 'Version $version (Build $buildNumber) • Flutter & .NET 10'} • Made with ❤️ by Clark Remon',
+                        '${l10n.appVersionFormat(version, buildNumber)} • Made with ❤️ by Clark Remon',
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodySmall?.copyWith(

@@ -109,10 +109,10 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
         : AppColors.lightBorder;
 
     final categories = [
-      {'key': 'All', 'label': l10n?.allActivities ?? 'All'},
-      {'key': 'Tasks', 'label': l10n?.taskActivities ?? 'Tasks'},
-      {'key': 'Projects', 'label': l10n?.projectActivities ?? 'Projects'},
-      {'key': 'Members', 'label': l10n?.memberActivities ?? 'Members'},
+      {'key': 'All', 'label': l10n.allActivities},
+      {'key': 'Tasks', 'label': l10n.taskActivities},
+      {'key': 'Projects', 'label': l10n.projectActivities},
+      {'key': 'Members', 'label': l10n.memberActivities},
     ];
 
     return SafeArea(
@@ -130,19 +130,23 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  l10n?.filterAndSort ?? 'Filter & Sort',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Text(
+                    l10n.filterAndSort,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     ConstrainedBox(
                       constraints: const BoxConstraints(minHeight: 48),
                       child: TextButton(
                         onPressed: _reset,
-                        child: Text(l10n?.clearFilters ?? 'Reset'),
+                        child: Text(l10n.clearFilters),
                       ),
                     ),
                     IconButton(
@@ -163,8 +167,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText:
-                    l10n?.searchActivitiesHint ?? 'Search by actor or item...',
+                hintText: l10n.searchActivitiesHint,
                 prefixIcon: const Icon(Icons.search_rounded, size: 20),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
@@ -190,7 +193,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
 
             // Category Section
             Text(
-              l10n?.filterCategory ?? 'Category',
+              l10n.filterCategory,
               style: theme.textTheme.labelLarge?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -233,7 +236,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
             // Project Section
             if (widget.availableProjects.isNotEmpty) ...[
               Text(
-                l10n?.projectActivities ?? 'Projects',
+                l10n.projectActivities,
                 style: theme.textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -244,7 +247,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 runSpacing: 8,
                 children: [
                   ChoiceChip(
-                    label: Text(l10n?.allActivities ?? 'All'),
+                    label: Text(l10n.allActivities),
                     selected: _selectedProjectId == null,
                     selectedColor: selectedBgColor,
                     checkmarkColor: selectedTextColor,
@@ -309,7 +312,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
 
             // Sort Section
             Text(
-              l10n?.sortBy ?? 'Sort By',
+              l10n.sortBy,
               style: theme.textTheme.labelLarge?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -320,7 +323,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
               runSpacing: 8,
               children: [
                 ChoiceChip(
-                  label: Text(l10n?.newestFirst ?? 'Newest first'),
+                  label: Text(l10n.newestFirst),
                   selected: _selectedSortOrder == ActivitySortOrder.newestFirst,
                   selectedColor: selectedBgColor,
                   checkmarkColor: selectedTextColor,
@@ -352,7 +355,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   materialTapTargetSize: MaterialTapTargetSize.padded,
                 ),
                 ChoiceChip(
-                  label: Text(l10n?.oldestFirst ?? 'Oldest first'),
+                  label: Text(l10n.oldestFirst),
                   selected: _selectedSortOrder == ActivitySortOrder.oldestFirst,
                   selectedColor: selectedBgColor,
                   checkmarkColor: selectedTextColor,
@@ -405,7 +408,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 child: Text(
-                  l10n?.applyFilters ?? 'Apply Filters',
+                  l10n.applyFilters,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,

@@ -32,8 +32,8 @@ class CreateTaskTextFields extends StatelessWidget {
           autofocus: true,
           textInputAction: TextInputAction.next,
           decoration: InputDecoration(
-            labelText: l10n?.taskTitle ?? 'Task Title *',
-            hintText: l10n?.taskTitlePlaceholder ?? 'What needs to be done?',
+            labelText: l10n.taskTitle,
+            hintText: l10n.taskTitlePlaceholder,
             floatingLabelBehavior: FloatingLabelBehavior.always,
             filled: true,
             fillColor: fillColor,
@@ -54,7 +54,7 @@ class CreateTaskTextFields extends StatelessWidget {
             ),
           ),
           validator: (val) => (val == null || val.trim().isEmpty)
-              ? (l10n?.taskTitleRequired ?? 'Task title is required')
+              ? (l10n.taskTitleRequired)
               : null,
         ),
         const SizedBox(height: 16),
@@ -62,10 +62,8 @@ class CreateTaskTextFields extends StatelessWidget {
           controller: descriptionController,
           maxLines: 3,
           decoration: InputDecoration(
-            labelText: l10n?.taskDescription ?? 'Description',
-            hintText:
-                l10n?.taskDescriptionPlaceholder ??
-                'Add details, context, or acceptance criteria...',
+            labelText: l10n.taskDescription,
+            hintText: l10n.taskDescriptionPlaceholder,
             floatingLabelBehavior: FloatingLabelBehavior.always,
             filled: true,
             fillColor: fillColor,

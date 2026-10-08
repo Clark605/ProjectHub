@@ -44,7 +44,7 @@ class ProjectsHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      l10n?.projectsTitle ?? 'Projects',
+                      l10n.projectsTitle,
                       style: theme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.5,
@@ -52,8 +52,7 @@ class ProjectsHeader extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      l10n?.projectsSubtitle ??
-                          'Manage workspace projects and track deliverables.',
+                      l10n.projectsSubtitle,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: isDark
                             ? AppColors.textSecondary
@@ -70,7 +69,7 @@ class ProjectsHeader extends StatelessWidget {
               if (isDesktop) ...[
                 const SizedBox(width: 16),
                 AppButton(
-                  label: l10n?.createProject ?? 'Create Project',
+                  label: l10n.createProject,
                   icon: Icons.add_rounded,
                   isExpanded: false,
                   onPressed: onCreatePressed,

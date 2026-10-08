@@ -15,13 +15,13 @@ class KanbanAssigneeFilterMenu extends StatelessWidget {
     required this.onAssigneeSelected,
   });
 
-  String _resolveAssigneeLabel(String? assigneeId, AppLocalizations? l10n) {
+  String _resolveAssigneeLabel(String? assigneeId, AppLocalizations l10n) {
     if (assigneeId == null || assigneeId.isEmpty || assigneeId == 'all') {
-      return l10n?.assignee ?? 'Assignee';
+      return l10n.assignee;
     }
-    if (assigneeId == 'unassigned') return l10n?.unassigned ?? 'Unassigned';
+    if (assigneeId == 'unassigned') return l10n.unassigned;
     final member = members.where((m) => m.userId == assigneeId).firstOrNull;
-    return member != null ? member.name : (l10n?.assignee ?? 'Assignee');
+    return member != null ? member.name : l10n.assignee;
   }
 
   @override
@@ -31,7 +31,7 @@ class KanbanAssigneeFilterMenu extends StatelessWidget {
         selectedAssignee != null && selectedAssignee!.isNotEmpty;
 
     return PopupMenuButton<String>(
-      tooltip: l10n?.filterByAssignee ?? 'Filter by assignee',
+      tooltip: l10n.filterByAssignee,
       onSelected: (val) => onAssigneeSelected(val == 'all' ? null : val),
       child: Chip(
         avatar: const Icon(Icons.person_outline_rounded, size: 16),
@@ -48,14 +48,8 @@ class KanbanAssigneeFilterMenu extends StatelessWidget {
         onDeleted: hasSelection ? () => onAssigneeSelected(null) : null,
       ),
       itemBuilder: (context) => [
-        PopupMenuItem(
-          value: 'all',
-          child: Text(l10n?.allAssignees ?? 'All Assignees'),
-        ),
-        PopupMenuItem(
-          value: 'unassigned',
-          child: Text(l10n?.unassigned ?? 'Unassigned'),
-        ),
+        PopupMenuItem(value: 'all', child: Text(l10n.allAssignees)),
+        PopupMenuItem(value: 'unassigned', child: Text(l10n.unassigned)),
         ...members.map(
           (m) => PopupMenuItem(value: m.userId, child: Text(m.name)),
         ),

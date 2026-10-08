@@ -1,9 +1,13 @@
 enum TaskStatus {
-  backlog,
-  todo,
-  inProgress,
-  review,
-  done;
+  backlog(1),
+  todo(2),
+  inProgress(3),
+  review(4),
+  done(5);
+
+  const TaskStatus(this.weight);
+
+  final int weight;
 
   static TaskStatus fromString(String? value) {
     if (value == null) return TaskStatus.backlog;

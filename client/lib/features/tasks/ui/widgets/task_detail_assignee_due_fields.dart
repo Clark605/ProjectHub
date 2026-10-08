@@ -33,7 +33,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          l10n?.assignee ?? 'Assignee',
+          l10n.assignee,
           style: theme.textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.w600,
             color: theme.colorScheme.onSurfaceVariant,
@@ -55,20 +55,17 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
               borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
             ),
           ),
-          hint: Text(l10n?.unassigned ?? 'Unassigned'),
+          hint: Text(l10n.unassigned),
           items: [
             DropdownMenuItem<String?>(
               value: null,
-              child: Text(l10n?.unassigned ?? 'Unassigned'),
+              child: Text(l10n.unassigned),
             ),
             if (editAssigneeId != null &&
                 !members.any((m) => m.userId == editAssigneeId))
               DropdownMenuItem<String?>(
                 value: editAssigneeId,
-                child: Text(
-                  taskAssigneeName ??
-                      (l10n?.assignedMember ?? 'Assigned Member'),
-                ),
+                child: Text(taskAssigneeName ?? (l10n.assignedMember)),
               ),
             ...members.map(
               (m) => DropdownMenuItem<String?>(
@@ -81,7 +78,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          l10n?.dueDate ?? 'Due Date',
+          l10n.dueDate,
           style: theme.textTheme.labelMedium?.copyWith(
             fontWeight: FontWeight.w600,
             color: theme.colorScheme.onSurfaceVariant,
@@ -114,7 +111,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
                             editDueDate!,
                             context: context,
                           )
-                        : (l10n?.noDueDate ?? 'No due date'),
+                        : (l10n.noDueDate),
                   ),
                 ),
                 if (editDueDate != null)

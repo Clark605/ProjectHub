@@ -1,10 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/errors/app_exception.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/core/utils/app_logger.dart';
 
 /// Base Cubit that provides standardized error handling via [safeExecute].
 /// Catches [AppException] and generic [Exception]/[Error] objects, routing
-/// failure messages through [onError].
+/// failure messages through [onError] or typed failures through [onFailure].
 abstract class SafeActionCubit<T> extends Cubit<T> {
   SafeActionCubit(super.initialState);
 
@@ -16,13 +17,14 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
 
   /// Executes [action] within a standardized try/catch block.
   ///
-  /// - Catches [AppException] and passes its `message` to [onError].
-  /// - Catches generic exceptions and passes [defaultErrorMessage] to [onError].
+  /// - Catches [AppException] and generic exceptions, mapping them to [AppFailure].
+  /// - Passes typed failure to [onFailure] and the raw/server message to [onError].
   /// - Returns the computed value of type [R], or `null` on failure.
   Future<R?> safeExecute<R>(
     Future<R> Function() action, {
     void Function(String errorMessage)? onError,
-    String defaultErrorMessage = 'An unexpected error occurred',
+    void Function(AppFailure failure)? onFailure,
+    String? defaultErrorMessage,
     String? logTag,
   }) async {
     try {
@@ -39,7 +41,9 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
           stackTrace: st,
         );
       }
-      onError?.call(e.message);
+      final failure = AppFailure.fromException(e);
+      onFailure?.call(failure);
+      onError?.call(failure.serverMessage ?? defaultErrorMessage ?? e.message);
       return null;
     } catch (e, st) {
       if (isClosed) return null;
@@ -51,7 +55,13 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
           stackTrace: st,
         );
       }
-      onError?.call(defaultErrorMessage);
+      final failure = AppFailure.fromException(e);
+      onFailure?.call(failure);
+      onError?.call(
+        failure.serverMessage ??
+            defaultErrorMessage ??
+            'An unexpected error occurred',
+      );
       return null;
     }
   }

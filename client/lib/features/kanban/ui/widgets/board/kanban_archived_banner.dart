@@ -24,8 +24,7 @@ class KanbanArchivedBanner extends StatelessWidget {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              l10n?.archivedProjectNotice ??
-                  'This project is archived. Tasks and board are read-only.',
+              l10n.archivedProjectNotice,
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),

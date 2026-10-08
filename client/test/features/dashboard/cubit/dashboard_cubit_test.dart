@@ -5,7 +5,6 @@ import 'package:client/core/errors/app_exception.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client/features/dashboard/cubit/dashboard_state.dart';
 import 'package:client/features/dashboard/data/models/workspace_dashboard_dto.dart';
-import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 
 import '../../../helpers/mock_repositories.dart';
@@ -78,55 +77,18 @@ void main() {
       verifyNever(() => mockProjectRepo.getProjects(any()));
     });
 
-    test(
-      'falls back to client derivation when server dashboard fails',
-      () async {
-        when(
-          () => mockWorkspaceRepo.getWorkspaceDashboard(1),
-        ).thenThrow(Exception('Server metrics down'));
-        when(() => mockProjectRepo.getProjects(1)).thenAnswer(
-          (_) async => const [
-            ProjectDto(
-              id: 10,
-              workspaceId: 1,
-              name: 'Active Project',
-              status: 'Active',
-            ),
-          ],
-        );
-        when(() => mockTaskRepo.getMyTasks(1)).thenAnswer(
-          (_) async => const [
-            TaskDto(
-              id: 10,
-              projectId: 10,
-              title: 'Task 1',
-              status: 'InProgress',
-              priority: 'Urgent',
-            ),
-            TaskDto(
-              id: 11,
-              projectId: 10,
-              title: 'Task 2',
-              status: 'Done',
-              priority: 'Low',
-            ),
-          ],
-        );
-        when(
-          () => mockActivityRepo.getWorkspaceActivities(1, limit: 20),
-        ).thenAnswer((_) async => []);
+    test('emits error state directly when server dashboard fails', () async {
+      when(
+        () => mockWorkspaceRepo.getWorkspaceDashboard(1),
+      ).thenThrow(Exception('Server metrics down'));
 
-        await cubit.loadDashboard(1);
+      await cubit.loadDashboard(1);
 
-        expect(cubit.state.isLoading, isFalse);
-        expect(cubit.state.activeProjects, 1);
-        expect(cubit.state.inProgressTasks, 1);
-        expect(cubit.state.urgentTasks, 1);
-        expect(cubit.state.completedTasks, 1);
-        expect(cubit.state.focusTasks.length, 1);
-        expect(cubit.state.focusTasks.first.title, 'Task 1');
-      },
-    );
+      expect(cubit.state.isLoading, isFalse);
+      expect(cubit.state.errorMessage, isNotNull);
+      verifyNever(() => mockProjectRepo.getProjects(any()));
+      verifyNever(() => mockTaskRepo.getMyTasks(any()));
+    });
 
     test(
       'emits error message and isLoading: false when repository throws AppException',
@@ -134,42 +96,11 @@ void main() {
         when(() => mockWorkspaceRepo.getWorkspaceDashboard(1)).thenThrow(
           const UnauthorizedException(message: 'Authentication required'),
         );
-        when(() => mockProjectRepo.getProjects(1)).thenThrow(
-          const UnauthorizedException(message: 'Authentication required'),
-        );
-        when(() => mockTaskRepo.getMyTasks(1)).thenAnswer((_) async => []);
-        when(
-          () => mockActivityRepo.getWorkspaceActivities(1, limit: 20),
-        ).thenAnswer((_) async => []);
 
         await cubit.loadDashboard(1);
 
         expect(cubit.state.isLoading, isFalse);
         expect(cubit.state.errorMessage, 'Authentication required');
-      },
-    );
-
-    test(
-      'emits sanitized error message and isLoading: false on generic exception',
-      () async {
-        when(
-          () => mockWorkspaceRepo.getWorkspaceDashboard(1),
-        ).thenThrow(Exception('Server unreachable'));
-        when(
-          () => mockProjectRepo.getProjects(1),
-        ).thenThrow(Exception('Server unreachable'));
-        when(() => mockTaskRepo.getMyTasks(1)).thenAnswer((_) async => []);
-        when(
-          () => mockActivityRepo.getWorkspaceActivities(1, limit: 20),
-        ).thenAnswer((_) async => []);
-
-        await cubit.loadDashboard(1);
-
-        expect(cubit.state.isLoading, isFalse);
-        expect(
-          cubit.state.errorMessage,
-          'Failed to load dashboard. Please try again.',
-        );
       },
     );
   });

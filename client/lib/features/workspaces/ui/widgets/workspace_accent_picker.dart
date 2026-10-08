@@ -30,7 +30,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              l10n?.accentColor ?? 'Accent Color',
+              l10n.accentColor,
               style: theme.textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -39,8 +39,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          l10n?.accentColorSubtitle ??
-              'Subtle wayfinding color for workspace indicators and tabs.',
+          l10n.accentColorSubtitle,
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),

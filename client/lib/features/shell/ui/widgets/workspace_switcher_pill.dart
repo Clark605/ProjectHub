@@ -27,7 +27,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
         activeWorkspaceName != null && activeWorkspaceName!.trim().isNotEmpty;
     final displayName = hasWorkspace
         ? activeWorkspaceName!
-        : (l10n?.createWorkspace ?? 'Create Workspace');
+        : (l10n.createWorkspace);
 
     final accent = WorkspaceAccent.fromId(activeWorkspaceAccent);
     final accentColor = accent.resolvedColor(theme.brightness);

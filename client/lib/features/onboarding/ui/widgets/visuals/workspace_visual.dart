@@ -201,7 +201,7 @@ class WorkspaceVisual extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Text(
-                                    l10n?.priorityHigh.toUpperCase() ?? 'HIGH',
+                                    l10n.priorityHigh.toUpperCase(),
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: AppColors.priorityHigh,
                                       fontWeight: FontWeight.w700,

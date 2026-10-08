@@ -43,12 +43,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   void _onStateListener(BuildContext context, ProjectDetailState state) {
     state.maybeWhen(
       deleted: () {
-        final l10n = AppLocalizations.of(context)!;
+        final l10n = AppLocalizations.of(context);
         showAppSuccessSnackBar(context, l10n.projectDeleted);
         Navigator.of(context).pop(true);
       },
       loaded: (project, _, _, errorMessage, actionSuccessMessage) {
-        final l10n = AppLocalizations.of(context)!;
+        final l10n = AppLocalizations.of(context);
         final cubit = context.read<ProjectDetailCubit>();
         if (actionSuccessMessage != null) {
           _updatedProject = project;

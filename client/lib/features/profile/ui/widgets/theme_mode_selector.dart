@@ -29,7 +29,7 @@ class ThemeModeSelector extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      l10n?.appearance ?? 'Appearance',
+                      l10n.appearance,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
@@ -38,8 +38,7 @@ class ThemeModeSelector extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  l10n?.appearanceSubtitle ??
-                      'Choose whether to follow device settings or lock to dark or light mode.',
+                  l10n.appearanceSubtitle,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                   ),
@@ -49,17 +48,17 @@ class ThemeModeSelector extends StatelessWidget {
                   segments: [
                     ButtonSegment<ThemeMode>(
                       value: ThemeMode.system,
-                      label: Text(l10n?.themeModeSystem ?? 'System'),
+                      label: Text(l10n.themeModeSystem),
                       icon: const Icon(Icons.brightness_auto_rounded),
                     ),
                     ButtonSegment<ThemeMode>(
                       value: ThemeMode.dark,
-                      label: Text(l10n?.themeModeDark ?? 'Dark'),
+                      label: Text(l10n.themeModeDark),
                       icon: const Icon(Icons.dark_mode_rounded),
                     ),
                     ButtonSegment<ThemeMode>(
                       value: ThemeMode.light,
-                      label: Text(l10n?.themeModeLight ?? 'Light'),
+                      label: Text(l10n.themeModeLight),
                       icon: const Icon(Icons.light_mode_rounded),
                     ),
                   ],

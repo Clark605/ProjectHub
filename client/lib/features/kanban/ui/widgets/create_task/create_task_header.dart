@@ -33,7 +33,7 @@ class CreateTaskHeader extends StatelessWidget {
         Row(
           children: [
             Text(
-              l10n?.createTask ?? 'Create Task',
+              l10n.createTask,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -46,9 +46,7 @@ class CreateTaskHeader extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                l10n != null
-                    ? selectedStatus.localizedName(l10n)
-                    : selectedStatus.toDisplayString(),
+                selectedStatus.localizedName(l10n),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,

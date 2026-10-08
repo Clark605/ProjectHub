@@ -54,7 +54,7 @@ class _ViewState extends State<_View> {
   }
 
   void _onState(BuildContext context, WorkspaceSettingsState state) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     if (state is WorkspaceSettingsDeleted) {
       context.showSuccessSnackBar(l10n.workspaceDeleted);
       Navigator.of(
@@ -79,7 +79,7 @@ class _ViewState extends State<_View> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
     final theme = Theme.of(context);
     final active = context.watch<WorkspaceContextCubit>().state.whenOrNull(
       loaded: (workspaces, active) => active,

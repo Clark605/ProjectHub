@@ -34,11 +34,11 @@ class WorkspacePresenceSheet extends StatelessWidget {
     );
   }
 
-  String _getUserName(String userId, AppLocalizations? l10n) {
+  String _getUserName(String userId, AppLocalizations l10n) {
     final member = members.where((m) => m.userId == userId).firstOrNull;
     if (member != null && member.name.isNotEmpty) return member.name;
-    if (userId == currentUserId) return l10n?.you ?? 'You';
-    return l10n?.teamMember ?? 'Team Member';
+    if (userId == currentUserId) return l10n.you;
+    return l10n.teamMember;
   }
 
   @override
@@ -66,8 +66,7 @@ class WorkspacePresenceSheet extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                l10n?.onlineMembersCount(onlineUserIds.length) ??
-                    'Online Members (${onlineUserIds.length})',
+                l10n.onlineMembersCount(onlineUserIds.length),
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -116,7 +115,7 @@ class WorkspacePresenceSheet extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      isMe ? (l10n?.youSuffix(name) ?? '$name (You)') : name,
+                      isMe ? l10n.youSuffix(name) : name,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         fontWeight: isMe ? FontWeight.w600 : FontWeight.normal,
                         color: theme.colorScheme.onSurface,

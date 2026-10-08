@@ -15,7 +15,7 @@ class ProjectDangerZone extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!canDelete) return const SizedBox.shrink();
 
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     return BlocBuilder<ProjectDetailCubit, ProjectDetailState>(
       builder: (context, state) {

@@ -62,7 +62,7 @@ class AppDangerZone extends StatelessWidget {
                 foregroundColor: Colors.white,
               ),
               onPressed: () => _showConfirmationDialog(context),
-              child: Text(l10n?.delete ?? 'Delete'),
+              child: Text(l10n.delete),
             ),
           ],
         ),
@@ -112,20 +112,14 @@ class _DeleteConfirmationDialogState extends State<_DeleteConfirmationDialog> {
 
     return AlertDialog(
       shape: const RoundedRectangleBorder(borderRadius: AppRadius.kRadiusLg),
-      title: Text(l10n?.areYouSureDelete ?? 'Are you absolutely sure?'),
+      title: Text(l10n.areYouSureDelete),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            l10n?.actionCannotBeUndone ??
-                'This action cannot be undone. This will permanently delete the entity.',
-          ),
+          Text(l10n.actionCannotBeUndone),
           const SizedBox(height: AppSpacing.md),
-          Text(
-            l10n?.typeToConfirm(widget.entityName) ??
-                'Please type "${widget.entityName}" to confirm.',
-          ),
+          Text(l10n.typeToConfirm(widget.entityName)),
           const SizedBox(height: AppSpacing.xs),
           TextField(
             controller: _controller,
@@ -139,7 +133,7 @@ class _DeleteConfirmationDialogState extends State<_DeleteConfirmationDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n?.cancel ?? 'Cancel'),
+          child: Text(l10n.cancel),
         ),
         FilledButton(
           style: FilledButton.styleFrom(
@@ -150,7 +144,7 @@ class _DeleteConfirmationDialogState extends State<_DeleteConfirmationDialog> {
             ),
           ),
           onPressed: _canConfirm ? widget.onConfirm : null,
-          child: Text(l10n?.delete ?? 'Delete'),
+          child: Text(l10n.delete),
         ),
       ],
     );

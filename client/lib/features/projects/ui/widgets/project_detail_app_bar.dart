@@ -45,7 +45,7 @@ class ProjectDetailAppBar extends StatelessWidget
         onPressed: () => Navigator.of(context).maybePop(),
       ),
       title: Text(
-        l10n?.projectDetails ?? 'Project Details',
+        l10n.projectDetails,
         style: theme.textTheme.titleMedium?.copyWith(
           fontWeight: FontWeight.w600,
         ),

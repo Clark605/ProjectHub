@@ -5,7 +5,7 @@ import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-String _formatStatusName(String? status, AppLocalizations? l10n) {
+String _formatStatusName(String? status, AppLocalizations l10n) {
   if (status == null || status.isEmpty) return '';
   final cleaned = status.replaceAll('"', '').trim();
   final lower = cleaned
@@ -23,9 +23,7 @@ String _formatStatusName(String? status, AppLocalizations? l10n) {
     'done',
   ].contains(lower)) {
     final taskStatus = TaskStatus.fromString(cleaned);
-    return l10n != null
-        ? taskStatus.localizedName(l10n)
-        : taskStatus.toDisplayString();
+    return taskStatus.localizedName(l10n);
   }
 
   if (lower == 'inprogress') return 'In Progress';
@@ -37,7 +35,7 @@ String _formatStatusName(String? status, AppLocalizations? l10n) {
 List<InlineSpan> buildActivityEventSpans(
   ActivityEventDto event,
   ThemeData theme,
-  AppLocalizations? l10n,
+  AppLocalizations l10n,
 ) {
   final mutedStyle = TextStyle(color: theme.colorScheme.onSurfaceVariant);
   final highlightStyle = TextStyle(
@@ -50,10 +48,7 @@ List<InlineSpan> buildActivityEventSpans(
   switch (event.eventType) {
     case 'TaskCreated':
       final spans = <InlineSpan>[
-        TextSpan(
-          text: l10n?.activityTaskCreated ?? 'created task',
-          style: mutedStyle,
-        ),
+        TextSpan(text: l10n.activityTaskCreated, style: mutedStyle),
         if (title != null && title.isNotEmpty) ...[
           const TextSpan(text: ' '),
           TextSpan(text: title, style: highlightStyle),
@@ -64,10 +59,7 @@ List<InlineSpan> buildActivityEventSpans(
 
     case 'TaskUpdated':
       final spans = <InlineSpan>[
-        TextSpan(
-          text: l10n?.activityTaskUpdated ?? 'updated task',
-          style: mutedStyle,
-        ),
+        TextSpan(text: l10n.activityTaskUpdated, style: mutedStyle),
         if (title != null && title.isNotEmpty) ...[
           const TextSpan(text: ' '),
           TextSpan(text: title, style: highlightStyle),
@@ -79,47 +71,30 @@ List<InlineSpan> buildActivityEventSpans(
     case 'TaskStatusChanged':
       final toStatus = _formatStatusName(event.newStatus ?? event.status, l10n);
       final spans = <InlineSpan>[];
-      if (l10n != null) {
-        if (title != null && title.isNotEmpty && toStatus.isNotEmpty) {
-          final full = l10n.activityMovedTo(title, toStatus);
-          spans.addAll(
-            _buildParameterizedSpans(
-              full,
-              [title, toStatus],
-              mutedStyle,
-              highlightStyle,
-            ),
-          );
-        } else if (toStatus.isNotEmpty) {
-          final full = l10n.activityTaskMovedToStatus(toStatus);
-          spans.addAll(
-            _buildParameterizedSpans(
-              full,
-              [toStatus],
-              mutedStyle,
-              highlightStyle,
-            ),
-          );
-        } else {
-          spans.add(
-            TextSpan(text: l10n.activityTaskStatusChanged, style: mutedStyle),
-          );
-        }
+      if (title != null && title.isNotEmpty && toStatus.isNotEmpty) {
+        final full = l10n.activityMovedTo(title, toStatus);
+        spans.addAll(
+          _buildParameterizedSpans(
+            full,
+            [title, toStatus],
+            mutedStyle,
+            highlightStyle,
+          ),
+        );
+      } else if (toStatus.isNotEmpty) {
+        final full = l10n.activityTaskMovedToStatus(toStatus);
+        spans.addAll(
+          _buildParameterizedSpans(
+            full,
+            [toStatus],
+            mutedStyle,
+            highlightStyle,
+          ),
+        );
       } else {
-        if (title != null && title.isNotEmpty) {
-          spans.add(TextSpan(text: 'moved ', style: mutedStyle));
-          spans.add(TextSpan(text: title, style: highlightStyle));
-          if (toStatus.isNotEmpty) {
-            spans.add(TextSpan(text: ' to ', style: mutedStyle));
-            spans.add(TextSpan(text: toStatus, style: highlightStyle));
-          }
-        } else {
-          spans.add(TextSpan(text: 'updated task status', style: mutedStyle));
-          if (toStatus.isNotEmpty) {
-            spans.add(TextSpan(text: ' to ', style: mutedStyle));
-            spans.add(TextSpan(text: toStatus, style: highlightStyle));
-          }
-        }
+        spans.add(
+          TextSpan(text: l10n.activityTaskStatusChanged, style: mutedStyle),
+        );
       }
       _appendProjectContext(spans, project, l10n, mutedStyle, highlightStyle);
       return spans;
@@ -127,48 +102,33 @@ List<InlineSpan> buildActivityEventSpans(
     case 'TaskAssigned':
       final assignee = event.assigneeName?.replaceAll('"', '');
       final spans = <InlineSpan>[];
-      if (l10n != null) {
-        if (assignee != null && assignee.isNotEmpty) {
-          if (title != null && title.isNotEmpty) {
-            final full = l10n.activityAssignedTo(title, assignee);
-            spans.addAll(
-              _buildParameterizedSpans(
-                full,
-                [title, assignee],
-                mutedStyle,
-                highlightStyle,
-              ),
-            );
-          } else {
-            final full = l10n.activityAssignedTaskTo(assignee);
-            spans.addAll(
-              _buildParameterizedSpans(
-                full,
-                [assignee],
-                mutedStyle,
-                highlightStyle,
-              ),
-            );
-          }
-        } else {
-          spans.add(
-            TextSpan(text: l10n.activityTaskAssigned, style: mutedStyle),
+      if (assignee != null && assignee.isNotEmpty) {
+        if (title != null && title.isNotEmpty) {
+          final full = l10n.activityAssignedTo(title, assignee);
+          spans.addAll(
+            _buildParameterizedSpans(
+              full,
+              [title, assignee],
+              mutedStyle,
+              highlightStyle,
+            ),
           );
-          if (title != null && title.isNotEmpty) {
-            spans.add(const TextSpan(text: ' '));
-            spans.add(TextSpan(text: title, style: highlightStyle));
-          }
+        } else {
+          final full = l10n.activityAssignedTaskTo(assignee);
+          spans.addAll(
+            _buildParameterizedSpans(
+              full,
+              [assignee],
+              mutedStyle,
+              highlightStyle,
+            ),
+          );
         }
       } else {
-        spans.add(TextSpan(text: 'assigned ', style: mutedStyle));
+        spans.add(TextSpan(text: l10n.activityTaskAssigned, style: mutedStyle));
         if (title != null && title.isNotEmpty) {
+          spans.add(const TextSpan(text: ' '));
           spans.add(TextSpan(text: title, style: highlightStyle));
-        } else {
-          spans.add(TextSpan(text: 'a task', style: mutedStyle));
-        }
-        if (assignee != null && assignee.isNotEmpty) {
-          spans.add(TextSpan(text: ' to ', style: mutedStyle));
-          spans.add(TextSpan(text: assignee, style: highlightStyle));
         }
       }
       _appendProjectContext(spans, project, l10n, mutedStyle, highlightStyle);
@@ -176,10 +136,7 @@ List<InlineSpan> buildActivityEventSpans(
 
     case 'TaskDeleted':
       final spans = <InlineSpan>[
-        TextSpan(
-          text: l10n?.activityTaskDeleted ?? 'deleted task',
-          style: mutedStyle,
-        ),
+        TextSpan(text: l10n.activityTaskDeleted, style: mutedStyle),
         if (title != null && title.isNotEmpty) ...[
           const TextSpan(text: ' '),
           TextSpan(text: title, style: highlightStyle),
@@ -190,10 +147,7 @@ List<InlineSpan> buildActivityEventSpans(
 
     case 'ProjectCreated':
       return [
-        TextSpan(
-          text: l10n?.activityProjectCreated ?? 'created project',
-          style: mutedStyle,
-        ),
+        TextSpan(text: l10n.activityProjectCreated, style: mutedStyle),
         if (title != null && title.isNotEmpty) ...[
           const TextSpan(text: ' '),
           TextSpan(text: title, style: highlightStyle),
@@ -202,51 +156,27 @@ List<InlineSpan> buildActivityEventSpans(
 
     case 'ProjectStatusChanged':
       final toStatus = _formatStatusName(event.newStatus ?? event.status, l10n);
-      if (l10n != null) {
-        if (title != null && title.isNotEmpty && toStatus.isNotEmpty) {
-          final full = l10n.activityUpdatedProjectTo(title, toStatus);
-          return _buildParameterizedSpans(
-            full,
-            [title, toStatus],
-            mutedStyle,
-            highlightStyle,
-          );
-        } else {
-          return [
-            TextSpan(
-              text: l10n.activityProjectStatusChanged,
-              style: mutedStyle,
-            ),
-            if (toStatus.isNotEmpty) ...[
-              const TextSpan(text: ' '),
-              TextSpan(text: toStatus, style: highlightStyle),
-            ],
-          ];
-        }
+      if (title != null && title.isNotEmpty && toStatus.isNotEmpty) {
+        final full = l10n.activityUpdatedProjectTo(title, toStatus);
+        return _buildParameterizedSpans(
+          full,
+          [title, toStatus],
+          mutedStyle,
+          highlightStyle,
+        );
+      } else {
+        return [
+          TextSpan(text: l10n.activityProjectStatusChanged, style: mutedStyle),
+          if (toStatus.isNotEmpty) ...[
+            const TextSpan(text: ' '),
+            TextSpan(text: toStatus, style: highlightStyle),
+          ],
+        ];
       }
-      return [
-        if (title != null && title.isNotEmpty) ...[
-          TextSpan(text: 'updated project ', style: mutedStyle),
-          TextSpan(text: title, style: highlightStyle),
-          if (toStatus.isNotEmpty) ...[
-            TextSpan(text: ' to ', style: mutedStyle),
-            TextSpan(text: toStatus, style: highlightStyle),
-          ],
-        ] else ...[
-          TextSpan(text: 'updated project status', style: mutedStyle),
-          if (toStatus.isNotEmpty) ...[
-            TextSpan(text: ' to ', style: mutedStyle),
-            TextSpan(text: toStatus, style: highlightStyle),
-          ],
-        ],
-      ];
 
     case 'ProjectArchived':
       return [
-        TextSpan(
-          text: l10n?.activityProjectArchived ?? 'archived project',
-          style: mutedStyle,
-        ),
+        TextSpan(text: l10n.activityProjectArchived, style: mutedStyle),
         if (title != null && title.isNotEmpty) ...[
           const TextSpan(text: ' '),
           TextSpan(text: title, style: highlightStyle),
@@ -255,10 +185,7 @@ List<InlineSpan> buildActivityEventSpans(
 
     case 'ProjectDeleted':
       return [
-        TextSpan(
-          text: l10n?.activityProjectDeleted ?? 'deleted project',
-          style: mutedStyle,
-        ),
+        TextSpan(text: l10n.activityProjectDeleted, style: mutedStyle),
         if (title != null && title.isNotEmpty) ...[
           const TextSpan(text: ' '),
           TextSpan(text: title, style: highlightStyle),
@@ -268,151 +195,94 @@ List<InlineSpan> buildActivityEventSpans(
     case 'MemberAdded':
       final member = event.memberName?.replaceAll('"', '');
       final role = event.role;
-      if (l10n != null) {
-        if (member != null && member.isNotEmpty) {
-          if (role != null && role.isNotEmpty) {
-            final full = l10n.activityAddedMemberAsRole(member, role);
-            return _buildParameterizedSpans(
-              full,
-              [member, role],
-              mutedStyle,
-              highlightStyle,
-            );
-          } else {
-            final full = l10n.activityAddedMemberToWorkspace(member);
-            return _buildParameterizedSpans(
-              full,
-              [member],
-              mutedStyle,
-              highlightStyle,
-            );
-          }
+      if (member != null && member.isNotEmpty) {
+        if (role != null && role.isNotEmpty) {
+          final full = l10n.activityAddedMemberAsRole(member, role);
+          return _buildParameterizedSpans(
+            full,
+            [member, role],
+            mutedStyle,
+            highlightStyle,
+          );
         } else {
-          return [TextSpan(text: l10n.activityMemberAdded, style: mutedStyle)];
-        }
-      }
-      return [
-        if (member != null && member.isNotEmpty) ...[
-          TextSpan(text: 'added ', style: mutedStyle),
-          TextSpan(text: member, style: highlightStyle),
-          if (role != null && role.isNotEmpty) ...[
-            TextSpan(text: ' as $role', style: mutedStyle),
-          ] else ...[
-            TextSpan(text: ' to the workspace', style: mutedStyle),
-          ],
-        ] else ...[
-          TextSpan(text: 'joined the workspace', style: mutedStyle),
-        ],
-      ];
-
-    case 'MemberRemoved':
-      final member = event.memberName?.replaceAll('"', '');
-      if (l10n != null) {
-        if (member != null && member.isNotEmpty) {
-          final full = l10n.activityRemovedMemberFromWorkspace(member);
+          final full = l10n.activityAddedMemberToWorkspace(member);
           return _buildParameterizedSpans(
             full,
             [member],
             mutedStyle,
             highlightStyle,
           );
-        } else {
-          return [
-            TextSpan(text: l10n.activityMemberRemoved, style: mutedStyle),
-          ];
         }
+      } else {
+        return [TextSpan(text: l10n.activityMemberAdded, style: mutedStyle)];
       }
-      return [
-        if (member != null && member.isNotEmpty) ...[
-          TextSpan(text: 'removed ', style: mutedStyle),
-          TextSpan(text: member, style: highlightStyle),
-          TextSpan(text: ' from the workspace', style: mutedStyle),
-        ] else ...[
-          TextSpan(text: 'left the workspace', style: mutedStyle),
-        ],
-      ];
+
+    case 'MemberRemoved':
+      final member = event.memberName?.replaceAll('"', '');
+      if (member != null && member.isNotEmpty) {
+        final full = l10n.activityRemovedMemberFromWorkspace(member);
+        return _buildParameterizedSpans(
+          full,
+          [member],
+          mutedStyle,
+          highlightStyle,
+        );
+      } else {
+        return [TextSpan(text: l10n.activityMemberRemoved, style: mutedStyle)];
+      }
 
     case 'WorkspaceCreated':
-      return [
-        TextSpan(
-          text: l10n?.activityWorkspaceCreated ?? 'created this workspace',
-          style: mutedStyle,
-        ),
-      ];
+      return [TextSpan(text: l10n.activityWorkspaceCreated, style: mutedStyle)];
 
     case 'WorkspaceUpdated':
-      if (l10n != null) {
-        if (title != null && title.isNotEmpty) {
-          final full = l10n.activityRenamedWorkspaceTo(title);
-          return _buildParameterizedSpans(
-            full,
-            [title],
-            mutedStyle,
-            highlightStyle,
-          );
-        } else {
-          return [
-            TextSpan(text: l10n.activityWorkspaceUpdated, style: mutedStyle),
-          ];
-        }
+      if (title != null && title.isNotEmpty) {
+        final full = l10n.activityRenamedWorkspaceTo(title);
+        return _buildParameterizedSpans(
+          full,
+          [title],
+          mutedStyle,
+          highlightStyle,
+        );
+      } else {
+        return [
+          TextSpan(text: l10n.activityWorkspaceUpdated, style: mutedStyle),
+        ];
       }
-      return [
-        if (title != null && title.isNotEmpty) ...[
-          TextSpan(text: 'renamed workspace to ', style: mutedStyle),
-          TextSpan(text: title, style: highlightStyle),
-        ] else ...[
-          TextSpan(text: 'updated workspace settings', style: mutedStyle),
-        ],
-      ];
 
     default:
-      if (l10n != null) {
-        if (title != null && title.isNotEmpty) {
-          final full = l10n.activityPerformedEventOn(event.eventType, title);
-          return _buildParameterizedSpans(
-            full,
-            [event.eventType, title],
-            mutedStyle,
-            highlightStyle,
-          );
-        } else {
-          final full = l10n.activityPerformedEvent(event.eventType);
-          return _buildParameterizedSpans(
-            full,
-            [event.eventType],
-            mutedStyle,
-            highlightStyle,
-          );
-        }
+      if (title != null && title.isNotEmpty) {
+        final full = l10n.activityPerformedEventOn(event.eventType, title);
+        return _buildParameterizedSpans(
+          full,
+          [event.eventType, title],
+          mutedStyle,
+          highlightStyle,
+        );
+      } else {
+        final full = l10n.activityPerformedEvent(event.eventType);
+        return _buildParameterizedSpans(
+          full,
+          [event.eventType],
+          mutedStyle,
+          highlightStyle,
+        );
       }
-      return [
-        TextSpan(text: 'performed ${event.eventType}', style: mutedStyle),
-        if (title != null && title.isNotEmpty) ...[
-          const TextSpan(text: ' on '),
-          TextSpan(text: title, style: highlightStyle),
-        ],
-      ];
   }
 }
 
 void _appendProjectContext(
   List<InlineSpan> spans,
   String? project,
-  AppLocalizations? l10n,
+  AppLocalizations l10n,
   TextStyle mutedStyle,
   TextStyle highlightStyle,
 ) {
   if (project != null && project.isNotEmpty) {
     spans.add(const TextSpan(text: ' '));
-    if (l10n != null) {
-      final full = l10n.activityInProject(project);
-      spans.addAll(
-        _buildParameterizedSpans(full, [project], mutedStyle, highlightStyle),
-      );
-    } else {
-      spans.add(TextSpan(text: 'in ', style: mutedStyle));
-      spans.add(TextSpan(text: project, style: highlightStyle));
-    }
+    final full = l10n.activityInProject(project);
+    spans.addAll(
+      _buildParameterizedSpans(full, [project], mutedStyle, highlightStyle),
+    );
   }
 }
 

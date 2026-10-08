@@ -84,7 +84,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                       size: 18,
                       color: AppColors.priorityHigh,
                     ),
-                    tooltip: l10n?.logOut ?? 'Logout',
+                    tooltip: l10n.logOut,
                     onPressed: () => _onLogout(context),
                   ),
                 ],

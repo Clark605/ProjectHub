@@ -30,7 +30,7 @@ class DashboardHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n?.sprintOverview ?? 'Workspace Overview',
+                l10n.sprintOverview,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.5,
@@ -38,8 +38,7 @@ class DashboardHeader extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                l10n?.sprintOverviewSubtitle ??
-                    'Track workspace deliverables, project progress, and daily focus items.',
+                l10n.sprintOverviewSubtitle,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

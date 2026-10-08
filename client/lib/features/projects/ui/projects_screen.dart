@@ -63,7 +63,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
           backgroundColor: AppColors.electricVioletContainer,
           foregroundColor: Colors.white,
           icon: const Icon(Icons.add_rounded),
-          label: Text(l10n?.newProject ?? 'New Project'),
+          label: Text(l10n.newProject),
         ),
         body: BlocBuilder<ProjectsListCubit, ProjectsListState>(
           builder: (context, state) {
@@ -110,10 +110,8 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                     ),
                     empty: (filter) => SliverFillRemaining(
                       child: AppEmptyState(
-                        title: l10n?.noProjectsFound ?? 'No projects found',
-                        description:
-                            l10n?.noProjectsDescription ??
-                            'Get started by creating your first project in this workspace.',
+                        title: l10n.noProjectsFound,
+                        description: l10n.noProjectsDescription,
                         icon: Icons.folder_open_rounded,
                       ),
                     ),
@@ -121,7 +119,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                       if (projects.isEmpty) {
                         return SliverFillRemaining(
                           child: AppEmptyState(
-                            title: l10n?.noResults ?? 'No results found',
+                            title: l10n.noResults,
                             description: '',
                             icon: Icons.filter_list_off_rounded,
                           ),

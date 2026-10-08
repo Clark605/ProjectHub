@@ -64,10 +64,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
       listener: (context, state) {
         if (state is ProfileEditSuccess) {
           setState(() => _isEditing = false);
-          showAppSuccessSnackBar(
-            context,
-            l10n?.profileUpdatedSuccess ?? 'Profile updated successfully!',
-          );
+          showAppSuccessSnackBar(context, l10n.profileUpdatedSuccess);
         }
       },
       builder: (context, state) {
@@ -135,9 +132,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                       icon: Icon(
                         _isEditing ? Icons.close_rounded : Icons.edit_rounded,
                       ),
-                      tooltip: _isEditing
-                          ? (l10n?.cancel ?? 'Cancel')
-                          : (l10n?.editProfile ?? 'Edit profile'),
+                      tooltip: _isEditing ? (l10n.cancel) : (l10n.editProfile),
                       onPressed: () => setState(() => _isEditing = !_isEditing),
                     ),
                   ],
@@ -148,16 +143,14 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                   const SizedBox(height: 16),
                   AppTextField(
                     controller: _nameController,
-                    label: l10n?.displayName ?? 'Display Name',
-                    hintText: l10n?.yourFullNameHint ?? 'Your full name',
+                    label: l10n.displayName,
+                    hintText: l10n.yourFullNameHint,
                   ),
                   const SizedBox(height: 14),
                   AppTextField(
                     controller: _bioController,
-                    label: l10n?.bio ?? 'Bio',
-                    hintText:
-                        l10n?.shortDescriptionHint ??
-                        'Short description about yourself',
+                    label: l10n.bio,
+                    hintText: l10n.shortDescriptionHint,
                   ),
                   const SizedBox(height: 18),
                   Align(
@@ -165,7 +158,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 160),
                       child: AppButton(
-                        label: l10n?.saveProfile ?? 'Save Profile',
+                        label: l10n.saveProfile,
                         icon: Icons.check_rounded,
                         isLoading: isLoading,
                         onPressed: () => _save(context),

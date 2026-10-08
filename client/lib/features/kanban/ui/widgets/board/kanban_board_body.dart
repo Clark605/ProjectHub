@@ -71,14 +71,13 @@ class KanbanBoardBody extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    l10n?.noTasksMatchFilters ??
-                        'No tasks match active filters',
+                    l10n.noTasksMatchFilters,
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 12),
                   OutlinedButton(
                     onPressed: onClearFilters,
-                    child: Text(l10n?.clearFilters ?? 'Clear Filters'),
+                    child: Text(l10n.clearFilters),
                   ),
                 ],
               ),

@@ -51,7 +51,7 @@ class TaskDetailReadView extends StatelessWidget {
         Text(
           task.description.isNotEmpty
               ? task.description
-              : (l10n?.noDescriptionProvided ?? 'No description provided.'),
+              : l10n.noDescriptionProvided,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: task.description.isNotEmpty
                 ? theme.colorScheme.onSurface
@@ -76,17 +76,17 @@ class TaskDetailReadView extends StatelessWidget {
         _buildInfoRow(
           context,
           icon: Icons.person_outline_rounded,
-          label: l10n?.assignee ?? 'Assignee',
-          value: task.assigneeName ?? (l10n?.unassigned ?? 'Unassigned'),
+          label: l10n.assignee,
+          value: task.assigneeName ?? l10n.unassigned,
         ),
         const SizedBox(height: 12),
         _buildInfoRow(
           context,
           icon: Icons.calendar_today_outlined,
-          label: l10n?.dueDate ?? 'Due Date',
+          label: l10n.dueDate,
           value: task.dueDate != null
               ? DateFormatter.formatDate(task.dueDate!, context: context)
-              : (l10n?.dueDateNotSet ?? 'Not set'),
+              : l10n.dueDateNotSet,
           valueColor: isOverdue ? AppColors.error : null,
           trailing: isOverdue ? _buildOverdueBadge(l10n) : null,
         ),
@@ -94,17 +94,17 @@ class TaskDetailReadView extends StatelessWidget {
         _buildInfoRow(
           context,
           icon: Icons.history_edu_rounded,
-          label: l10n?.taskCreatedBy ?? 'Created By',
+          label: l10n.taskCreatedBy,
           value: task.createdByName.isNotEmpty
               ? task.createdByName
-              : (l10n?.unknownUser ?? 'Unknown'),
+              : l10n.unknownUser,
         ),
         if (task.createdAt != null) ...[
           const SizedBox(height: 12),
           _buildInfoRow(
             context,
             icon: Icons.access_time_rounded,
-            label: l10n?.taskCreatedAt ?? 'Created',
+            label: l10n.taskCreatedAt,
             value: DateFormatter.formatDateTime(
               task.createdAt!,
               context: context,
@@ -161,7 +161,7 @@ class TaskDetailReadView extends StatelessWidget {
     );
   }
 
-  Widget _buildOverdueBadge(AppLocalizations? l10n) {
+  Widget _buildOverdueBadge(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
@@ -169,7 +169,7 @@ class TaskDetailReadView extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
       ),
       child: Text(
-        l10n?.taskOverdue ?? 'Overdue',
+        l10n.taskOverdue,
         style: const TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,

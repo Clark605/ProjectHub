@@ -1,3 +1,4 @@
+import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -7,6 +8,8 @@ import 'package:client/features/tasks/data/models/task_status.dart';
 void main() {
   Widget buildHeader(TaskStatus status, {int taskCount = 0}) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         body: Center(
           child: SizedBox(

@@ -70,7 +70,7 @@ class TaskTagsRow extends StatelessWidget {
                   ),
                   const SizedBox(width: 2),
                   Text(
-                    l10n?.tagLabel ?? 'Tag',
+                    l10n.tagLabel,
                     style: const TextStyle(
                       fontSize: 11,
                       color: AppColors.textSecondary,

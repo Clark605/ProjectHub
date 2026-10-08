@@ -35,9 +35,7 @@ class KanbanSearchInputRow extends StatelessWidget {
               autofocus: true,
               style: theme.textTheme.bodyMedium,
               decoration: InputDecoration(
-                hintText:
-                    l10n?.taskTitlePlaceholder ??
-                    'Search tasks by title or description...',
+                hintText: l10n.taskTitlePlaceholder,
                 hintStyle: TextStyle(
                   fontSize: 13,
                   color: theme.colorScheme.onSurfaceVariant,
@@ -61,7 +59,7 @@ class KanbanSearchInputRow extends StatelessWidget {
         const SizedBox(width: 8),
         IconButton(
           icon: const Icon(Icons.close_rounded),
-          tooltip: l10n?.closeSearch ?? 'Close search',
+          tooltip: l10n.closeSearch,
           onPressed: onClose,
         ),
       ],

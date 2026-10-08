@@ -158,7 +158,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                l10n?.attachTagMax ?? 'Attach Tag (Max 5)',
+                l10n.attachTagMax,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

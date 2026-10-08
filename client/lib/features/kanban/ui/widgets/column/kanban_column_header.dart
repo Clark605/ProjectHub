@@ -27,9 +27,7 @@ class KanbanColumnHeader extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final l10n = AppLocalizations.of(context);
     final statusColor = status.toColor();
-    final statusName = l10n != null
-        ? status.localizedName(l10n)
-        : status.toDisplayString();
+    final statusName = status.localizedName(l10n);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 12, 8, 10),
@@ -83,9 +81,7 @@ class KanbanColumnHeader extends StatelessWidget {
           if (!isArchived && onAddTask != null)
             IconButton(
               icon: const Icon(Icons.add_rounded, size: 20),
-              tooltip: l10n != null
-                  ? l10n.addTaskToStatus(statusName)
-                  : 'Add task to $statusName',
+              tooltip: l10n.addTaskToStatus(statusName),
               constraints: const BoxConstraints(),
               padding: const EdgeInsets.all(6),
               onPressed: onAddTask,

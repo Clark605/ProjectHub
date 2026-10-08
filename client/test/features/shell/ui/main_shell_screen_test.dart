@@ -23,7 +23,6 @@ import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
-import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mock_repositories.dart';
 

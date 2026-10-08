@@ -1,8 +1,12 @@
 enum TaskPriority {
-  low,
-  medium,
-  high,
-  urgent;
+  low(1),
+  medium(2),
+  high(3),
+  urgent(4);
+
+  const TaskPriority(this.weight);
+
+  final int weight;
 
   static TaskPriority fromString(String? value) {
     if (value == null) return TaskPriority.medium;

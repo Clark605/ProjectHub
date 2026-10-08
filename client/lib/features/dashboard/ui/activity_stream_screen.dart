@@ -137,7 +137,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
           appBar: AppBar(
             centerTitle: false,
             title: Text(
-              l10n?.teamStream ?? 'Team Presence & Stream',
+              l10n.teamStream,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -151,7 +151,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                   smallSize: 8,
                   child: const Icon(Icons.filter_list_rounded),
                 ),
-                tooltip: l10n?.filterAndSort ?? 'Filter & Sort',
+                tooltip: l10n.filterAndSort,
                 onPressed: () => _openFilterSheet(context, state),
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
               ),
@@ -184,14 +184,14 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
 
   Widget _buildQuickFilterBar(
     ThemeData theme,
-    AppLocalizations? l10n,
+    AppLocalizations l10n,
     String currentCategory,
   ) {
     final categories = [
-      {'key': 'All', 'label': l10n?.allActivities ?? 'All'},
-      {'key': 'Tasks', 'label': l10n?.taskActivities ?? 'Tasks'},
-      {'key': 'Projects', 'label': l10n?.projectActivities ?? 'Projects'},
-      {'key': 'Members', 'label': l10n?.memberActivities ?? 'Members'},
+      {'key': 'All', 'label': l10n.allActivities},
+      {'key': 'Tasks', 'label': l10n.taskActivities},
+      {'key': 'Projects', 'label': l10n.projectActivities},
+      {'key': 'Members', 'label': l10n.memberActivities},
     ];
 
     final isDark = theme.brightness == Brightness.dark;
@@ -251,7 +251,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
 
   Widget _buildBody(
     ThemeData theme,
-    AppLocalizations? l10n,
+    AppLocalizations l10n,
     ActivityStreamState state,
   ) {
     if (state.isLoading && !state.isRefreshing) {
@@ -283,7 +283,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                   forceRefresh: true,
                 ),
                 icon: const Icon(Icons.refresh_rounded),
-                label: Text(l10n?.retry ?? 'Retry'),
+                label: Text(l10n.retry),
               ),
             ],
           ),
@@ -308,8 +308,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                l10n?.noMatchingActivities ??
-                    'No activities match your filters',
+                l10n.noMatchingActivities,
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -319,7 +318,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                 key: const Key('activity_stream_reset_filters_button'),
                 onPressed: _cubit.clearFilters,
                 icon: const Icon(Icons.clear_all_rounded),
-                label: Text(l10n?.clearFilters ?? 'Reset Filters'),
+                label: Text(l10n.clearFilters),
               ),
             ],
           ),
@@ -344,7 +343,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                l10n?.noRecentActivity ?? 'No recent activity yet',
+                l10n.noRecentActivity,
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

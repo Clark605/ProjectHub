@@ -53,7 +53,7 @@ class MoveToStatusSheet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  l10n != null ? l10n.moveTask : 'Move Task',
+                  l10n.moveTask,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -101,9 +101,7 @@ class MoveToStatusSheet extends StatelessWidget {
                       const SizedBox(width: 14),
                       Expanded(
                         child: Text(
-                          l10n != null
-                              ? status.localizedName(l10n)
-                              : status.toDisplayString(),
+                          status.localizedName(l10n),
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: isCurrent
                                 ? FontWeight.w700
@@ -125,7 +123,7 @@ class MoveToStatusSheet extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            l10n != null ? l10n.currentStatus : 'Current',
+                            l10n.currentStatus,
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,

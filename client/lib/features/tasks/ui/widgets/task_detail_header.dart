@@ -54,9 +54,7 @@ class TaskDetailHeader extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  l10n != null
-                      ? task.statusEnum.localizedName(l10n)
-                      : task.statusEnum.toDisplayString(),
+                  task.statusEnum.localizedName(l10n),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
@@ -92,9 +90,7 @@ class TaskDetailHeader extends StatelessWidget {
               ),
               const SizedBox(width: 4),
               Text(
-                l10n != null
-                    ? task.priorityEnum.localizedName(l10n)
-                    : task.priorityEnum.toDisplayString(),
+                task.priorityEnum.localizedName(l10n),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -109,7 +105,7 @@ class TaskDetailHeader extends StatelessWidget {
           if (!isArchived)
             IconButton(
               icon: const Icon(Icons.edit_outlined, size: 20),
-              tooltip: l10n?.editTask ?? 'Edit Task',
+              tooltip: l10n.editTask,
               onPressed: onStartEdit,
             ),
           if (!isArchived)
@@ -119,14 +115,11 @@ class TaskDetailHeader extends StatelessWidget {
                 size: 20,
                 color: AppColors.error,
               ),
-              tooltip: l10n?.deleteTaskConfirmTitle ?? 'Delete Task',
+              tooltip: l10n.deleteTaskConfirmTitle,
               onPressed: onDelete,
             ),
         ] else ...[
-          TextButton(
-            onPressed: onCancelEdit,
-            child: Text(l10n?.cancel ?? 'Cancel'),
-          ),
+          TextButton(onPressed: onCancelEdit, child: Text(l10n.cancel)),
         ],
       ],
     );

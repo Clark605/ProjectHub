@@ -70,7 +70,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                     Icons.menu_rounded,
                     color: theme.colorScheme.onSurface,
                   ),
-                  tooltip: l10n?.navigationMenu ?? 'Navigation Menu',
+                  tooltip: l10n.navigationMenu,
                   onPressed: onOpenDrawer,
                 ),
                 const SizedBox(width: 8),
@@ -101,7 +101,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                     color: theme.colorScheme.onSurfaceVariant,
                     size: 20,
                   ),
-                  tooltip: l10n?.workspaceSettings ?? 'Workspace Settings',
+                  tooltip: l10n.workspaceSettings,
                   onPressed:
                       onSettingsTap ??
                       () => Navigator.of(

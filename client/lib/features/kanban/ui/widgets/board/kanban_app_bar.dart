@@ -66,7 +66,7 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            l10n?.kanbanBoard ?? 'Kanban Board',
+            l10n.kanbanBoard,
             style: theme.textTheme.bodySmall?.copyWith(fontSize: 12),
           ),
         ],
@@ -84,7 +84,7 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
             color: theme.colorScheme.onSurfaceVariant,
             size: 20,
           ),
-          tooltip: l10n?.projectDetails ?? 'Project Settings',
+          tooltip: l10n.projectDetails,
           onPressed: onSettings,
         ),
         const SizedBox(width: 8),

@@ -22,7 +22,7 @@ class AppErrorState extends StatelessWidget {
             const Icon(Icons.error_outline, size: 64, color: AppColors.error),
             const SizedBox(height: 16),
             Text(
-              l10n?.somethingWentWrong ?? 'Something went wrong',
+              l10n.somethingWentWrong,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: theme.colorScheme.onSurface,
@@ -42,7 +42,7 @@ class AppErrorState extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),
-                label: Text(l10n?.retry ?? 'Retry'),
+                label: Text(l10n.retry),
               ),
             ],
           ],

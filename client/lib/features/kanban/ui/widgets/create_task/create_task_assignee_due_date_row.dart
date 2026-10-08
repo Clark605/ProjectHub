@@ -34,7 +34,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n?.assignee ?? 'Assignee',
+                l10n.assignee,
                 style: theme.textTheme.labelMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurfaceVariant,
@@ -69,7 +69,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                   ),
                 ),
                 hint: Text(
-                  l10n?.unassigned ?? 'Unassigned',
+                  l10n.unassigned,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
@@ -78,7 +78,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                   DropdownMenuItem<String?>(
                     value: null,
                     child: Text(
-                      l10n?.unassigned ?? 'Unassigned',
+                      l10n.unassigned,
                       style: theme.textTheme.bodyMedium,
                     ),
                   ),
@@ -87,7 +87,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                     DropdownMenuItem<String?>(
                       value: selectedAssigneeId,
                       child: Text(
-                        l10n?.assignedMember ?? 'Assigned Member',
+                        l10n.assignedMember,
                         style: theme.textTheme.bodyMedium,
                       ),
                     ),
@@ -113,7 +113,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n?.dueDate ?? 'Due Date',
+                l10n.dueDate,
                 style: theme.textTheme.labelMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.onSurfaceVariant,
@@ -146,7 +146,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                                   selectedDueDate!,
                                   context: context,
                                 )
-                              : (l10n?.noDueDate ?? 'No date'),
+                              : (l10n.noDueDate),
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: selectedDueDate != null
                                 ? null

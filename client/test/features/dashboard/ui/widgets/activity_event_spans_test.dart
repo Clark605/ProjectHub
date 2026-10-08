@@ -16,7 +16,7 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
           builder: (context) {
-            final l10n = AppLocalizations.of(context)!;
+            final l10n = AppLocalizations.of(context);
             final spans = buildActivityEventSpans(
               event,
               Theme.of(context),

@@ -62,9 +62,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                       ),
                       const SizedBox(width: 3),
                       Text(
-                        l10n != null
-                            ? priority!.localizedName(l10n)
-                            : priority!.toDisplayString(),
+                        priority!.localizedName(l10n),
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
@@ -150,17 +148,17 @@ class KanbanTaskCardFooter extends StatelessWidget {
     BuildContext context,
     ThemeData theme,
     bool isDark,
-    AppLocalizations? l10n,
+    AppLocalizations l10n,
   ) {
     final name = assigneeName?.trim();
     if (name != null && name.isNotEmpty) {
       return Tooltip(
-        message: l10n?.assignedToUser(name) ?? 'Assigned to $name',
+        message: l10n.assignedToUser(name),
         child: AppAvatar(name: name, userId: assigneeId, size: 24),
       );
     }
     return Tooltip(
-      message: l10n?.unassigned ?? 'Unassigned',
+      message: l10n.unassigned,
       child: CircleAvatar(
         radius: 12,
         backgroundColor: isDark

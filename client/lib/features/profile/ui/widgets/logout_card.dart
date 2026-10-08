@@ -13,12 +13,10 @@ class LogoutCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final confirmed = await showAppConfirmDialog(
       context: context,
-      title: l10n?.logOut ?? 'Log Out',
-      message:
-          l10n?.logoutConfirmation ??
-          'Are you sure you want to log out of your session on this device?',
-      confirmLabel: l10n?.logOut ?? 'Log Out',
-      cancelLabel: l10n?.cancel ?? 'Cancel',
+      title: l10n.logOut,
+      message: l10n.logoutConfirmation,
+      confirmLabel: l10n.logOut,
+      cancelLabel: l10n.cancel,
       isDestructive: true,
     );
 
@@ -49,15 +47,14 @@ class LogoutCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    l10n?.sessionSecurity ?? 'Session Security',
+                    l10n.sessionSecurity,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    l10n?.sessionSecurityDesc ??
-                        'Log out of your account on this device.',
+                    l10n.sessionSecurityDesc,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Theme.of(
                         context,
@@ -69,7 +66,7 @@ class LogoutCard extends StatelessWidget {
             ),
             Expanded(
               child: AppButton(
-                label: l10n?.logOut ?? 'Log Out',
+                label: l10n.logOut,
                 icon: Icons.logout_rounded,
                 variant: AppButtonVariant.outline,
                 onPressed: () => _onLogout(context),

@@ -37,7 +37,6 @@ mixin WorkspaceSettingsMembersMixin on SafeActionCubit<WorkspaceSettingsState> {
       onError: (message) {
         emit(currentState.copyWith(isInviting: false, errorMessage: message));
       },
-      defaultErrorMessage: 'Failed to invite member',
       logTag: 'WorkspaceSettings',
     );
 
@@ -67,7 +66,6 @@ mixin WorkspaceSettingsMembersMixin on SafeActionCubit<WorkspaceSettingsState> {
       onError: (message) {
         emit(currentState.copyWith(errorMessage: message));
       },
-      defaultErrorMessage: 'Failed to remove member',
       logTag: 'WorkspaceSettings',
     );
 
@@ -102,7 +100,6 @@ mixin WorkspaceSettingsMembersMixin on SafeActionCubit<WorkspaceSettingsState> {
       onError: (message) {
         emit(currentState.copyWith(errorMessage: message));
       },
-      defaultErrorMessage: 'Failed to update member role',
       logTag: 'WorkspaceSettings',
     );
 

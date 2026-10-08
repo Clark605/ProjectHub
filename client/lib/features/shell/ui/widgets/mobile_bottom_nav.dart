@@ -45,7 +45,7 @@ class MobileBottomNav extends StatelessWidget {
                   (tab) => Expanded(
                     child: _BottomNavItem(
                       icon: tab.selectedIcon,
-                      label: l10n != null ? tab.localizedName(l10n) : tab.label,
+                      label: tab.localizedName(l10n),
                       isSelected: selectedIndex == tab.index,
                       activeColor: activeAccent,
                       onTap: () => onItemSelected(tab.index),

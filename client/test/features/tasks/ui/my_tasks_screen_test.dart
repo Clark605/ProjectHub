@@ -24,9 +24,9 @@ void main() {
   ]) {
     final workspaceCubit = wsCubit ?? MockWorkspaceContextCubit();
     if (wsCubit == null) {
-      when(() => workspaceCubit.state).thenReturn(
-        const WorkspaceContextState.initial(),
-      );
+      when(
+        () => workspaceCubit.state,
+      ).thenReturn(const WorkspaceContextState.initial());
       when(() => workspaceCubit.stream).thenAnswer((_) => const Stream.empty());
     }
     return MaterialApp(

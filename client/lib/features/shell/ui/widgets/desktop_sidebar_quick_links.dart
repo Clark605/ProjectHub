@@ -81,7 +81,7 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(
-            l10n?.activeProjectsSection ?? 'ACTIVE PROJECTS',
+            l10n.activeProjectsSection,
             style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.bold,
@@ -104,7 +104,7 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Text(
-              l10n?.noProjectsYet ?? 'No projects yet',
+              l10n.noProjectsYet,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 fontSize: 11,

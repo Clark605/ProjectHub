@@ -40,7 +40,7 @@ class KanbanFab extends StatelessWidget {
           foregroundColor: AppColors.textOnPrimary,
           icon: const Icon(Icons.add_rounded),
           label: Text(
-            l10n?.newTask ?? 'New Task',
+            l10n.newTask,
             style: const TextStyle(fontWeight: FontWeight.w600),
           ),
         ),

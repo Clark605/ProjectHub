@@ -52,7 +52,6 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
         );
       },
       onError: (message) => emit(ProjectsListState.error(message)),
-      defaultErrorMessage: 'Failed to load projects',
       logTag: 'ProjectsListCubit',
     );
   }
@@ -112,7 +111,6 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
       onError: (message) {
         emit(ProjectsListState.error(message));
       },
-      defaultErrorMessage: 'Failed to create project',
       logTag: 'ProjectsListCubit',
     );
   }

@@ -59,7 +59,7 @@ class RecentActivityCard extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  l10n?.teamStream ?? 'Team Presence & Stream',
+                  l10n.teamStream,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -90,7 +90,7 @@ class RecentActivityCard extends StatelessWidget {
                     visualDensity: VisualDensity.compact,
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                   ),
-                  child: Text(l10n?.viewAll ?? 'View all'),
+                  child: Text(l10n.viewAll),
                 ),
             ],
           ),
@@ -110,7 +110,7 @@ class RecentActivityCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      l10n?.noRecentActivity ?? 'No recent activity yet',
+                      l10n.noRecentActivity,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),

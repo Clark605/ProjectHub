@@ -46,9 +46,9 @@ class DashboardMetricsGrid extends StatelessWidget {
         final metrics = [
           (
             MetricData(
-              label: l10n?.activeProjects ?? 'Active Projects',
+              label: l10n.activeProjects,
               value: isLoading ? '...' : '$activeProjects',
-              trend: l10n?.ongoingProjectsSubtitle ?? 'Ongoing projects',
+              trend: l10n.ongoingProjectsSubtitle,
               icon: Icons.folder_open_rounded,
               color: AppColors.primary,
             ),
@@ -56,9 +56,9 @@ class DashboardMetricsGrid extends StatelessWidget {
           ),
           (
             MetricData(
-              label: l10n?.inProgressTasks ?? 'In Progress Tasks',
+              label: l10n.inProgressTasks,
               value: isLoading ? '...' : '$inProgressTasks',
-              trend: l10n?.inProgressSubtitle ?? 'Workspace in progress',
+              trend: l10n.inProgressSubtitle,
               icon: Icons.timelapse_rounded,
               color: AppColors.skyBlue,
             ),
@@ -66,9 +66,9 @@ class DashboardMetricsGrid extends StatelessWidget {
           ),
           (
             MetricData(
-              label: l10n?.urgentBlockers ?? 'Urgent Tasks',
+              label: l10n.urgentBlockers,
               value: isLoading ? '...' : '$urgentTasks',
-              trend: l10n?.urgentQueueSubtitle ?? 'High priority queue',
+              trend: l10n.urgentQueueSubtitle,
               icon: Icons.error_outline_rounded,
               color: AppColors.priorityUrgent,
             ),
@@ -76,9 +76,9 @@ class DashboardMetricsGrid extends StatelessWidget {
           ),
           (
             MetricData(
-              label: l10n?.completedTasks ?? 'Completed Tasks',
+              label: l10n.completedTasks,
               value: isLoading ? '...' : '$completedTasks',
-              trend: l10n?.completedTasksSubtitle ?? 'Finished tasks',
+              trend: l10n.completedTasksSubtitle,
               icon: Icons.check_circle_outline_rounded,
               color: AppColors.success,
             ),

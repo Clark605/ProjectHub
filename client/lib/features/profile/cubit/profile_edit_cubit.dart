@@ -21,7 +21,6 @@ class ProfileEditCubit extends SafeActionCubit<ProfileEditState> {
         emit(ProfileEditSuccess(updatedUser));
       },
       onError: (err) => emit(ProfileEditFailure(err)),
-      defaultErrorMessage: 'Failed to update profile',
       logTag: 'ProfileEditCubit',
     );
   }

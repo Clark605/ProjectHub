@@ -62,21 +62,21 @@ class _KanbanVisualState extends State<KanbanVisual>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildColumnHeader(
-                    l10n?.statusTodo.toUpperCase() ?? 'TO DO',
+                    l10n.statusTodo.toUpperCase(),
                     '2',
                     AppColors.priorityUrgent,
                     theme,
                   ),
                   const SizedBox(width: 8),
                   _buildColumnHeader(
-                    l10n?.statusInProgress.toUpperCase() ?? 'IN PROGRESS',
+                    l10n.statusInProgress.toUpperCase(),
                     '3',
                     AppColors.electricViolet,
                     theme,
                   ),
                   const SizedBox(width: 8),
                   _buildColumnHeader(
-                    l10n?.statusDone.toUpperCase() ?? 'DONE',
+                    l10n.statusDone.toUpperCase(),
                     '8',
                     AppColors.success,
                     theme,
@@ -102,7 +102,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                         children: [
                           _buildTaskCard(
                             title: 'JWT Refresh',
-                            tag: l10n?.priorityUrgent.toUpperCase() ?? 'URGENT',
+                            tag: l10n.priorityUrgent.toUpperCase(),
                             tagColor: AppColors.priorityUrgent,
                             avatarInitials: 'EL',
                             cardBg: cardBg,
@@ -289,8 +289,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                                   ),
                                   child: Text(
                                     isDoneState
-                                        ? (l10n?.statusDone.toUpperCase() ??
-                                              'DONE')
+                                        ? (l10n.statusDone.toUpperCase())
                                         : 'SYNC',
                                     style: TextStyle(
                                       color: isDoneState
