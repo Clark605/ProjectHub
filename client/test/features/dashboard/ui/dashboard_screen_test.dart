@@ -98,6 +98,8 @@ void main() {
     testWidgets('displays AppErrorState when loading fails (eliminating silent error)', (
       tester,
     ) async {
+      when(() => mockWorkspaceRepo.getWorkspaceDashboard(31))
+          .thenThrow(const UnauthorizedException(message: 'Authentication required'));
       when(() => mockProjectRepo.getProjects(31))
           .thenThrow(const UnauthorizedException(message: 'Authentication required'));
       when(() => mockTaskRepo.getMyTasks(31)).thenAnswer((_) async => []);
@@ -115,6 +117,8 @@ void main() {
     });
 
     testWidgets('tapping retry re-triggers loadDashboard', (tester) async {
+      when(() => mockWorkspaceRepo.getWorkspaceDashboard(31))
+          .thenThrow(const ServerException(message: 'Connection failure'));
       when(() => mockProjectRepo.getProjects(31))
           .thenThrow(const ServerException(message: 'Connection failure'));
       when(() => mockTaskRepo.getMyTasks(31)).thenAnswer((_) async => []);
@@ -129,12 +133,20 @@ void main() {
       expect(find.byType(AppErrorState), findsOneWidget);
 
       // Now mock successful response on retry
-      when(() => mockProjectRepo.getProjects(31)).thenAnswer((_) async => []);
+      when(() => mockWorkspaceRepo.getWorkspaceDashboard(31))
+          .thenAnswer((_) async => const WorkspaceDashboardDto(
+                activeProjectsCount: 1,
+                inProgressTasksCount: 0,
+                urgentTasksCount: 0,
+                completedTasksCount: 0,
+                overdueTasksCount: 0,
+                dueThisWeekTasksCount: 0,
+              ));
 
       await tester.tap(find.text('Retry'));
       await tester.pumpAndSettle();
 
-      verify(() => mockProjectRepo.getProjects(31)).called(greaterThanOrEqualTo(2));
+      verify(() => mockWorkspaceRepo.getWorkspaceDashboard(31)).called(greaterThanOrEqualTo(2));
     });
   });
 }

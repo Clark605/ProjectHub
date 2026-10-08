@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/network/signalr_events.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/features/comments/cubit/comments_state.dart';
 import 'package:client/features/comments/data/comment_repository.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
 
-class CommentsCubit extends Cubit<CommentsState> {
+class CommentsCubit extends SafeActionCubit<CommentsState> {
   CommentsCubit({
     required this.taskId,
     required CommentRepository repository,
@@ -74,12 +74,15 @@ class CommentsCubit extends Cubit<CommentsState> {
 
   Future<void> loadComments() async {
     emit(const CommentsState.loading());
-    try {
-      final comments = await _repository.getComments(taskId);
-      emit(CommentsState.loaded(comments: comments));
-    } catch (e) {
-      emit(CommentsState.error(e.toString()));
-    }
+    await safeExecute(
+      () async {
+        final comments = await _repository.getComments(taskId);
+        emit(CommentsState.loaded(comments: comments));
+      },
+      onError: (err) => emit(CommentsState.error(err)),
+      defaultErrorMessage: 'Failed to load comments',
+      logTag: 'CommentsCubit',
+    );
   }
 
   Future<bool> addComment(String content) async {
@@ -92,24 +95,29 @@ class CommentsCubit extends Cubit<CommentsState> {
     );
 
     emit(CommentsState.loaded(comments: currentComments, isSending: true));
-    try {
-      final newComment = await _repository.createComment(taskId, trimmed);
-      final exists = currentComments.any((c) => c.id == newComment.id);
-      final updated = exists
-          ? currentComments
-          : [...currentComments, newComment];
-      emit(CommentsState.loaded(comments: updated, isSending: false));
-      return true;
-    } catch (e) {
-      emit(
-        CommentsState.loaded(
-          comments: currentComments,
-          isSending: false,
-          errorMessage: e.toString(),
-        ),
-      );
-      return false;
-    }
+    final result = await safeExecute<bool>(
+      () async {
+        final newComment = await _repository.createComment(taskId, trimmed);
+        final exists = currentComments.any((c) => c.id == newComment.id);
+        final updated = exists
+            ? currentComments
+            : [...currentComments, newComment];
+        emit(CommentsState.loaded(comments: updated, isSending: false));
+        return true;
+      },
+      onError: (err) {
+        emit(
+          CommentsState.loaded(
+            comments: currentComments,
+            isSending: false,
+            errorMessage: err,
+          ),
+        );
+      },
+      defaultErrorMessage: 'Failed to post comment',
+      logTag: 'CommentsCubit',
+    );
+    return result ?? false;
   }
 
   Future<void> deleteComment(int commentId) async {
@@ -118,21 +126,26 @@ class CommentsCubit extends Cubit<CommentsState> {
       orElse: () => <CommentDto>[],
     );
 
-    try {
-      await _repository.deleteComment(commentId);
-      emit(
-        CommentsState.loaded(
-          comments: currentComments.where((c) => c.id != commentId).toList(),
-        ),
-      );
-    } catch (e) {
-      emit(
-        CommentsState.loaded(
-          comments: currentComments,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
+    await safeExecute(
+      () async {
+        await _repository.deleteComment(commentId);
+        emit(
+          CommentsState.loaded(
+            comments: currentComments.where((c) => c.id != commentId).toList(),
+          ),
+        );
+      },
+      onError: (err) {
+        emit(
+          CommentsState.loaded(
+            comments: currentComments,
+            errorMessage: err,
+          ),
+        );
+      },
+      defaultErrorMessage: 'Failed to delete comment',
+      logTag: 'CommentsCubit',
+    );
   }
 
   @override

@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
+import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/utils/app_logger.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:client/features/tasks/data/ai_task_repository.dart';
 
 @injectable
-class VoiceTaskCubit extends Cubit<VoiceTaskState> {
+class VoiceTaskCubit extends SafeActionCubit<VoiceTaskState> {
   final AiTaskRepository _aiTaskRepository;
   final stt.SpeechToText _speechToText = stt.SpeechToText();
 
@@ -128,22 +128,22 @@ class VoiceTaskCubit extends Cubit<VoiceTaskState> {
 
     emit(VoiceTaskState.parsing(fullText: text));
 
-    try {
-      final draft = await _aiTaskRepository.parseTaskFromText(
-        text: text,
-        projectId: _projectId!,
-        workspaceId: _workspaceId!,
-      );
+    await safeExecute(
+      () async {
+        final draft = await _aiTaskRepository.parseTaskFromText(
+          text: text,
+          projectId: _projectId!,
+          workspaceId: _workspaceId!,
+        );
 
-      emit(VoiceTaskState.reviewDraft(draft: draft, rawSpokenText: text));
-    } catch (e) {
-      AppLogger.error('AI parse failed', error: e, tag: 'VoiceTaskCubit');
-      emit(
-        const VoiceTaskState.error(
-          message: 'Failed to understand task. Please try again.',
-        ),
-      );
-    }
+        emit(VoiceTaskState.reviewDraft(draft: draft, rawSpokenText: text));
+      },
+      onError: (msg) {
+        emit(VoiceTaskState.error(message: msg));
+      },
+      defaultErrorMessage: 'Failed to understand task. Please try again.',
+      logTag: 'VoiceTaskCubit',
+    );
   }
 
   void reset() => emit(const VoiceTaskState.idle());

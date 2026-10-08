@@ -22,14 +22,6 @@ class WorkspaceDashboardDto {
     this.recentActivities = const [],
   });
 
-  // Convenience aliases for backwards compatibility
-  int get activeProjects => activeProjectsCount;
-  int get inProgressTasks => inProgressTasksCount;
-  int get urgentTasks => urgentTasksCount;
-  int get completedTasks => completedTasksCount;
-  int get overdueTasks => overdueTasksCount;
-  int get dueThisWeekTasks => dueThisWeekTasksCount;
-
   factory WorkspaceDashboardDto.fromJson(Map<String, dynamic> json) {
     const requiredKeys = [
       'activeProjectsCount',
@@ -72,16 +64,6 @@ class WorkspaceDashboardDto {
     'overdueTasksCount': overdueTasksCount,
     'dueThisWeekTasksCount': dueThisWeekTasksCount,
     'focusTasks': focusTasks.map((t) => t.toJson()).toList(),
-    'recentActivities': recentActivities.map((a) => {
-      'id': a.id,
-      'workspaceId': a.workspaceId,
-      'projectId': a.projectId,
-      'taskId': a.taskId,
-      'actorId': a.actorId,
-      'actorName': a.actorName,
-      'eventType': a.eventType,
-      'metadata': a.metadata,
-      'createdAt': a.createdAt.toIso8601String(),
-    }).toList(),
+    'recentActivities': recentActivities.map((a) => a.toJson()).toList(),
   };
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/ui/widgets/voice/voice_listening_overlay.dart';
 import 'package:client/features/kanban/ui/widgets/voice/voice_task_review_sheet.dart';
@@ -35,32 +36,22 @@ class KanbanVoiceHandler extends StatelessWidget {
       listener: (context, state) {
         state.maybeWhen(
           permissionDenied: (permanentlyDenied) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  l10n?.voiceTaskMicPermissionRequired ??
-                      'Microphone permission is required for voice tasks.',
-                ),
-                backgroundColor: AppColors.warning,
-                behavior: SnackBarBehavior.floating,
-                action: permanentlyDenied
-                    ? SnackBarAction(
-                        label: l10n?.voiceTaskSettings ?? 'Settings',
-                        textColor: Colors.white,
-                        onPressed: openAppSettings,
-                      )
-                    : null,
-              ),
+            showAppSnackBar(
+              context,
+              l10n?.voiceTaskMicPermissionRequired ??
+                  'Microphone permission is required for voice tasks.',
+              backgroundColor: AppColors.warning,
+              action: permanentlyDenied
+                  ? SnackBarAction(
+                      label: l10n?.voiceTaskSettings ?? 'Settings',
+                      textColor: Colors.white,
+                      onPressed: openAppSettings,
+                    )
+                  : null,
             );
           },
           error: (msg) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(msg),
-                backgroundColor: AppColors.error,
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
+            showAppErrorSnackBar(context, msg);
           },
           reviewDraft: (draft, _) {
             VoiceTaskReviewSheet.show(

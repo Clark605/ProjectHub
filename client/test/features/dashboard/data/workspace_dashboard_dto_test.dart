@@ -63,13 +63,6 @@ void main() {
       expect(dto.overdueTasksCount, 1);
       expect(dto.dueThisWeekTasksCount, 4);
 
-      // Verify convenience getters
-      expect(dto.activeProjects, 3);
-      expect(dto.inProgressTasks, 7);
-      expect(dto.urgentTasks, 2);
-      expect(dto.completedTasks, 12);
-      expect(dto.overdueTasks, 1);
-      expect(dto.dueThisWeekTasks, 4);
 
       // Verify focus tasks
       expect(dto.focusTasks.length, 1);

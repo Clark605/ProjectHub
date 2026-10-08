@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/cubit/app_settings_state.dart';
 import 'package:client/core/di/injection.dart';
+import 'package:client/core/dialog/app_confirm_dialog.dart';
 import 'package:client/core/network/auth_interceptor.dart';
 import 'package:client/core/network/global_network_error_handler.dart';
 import 'package:client/core/routes/app_navigator.dart';
@@ -45,21 +46,13 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
               barrierDismissible: false,
               builder: (dialogContext) {
                 final l10n = AppLocalizations.of(dialogContext);
-                return AlertDialog(
-                  title: Text(
-                    l10n?.connectionUnavailable ?? 'Connection unavailable',
-                  ),
-                  content: Text(
-                    message.contains('Unable to connect to the server')
-                        ? (l10n?.connectionErrorMessage ?? message)
-                        : message,
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.of(dialogContext).pop(),
-                      child: Text(l10n?.ok ?? 'OK'),
-                    ),
-                  ],
+                return AppConfirmDialog(
+                  title: l10n?.connectionUnavailable ?? 'Connection unavailable',
+                  message: message.contains('Unable to connect to the server')
+                      ? (l10n?.connectionErrorMessage ?? message)
+                      : message,
+                  confirmLabel: l10n?.ok ?? 'OK',
+                  showCancelButton: false,
                 );
               },
             ),
@@ -89,28 +82,21 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
           barrierDismissible: false,
           builder: (dialogContext) {
             final l10n = AppLocalizations.of(dialogContext);
-            return AlertDialog(
-              title: Text(
-                l10n?.sessionExpiredTitle ?? 'Session Expired',
-              ),
-              content: Text(
-                l10n?.sessionExpiredMessage ??
-                    'Your session has expired. Please log in again to continue.',
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () async {
-                    Navigator.of(dialogContext).pop();
-                    _isSessionExpiredDialogShowing = false;
-                    await authCubit.logout();
-                    navState.pushNamedAndRemoveUntil(
-                      RouteNames.login,
-                      (route) => false,
-                    );
-                  },
-                  child: Text(l10n?.reauthenticate ?? 'Log In'),
-                ),
-              ],
+            return AppConfirmDialog(
+              title: l10n?.sessionExpiredTitle ?? 'Session Expired',
+              message: l10n?.sessionExpiredMessage ??
+                  'Your session has expired. Please log in again to continue.',
+              confirmLabel: l10n?.reauthenticate ?? 'Log In',
+              showCancelButton: false,
+              onConfirm: () async {
+                Navigator.of(dialogContext).pop();
+                _isSessionExpiredDialogShowing = false;
+                await authCubit.logout();
+                navState.pushNamedAndRemoveUntil(
+                  RouteNames.login,
+                  (route) => false,
+                );
+              },
             );
           },
         ),

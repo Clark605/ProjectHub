@@ -58,6 +58,18 @@ class ActivityEventDto {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'workspaceId': workspaceId,
+    'projectId': projectId,
+    'taskId': taskId,
+    'actorId': actorId,
+    'actorName': actorName,
+    'eventType': eventType,
+    'metadata': metadata,
+    'createdAt': createdAt.toIso8601String(),
+  };
+
   /// Target item name or title (e.g. task title, project name, workspace name)
   String? get targetTitle =>
       metadata?['Title'] as String? ??

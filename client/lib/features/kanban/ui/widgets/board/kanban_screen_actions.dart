@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/routes/route_names.dart';
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/ui/widgets/create_task/create_task_sheet.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
@@ -122,13 +122,7 @@ class KanbanScreenActions {
     KanbanCubit cubit,
   ) {
     if (err == null || err.isEmpty) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(err),
-        backgroundColor: AppColors.error,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    showAppErrorSnackBar(context, err);
     cubit.clearErrorMessage();
   }
 }

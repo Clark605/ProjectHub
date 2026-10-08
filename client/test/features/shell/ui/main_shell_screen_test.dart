@@ -8,6 +8,9 @@ import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/ui/dashboard_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client/core/cubit/app_settings_cubit.dart';
+import 'package:client/features/profile/cubit/profile_edit_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/shell/ui/main_shell_screen.dart';
@@ -29,6 +32,9 @@ void main() {
     final sp = await SharedPreferences.getInstance();
     final prefs = PrefsService(sp);
     getIt.registerSingleton<PrefsService>(prefs);
+
+    final settingsCubit = AppSettingsCubit(prefs);
+    getIt.registerSingleton<AppSettingsCubit>(settingsCubit);
 
     final authRepo = createMockAuthRepository();
     final authCubit = AppAuthCubit(authRepo);
@@ -54,11 +60,23 @@ void main() {
       () => DashboardCubit(activityRepo, projectRepo, taskRepo, workspaceRepo),
     );
     getIt.registerFactory<MyTasksCubit>(() => MyTasksCubit(taskRepo));
+    getIt.registerFactory<ProfileEditCubit>(() => ProfileEditCubit(authRepo));
   });
 
   tearDown(() async {
     await getIt.reset();
   });
+
+  Widget buildTestApp({int initialIndex = 0}) {
+    return BlocProvider<AppSettingsCubit>.value(
+      value: getIt<AppSettingsCubit>(),
+      child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: MainShellScreen(initialIndex: initialIndex),
+      ),
+    );
+  }
 
   testWidgets('MainShellScreen renders Desktop layout with DesktopSidebar', (
     WidgetTester tester,
@@ -67,13 +85,7 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
 
-    await tester.pumpWidget(
-      const MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: MainShellScreen(initialIndex: 0),
-      ),
-    );
+    await tester.pumpWidget(buildTestApp());
     await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.byType(Sidebar), findsOneWidget);
@@ -87,13 +99,7 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
 
-    await tester.pumpWidget(
-      const MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: MainShellScreen(initialIndex: 0),
-      ),
-    );
+    await tester.pumpWidget(buildTestApp());
     await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.byType(MobileBottomNav), findsOneWidget);
@@ -107,13 +113,7 @@ void main() {
     tester.view.devicePixelRatio = 1.0;
     addTearDown(tester.view.resetPhysicalSize);
 
-    await tester.pumpWidget(
-      const MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: MainShellScreen(initialIndex: 0),
-      ),
-    );
+    await tester.pumpWidget(buildTestApp());
     await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.byType(DashboardScreen), findsOneWidget);
@@ -134,13 +134,7 @@ void main() {
       getIt.unregister<WorkspaceContextCubit>();
       getIt.registerSingleton<WorkspaceContextCubit>(emptyContextCubit);
 
-      await tester.pumpWidget(
-        const MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: MainShellScreen(initialIndex: 0),
-        ),
-      );
+      await tester.pumpWidget(buildTestApp());
       await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.text('Create Workspace'), findsWidgets);
@@ -160,13 +154,7 @@ void main() {
       getIt.unregister<WorkspaceContextCubit>();
       getIt.registerSingleton<WorkspaceContextCubit>(emptyContextCubit);
 
-      await tester.pumpWidget(
-        const MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: MainShellScreen(initialIndex: 0),
-        ),
-      );
+      await tester.pumpWidget(buildTestApp());
       await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.byType(QuickStartDialog), findsOneWidget);

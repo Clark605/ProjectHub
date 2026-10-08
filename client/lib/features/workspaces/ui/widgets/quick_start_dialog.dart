@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
@@ -89,7 +90,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: AppRadius.kRadiusXxl,
           border: Border.all(color: theme.colorScheme.outlineVariant),
           boxShadow: [
             BoxShadow(

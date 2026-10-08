@@ -1,5 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_radius.dart';
+
+/// Standardized SnackBar functions across the application.
+void showAppSnackBar(
+  BuildContext context,
+  String message, {
+  Color backgroundColor = AppColors.surface,
+  Color textColor = Colors.white,
+  SnackBarAction? action,
+}) {
+  context._showSnackBar(
+    message,
+    backgroundColor,
+    textColor: textColor,
+    action: action,
+  );
+}
+
+void showAppSuccessSnackBar(BuildContext context, String message) {
+  context.showSuccessSnackBar(message);
+}
+
+void showAppErrorSnackBar(BuildContext context, String message) {
+  context.showErrorSnackBar(message);
+}
+
+void showAppInfoSnackBar(BuildContext context, String message) {
+  context.showInfoSnackBar(message);
+}
 
 extension AppSnackBarExtension on BuildContext {
   void showSuccessSnackBar(String message) {
@@ -18,6 +47,7 @@ extension AppSnackBarExtension on BuildContext {
     String message,
     Color backgroundColor, {
     Color textColor = Colors.white,
+    SnackBarAction? action,
   }) {
     final scaffoldMessenger = ScaffoldMessenger.maybeOf(this);
     if (scaffoldMessenger == null) return;
@@ -28,7 +58,8 @@ extension AppSnackBarExtension on BuildContext {
         content: Text(message, style: TextStyle(color: textColor)),
         backgroundColor: backgroundColor,
         behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: const RoundedRectangleBorder(borderRadius: AppRadius.kRadiusSm),
+        action: action,
       ),
     );
   }

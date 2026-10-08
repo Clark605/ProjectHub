@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/widgets/app_button.dart';
+import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/profile/cubit/profile_edit_cubit.dart';
@@ -63,12 +64,9 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
       listener: (context, state) {
         if (state is ProfileEditSuccess) {
           setState(() => _isEditing = false);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                l10n?.profileUpdatedSuccess ?? 'Profile updated successfully!',
-              ),
-            ),
+          showAppSuccessSnackBar(
+            context,
+            l10n?.profileUpdatedSuccess ?? 'Profile updated successfully!',
           );
         }
       },

@@ -15,17 +15,20 @@ class AttachTagModal extends StatefulWidget {
     required this.projectId,
     required this.currentTags,
     required this.onTagSelected,
+    this.repository,
   });
 
   final int projectId;
   final List<TagDto> currentTags;
   final ValueChanged<TagDto> onTagSelected;
+  final TagRepository? repository;
 
   static Future<void> show(
     BuildContext context, {
     required int projectId,
     required List<TagDto> currentTags,
     required ValueChanged<TagDto> onTagSelected,
+    TagRepository? repository,
   }) {
     return showAppBottomSheet<void>(
       context: context,
@@ -33,6 +36,7 @@ class AttachTagModal extends StatefulWidget {
         projectId: projectId,
         currentTags: currentTags,
         onTagSelected: onTagSelected,
+        repository: repository,
       ),
     );
   }
@@ -43,7 +47,7 @@ class AttachTagModal extends StatefulWidget {
 
 class _AttachTagModalState extends State<AttachTagModal> {
   final _searchController = TextEditingController();
-  final _tagRepository = getIt<TagRepository>();
+  late final TagRepository _tagRepository;
 
   List<TagDto> _availableTags = [];
   bool _isLoading = true;
@@ -52,6 +56,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
   @override
   void initState() {
     super.initState();
+    _tagRepository = widget.repository ?? getIt<TagRepository>();
     _loadTags();
   }
 

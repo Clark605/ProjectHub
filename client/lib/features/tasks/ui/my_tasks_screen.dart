@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
+import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/features/tasks/cubit/my_tasks_cubit.dart';
 import 'package:client/features/tasks/cubit/my_tasks_state.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
-import 'package:client/features/tasks/data/task_repository.dart';
 import 'package:client/features/tasks/ui/widgets/move_to_status_sheet.dart';
 import 'package:client/features/tasks/ui/widgets/my_tasks_content_slivers.dart';
 import 'package:client/features/tasks/ui/widgets/my_tasks_header.dart';
@@ -41,9 +40,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
       _cubit = widget.cubit!;
       _isInternalCubit = false;
     } else {
-      _cubit = getIt.isRegistered<MyTasksCubit>()
-          ? getIt<MyTasksCubit>()
-          : MyTasksCubit(getIt<TaskRepository>());
+      _cubit = getIt<MyTasksCubit>();
       _isInternalCubit = true;
     }
     _resolveActiveWorkspace();
@@ -108,13 +105,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
 
   void _onError(String? err) {
     if (err == null || err.isEmpty) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(err),
-        backgroundColor: AppColors.error,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    showAppErrorSnackBar(context, err);
   }
 
   @override

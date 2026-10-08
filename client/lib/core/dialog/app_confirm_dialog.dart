@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_radius.dart';
 
 /// Shows a standardized confirmation dialog across the application.
 Future<bool> showAppConfirmDialog({
@@ -9,6 +10,7 @@ Future<bool> showAppConfirmDialog({
   String? confirmLabel,
   String? cancelLabel,
   bool isDestructive = false,
+  bool showCancelButton = true,
 }) async {
   final result = await showDialog<bool>(
     context: context,
@@ -18,6 +20,7 @@ Future<bool> showAppConfirmDialog({
       confirmLabel: confirmLabel,
       cancelLabel: cancelLabel,
       isDestructive: isDestructive,
+      showCancelButton: showCancelButton,
     ),
   );
   return result ?? false;
@@ -31,6 +34,8 @@ class AppConfirmDialog extends StatelessWidget {
     this.confirmLabel,
     this.cancelLabel,
     this.isDestructive = false,
+    this.showCancelButton = true,
+    this.onConfirm,
   });
 
   final String title;
@@ -38,17 +43,20 @@ class AppConfirmDialog extends StatelessWidget {
   final String? confirmLabel;
   final String? cancelLabel;
   final bool isDestructive;
+  final bool showCancelButton;
+  final VoidCallback? onConfirm;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final effectiveConfirmLabel = confirmLabel ?? (isDestructive ? 'Delete' : 'Confirm');
+    final effectiveConfirmLabel =
+        confirmLabel ?? (isDestructive ? 'Delete' : 'Confirm');
     final effectiveCancelLabel = cancelLabel ?? 'Cancel';
 
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.kRadiusLg),
       backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
       title: Text(
         title,
@@ -66,17 +74,26 @@ class AppConfirmDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
-          child: Text(
-            effectiveCancelLabel,
-            style: TextStyle(
-              color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
+        if (showCancelButton)
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              effectiveCancelLabel,
+              style: TextStyle(
+                color: isDark
+                    ? AppColors.textSecondary
+                    : AppColors.lightTextSecondary,
+              ),
             ),
           ),
-        ),
         FilledButton(
-          onPressed: () => Navigator.of(context).pop(true),
+          onPressed: () {
+            if (onConfirm != null) {
+              onConfirm!();
+            } else {
+              Navigator.of(context).pop(true);
+            }
+          },
           style: FilledButton.styleFrom(
             backgroundColor: isDestructive
                 ? AppColors.error
@@ -84,8 +101,8 @@ class AppConfirmDialog extends StatelessWidget {
             foregroundColor: isDestructive
                 ? Colors.white
                 : (isDark ? AppColors.textOnPrimary : Colors.white),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+            shape: const RoundedRectangleBorder(
+              borderRadius: AppRadius.kRadiusSm,
             ),
           ),
           child: Text(effectiveConfirmLabel),

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/di/injection.dart';
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/utils/permission_checker.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/app_error_state.dart';
+import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/projects/cubit/project_detail_cubit.dart';
@@ -36,11 +36,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _cubit =
-        widget.cubit ??
-        (getIt.isRegistered<ProjectDetailCubit>()
-            ? getIt<ProjectDetailCubit>()
-            : ProjectDetailCubit(getIt()));
+    _cubit = widget.cubit ?? getIt<ProjectDetailCubit>();
     _cubit.loadProject(widget.projectId);
   }
 
@@ -48,32 +44,17 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     state.maybeWhen(
       deleted: () {
         final l10n = AppLocalizations.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.projectDeleted),
-            backgroundColor: AppColors.surfaceContainerHigh,
-          ),
-        );
+        showAppSuccessSnackBar(context, l10n.projectDeleted);
         Navigator.of(context).pop(true);
       },
       loaded: (project, _, _, errorMessage, actionSuccessMessage) {
         final l10n = AppLocalizations.of(context)!;
         if (actionSuccessMessage != null) {
           _updatedProject = project;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(l10n.projectUpdated),
-              backgroundColor: AppColors.surfaceContainerHigh,
-            ),
-          );
+          showAppSuccessSnackBar(context, l10n.projectUpdated);
           _cubit.clearMessages();
         } else if (errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(errorMessage),
-              backgroundColor: AppColors.error,
-            ),
-          );
+          showAppErrorSnackBar(context, errorMessage);
           _cubit.clearError();
         }
       },

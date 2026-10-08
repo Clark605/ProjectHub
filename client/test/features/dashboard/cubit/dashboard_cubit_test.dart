@@ -61,15 +61,6 @@ void main() {
 
       when(() => mockWorkspaceRepo.getWorkspaceDashboard(1))
           .thenAnswer((_) async => serverDto);
-      when(() => mockProjectRepo.getProjects(1))
-          .thenAnswer((_) async => const [
-                ProjectDto(
-                  id: 10,
-                  workspaceId: 1,
-                  name: 'Project 1',
-                  status: 'Active',
-                ),
-              ]);
 
       await cubit.loadDashboard(1);
 
@@ -81,8 +72,9 @@ void main() {
       expect(cubit.state.focusTasks.length, 1);
       expect(cubit.state.focusTasks.first.title, 'Urgent Task');
 
-      // Verifies that getMyTasks was NOT called when server metrics succeeded
+      // Verifies that getMyTasks and getProjects were NOT called when server metrics succeeded
       verifyNever(() => mockTaskRepo.getMyTasks(any()));
+      verifyNever(() => mockProjectRepo.getProjects(any()));
     });
 
     test('falls back to client derivation when server dashboard fails', () async {

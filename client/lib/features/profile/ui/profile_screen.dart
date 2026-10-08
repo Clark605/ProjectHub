@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/di/injection.dart';
-import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
-import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/profile/cubit/profile_edit_cubit.dart';
 import 'package:client/features/profile/ui/widgets/faq_section.dart';
 import 'package:client/features/profile/ui/widgets/language_selector_tile.dart';
@@ -16,39 +13,19 @@ import 'package:client/features/profile/ui/widgets/theme_mode_selector.dart';
 import 'package:client/features/profile/ui/widgets/version_info_tile.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-class _FallbackAuthRepository implements AuthRepository {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
-}
-
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  final ProfileEditCubit? cubit;
+
+  const ProfileScreen({super.key, this.cubit});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context);
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: getIt<AppAuthCubit>()),
-        if (getIt.isRegistered<AppSettingsCubit>())
-          BlocProvider.value(value: getIt<AppSettingsCubit>())
-        else if (getIt.isRegistered<PrefsService>())
-          BlocProvider(create: (_) => AppSettingsCubit(getIt<PrefsService>())),
-        BlocProvider(
-          create: (_) => getIt.isRegistered<ProfileEditCubit>()
-              ? getIt<ProfileEditCubit>()
-              : ProfileEditCubit(
-                  getIt.isRegistered<AuthRepository>()
-                      ? getIt<AuthRepository>()
-                      : _FallbackAuthRepository(),
-                ),
-        ),
-      ],
-      child: BlocBuilder<AppAuthCubit, AppAuthState>(
-        builder: (context, state) {
-          final user = state.whenOrNull(authenticated: (u) => u);
+    final content = BlocBuilder<AppAuthCubit, AppAuthState>(
+      builder: (context, state) {
+        final user = state.whenOrNull(authenticated: (u) => u);
 
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -94,7 +71,36 @@ class ProfileScreen extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
+      );
+
+    Widget effectiveContent = content;
+
+    if (cubit != null) {
+      effectiveContent = BlocProvider.value(value: cubit!, child: effectiveContent);
+    } else {
+      try {
+        context.read<ProfileEditCubit>();
+      } catch (_) {
+        if (getIt.isRegistered<ProfileEditCubit>()) {
+          effectiveContent = BlocProvider(
+            create: (_) => getIt<ProfileEditCubit>(),
+            child: effectiveContent,
+          );
+        }
+      }
+    }
+
+    try {
+      context.read<AppAuthCubit>();
+    } catch (_) {
+      if (getIt.isRegistered<AppAuthCubit>()) {
+        effectiveContent = BlocProvider.value(
+          value: getIt<AppAuthCubit>(),
+          child: effectiveContent,
+        );
+      }
+    }
+
+    return effectiveContent;
   }
 }
