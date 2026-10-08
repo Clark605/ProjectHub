@@ -56,7 +56,8 @@ void main() {
 
       taskCreatedCtrl = StreamController<TaskCreatedEvent>.broadcast();
       taskUpdatedCtrl = StreamController<TaskUpdatedEvent>.broadcast();
-      taskStatusChangedCtrl = StreamController<TaskStatusChangedEvent>.broadcast();
+      taskStatusChangedCtrl =
+          StreamController<TaskStatusChangedEvent>.broadcast();
       taskAssignedCtrl = StreamController<TaskAssignedEvent>.broadcast();
       taskDeletedCtrl = StreamController<TaskDeletedEvent>.broadcast();
       commentAddedCtrl = StreamController<CommentAddedEvent>.broadcast();
@@ -66,21 +67,35 @@ void main() {
 
       when(() => signalR.taskCreated).thenAnswer((_) => taskCreatedCtrl.stream);
       when(() => signalR.taskUpdated).thenAnswer((_) => taskUpdatedCtrl.stream);
-      when(() => signalR.taskStatusChanged).thenAnswer((_) => taskStatusChangedCtrl.stream);
-      when(() => signalR.taskAssigned).thenAnswer((_) => taskAssignedCtrl.stream);
+      when(
+        () => signalR.taskStatusChanged,
+      ).thenAnswer((_) => taskStatusChangedCtrl.stream);
+      when(
+        () => signalR.taskAssigned,
+      ).thenAnswer((_) => taskAssignedCtrl.stream);
       when(() => signalR.taskDeleted).thenAnswer((_) => taskDeletedCtrl.stream);
-      when(() => signalR.commentAdded).thenAnswer((_) => commentAddedCtrl.stream);
-      when(() => signalR.commentDeleted).thenAnswer((_) => commentDeletedCtrl.stream);
-      when(() => signalR.presenceChanged).thenAnswer((_) => presenceChangedCtrl.stream);
+      when(
+        () => signalR.commentAdded,
+      ).thenAnswer((_) => commentAddedCtrl.stream);
+      when(
+        () => signalR.commentDeleted,
+      ).thenAnswer((_) => commentDeletedCtrl.stream);
+      when(
+        () => signalR.presenceChanged,
+      ).thenAnswer((_) => presenceChangedCtrl.stream);
       when(() => signalR.reconnected).thenAnswer((_) => reconnectedCtrl.stream);
       when(() => signalR.joinWorkspace(any())).thenAnswer((_) async {});
       when(() => signalR.leaveWorkspace(any())).thenAnswer((_) async {});
 
       when(
-        () => projectRepo.getProject(1, forceRefresh: any(named: 'forceRefresh')),
+        () =>
+            projectRepo.getProject(1, forceRefresh: any(named: 'forceRefresh')),
       ).thenAnswer((_) async => testProject);
       when(
-        () => taskRepo.getTasksByProject(1, forceRefresh: any(named: 'forceRefresh')),
+        () => taskRepo.getTasksByProject(
+          1,
+          forceRefresh: any(named: 'forceRefresh'),
+        ),
       ).thenAnswer((_) async => [sampleTask]);
 
       cubit = KanbanCubit(taskRepo, projectRepo, signalR);
@@ -107,7 +122,11 @@ void main() {
 
     test('realtime taskCreated adds task to loaded list', () async {
       await cubit.loadTasks(1);
-      const newTask = TaskDto(id: 102, projectId: 1, title: 'New Realtime Task');
+      const newTask = TaskDto(
+        id: 102,
+        projectId: 1,
+        title: 'New Realtime Task',
+      );
       taskCreatedCtrl.add(newTask);
       await pumpEventQueue();
 
@@ -172,9 +191,7 @@ void main() {
       'realtime taskDeleted removes task and triggers empty state when last task removed',
       () async {
         await cubit.loadTasks(1);
-        taskDeletedCtrl.add(
-          const TaskDeletedEvent(taskId: 101, projectId: 1),
-        );
+        taskDeletedCtrl.add(const TaskDeletedEvent(taskId: 101, projectId: 1));
         await pumpEventQueue();
 
         final isEmpty = cubit.state.maybeWhen(
@@ -208,9 +225,9 @@ void main() {
       () async {
         await cubit.loadTasks(1);
 
-        when(
-          () => taskRepo.createTask(1, any()),
-        ).thenAnswer((invocation) async {
+        when(() => taskRepo.createTask(1, any())).thenAnswer((
+          invocation,
+        ) async {
           const created = TaskDto(
             id: 200,
             projectId: 1,
@@ -238,9 +255,9 @@ void main() {
       () async {
         await cubit.loadTasks(1);
 
-        when(
-          () => taskRepo.createTask(1, any()),
-        ).thenAnswer((invocation) async {
+        when(() => taskRepo.createTask(1, any())).thenAnswer((
+          invocation,
+        ) async {
           const created = TaskDto(
             id: 200,
             projectId: 1,
@@ -251,9 +268,7 @@ void main() {
           await pumpEventQueue();
           return created;
         });
-        when(
-          () => taskRepo.updateTaskStatus(200, 'InProgress'),
-        ).thenAnswer(
+        when(() => taskRepo.updateTaskStatus(200, 'InProgress')).thenAnswer(
           (_) async => const TaskDto(
             id: 200,
             projectId: 1,

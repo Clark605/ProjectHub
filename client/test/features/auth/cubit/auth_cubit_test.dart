@@ -29,9 +29,9 @@ void main() {
     setUp(() {
       repository = MockAuthRepository();
       authStateController = StreamController<User?>.broadcast();
-      when(() => repository.authStateChanges).thenAnswer(
-        (_) => authStateController.stream,
-      );
+      when(
+        () => repository.authStateChanges,
+      ).thenAnswer((_) => authStateController.stream);
     });
 
     tearDown(() async {
@@ -78,10 +78,8 @@ void main() {
       'syncUser updates and emits authenticated',
       build: () {
         when(() => repository.getCurrentUser()).thenAnswer(
-          (_) async => const User(
-            name: 'Updated Clark',
-            email: 'updated@example.com',
-          ),
+          (_) async =>
+              const User(name: 'Updated Clark', email: 'updated@example.com'),
         );
         return AppAuthCubit(repository);
       },
@@ -139,15 +137,11 @@ void main() {
     blocTest<LoginCubit, LoginState>(
       'login success emits [loading, success]',
       build: () {
-        when(
-          () => repository.login(any()),
-        ).thenAnswer((_) async => testUser);
+        when(() => repository.login(any())).thenAnswer((_) async => testUser);
         return LoginCubit(repository);
       },
-      act: (cubit) => cubit.login(
-        email: 'clark@example.com',
-        password: 'Password123!',
-      ),
+      act: (cubit) =>
+          cubit.login(email: 'clark@example.com', password: 'Password123!'),
       expect: () => [
         const LoginState.loading(),
         const LoginState.success(testUser),
@@ -167,17 +161,14 @@ void main() {
     blocTest<LoginCubit, LoginState>(
       'login failure emits [loading, failure]',
       build: () {
-        when(
-          () => repository.login(any()),
-        ).thenAnswer(
-          (_) async => throw const ValidationException(message: 'Invalid credentials'),
+        when(() => repository.login(any())).thenAnswer(
+          (_) async =>
+              throw const ValidationException(message: 'Invalid credentials'),
         );
         return LoginCubit(repository);
       },
-      act: (cubit) => cubit.login(
-        email: 'clark@example.com',
-        password: 'WrongPassword',
-      ),
+      act: (cubit) =>
+          cubit.login(email: 'clark@example.com', password: 'WrongPassword'),
       expect: () => [
         const LoginState.loading(),
         const LoginState.failure('Invalid credentials'),
@@ -195,10 +186,8 @@ void main() {
         ).thenAnswer((_) async => testUser);
         return LoginCubit(repository);
       },
-      act: (cubit) => cubit.externalLogin(
-        provider: 'GitHub',
-        code: 'valid_auth_code',
-      ),
+      act: (cubit) =>
+          cubit.externalLogin(provider: 'GitHub', code: 'valid_auth_code'),
       expect: () => [
         const LoginState.loading(),
         const LoginState.success(testUser),
@@ -222,14 +211,14 @@ void main() {
             code: 'invalid_code',
           ),
         ).thenAnswer(
-          (_) async => throw const ValidationException(message: 'External authentication failed.'),
+          (_) async => throw const ValidationException(
+            message: 'External authentication failed.',
+          ),
         );
         return LoginCubit(repository);
       },
-      act: (cubit) => cubit.externalLogin(
-        provider: 'GitHub',
-        code: 'invalid_code',
-      ),
+      act: (cubit) =>
+          cubit.externalLogin(provider: 'GitHub', code: 'invalid_code'),
       expect: () => [
         const LoginState.loading(),
         const LoginState.failure('External authentication failed.'),

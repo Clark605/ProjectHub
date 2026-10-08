@@ -290,7 +290,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                                   child: Text(
                                     isDoneState
                                         ? (l10n?.statusDone.toUpperCase() ??
-                                            'DONE')
+                                              'DONE')
                                         : 'SYNC',
                                     style: TextStyle(
                                       color: isDoneState

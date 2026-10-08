@@ -3,7 +3,6 @@ import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/network/signalr_events.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -11,16 +10,19 @@ import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_avatar_item.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_sheet.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WorkspacePresenceAvatars extends StatefulWidget {
   const WorkspacePresenceAvatars({
     super.key,
     required this.workspaceId,
     this.signalRService,
+    this.workspaceRepository,
   });
 
   final int workspaceId;
   final SignalRService? signalRService;
+  final WorkspaceRepository? workspaceRepository;
 
   @override
   State<WorkspacePresenceAvatars> createState() =>
@@ -33,18 +35,49 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
   List<MemberDto> _members = [];
 
   String get _currentUserId {
-    if (!getIt.isRegistered<AppAuthCubit>()) return '';
-    return getIt<AppAuthCubit>().state.whenOrNull(authenticated: (u) => u.id) ??
-        '';
+    try {
+      return context.read<AppAuthCubit>().state.whenOrNull(
+            authenticated: (u) => u.id,
+          ) ??
+          '';
+    } catch (_) {
+      // Allows rendering in widget tests without AppAuthCubit in context
+      return '';
+    }
+  }
+
+  SignalRService? _resolveSignalR(BuildContext context) {
+    if (widget.signalRService != null) return widget.signalRService;
+    try {
+      return context.read<SignalRService>();
+    } catch (_) {
+      // Allows rendering in widget tests without SignalR service provided in context
+      return null;
+    }
+  }
+
+  WorkspaceRepository? _resolveWorkspaceRepo(BuildContext context) {
+    if (widget.workspaceRepository != null) return widget.workspaceRepository;
+    try {
+      return context.read<WorkspaceRepository>();
+    } catch (_) {
+      // Allows rendering in widget tests without WorkspaceRepository provided in context
+      return null;
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _initService();
+    });
+  }
+
+  void _initService() {
     _loadMembers();
-    final service =
-        widget.signalRService ??
-        (getIt.isRegistered<SignalRService>() ? getIt<SignalRService>() : null);
+    final service = _resolveSignalR(context);
     if (service != null) {
       service.joinWorkspace(widget.workspaceId);
       _presenceSub = service.presenceChanged.listen((event) {
@@ -58,16 +91,16 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
   }
 
   void _loadMembers() {
-    final repo = getIt.isRegistered<WorkspaceRepository>()
-        ? getIt<WorkspaceRepository>()
-        : null;
+    final repo = _resolveWorkspaceRepo(context);
     if (repo != null) {
       repo
           .getMembers(widget.workspaceId)
           .then((m) {
             if (mounted) setState(() => _members = m);
           })
-          .catchError((_) {});
+          .catchError((_) {
+            // Member list failure safely leaves list empty
+          });
     }
   }
 
@@ -77,11 +110,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
     if (oldWidget.workspaceId != widget.workspaceId) {
       _onlineUserIds = [];
       _loadMembers();
-      final service =
-          widget.signalRService ??
-          (getIt.isRegistered<SignalRService>()
-              ? getIt<SignalRService>()
-              : null);
+      final service = _resolveSignalR(context);
       service?.joinWorkspace(widget.workspaceId);
     }
   }

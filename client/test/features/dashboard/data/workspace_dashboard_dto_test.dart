@@ -35,9 +35,9 @@ void main() {
                 'color': 'indigo',
                 'workspaceId': 1,
                 'projectId': 10,
-              }
+              },
             ],
-          }
+          },
         ],
         'recentActivities': [
           {
@@ -50,7 +50,7 @@ void main() {
             'eventType': 'TaskCreated',
             'metadata': {'title': 'Implement auth tokens'},
             'createdAt': '2026-10-01T08:00:00.000Z',
-          }
+          },
         ],
       };
 
@@ -62,7 +62,6 @@ void main() {
       expect(dto.completedTasksCount, 12);
       expect(dto.overdueTasksCount, 1);
       expect(dto.dueThisWeekTasksCount, 4);
-
 
       // Verify focus tasks
       expect(dto.focusTasks.length, 1);
@@ -109,4 +108,3 @@ void main() {
     });
   });
 }
-

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/dialog/app_bottom_sheet.dart';
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/data/tag_repository.dart';
@@ -47,7 +47,7 @@ class AttachTagModal extends StatefulWidget {
 
 class _AttachTagModalState extends State<AttachTagModal> {
   final _searchController = TextEditingController();
-  late final TagRepository _tagRepository;
+  TagRepository? _tagRepository;
 
   List<TagDto> _availableTags = [];
   bool _isLoading = true;
@@ -56,16 +56,30 @@ class _AttachTagModalState extends State<AttachTagModal> {
   @override
   void initState() {
     super.initState();
-    _tagRepository = widget.repository ?? getIt<TagRepository>();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _initRepoAndLoad();
+    });
+  }
+
+  void _initRepoAndLoad() {
+    _tagRepository = widget.repository;
+    if (_tagRepository == null) {
+      try {
+        _tagRepository = context.read<TagRepository>();
+      } catch (_) {
+        // Allows rendering in isolated tests without TagRepository
+      }
+    }
     _loadTags();
   }
 
   Future<void> _loadTags() async {
     setState(() => _isLoading = true);
     try {
-      final tags = await _tagRepository.getAvailableTagsForProject(
-        widget.projectId,
-      );
+      final tags =
+          await _tagRepository?.getAvailableTagsForProject(widget.projectId) ??
+          [];
       if (mounted) {
         setState(() {
           _availableTags = tags;
@@ -86,12 +100,15 @@ class _AttachTagModalState extends State<AttachTagModal> {
     final trimmed = name.trim();
     if (trimmed.isEmpty) return;
 
+    final repo = _tagRepository;
+    if (repo == null) {
+      if (mounted) setState(() => _isLoading = false);
+      return;
+    }
+
     setState(() => _isLoading = true);
     try {
-      final newTag = await _tagRepository.createProjectTag(
-        widget.projectId,
-        trimmed,
-      );
+      final newTag = await repo.createProjectTag(widget.projectId, trimmed);
       if (mounted) {
         widget.onTagSelected(newTag);
         Navigator.of(context).pop();

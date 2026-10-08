@@ -57,7 +57,8 @@ class FaqSection extends StatelessWidget {
             ),
             _FaqItem(
               question:
-                  l10n?.faqArchivedQ ?? 'Can archived projects still be edited?',
+                  l10n?.faqArchivedQ ??
+                  'Can archived projects still be edited?',
               answer:
                   l10n?.faqArchivedA ??
                   'No. In accordance with ADR-0002, setting a project to Archived strictly freezes the project and all its Kanban tasks as read-only until explicitly restored to Active or Planning.',

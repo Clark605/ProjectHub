@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
@@ -13,7 +12,9 @@ import 'package:client/features/onboarding/ui/widgets/visuals/workspace_visual.d
 import 'package:client/l10n/generated/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+  final PrefsService? prefsService;
+
+  const OnboardingScreen({super.key, this.prefsService});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -30,12 +31,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _onGetStarted() {
-    getIt<PrefsService>().setOnboardingSeen();
+    widget.prefsService?.setOnboardingSeen();
     Navigator.pushReplacementNamed(context, RouteNames.login);
   }
 
   void _onSkip() {
-    getIt<PrefsService>().setOnboardingSeen();
+    widget.prefsService?.setOnboardingSeen();
     Navigator.pushReplacementNamed(context, RouteNames.login);
   }
 

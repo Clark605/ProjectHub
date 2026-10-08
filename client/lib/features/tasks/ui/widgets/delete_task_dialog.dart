@@ -13,7 +13,8 @@ class DeleteTaskDialog extends StatelessWidget {
     return showAppConfirmDialog(
       context: context,
       title: l10n?.deleteTaskConfirmTitle ?? 'Delete Task',
-      message: l10n?.deleteTaskConfirmMessage(taskTitle) ??
+      message:
+          l10n?.deleteTaskConfirmMessage(taskTitle) ??
           'Are you sure you want to delete "$taskTitle"? This action cannot be undone.',
       confirmLabel: l10n?.delete ?? 'Delete',
       cancelLabel: l10n?.cancel ?? 'Cancel',
@@ -27,7 +28,8 @@ class DeleteTaskDialog extends StatelessWidget {
 
     return AppConfirmDialog(
       title: l10n?.deleteTaskConfirmTitle ?? 'Delete Task',
-      message: l10n?.deleteTaskConfirmMessage(taskTitle) ??
+      message:
+          l10n?.deleteTaskConfirmMessage(taskTitle) ??
           'Are you sure you want to delete "$taskTitle"? This action cannot be undone.',
       confirmLabel: l10n?.delete ?? 'Delete',
       cancelLabel: l10n?.cancel ?? 'Cancel',

@@ -62,10 +62,7 @@ void main() {
     test('getTasksByProject returns unmodifiable list', () async {
       final tasks = await repo.getTasksByProject(10);
       expect(tasks.length, 2);
-      expect(
-        () => (tasks as dynamic).add(sampleTask1),
-        throwsUnsupportedError,
-      );
+      expect(() => (tasks as dynamic).add(sampleTask1), throwsUnsupportedError);
     });
 
     test(

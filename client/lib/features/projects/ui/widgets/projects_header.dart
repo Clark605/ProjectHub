@@ -27,7 +27,9 @@ class ProjectsHeader extends StatelessWidget {
         loaded: (l) => l.activeWorkspace.id,
         orElse: () => null,
       );
-    } catch (_) {}
+    } catch (_) {
+      // Allows rendering header in isolated widget tests without WorkspaceContextCubit
+    }
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),

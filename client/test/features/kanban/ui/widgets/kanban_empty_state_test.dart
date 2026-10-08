@@ -7,10 +7,7 @@ import 'package:client/l10n/generated/app_localizations.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  Widget buildWidget({
-    bool isArchived = false,
-    VoidCallback? onCreateTask,
-  }) {
+  Widget buildWidget({bool isArchived = false, VoidCallback? onCreateTask}) {
     return MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
@@ -29,10 +26,7 @@ void main() {
     ) async {
       bool created = false;
       await tester.pumpWidget(
-        buildWidget(
-          isArchived: false,
-          onCreateTask: () => created = true,
-        ),
+        buildWidget(isArchived: false, onCreateTask: () => created = true),
       );
 
       expect(find.text('Board is Empty'), findsOneWidget);
@@ -54,10 +48,7 @@ void main() {
     ) async {
       bool created = false;
       await tester.pumpWidget(
-        buildWidget(
-          isArchived: true,
-          onCreateTask: () => created = true,
-        ),
+        buildWidget(isArchived: true, onCreateTask: () => created = true),
       );
 
       expect(find.text('No Tasks'), findsOneWidget);
@@ -72,7 +63,9 @@ void main() {
     testWidgets('does not show CTA button when onCreateTask is null', (
       tester,
     ) async {
-      await tester.pumpWidget(buildWidget(isArchived: false, onCreateTask: null));
+      await tester.pumpWidget(
+        buildWidget(isArchived: false, onCreateTask: null),
+      );
 
       expect(find.text('Board is Empty'), findsOneWidget);
       expect(find.text('Create First Task'), findsNothing);

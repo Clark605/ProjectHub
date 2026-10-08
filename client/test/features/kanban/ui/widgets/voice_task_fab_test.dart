@@ -5,7 +5,9 @@ import 'package:client/features/kanban/ui/widgets/voice/voice_task_fab.dart';
 
 void main() {
   group('VoiceTaskFab', () {
-    testWidgets('renders mic icon when idle and triggers callback on tap', (tester) async {
+    testWidgets('renders mic icon when idle and triggers callback on tap', (
+      tester,
+    ) async {
       var tapped = false;
 
       await tester.pumpWidget(

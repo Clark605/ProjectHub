@@ -34,7 +34,8 @@ class AiTaskRemoteDataSourceImpl implements AiTaskRemoteDataSource {
       final sign = offset.isNegative ? '-' : '+';
       final hours = offset.inHours.abs().toString().padLeft(2, '0');
       final minutes = (offset.inMinutes.abs() % 60).toString().padLeft(2, '0');
-      final userLocalTimeWithOffset = '${now.toIso8601String()}$sign$hours:$minutes';
+      final userLocalTimeWithOffset =
+          '${now.toIso8601String()}$sign$hours:$minutes';
 
       final response = await _dio.post<Map<String, dynamic>>(
         ApiConstants.aiParseTask,

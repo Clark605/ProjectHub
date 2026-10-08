@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_empty_state.dart';
 import 'package:client/core/widgets/app_error_state.dart';
@@ -16,66 +15,28 @@ import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-class ProjectsScreen extends StatelessWidget {
-  final ProjectsListCubit? cubit;
-
-  const ProjectsScreen({super.key, this.cubit});
+class ProjectsScreen extends StatefulWidget {
+  const ProjectsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    if (cubit != null) {
-      return BlocProvider<ProjectsListCubit>.value(
-        value: cubit!,
-        child: const _ProjectsView(),
-      );
-    }
-
-    try {
-      final ambientCubit = context.read<ProjectsListCubit>();
-      return BlocProvider<ProjectsListCubit>.value(
-        value: ambientCubit,
-        child: const _ProjectsView(),
-      );
-    } catch (_) {
-      if (getIt.isRegistered<ProjectsListCubit>()) {
-        return BlocProvider<ProjectsListCubit>(
-          create: (_) => getIt<ProjectsListCubit>(),
-          child: const _ProjectsView(),
-        );
-      }
-      return const _ProjectsView();
-    }
-  }
+  State<ProjectsScreen> createState() => _ProjectsScreenState();
 }
 
-class _ProjectsView extends StatefulWidget {
-  const _ProjectsView();
-
-  @override
-  State<_ProjectsView> createState() => _ProjectsViewState();
-}
-
-class _ProjectsViewState extends State<_ProjectsView> {
+class _ProjectsScreenState extends State<ProjectsScreen> {
   int? _lastWorkspaceId;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) _checkWorkspaceReload();
-    });
-  }
-
-  void _checkWorkspaceReload() {
-    try {
+      if (!mounted) return;
       final wsState = context.read<WorkspaceContextCubit>().state;
       final activeWs = wsState.whenOrNull(loaded: (_, active) => active);
-
-      if (activeWs != null && activeWs.id != _lastWorkspaceId) {
+      if (activeWs != null) {
         _lastWorkspaceId = activeWs.id;
         context.read<ProjectsListCubit>().loadProjects(activeWs.id);
       }
-    } catch (_) {}
+    });
   }
 
   void _openCreateSheet(BuildContext context) {
@@ -95,7 +56,6 @@ class _ProjectsViewState extends State<_ProjectsView> {
           context.read<ProjectsListCubit>().loadProjects(activeWs.id);
         }
       },
-
       child: Scaffold(
         backgroundColor: Colors.transparent,
         floatingActionButton: FloatingActionButton.extended(

@@ -14,8 +14,14 @@ String _formatStatusName(String? status, AppLocalizations? l10n) {
       .replaceAll('-', '')
       .replaceAll('_', '');
 
-  if (['backlog', 'todo', 'inprogress', 'review', 'inreview', 'done']
-      .contains(lower)) {
+  if ([
+    'backlog',
+    'todo',
+    'inprogress',
+    'review',
+    'inreview',
+    'done',
+  ].contains(lower)) {
     final taskStatus = TaskStatus.fromString(cleaned);
     return l10n != null
         ? taskStatus.localizedName(l10n)
@@ -74,9 +80,7 @@ List<InlineSpan> buildActivityEventSpans(
       final toStatus = _formatStatusName(event.newStatus ?? event.status, l10n);
       final spans = <InlineSpan>[];
       if (l10n != null) {
-        if (title != null &&
-            title.isNotEmpty &&
-            toStatus.isNotEmpty) {
+        if (title != null && title.isNotEmpty && toStatus.isNotEmpty) {
           final full = l10n.activityMovedTo(title, toStatus);
           spans.addAll(
             _buildParameterizedSpans(
@@ -199,9 +203,7 @@ List<InlineSpan> buildActivityEventSpans(
     case 'ProjectStatusChanged':
       final toStatus = _formatStatusName(event.newStatus ?? event.status, l10n);
       if (l10n != null) {
-        if (title != null &&
-            title.isNotEmpty &&
-            toStatus.isNotEmpty) {
+        if (title != null && title.isNotEmpty && toStatus.isNotEmpty) {
           final full = l10n.activityUpdatedProjectTo(title, toStatus);
           return _buildParameterizedSpans(
             full,

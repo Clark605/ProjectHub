@@ -113,24 +113,22 @@ class WorkspacePresenceSheet extends StatelessWidget {
                       ),
                     ],
                   ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        isMe ? (l10n?.youSuffix(name) ?? '$name (You)') : name,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: isMe
-                              ? FontWeight.w600
-                              : FontWeight.normal,
-                          color: theme.colorScheme.onSurface,
-                        ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      isMe ? (l10n?.youSuffix(name) ?? '$name (You)') : name,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: isMe ? FontWeight.w600 : FontWeight.normal,
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
-                  ],
-                ),
-              );
-            }),
-          ],
-        ),
+                  ),
+                ],
+              ),
+            );
+          }),
+        ],
+      ),
     );
   }
 }

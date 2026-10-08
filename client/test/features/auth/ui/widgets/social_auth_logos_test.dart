@@ -6,13 +6,11 @@ import 'package:client/features/auth/ui/widgets/github_logo.dart';
 
 void main() {
   group('Social Auth Logos', () {
-    testWidgets('GoogleLogo renders SvgPicture with default size', (tester) async {
+    testWidgets('GoogleLogo renders SvgPicture with default size', (
+      tester,
+    ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: GoogleLogo(),
-          ),
-        ),
+        const MaterialApp(home: Scaffold(body: GoogleLogo())),
       );
 
       final svgFinder = find.byType(SvgPicture);
@@ -21,15 +19,12 @@ void main() {
       expect(googleLogoFinder, findsOneWidget);
     });
 
-    testWidgets('GithubLogo renders SvgPicture with custom color and size', (tester) async {
+    testWidgets('GithubLogo renders SvgPicture with custom color and size', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: GithubLogo(
-              size: 24,
-              color: Colors.white,
-            ),
-          ),
+          home: Scaffold(body: GithubLogo(size: 24, color: Colors.white)),
         ),
       );
 
@@ -40,4 +35,3 @@ void main() {
     });
   });
 }
-

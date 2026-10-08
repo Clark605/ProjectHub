@@ -48,7 +48,8 @@ class KanbanScreenActions {
       projectId: projectId,
       initialStatus: status,
       members: members,
-      onSubmit: (req, st) => cubit.createTask(projectId, req, initialStatus: st),
+      onSubmit: (req, st) =>
+          cubit.createTask(projectId, req, initialStatus: st),
     );
   }
 
@@ -90,7 +91,8 @@ class KanbanScreenActions {
     MoveToStatusSheet.show(
       context,
       task: task,
-      onStatusSelected: (s) => cubit.moveTaskStatus(task.id, s.toServerString()),
+      onStatusSelected: (s) =>
+          cubit.moveTaskStatus(task.id, s.toServerString()),
     );
   }
 
@@ -102,6 +104,7 @@ class KanbanScreenActions {
     try {
       return context.read<VoiceTaskCubit>();
     } catch (_) {
+      // Allows rendering in widget tests without VoiceTaskCubit in context
       return null;
     }
   }
@@ -112,15 +115,12 @@ class KanbanScreenActions {
         loaded: (_, activeWorkspace) => activeWorkspace.accentColor,
       );
     } catch (_) {
+      // Allows rendering in widget tests without WorkspaceContextCubit in context
       return null;
     }
   }
 
-  static void showError(
-    BuildContext context,
-    String? err,
-    KanbanCubit cubit,
-  ) {
+  static void showError(BuildContext context, String? err, KanbanCubit cubit) {
     if (err == null || err.isEmpty) return;
     showAppErrorSnackBar(context, err);
     cubit.clearErrorMessage();

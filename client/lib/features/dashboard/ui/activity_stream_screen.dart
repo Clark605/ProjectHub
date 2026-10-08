@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/realtime_status_badge.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_cubit.dart';
@@ -52,24 +51,57 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
       _cubit = widget.cubit!;
       _isInternalCubit = false;
       _cubit.loadActivities(widget.workspaceId);
-    } else {
-      final repo = widget.activityRepository ?? getIt<ActivityRepository>();
-      _cubit = ActivityStreamCubit(repo);
+    } else if (widget.activityRepository != null) {
+      _cubit = ActivityStreamCubit(widget.activityRepository!);
       _isInternalCubit = true;
       _cubit.loadActivities(widget.workspaceId);
+    } else {
+      ActivityStreamCubit? ambientCubit;
+      try {
+        ambientCubit = context.read<ActivityStreamCubit>();
+      } catch (_) {
+        // Allow fallback to repo resolution
+      }
+      if (ambientCubit != null) {
+        _cubit = ambientCubit;
+        _isInternalCubit = false;
+      } else {
+        ActivityRepository? repo;
+        try {
+          repo = context.read<ActivityRepository>();
+        } catch (_) {
+          // Fallback if not in provider tree
+        }
+        if (repo != null) {
+          _cubit = ActivityStreamCubit(repo);
+          _isInternalCubit = true;
+          _cubit.loadActivities(widget.workspaceId);
+        }
+      }
     }
   }
 
   Future<void> _loadProjects() async {
     try {
-      final repo = widget.projectRepository ?? getIt<ProjectRepository>();
-      final projects = await repo.getProjects(widget.workspaceId);
-      if (mounted) {
-        setState(() {
-          _projects = projects;
-        });
+      ProjectRepository? repo = widget.projectRepository;
+      if (repo == null) {
+        try {
+          repo = context.read<ProjectRepository>();
+        } catch (_) {
+          // Fallback if not in provider tree
+        }
       }
-    } catch (_) {}
+      if (repo != null) {
+        final projects = await repo.getProjects(widget.workspaceId);
+        if (mounted) {
+          setState(() {
+            _projects = projects;
+          });
+        }
+      }
+    } catch (_) {
+      // Non-critical project list for filter dropdown safely falls back to empty
+    }
   }
 
   @override
@@ -123,9 +155,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                 onPressed: () => _openFilterSheet(context, state),
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
               ),
-              WorkspacePresenceAvatars(
-                workspaceId: widget.workspaceId,
-              ),
+              WorkspacePresenceAvatars(workspaceId: widget.workspaceId),
               const SizedBox(width: 8),
               const RealtimeStatusBadge(),
               const SizedBox(width: 16),

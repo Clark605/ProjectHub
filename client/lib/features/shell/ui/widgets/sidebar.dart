@@ -43,7 +43,9 @@ class Sidebar extends StatelessWidget {
     ProjectsListCubit? cubit;
     try {
       cubit = context.read<ProjectsListCubit>();
-    } catch (_) {}
+    } catch (_) {
+      // Allows rendering sidebar in isolated widget tests without ProjectsListCubit
+    }
 
     Widget buildNavList(List<ProjectDto> projects, bool isLoading) {
       final projectsCount = projects.isNotEmpty

@@ -39,10 +39,7 @@ class ProjectMemberSummary {
   final String id;
   final String name;
 
-  const ProjectMemberSummary({
-    required this.id,
-    required this.name,
-  });
+  const ProjectMemberSummary({required this.id, required this.name});
 
   factory ProjectMemberSummary.fromJson(Map<String, dynamic> json) {
     return ProjectMemberSummary(
@@ -87,10 +84,10 @@ abstract class ProjectDto with _$ProjectDto {
       taskCounts: ProjectTaskCounts.fromJson(
         json['taskCounts'] as Map<String, dynamic>?,
       ),
-      members: (json['members'] as List?)
+      members:
+          (json['members'] as List?)
               ?.map(
-                (m) =>
-                    ProjectMemberSummary.fromJson(m as Map<String, dynamic>),
+                (m) => ProjectMemberSummary.fromJson(m as Map<String, dynamic>),
               )
               .toList() ??
           const [],
@@ -103,6 +100,5 @@ abstract class ProjectDto with _$ProjectDto {
   ProjectTaskCounts get taskCounts =>
       _extras[this]?.taskCounts ?? const ProjectTaskCounts();
 
-  List<ProjectMemberSummary> get members =>
-      _extras[this]?.members ?? const [];
+  List<ProjectMemberSummary> get members => _extras[this]?.members ?? const [];
 }

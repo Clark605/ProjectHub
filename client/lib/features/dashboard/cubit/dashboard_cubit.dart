@@ -49,8 +49,9 @@ class DashboardCubit extends SafeActionCubit<DashboardState> {
       () async {
         WorkspaceDashboardDto? serverDashboard;
         try {
-          serverDashboard =
-              await _workspaceRepository.getWorkspaceDashboard(workspaceId);
+          serverDashboard = await _workspaceRepository.getWorkspaceDashboard(
+            workspaceId,
+          );
         } catch (e, st) {
           AppLogger.error(
             'Failed to fetch server dashboard metrics for workspace $workspaceId: $e',
@@ -87,12 +88,15 @@ class DashboardCubit extends SafeActionCubit<DashboardState> {
         final tasks = results[1] as List<TaskDto>;
         final activities = results[2] as List<ActivityEventDto>;
 
-        final activeProjects =
-            projects.where((p) => p.status != 'Archived').length;
-        final inProgressTasks =
-            tasks.where((t) => t.status == 'InProgress').length;
-        final urgentTasks =
-            tasks.where((t) => t.priority == 'Urgent' && t.status != 'Done').length;
+        final activeProjects = projects
+            .where((p) => p.status != 'Archived')
+            .length;
+        final inProgressTasks = tasks
+            .where((t) => t.status == 'InProgress')
+            .length;
+        final urgentTasks = tasks
+            .where((t) => t.priority == 'Urgent' && t.status != 'Done')
+            .length;
         final doneTasks = tasks.where((t) => t.status == 'Done').length;
 
         emit(

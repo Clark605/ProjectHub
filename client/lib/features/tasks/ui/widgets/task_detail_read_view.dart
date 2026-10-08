@@ -111,24 +111,52 @@ class TaskDetailReadView extends StatelessWidget {
             ),
           ),
         ],
-        if (getIt.isRegistered<CommentRepository>()) ...[
-          const SizedBox(height: 20),
-          Divider(height: 1, color: theme.colorScheme.outlineVariant),
-          const SizedBox(height: 16),
-          BlocProvider<CommentsCubit>(
-            create: (_) => CommentsCubit(
-              taskId: task.id,
-              repository: getIt<CommentRepository>(),
-              signalRService: getIt.isRegistered<SignalRService>()
-                  ? getIt<SignalRService>()
-                  : null,
-            ),
-            child: TaskCommentsList(
-              currentUserId: currentUserId,
-              isWorkspaceOwner: isWorkspaceOwner,
-            ),
-          ),
-        ],
+        () {
+          CommentRepository? repo;
+          try {
+            repo = context.read<CommentRepository>();
+          } catch (_) {
+            // Allow fallback to GetIt locator
+          }
+          try {
+            repo ??= getIt<CommentRepository>();
+          } catch (_) {
+            // Allows rendering task detail in isolated tests without comments
+            return const SizedBox.shrink();
+          }
+
+          SignalRService? signalR;
+          try {
+            signalR = context.read<SignalRService>();
+          } catch (_) {
+            // Allow fallback to GetIt locator
+          }
+          try {
+            signalR ??= getIt<SignalRService>();
+          } catch (_) {
+            // Optional realtime in isolated tests
+          }
+
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 20),
+              Divider(height: 1, color: theme.colorScheme.outlineVariant),
+              const SizedBox(height: 16),
+              BlocProvider<CommentsCubit>(
+                create: (_) => CommentsCubit(
+                  taskId: task.id,
+                  repository: repo!,
+                  signalRService: signalR,
+                ),
+                child: TaskCommentsList(
+                  currentUserId: currentUserId,
+                  isWorkspaceOwner: isWorkspaceOwner,
+                ),
+              ),
+            ],
+          );
+        }(),
       ],
     );
   }

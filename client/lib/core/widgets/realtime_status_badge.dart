@@ -2,21 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RealtimeStatusBadge extends StatelessWidget {
   const RealtimeStatusBadge({
     super.key,
+    this.signalRService,
     this.showLabel = false,
   });
 
+  final SignalRService? signalRService;
   final bool showLabel;
+
+  SignalRService? _resolveSignalR(BuildContext context) {
+    if (signalRService != null) return signalRService;
+    try {
+      return context.read<SignalRService>();
+    } catch (_) {
+      // Allow fallback to GetIt locator when outside a provider tree
+    }
+    try {
+      return getIt<SignalRService>();
+    } catch (_) {
+      // Safe fallback when running in isolated tests without SignalR service
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (!getIt.isRegistered<SignalRService>()) {
+    final signalR = _resolveSignalR(context);
+    if (signalR == null) {
       return const SizedBox.shrink();
     }
-    final signalR = getIt<SignalRService>();
 
     return StreamBuilder<RealtimeStatus>(
       stream: signalR.realtimeStatus,

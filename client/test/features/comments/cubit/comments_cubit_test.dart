@@ -33,8 +33,12 @@ void main() {
       commentAddedCtrl = StreamController<CommentAddedEvent>.broadcast();
       commentDeletedCtrl = StreamController<CommentDeletedEvent>.broadcast();
 
-      when(() => signalR.commentAdded).thenAnswer((_) => commentAddedCtrl.stream);
-      when(() => signalR.commentDeleted).thenAnswer((_) => commentDeletedCtrl.stream);
+      when(
+        () => signalR.commentAdded,
+      ).thenAnswer((_) => commentAddedCtrl.stream);
+      when(
+        () => signalR.commentDeleted,
+      ).thenAnswer((_) => commentDeletedCtrl.stream);
     });
 
     tearDown(() async {
@@ -52,9 +56,7 @@ void main() {
           signalRService: signalR,
         );
       },
-      expect: () => [
-        const CommentsState.loaded(comments: []),
-      ],
+      expect: () => [const CommentsState.loaded(comments: [])],
       verify: (_) {
         verify(() => repo.getComments(taskId)).called(1);
       },
@@ -64,9 +66,7 @@ void main() {
       'addComment creates and appends new comment',
       build: () {
         when(() => repo.getComments(taskId)).thenAnswer((_) async => []);
-        when(
-          () => repo.createComment(taskId, 'Hello team'),
-        ).thenAnswer(
+        when(() => repo.createComment(taskId, 'Hello team')).thenAnswer(
           (_) async => CommentDto(
             id: 2,
             taskId: taskId,
@@ -124,9 +124,7 @@ void main() {
         await cubit.deleteComment(1);
       },
       skip: 1,
-      expect: () => [
-        const CommentsState.loaded(comments: []),
-      ],
+      expect: () => [const CommentsState.loaded(comments: [])],
       verify: (_) {
         verify(() => repo.deleteComment(1)).called(1);
       },
@@ -162,8 +160,7 @@ void main() {
       expect: () => [
         isA<CommentsState>().having(
           (s) => s.maybeWhen(
-            loaded: (comments, _, _) =>
-                comments.any((c) => c.id == 99),
+            loaded: (comments, _, _) => comments.any((c) => c.id == 99),
             orElse: () => false,
           ),
           'loaded with remote comment',

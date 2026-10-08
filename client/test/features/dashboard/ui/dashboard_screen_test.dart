@@ -41,15 +41,16 @@ void main() {
     mockWorkspaceRepo = MockWorkspaceRepository();
     mockWorkspaceCubit = MockWorkspaceContextCubit();
 
-    when(() => mockWorkspaceRepo.getWorkspaceDashboard(any()))
-        .thenAnswer((_) async => const WorkspaceDashboardDto(
-              activeProjectsCount: 1,
-              inProgressTasksCount: 0,
-              urgentTasksCount: 0,
-              completedTasksCount: 0,
-              overdueTasksCount: 0,
-              dueThisWeekTasksCount: 0,
-            ));
+    when(() => mockWorkspaceRepo.getWorkspaceDashboard(any())).thenAnswer(
+      (_) async => const WorkspaceDashboardDto(
+        activeProjectsCount: 1,
+        inProgressTasksCount: 0,
+        urgentTasksCount: 0,
+        completedTasksCount: 0,
+        overdueTasksCount: 0,
+        dueThisWeekTasksCount: 0,
+      ),
+    );
 
     when(() => mockWorkspaceCubit.state).thenReturn(
       const WorkspaceContextState.loaded(
@@ -85,45 +86,54 @@ void main() {
       home: Scaffold(
         body: MultiBlocProvider(
           providers: [
-            BlocProvider<WorkspaceContextCubit>.value(value: mockWorkspaceCubit),
+            BlocProvider<WorkspaceContextCubit>.value(
+              value: mockWorkspaceCubit,
+            ),
             BlocProvider<DashboardCubit>.value(value: dashboardCubit),
           ],
-          child: DashboardScreen(cubit: dashboardCubit),
+          child: const DashboardScreen(),
         ),
       ),
     );
   }
 
   group('DashboardScreen error handling', () {
-    testWidgets('displays AppErrorState when loading fails (eliminating silent error)', (
-      tester,
-    ) async {
-      when(() => mockWorkspaceRepo.getWorkspaceDashboard(31))
-          .thenThrow(const UnauthorizedException(message: 'Authentication required'));
-      when(() => mockProjectRepo.getProjects(31))
-          .thenThrow(const UnauthorizedException(message: 'Authentication required'));
-      when(() => mockTaskRepo.getMyTasks(31)).thenAnswer((_) async => []);
-      when(() => mockActivityRepo.getWorkspaceActivities(31, limit: 20))
-          .thenAnswer((_) async => []);
+    testWidgets(
+      'displays AppErrorState when loading fails (eliminating silent error)',
+      (tester) async {
+        when(() => mockWorkspaceRepo.getWorkspaceDashboard(31)).thenThrow(
+          const UnauthorizedException(message: 'Authentication required'),
+        );
+        when(() => mockProjectRepo.getProjects(31)).thenThrow(
+          const UnauthorizedException(message: 'Authentication required'),
+        );
+        when(() => mockTaskRepo.getMyTasks(31)).thenAnswer((_) async => []);
+        when(
+          () => mockActivityRepo.getWorkspaceActivities(31, limit: 20),
+        ).thenAnswer((_) async => []);
 
-      await dashboardCubit.loadDashboard(31);
+        await dashboardCubit.loadDashboard(31);
 
-      await tester.pumpWidget(createWidgetUnderTest());
-      await tester.pumpAndSettle();
+        await tester.pumpWidget(createWidgetUnderTest());
+        await tester.pumpAndSettle();
 
-      expect(find.byType(AppErrorState), findsOneWidget);
-      expect(find.textContaining('Authentication required'), findsOneWidget);
-      expect(find.text('Retry'), findsOneWidget);
-    });
+        expect(find.byType(AppErrorState), findsOneWidget);
+        expect(find.textContaining('Authentication required'), findsOneWidget);
+        expect(find.text('Retry'), findsOneWidget);
+      },
+    );
 
     testWidgets('tapping retry re-triggers loadDashboard', (tester) async {
-      when(() => mockWorkspaceRepo.getWorkspaceDashboard(31))
-          .thenThrow(const ServerException(message: 'Connection failure'));
-      when(() => mockProjectRepo.getProjects(31))
-          .thenThrow(const ServerException(message: 'Connection failure'));
+      when(
+        () => mockWorkspaceRepo.getWorkspaceDashboard(31),
+      ).thenThrow(const ServerException(message: 'Connection failure'));
+      when(
+        () => mockProjectRepo.getProjects(31),
+      ).thenThrow(const ServerException(message: 'Connection failure'));
       when(() => mockTaskRepo.getMyTasks(31)).thenAnswer((_) async => []);
-      when(() => mockActivityRepo.getWorkspaceActivities(31, limit: 20))
-          .thenAnswer((_) async => []);
+      when(
+        () => mockActivityRepo.getWorkspaceActivities(31, limit: 20),
+      ).thenAnswer((_) async => []);
 
       await dashboardCubit.loadDashboard(31);
 
@@ -133,20 +143,23 @@ void main() {
       expect(find.byType(AppErrorState), findsOneWidget);
 
       // Now mock successful response on retry
-      when(() => mockWorkspaceRepo.getWorkspaceDashboard(31))
-          .thenAnswer((_) async => const WorkspaceDashboardDto(
-                activeProjectsCount: 1,
-                inProgressTasksCount: 0,
-                urgentTasksCount: 0,
-                completedTasksCount: 0,
-                overdueTasksCount: 0,
-                dueThisWeekTasksCount: 0,
-              ));
+      when(() => mockWorkspaceRepo.getWorkspaceDashboard(31)).thenAnswer(
+        (_) async => const WorkspaceDashboardDto(
+          activeProjectsCount: 1,
+          inProgressTasksCount: 0,
+          urgentTasksCount: 0,
+          completedTasksCount: 0,
+          overdueTasksCount: 0,
+          dueThisWeekTasksCount: 0,
+        ),
+      );
 
       await tester.tap(find.text('Retry'));
       await tester.pumpAndSettle();
 
-      verify(() => mockWorkspaceRepo.getWorkspaceDashboard(31)).called(greaterThanOrEqualTo(2));
+      verify(
+        () => mockWorkspaceRepo.getWorkspaceDashboard(31),
+      ).called(greaterThanOrEqualTo(2));
     });
   });
 }

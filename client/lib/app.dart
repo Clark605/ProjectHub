@@ -47,7 +47,8 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
               builder: (dialogContext) {
                 final l10n = AppLocalizations.of(dialogContext);
                 return AppConfirmDialog(
-                  title: l10n?.connectionUnavailable ?? 'Connection unavailable',
+                  title:
+                      l10n?.connectionUnavailable ?? 'Connection unavailable',
                   message: message.contains('Unable to connect to the server')
                       ? (l10n?.connectionErrorMessage ?? message)
                       : message,
@@ -76,33 +77,36 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
       if (navState == null || context == null || !context.mounted) return;
 
       _isSessionExpiredDialogShowing = true;
-      navState.push<void>(
-        DialogRoute<void>(
-          context: context,
-          barrierDismissible: false,
-          builder: (dialogContext) {
-            final l10n = AppLocalizations.of(dialogContext);
-            return AppConfirmDialog(
-              title: l10n?.sessionExpiredTitle ?? 'Session Expired',
-              message: l10n?.sessionExpiredMessage ??
-                  'Your session has expired. Please log in again to continue.',
-              confirmLabel: l10n?.reauthenticate ?? 'Log In',
-              showCancelButton: false,
-              onConfirm: () async {
-                Navigator.of(dialogContext).pop();
-                _isSessionExpiredDialogShowing = false;
-                await authCubit.logout();
-                navState.pushNamedAndRemoveUntil(
-                  RouteNames.login,
-                  (route) => false,
+      navState
+          .push<void>(
+            DialogRoute<void>(
+              context: context,
+              barrierDismissible: false,
+              builder: (dialogContext) {
+                final l10n = AppLocalizations.of(dialogContext);
+                return AppConfirmDialog(
+                  title: l10n?.sessionExpiredTitle ?? 'Session Expired',
+                  message:
+                      l10n?.sessionExpiredMessage ??
+                      'Your session has expired. Please log in again to continue.',
+                  confirmLabel: l10n?.reauthenticate ?? 'Log In',
+                  showCancelButton: false,
+                  onConfirm: () async {
+                    Navigator.of(dialogContext).pop();
+                    _isSessionExpiredDialogShowing = false;
+                    await authCubit.logout();
+                    navState.pushNamedAndRemoveUntil(
+                      RouteNames.login,
+                      (route) => false,
+                    );
+                  },
                 );
               },
-            );
-          },
-        ),
-      ).then((_) {
-        _isSessionExpiredDialogShowing = false;
-      });
+            ),
+          )
+          .then((_) {
+            _isSessionExpiredDialogShowing = false;
+          });
     });
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/features/tasks/cubit/my_tasks_cubit.dart';
@@ -17,9 +16,7 @@ import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 
 class MyTasksScreen extends StatefulWidget {
-  final MyTasksCubit? cubit;
-
-  const MyTasksScreen({super.key, this.cubit});
+  const MyTasksScreen({super.key});
 
   @override
   State<MyTasksScreen> createState() => _MyTasksScreenState();
@@ -27,8 +24,6 @@ class MyTasksScreen extends StatefulWidget {
 
 class _MyTasksScreenState extends State<MyTasksScreen>
     with WidgetsBindingObserver {
-  late final MyTasksCubit _cubit;
-  late final bool _isInternalCubit;
   int? _activeWorkspaceId;
   List<MemberDto> _workspaceMembers = [];
 
@@ -36,70 +31,70 @@ class _MyTasksScreenState extends State<MyTasksScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    if (widget.cubit != null) {
-      _cubit = widget.cubit!;
-      _isInternalCubit = false;
-    } else {
-      _cubit = getIt<MyTasksCubit>();
-      _isInternalCubit = true;
-    }
-    _resolveActiveWorkspace();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _resolveActiveWorkspace();
+    });
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    if (_isInternalCubit) _cubit.close();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) _cubit.refreshOnFocus();
+    if (state == AppLifecycleState.resumed) {
+      context.read<MyTasksCubit>().refreshOnFocus();
+    }
   }
 
   void _resolveActiveWorkspace() {
-    if (getIt.isRegistered<WorkspaceContextCubit>()) {
-      getIt<WorkspaceContextCubit>().state.maybeWhen(
+    try {
+      context.read<WorkspaceContextCubit>().state.maybeWhen(
         loaded: (_, active) {
           _activeWorkspaceId = active.id;
-          _cubit.loadMyTasks(active.id);
+          context.read<MyTasksCubit>().loadMyTasks(active.id);
           _loadWorkspaceMembers(active.id);
         },
         orElse: () {},
       );
+    } catch (_) {
+      // Allows running in isolated widget tests without WorkspaceContextCubit
     }
   }
 
   Future<void> _loadWorkspaceMembers(int workspaceId) async {
-    if (getIt.isRegistered<WorkspaceRepository>()) {
-      try {
-        final members = await getIt<WorkspaceRepository>().getMembers(
-          workspaceId,
-        );
-        if (mounted) setState(() => _workspaceMembers = members);
-      } catch (_) {}
+    try {
+      final repo = context.read<WorkspaceRepository>();
+      final members = await repo.getMembers(workspaceId);
+      if (mounted) setState(() => _workspaceMembers = members);
+    } catch (_) {
+      // Workspace members list is non-critical for task listing; falls back gracefully
     }
   }
 
   void _openTaskDetail(TaskDto task) {
+    final cubit = context.read<MyTasksCubit>();
     TaskDetailSheet.show(
       context,
       task: task,
       isArchived: false,
       members: _workspaceMembers,
-      onUpdate: (req) => _cubit.updateTask(task.id, req),
-      onStatusChange: (status) => _cubit.updateTaskStatus(task.id, status),
-      onDelete: () => _cubit.deleteTask(task.id),
+      onUpdate: (req) => cubit.updateTask(task.id, req),
+      onStatusChange: (status) => cubit.updateTaskStatus(task.id, status),
+      onDelete: () => cubit.deleteTask(task.id),
     );
   }
 
   void _openMoveTask(TaskDto task) {
+    final cubit = context.read<MyTasksCubit>();
     MoveToStatusSheet.show(
       context,
       task: task,
       onStatusSelected: (s) =>
-          _cubit.updateTaskStatus(task.id, s.toServerString()),
+          cubit.updateTaskStatus(task.id, s.toServerString()),
     );
   }
 
@@ -110,12 +105,19 @@ class _MyTasksScreenState extends State<MyTasksScreen>
 
   @override
   Widget build(BuildContext context) {
-    final wsCubit = getIt.isRegistered<WorkspaceContextCubit>()
-        ? getIt<WorkspaceContextCubit>()
-        : null;
-
-    final content = BlocProvider.value(
-      value: _cubit,
+    return BlocListener<WorkspaceContextCubit, WorkspaceContextState>(
+      listener: (context, wsState) {
+        wsState.maybeWhen(
+          loaded: (_, active) {
+            if (_activeWorkspaceId != active.id) {
+              _activeWorkspaceId = active.id;
+              context.read<MyTasksCubit>().loadMyTasks(active.id);
+              _loadWorkspaceMembers(active.id);
+            }
+          },
+          orElse: () {},
+        );
+      },
       child: BlocConsumer<MyTasksCubit, MyTasksState>(
         listener: (context, state) {
           state.maybeWhen(
@@ -124,6 +126,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
           );
         },
         builder: (context, state) {
+          final cubit = context.read<MyTasksCubit>();
           String? wsAccent;
           try {
             wsAccent = context.watch<WorkspaceContextCubit>().state.maybeWhen(
@@ -131,10 +134,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
               orElse: () => null,
             );
           } catch (_) {
-            wsAccent = wsCubit?.state.maybeWhen(
-              loaded: (_, active) => active.accentColor,
-              orElse: () => null,
-            );
+            // Allows rendering screen in isolated widget tests without WorkspaceContextCubit
           }
 
           return AmbientGlowBackground(
@@ -142,7 +142,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
               child: RefreshIndicator(
                 onRefresh: () async {
                   if (_activeWorkspaceId != null) {
-                    await _cubit.loadMyTasks(
+                    await cubit.loadMyTasks(
                       _activeWorkspaceId!,
                       forceRefresh: true,
                     );
@@ -158,10 +158,10 @@ class _MyTasksScreenState extends State<MyTasksScreen>
                       wsAccent: wsAccent,
                       onTaskTap: _openTaskDetail,
                       onTaskMove: _openMoveTask,
-                      onToggleCollapse: _cubit.toggleDoneVisibility,
+                      onToggleCollapse: cubit.toggleDoneVisibility,
                       onRetry: () {
                         if (_activeWorkspaceId != null) {
-                          _cubit.loadMyTasks(
+                          cubit.loadMyTasks(
                             _activeWorkspaceId!,
                             forceRefresh: true,
                           );
@@ -176,26 +176,5 @@ class _MyTasksScreenState extends State<MyTasksScreen>
         },
       ),
     );
-
-    if (wsCubit != null) {
-      return BlocListener<WorkspaceContextCubit, WorkspaceContextState>(
-        bloc: wsCubit,
-        listener: (context, wsState) {
-          wsState.maybeWhen(
-            loaded: (_, active) {
-              if (_activeWorkspaceId != active.id) {
-                _activeWorkspaceId = active.id;
-                _cubit.loadMyTasks(active.id);
-                _loadWorkspaceMembers(active.id);
-              }
-            },
-            orElse: () {},
-          );
-        },
-        child: content,
-      );
-    }
-
-    return content;
   }
 }

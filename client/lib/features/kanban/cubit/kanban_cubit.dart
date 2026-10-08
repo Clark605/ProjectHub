@@ -213,7 +213,9 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
           errorMessage: current is KanbanLoaded ? current.errorMessage : null,
         );
       }
-    } catch (_) {}
+    } catch (_) {
+      // Silent catch on background task refresh to avoid interrupting UI interaction
+    }
   }
 
   @override

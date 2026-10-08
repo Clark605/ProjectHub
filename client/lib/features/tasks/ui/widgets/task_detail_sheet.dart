@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/dialog/app_bottom_sheet.dart';
-import 'package:client/core/di/injection.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/tags/data/tag_repository.dart';
@@ -127,25 +126,35 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
         setState(() => _currentTask = u);
         widget.onTaskUpdated?.call(u);
       }
-    } catch (_) {}
+    } catch (_) {
+      // Failed tag update safely leaves task unmodified
+    }
   }
 
-  TagRepository? get _tagRepo =>
-      getIt.isRegistered<TagRepository>() ? getIt<TagRepository>() : null;
+  TagRepository? _resolveTagRepo(BuildContext context) {
+    try {
+      return context.read<TagRepository>();
+    } catch (_) {
+      // Allows rendering sheet in isolated tests without TagRepository provider
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final auth =
-        context.read<AppAuthCubit?>()?.state ??
-        (getIt.isRegistered<AppAuthCubit>()
-            ? getIt<AppAuthCubit>().state
-            : null);
+    AppAuthState? auth;
+    try {
+      auth = context.read<AppAuthCubit>().state;
+    } catch (_) {
+      // Allows rendering sheet in isolated tests without AppAuthCubit in context
+    }
     final uid = auth != null
         ? (auth.whenOrNull(authenticated: (u) => u.id) ?? '')
         : '';
     final isOwner = widget.members.any(
       (m) => m.userId == uid && m.role == 'Owner',
     );
+    final tagRepo = _resolveTagRepo(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(20, 2, 20, 4),
@@ -156,40 +165,40 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
           const AppSheetDragHandle(margin: EdgeInsets.only(top: 2, bottom: 2)),
           const SizedBox(height: 2),
           TaskDetailHeader(
-                task: _currentTask,
-                isArchived: widget.isArchived,
-                isEditMode: _isEditMode,
-                onOpenStatusMove: _openStatusMove,
-                onStartEdit: () => setState(() => _isEditMode = true),
-                onCancelEdit: () => setState(() => _isEditMode = false),
-                onDelete: _confirmDelete,
-              ),
-              const SizedBox(height: 16),
-              if (!_isEditMode)
-                TaskDetailReadView(
-                  task: _currentTask,
-                  isArchived: widget.isArchived,
-                  currentUserId: uid,
-                  isWorkspaceOwner: isOwner,
-                  onTagAdded: (t) => _mutateTag(
-                    () =>
-                        _tagRepo?.attachTagToTask(_currentTask.id, t.id) ??
-                        Future.value(_currentTask),
-                  ),
-                  onTagRemoved: (t) => _mutateTag(
-                    () =>
-                        _tagRepo?.detachTagFromTask(_currentTask.id, t.id) ??
-                        Future.value(_currentTask),
-                  ),
-                )
-              else
-                TaskDetailEditForm(
-                  task: _currentTask,
-                  members: widget.members,
-                  onSave: _handleUpdate,
-                ),
-            ],
+            task: _currentTask,
+            isArchived: widget.isArchived,
+            isEditMode: _isEditMode,
+            onOpenStatusMove: _openStatusMove,
+            onStartEdit: () => setState(() => _isEditMode = true),
+            onCancelEdit: () => setState(() => _isEditMode = false),
+            onDelete: _confirmDelete,
           ),
-        );
+          const SizedBox(height: 16),
+          if (!_isEditMode)
+            TaskDetailReadView(
+              task: _currentTask,
+              isArchived: widget.isArchived,
+              currentUserId: uid,
+              isWorkspaceOwner: isOwner,
+              onTagAdded: (t) => _mutateTag(
+                () =>
+                    tagRepo?.attachTagToTask(_currentTask.id, t.id) ??
+                    Future.value(_currentTask),
+              ),
+              onTagRemoved: (t) => _mutateTag(
+                () =>
+                    tagRepo?.detachTagFromTask(_currentTask.id, t.id) ??
+                    Future.value(_currentTask),
+              ),
+            )
+          else
+            TaskDetailEditForm(
+              task: _currentTask,
+              members: widget.members,
+              onSave: _handleUpdate,
+            ),
+        ],
+      ),
+    );
   }
 }

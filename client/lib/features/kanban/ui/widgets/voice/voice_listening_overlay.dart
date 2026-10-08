@@ -77,7 +77,8 @@ class VoiceListeningOverlay extends StatelessWidget {
                 const SizedBox(height: 16),
                 Text(
                   isParsing
-                      ? (l10n?.voiceTaskStructuring ?? 'Structuring task with AI...')
+                      ? (l10n?.voiceTaskStructuring ??
+                            'Structuring task with AI...')
                       : (l10n?.voiceTaskListening ?? 'Listening...'),
                   style: TextStyle(
                     fontSize: 16,
@@ -107,7 +108,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                     child: Text(
                       recognizedText.isEmpty
                           ? (l10n?.voiceTaskPlaceholder ??
-                              'Speak naturally (e.g. "Add an urgent task to review metrics due tomorrow")')
+                                'Speak naturally (e.g. "Add an urgent task to review metrics due tomorrow")')
                           : recognizedText,
                       style: TextStyle(
                         fontSize: 14,
@@ -150,8 +151,13 @@ class VoiceListeningOverlay extends StatelessWidget {
                           backgroundColor: AppColors.electricVioletContainer,
                           foregroundColor: Colors.white,
                           minimumSize: const Size(0, 42),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
                       ),
                     ],

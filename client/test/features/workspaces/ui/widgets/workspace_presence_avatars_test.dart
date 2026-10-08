@@ -17,8 +17,9 @@ void main() {
   setUp(() {
     mockSignalR = MockSignalRService();
     presenceController = StreamController<PresenceChangedEvent>.broadcast();
-    when(() => mockSignalR.presenceChanged)
-        .thenAnswer((_) => presenceController.stream);
+    when(
+      () => mockSignalR.presenceChanged,
+    ).thenAnswer((_) => presenceController.stream);
     when(() => mockSignalR.joinWorkspace(any())).thenAnswer((_) async {});
   });
 

@@ -45,6 +45,7 @@ class KanbanColumn extends StatelessWidget {
     try {
       return context.read<KanbanCubit>();
     } catch (_) {
+      // Allows rendering kanban column in isolated component tests without KanbanCubit
       return null;
     }
   }

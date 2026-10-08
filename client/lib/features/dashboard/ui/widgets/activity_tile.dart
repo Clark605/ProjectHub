@@ -23,11 +23,7 @@ class ActivityTile extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        AppAvatar(
-          name: activity.actorName,
-          userId: activity.actorId,
-          size: 28,
-        ),
+        AppAvatar(name: activity.actorName, userId: activity.actorId, size: 28),
         const SizedBox(width: 10),
         Expanded(
           child: RichText(

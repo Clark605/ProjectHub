@@ -72,10 +72,13 @@ void main() {
 
     repo = MockWorkspaceRepository();
     when(() => repo.activeWorkspace).thenAnswer((_) => currentWorkspace);
-    when(() => repo.activeWorkspaceChanges)
-        .thenAnswer((_) => const Stream.empty());
+    when(
+      () => repo.activeWorkspaceChanges,
+    ).thenAnswer((_) => const Stream.empty());
     when(() => repo.setActiveWorkspace(any())).thenReturn(null);
-    when(() => repo.getWorkspaces()).thenAnswer((_) async => [currentWorkspace]);
+    when(
+      () => repo.getWorkspaces(),
+    ).thenAnswer((_) async => [currentWorkspace]);
     when(
       () => repo.getWorkspace(any(), forceRefresh: any(named: 'forceRefresh')),
     ).thenAnswer((_) async => currentWorkspace);
@@ -90,7 +93,9 @@ void main() {
       );
       return currentWorkspace;
     });
-    when(() => repo.updateMemberRole(any(), any(), any())).thenAnswer((inv) async {
+    when(() => repo.updateMemberRole(any(), any(), any())).thenAnswer((
+      inv,
+    ) async {
       final uid = inv.positionalArguments[1] as String;
       final role = inv.positionalArguments[2] as String;
       final index = currentMembers.indexWhere((m) => m.userId == uid);
@@ -260,8 +265,9 @@ void main() {
 
       expect(find.byType(AppErrorBanner), findsNothing);
 
-      when(() => repo.updateWorkspace(any(), any()))
-          .thenAnswer((_) async => throw Exception('Failed to update'));
+      when(
+        () => repo.updateWorkspace(any(), any()),
+      ).thenAnswer((_) async => throw Exception('Failed to update'));
       await settingsCubit.updateDetails('Bad Name', 'Bad Desc', 'teal');
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 250));

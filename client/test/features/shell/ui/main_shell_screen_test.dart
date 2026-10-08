@@ -21,7 +21,9 @@ import 'package:client/features/tasks/data/task_repository.dart';
 import 'package:client/features/tasks/ui/my_tasks_screen.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
+import 'package:client/core/network/signalr_service.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mock_repositories.dart';
 
@@ -61,6 +63,9 @@ void main() {
     );
     getIt.registerFactory<MyTasksCubit>(() => MyTasksCubit(taskRepo));
     getIt.registerFactory<ProfileEditCubit>(() => ProfileEditCubit(authRepo));
+
+    final signalR = createMockSignalRService();
+    getIt.registerSingleton<SignalRService>(signalR);
   });
 
   tearDown(() async {
@@ -68,8 +73,17 @@ void main() {
   });
 
   Widget buildTestApp({int initialIndex = 0}) {
-    return BlocProvider<AppSettingsCubit>.value(
-      value: getIt<AppSettingsCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AppSettingsCubit>.value(value: getIt<AppSettingsCubit>()),
+        BlocProvider<AppAuthCubit>.value(value: getIt<AppAuthCubit>()),
+        BlocProvider<WorkspaceContextCubit>.value(
+          value: getIt<WorkspaceContextCubit>(),
+        ),
+        BlocProvider<ProjectsListCubit>.value(
+          value: getIt<ProjectsListCubit>(),
+        ),
+      ],
       child: MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,

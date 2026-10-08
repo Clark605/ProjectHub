@@ -92,7 +92,7 @@ void main() {
           BlocProvider<WorkspaceContextCubit>.value(value: workspaceCubit),
           BlocProvider<ProjectsListCubit>.value(value: projectsCubit),
         ],
-        child: ProjectsScreen(cubit: projectsCubit),
+        child: const ProjectsScreen(),
       ),
     );
   }

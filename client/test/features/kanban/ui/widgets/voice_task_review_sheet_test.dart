@@ -8,7 +8,9 @@ import 'package:client/l10n/generated/app_localizations.dart';
 
 void main() {
   group('VoiceTaskReviewSheet', () {
-    testWidgets('renders pre-filled fields and warnings correctly', (tester) async {
+    testWidgets('renders pre-filled fields and warnings correctly', (
+      tester,
+    ) async {
       const draft = ParsedTaskDraftDto(
         title: 'Draft Task Title',
         description: 'Structured summary.\n\n- Point 1',

@@ -35,11 +35,7 @@ class VoiceTaskReviewHeader extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.auto_awesome,
-                size: 14,
-                color: badgeColor,
-              ),
+              Icon(Icons.auto_awesome, size: 14, color: badgeColor),
               const SizedBox(width: 4),
               Text(
                 l10n?.voiceTaskAiDraftPreview ?? 'AI Draft Preview',

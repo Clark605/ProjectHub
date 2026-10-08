@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class GoogleLogo extends StatelessWidget {
-  const GoogleLogo({
-    super.key,
-    this.size = 20,
-  });
+  const GoogleLogo({super.key, this.size = 20});
 
   final double size;
 

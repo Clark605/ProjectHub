@@ -97,10 +97,7 @@ class DashboardMetricsGrid extends StatelessWidget {
 
             return SizedBox(
               width: cardWidth,
-              child: MetricCard(
-                data: entry.$1,
-                onTap: entry.$2,
-              ),
+              child: MetricCard(data: entry.$1, onTap: entry.$2),
             );
           }).toList(),
         );

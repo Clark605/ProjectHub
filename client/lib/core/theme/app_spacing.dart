@@ -42,4 +42,3 @@ class AppSpacing {
   static const EdgeInsets edgeInsetsAll20 = EdgeInsets.all(xl);
   static const EdgeInsets edgeInsetsAll24 = EdgeInsets.all(xxl);
 }
-

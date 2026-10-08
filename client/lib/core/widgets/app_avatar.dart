@@ -52,9 +52,11 @@ class AppAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final base = _baseColor;
-    final bg = backgroundColor ??
+    final bg =
+        backgroundColor ??
         (isDark ? base.withValues(alpha: 0.28) : base.withValues(alpha: 0.18));
-    final fg = textColor ??
+    final fg =
+        textColor ??
         (textStyle?.color ?? (isDark ? AppColors.textPrimary : base));
 
     return Container(
@@ -68,7 +70,8 @@ class AppAvatar extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         _initials,
-        style: textStyle ??
+        style:
+            textStyle ??
             TextStyle(
               color: fg,
               fontSize: size * 0.4,

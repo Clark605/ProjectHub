@@ -70,7 +70,9 @@ class AppConfirmDialog extends StatelessWidget {
       content: Text(
         message,
         style: theme.textTheme.bodyMedium?.copyWith(
-          color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
+          color: isDark
+              ? AppColors.textSecondary
+              : AppColors.lightTextSecondary,
         ),
       ),
       actions: [
@@ -111,4 +113,3 @@ class AppConfirmDialog extends StatelessWidget {
     );
   }
 }
-

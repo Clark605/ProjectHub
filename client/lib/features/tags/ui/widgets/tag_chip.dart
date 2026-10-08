@@ -24,6 +24,7 @@ class TagChip extends StatelessWidget {
       buffer.write(hexString.replaceFirst('#', ''));
       return Color(int.parse(buffer.toString(), radix: 16));
     } catch (_) {
+      // Fallback to secondaryContainer color if hex string format is malformed
       return AppColors.secondaryContainer;
     }
   }

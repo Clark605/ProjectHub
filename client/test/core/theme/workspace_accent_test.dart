@@ -44,18 +44,21 @@ void main() {
       expect(WorkspaceAccent.fromId('non_existent').id, 'teal');
     });
 
-    test('resolve returns null for null or whitespace id, and color otherwise', () {
-      expect(WorkspaceAccent.resolve(null, Brightness.dark), isNull);
-      expect(WorkspaceAccent.resolve('', Brightness.dark), isNull);
-      expect(WorkspaceAccent.resolve('   ', Brightness.dark), isNull);
-      expect(
-        WorkspaceAccent.resolve('teal', Brightness.dark),
-        WorkspaceAccent.teal.darkColor,
-      );
-      expect(
-        WorkspaceAccent.resolve('teal', Brightness.light),
-        WorkspaceAccent.teal.lightColor,
-      );
-    });
+    test(
+      'resolve returns null for null or whitespace id, and color otherwise',
+      () {
+        expect(WorkspaceAccent.resolve(null, Brightness.dark), isNull);
+        expect(WorkspaceAccent.resolve('', Brightness.dark), isNull);
+        expect(WorkspaceAccent.resolve('   ', Brightness.dark), isNull);
+        expect(
+          WorkspaceAccent.resolve('teal', Brightness.dark),
+          WorkspaceAccent.teal.darkColor,
+        );
+        expect(
+          WorkspaceAccent.resolve('teal', Brightness.light),
+          WorkspaceAccent.teal.lightColor,
+        );
+      },
+    );
   });
 }

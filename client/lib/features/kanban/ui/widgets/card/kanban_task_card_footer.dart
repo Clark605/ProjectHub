@@ -42,9 +42,14 @@ class KanbanTaskCardFooter extends StatelessWidget {
             children: [
               if (priority != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
-                    color: priority!.toColor().withValues(alpha: isDark ? 0.2 : 0.12),
+                    color: priority!.toColor().withValues(
+                      alpha: isDark ? 0.2 : 0.12,
+                    ),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Row(
@@ -71,7 +76,10 @@ class KanbanTaskCardFooter extends StatelessWidget {
                 ),
               if (dueDate != null)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: isOverdue
                         ? AppColors.error.withValues(alpha: 0.15)
@@ -92,10 +100,15 @@ class KanbanTaskCardFooter extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        DateFormatter.formatShortDate(dueDate!, context: context),
+                        DateFormatter.formatShortDate(
+                          dueDate!,
+                          context: context,
+                        ),
                         style: TextStyle(
                           fontSize: 11,
-                          fontWeight: isOverdue ? FontWeight.w700 : FontWeight.w500,
+                          fontWeight: isOverdue
+                              ? FontWeight.w700
+                              : FontWeight.w500,
                           color: isOverdue
                               ? AppColors.error
                               : theme.colorScheme.onSurfaceVariant,
@@ -143,11 +156,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
     if (name != null && name.isNotEmpty) {
       return Tooltip(
         message: l10n?.assignedToUser(name) ?? 'Assigned to $name',
-        child: AppAvatar(
-          name: name,
-          userId: assigneeId,
-          size: 24,
-        ),
+        child: AppAvatar(name: name, userId: assigneeId, size: 24),
       );
     }
     return Tooltip(

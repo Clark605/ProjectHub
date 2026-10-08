@@ -21,7 +21,8 @@ class AuthInterceptor extends Interceptor {
   static void notifySessionExpired() {
     final now = DateTime.now();
     if (_lastSessionExpiredNotification != null &&
-        now.difference(_lastSessionExpiredNotification!).inMilliseconds < 1000) {
+        now.difference(_lastSessionExpiredNotification!).inMilliseconds <
+            1000) {
       return;
     }
     _lastSessionExpiredNotification = now;
@@ -37,12 +38,9 @@ class AuthInterceptor extends Interceptor {
   final List<({RequestOptions options, ErrorInterceptorHandler handler})>
   _pendingRequests = [];
 
-  AuthInterceptor(
-    this._secureStorage, {
-    Dio Function()? dioFactory,
-  }) : _dioFactory =
-           dioFactory ??
-           (() => Dio(BaseOptions(baseUrl: ApiConstants.baseUrl)));
+  AuthInterceptor(this._secureStorage, {Dio Function()? dioFactory})
+    : _dioFactory =
+          dioFactory ?? (() => Dio(BaseOptions(baseUrl: ApiConstants.baseUrl)));
 
   @override
   Future<void> onRequest(
@@ -134,8 +132,9 @@ class AuthInterceptor extends Interceptor {
       );
     } catch (refreshErr) {
       // Clear tokens only on a real auth/payload invalidation, not on transient network/timeout failures
-      final status =
-          refreshErr is DioException ? refreshErr.response?.statusCode : null;
+      final status = refreshErr is DioException
+          ? refreshErr.response?.statusCode
+          : null;
       if (refreshErr is FormatException ||
           status == 400 ||
           status == 401 ||
@@ -146,10 +145,7 @@ class AuthInterceptor extends Interceptor {
 
       final dioError = refreshErr is DioException
           ? refreshErr
-          : DioException(
-              requestOptions: err.requestOptions,
-              error: refreshErr,
-            );
+          : DioException(requestOptions: err.requestOptions, error: refreshErr);
       _rejectAll(dioError);
       _isRefreshing = false;
       return handler.next(dioError);
@@ -170,10 +166,7 @@ class AuthInterceptor extends Interceptor {
       handler.reject(retryErr);
     } catch (e) {
       handler.reject(
-        DioException(
-          requestOptions: err.requestOptions,
-          error: e,
-        ),
+        DioException(requestOptions: err.requestOptions, error: e),
       );
     } finally {
       // Replay queued requests and eliminate hang window for requests arriving during replay
@@ -202,10 +195,7 @@ class AuthInterceptor extends Interceptor {
           pending.handler.reject(e);
         } catch (e) {
           pending.handler.reject(
-            DioException(
-              requestOptions: pending.options,
-              error: e,
-            ),
+            DioException(requestOptions: pending.options, error: e),
           );
         }
       }),

@@ -70,19 +70,22 @@ void main() {
       expect((provider.child as ProjectDetailScreen).projectId, 0);
     });
 
-    test('kanban route accepts int arguments and wraps in MultiBlocProvider', () {
-      final route = AppRouter.onGenerateRoute(
-        const RouteSettings(name: RouteNames.kanban, arguments: 123),
-      );
-      expect(route, isA<PageRouteBuilder>());
-      final pageRoute = route as PageRouteBuilder;
-      final widget = pageRoute.pageBuilder(
-        _MockBuildContext(),
-        const AlwaysStoppedAnimation(1.0),
-        const AlwaysStoppedAnimation(1.0),
-      );
-      expect(widget, isA<MultiBlocProvider>());
-    });
+    test(
+      'kanban route accepts int arguments and wraps in MultiBlocProvider',
+      () {
+        final route = AppRouter.onGenerateRoute(
+          const RouteSettings(name: RouteNames.kanban, arguments: 123),
+        );
+        expect(route, isA<PageRouteBuilder>());
+        final pageRoute = route as PageRouteBuilder;
+        final widget = pageRoute.pageBuilder(
+          _MockBuildContext(),
+          const AlwaysStoppedAnimation(1.0),
+          const AlwaysStoppedAnimation(1.0),
+        );
+        expect(widget, isA<MultiBlocProvider>());
+      },
+    );
 
     test('kanban route accepts ProjectDto arguments', () {
       const project = ProjectDto(

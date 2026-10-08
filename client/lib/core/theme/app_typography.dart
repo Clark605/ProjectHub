@@ -14,8 +14,8 @@ class AppTypography {
 
   static List<String> fallbackFor(Locale? locale) =>
       locale?.languageCode == 'ar'
-          ? const [latinFontFamily]
-          : const [arabicFontFamily];
+      ? const [latinFontFamily]
+      : const [arabicFontFamily];
 
   /// Default text theme (with Arabic fallback)
   static TextTheme get textTheme => getTextTheme();
@@ -136,17 +136,17 @@ class AppTypography {
 /// Semantic text extensions on [TextTheme] for consistent micro-copy and tags.
 extension AppTypographyX on TextTheme {
   TextStyle get badge => (labelSmall ?? const TextStyle()).copyWith(
-        fontSize: 10,
-        fontWeight: FontWeight.w600,
-      );
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
+  );
 
   TextStyle get caption => (bodySmall ?? const TextStyle()).copyWith(
-        fontSize: 11,
-        fontWeight: FontWeight.w500,
-      );
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+  );
 
   TextStyle get chip => (labelMedium ?? const TextStyle()).copyWith(
-        fontSize: 12,
-        fontWeight: FontWeight.w500,
-      );
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/utils/permission_checker.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/app_error_state.dart';
@@ -21,23 +20,24 @@ import 'package:client/l10n/generated/app_localizations.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
   final int projectId;
-  final ProjectDetailCubit? cubit;
 
-  const ProjectDetailScreen({super.key, required this.projectId, this.cubit});
+  const ProjectDetailScreen({super.key, required this.projectId});
 
   @override
   State<ProjectDetailScreen> createState() => _ProjectDetailScreenState();
 }
 
 class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
-  late ProjectDetailCubit _cubit;
   ProjectDto? _updatedProject;
 
   @override
   void initState() {
     super.initState();
-    _cubit = widget.cubit ?? getIt<ProjectDetailCubit>();
-    _cubit.loadProject(widget.projectId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<ProjectDetailCubit>().loadProject(widget.projectId);
+      }
+    });
   }
 
   void _onStateListener(BuildContext context, ProjectDetailState state) {
@@ -49,13 +49,14 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
       },
       loaded: (project, _, _, errorMessage, actionSuccessMessage) {
         final l10n = AppLocalizations.of(context)!;
+        final cubit = context.read<ProjectDetailCubit>();
         if (actionSuccessMessage != null) {
           _updatedProject = project;
           showAppSuccessSnackBar(context, l10n.projectUpdated);
-          _cubit.clearMessages();
+          cubit.clearMessages();
         } else if (errorMessage != null) {
           showAppErrorSnackBar(context, errorMessage);
-          _cubit.clearError();
+          cubit.clearError();
         }
       },
       orElse: () {},
@@ -64,16 +65,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ProjectDetailCubit activeCubit = widget.cubit ?? _cubit;
-    bool hasAmbientProvider = true;
-    try {
-      activeCubit = context.read<ProjectDetailCubit>();
-    } catch (_) {
-      hasAmbientProvider = false;
-    }
-
-    Widget screen = BlocConsumer<ProjectDetailCubit, ProjectDetailState>(
-      bloc: activeCubit,
+    return BlocConsumer<ProjectDetailCubit, ProjectDetailState>(
       listener: _onStateListener,
       builder: (context, state) {
         final isDesktop = ResponsiveLayout.isDesktop(context);
@@ -83,7 +75,9 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             loaded: (_, active) => active.accentColor,
             orElse: () => null,
           );
-        } catch (_) {}
+        } catch (_) {
+          // Allows rendering screen in isolated widget tests without WorkspaceContextCubit.
+        }
 
         return PopScope<Object?>(
           canPop: false,
@@ -99,8 +93,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
               loading: () => const ProjectDetailSkeleton(),
               error: (msg) => AppErrorState(
                 errorMessage: msg,
-                onRetry: () =>
-                    _cubit.loadProject(widget.projectId, forceRefresh: true),
+                onRetry: () => context.read<ProjectDetailCubit>().loadProject(
+                  widget.projectId,
+                  forceRefresh: true,
+                ),
               ),
               deleted: () => const SizedBox.shrink(),
               loaded: (project, isSaving, isDeleting, _, _) {
@@ -157,13 +153,5 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
         );
       },
     );
-
-    if (!hasAmbientProvider) {
-      screen = BlocProvider<ProjectDetailCubit>.value(
-        value: activeCubit,
-        child: screen,
-      );
-    }
-    return screen;
   }
 }

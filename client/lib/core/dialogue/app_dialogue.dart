@@ -17,16 +17,15 @@ class AppDialogue {
     bool enableDrag = true,
     Color? backgroundColor,
     double maxHeightFraction = 0.88,
-  }) =>
-      showAppBottomSheet<T>(
-        context: context,
-        builder: builder,
-        isScrollControlled: isScrollControlled,
-        isDismissible: isDismissible,
-        enableDrag: enableDrag,
-        backgroundColor: backgroundColor,
-        maxHeightFraction: maxHeightFraction,
-      );
+  }) => showAppBottomSheet<T>(
+    context: context,
+    builder: builder,
+    isScrollControlled: isScrollControlled,
+    isDismissible: isDismissible,
+    enableDrag: enableDrag,
+    backgroundColor: backgroundColor,
+    maxHeightFraction: maxHeightFraction,
+  );
 
   /// Shows a standardized confirmation dialog.
   static Future<bool> confirm({
@@ -36,14 +35,12 @@ class AppDialogue {
     String? confirmLabel,
     String? cancelLabel,
     bool isDestructive = false,
-  }) =>
-      showAppConfirmDialog(
-        context: context,
-        title: title,
-        message: message,
-        confirmLabel: confirmLabel,
-        cancelLabel: cancelLabel,
-        isDestructive: isDestructive,
-      );
+  }) => showAppConfirmDialog(
+    context: context,
+    title: title,
+    message: message,
+    confirmLabel: confirmLabel,
+    cancelLabel: cancelLabel,
+    isDestructive: isDestructive,
+  );
 }
-

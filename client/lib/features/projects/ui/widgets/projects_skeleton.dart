@@ -27,9 +27,7 @@ class ProjectsSkeleton extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Expanded(
-                  child: Bone.text(words: 3, fontSize: 16),
-                ),
+                const Expanded(child: Bone.text(words: 3, fontSize: 16)),
                 const SizedBox(width: 8),
                 Bone(
                   width: 60,

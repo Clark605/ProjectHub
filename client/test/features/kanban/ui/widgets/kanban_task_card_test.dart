@@ -55,7 +55,9 @@ void main() {
       // Verify PopupMenuButton constraints meet 48x48 dp touch target
       final popupButtonFinder = find.byType(PopupMenuButton<String>);
       expect(popupButtonFinder, findsOneWidget);
-      final popupButton = tester.widget<PopupMenuButton<String>>(popupButtonFinder);
+      final popupButton = tester.widget<PopupMenuButton<String>>(
+        popupButtonFinder,
+      );
       expect(popupButton.constraints?.minWidth, greaterThanOrEqualTo(48.0));
       expect(popupButton.constraints?.minHeight, greaterThanOrEqualTo(48.0));
 
@@ -82,11 +84,7 @@ void main() {
         const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
-            body: KanbanTaskCard(
-              task: sampleTask,
-            ),
-          ),
+          home: Scaffold(body: KanbanTaskCard(task: sampleTask)),
         ),
       );
 
@@ -134,11 +132,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           home: BlocProvider.value(
             value: cubit,
-            child: const Scaffold(
-              body: KanbanTaskCard(
-                task: sampleTask,
-              ),
-            ),
+            child: const Scaffold(body: KanbanTaskCard(task: sampleTask)),
           ),
         ),
       );

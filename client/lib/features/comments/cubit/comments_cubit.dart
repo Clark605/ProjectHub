@@ -137,10 +137,7 @@ class CommentsCubit extends SafeActionCubit<CommentsState> {
       },
       onError: (err) {
         emit(
-          CommentsState.loaded(
-            comments: currentComments,
-            errorMessage: err,
-          ),
+          CommentsState.loaded(comments: currentComments, errorMessage: err),
         );
       },
       defaultErrorMessage: 'Failed to delete comment',

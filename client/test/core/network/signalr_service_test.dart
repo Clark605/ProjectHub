@@ -36,20 +36,23 @@ void main() {
       expect(service.getWorkspaceRefCount(10), 0);
     });
 
-    test('leaveWorkspace for multiple workspaces behaves independently', () async {
-      await service.joinWorkspace(10);
-      await service.joinWorkspace(20);
+    test(
+      'leaveWorkspace for multiple workspaces behaves independently',
+      () async {
+        await service.joinWorkspace(10);
+        await service.joinWorkspace(20);
 
-      expect(service.getWorkspaceRefCount(10), 1);
-      expect(service.getWorkspaceRefCount(20), 1);
+        expect(service.getWorkspaceRefCount(10), 1);
+        expect(service.getWorkspaceRefCount(20), 1);
 
-      await service.leaveWorkspace(10);
-      expect(service.getWorkspaceRefCount(10), 0);
-      expect(service.getWorkspaceRefCount(20), 1);
+        await service.leaveWorkspace(10);
+        expect(service.getWorkspaceRefCount(10), 0);
+        expect(service.getWorkspaceRefCount(20), 1);
 
-      await service.leaveWorkspace(20);
-      expect(service.getWorkspaceRefCount(20), 0);
-    });
+        await service.leaveWorkspace(20);
+        expect(service.getWorkspaceRefCount(20), 0);
+      },
+    );
 
     test('disconnect resets ref counts', () async {
       await service.joinWorkspace(10);

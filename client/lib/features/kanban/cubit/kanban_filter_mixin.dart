@@ -38,21 +38,19 @@ mixin KanbanFilterMixin on SafeActionCubit<KanbanState> {
     final newSearch = clearSearch
         ? null
         : (search != null
-            ? (search.trim().isEmpty ? null : search.trim())
-            : existing.search);
+              ? (search.trim().isEmpty ? null : search.trim())
+              : existing.search);
     final newPriority = clearPriority
         ? null
         : (priority != null
-            ? (priority.toLowerCase() == 'all' ? null : priority)
-            : existing.priority);
+              ? (priority.toLowerCase() == 'all' ? null : priority)
+              : existing.priority);
     final newAssignee = clearAssignee
         ? null
         : (assigneeId != null
-            ? (assigneeId.toLowerCase() == 'all' ? null : assigneeId)
-            : existing.assigneeId);
-    final newTag = clearTag
-        ? null
-        : (tagId ?? existing.tagId);
+              ? (assigneeId.toLowerCase() == 'all' ? null : assigneeId)
+              : existing.assigneeId);
+    final newTag = clearTag ? null : (tagId ?? existing.tagId);
 
     final nextFilter = TaskFilter(
       search: newSearch,

@@ -33,6 +33,25 @@ class MockAiTaskRepository extends Mock implements AiTaskRepository {}
 
 class MockSignalRService extends Mock implements SignalRService {}
 
+/// Helper to create a configured [MockSignalRService] with sensible test defaults.
+MockSignalRService createMockSignalRService() {
+  final service = MockSignalRService();
+  when(() => service.presenceChanged).thenAnswer((_) => const Stream.empty());
+  when(() => service.realtimeStatus).thenAnswer((_) => const Stream.empty());
+  when(() => service.currentStatus).thenReturn(RealtimeStatus.disconnected);
+  when(() => service.taskCreated).thenAnswer((_) => const Stream.empty());
+  when(() => service.taskUpdated).thenAnswer((_) => const Stream.empty());
+  when(() => service.taskDeleted).thenAnswer((_) => const Stream.empty());
+  when(() => service.taskStatusChanged).thenAnswer((_) => const Stream.empty());
+  when(() => service.taskAssigned).thenAnswer((_) => const Stream.empty());
+  when(() => service.commentAdded).thenAnswer((_) => const Stream.empty());
+  when(() => service.commentDeleted).thenAnswer((_) => const Stream.empty());
+  when(() => service.reconnected).thenAnswer((_) => const Stream.empty());
+  when(() => service.joinWorkspace(any())).thenAnswer((_) async {});
+  when(() => service.leaveWorkspace(any())).thenAnswer((_) async {});
+  return service;
+}
+
 class MockSecureStorageService extends Mock implements SecureStorageService {}
 
 /// Helper to create a configured [MockAuthRepository] with sensible test defaults.

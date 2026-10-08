@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class GithubLogo extends StatelessWidget {
-  const GithubLogo({
-    super.key,
-    this.size = 20,
-    this.color,
-  });
+  const GithubLogo({super.key, this.size = 20, this.color});
 
   final double size;
   final Color? color;

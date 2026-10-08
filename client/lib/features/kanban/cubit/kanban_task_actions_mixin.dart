@@ -71,9 +71,11 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
 
     final targetStatus = initialStatus ?? req.status;
     final requestWithStatus =
-        (targetStatus != null && targetStatus.isNotEmpty && req.status != targetStatus)
-            ? req.copyWith(status: targetStatus)
-            : req;
+        (targetStatus != null &&
+            targetStatus.isNotEmpty &&
+            req.status != targetStatus)
+        ? req.copyWith(status: targetStatus)
+        : req;
 
     TaskDto created;
     try {
@@ -82,6 +84,7 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
       setLoadedError(e.message);
       rethrow;
     } catch (_) {
+      // Fallback error message when non-AppException is encountered
       setLoadedError('Failed to create task');
       rethrow;
     }
@@ -98,8 +101,9 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
         );
       } catch (e) {
         // H3: Even if status update fails, emit the created task in state!
-        final errorMsg =
-            e is AppException ? e.message : 'Task created, but failed to set status';
+        final errorMsg = e is AppException
+            ? e.message
+            : 'Task created, but failed to set status';
         _insertTaskIntoState(created, errorMessage: errorMsg);
         rethrow;
       }

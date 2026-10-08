@@ -60,8 +60,11 @@ void main() {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
-        body: BlocProvider<ProjectsListCubit>.value(
-          value: cubit,
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider<AppAuthCubit>.value(value: getIt<AppAuthCubit>()),
+            BlocProvider<ProjectsListCubit>.value(value: cubit),
+          ],
           child: Sidebar(
             selectedIndex: 0,
             onItemSelected: (_) {},

@@ -12,9 +12,7 @@ import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(
-      const UpdateProjectRequest(name: 'Fallback'),
-    );
+    registerFallbackValue(const UpdateProjectRequest(name: 'Fallback'));
   });
 
   group('ProjectDetailCubit', () {
@@ -43,7 +41,10 @@ void main() {
       'loadProject emits loading then loaded on success',
       build: () {
         when(
-          () => repository.getProject(50, forceRefresh: any(named: 'forceRefresh')),
+          () => repository.getProject(
+            50,
+            forceRefresh: any(named: 'forceRefresh'),
+          ),
         ).thenAnswer((_) async => initialProject);
         return ProjectDetailCubit(repository);
       },
@@ -61,8 +62,14 @@ void main() {
       'loadProject handles error via SafeActionCubit',
       build: () {
         when(
-          () => repository.getProject(50, forceRefresh: any(named: 'forceRefresh')),
-        ).thenAnswer((_) async => throw const ServerException(message: 'Project not found'));
+          () => repository.getProject(
+            50,
+            forceRefresh: any(named: 'forceRefresh'),
+          ),
+        ).thenAnswer(
+          (_) async =>
+              throw const ServerException(message: 'Project not found'),
+        );
         return ProjectDetailCubit(repository);
       },
       act: (cubit) => cubit.loadProject(50),
@@ -75,9 +82,7 @@ void main() {
     blocTest<ProjectDetailCubit, ProjectDetailState>(
       'updateProject updates project data and sets success message',
       build: () {
-        when(
-          () => repository.updateProject(50, any()),
-        ).thenAnswer(
+        when(() => repository.updateProject(50, any())).thenAnswer(
           (_) async => initialProject.copyWith(
             name: 'Renamed Project',
             description: 'Updated Desc',
@@ -129,8 +134,11 @@ void main() {
       seed: () => const ProjectDetailState.loaded(project: initialProject),
       act: (cubit) => cubit.deleteProject(),
       expect: () => [
-        isA<ProjectDetailLoaded>()
-            .having((s) => s.isDeleting, 'isDeleting', true),
+        isA<ProjectDetailLoaded>().having(
+          (s) => s.isDeleting,
+          'isDeleting',
+          true,
+        ),
         const ProjectDetailState.deleted(),
       ],
       verify: (_) {

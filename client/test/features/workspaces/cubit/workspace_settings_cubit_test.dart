@@ -62,10 +62,16 @@ void main() {
       build: () {
         when(() => repository.hasCachedSettings(1)).thenReturn(false);
         when(
-          () => repository.getWorkspace(1, forceRefresh: any(named: 'forceRefresh')),
+          () => repository.getWorkspace(
+            1,
+            forceRefresh: any(named: 'forceRefresh'),
+          ),
         ).thenAnswer((_) async => testWorkspace);
         when(
-          () => repository.getMembers(1, forceRefresh: any(named: 'forceRefresh')),
+          () => repository.getMembers(
+            1,
+            forceRefresh: any(named: 'forceRefresh'),
+          ),
         ).thenAnswer((_) async => testMembers);
         return WorkspaceSettingsCubit(repository);
       },
@@ -85,9 +91,7 @@ void main() {
     blocTest<WorkspaceSettingsCubit, WorkspaceSettingsState>(
       'updateDetails updates workspace and sets success message',
       build: () {
-        when(
-          () => repository.updateWorkspace(1, any()),
-        ).thenAnswer(
+        when(() => repository.updateWorkspace(1, any())).thenAnswer(
           (_) async => testWorkspace.copyWith(
             name: 'New Acme Name',
             description: 'New Desc',
@@ -100,19 +104,24 @@ void main() {
         workspace: testWorkspace,
         members: [],
       ),
-      act: (cubit) => cubit.updateDetails(
-        'New Acme Name',
-        'New Desc',
-        'violet',
-      ),
+      act: (cubit) =>
+          cubit.updateDetails('New Acme Name', 'New Desc', 'violet'),
       expect: () => [
-        isA<WorkspaceSettingsLoaded>().having((s) => s.isSaving, 'isSaving', true),
+        isA<WorkspaceSettingsLoaded>().having(
+          (s) => s.isSaving,
+          'isSaving',
+          true,
+        ),
         isA<WorkspaceSettingsLoaded>()
             .having((s) => s.workspace.name, 'name', 'New Acme Name')
             .having((s) => s.workspace.description, 'description', 'New Desc')
             .having((s) => s.workspace.accentColor, 'accentColor', 'violet')
             .having((s) => s.isSaving, 'isSaving', false)
-            .having((s) => s.successAction, 'successAction', isA<ActionDetailsUpdated>()),
+            .having(
+              (s) => s.successAction,
+              'successAction',
+              isA<ActionDetailsUpdated>(),
+            ),
       ],
       verify: (_) {
         verify(
@@ -131,9 +140,7 @@ void main() {
     blocTest<WorkspaceSettingsCubit, WorkspaceSettingsState>(
       'inviteMember adds member to list and sets success message with email',
       build: () {
-        when(
-          () => repository.addMember(1, any()),
-        ).thenAnswer(
+        when(() => repository.addMember(1, any())).thenAnswer(
           (_) async => MemberDto(
             userId: 'u_new',
             name: 'New Colleague',
@@ -150,7 +157,11 @@ void main() {
       ),
       act: (cubit) => cubit.inviteMember('colleague@test.com'),
       expect: () => [
-        isA<WorkspaceSettingsLoaded>().having((s) => s.isInviting, 'isInviting', true),
+        isA<WorkspaceSettingsLoaded>().having(
+          (s) => s.isInviting,
+          'isInviting',
+          true,
+        ),
         isA<WorkspaceSettingsLoaded>()
             .having((s) => s.members.length, 'members count', 3)
             .having((s) => s.members.last.email, 'email', 'colleague@test.com')
@@ -201,9 +212,7 @@ void main() {
       build: () {
         when(
           () => repository.updateMemberRole(1, 'u2', 'Owner'),
-        ).thenAnswer(
-          (_) async => testMembers[1].copyWith(role: 'Owner'),
-        );
+        ).thenAnswer((_) async => testMembers[1].copyWith(role: 'Owner'));
         return WorkspaceSettingsCubit(repository);
       },
       seed: () => WorkspaceSettingsState.loaded(
@@ -232,9 +241,10 @@ void main() {
     blocTest<WorkspaceSettingsCubit, WorkspaceSettingsState>(
       'updateMemberRole sets errorMessage when repo fails',
       build: () {
-        when(
-          () => repository.updateMemberRole(1, 'u2', 'Owner'),
-        ).thenAnswer((_) async => throw const ServerException(message: 'Role update failed'));
+        when(() => repository.updateMemberRole(1, 'u2', 'Owner')).thenAnswer(
+          (_) async =>
+              throw const ServerException(message: 'Role update failed'),
+        );
         return WorkspaceSettingsCubit(repository);
       },
       seed: () => WorkspaceSettingsState.loaded(
@@ -262,9 +272,7 @@ void main() {
         members: testMembers,
       ),
       act: (cubit) => cubit.deleteWorkspace(),
-      expect: () => [
-        const WorkspaceSettingsState.deleted(),
-      ],
+      expect: () => [const WorkspaceSettingsState.deleted()],
       verify: (_) {
         verify(() => repository.deleteWorkspace(1)).called(1);
       },

@@ -45,11 +45,13 @@ class WorkspaceDashboardDto {
       completedTasksCount: (json['completedTasksCount'] as num).toInt(),
       overdueTasksCount: (json['overdueTasksCount'] as num).toInt(),
       dueThisWeekTasksCount: (json['dueThisWeekTasksCount'] as num).toInt(),
-      focusTasks: (json['focusTasks'] as List<dynamic>?)
+      focusTasks:
+          (json['focusTasks'] as List<dynamic>?)
               ?.map((t) => TaskDto.fromJson(t as Map<String, dynamic>))
               .toList() ??
           const [],
-      recentActivities: (json['recentActivities'] as List<dynamic>?)
+      recentActivities:
+          (json['recentActivities'] as List<dynamic>?)
               ?.map((a) => ActivityEventDto.fromJson(a as Map<String, dynamic>))
               .toList() ??
           const [],

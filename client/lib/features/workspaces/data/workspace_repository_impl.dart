@@ -105,7 +105,9 @@ class WorkspaceRepositoryImpl
   @override
   Future<WorkspaceDashboardDto> getWorkspaceDashboard(int workspaceId) async {
     try {
-      final response = await dio.get(ApiConstants.workspaceDashboard(workspaceId));
+      final response = await dio.get(
+        ApiConstants.workspaceDashboard(workspaceId),
+      );
       return WorkspaceDashboardDto.fromJson(
         response.data as Map<String, dynamic>,
       );

@@ -51,7 +51,9 @@ class ProjectCard extends StatelessWidget {
 
     final totalTasks = project.taskCounts.total;
     final doneTasks = project.taskCounts.done;
-    final progress = totalTasks > 0 ? (doneTasks / totalTasks).clamp(0.0, 1.0) : 0.0;
+    final progress = totalTasks > 0
+        ? (doneTasks / totalTasks).clamp(0.0, 1.0)
+        : 0.0;
     final members = project.members;
 
     return InkWell(
@@ -127,7 +129,9 @@ class ProjectCard extends StatelessWidget {
                   style: theme.textTheme.bodySmall?.copyWith(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
-                    color: isDark ? AppColors.textSecondary : AppColors.lightTextSecondary,
+                    color: isDark
+                        ? AppColors.textSecondary
+                        : AppColors.lightTextSecondary,
                   ),
                 ),
                 if (totalTasks > 0)
@@ -151,7 +155,9 @@ class ProjectCard extends StatelessWidget {
                     ? AppColors.surfaceContainerHighest
                     : AppColors.lightBorder,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  progress >= 1.0 ? AppColors.success : AppColors.electricVioletContainer,
+                  progress >= 1.0
+                      ? AppColors.success
+                      : AppColors.electricVioletContainer,
                 ),
               ),
             ),
@@ -186,7 +192,10 @@ class ProjectCard extends StatelessWidget {
                   if (members.length > 4) ...[
                     const SizedBox(width: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceContainerHighest,
                         borderRadius: BorderRadius.circular(10),
@@ -217,7 +226,10 @@ class ProjectCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    DateFormatter.formatDate(project.dueDate!, context: context),
+                    DateFormatter.formatDate(
+                      project.dueDate!,
+                      context: context,
+                    ),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                       fontSize: 11,

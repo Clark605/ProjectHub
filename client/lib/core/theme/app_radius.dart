@@ -28,4 +28,3 @@ class AppRadius {
   static const BorderRadius kRadiusXxl = BorderRadius.all(xxl);
   static const BorderRadius kRadiusFull = BorderRadius.all(full);
 }
-

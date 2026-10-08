@@ -159,7 +159,9 @@ void main() {
       build: () {
         when(
           () => repo.getMyTasks(10, forceRefresh: any(named: 'forceRefresh')),
-        ).thenAnswer((_) async => throw const AppException(message: 'Network timeout'));
+        ).thenAnswer(
+          (_) async => throw const AppException(message: 'Network timeout'),
+        );
         return MyTasksCubit(repo);
       },
       act: (cubit) => cubit.loadMyTasks(10),
@@ -190,14 +192,9 @@ void main() {
           when(
             () => repo.updateTaskStatus(1, 'Done'),
           ).thenAnswer((_) async => initialTask.copyWith(status: 'Done'));
-          when(
-            () => repo.getMyTasks(10, forceRefresh: true),
-          ).thenAnswer(
+          when(() => repo.getMyTasks(10, forceRefresh: true)).thenAnswer(
             (_) async => [
-              initialTask.copyWith(
-                status: 'Done',
-                updatedAt: DateTime.now(),
-              ),
+              initialTask.copyWith(status: 'Done', updatedAt: DateTime.now()),
             ],
           );
           return MyTasksCubit(repo);
@@ -224,9 +221,10 @@ void main() {
           when(
             () => repo.getMyTasks(10, forceRefresh: any(named: 'forceRefresh')),
           ).thenAnswer((_) async => [initialTask]);
-          when(
-            () => repo.updateTaskStatus(1, 'Done'),
-          ).thenAnswer((_) async => throw const AppException(message: 'Status update failed'));
+          when(() => repo.updateTaskStatus(1, 'Done')).thenAnswer(
+            (_) async =>
+                throw const AppException(message: 'Status update failed'),
+          );
           return MyTasksCubit(repo);
         },
         act: (cubit) async {
@@ -251,7 +249,10 @@ void main() {
         title: 'Original Title',
         status: 'Todo',
       );
-      const updateReq = UpdateTaskRequest(title: 'Updated Title', priority: 'High');
+      const updateReq = UpdateTaskRequest(
+        title: 'Updated Title',
+        priority: 'High',
+      );
 
       blocTest<MyTasksCubit, MyTasksState>(
         'updates task and refreshes grouped tasks on success',
@@ -259,12 +260,11 @@ void main() {
           when(
             () => repo.getMyTasks(10, forceRefresh: false),
           ).thenAnswer((_) async => [initialTask]);
-          when(
-            () => repo.updateTask(1, updateReq),
-          ).thenAnswer((_) async => initialTask.copyWith(title: 'Updated Title', priority: 'High'));
-          when(
-            () => repo.getMyTasks(10, forceRefresh: true),
-          ).thenAnswer(
+          when(() => repo.updateTask(1, updateReq)).thenAnswer(
+            (_) async =>
+                initialTask.copyWith(title: 'Updated Title', priority: 'High'),
+          );
+          when(() => repo.getMyTasks(10, forceRefresh: true)).thenAnswer(
             (_) async => [
               initialTask.copyWith(title: 'Updated Title', priority: 'High'),
             ],
@@ -277,8 +277,11 @@ void main() {
         },
         skip: 2,
         expect: () => [
-          isA<MyTasksLoaded>()
-              .having((s) => s.todoTasks.first.title, 'title', 'Updated Title'),
+          isA<MyTasksLoaded>().having(
+            (s) => s.todoTasks.first.title,
+            'title',
+            'Updated Title',
+          ),
         ],
         verify: (_) {
           verify(() => repo.updateTask(1, updateReq)).called(1);
@@ -292,9 +295,10 @@ void main() {
           when(
             () => repo.getMyTasks(10, forceRefresh: any(named: 'forceRefresh')),
           ).thenAnswer((_) async => [initialTask]);
-          when(
-            () => repo.updateTask(1, any()),
-          ).thenAnswer((_) async => throw const AppException(message: 'Task update failed'));
+          when(() => repo.updateTask(1, any())).thenAnswer(
+            (_) async =>
+                throw const AppException(message: 'Task update failed'),
+          );
           return MyTasksCubit(repo);
         },
         act: (cubit) async {
@@ -313,8 +317,18 @@ void main() {
     });
 
     group('deleteTask', () {
-      const task1 = TaskDto(id: 1, projectId: 1, title: 'Task 1', status: 'Todo');
-      const task2 = TaskDto(id: 2, projectId: 1, title: 'Task 2', status: 'Todo');
+      const task1 = TaskDto(
+        id: 1,
+        projectId: 1,
+        title: 'Task 1',
+        status: 'Todo',
+      );
+      const task2 = TaskDto(
+        id: 2,
+        projectId: 1,
+        title: 'Task 2',
+        status: 'Todo',
+      );
 
       blocTest<MyTasksCubit, MyTasksState>(
         'deletes task and emits updated tasks list',
@@ -334,7 +348,11 @@ void main() {
         },
         skip: 2,
         expect: () => [
-          isA<MyTasksLoaded>().having((s) => s.todoTasks.length, 'todoTasks count', 1),
+          isA<MyTasksLoaded>().having(
+            (s) => s.todoTasks.length,
+            'todoTasks count',
+            1,
+          ),
         ],
         verify: (_) {
           verify(() => repo.deleteTask(1)).called(1);
@@ -358,9 +376,7 @@ void main() {
           await cubit.deleteTask(1);
         },
         skip: 2,
-        expect: () => [
-          const MyTasksState.empty(workspaceId: 10),
-        ],
+        expect: () => [const MyTasksState.empty(workspaceId: 10)],
       );
 
       blocTest<MyTasksCubit, MyTasksState>(
@@ -390,8 +406,18 @@ void main() {
     });
 
     group('refreshOnFocus', () {
-      const task1 = TaskDto(id: 1, projectId: 1, title: 'Task 1', status: 'Todo');
-      const task2 = TaskDto(id: 2, projectId: 1, title: 'Task 2', status: 'Todo');
+      const task1 = TaskDto(
+        id: 1,
+        projectId: 1,
+        title: 'Task 1',
+        status: 'Todo',
+      );
+      const task2 = TaskDto(
+        id: 2,
+        projectId: 1,
+        title: 'Task 2',
+        status: 'Todo',
+      );
 
       test('does nothing when workspaceId is null', () async {
         final cubit = MyTasksCubit(repo);
@@ -418,7 +444,11 @@ void main() {
         },
         skip: 2,
         expect: () => [
-          isA<MyTasksLoaded>().having((s) => s.todoTasks.length, 'todo count', 2),
+          isA<MyTasksLoaded>().having(
+            (s) => s.todoTasks.length,
+            'todo count',
+            2,
+          ),
         ],
         verify: (_) {
           verify(() => repo.getMyTasks(10, forceRefresh: true)).called(1);
@@ -441,9 +471,7 @@ void main() {
           await cubit.refreshOnFocus();
         },
         skip: 2,
-        expect: () => [
-          const MyTasksState.empty(workspaceId: 10),
-        ],
+        expect: () => [const MyTasksState.empty(workspaceId: 10)],
       );
 
       blocTest<MyTasksCubit, MyTasksState>(
@@ -452,9 +480,9 @@ void main() {
           when(
             () => repo.getMyTasks(10, forceRefresh: false),
           ).thenAnswer((_) async => [task1]);
-          when(
-            () => repo.getMyTasks(10, forceRefresh: true),
-          ).thenAnswer((_) async => throw const AppException(message: 'Offline'));
+          when(() => repo.getMyTasks(10, forceRefresh: true)).thenAnswer(
+            (_) async => throw const AppException(message: 'Offline'),
+          );
           return MyTasksCubit(repo);
         },
         act: (cubit) async {

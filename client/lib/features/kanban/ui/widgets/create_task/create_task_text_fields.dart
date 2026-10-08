@@ -47,7 +47,10 @@ class CreateTaskTextFields extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+              borderSide: const BorderSide(
+                color: AppColors.primary,
+                width: 1.5,
+              ),
             ),
           ),
           validator: (val) => (val == null || val.trim().isEmpty)
@@ -60,7 +63,8 @@ class CreateTaskTextFields extends StatelessWidget {
           maxLines: 3,
           decoration: InputDecoration(
             labelText: l10n?.taskDescription ?? 'Description',
-            hintText: l10n?.taskDescriptionPlaceholder ??
+            hintText:
+                l10n?.taskDescriptionPlaceholder ??
                 'Add details, context, or acceptance criteria...',
             floatingLabelBehavior: FloatingLabelBehavior.always,
             filled: true,
@@ -75,7 +79,10 @@ class CreateTaskTextFields extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+              borderSide: const BorderSide(
+                color: AppColors.primary,
+                width: 1.5,
+              ),
             ),
           ),
         ),

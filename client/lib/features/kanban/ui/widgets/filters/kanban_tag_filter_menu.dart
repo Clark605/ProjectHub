@@ -40,7 +40,7 @@ class KanbanTagFilterMenu extends StatelessWidget {
         label: Text(
           selectedTag != null
               ? (l10n?.tagPrefix(selectedTag.name) ??
-                  'Tag: ${selectedTag.name}')
+                    'Tag: ${selectedTag.name}')
               : (l10n?.tagsMenuLabel ?? 'Tags'),
           style: TextStyle(
             fontSize: 12,

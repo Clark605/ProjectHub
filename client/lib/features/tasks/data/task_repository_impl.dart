@@ -184,18 +184,21 @@ class TaskRepositoryImpl implements TaskRepository {
     if (cached != null) {
       final old = _projectTasksCache[cached.projectId];
       if (old != null) {
-        _projectTasksCache[cached.projectId] =
-            old.where((t) => t.id != taskId).toList();
+        _projectTasksCache[cached.projectId] = old
+            .where((t) => t.id != taskId)
+            .toList();
       }
     } else {
       for (final entry in _projectTasksCache.entries.toList()) {
-        _projectTasksCache[entry.key] =
-            entry.value.where((t) => t.id != taskId).toList();
+        _projectTasksCache[entry.key] = entry.value
+            .where((t) => t.id != taskId)
+            .toList();
       }
     }
     for (final entry in _myTasksCache.entries.toList()) {
-      _myTasksCache[entry.key] =
-          entry.value.where((t) => t.id != taskId).toList();
+      _myTasksCache[entry.key] = entry.value
+          .where((t) => t.id != taskId)
+          .toList();
     }
   }
 

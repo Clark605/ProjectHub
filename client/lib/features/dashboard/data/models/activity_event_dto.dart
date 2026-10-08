@@ -39,6 +39,7 @@ class ActivityEventDto {
           parsedMetadata = decoded.cast<String, dynamic>();
         }
       } catch (_) {
+        // Corrupted or invalid JSON metadata string safely falls back to null
         parsedMetadata = null;
       }
     }

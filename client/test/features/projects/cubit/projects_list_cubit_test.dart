@@ -12,9 +12,7 @@ import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(
-      const CreateProjectRequest(name: 'Test Project'),
-    );
+    registerFallbackValue(const CreateProjectRequest(name: 'Test Project'));
   });
 
   group('ProjectsListCubit', () {
@@ -58,7 +56,10 @@ void main() {
       'loadProjects emits empty when 0 projects returned',
       build: () {
         when(
-          () => repository.getProjects(10, forceRefresh: any(named: 'forceRefresh')),
+          () => repository.getProjects(
+            10,
+            forceRefresh: any(named: 'forceRefresh'),
+          ),
         ).thenAnswer((_) async => []);
         return ProjectsListCubit(repository);
       },
@@ -68,9 +69,7 @@ void main() {
         const ProjectsListState.empty(selectedFilter: 'All'),
       ],
       verify: (_) {
-        verify(
-          () => repository.getProjects(10, forceRefresh: false),
-        ).called(1);
+        verify(() => repository.getProjects(10, forceRefresh: false)).called(1);
       },
     );
 
@@ -78,7 +77,10 @@ void main() {
       'loadProjects emits loaded with filtered and all projects',
       build: () {
         when(
-          () => repository.getProjects(10, forceRefresh: any(named: 'forceRefresh')),
+          () => repository.getProjects(
+            10,
+            forceRefresh: any(named: 'forceRefresh'),
+          ),
         ).thenAnswer((_) async => testProjects);
         return ProjectsListCubit(repository);
       },
@@ -97,7 +99,10 @@ void main() {
       'filterByStatus filters projects in memory',
       build: () {
         when(
-          () => repository.getProjects(10, forceRefresh: any(named: 'forceRefresh')),
+          () => repository.getProjects(
+            10,
+            forceRefresh: any(named: 'forceRefresh'),
+          ),
         ).thenAnswer((_) async => testProjects);
         return ProjectsListCubit(repository);
       },
@@ -122,8 +127,13 @@ void main() {
       'loadProjects handles errors gracefully via SafeActionCubit',
       build: () {
         when(
-          () => repository.getProjects(10, forceRefresh: any(named: 'forceRefresh')),
-        ).thenAnswer((_) async => throw const ServerException(message: 'Database down'));
+          () => repository.getProjects(
+            10,
+            forceRefresh: any(named: 'forceRefresh'),
+          ),
+        ).thenAnswer(
+          (_) async => throw const ServerException(message: 'Database down'),
+        );
         return ProjectsListCubit(repository);
       },
       act: (cubit) => cubit.loadProjects(10),
@@ -137,11 +147,12 @@ void main() {
       'createProject adds new project to state',
       build: () {
         when(
-          () => repository.getProjects(10, forceRefresh: any(named: 'forceRefresh')),
+          () => repository.getProjects(
+            10,
+            forceRefresh: any(named: 'forceRefresh'),
+          ),
         ).thenAnswer((_) async => testProjects);
-        when(
-          () => repository.createProject(10, any()),
-        ).thenAnswer(
+        when(() => repository.createProject(10, any())).thenAnswer(
           (_) async => const ProjectDto(
             id: 99,
             workspaceId: 10,

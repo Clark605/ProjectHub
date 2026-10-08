@@ -88,9 +88,9 @@ ThemeData buildLightTheme([Locale? locale]) {
         elevation: 0,
         minimumSize: const Size(64, 44),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        textStyle: AppTypography.getTextTheme(locale).labelLarge?.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
+        textStyle: AppTypography.getTextTheme(
+          locale,
+        ).labelLarge?.copyWith(fontWeight: FontWeight.w600),
       ),
     ),
     dividerTheme: const DividerThemeData(
@@ -192,9 +192,9 @@ ThemeData buildLightTheme([Locale? locale]) {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.electricVioletContainer,
-        textStyle: AppTypography.getTextTheme(locale).labelLarge?.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
+        textStyle: AppTypography.getTextTheme(
+          locale,
+        ).labelLarge?.copyWith(fontWeight: FontWeight.w600),
       ),
     ),
   );

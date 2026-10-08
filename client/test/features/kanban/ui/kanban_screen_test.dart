@@ -100,15 +100,17 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      final mockTaskRepo = createMockTaskRepository(tasks: [
-        const TaskDto(
-          id: 101,
-          projectId: 42,
-          title: 'Mobile Architecture Task',
-          status: 'Backlog',
-          priority: 'High',
-        ),
-      ]);
+      final mockTaskRepo = createMockTaskRepository(
+        tasks: [
+          const TaskDto(
+            id: 101,
+            projectId: 42,
+            title: 'Mobile Architecture Task',
+            status: 'Backlog',
+            priority: 'High',
+          ),
+        ],
+      );
       final mockProjectRepo = createMockProjectRepository(project: testProject);
       final cubit = KanbanCubit(mockTaskRepo, mockProjectRepo);
 
@@ -142,15 +144,17 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      final mockTaskRepo = createMockTaskRepository(tasks: [
-        const TaskDto(
-          id: 101,
-          projectId: 42,
-          title: 'Sync Chip Task',
-          status: 'Backlog',
-          priority: 'High',
-        ),
-      ]);
+      final mockTaskRepo = createMockTaskRepository(
+        tasks: [
+          const TaskDto(
+            id: 101,
+            projectId: 42,
+            title: 'Sync Chip Task',
+            status: 'Backlog',
+            priority: 'High',
+          ),
+        ],
+      );
       final mockProjectRepo = createMockProjectRepository(project: testProject);
       final cubit = KanbanCubit(mockTaskRepo, mockProjectRepo);
 
@@ -191,15 +195,17 @@ void main() {
         tester.view.resetDevicePixelRatio();
       });
 
-      final mockTaskRepo = createMockTaskRepository(tasks: [
-        const TaskDto(
-          id: 101,
-          projectId: 42,
-          title: 'Desktop Multi-column Task',
-          status: 'Backlog',
-          priority: 'Medium',
-        ),
-      ]);
+      final mockTaskRepo = createMockTaskRepository(
+        tasks: [
+          const TaskDto(
+            id: 101,
+            projectId: 42,
+            title: 'Desktop Multi-column Task',
+            status: 'Backlog',
+            priority: 'Medium',
+          ),
+        ],
+      );
       final mockProjectRepo = createMockProjectRepository(project: testProject);
       final cubit = KanbanCubit(mockTaskRepo, mockProjectRepo);
 

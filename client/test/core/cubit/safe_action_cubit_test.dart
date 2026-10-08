@@ -89,22 +89,25 @@ void main() {
 
     test('emit does not throw StateError after cubit is closed', () async {
       await cubit.close();
-      expect(() => cubit.emit(const _TestState(status: 'after_close')), returnsNormally);
+      expect(
+        () => cubit.emit(const _TestState(status: 'after_close')),
+        returnsNormally,
+      );
     });
 
-    test('safeExecute does not invoke onError or throw after cubit is closed', () async {
-      bool onErrorCalled = false;
-      final future = cubit.safeExecute<int>(
-        () async {
+    test(
+      'safeExecute does not invoke onError or throw after cubit is closed',
+      () async {
+        bool onErrorCalled = false;
+        final future = cubit.safeExecute<int>(() async {
           await Future.delayed(const Duration(milliseconds: 10));
           throw Exception('late error');
-        },
-        onError: (_) => onErrorCalled = true,
-      );
-      await cubit.close();
-      final result = await future;
-      expect(result, isNull);
-      expect(onErrorCalled, isFalse);
-    });
+        }, onError: (_) => onErrorCalled = true);
+        await cubit.close();
+        final result = await future;
+        expect(result, isNull);
+        expect(onErrorCalled, isFalse);
+      },
+    );
   });
 }

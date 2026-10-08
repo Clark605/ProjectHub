@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/dialog/app_confirm_dialog.dart';
-import 'package:client/core/di/injection.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
@@ -14,7 +14,8 @@ class LogoutCard extends StatelessWidget {
     final confirmed = await showAppConfirmDialog(
       context: context,
       title: l10n?.logOut ?? 'Log Out',
-      message: l10n?.logoutConfirmation ??
+      message:
+          l10n?.logoutConfirmation ??
           'Are you sure you want to log out of your session on this device?',
       confirmLabel: l10n?.logOut ?? 'Log Out',
       cancelLabel: l10n?.cancel ?? 'Cancel',
@@ -22,7 +23,7 @@ class LogoutCard extends StatelessWidget {
     );
 
     if (confirmed == true && context.mounted) {
-      final cubit = getIt<AppAuthCubit>();
+      final cubit = context.read<AppAuthCubit>();
       await cubit.logout();
 
       if (!context.mounted) return;

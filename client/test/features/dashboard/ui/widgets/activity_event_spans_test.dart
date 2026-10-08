@@ -7,7 +7,10 @@ import 'package:client/l10n/generated/app_localizations.dart';
 
 void main() {
   group('ActivityEventSpans Tests', () {
-    Widget buildTestHost(ActivityEventDto event, void Function(List<InlineSpan>) onSpans) {
+    Widget buildTestHost(
+      ActivityEventDto event,
+      void Function(List<InlineSpan>) onSpans,
+    ) {
       return MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
@@ -26,7 +29,9 @@ void main() {
       );
     }
 
-    testWidgets('formats TaskCreated with project context and no quotes', (tester) async {
+    testWidgets('formats TaskCreated with project context and no quotes', (
+      tester,
+    ) async {
       final event = ActivityEventDto(
         id: 1,
         workspaceId: 10,
@@ -42,38 +47,51 @@ void main() {
       );
 
       List<InlineSpan> capturedSpans = [];
-      await tester.pumpWidget(buildTestHost(event, (spans) => capturedSpans = spans));
-      await tester.pumpAndSettle();
-
-      final fullText = capturedSpans.map((s) => s.toPlainText()).join();
-      expect(fullText, contains('created task Design System in ProjectHub Mobile'));
-      expect(fullText, isNot(contains('"')));
-    });
-
-    testWidgets('formats TaskStatusChanged with project context and no quotes', (tester) async {
-      final event = ActivityEventDto(
-        id: 2,
-        workspaceId: 10,
-        projectId: 5,
-        actorId: 'u1',
-        actorName: 'Sarah',
-        eventType: 'TaskStatusChanged',
-        metadata: {
-          'Title': 'Design System',
-          'ProjectName': 'ProjectHub Mobile',
-          'NewStatus': 'Done',
-        },
-        createdAt: DateTime.now(),
+      await tester.pumpWidget(
+        buildTestHost(event, (spans) => capturedSpans = spans),
       );
-
-      List<InlineSpan> capturedSpans = [];
-      await tester.pumpWidget(buildTestHost(event, (spans) => capturedSpans = spans));
       await tester.pumpAndSettle();
 
       final fullText = capturedSpans.map((s) => s.toPlainText()).join();
-      expect(fullText, contains('moved Design System to Done in ProjectHub Mobile'));
+      expect(
+        fullText,
+        contains('created task Design System in ProjectHub Mobile'),
+      );
       expect(fullText, isNot(contains('"')));
     });
+
+    testWidgets(
+      'formats TaskStatusChanged with project context and no quotes',
+      (tester) async {
+        final event = ActivityEventDto(
+          id: 2,
+          workspaceId: 10,
+          projectId: 5,
+          actorId: 'u1',
+          actorName: 'Sarah',
+          eventType: 'TaskStatusChanged',
+          metadata: {
+            'Title': 'Design System',
+            'ProjectName': 'ProjectHub Mobile',
+            'NewStatus': 'Done',
+          },
+          createdAt: DateTime.now(),
+        );
+
+        List<InlineSpan> capturedSpans = [];
+        await tester.pumpWidget(
+          buildTestHost(event, (spans) => capturedSpans = spans),
+        );
+        await tester.pumpAndSettle();
+
+        final fullText = capturedSpans.map((s) => s.toPlainText()).join();
+        expect(
+          fullText,
+          contains('moved Design System to Done in ProjectHub Mobile'),
+        );
+        expect(fullText, isNot(contains('"')));
+      },
+    );
 
     testWidgets('formats ProjectDeleted with no quotes', (tester) async {
       final event = ActivityEventDto(
@@ -82,14 +100,14 @@ void main() {
         actorId: 'u2',
         actorName: 'Alex',
         eventType: 'ProjectDeleted',
-        metadata: {
-          'ProjectName': 'Old Marketing Campaign',
-        },
+        metadata: {'ProjectName': 'Old Marketing Campaign'},
         createdAt: DateTime.now(),
       );
 
       List<InlineSpan> capturedSpans = [];
-      await tester.pumpWidget(buildTestHost(event, (spans) => capturedSpans = spans));
+      await tester.pumpWidget(
+        buildTestHost(event, (spans) => capturedSpans = spans),
+      );
       await tester.pumpAndSettle();
 
       final fullText = capturedSpans.map((s) => s.toPlainText()).join();

@@ -15,9 +15,7 @@ import '../../../helpers/mock_repositories.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(
-      const CreateWorkspaceRequest(name: 'Test Workspace'),
-    );
+    registerFallbackValue(const CreateWorkspaceRequest(name: 'Test Workspace'));
     registerFallbackValue(
       const WorkspaceDto(id: 1, name: 'Fallback Workspace'),
     );
@@ -34,9 +32,9 @@ void main() {
       prefs = PrefsService(sp);
       repository = MockWorkspaceRepository();
 
-      when(() => repository.activeWorkspaceChanges).thenAnswer(
-        (_) => const Stream.empty(),
-      );
+      when(
+        () => repository.activeWorkspaceChanges,
+      ).thenAnswer((_) => const Stream.empty());
       when(() => repository.setActiveWorkspace(any())).thenReturn(null);
     });
 
@@ -72,7 +70,9 @@ void main() {
     blocTest<WorkspaceContextCubit, WorkspaceContextState>(
       'auto-selects single workspace and persists ID when 1 workspace exists',
       build: () {
-        when(() => repository.getWorkspaces()).thenAnswer((_) async => [single]);
+        when(
+          () => repository.getWorkspaces(),
+        ).thenAnswer((_) async => [single]);
         return WorkspaceContextCubit(repository, prefs);
       },
       act: (cubit) => cubit.loadWorkspaces(),
@@ -97,7 +97,9 @@ void main() {
         await prefs.setActiveWorkspaceId(2);
       },
       build: () {
-        when(() => repository.getWorkspaces()).thenAnswer((_) async => [ws1, ws2]);
+        when(
+          () => repository.getWorkspaces(),
+        ).thenAnswer((_) async => [ws1, ws2]);
         return WorkspaceContextCubit(repository, prefs);
       },
       act: (cubit) => cubit.loadWorkspaces(),
@@ -163,9 +165,7 @@ void main() {
     blocTest<WorkspaceContextCubit, WorkspaceContextState>(
       'createWorkspace adds new workspace and auto-selects as Owner',
       build: () {
-        when(
-          () => repository.createWorkspace(any()),
-        ).thenAnswer(
+        when(() => repository.createWorkspace(any())).thenAnswer(
           (_) async => const WorkspaceDto(
             id: 2,
             name: 'New Product Team',
@@ -202,9 +202,10 @@ void main() {
     blocTest<WorkspaceContextCubit, WorkspaceContextState>(
       'emits error state when repository throws exception',
       build: () {
-        when(
-          () => repository.getWorkspaces(),
-        ).thenAnswer((_) async => throw const ServerException(message: 'Network connection failed'));
+        when(() => repository.getWorkspaces()).thenAnswer(
+          (_) async =>
+              throw const ServerException(message: 'Network connection failed'),
+        );
         return WorkspaceContextCubit(repository, prefs);
       },
       act: (cubit) => cubit.loadWorkspaces(),
@@ -283,13 +284,14 @@ void main() {
         await prefs.setCachedActiveWorkspaceRaw(jsonEncode(cachedOrg.toJson()));
       },
       build: () {
-        when(
-          () => repository.getWorkspaces(),
-        ).thenAnswer((_) async => throw const ServerException(message: 'Network offline'));
+        when(() => repository.getWorkspaces()).thenAnswer(
+          (_) async => throw const ServerException(message: 'Network offline'),
+        );
         return WorkspaceContextCubit(repository, prefs);
       },
       act: (cubit) => cubit.loadWorkspaces(),
-      expect: () => [], // No states emitted because failure is suppressed when already loaded
+      expect: () =>
+          [], // No states emitted because failure is suppressed when already loaded
       verify: (cubit) {
         expect(
           cubit.state,

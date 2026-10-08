@@ -138,7 +138,9 @@ void main() {
       test(
         'getWorkspace returns cached workspace without extra HTTP call',
         () async {
-          when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+          when(() => adapter.fetch(any(), any(), any())).thenAnswer((
+            inv,
+          ) async {
             return jsonResponse({
               'id': 10,
               'name': 'Cached Org',
@@ -161,7 +163,9 @@ void main() {
         'getWorkspace with forceRefresh: true calls API and updates cache',
         () async {
           int callCount = 0;
-          when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+          when(() => adapter.fetch(any(), any(), any())).thenAnswer((
+            inv,
+          ) async {
             callCount++;
             return jsonResponse({
               'id': 10,
@@ -226,7 +230,9 @@ void main() {
           );
           await repository.getMembers(10);
 
-          when(() => adapter.fetch(any(), any(), any())).thenAnswer((inv) async {
+          when(() => adapter.fetch(any(), any(), any())).thenAnswer((
+            inv,
+          ) async {
             final options = inv.positionalArguments[0] as RequestOptions;
             expect(options.method, 'PUT');
             expect(options.path, ApiConstants.updateMemberRole(10, 'u1'));
@@ -289,15 +295,15 @@ void main() {
         await repository.getWorkspace(10);
         expect(repository.hasCachedSettings(10), isFalse);
 
-        when(() => adapter.fetch(any(), any(), any())).thenAnswer(
-          (_) async => jsonResponse([]),
-        );
+        when(
+          () => adapter.fetch(any(), any(), any()),
+        ).thenAnswer((_) async => jsonResponse([]));
         await repository.getMembers(10);
         expect(repository.hasCachedSettings(10), isTrue);
 
-        when(() => adapter.fetch(any(), any(), any())).thenAnswer(
-          (_) async => jsonResponse({}),
-        );
+        when(
+          () => adapter.fetch(any(), any(), any()),
+        ).thenAnswer((_) async => jsonResponse({}));
         await repository.deleteWorkspace(10);
         expect(repository.hasCachedSettings(10), isFalse);
       });

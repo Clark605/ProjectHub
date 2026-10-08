@@ -12,6 +12,7 @@ class JwtUtils {
       final String decoded = utf8.decode(base64Url.decode(normalized));
       return jsonDecode(decoded) as Map<String, dynamic>;
     } catch (_) {
+      // Malformed or invalid token base64/JSON payload safely returns null
       return null;
     }
   }

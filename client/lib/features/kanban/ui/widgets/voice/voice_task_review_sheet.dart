@@ -19,10 +19,8 @@ class VoiceTaskReviewSheet extends StatefulWidget {
   final int projectId;
   final ParsedTaskDraftDto draft;
   final List<MemberDto> members;
-  final Future<void> Function(
-    CreateTaskRequest request,
-    String targetStatus,
-  ) onSubmit;
+  final Future<void> Function(CreateTaskRequest request, String targetStatus)
+  onSubmit;
 
   const VoiceTaskReviewSheet({
     super.key,
@@ -40,7 +38,8 @@ class VoiceTaskReviewSheet extends StatefulWidget {
     required Future<void> Function(
       CreateTaskRequest request,
       String targetStatus,
-    ) onSubmit,
+    )
+    onSubmit,
   }) {
     return showAppBottomSheet(
       context: context,
@@ -91,6 +90,7 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
       await widget.onSubmit(request, TaskStatus.backlog.toServerString());
       if (mounted) Navigator.of(context).pop();
     } catch (_) {
+      // Reset submission state on submission error so user can retry
       if (mounted) setState(() => isSubmitting = false);
     }
   }
@@ -108,42 +108,38 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const AppSheetDragHandle(),
-            VoiceTaskReviewHeader(
-              onClose: () => Navigator.of(context).pop(),
+            VoiceTaskReviewHeader(onClose: () => Navigator.of(context).pop()),
+            VoiceTaskReviewWarnings(warnings: widget.draft.warnings),
+            const SizedBox(height: 16),
+            CreateTaskTextFields(
+              titleController: titleController,
+              descriptionController: descriptionController,
             ),
-                VoiceTaskReviewWarnings(warnings: widget.draft.warnings),
-                const SizedBox(height: 16),
-                CreateTaskTextFields(
-                  titleController: titleController,
-                  descriptionController: descriptionController,
-                ),
-                const SizedBox(height: 18),
-                CreateTaskPrioritySelector(
-                  selectedPriority: selectedPriority,
-                  onPriorityChanged: (p) =>
-                      setState(() => selectedPriority = p),
-                ),
-                const SizedBox(height: 18),
-                CreateTaskAssigneeDueDateRow(
-                  members: widget.members,
-                  selectedAssigneeId: selectedAssigneeId,
-                  selectedDueDate: selectedDueDate,
-                  onAssigneeChanged: (val) =>
-                      setState(() => selectedAssigneeId = val),
-                  onPickDueDate: () => pickDueDate(context),
-                  onClearDueDate: clearDueDate,
-                ),
-                const SizedBox(height: 24),
-                AppButton(
-                  label:
-                      l10n?.voiceTaskConfirmCreate ?? 'Confirm & Create Task',
-                  isLoading: isSubmitting,
-                  variant: AppButtonVariant.primary,
-                  onPressed: isSubmitting ? null : _submit,
-                ),
-              ],
+            const SizedBox(height: 18),
+            CreateTaskPrioritySelector(
+              selectedPriority: selectedPriority,
+              onPriorityChanged: (p) => setState(() => selectedPriority = p),
             ),
-          ),
-        );
+            const SizedBox(height: 18),
+            CreateTaskAssigneeDueDateRow(
+              members: widget.members,
+              selectedAssigneeId: selectedAssigneeId,
+              selectedDueDate: selectedDueDate,
+              onAssigneeChanged: (val) =>
+                  setState(() => selectedAssigneeId = val),
+              onPickDueDate: () => pickDueDate(context),
+              onClearDueDate: clearDueDate,
+            ),
+            const SizedBox(height: 24),
+            AppButton(
+              label: l10n?.voiceTaskConfirmCreate ?? 'Confirm & Create Task',
+              isLoading: isSubmitting,
+              variant: AppButtonVariant.primary,
+              onPressed: isSubmitting ? null : _submit,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

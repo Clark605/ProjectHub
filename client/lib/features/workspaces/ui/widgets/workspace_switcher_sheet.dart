@@ -69,107 +69,107 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const AppSheetDragHandle(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              children: [
-                Text(
-                  l10n.switchWorkspace,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: theme.colorScheme.onSurface,
-                  ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          child: Row(
+            children: [
+              Text(
+                l10n.switchWorkspace,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: theme.colorScheme.onSurface,
                 ),
-                const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.close_rounded, size: 20),
-                  color: theme.colorScheme.onSurfaceVariant,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
+              ),
+              const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.close_rounded, size: 20),
+                color: theme.colorScheme.onSurfaceVariant,
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-            child: AppTextField(
-              label: '',
-              hintText: l10n.searchWorkspaces,
-              controller: _searchController,
-              prefixIcon: Icons.search_rounded,
-              onChanged: (val) =>
-                  setState(() => _searchQuery = val.trim().toLowerCase()),
-            ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+          child: AppTextField(
+            label: '',
+            hintText: l10n.searchWorkspaces,
+            controller: _searchController,
+            prefixIcon: Icons.search_rounded,
+            onChanged: (val) =>
+                setState(() => _searchQuery = val.trim().toLowerCase()),
           ),
-          const SizedBox(height: 12),
-          Flexible(
-            child: BlocBuilder<WorkspaceContextCubit, WorkspaceContextState>(
-              builder: (context, state) {
-                return state.maybeWhen(
-                  loaded: (workspaces, activeWorkspace) {
-                    final filtered = workspaces.where((w) {
-                      if (_searchQuery.isEmpty) return true;
-                      return w.name.toLowerCase().contains(_searchQuery) ||
-                          w.description.toLowerCase().contains(_searchQuery);
-                    }).toList();
+        ),
+        const SizedBox(height: 12),
+        Flexible(
+          child: BlocBuilder<WorkspaceContextCubit, WorkspaceContextState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                loaded: (workspaces, activeWorkspace) {
+                  final filtered = workspaces.where((w) {
+                    if (_searchQuery.isEmpty) return true;
+                    return w.name.toLowerCase().contains(_searchQuery) ||
+                        w.description.toLowerCase().contains(_searchQuery);
+                  }).toList();
 
-                    if (filtered.isEmpty) {
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(32),
-                          child: Text(
-                            l10n.noWorkspacesFound,
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
+                  if (filtered.isEmpty) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(32),
+                        child: Text(
+                          l10n.noWorkspacesFound,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
                         ),
-                      );
-                    }
-
-                    return ListView.separated(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 4,
                       ),
-                      shrinkWrap: true,
-                      itemCount: filtered.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 8),
-                      itemBuilder: (context, index) {
-                        final workspace = filtered[index];
-                        final isActive = workspace.id == activeWorkspace.id;
-                        return WorkspaceCard(
-                          workspace: workspace,
-                          isActive: isActive,
-                          onTap: () => _onSelect(workspace),
-                        );
-                      },
                     );
-                  },
-                  loading: () => Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(32),
-                      child: CircularProgressIndicator(
-                        color: theme.colorScheme.primary,
-                      ),
+                  }
+
+                  return ListView.separated(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 4,
+                    ),
+                    shrinkWrap: true,
+                    itemCount: filtered.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 8),
+                    itemBuilder: (context, index) {
+                      final workspace = filtered[index];
+                      final isActive = workspace.id == activeWorkspace.id;
+                      return WorkspaceCard(
+                        workspace: workspace,
+                        isActive: isActive,
+                        onTap: () => _onSelect(workspace),
+                      );
+                    },
+                  );
+                },
+                loading: () => Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: CircularProgressIndicator(
+                      color: theme.colorScheme.primary,
                     ),
                   ),
-                  orElse: () => const SizedBox.shrink(),
-                );
-              },
-            ),
+                ),
+                orElse: () => const SizedBox.shrink(),
+              );
+            },
           ),
+        ),
 
-          // Pinned Bottom Button: Create New Workspace
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: AppButton(
-              label: l10n.createNewWorkspace,
-              icon: Icons.add_rounded,
-              variant: AppButtonVariant.primary,
-              onPressed: _onCreateNew,
-            ),
+        // Pinned Bottom Button: Create New Workspace
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: AppButton(
+            label: l10n.createNewWorkspace,
+            icon: Icons.add_rounded,
+            variant: AppButtonVariant.primary,
+            onPressed: _onCreateNew,
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 }

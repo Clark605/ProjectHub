@@ -117,10 +117,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: theme.colorScheme.outlineVariant,
-          width: 1,
-        ),
+        border: Border.all(color: theme.colorScheme.outlineVariant, width: 1),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
@@ -145,9 +142,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
                   const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Bone.text(words: 3, fontSize: 14),
-                      ),
+                      Expanded(child: Bone.text(words: 3, fontSize: 14)),
                       SizedBox(width: 8),
                       Bone.icon(size: 18),
                     ],

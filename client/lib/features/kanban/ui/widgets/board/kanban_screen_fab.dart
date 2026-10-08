@@ -25,10 +25,7 @@ class KanbanScreenFab extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = voiceCubit;
     if (cubit == null) {
-      return KanbanFab(
-        isArchived: isArchived,
-        onPressed: onOpenCreateTask,
-      );
+      return KanbanFab(isArchived: isArchived, onPressed: onOpenCreateTask);
     }
     return BlocBuilder<VoiceTaskCubit, VoiceTaskState>(
       bloc: cubit,

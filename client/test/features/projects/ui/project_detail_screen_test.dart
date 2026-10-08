@@ -77,7 +77,7 @@ void main() {
           BlocProvider<WorkspaceContextCubit>.value(value: workspaceCubit),
           BlocProvider<ProjectDetailCubit>.value(value: detailCubit),
         ],
-        child: ProjectDetailScreen(projectId: 1, cubit: detailCubit),
+        child: const ProjectDetailScreen(projectId: 1),
       ),
     );
   }
@@ -95,9 +95,14 @@ void main() {
       name: 'WS',
       membership: WorkspaceMembershipDto(role: 'Owner'),
     );
-    when(() => workspaceRepo.getWorkspaces()).thenAnswer((_) async => [ownerWs]);
     when(
-      () => workspaceRepo.getWorkspace(10, forceRefresh: any(named: 'forceRefresh')),
+      () => workspaceRepo.getWorkspaces(),
+    ).thenAnswer((_) async => [ownerWs]);
+    when(
+      () => workspaceRepo.getWorkspace(
+        10,
+        forceRefresh: any(named: 'forceRefresh'),
+      ),
     ).thenAnswer((_) async => ownerWs);
     await workspaceCubit.loadWorkspaces();
 
@@ -122,9 +127,14 @@ void main() {
       name: 'WS',
       membership: WorkspaceMembershipDto(role: 'Member'),
     );
-    when(() => workspaceRepo.getWorkspaces()).thenAnswer((_) async => [memberWs]);
     when(
-      () => workspaceRepo.getWorkspace(10, forceRefresh: any(named: 'forceRefresh')),
+      () => workspaceRepo.getWorkspaces(),
+    ).thenAnswer((_) async => [memberWs]);
+    when(
+      () => workspaceRepo.getWorkspace(
+        10,
+        forceRefresh: any(named: 'forceRefresh'),
+      ),
     ).thenAnswer((_) async => memberWs);
     await workspaceCubit.loadWorkspaces();
 
@@ -149,9 +159,14 @@ void main() {
       name: 'WS',
       membership: WorkspaceMembershipDto(role: 'Member'),
     );
-    when(() => workspaceRepo.getWorkspaces()).thenAnswer((_) async => [memberWs]);
     when(
-      () => workspaceRepo.getWorkspace(10, forceRefresh: any(named: 'forceRefresh')),
+      () => workspaceRepo.getWorkspaces(),
+    ).thenAnswer((_) async => [memberWs]);
+    when(
+      () => workspaceRepo.getWorkspace(
+        10,
+        forceRefresh: any(named: 'forceRefresh'),
+      ),
     ).thenAnswer((_) async => memberWs);
     await workspaceCubit.loadWorkspaces();
 
