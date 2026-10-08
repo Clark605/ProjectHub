@@ -8,6 +8,7 @@ import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/comments/data/comment_repository.dart';
 import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
+import 'package:client/features/dashboard/data/models/workspace_dashboard_dto.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/tasks/data/ai_task_repository.dart';
@@ -82,6 +83,16 @@ MockWorkspaceRepository createMockWorkspaceRepository({
   when(
     () => repo.getMembers(any(), forceRefresh: any(named: 'forceRefresh')),
   ).thenAnswer((_) async => []);
+  when(() => repo.getWorkspaceDashboard(any())).thenAnswer(
+    (_) async => const WorkspaceDashboardDto(
+      activeProjectsCount: 1,
+      inProgressTasksCount: 0,
+      urgentTasksCount: 0,
+      completedTasksCount: 0,
+      overdueTasksCount: 0,
+      dueThisWeekTasksCount: 0,
+    ),
+  );
   when(() => repo.hasCachedSettings(any())).thenReturn(false);
   when(() => repo.clearCache(any())).thenReturn(null);
 

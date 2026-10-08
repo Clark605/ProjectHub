@@ -140,7 +140,7 @@ class _DashboardViewState extends State<_DashboardView> {
                 DashboardMetricsGrid(
                   activeProjects: state.activeProjects,
                   inProgressTasks: state.inProgressTasks,
-                  urgentBlockers: state.urgentBlockers,
+                  urgentTasks: state.urgentTasks,
                   completedTasks: state.completedTasks,
                   isLoading: state.isLoading,
                   onTapActiveProjects: widget.onNavigateToProjects,

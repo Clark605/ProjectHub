@@ -2233,6 +2233,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log In'**
   String get reauthenticate;
+
+  /// Tooltip indicating task assignee
+  ///
+  /// In en, this message translates to:
+  /// **'Assigned to {name}'**
+  String assignedToUser(String name);
+
+  /// Subtitle on dashboard in-progress metric card
+  ///
+  /// In en, this message translates to:
+  /// **'Workspace in progress'**
+  String get inProgressSubtitle;
+
+  /// Subtitle on dashboard active projects metric card
+  ///
+  /// In en, this message translates to:
+  /// **'Ongoing projects'**
+  String get ongoingProjectsSubtitle;
+
+  /// Subtitle on dashboard urgent tasks metric card
+  ///
+  /// In en, this message translates to:
+  /// **'High priority queue'**
+  String get urgentQueueSubtitle;
+
+  /// Subtitle on dashboard completed tasks metric card
+  ///
+  /// In en, this message translates to:
+  /// **'Finished tasks'**
+  String get completedTasksSubtitle;
 }
 
 class _AppLocalizationsDelegate

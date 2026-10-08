@@ -6,7 +6,7 @@ class DashboardState {
   final int totalProjects;
   final int activeProjects;
   final int inProgressTasks;
-  final int urgentBlockers;
+  final int urgentTasks;
   final int completedTasks;
   final List<TaskDto> focusTasks;
   final List<ActivityEventDto> recentActivities;
@@ -17,19 +17,22 @@ class DashboardState {
     this.totalProjects = 0,
     this.activeProjects = 0,
     this.inProgressTasks = 0,
-    this.urgentBlockers = 0,
+    this.urgentTasks = 0,
     this.completedTasks = 0,
     this.focusTasks = const [],
     this.recentActivities = const [],
     this.errorMessage,
   });
 
+  /// Alias for backwards compatibility
+  int get urgentBlockers => urgentTasks;
+
   DashboardState copyWith({
     bool? isLoading,
     int? totalProjects,
     int? activeProjects,
     int? inProgressTasks,
-    int? urgentBlockers,
+    int? urgentTasks,
     int? completedTasks,
     List<TaskDto>? focusTasks,
     List<ActivityEventDto>? recentActivities,
@@ -40,7 +43,7 @@ class DashboardState {
       totalProjects: totalProjects ?? this.totalProjects,
       activeProjects: activeProjects ?? this.activeProjects,
       inProgressTasks: inProgressTasks ?? this.inProgressTasks,
-      urgentBlockers: urgentBlockers ?? this.urgentBlockers,
+      urgentTasks: urgentTasks ?? this.urgentTasks,
       completedTasks: completedTasks ?? this.completedTasks,
       focusTasks: focusTasks ?? this.focusTasks,
       recentActivities: recentActivities ?? this.recentActivities,

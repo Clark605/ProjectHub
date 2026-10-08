@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/widgets/app_error_state.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
+import 'package:client/features/dashboard/data/models/workspace_dashboard_dto.dart';
 import 'package:client/features/dashboard/ui/dashboard_screen.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
@@ -21,6 +23,7 @@ void main() {
   late MockActivityRepository mockActivityRepo;
   late MockProjectRepository mockProjectRepo;
   late MockTaskRepository mockTaskRepo;
+  late MockWorkspaceRepository mockWorkspaceRepo;
   late MockWorkspaceContextCubit mockWorkspaceCubit;
   late DashboardCubit dashboardCubit;
 
@@ -35,7 +38,18 @@ void main() {
     mockActivityRepo = MockActivityRepository();
     mockProjectRepo = MockProjectRepository();
     mockTaskRepo = MockTaskRepository();
+    mockWorkspaceRepo = MockWorkspaceRepository();
     mockWorkspaceCubit = MockWorkspaceContextCubit();
+
+    when(() => mockWorkspaceRepo.getWorkspaceDashboard(any()))
+        .thenAnswer((_) async => const WorkspaceDashboardDto(
+              activeProjectsCount: 1,
+              inProgressTasksCount: 0,
+              urgentTasksCount: 0,
+              completedTasksCount: 0,
+              overdueTasksCount: 0,
+              dueThisWeekTasksCount: 0,
+            ));
 
     when(() => mockWorkspaceCubit.state).thenReturn(
       const WorkspaceContextState.loaded(
@@ -56,6 +70,7 @@ void main() {
       mockActivityRepo,
       mockProjectRepo,
       mockTaskRepo,
+      mockWorkspaceRepo,
     );
   });
 
@@ -84,7 +99,7 @@ void main() {
       tester,
     ) async {
       when(() => mockProjectRepo.getProjects(31))
-          .thenThrow(Exception('Authentication required'));
+          .thenThrow(const UnauthorizedException(message: 'Authentication required'));
       when(() => mockTaskRepo.getMyTasks(31)).thenAnswer((_) async => []);
       when(() => mockActivityRepo.getWorkspaceActivities(31, limit: 20))
           .thenAnswer((_) async => []);
@@ -101,7 +116,7 @@ void main() {
 
     testWidgets('tapping retry re-triggers loadDashboard', (tester) async {
       when(() => mockProjectRepo.getProjects(31))
-          .thenThrow(Exception('Connection failure'));
+          .thenThrow(const ServerException(message: 'Connection failure'));
       when(() => mockTaskRepo.getMyTasks(31)).thenAnswer((_) async => []);
       when(() => mockActivityRepo.getWorkspaceActivities(31, limit: 20))
           .thenAnswer((_) async => []);

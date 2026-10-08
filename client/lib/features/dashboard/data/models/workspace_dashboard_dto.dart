@@ -1,42 +1,87 @@
+import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
+import 'package:client/features/tasks/data/models/task_dto.dart';
+
 class WorkspaceDashboardDto {
-  final int totalProjects;
-  final int activeProjects;
-  final int inProgressTasks;
-  final int urgentTasks;
-  final int completedTasks;
-  final int overdueTasks;
-  final int dueThisWeekTasks;
+  final int activeProjectsCount;
+  final int inProgressTasksCount;
+  final int urgentTasksCount;
+  final int completedTasksCount;
+  final int overdueTasksCount;
+  final int dueThisWeekTasksCount;
+  final List<TaskDto> focusTasks;
+  final List<ActivityEventDto> recentActivities;
 
   const WorkspaceDashboardDto({
-    this.totalProjects = 0,
-    this.activeProjects = 0,
-    this.inProgressTasks = 0,
-    this.urgentTasks = 0,
-    this.completedTasks = 0,
-    this.overdueTasks = 0,
-    this.dueThisWeekTasks = 0,
+    required this.activeProjectsCount,
+    required this.inProgressTasksCount,
+    required this.urgentTasksCount,
+    required this.completedTasksCount,
+    required this.overdueTasksCount,
+    required this.dueThisWeekTasksCount,
+    this.focusTasks = const [],
+    this.recentActivities = const [],
   });
 
+  // Convenience aliases for backwards compatibility
+  int get activeProjects => activeProjectsCount;
+  int get inProgressTasks => inProgressTasksCount;
+  int get urgentTasks => urgentTasksCount;
+  int get completedTasks => completedTasksCount;
+  int get overdueTasks => overdueTasksCount;
+  int get dueThisWeekTasks => dueThisWeekTasksCount;
+
   factory WorkspaceDashboardDto.fromJson(Map<String, dynamic> json) {
+    const requiredKeys = [
+      'activeProjectsCount',
+      'inProgressTasksCount',
+      'urgentTasksCount',
+      'completedTasksCount',
+      'overdueTasksCount',
+      'dueThisWeekTasksCount',
+    ];
+
+    for (final key in requiredKeys) {
+      if (!json.containsKey(key) || json[key] == null) {
+        throw FormatException('Missing required dashboard metric key: $key');
+      }
+    }
+
     return WorkspaceDashboardDto(
-      totalProjects: (json['totalProjects'] as num?)?.toInt() ?? 0,
-      activeProjects: (json['activeProjects'] as num?)?.toInt() ?? 0,
-      inProgressTasks: (json['inProgressTasks'] as num?)?.toInt() ?? 0,
-      urgentTasks: (json['urgentTasks'] as num?)?.toInt() ?? 0,
-      completedTasks: (json['completedTasks'] as num?)?.toInt() ?? 0,
-      overdueTasks: (json['overdueTasks'] as num?)?.toInt() ?? 0,
-      dueThisWeekTasks: (json['dueThisWeekTasks'] as num?)?.toInt() ?? 0,
+      activeProjectsCount: (json['activeProjectsCount'] as num).toInt(),
+      inProgressTasksCount: (json['inProgressTasksCount'] as num).toInt(),
+      urgentTasksCount: (json['urgentTasksCount'] as num).toInt(),
+      completedTasksCount: (json['completedTasksCount'] as num).toInt(),
+      overdueTasksCount: (json['overdueTasksCount'] as num).toInt(),
+      dueThisWeekTasksCount: (json['dueThisWeekTasksCount'] as num).toInt(),
+      focusTasks: (json['focusTasks'] as List<dynamic>?)
+              ?.map((t) => TaskDto.fromJson(t as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      recentActivities: (json['recentActivities'] as List<dynamic>?)
+              ?.map((a) => ActivityEventDto.fromJson(a as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
   }
 
   Map<String, dynamic> toJson() => {
-    'totalProjects': totalProjects,
-    'activeProjects': activeProjects,
-    'inProgressTasks': inProgressTasks,
-    'urgentTasks': urgentTasks,
-    'completedTasks': completedTasks,
-    'overdueTasks': overdueTasks,
-    'dueThisWeekTasks': dueThisWeekTasks,
+    'activeProjectsCount': activeProjectsCount,
+    'inProgressTasksCount': inProgressTasksCount,
+    'urgentTasksCount': urgentTasksCount,
+    'completedTasksCount': completedTasksCount,
+    'overdueTasksCount': overdueTasksCount,
+    'dueThisWeekTasksCount': dueThisWeekTasksCount,
+    'focusTasks': focusTasks.map((t) => t.toJson()).toList(),
+    'recentActivities': recentActivities.map((a) => {
+      'id': a.id,
+      'workspaceId': a.workspaceId,
+      'projectId': a.projectId,
+      'taskId': a.taskId,
+      'actorId': a.actorId,
+      'actorName': a.actorName,
+      'eventType': a.eventType,
+      'metadata': a.metadata,
+      'createdAt': a.createdAt.toIso8601String(),
+    }).toList(),
   };
 }
-

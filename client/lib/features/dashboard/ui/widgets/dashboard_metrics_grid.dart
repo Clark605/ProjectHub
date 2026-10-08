@@ -7,7 +7,7 @@ import 'package:client/l10n/generated/app_localizations.dart';
 class DashboardMetricsGrid extends StatelessWidget {
   final int activeProjects;
   final int inProgressTasks;
-  final int urgentBlockers;
+  final int urgentTasks;
   final int completedTasks;
   final bool isLoading;
   final VoidCallback? onTapActiveProjects;
@@ -19,14 +19,17 @@ class DashboardMetricsGrid extends StatelessWidget {
     super.key,
     this.activeProjects = 0,
     this.inProgressTasks = 0,
-    this.urgentBlockers = 0,
+    int urgentTasks = 0,
+    int? urgentBlockers,
     this.completedTasks = 0,
     this.isLoading = false,
     this.onTapActiveProjects,
     this.onTapInProgressTasks,
     this.onTapUrgentTasks,
     this.onTapCompletedTasks,
-  });
+  }) : urgentTasks = urgentBlockers ?? urgentTasks;
+
+  int get urgentBlockers => urgentTasks;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,7 @@ class DashboardMetricsGrid extends StatelessWidget {
             MetricData(
               label: l10n?.activeProjects ?? 'Active Projects',
               value: isLoading ? '...' : '$activeProjects',
-              trend: 'Ongoing projects',
+              trend: l10n?.ongoingProjectsSubtitle ?? 'Ongoing projects',
               icon: Icons.folder_open_rounded,
               color: AppColors.primary,
             ),
@@ -55,7 +58,7 @@ class DashboardMetricsGrid extends StatelessWidget {
             MetricData(
               label: l10n?.inProgressTasks ?? 'In Progress Tasks',
               value: isLoading ? '...' : '$inProgressTasks',
-              trend: 'Assigned to you',
+              trend: l10n?.inProgressSubtitle ?? 'Workspace in progress',
               icon: Icons.timelapse_rounded,
               color: AppColors.skyBlue,
             ),
@@ -64,8 +67,8 @@ class DashboardMetricsGrid extends StatelessWidget {
           (
             MetricData(
               label: l10n?.urgentBlockers ?? 'Urgent Tasks',
-              value: isLoading ? '...' : '$urgentBlockers',
-              trend: 'High priority queue',
+              value: isLoading ? '...' : '$urgentTasks',
+              trend: l10n?.urgentQueueSubtitle ?? 'High priority queue',
               icon: Icons.error_outline_rounded,
               color: AppColors.priorityUrgent,
             ),
@@ -75,7 +78,7 @@ class DashboardMetricsGrid extends StatelessWidget {
             MetricData(
               label: l10n?.completedTasks ?? 'Completed Tasks',
               value: isLoading ? '...' : '$completedTasks',
-              trend: 'Finished tasks',
+              trend: l10n?.completedTasksSubtitle ?? 'Finished tasks',
               icon: Icons.check_circle_outline_rounded,
               color: AppColors.success,
             ),

@@ -188,6 +188,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i568.ActivityRepository>(),
         gh<_i405.ProjectRepository>(),
         gh<_i241.TaskRepository>(),
+        gh<_i688.WorkspaceRepository>(),
       ),
     );
     return this;

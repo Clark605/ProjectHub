@@ -1182,4 +1182,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reauthenticate => 'Log In';
+
+  @override
+  String assignedToUser(String name) {
+    return 'Assigned to $name';
+  }
+
+  @override
+  String get inProgressSubtitle => 'Workspace in progress';
+
+  @override
+  String get ongoingProjectsSubtitle => 'Ongoing projects';
+
+  @override
+  String get urgentQueueSubtitle => 'High priority queue';
+
+  @override
+  String get completedTasksSubtitle => 'Finished tasks';
 }

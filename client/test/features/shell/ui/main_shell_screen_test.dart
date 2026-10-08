@@ -51,7 +51,7 @@ void main() {
     getIt.registerSingleton<TaskRepository>(taskRepo);
 
     getIt.registerFactory<DashboardCubit>(
-      () => DashboardCubit(activityRepo, projectRepo, taskRepo),
+      () => DashboardCubit(activityRepo, projectRepo, taskRepo, workspaceRepo),
     );
     getIt.registerFactory<MyTasksCubit>(() => MyTasksCubit(taskRepo));
   });

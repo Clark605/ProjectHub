@@ -1178,4 +1178,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get reauthenticate => 'تسجيل الدخول';
+
+  @override
+  String assignedToUser(String name) {
+    return 'مُسند إلى $name';
+  }
+
+  @override
+  String get inProgressSubtitle => 'قيد التنفيذ في مساحة العمل';
+
+  @override
+  String get ongoingProjectsSubtitle => 'مشاريع جارية';
+
+  @override
+  String get urgentQueueSubtitle => 'قائمة المهام العاجلة';
+
+  @override
+  String get completedTasksSubtitle => 'مهام مكتملة';
 }

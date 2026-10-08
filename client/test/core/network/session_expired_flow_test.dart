@@ -15,6 +15,7 @@ import 'package:client/features/auth/cubit/login_state.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
+import 'package:client/features/dashboard/data/models/workspace_dashboard_dto.dart';
 import 'package:client/features/profile/cubit/profile_edit_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/tasks/cubit/my_tasks_cubit.dart';
@@ -39,6 +40,7 @@ void main() {
   late MockActivityRepository mockActivityRepo;
   late MockProjectRepository mockProjectRepo;
   late MockTaskRepository mockTaskRepo;
+  late MockWorkspaceRepository mockWorkspaceRepo;
   late MockLoginCubit mockLoginCubit;
   late DashboardCubit dashboardCubit;
   late ProjectsListCubit projectsListCubit;
@@ -55,6 +57,7 @@ void main() {
     mockActivityRepo = MockActivityRepository();
     mockProjectRepo = MockProjectRepository();
     mockTaskRepo = MockTaskRepository();
+    mockWorkspaceRepo = MockWorkspaceRepository();
     mockLoginCubit = MockLoginCubit();
 
     when(() => mockActivityRepo.getWorkspaceActivities(any(), limit: any(named: 'limit')))
@@ -63,8 +66,22 @@ void main() {
         .thenAnswer((_) async => []);
     when(() => mockTaskRepo.getMyTasks(any()))
         .thenAnswer((_) async => []);
+    when(() => mockWorkspaceRepo.getWorkspaceDashboard(any()))
+        .thenAnswer((_) async => const WorkspaceDashboardDto(
+              activeProjectsCount: 0,
+              inProgressTasksCount: 0,
+              urgentTasksCount: 0,
+              completedTasksCount: 0,
+              overdueTasksCount: 0,
+              dueThisWeekTasksCount: 0,
+            ));
 
-    dashboardCubit = DashboardCubit(mockActivityRepo, mockProjectRepo, mockTaskRepo);
+    dashboardCubit = DashboardCubit(
+      mockActivityRepo,
+      mockProjectRepo,
+      mockTaskRepo,
+      mockWorkspaceRepo,
+    );
     projectsListCubit = ProjectsListCubit(mockProjectRepo);
     myTasksCubit = MyTasksCubit(mockTaskRepo);
     profileEditCubit = ProfileEditCubit(mockAuthRepo);

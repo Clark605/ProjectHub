@@ -805,5 +805,30 @@
   "reauthenticate": "Log In",
   "@reauthenticate": {
     "description": "Button to redirect user to log in screen"
+  },
+  "assignedToUser": "Assigned to {name}",
+  "@assignedToUser": {
+    "description": "Tooltip indicating task assignee",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inProgressSubtitle": "Workspace in progress",
+  "@inProgressSubtitle": {
+    "description": "Subtitle on dashboard in-progress metric card"
+  },
+  "ongoingProjectsSubtitle": "Ongoing projects",
+  "@ongoingProjectsSubtitle": {
+    "description": "Subtitle on dashboard active projects metric card"
+  },
+  "urgentQueueSubtitle": "High priority queue",
+  "@urgentQueueSubtitle": {
+    "description": "Subtitle on dashboard urgent tasks metric card"
+  },
+  "completedTasksSubtitle": "Finished tasks",
+  "@completedTasksSubtitle": {
+    "description": "Subtitle on dashboard completed tasks metric card"
   }
 }

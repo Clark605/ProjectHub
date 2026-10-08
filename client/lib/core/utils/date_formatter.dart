@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 
 class DateFormatter {
   DateFormatter._();
@@ -48,15 +49,22 @@ class DateFormatter {
     if (dateTime == null) return fallback;
     final now = DateTime.now();
     final difference = now.difference(dateTime.toLocal());
+    final l10n = context != null ? AppLocalizations.of(context) : null;
 
     if (difference.isNegative || difference.inSeconds < 45) {
-      return 'Just now';
+      return l10n?.timeJustNow ?? 'Just now';
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
+      return l10n != null
+          ? l10n.timeMinutesAgo(difference.inMinutes)
+          : '${difference.inMinutes}m ago';
     } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
+      return l10n != null
+          ? l10n.timeHoursAgo(difference.inHours)
+          : '${difference.inHours}h ago';
     } else if (difference.inDays < 7) {
-      return '${difference.inDays}d ago';
+      return l10n != null
+          ? l10n.timeDaysAgo(difference.inDays)
+          : '${difference.inDays}d ago';
     } else {
       return formatShortDate(dateTime, context: context);
     }

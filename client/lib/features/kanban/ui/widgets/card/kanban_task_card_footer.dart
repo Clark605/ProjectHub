@@ -32,97 +32,102 @@ class KanbanTaskCardFooter extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        if (priority != null) ...[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: priority!.toColor().withValues(alpha: isDark ? 0.2 : 0.12),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  priority!.toIcon(),
-                  size: 11,
-                  color: priority!.toColor(),
-                ),
-                const SizedBox(width: 3),
-                Text(
-                  l10n != null
-                      ? priority!.localizedName(l10n)
-                      : priority!.toDisplayString(),
-                  style: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: priority!.toColor(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 6),
-        ],
-        if (dueDate != null) ...[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(
-              color: isOverdue
-                  ? AppColors.error.withValues(alpha: 0.15)
-                  : (isDark
-                        ? Colors.white10
-                        : Colors.black.withValues(alpha: 0.05)),
-              borderRadius: BorderRadius.circular(6),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.calendar_today_outlined,
-                  size: 11,
-                  color: isOverdue
-                      ? AppColors.error
-                      : theme.colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  DateFormatter.formatShortDate(dueDate!, context: context),
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: isOverdue ? FontWeight.w700 : FontWeight.w500,
-                    color: isOverdue
-                        ? AppColors.error
-                        : theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 6),
-        ],
-        if (commentCount > 0) ...[
-          Row(
-            mainAxisSize: MainAxisSize.min,
+        Expanded(
+          child: Wrap(
+            spacing: 6,
+            runSpacing: 4,
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              Icon(
-                Icons.chat_bubble_outline_rounded,
-                size: 12,
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-              const SizedBox(width: 3),
-              Text(
-                '$commentCount',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                  color: theme.colorScheme.onSurfaceVariant,
+              if (priority != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: priority!.toColor().withValues(alpha: isDark ? 0.2 : 0.12),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        priority!.toIcon(),
+                        size: 11,
+                        color: priority!.toColor(),
+                      ),
+                      const SizedBox(width: 3),
+                      Text(
+                        l10n != null
+                            ? priority!.localizedName(l10n)
+                            : priority!.toDisplayString(),
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: priority!.toColor(),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              if (dueDate != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: isOverdue
+                        ? AppColors.error.withValues(alpha: 0.15)
+                        : (isDark
+                              ? Colors.white10
+                              : Colors.black.withValues(alpha: 0.05)),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.calendar_today_outlined,
+                        size: 11,
+                        color: isOverdue
+                            ? AppColors.error
+                            : theme.colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        DateFormatter.formatShortDate(dueDate!, context: context),
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: isOverdue ? FontWeight.w700 : FontWeight.w500,
+                          color: isOverdue
+                              ? AppColors.error
+                              : theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              if (commentCount > 0)
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.chat_bubble_outline_rounded,
+                      size: 12,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 3),
+                    Text(
+                      '$commentCount',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
             ],
           ),
-        ],
-        const Spacer(),
+        ),
+        const SizedBox(width: 8),
         _buildAvatar(context, theme, isDark, l10n),
       ],
     );
@@ -137,7 +142,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
     final name = assigneeName?.trim();
     if (name != null && name.isNotEmpty) {
       return Tooltip(
-        message: 'Assigned to $name',
+        message: l10n?.assignedToUser(name) ?? 'Assigned to $name',
         child: AppAvatar(
           name: name,
           userId: assigneeId,

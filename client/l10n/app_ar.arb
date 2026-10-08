@@ -377,5 +377,10 @@
   "voiceTaskCouldNotDetermineDueDate": "تعذر تحديد تاريخ الاستحقاق",
   "sessionExpiredTitle": "انتهت الجلسة",
   "sessionExpiredMessage": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى للمتابعة.",
-  "reauthenticate": "تسجيل الدخول"
+  "reauthenticate": "تسجيل الدخول",
+  "assignedToUser": "مُسند إلى {name}",
+  "inProgressSubtitle": "قيد التنفيذ في مساحة العمل",
+  "ongoingProjectsSubtitle": "مشاريع جارية",
+  "urgentQueueSubtitle": "قائمة المهام العاجلة",
+  "completedTasksSubtitle": "مهام مكتملة"
 }
