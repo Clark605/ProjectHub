@@ -180,5 +180,16 @@ ThemeData buildDarkTheme([Locale? locale]) {
         }),
       ),
     ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.primary,
+        textStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontFamilyFallback: fontFallback,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
   );
 }

@@ -90,25 +90,7 @@ class RecentActivityCard extends StatelessWidget {
                     visualDensity: VisualDensity.compact,
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        l10n?.viewAll ?? 'View all',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: theme.colorScheme.primary,
-                        ),
-                      ),
-                      const SizedBox(width: 2),
-                      Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        size: 10,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ],
-                  ),
+                  child: Text(l10n?.viewAll ?? 'View all'),
                 ),
             ],
           ),

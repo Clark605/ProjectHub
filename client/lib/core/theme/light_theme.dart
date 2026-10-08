@@ -192,5 +192,16 @@ ThemeData buildLightTheme([Locale? locale]) {
         }),
       ),
     ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.electricVioletContainer,
+        textStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontFamilyFallback: fontFallback,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
   );
 }
