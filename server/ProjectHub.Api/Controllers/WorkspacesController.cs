@@ -16,17 +16,20 @@ namespace ProjectHub.Api.Controllers
         private readonly IProjectService _projectService;
         private readonly ITaskService _taskService;
         private readonly IActivityLogger _activityLogger;
+        private readonly IDashboardService _dashboardService;
 
         public WorkspacesController(
             IWorkspaceService workspaceService,
             IProjectService projectService,
             ITaskService taskService,
-            IActivityLogger activityLogger)
+            IActivityLogger activityLogger,
+            IDashboardService dashboardService)
         {
             _workspaceService = workspaceService;
             _projectService = projectService;
             _taskService = taskService;
             _activityLogger = activityLogger;
+            _dashboardService = dashboardService;
         }
 
         [HttpGet]
@@ -156,7 +159,7 @@ namespace ProjectHub.Api.Controllers
         public async Task<IActionResult> GetWorkspaceDashboard(int id)
         {
             var userId = User.GetUserId();
-            var dashboard = await _workspaceService.GetWorkspaceDashboardAsync(userId, id);
+            var dashboard = await _dashboardService.GetWorkspaceDashboardAsync(userId, id);
             return Ok(dashboard);
         }
     }

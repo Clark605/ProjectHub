@@ -18,8 +18,5 @@ public interface IWorkspaceService
     Task<IEnumerable<MemberResponseDto>> GetMembersByWorkspaceIdAsync(string userId, int workspaceId);
     Task<MemberResponseDto> UpdateMemberRoleAsync(string userId, int workspaceId, string memberId, UpdateMemberRoleDto request);
     Task<string?> GetMemberRoleAsync(string userId, int workspaceId);
-
-    // Dashboard Aggregates
-    Task<ProjectHub.Api.DTOs.DashboardDtos.WorkspaceDashboardDto> GetWorkspaceDashboardAsync(string userId, int workspaceId);
 }
 
