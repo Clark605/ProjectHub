@@ -41,6 +41,7 @@ class AppColors {
   // ── Status Tokens ──
   static const Color success = Color(0xFF22C55E); // Green
   static const Color warning = Color(0xFFFBBF24); // Amber
+  static const Color warningLight = Color(0xFFD97706); // Darker Amber for light mode contrast
   static const Color error = Color.fromARGB(255, 255, 65, 44); // Red / Coral
   static const Color onError = Color(0xFF690005);
   static const Color info = Color(0xFF89CEFF); // Sky

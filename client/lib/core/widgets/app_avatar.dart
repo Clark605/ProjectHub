@@ -32,41 +32,30 @@ class AppAvatar extends StatelessWidget {
         .toUpperCase();
   }
 
-  Color _resolveBackgroundColor(BuildContext context) {
-    if (backgroundColor != null) return backgroundColor!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final seed = (userId != null && userId!.isNotEmpty) ? userId! : name;
-    if (seed.isEmpty) return AppColors.primaryContainer;
-    final hash = seed.codeUnits.fold<int>(
-      0,
-      (prev, elem) => (prev * 31 + elem) & 0x7FFFFFFF,
-    );
-    final baseColor =
-        AppColors.avatarPalette[hash % AppColors.avatarPalette.length];
-    return isDark
-        ? baseColor.withValues(alpha: 0.28)
-        : baseColor.withValues(alpha: 0.18);
+  String get _normalizedSeed {
+    final trimmedName = name.trim().toLowerCase();
+    if (trimmedName.isNotEmpty) return trimmedName;
+    return (userId ?? '').trim().toLowerCase();
   }
 
-  Color _resolveTextColor(BuildContext context) {
-    if (textColor != null) return textColor!;
-    if (textStyle?.color != null) return textStyle!.color!;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final seed = (userId != null && userId!.isNotEmpty) ? userId! : name;
-    if (seed.isEmpty) return AppColors.textOnPrimary;
+  Color get _baseColor {
+    final seed = _normalizedSeed;
+    if (seed.isEmpty) return AppColors.primary;
     final hash = seed.codeUnits.fold<int>(
       0,
       (prev, elem) => (prev * 31 + elem) & 0x7FFFFFFF,
     );
-    final baseColor =
-        AppColors.avatarPalette[hash % AppColors.avatarPalette.length];
-    return isDark ? AppColors.textPrimary : baseColor;
+    return AppColors.avatarPalette[hash % AppColors.avatarPalette.length];
   }
 
   @override
   Widget build(BuildContext context) {
-    final bg = _resolveBackgroundColor(context);
-    final fg = _resolveTextColor(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final base = _baseColor;
+    final bg = backgroundColor ??
+        (isDark ? base.withValues(alpha: 0.28) : base.withValues(alpha: 0.18));
+    final fg = textColor ??
+        (textStyle?.color ?? (isDark ? AppColors.textPrimary : base));
 
     return Container(
       width: size,
@@ -79,8 +68,7 @@ class AppAvatar extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         _initials,
-        style:
-            textStyle ??
+        style: textStyle ??
             TextStyle(
               color: fg,
               fontSize: size * 0.4,

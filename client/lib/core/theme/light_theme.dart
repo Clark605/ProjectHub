@@ -86,12 +86,9 @@ ThemeData buildLightTheme([Locale? locale]) {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.textOnPrimary,
         elevation: 0,
-        minimumSize: const Size(double.infinity, 52),
+        minimumSize: const Size(64, 44),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        textStyle: TextStyle(
-          fontFamily: fontFamily,
-          fontFamilyFallback: fontFallback,
-          fontSize: 16,
+        textStyle: AppTypography.getTextTheme(locale).labelLarge?.copyWith(
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -195,10 +192,7 @@ ThemeData buildLightTheme([Locale? locale]) {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: AppColors.electricVioletContainer,
-        textStyle: TextStyle(
-          fontFamily: fontFamily,
-          fontFamilyFallback: fontFallback,
-          fontSize: 12,
+        textStyle: AppTypography.getTextTheme(locale).labelLarge?.copyWith(
           fontWeight: FontWeight.w600,
         ),
       ),

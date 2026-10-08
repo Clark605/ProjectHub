@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_radius.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 
 class TagChip extends StatelessWidget {
@@ -23,7 +24,7 @@ class TagChip extends StatelessWidget {
       buffer.write(hexString.replaceFirst('#', ''));
       return Color(int.parse(buffer.toString(), radix: 16));
     } catch (_) {
-      return const Color(0xFF0D9488);
+      return AppColors.secondaryContainer;
     }
   }
 
@@ -33,7 +34,7 @@ class TagChip extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: AppRadius.kRadiusSm,
       child: Container(
         padding: EdgeInsets.only(
           left: 8,
@@ -45,7 +46,7 @@ class TagChip extends StatelessWidget {
           color: isSelected
               ? baseColor.withValues(alpha: 0.35)
               : baseColor.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: AppRadius.kRadiusSm,
           border: Border.all(
             color: isSelected ? baseColor : baseColor.withValues(alpha: 0.4),
             width: isSelected ? 1.5 : 1,

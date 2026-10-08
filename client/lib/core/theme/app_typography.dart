@@ -14,16 +14,20 @@ class AppTypography {
 
   static List<String> fallbackFor(Locale? locale) =>
       locale?.languageCode == 'ar'
-      ? const [latinFontFamily]
-      : const [arabicFontFamily];
+          ? const [latinFontFamily]
+          : const [arabicFontFamily];
 
   /// Default text theme (with Arabic fallback)
   static TextTheme get textTheme => getTextTheme();
 
   /// Builds a locale-aware [TextTheme] with primary font and fallback.
   static TextTheme getTextTheme([Locale? locale]) {
+    final isArabic = locale?.languageCode == 'ar';
     final primary = fontFamilyFor(locale);
     final fallback = fallbackFor(locale);
+
+    // Letter spacing must be 0 for cursive Arabic to prevent breaking letter joining.
+    double ls(double standard) => isArabic ? 0.0 : standard;
 
     return TextTheme(
       displayLarge: TextStyle(
@@ -31,7 +35,7 @@ class AppTypography {
         fontFamilyFallback: fallback,
         fontSize: 57,
         fontWeight: FontWeight.w400,
-        letterSpacing: -0.25,
+        letterSpacing: ls(-0.25),
       ),
       displayMedium: TextStyle(
         fontFamily: primary,
@@ -74,57 +78,75 @@ class AppTypography {
         fontFamilyFallback: fallback,
         fontSize: 16,
         fontWeight: FontWeight.w500,
-        letterSpacing: 0.15,
+        letterSpacing: ls(0.15),
       ),
       titleSmall: TextStyle(
         fontFamily: primary,
         fontFamilyFallback: fallback,
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        letterSpacing: 0.1,
+        letterSpacing: ls(0.1),
       ),
       bodyLarge: TextStyle(
         fontFamily: primary,
         fontFamilyFallback: fallback,
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        letterSpacing: 0.5,
+        letterSpacing: ls(0.5),
       ),
       bodyMedium: TextStyle(
         fontFamily: primary,
         fontFamilyFallback: fallback,
         fontSize: 14,
         fontWeight: FontWeight.w400,
-        letterSpacing: 0.25,
+        letterSpacing: ls(0.25),
       ),
       bodySmall: TextStyle(
         fontFamily: primary,
         fontFamilyFallback: fallback,
         fontSize: 12,
         fontWeight: FontWeight.w400,
-        letterSpacing: 0.4,
+        letterSpacing: ls(0.4),
       ),
       labelLarge: TextStyle(
         fontFamily: primary,
         fontFamilyFallback: fallback,
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        letterSpacing: 0.1,
+        letterSpacing: ls(0.1),
       ),
       labelMedium: TextStyle(
         fontFamily: primary,
         fontFamilyFallback: fallback,
         fontSize: 12,
         fontWeight: FontWeight.w500,
-        letterSpacing: 0.5,
+        letterSpacing: ls(0.5),
       ),
       labelSmall: TextStyle(
         fontFamily: primary,
         fontFamilyFallback: fallback,
         fontSize: 11,
         fontWeight: FontWeight.w500,
-        letterSpacing: 0.5,
+        letterSpacing: ls(0.5),
       ),
     );
   }
+}
+
+/// Semantic text extensions on [TextTheme] for consistent micro-copy and tags.
+extension AppTypographyX on TextTheme {
+  TextStyle get badge => (labelSmall ?? const TextStyle()).copyWith(
+        fontSize: 10,
+        fontWeight: FontWeight.w600,
+      );
+
+  TextStyle get caption => (bodySmall ?? const TextStyle()).copyWith(
+        fontSize: 11,
+        fontWeight: FontWeight.w500,
+      );
+
+  TextStyle get chip => (labelMedium ?? const TextStyle()).copyWith(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+      );
 }

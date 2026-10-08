@@ -1952,6 +1952,18 @@ abstract class AppLocalizations {
   /// **'Online Members ({count})'**
   String onlineMembersCount(int count);
 
+  /// Current user label
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get you;
+
+  /// Generic team member label
+  ///
+  /// In en, this message translates to:
+  /// **'Team Member'**
+  String get teamMember;
+
   /// Format for current user in presence list
   ///
   /// In en, this message translates to:

@@ -1007,6 +1007,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get you => 'You';
+
+  @override
+  String get teamMember => 'Team Member';
+
+  @override
   String youSuffix(String name) {
     return '$name (You)';
   }

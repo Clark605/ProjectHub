@@ -526,6 +526,14 @@
       }
     }
   },
+  "you": "You",
+  "@you": {
+    "description": "Current user label"
+  },
+  "teamMember": "Team Member",
+  "@teamMember": {
+    "description": "Generic team member label"
+  },
   "youSuffix": "{name} (You)",
   "@youSuffix": {
     "description": "Format for current user in presence list",

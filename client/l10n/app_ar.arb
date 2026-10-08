@@ -330,6 +330,8 @@
   "confirmChangeRole": "هل أنت متأكد أنك تريد تغيير دور {name} إلى {role}؟",
   "memberRoleUpdated": "تم تحديث دور العضو بنجاح",
   "onlineMembersCount": "الأعضاء المتصلون ({count})",
+  "you": "أنت",
+  "teamMember": "عضو الفريق",
   "youSuffix": "{name} (أنت)",
   "readOnlyBadge": "للقراءة فقط",
   "noTasksInSection": "لا توجد مهام في هذا القسم",
