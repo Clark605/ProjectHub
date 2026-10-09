@@ -328,7 +328,7 @@ class _KanbanVisualState extends State<KanbanVisual>
             },
           ),
 
-          // ── Floating Sprint Velocity Badge ──
+          // ── Floating Cycle Velocity Badge ──
           Positioned(
             top: -10,
             right: 4,
@@ -362,7 +362,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              'Sprint 14 · 92% Done',
+                              'Cycle 14 · 92% Done',
                               style: theme.textTheme.labelSmall?.copyWith(
                                 color: AppColors.pureWhite,
                                 fontWeight: FontWeight.w800,

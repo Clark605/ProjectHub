@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/widgets/app_error_state.dart';
+import 'package:client/core/theme/breakpoints.dart';
+import 'package:client/core/widgets/app_async_state_wrapper.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client/features/dashboard/cubit/dashboard_state.dart';
 import 'package:client/features/dashboard/ui/widgets/dashboard_header.dart';
 import 'package:client/features/dashboard/ui/widgets/dashboard_metrics_grid.dart';
+import 'package:client/features/dashboard/ui/widgets/focus_tasks_card.dart';
 import 'package:client/features/dashboard/ui/widgets/recent_activity_card.dart';
-import 'package:client/features/dashboard/ui/widgets/sprint_focus_card.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 
@@ -68,94 +69,72 @@ class _DashboardScreenState extends State<DashboardScreen> {
           final wsState = context.watch<WorkspaceContextCubit>().state;
           final activeWorkspaceId = wsState.whenOrNull(loaded: (_, a) => a.id);
 
-          if (state.errorMessage != null && !state.isLoading) {
-            return RefreshIndicator(
-              onRefresh: () => _refresh(activeWorkspaceId),
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 40,
-                ),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.65,
-                  child: AppErrorState(
-                    errorMessage: state.errorMessage!,
-                    onRetry: () => _refresh(activeWorkspaceId),
-                  ),
-                ),
-              ),
-            );
-          }
-
-          return RefreshIndicator(
+          return AppAsyncStateWrapper(
             onRefresh: () => _refresh(activeWorkspaceId),
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const DashboardHeader(),
-                  const SizedBox(height: 24),
-                  DashboardMetricsGrid(
-                    activeProjects: state.activeProjects,
-                    inProgressTasks: state.inProgressTasks,
-                    urgentTasks: state.urgentTasks,
-                    completedTasks: state.completedTasks,
-                    isLoading: state.isLoading,
-                    onTapActiveProjects: widget.onNavigateToProjects,
-                    onTapInProgressTasks: widget.onNavigateToMyTasks,
-                    onTapUrgentTasks: widget.onNavigateToMyTasks,
-                    onTapCompletedTasks: widget.onNavigateToMyTasks,
-                  ),
-                  const SizedBox(height: 28),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      final isWide = constraints.maxWidth > 900;
-                      if (isWide) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 6,
-                              child: SprintFocusCard(
-                                focusTasks: state.focusTasks,
-                                isLoading: state.isLoading,
-                                onNavigateToMyTasks: widget.onNavigateToMyTasks,
-                              ),
-                            ),
-                            const SizedBox(width: 20),
-                            Expanded(
-                              flex: 4,
-                              child: RecentActivityCard(
-                                activities: state.recentActivities,
-                                isLoading: state.isLoading,
-                                workspaceId: activeWorkspaceId,
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-                      return Column(
+            errorMessage: !state.isLoading ? state.errorMessage : null,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const DashboardHeader(),
+                const SizedBox(height: 24),
+                DashboardMetricsGrid(
+                  activeProjects: state.activeProjects,
+                  inProgressTasks: state.inProgressTasks,
+                  urgentTasks: state.urgentTasks,
+                  completedTasks: state.completedTasks,
+                  isLoading: state.isLoading,
+                  onTapActiveProjects: widget.onNavigateToProjects,
+                  onTapInProgressTasks: widget.onNavigateToMyTasks,
+                  onTapUrgentTasks: widget.onNavigateToMyTasks,
+                  onTapCompletedTasks: widget.onNavigateToMyTasks,
+                ),
+                const SizedBox(height: 28),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isWide = constraints.maxWidth > Breakpoints.tablet;
+                    if (isWide) {
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SprintFocusCard(
-                            focusTasks: state.focusTasks,
-                            isLoading: state.isLoading,
-                            onNavigateToMyTasks: widget.onNavigateToMyTasks,
+                          Expanded(
+                            flex: 6,
+                            child: FocusTasksCard(
+                              focusTasks: state.focusTasks,
+                              isLoading: state.isLoading,
+                              onNavigateToMyTasks: widget.onNavigateToMyTasks,
+                            ),
                           ),
-                          const SizedBox(height: 20),
-                          RecentActivityCard(
-                            activities: state.recentActivities,
-                            isLoading: state.isLoading,
-                            workspaceId: activeWorkspaceId,
+                          const SizedBox(width: 20),
+                          Expanded(
+                            flex: 4,
+                            child: RecentActivityCard(
+                              activities: state.recentActivities,
+                              isLoading: state.isLoading,
+                              workspaceId: activeWorkspaceId,
+                            ),
                           ),
                         ],
                       );
-                    },
-                  ),
-                ],
-              ),
+                    }
+                    return Column(
+                      children: [
+                        FocusTasksCard(
+                          focusTasks: state.focusTasks,
+                          isLoading: state.isLoading,
+                          onNavigateToMyTasks: widget.onNavigateToMyTasks,
+                        ),
+                        const SizedBox(height: 20),
+                        RecentActivityCard(
+                          activities: state.recentActivities,
+                          isLoading: state.isLoading,
+                          workspaceId: activeWorkspaceId,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
             ),
           );
         },

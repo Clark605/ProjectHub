@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:client/core/dialog/dialog.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
@@ -19,15 +20,10 @@ class AppDangerZone extends StatelessWidget {
   final VoidCallback onDelete;
 
   void _showConfirmationDialog(BuildContext context) {
-    showDialog(
+    showAppTypeToConfirmDialog(
       context: context,
-      builder: (context) => _DeleteConfirmationDialog(
-        entityName: entityName,
-        onConfirm: () {
-          Navigator.of(context).pop();
-          onDelete();
-        },
-      ),
+      entityName: entityName,
+      onConfirm: onDelete,
     );
   }
 
@@ -67,86 +63,6 @@ class AppDangerZone extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _DeleteConfirmationDialog extends StatefulWidget {
-  const _DeleteConfirmationDialog({
-    required this.entityName,
-    required this.onConfirm,
-  });
-
-  final String entityName;
-  final VoidCallback onConfirm;
-
-  @override
-  State<_DeleteConfirmationDialog> createState() =>
-      _DeleteConfirmationDialogState();
-}
-
-class _DeleteConfirmationDialogState extends State<_DeleteConfirmationDialog> {
-  late final TextEditingController _controller;
-  bool _canConfirm = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TextEditingController();
-    _controller.addListener(() {
-      setState(() {
-        _canConfirm = _controller.text == widget.entityName;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(borderRadius: AppRadius.kRadiusLg),
-      title: Text(l10n.areYouSureDelete),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(l10n.actionCannotBeUndone),
-          const SizedBox(height: AppSpacing.md),
-          Text(l10n.typeToConfirm(widget.entityName)),
-          const SizedBox(height: AppSpacing.xs),
-          TextField(
-            controller: _controller,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              isDense: true,
-            ),
-          ),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.cancel),
-        ),
-        FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: AppColors.error,
-            foregroundColor: Colors.white,
-            shape: const RoundedRectangleBorder(
-              borderRadius: AppRadius.kRadiusSm,
-            ),
-          ),
-          onPressed: _canConfirm ? widget.onConfirm : null,
-          child: Text(l10n.delete),
-        ),
-      ],
     );
   }
 }

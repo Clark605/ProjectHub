@@ -468,10 +468,10 @@ class AppLocalizationsAr extends AppLocalizations {
       'يحق لمالك مساحة العمل أو منشئ المشروع فقط حذف هذا المشروع.';
 
   @override
-  String get sprintOverview => 'نظرة عامة على مساحة العمل';
+  String get workspaceOverview => 'نظرة عامة على مساحة العمل';
 
   @override
-  String get sprintOverviewSubtitle =>
+  String get workspaceOverviewSubtitle =>
       'متابعة إنجاز المشاريع والمهام النشطة وسير العمل اليومي.';
 
   @override

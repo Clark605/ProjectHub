@@ -471,10 +471,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Only workspace owner or project creator can delete this project.';
 
   @override
-  String get sprintOverview => 'Workspace Overview';
+  String get workspaceOverview => 'Workspace Overview';
 
   @override
-  String get sprintOverviewSubtitle =>
+  String get workspaceOverviewSubtitle =>
       'Track active deliverables, project progress, and daily workflow.';
 
   @override

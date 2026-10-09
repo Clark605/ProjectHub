@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/dialog/dialog.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/widgets/app_button.dart';
@@ -20,7 +21,7 @@ class QuickStartDialog extends StatefulWidget {
     VoidCallback? onSuccess,
   }) {
     final effectiveCubit = cubit ?? context.read<WorkspaceContextCubit>();
-    return showDialog<void>(
+    return showAppDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (_) => BlocProvider.value(

@@ -968,17 +968,17 @@ abstract class AppLocalizations {
   /// **'Only workspace owner or project creator can delete this project.'**
   String get noPermissionToDeleteProject;
 
-  /// No description provided for @sprintOverview.
+  /// No description provided for @workspaceOverview.
   ///
   /// In en, this message translates to:
   /// **'Workspace Overview'**
-  String get sprintOverview;
+  String get workspaceOverview;
 
-  /// No description provided for @sprintOverviewSubtitle.
+  /// No description provided for @workspaceOverviewSubtitle.
   ///
   /// In en, this message translates to:
   /// **'Track active deliverables, project progress, and daily workflow.'**
-  String get sprintOverviewSubtitle;
+  String get workspaceOverviewSubtitle;
 
   /// No description provided for @velocityBadge.
   ///

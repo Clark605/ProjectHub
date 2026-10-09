@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:client/core/dialog/app_dialog.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:flutter/material.dart';
 
 /// Shows a standardized confirmation dialog across the application.
 Future<bool> showAppConfirmDialog({
@@ -12,7 +13,7 @@ Future<bool> showAppConfirmDialog({
   bool isDestructive = false,
   bool showCancelButton = true,
 }) async {
-  final result = await showDialog<bool>(
+  final result = await showAppDialog<bool>(
     context: context,
     builder: (ctx) => AppConfirmDialog(
       title: title,

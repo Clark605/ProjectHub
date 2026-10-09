@@ -172,7 +172,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Sprint Planning Thread',
+                                  'Task Planning Thread',
                                   style: theme.textTheme.labelMedium?.copyWith(
                                     fontWeight: FontWeight.w700,
                                   ),

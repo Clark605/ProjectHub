@@ -30,7 +30,7 @@ class DashboardHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                l10n.sprintOverview,
+                l10n.workspaceOverview,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                   letterSpacing: -0.5,
@@ -38,7 +38,7 @@ class DashboardHeader extends StatelessWidget {
               ),
               const SizedBox(height: 4),
               Text(
-                l10n.sprintOverviewSubtitle,
+                l10n.workspaceOverviewSubtitle,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

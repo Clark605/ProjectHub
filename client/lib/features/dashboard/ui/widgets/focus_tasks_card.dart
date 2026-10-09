@@ -1,16 +1,16 @@
-import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
+import 'package:client/core/theme/app_radius.dart';
 import 'package:client/features/dashboard/ui/widgets/focus_task_tile.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
-class SprintFocusCard extends StatelessWidget {
+class FocusTasksCard extends StatelessWidget {
   final List<TaskDto> focusTasks;
   final bool isLoading;
   final VoidCallback? onNavigateToMyTasks;
 
-  const SprintFocusCard({
+  const FocusTasksCard({
     super.key,
     this.focusTasks = const [],
     this.isLoading = false,

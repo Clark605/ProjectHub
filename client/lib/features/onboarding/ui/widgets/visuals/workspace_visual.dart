@@ -177,7 +177,7 @@ class WorkspaceVisual extends StatelessWidget {
                                     borderRadius: AppRadius.r6,
                                   ),
                                   child: Text(
-                                    'SPRINT 04',
+                                    'PROJECT 04',
                                     style: theme.textTheme.labelSmall?.copyWith(
                                       color: AppColors.electricViolet,
                                       fontWeight: FontWeight.w800,

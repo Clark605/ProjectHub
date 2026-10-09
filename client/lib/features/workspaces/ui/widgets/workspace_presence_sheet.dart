@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_avatar.dart';
+import 'package:client/core/widgets/status_dot.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
@@ -56,14 +57,7 @@ class WorkspacePresenceSheet extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: AppColors.success,
-                  shape: BoxShape.circle,
-                ),
-              ),
+              const StatusDot(color: AppColors.success),
               const SizedBox(width: 8),
               Text(
                 l10n.onlineMembersCount(onlineUserIds.length),
@@ -94,17 +88,9 @@ class WorkspacePresenceSheet extends StatelessWidget {
                       Positioned(
                         right: -1,
                         bottom: -1,
-                        child: Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: AppColors.success,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: theme.colorScheme.surface,
-                              width: 1.5,
-                            ),
-                          ),
+                        child: StatusDot(
+                          color: AppColors.success,
+                          borderColor: theme.colorScheme.surface,
                         ),
                       ),
                     ],

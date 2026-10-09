@@ -23,9 +23,10 @@ class AppAvatar extends StatelessWidget {
   final BoxBorder? border;
 
   String get _initials {
-    if (name.isEmpty) return '?';
-    final parts = name.trim().split(RegExp(r'\s+'));
-    if (parts.isEmpty) return '?';
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return '?';
+    final parts = trimmed.split(RegExp(r'\s+'));
+    if (parts.isEmpty || parts[0].isEmpty) return '?';
     if (parts.length == 1) {
       return parts[0].characters.take(1).toString().toUpperCase();
     }
