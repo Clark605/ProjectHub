@@ -103,7 +103,7 @@ class KanbanScreenActions {
     if (overrideCubit != null) return overrideCubit;
     try {
       return context.read<VoiceTaskCubit>();
-    } catch (_) {
+    } on Object catch (_) {
       // Allows rendering in widget tests without VoiceTaskCubit in context
       return null;
     }
@@ -114,7 +114,7 @@ class KanbanScreenActions {
       return context.watch<WorkspaceContextCubit>().state.whenOrNull(
         loaded: (_, activeWorkspace) => activeWorkspace.accentColor,
       );
-    } catch (_) {
+    } on Object catch (_) {
       // Allows rendering in widget tests without WorkspaceContextCubit in context
       return null;
     }

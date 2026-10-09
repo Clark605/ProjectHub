@@ -22,7 +22,7 @@ class ProjectsGrid extends StatelessWidget {
         context,
       ).pushNamed(RouteNames.kanban, arguments: project);
       if (result == true && workspaceId != null && context.mounted) {
-        context.read<ProjectsListCubit>().loadProjects(
+        await context.read<ProjectsListCubit>().loadProjects(
           workspaceId!,
           forceRefresh: true,
         );

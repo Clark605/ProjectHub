@@ -23,7 +23,7 @@ class TagChip extends StatelessWidget {
       if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
       buffer.write(hexString.replaceFirst('#', ''));
       return Color(int.parse(buffer.toString(), radix: 16));
-    } catch (_) {
+    } on Object catch (_) {
       // Fallback to secondaryContainer color if hex string format is malformed
       return AppColors.secondaryContainer;
     }

@@ -75,7 +75,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             loaded: (_, active) => active.accentColor,
             orElse: () => null,
           );
-        } catch (_) {
+        } on Object catch (_) {
           // Allows rendering screen in isolated widget tests without WorkspaceContextCubit.
         }
 

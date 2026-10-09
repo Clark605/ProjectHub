@@ -94,7 +94,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
       );
       await widget.onSubmit(request, _selectedStatus.toServerString());
       if (mounted) Navigator.of(context).pop();
-    } catch (e) {
+    } on Object catch (e) {
       if (mounted) {
         setState(() {
           isSubmitting = false;

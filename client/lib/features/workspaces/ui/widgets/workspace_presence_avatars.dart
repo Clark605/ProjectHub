@@ -41,7 +41,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
             authenticated: (u) => u.id,
           ) ??
           '';
-    } catch (_) {
+    } on Object catch (_) {
       // Allows rendering in widget tests without AppAuthCubit in context
       return '';
     }
@@ -51,7 +51,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
     if (widget.signalRService != null) return widget.signalRService;
     try {
       return context.read<SignalRService>();
-    } catch (_) {
+    } on Object catch (_) {
       // Allows rendering in widget tests without SignalR service provided in context
       return null;
     }
@@ -61,7 +61,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
     if (widget.workspaceRepository != null) return widget.workspaceRepository;
     try {
       return context.read<WorkspaceRepository>();
-    } catch (_) {
+    } on Object catch (_) {
       // Allows rendering in widget tests without WorkspaceRepository provided in context
       return null;
     }

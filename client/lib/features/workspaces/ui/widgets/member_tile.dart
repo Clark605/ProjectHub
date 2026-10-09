@@ -30,7 +30,7 @@ class MemberTile extends StatelessWidget {
     );
 
     if (confirm == true) {
-      cubit.removeMember(member.userId);
+      await cubit.removeMember(member.userId);
     }
   }
 
@@ -53,7 +53,7 @@ class MemberTile extends StatelessWidget {
     );
 
     if (confirm == true) {
-      cubit.updateMemberRole(member.userId, targetRole);
+      await cubit.updateMemberRole(member.userId, targetRole);
     }
   }
 

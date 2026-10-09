@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -132,7 +134,7 @@ void main() {
       ),
       act: (cubit) async {
         // Need workspaceId set
-        cubit.loadActivities(10);
+        unawaited(cubit.loadActivities(10));
         await pumpEventQueue();
         cubit.updateCategory('Tasks');
       },
@@ -177,7 +179,7 @@ void main() {
         filter: const ActivityFilter.empty().copyWith(category: 'Tasks'),
       ),
       act: (cubit) async {
-        cubit.loadActivities(10);
+        unawaited(cubit.loadActivities(10));
         await pumpEventQueue();
         cubit.clearFilters();
       },

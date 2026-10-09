@@ -38,7 +38,7 @@ class ActivityEventDto {
         } else if (decoded is Map) {
           parsedMetadata = decoded.cast<String, dynamic>();
         }
-      } catch (_) {
+      } on Object catch (_) {
         // Corrupted or invalid JSON metadata string safely falls back to null
         parsedMetadata = null;
       }

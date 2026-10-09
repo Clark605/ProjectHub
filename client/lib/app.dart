@@ -92,9 +92,11 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
                     Navigator.of(dialogContext).pop();
                     _isSessionExpiredDialogShowing = false;
                     await authCubit.logout();
-                    navState.pushNamedAndRemoveUntil(
-                      RouteNames.login,
-                      (route) => false,
+                    unawaited(
+                      navState.pushNamedAndRemoveUntil(
+                        RouteNames.login,
+                        (route) => false,
+                      ),
                     );
                   },
                 );

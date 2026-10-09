@@ -61,7 +61,7 @@ class GoogleAuthService {
       );
 
       return null;
-    } catch (e, stackTrace) {
+    } on Object catch (e, stackTrace) {
       AppLogger.error(
         'Unexpected Google sign-in exception',
         tag: 'GoogleAuth',
@@ -79,7 +79,7 @@ class GoogleAuthService {
   Future<void> signOut() async {
     try {
       await _googleSignIn.signOut();
-    } catch (e, stackTrace) {
+    } on Object catch (e, stackTrace) {
       AppLogger.error(
         'Google sign-out failed',
         tag: 'GoogleAuth',

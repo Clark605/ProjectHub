@@ -67,7 +67,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
     if (_tagRepository == null) {
       try {
         _tagRepository = context.read<TagRepository>();
-      } catch (_) {
+      } on Object catch (_) {
         // Allows rendering in isolated tests without TagRepository
       }
     }
@@ -86,7 +86,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
           _isLoading = false;
         });
       }
-    } catch (e) {
+    } on Object catch (e) {
       if (mounted) {
         setState(() {
           _error = e.toString();
@@ -113,7 +113,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
         widget.onTagSelected(newTag);
         Navigator.of(context).pop();
       }
-    } catch (e) {
+    } on Object catch (e) {
       if (mounted) {
         setState(() {
           _error = e.toString();

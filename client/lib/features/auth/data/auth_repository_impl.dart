@@ -60,7 +60,7 @@ class AuthRepositoryImpl with AuthSocialMixin implements AuthRepository {
         await _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
         _authStateController.add(user);
         return user;
-      } catch (_) {
+      } on Object catch (_) {
         // Corrupted cached user JSON; fall through to fetch fresh user from network
       }
     }
@@ -69,7 +69,7 @@ class AuthRepositoryImpl with AuthSocialMixin implements AuthRepository {
       await _prefs.setCachedUserRaw(jsonEncode(user.toJson()));
       _authStateController.add(user);
       return user;
-    } catch (_) {
+    } on Object catch (_) {
       // Failed to restore user session; clear stale cache and set unauthenticated
       await _prefs.clearCachedUser();
       _authStateController.add(null);
@@ -134,7 +134,7 @@ class AuthRepositoryImpl with AuthSocialMixin implements AuthRepository {
           data: LogoutDto(refreshToken: rt).toJson(),
         );
       }
-    } catch (_) {
+    } on Object catch (_) {
       // Remote logout is best-effort; always proceed to clear local session and tokens
     }
     await _storage.clearTokens();

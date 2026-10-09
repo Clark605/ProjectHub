@@ -30,6 +30,10 @@ jobs:
         working-directory: client
         run: flutter pub get
 
+      - name: Verify code formatting
+        working-directory: client
+        run: dart format --set-exit-if-changed .
+
       - name: Analyze code
         working-directory: client
         run: flutter analyze

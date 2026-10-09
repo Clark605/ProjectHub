@@ -83,7 +83,7 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
     } on AppException catch (e) {
       setLoadedError(e.message);
       rethrow;
-    } catch (_) {
+    } on Object catch (_) {
       // Fallback error message when non-AppException is encountered
       setLoadedError('Failed to create task');
       rethrow;
@@ -99,7 +99,7 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
           created.id,
           targetStatus,
         );
-      } catch (e) {
+      } on Object catch (e) {
         // H3: Even if status update fails, emit the created task in state!
         final errorMsg = e is AppException
             ? e.message

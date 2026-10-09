@@ -424,7 +424,7 @@ void main() {
         await cubit.refreshOnFocus();
         expect(cubit.state, const MyTasksState.initial());
         verifyZeroInteractions(repo);
-        cubit.close();
+        await cubit.close();
       });
 
       blocTest<MyTasksCubit, MyTasksState>(

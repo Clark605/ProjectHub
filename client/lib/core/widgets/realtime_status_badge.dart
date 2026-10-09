@@ -19,12 +19,12 @@ class RealtimeStatusBadge extends StatelessWidget {
     if (signalRService != null) return signalRService;
     try {
       return context.read<SignalRService>();
-    } catch (_) {
+    } on Object catch (_) {
       // Allow fallback to GetIt locator when outside a provider tree
     }
     try {
       return getIt<SignalRService>();
-    } catch (_) {
+    } on Object catch (_) {
       // Safe fallback when running in isolated tests without SignalR service
       return null;
     }

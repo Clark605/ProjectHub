@@ -110,7 +110,7 @@ class SignalRService {
       for (final wsId in _workspaceRefCounts.keys.toList()) {
         await _invokeJoin(wsId);
       }
-    } catch (e) {
+    } on Object catch (e) {
       _realtimeStatus.add(RealtimeStatus.disconnected);
       debugPrint('[SignalRService] Error connecting: $e');
     }
@@ -212,7 +212,7 @@ class SignalRService {
   Future<void> _invokeJoin(int workspaceId) async {
     try {
       await _connection?.invoke('JoinWorkspace', args: [workspaceId]);
-    } catch (e) {
+    } on Object catch (e) {
       debugPrint('[SignalRService] JoinWorkspace error: $e');
     }
   }
@@ -229,7 +229,7 @@ class SignalRService {
       if (_connection?.state == HubConnectionState.Connected) {
         try {
           await _connection?.invoke('LeaveWorkspace', args: [workspaceId]);
-        } catch (e) {
+        } on Object catch (e) {
           debugPrint('[SignalRService] LeaveWorkspace error: $e');
         }
       }

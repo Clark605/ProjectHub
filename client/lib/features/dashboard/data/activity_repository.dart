@@ -74,7 +74,7 @@ class ActivityRepositoryImpl implements ActivityRepository {
         stackTrace: stackTrace,
       );
       return [];
-    } catch (e, stackTrace) {
+    } on Object catch (e, stackTrace) {
       AppLogger.error(
         'Unexpected error fetching workspace activities (workspaceId: $workspaceId)',
         tag: 'ActivityRepository',
@@ -106,7 +106,7 @@ class ActivityRepositoryImpl implements ActivityRepository {
         stackTrace: stackTrace,
       );
       return [];
-    } catch (e, stackTrace) {
+    } on Object catch (e, stackTrace) {
       AppLogger.error(
         'Unexpected error fetching project activities (projectId: $projectId)',
         tag: 'ActivityRepository',

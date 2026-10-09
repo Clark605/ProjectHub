@@ -60,7 +60,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
         },
         orElse: () {},
       );
-    } catch (_) {
+    } on Object catch (_) {
       // Allows running in isolated widget tests without WorkspaceContextCubit
     }
   }
@@ -70,7 +70,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
       final repo = context.read<WorkspaceRepository>();
       final members = await repo.getMembers(workspaceId);
       if (mounted) setState(() => _workspaceMembers = members);
-    } catch (_) {
+    } on Object catch (_) {
       // Workspace members list is non-critical for task listing; falls back gracefully
     }
   }
@@ -133,7 +133,7 @@ class _MyTasksScreenState extends State<MyTasksScreen>
               loaded: (_, active) => active.accentColor,
               orElse: () => null,
             );
-          } catch (_) {
+          } on Object catch (_) {
             // Allows rendering screen in isolated widget tests without WorkspaceContextCubit
           }
 

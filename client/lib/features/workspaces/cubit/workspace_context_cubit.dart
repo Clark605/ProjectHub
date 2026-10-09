@@ -62,7 +62,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
           workspaces: [cached],
           activeWorkspace: cached,
         );
-      } catch (_) {
+      } on Object catch (_) {
         // Fall back to initial state if cached workspace JSON is malformed
       }
     }

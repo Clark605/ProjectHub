@@ -117,7 +117,7 @@ class GithubAuthService {
         return 'mock_github_code';
       }
       return null;
-    } catch (e, stackTrace) {
+    } on Object catch (e, stackTrace) {
       AppLogger.error(
         'Unexpected GitHub sign-in error',
         tag: 'GithubAuth',

@@ -130,7 +130,7 @@ class AuthInterceptor extends Interceptor {
         accessToken: newToken,
         refreshToken: newRefreshToken,
       );
-    } catch (refreshErr) {
+    } on Object catch (refreshErr) {
       // Clear tokens only on a real auth/payload invalidation, not on transient network/timeout failures
       final status = refreshErr is DioException
           ? refreshErr.response?.statusCode
@@ -164,7 +164,7 @@ class AuthInterceptor extends Interceptor {
         notifySessionExpired();
       }
       handler.reject(retryErr);
-    } catch (e) {
+    } on Object catch (e) {
       handler.reject(
         DioException(requestOptions: err.requestOptions, error: e),
       );
@@ -193,7 +193,7 @@ class AuthInterceptor extends Interceptor {
             notifySessionExpired();
           }
           pending.handler.reject(e);
-        } catch (e) {
+        } on Object catch (e) {
           pending.handler.reject(
             DioException(requestOptions: pending.options, error: e),
           );

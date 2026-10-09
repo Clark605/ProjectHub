@@ -14,7 +14,7 @@ class ApiConstants {
       try {
         final androidInfo = await DeviceInfoPlugin().androidInfo;
         isPhysicalDevice = androidInfo.isPhysicalDevice;
-      } catch (_) {
+      } on Object catch (_) {
         // Fallback gracefully if device info cannot be retrieved
       }
     }

@@ -56,7 +56,7 @@ class MyTasksCubit extends SafeActionCubit<MyTasksState> {
       } else {
         _emitGroupedTasks(_workspaceId!, tasks);
       }
-    } catch (_) {
+    } on Object catch (_) {
       // Keep view intact on silent background refresh failure
     }
   }

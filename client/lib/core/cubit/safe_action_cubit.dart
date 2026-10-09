@@ -45,7 +45,7 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
       onFailure?.call(failure);
       onError?.call(failure.serverMessage ?? defaultErrorMessage ?? e.message);
       return null;
-    } catch (e, st) {
+    } on Object catch (e, st) {
       if (isClosed) return null;
       if (logTag != null) {
         AppLogger.error(

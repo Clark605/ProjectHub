@@ -116,12 +116,12 @@ class TaskDetailReadView extends StatelessWidget {
           CommentRepository? repo;
           try {
             repo = context.read<CommentRepository>();
-          } catch (_) {
+          } on Object catch (_) {
             // Allow fallback to GetIt locator
           }
           try {
             repo ??= getIt<CommentRepository>();
-          } catch (_) {
+          } on Object catch (_) {
             // Allows rendering task detail in isolated tests without comments
             return const SizedBox.shrink();
           }
@@ -129,12 +129,12 @@ class TaskDetailReadView extends StatelessWidget {
           SignalRService? signalR;
           try {
             signalR = context.read<SignalRService>();
-          } catch (_) {
+          } on Object catch (_) {
             // Allow fallback to GetIt locator
           }
           try {
             signalR ??= getIt<SignalRService>();
-          } catch (_) {
+          } on Object catch (_) {
             // Optional realtime in isolated tests
           }
 

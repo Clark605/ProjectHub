@@ -126,7 +126,7 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
         try {
           await _signalRService?.joinWorkspace(p.workspaceId);
           subscribeToRealtime();
-        } catch (e, st) {
+        } on Object catch (e, st) {
           AppLogger.warning(
             'Failed to join realtime workspace ${p.workspaceId}: $e',
             tag: 'KanbanCubit',
@@ -138,7 +138,7 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
         if (_workspaceRepository != null) {
           try {
             _members = await _workspaceRepository.getMembers(p.workspaceId);
-          } catch (e, st) {
+          } on Object catch (e, st) {
             AppLogger.warning(
               'Failed to load workspace members for ${p.workspaceId}: $e',
               tag: 'KanbanCubit',
@@ -213,7 +213,7 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
           errorMessage: current is KanbanLoaded ? current.errorMessage : null,
         );
       }
-    } catch (_) {
+    } on Object catch (_) {
       // Silent catch on background task refresh to avoid interrupting UI interaction
     }
   }

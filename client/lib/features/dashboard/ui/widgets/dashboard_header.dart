@@ -18,7 +18,7 @@ class DashboardHeader extends StatelessWidget {
     try {
       final wsState = context.watch<WorkspaceContextCubit>().state;
       activeWsId = wsState.mapOrNull(loaded: (l) => l.activeWorkspace.id);
-    } catch (_) {
+    } on Object catch (_) {
       // Allows rendering DashboardHeader in isolated widget tests without WorkspaceContextCubit
     }
 

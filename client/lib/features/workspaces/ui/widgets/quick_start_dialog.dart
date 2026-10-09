@@ -69,7 +69,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
       if (!mounted) return;
       Navigator.of(context).pop();
       widget.onSuccess?.call();
-    } catch (e) {
+    } on Object catch (e) {
       if (!mounted) return;
       setState(() {
         _errorMessage = e.toString();

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
@@ -54,6 +56,6 @@ void main() async {
 
   // Silently validate session and refresh cached user in background
   if (isAuthenticated) {
-    appAuthCubit.syncUser();
+    unawaited(appAuthCubit.syncUser());
   }
 }

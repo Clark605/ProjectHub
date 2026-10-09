@@ -126,7 +126,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
         setState(() => _currentTask = u);
         widget.onTaskUpdated?.call(u);
       }
-    } catch (_) {
+    } on Object catch (_) {
       // Failed tag update safely leaves task unmodified
     }
   }
@@ -134,7 +134,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
   TagRepository? _resolveTagRepo(BuildContext context) {
     try {
       return context.read<TagRepository>();
-    } catch (_) {
+    } on Object catch (_) {
       // Allows rendering sheet in isolated tests without TagRepository provider
       return null;
     }
@@ -145,7 +145,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
     AppAuthState? auth;
     try {
       auth = context.read<AppAuthCubit>().state;
-    } catch (_) {
+    } on Object catch (_) {
       // Allows rendering sheet in isolated tests without AppAuthCubit in context
     }
     final uid = auth != null

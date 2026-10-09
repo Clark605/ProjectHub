@@ -59,7 +59,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
       ActivityStreamCubit? ambientCubit;
       try {
         ambientCubit = context.read<ActivityStreamCubit>();
-      } catch (_) {
+      } on Object catch (_) {
         // Allow fallback to repo resolution
       }
       if (ambientCubit != null) {
@@ -69,7 +69,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
         ActivityRepository? repo;
         try {
           repo = context.read<ActivityRepository>();
-        } catch (_) {
+        } on Object catch (_) {
           // Fallback if not in provider tree
         }
         if (repo != null) {
@@ -87,7 +87,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
       if (repo == null) {
         try {
           repo = context.read<ProjectRepository>();
-        } catch (_) {
+        } on Object catch (_) {
           // Fallback if not in provider tree
         }
       }
@@ -99,7 +99,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
           });
         }
       }
-    } catch (_) {
+    } on Object catch (_) {
       // Non-critical project list for filter dropdown safely falls back to empty
     }
   }

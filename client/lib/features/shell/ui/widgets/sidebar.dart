@@ -44,7 +44,7 @@ class Sidebar extends StatelessWidget {
     ProjectsListCubit? cubit;
     try {
       cubit = context.read<ProjectsListCubit>();
-    } catch (_) {
+    } on Object catch (_) {
       // Allows rendering sidebar in isolated widget tests without ProjectsListCubit
     }
 

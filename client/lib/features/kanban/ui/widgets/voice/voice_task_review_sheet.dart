@@ -89,7 +89,7 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
       );
       await widget.onSubmit(request, TaskStatus.backlog.toServerString());
       if (mounted) Navigator.of(context).pop();
-    } catch (_) {
+    } on Object catch (_) {
       // Reset submission state on submission error so user can retry
       if (mounted) setState(() => isSubmitting = false);
     }

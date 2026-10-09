@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,10 +18,12 @@ class DesktopSidebarUserProfile extends StatelessWidget {
     await cubit.logout();
 
     if (!context.mounted) return;
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      RouteNames.login,
-      (route) => false,
+    unawaited(
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        RouteNames.login,
+        (route) => false,
+      ),
     );
   }
 

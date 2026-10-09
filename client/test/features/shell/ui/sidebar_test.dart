@@ -48,7 +48,7 @@ void main() {
   });
 
   tearDown(() async {
-    projectsCubit.close();
+    await projectsCubit.close();
     await getIt.reset();
   });
 

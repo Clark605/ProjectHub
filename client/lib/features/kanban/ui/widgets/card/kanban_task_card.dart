@@ -33,7 +33,7 @@ class KanbanTaskCard extends StatelessWidget {
   KanbanCubit? _tryGetCubit(BuildContext context) {
     try {
       return context.read<KanbanCubit>();
-    } catch (_) {
+    } on Object catch (_) {
       // Allows rendering task card in isolated component tests without KanbanCubit
       return null;
     }
