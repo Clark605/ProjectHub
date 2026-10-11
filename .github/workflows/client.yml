@@ -52,19 +52,19 @@ jobs:
       - name: Filter generated files from coverage
         working-directory: client
         run: |
-          lcov --remove coverage/lcov.info 'lib/**/*.g.dart' 'lib/**/*.freezed.dart' -o coverage/lcov.info --ignore-errors unused,empty || lcov --remove coverage/lcov.info 'lib/**/*.g.dart' 'lib/**/*.freezed.dart' -o coverage/lcov.info || true
+          lcov --remove coverage/lcov.info 'lib/**/*.g.dart' 'lib/**/*.freezed.dart' -o coverage/lcov.info --ignore-errors unused,empty
 
       - name: Generate HTML coverage report
         working-directory: client
         run: |
-          genhtml coverage/lcov.info -o coverage/html --ignore-errors source,empty || genhtml coverage/lcov.info -o coverage/html || true
+          genhtml coverage/lcov.info -o coverage/html --ignore-errors source,empty
 
       - name: Publish coverage summary to GitHub Step Summary
         working-directory: client
         run: |
           echo "### 📱 Client (Flutter) Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-          lcov --summary coverage/lcov.info >> $GITHUB_STEP_SUMMARY || true
+          lcov --summary coverage/lcov.info >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Upload client coverage report

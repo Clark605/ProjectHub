@@ -55,7 +55,7 @@ class AppDangerZone extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.error,
-                foregroundColor: Colors.white,
+                foregroundColor: AppColors.pureWhite,
               ),
               onPressed: () => _showConfirmationDialog(context),
               child: Text(l10n.delete),

@@ -2,6 +2,7 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_typography.dart';
 import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
@@ -64,11 +65,13 @@ class KanbanTaskCardFooter extends StatelessWidget {
                         color: priority!.toColor(),
                       ),
                       const SizedBox(width: AppSpacing.s3),
-                      Text(
-                        priority!.localizedName(l10n),
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: priority!.toColor(),
+                      Flexible(
+                        child: Text(
+                          priority!.localizedName(l10n),
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.badge.copyWith(
+                            color: priority!.toColor(),
+                          ),
                         ),
                       ),
                     ],
@@ -99,18 +102,21 @@ class KanbanTaskCardFooter extends StatelessWidget {
                             : theme.colorScheme.onSurfaceVariant,
                       ),
                       AppSpacing.gapW4,
-                      Text(
-                        DateFormatter.formatShortDate(
-                          dueDate!,
-                          context: context,
-                        ),
-                        style: TextStyle(
-                          fontWeight: isOverdue
-                              ? FontWeight.w700
-                              : FontWeight.w500,
-                          color: isOverdue
-                              ? AppColors.error
-                              : theme.colorScheme.onSurfaceVariant,
+                      Flexible(
+                        child: Text(
+                          DateFormatter.formatShortDate(
+                            dueDate!,
+                            context: context,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.badge.copyWith(
+                            fontWeight: isOverdue
+                                ? FontWeight.w700
+                                : FontWeight.w500,
+                            color: isOverdue
+                                ? AppColors.error
+                                : theme.colorScheme.onSurfaceVariant,
+                          ),
                         ),
                       ),
                     ],
@@ -128,8 +134,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                     const SizedBox(width: AppSpacing.s3),
                     Text(
                       '$commentCount',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                      style: theme.textTheme.caption.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),

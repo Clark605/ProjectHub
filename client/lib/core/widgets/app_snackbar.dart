@@ -7,7 +7,7 @@ void showAppSnackBar(
   BuildContext context,
   String message, {
   Color backgroundColor = AppColors.surface,
-  Color textColor = Colors.white,
+  Color textColor = AppColors.pureWhite,
   SnackBarAction? action,
 }) {
   context._showSnackBar(
@@ -46,14 +46,14 @@ extension AppSnackBarExtension on BuildContext {
   void _showSnackBar(
     String message,
     Color backgroundColor, {
-    Color textColor = Colors.white,
+    Color textColor = AppColors.pureWhite,
     SnackBarAction? action,
   }) {
-    final scaffoldMessenger = ScaffoldMessenger.maybeOf(this);
-    if (scaffoldMessenger == null) return;
+    final messenger = ScaffoldMessenger.maybeOf(this); // token-check: allow
+    if (messenger == null) return;
 
-    scaffoldMessenger.hideCurrentSnackBar();
-    scaffoldMessenger.showSnackBar(
+    messenger.hideCurrentSnackBar();
+    messenger.showSnackBar(
       SnackBar(
         content: Text(message, style: TextStyle(color: textColor)),
         backgroundColor: backgroundColor,

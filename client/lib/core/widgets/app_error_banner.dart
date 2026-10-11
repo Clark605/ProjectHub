@@ -38,17 +38,17 @@ class AppErrorBanner extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.error_outline, color: Colors.white),
+                  const Icon(Icons.error_outline, color: AppColors.pureWhite),
                   AppSpacing.gapW8,
                   Expanded(
                     child: Text(
                       errorMessage!,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: AppColors.pureWhite),
                     ),
                   ),
                   if (onDismiss != null)
                     IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
+                      icon: const Icon(Icons.close, color: AppColors.pureWhite),
                       onPressed: onDismiss,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),

@@ -4,9 +4,11 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/ui/widgets/card/kanban_task_card.dart';
+import 'package:client/features/kanban/ui/widgets/card/kanban_task_card_footer.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
+import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 import '../../../../helpers/mock_repositories.dart';
 
@@ -148,6 +150,46 @@ void main() {
       await tester.tap(find.text('Frontend'));
       await tester.pump();
       expect(cubit.tagFilter, isNull);
+    },
+  );
+
+  testWidgets(
+    'KanbanTaskCardFooter renders without overflow at text scale 1.5 in Arabic',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          locale: const Locale('ar'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          builder: (context, child) => MediaQuery(
+            data: MediaQuery.of(
+              context,
+            ).copyWith(textScaler: const TextScaler.linear(1.5)),
+            child: child!,
+          ),
+          home: Scaffold(
+            body: Center(
+              child: SizedBox(
+                width: 240,
+                child: KanbanTaskCardFooter(
+                  priority: TaskPriority.urgent,
+                  dueDate: DateTime(2026, 10, 15),
+                  isOverdue: true,
+                  assigneeName: 'أحمد محمد',
+                  assigneeId: 'u-1',
+                  commentCount: 12,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(find.text('عاجلة'), findsOneWidget);
+      expect(find.text('12'), findsOneWidget);
     },
   );
 }

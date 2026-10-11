@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_typography.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/core/theme/app_spacing.dart';
 
@@ -68,7 +69,10 @@ class TagChip extends StatelessWidget {
             const SizedBox(width: AppSpacing.s5),
             Text(
               tag.name,
-              style: TextStyle(fontWeight: FontWeight.w600, color: baseColor),
+              style: Theme.of(context).textTheme.caption.copyWith(
+                fontWeight: FontWeight.w600,
+                color: baseColor,
+              ),
             ),
             if (onDeleted != null) ...[
               AppSpacing.gapW4,
