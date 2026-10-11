@@ -23,7 +23,7 @@ class ProjectDetailCubit extends SafeActionCubit<ProjectDetailState> {
         );
         emit(ProjectDetailState.loaded(project: project));
       },
-      onError: (message) => emit(ProjectDetailState.error(message)),
+      onFailure: (failure) => emit(ProjectDetailState.error(failure)),
       logTag: 'ProjectDetailCubit',
     );
   }
@@ -35,7 +35,7 @@ class ProjectDetailCubit extends SafeActionCubit<ProjectDetailState> {
     emit(
       currentState.copyWith(
         isSaving: true,
-        errorMessage: null,
+        failure: null,
         actionSuccessMessage: null,
       ),
     );
@@ -55,8 +55,8 @@ class ProjectDetailCubit extends SafeActionCubit<ProjectDetailState> {
         );
         return result;
       },
-      onError: (message) {
-        emit(currentState.copyWith(isSaving: false, errorMessage: message));
+      onFailure: (failure) {
+        emit(currentState.copyWith(isSaving: false, failure: failure));
       },
       logTag: 'ProjectDetailCubit',
     );
@@ -71,7 +71,7 @@ class ProjectDetailCubit extends SafeActionCubit<ProjectDetailState> {
     emit(
       currentState.copyWith(
         isDeleting: true,
-        errorMessage: null,
+        failure: null,
         actionSuccessMessage: null,
       ),
     );
@@ -82,8 +82,8 @@ class ProjectDetailCubit extends SafeActionCubit<ProjectDetailState> {
         emit(const ProjectDetailState.deleted());
         return true;
       },
-      onError: (message) {
-        emit(currentState.copyWith(isDeleting: false, errorMessage: message));
+      onFailure: (failure) {
+        emit(currentState.copyWith(isDeleting: false, failure: failure));
       },
       logTag: 'ProjectDetailCubit',
     );
@@ -94,16 +94,14 @@ class ProjectDetailCubit extends SafeActionCubit<ProjectDetailState> {
   void clearError() {
     final currentState = state;
     if (currentState is ProjectDetailLoaded) {
-      emit(currentState.copyWith(errorMessage: null));
+      emit(currentState.copyWith(failure: null));
     }
   }
 
   void clearMessages() {
     final currentState = state;
     if (currentState is ProjectDetailLoaded) {
-      emit(
-        currentState.copyWith(errorMessage: null, actionSuccessMessage: null),
-      );
+      emit(currentState.copyWith(failure: null, actionSuccessMessage: null));
     }
   }
 }

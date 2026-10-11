@@ -257,7 +257,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (state.errorMessage != null) {
+    if (state.failure != null) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -271,7 +271,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                state.errorMessage!,
+                state.failure!.toLocalizedMessage(l10n),
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodyMedium,
               ),

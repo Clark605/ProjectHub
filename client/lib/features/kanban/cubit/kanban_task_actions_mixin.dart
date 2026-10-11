@@ -1,5 +1,6 @@
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/errors/app_exception.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
@@ -13,10 +14,10 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
   void emitLoaded(
     List<TaskDto> allTasks, {
     TaskFilter? filter,
-    String? errorMessage,
+    AppFailure? failure,
   });
   void updateTaskInLoaded(int taskId, TaskDto updated);
-  void setLoadedError(String msg);
+  void setLoadedFailure(AppFailure failure);
 
   Future<void> moveTaskStatus(int taskId, String newStatus) async {
     if (isArchived) return;
@@ -36,7 +37,7 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
 
     await safeExecute(
       () async => taskRepository.updateTaskStatus(taskId, newStatus),
-      onError: (errorMsg) {
+      onFailure: (failure) {
         final latest = state is KanbanLoaded
             ? (state as KanbanLoaded).allTasks
             : originalTasks;
@@ -46,14 +47,8 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
                   t.id == taskId ? t.copyWith(status: originalTask.status) : t,
             )
             .toList();
-        emitLoaded(
-          rollbackAll,
-          errorMessage: errorMsg.isNotEmpty
-              ? errorMsg
-              : 'Failed to move task. Reverted.',
-        );
+        emitLoaded(rollbackAll, failure: failure);
       },
-      defaultErrorMessage: 'Failed to update task status',
       logTag: 'KanbanCubit',
     );
   }
@@ -80,12 +75,8 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
     TaskDto created;
     try {
       created = await taskRepository.createTask(projectId, requestWithStatus);
-    } on AppException catch (e) {
-      setLoadedError(e.message);
-      rethrow;
-    } on Object catch (_) {
-      // Fallback error message when non-AppException is encountered
-      setLoadedError('Failed to create task');
+    } on Object catch (e) {
+      setLoadedFailure(AppFailure.fromException(e));
       rethrow;
     }
 
@@ -101,10 +92,7 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
         );
       } on Object catch (e) {
         // H3: Even if status update fails, emit the created task in state!
-        final errorMsg = e is AppException
-            ? e.message
-            : 'Task created, but failed to set status';
-        _insertTaskIntoState(created, errorMessage: errorMsg);
+        _insertTaskIntoState(created, failure: AppFailure.fromException(e));
         rethrow;
       }
     }
@@ -113,16 +101,16 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
     return created;
   }
 
-  void _insertTaskIntoState(TaskDto task, {String? errorMessage}) {
+  void _insertTaskIntoState(TaskDto task, {AppFailure? failure}) {
     final current = state;
     if (current is KanbanLoaded) {
       final existingIndex = current.allTasks.indexWhere((t) => t.id == task.id);
       final updatedAll = existingIndex != -1
           ? (List<TaskDto>.from(current.allTasks)..[existingIndex] = task)
           : [task, ...current.allTasks];
-      emitLoaded(updatedAll, errorMessage: errorMessage);
+      emitLoaded(updatedAll, failure: failure);
     } else {
-      emitLoaded([task], errorMessage: errorMessage);
+      emitLoaded([task], failure: failure);
     }
   }
 
@@ -134,8 +122,7 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
         updateTaskInLoaded(taskId, updated);
         return updated;
       },
-      onError: (msg) => setLoadedError(msg),
-      defaultErrorMessage: 'Failed to update task',
+      onFailure: setLoadedFailure,
       logTag: 'KanbanCubit',
     );
   }
@@ -150,8 +137,7 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
         );
         updateTaskInLoaded(taskId, updated);
       },
-      onError: (msg) => setLoadedError(msg),
-      defaultErrorMessage: 'Failed to reassign task',
+      onFailure: setLoadedFailure,
       logTag: 'KanbanCubit',
     );
   }
@@ -178,8 +164,7 @@ mixin KanbanTaskActionsMixin on SafeActionCubit<KanbanState> {
           }
         }
       },
-      onError: (msg) => setLoadedError(msg),
-      defaultErrorMessage: 'Failed to delete task',
+      onFailure: setLoadedFailure,
       logTag: 'KanbanCubit',
     );
   }

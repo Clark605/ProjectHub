@@ -131,14 +131,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ProjectDto> projects,  List<ProjectDto> allProjects,  String selectedFilter)?  loaded,TResult Function( String selectedFilter)?  empty,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ProjectDto> projects,  List<ProjectDto> allProjects,  String selectedFilter)?  loaded,TResult Function( String selectedFilter)?  empty,TResult Function( AppFailure failure)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProjectsListInitial() when initial != null:
 return initial();case _ProjectsListLoading() when loading != null:
 return loading();case ProjectsListLoaded() when loaded != null:
 return loaded(_that.projects,_that.allProjects,_that.selectedFilter);case _ProjectsListEmpty() when empty != null:
 return empty(_that.selectedFilter);case _ProjectsListError() when error != null:
-return error(_that.message);case _:
+return error(_that.failure);case _:
   return orElse();
 
 }
@@ -156,14 +156,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ProjectDto> projects,  List<ProjectDto> allProjects,  String selectedFilter)  loaded,required TResult Function( String selectedFilter)  empty,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ProjectDto> projects,  List<ProjectDto> allProjects,  String selectedFilter)  loaded,required TResult Function( String selectedFilter)  empty,required TResult Function( AppFailure failure)  error,}) {final _that = this;
 switch (_that) {
 case _ProjectsListInitial():
 return initial();case _ProjectsListLoading():
 return loading();case ProjectsListLoaded():
 return loaded(_that.projects,_that.allProjects,_that.selectedFilter);case _ProjectsListEmpty():
 return empty(_that.selectedFilter);case _ProjectsListError():
-return error(_that.message);case _:
+return error(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -180,14 +180,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ProjectDto> projects,  List<ProjectDto> allProjects,  String selectedFilter)?  loaded,TResult? Function( String selectedFilter)?  empty,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ProjectDto> projects,  List<ProjectDto> allProjects,  String selectedFilter)?  loaded,TResult? Function( String selectedFilter)?  empty,TResult? Function( AppFailure failure)?  error,}) {final _that = this;
 switch (_that) {
 case _ProjectsListInitial() when initial != null:
 return initial();case _ProjectsListLoading() when loading != null:
 return loading();case ProjectsListLoaded() when loaded != null:
 return loaded(_that.projects,_that.allProjects,_that.selectedFilter);case _ProjectsListEmpty() when empty != null:
 return empty(_that.selectedFilter);case _ProjectsListError() when error != null:
-return error(_that.message);case _:
+return error(_that.failure);case _:
   return null;
 
 }
@@ -411,10 +411,10 @@ as String,
 
 
 class _ProjectsListError implements ProjectsListState {
-  const _ProjectsListError(this.message);
+  const _ProjectsListError(this.failure);
   
 
- final  String message;
+ final  AppFailure failure;
 
 /// Create a copy of ProjectsListState
 /// with the given fields replaced by the non-null parameter values.
@@ -426,16 +426,16 @@ _$ProjectsListErrorCopyWith<_ProjectsListError> get copyWith => __$ProjectsListE
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProjectsListError&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProjectsListError&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'ProjectsListState.error(message: $message)';
+  return 'ProjectsListState.error(failure: $failure)';
 }
 
 
@@ -446,7 +446,7 @@ abstract mixin class _$ProjectsListErrorCopyWith<$Res> implements $ProjectsListS
   factory _$ProjectsListErrorCopyWith(_ProjectsListError value, $Res Function(_ProjectsListError) _then) = __$ProjectsListErrorCopyWithImpl;
 @useResult
 $Res call({
- String message
+ AppFailure failure
 });
 
 
@@ -463,10 +463,10 @@ class __$ProjectsListErrorCopyWithImpl<$Res>
 
 /// Create a copy of ProjectsListState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(_ProjectsListError(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure,
   ));
 }
 

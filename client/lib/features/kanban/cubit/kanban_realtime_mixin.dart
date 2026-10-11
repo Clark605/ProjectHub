@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/core/network/signalr_events.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
@@ -13,7 +14,7 @@ mixin KanbanRealtimeMixin on SafeActionCubit<KanbanState> {
   void emitLoaded(
     List<TaskDto> allTasks, {
     TaskFilter? filter,
-    String? errorMessage,
+    AppFailure? failure,
   });
   void updateTaskInLoaded(int taskId, TaskDto updated);
   bool get isArchived;

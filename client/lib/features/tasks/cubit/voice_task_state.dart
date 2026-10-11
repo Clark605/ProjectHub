@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/tasks/data/models/parsed_task_draft_dto.dart';
 
 part 'voice_task_state.freezed.dart';
@@ -22,6 +23,6 @@ abstract class VoiceTaskState with _$VoiceTaskState {
     required ParsedTaskDraftDto draft,
     required String rawSpokenText,
   }) = VoiceTaskReviewDraft;
-  const factory VoiceTaskState.error({required String message}) =
+  const factory VoiceTaskState.error({required AppFailure failure}) =
       VoiceTaskError;
 }

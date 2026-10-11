@@ -47,15 +47,15 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
         showAppSuccessSnackBar(context, l10n.projectDeleted);
         Navigator.of(context).pop(true);
       },
-      loaded: (project, _, _, errorMessage, actionSuccessMessage) {
+      loaded: (project, _, _, failure, actionSuccessMessage) {
         final l10n = AppLocalizations.of(context);
         final cubit = context.read<ProjectDetailCubit>();
         if (actionSuccessMessage != null) {
           _updatedProject = project;
           showAppSuccessSnackBar(context, l10n.projectUpdated);
           cubit.clearMessages();
-        } else if (errorMessage != null) {
-          showAppErrorSnackBar(context, errorMessage);
+        } else if (failure != null) {
+          showAppErrorSnackBar(context, failure.toLocalizedMessage(l10n));
           cubit.clearError();
         }
       },
@@ -91,8 +91,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             body: state.when(
               initial: () => const SizedBox.shrink(),
               loading: () => const ProjectDetailSkeleton(),
-              error: (msg) => AppErrorState(
-                errorMessage: msg,
+              error: (failure) => AppErrorState(
+                errorMessage: failure.localized(context),
                 onRetry: () => context.read<ProjectDetailCubit>().loadProject(
                   widget.projectId,
                   forceRefresh: true,

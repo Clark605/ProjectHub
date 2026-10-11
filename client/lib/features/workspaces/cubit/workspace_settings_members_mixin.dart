@@ -14,7 +14,7 @@ mixin WorkspaceSettingsMembersMixin on SafeActionCubit<WorkspaceSettingsState> {
       currentState.copyWith(
         isInviting: true,
         successAction: null,
-        errorMessage: null,
+        failure: null,
       ),
     );
 
@@ -34,8 +34,8 @@ mixin WorkspaceSettingsMembersMixin on SafeActionCubit<WorkspaceSettingsState> {
         );
         return true;
       },
-      onError: (message) {
-        emit(currentState.copyWith(isInviting: false, errorMessage: message));
+      onFailure: (failure) {
+        emit(currentState.copyWith(isInviting: false, failure: failure));
       },
       logTag: 'WorkspaceSettings',
     );
@@ -47,7 +47,7 @@ mixin WorkspaceSettingsMembersMixin on SafeActionCubit<WorkspaceSettingsState> {
     final currentState = state;
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
-    emit(currentState.copyWith(successAction: null, errorMessage: null));
+    emit(currentState.copyWith(successAction: null, failure: null));
 
     final success = await safeExecute<bool>(
       () async {
@@ -63,8 +63,8 @@ mixin WorkspaceSettingsMembersMixin on SafeActionCubit<WorkspaceSettingsState> {
         );
         return true;
       },
-      onError: (message) {
-        emit(currentState.copyWith(errorMessage: message));
+      onFailure: (failure) {
+        emit(currentState.copyWith(failure: failure));
       },
       logTag: 'WorkspaceSettings',
     );
@@ -76,7 +76,7 @@ mixin WorkspaceSettingsMembersMixin on SafeActionCubit<WorkspaceSettingsState> {
     final currentState = state;
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
-    emit(currentState.copyWith(successAction: null, errorMessage: null));
+    emit(currentState.copyWith(successAction: null, failure: null));
 
     final success = await safeExecute<bool>(
       () async {
@@ -97,8 +97,8 @@ mixin WorkspaceSettingsMembersMixin on SafeActionCubit<WorkspaceSettingsState> {
         );
         return true;
       },
-      onError: (message) {
-        emit(currentState.copyWith(errorMessage: message));
+      onFailure: (failure) {
+        emit(currentState.copyWith(failure: failure));
       },
       logTag: 'WorkspaceSettings',
     );

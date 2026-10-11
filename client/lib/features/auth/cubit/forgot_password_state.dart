@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
 
 part 'forgot_password_state.freezed.dart';
@@ -10,6 +11,6 @@ sealed class ForgotPasswordState with _$ForgotPasswordState {
   const factory ForgotPasswordState.success(
     ForgotPasswordResponseDto response,
   ) = _ForgotPasswordSuccess;
-  const factory ForgotPasswordState.failure(String message) =
+  const factory ForgotPasswordState.failure(AppFailure failure) =
       _ForgotPasswordFailure;
 }

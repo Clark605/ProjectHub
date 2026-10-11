@@ -137,7 +137,7 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  idle,TResult Function()?  requestingPermission,TResult Function( bool permanentlyDenied)?  permissionDenied,TResult Function( String recognizedText,  double soundLevel)?  listening,TResult Function( String fullText)?  parsing,TResult Function( ParsedTaskDraftDto draft,  String rawSpokenText)?  reviewDraft,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  idle,TResult Function()?  requestingPermission,TResult Function( bool permanentlyDenied)?  permissionDenied,TResult Function( String recognizedText,  double soundLevel)?  listening,TResult Function( String fullText)?  parsing,TResult Function( ParsedTaskDraftDto draft,  String rawSpokenText)?  reviewDraft,TResult Function( AppFailure failure)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case VoiceTaskIdle() when idle != null:
 return idle();case VoiceTaskRequestingPermission() when requestingPermission != null:
@@ -146,7 +146,7 @@ return permissionDenied(_that.permanentlyDenied);case VoiceTaskListening() when 
 return listening(_that.recognizedText,_that.soundLevel);case VoiceTaskParsing() when parsing != null:
 return parsing(_that.fullText);case VoiceTaskReviewDraft() when reviewDraft != null:
 return reviewDraft(_that.draft,_that.rawSpokenText);case VoiceTaskError() when error != null:
-return error(_that.message);case _:
+return error(_that.failure);case _:
   return orElse();
 
 }
@@ -164,7 +164,7 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  idle,required TResult Function()  requestingPermission,required TResult Function( bool permanentlyDenied)  permissionDenied,required TResult Function( String recognizedText,  double soundLevel)  listening,required TResult Function( String fullText)  parsing,required TResult Function( ParsedTaskDraftDto draft,  String rawSpokenText)  reviewDraft,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  idle,required TResult Function()  requestingPermission,required TResult Function( bool permanentlyDenied)  permissionDenied,required TResult Function( String recognizedText,  double soundLevel)  listening,required TResult Function( String fullText)  parsing,required TResult Function( ParsedTaskDraftDto draft,  String rawSpokenText)  reviewDraft,required TResult Function( AppFailure failure)  error,}) {final _that = this;
 switch (_that) {
 case VoiceTaskIdle():
 return idle();case VoiceTaskRequestingPermission():
@@ -173,7 +173,7 @@ return permissionDenied(_that.permanentlyDenied);case VoiceTaskListening():
 return listening(_that.recognizedText,_that.soundLevel);case VoiceTaskParsing():
 return parsing(_that.fullText);case VoiceTaskReviewDraft():
 return reviewDraft(_that.draft,_that.rawSpokenText);case VoiceTaskError():
-return error(_that.message);case _:
+return error(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -190,7 +190,7 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  idle,TResult? Function()?  requestingPermission,TResult? Function( bool permanentlyDenied)?  permissionDenied,TResult? Function( String recognizedText,  double soundLevel)?  listening,TResult? Function( String fullText)?  parsing,TResult? Function( ParsedTaskDraftDto draft,  String rawSpokenText)?  reviewDraft,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  idle,TResult? Function()?  requestingPermission,TResult? Function( bool permanentlyDenied)?  permissionDenied,TResult? Function( String recognizedText,  double soundLevel)?  listening,TResult? Function( String fullText)?  parsing,TResult? Function( ParsedTaskDraftDto draft,  String rawSpokenText)?  reviewDraft,TResult? Function( AppFailure failure)?  error,}) {final _that = this;
 switch (_that) {
 case VoiceTaskIdle() when idle != null:
 return idle();case VoiceTaskRequestingPermission() when requestingPermission != null:
@@ -199,7 +199,7 @@ return permissionDenied(_that.permanentlyDenied);case VoiceTaskListening() when 
 return listening(_that.recognizedText,_that.soundLevel);case VoiceTaskParsing() when parsing != null:
 return parsing(_that.fullText);case VoiceTaskReviewDraft() when reviewDraft != null:
 return reviewDraft(_that.draft,_that.rawSpokenText);case VoiceTaskError() when error != null:
-return error(_that.message);case _:
+return error(_that.failure);case _:
   return null;
 
 }
@@ -552,10 +552,10 @@ $ParsedTaskDraftDtoCopyWith<$Res> get draft {
 
 
 class VoiceTaskError implements VoiceTaskState {
-  const VoiceTaskError({required this.message});
+  const VoiceTaskError({required this.failure});
   
 
- final  String message;
+ final  AppFailure failure;
 
 /// Create a copy of VoiceTaskState
 /// with the given fields replaced by the non-null parameter values.
@@ -567,16 +567,16 @@ $VoiceTaskErrorCopyWith<VoiceTaskError> get copyWith => _$VoiceTaskErrorCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoiceTaskError&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoiceTaskError&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'VoiceTaskState.error(message: $message)';
+  return 'VoiceTaskState.error(failure: $failure)';
 }
 
 
@@ -587,7 +587,7 @@ abstract mixin class $VoiceTaskErrorCopyWith<$Res> implements $VoiceTaskStateCop
   factory $VoiceTaskErrorCopyWith(VoiceTaskError value, $Res Function(VoiceTaskError) _then) = _$VoiceTaskErrorCopyWithImpl;
 @useResult
 $Res call({
- String message
+ AppFailure failure
 });
 
 
@@ -604,10 +604,10 @@ class _$VoiceTaskErrorCopyWithImpl<$Res>
 
 /// Create a copy of VoiceTaskState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(VoiceTaskError(
-message: null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+failure: null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure,
   ));
 }
 

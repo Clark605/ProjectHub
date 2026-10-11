@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 
 part 'workspace_context_state.freezed.dart';
@@ -13,6 +14,6 @@ sealed class WorkspaceContextState with _$WorkspaceContextState {
     required WorkspaceDto activeWorkspace,
   }) = _WorkspaceContextLoaded;
   const factory WorkspaceContextState.empty() = _WorkspaceContextEmpty;
-  const factory WorkspaceContextState.error(String message) =
+  const factory WorkspaceContextState.error(AppFailure failure) =
       _WorkspaceContextError;
 }

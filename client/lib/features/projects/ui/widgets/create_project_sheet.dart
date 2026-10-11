@@ -67,7 +67,9 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
       bloc: cubit,
       builder: (context, state) {
         final isLoading = state.mapOrNull(loading: (_) => true) ?? false;
-        final errorMessage = state.mapOrNull(error: (s) => s.message);
+        final errorMessage = state.mapOrNull(
+          error: (s) => s.failure.toLocalizedMessage(l10n),
+        );
 
         return SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),

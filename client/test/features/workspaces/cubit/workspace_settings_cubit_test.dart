@@ -239,7 +239,7 @@ void main() {
     );
 
     blocTest<WorkspaceSettingsCubit, WorkspaceSettingsState>(
-      'updateMemberRole sets errorMessage when repo fails',
+      'updateMemberRole sets failure when repo fails',
       build: () {
         when(() => repository.updateMemberRole(1, 'u2', 'Owner')).thenAnswer(
           (_) async =>
@@ -254,8 +254,8 @@ void main() {
       act: (cubit) => cubit.updateMemberRole('u2', 'Owner'),
       expect: () => [
         isA<WorkspaceSettingsLoaded>().having(
-          (s) => s.errorMessage,
-          'errorMessage',
+          (s) => s.failure?.serverMessage,
+          'failure serverMessage',
           'Role update failed',
         ),
       ],

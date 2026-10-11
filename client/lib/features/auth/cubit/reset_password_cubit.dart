@@ -30,7 +30,7 @@ class ResetPasswordCubit extends SafeActionCubit<ResetPasswordState> {
         emit(const ResetPasswordState.success());
         return true;
       },
-      onError: (msg) => emit(ResetPasswordState.failure(msg)),
+      onFailure: (failure) => emit(ResetPasswordState.failure(failure)),
       logTag: 'ResetPasswordCubit',
     );
   }

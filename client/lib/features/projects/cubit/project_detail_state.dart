@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 
 part 'project_detail_state.freezed.dart';
@@ -11,9 +12,10 @@ abstract class ProjectDetailState with _$ProjectDetailState {
     required ProjectDto project,
     @Default(false) bool isSaving,
     @Default(false) bool isDeleting,
-    String? errorMessage,
+    AppFailure? failure,
     String? actionSuccessMessage,
   }) = ProjectDetailLoaded;
   const factory ProjectDetailState.deleted() = _ProjectDetailDeleted;
-  const factory ProjectDetailState.error(String message) = _ProjectDetailError;
+  const factory ProjectDetailState.error(AppFailure failure) =
+      _ProjectDetailError;
 }

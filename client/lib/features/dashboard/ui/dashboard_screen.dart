@@ -71,7 +71,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           return AppAsyncStateWrapper(
             onRefresh: () => _refresh(activeWorkspaceId),
-            errorMessage: !state.isLoading ? state.errorMessage : null,
+            errorMessage: !state.isLoading
+                ? state.failure?.localized(context)
+                : null,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

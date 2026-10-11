@@ -11,7 +11,7 @@ class DashboardCubit extends SafeActionCubit<DashboardState> {
     : super(const DashboardState(isLoading: true));
 
   Future<void> loadDashboard(int workspaceId) async {
-    emit(state.copyWith(isLoading: true, errorMessage: null));
+    emit(state.copyWith(isLoading: true, failure: null));
 
     await safeExecute(
       () async {
@@ -30,8 +30,8 @@ class DashboardCubit extends SafeActionCubit<DashboardState> {
           ),
         );
       },
-      onError: (msg) {
-        emit(state.copyWith(isLoading: false, errorMessage: msg));
+      onFailure: (failure) {
+        emit(state.copyWith(isLoading: false, failure: failure));
       },
       logTag: 'DashboardCubit',
     );

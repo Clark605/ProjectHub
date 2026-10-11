@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
 
 part 'comments_state.freezed.dart';
@@ -11,7 +12,7 @@ abstract class CommentsState with _$CommentsState {
   const factory CommentsState.loaded({
     required List<CommentDto> comments,
     @Default(false) bool isSending,
-    String? errorMessage,
+    AppFailure? failure,
   }) = CommentsLoaded;
-  const factory CommentsState.error(String message) = _CommentsError;
+  const factory CommentsState.error(AppFailure failure) = _CommentsError;
 }

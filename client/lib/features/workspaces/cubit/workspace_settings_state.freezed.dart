@@ -128,14 +128,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( WorkspaceDto workspace,  List<MemberDto> members,  bool isSaving,  bool isInviting,  bool isRevalidating,  WorkspaceAction? successAction,  String? errorMessage)?  loaded,TResult Function()?  deleted,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( WorkspaceDto workspace,  List<MemberDto> members,  bool isSaving,  bool isInviting,  bool isRevalidating,  WorkspaceAction? successAction,  AppFailure? failure)?  loaded,TResult Function()?  deleted,TResult Function( AppFailure failure)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case WorkspaceSettingsInitial() when initial != null:
 return initial();case WorkspaceSettingsLoading() when loading != null:
 return loading();case WorkspaceSettingsLoaded() when loaded != null:
-return loaded(_that.workspace,_that.members,_that.isSaving,_that.isInviting,_that.isRevalidating,_that.successAction,_that.errorMessage);case WorkspaceSettingsDeleted() when deleted != null:
+return loaded(_that.workspace,_that.members,_that.isSaving,_that.isInviting,_that.isRevalidating,_that.successAction,_that.failure);case WorkspaceSettingsDeleted() when deleted != null:
 return deleted();case WorkspaceSettingsError() when error != null:
-return error(_that.message);case _:
+return error(_that.failure);case _:
   return orElse();
 
 }
@@ -153,14 +153,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( WorkspaceDto workspace,  List<MemberDto> members,  bool isSaving,  bool isInviting,  bool isRevalidating,  WorkspaceAction? successAction,  String? errorMessage)  loaded,required TResult Function()  deleted,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( WorkspaceDto workspace,  List<MemberDto> members,  bool isSaving,  bool isInviting,  bool isRevalidating,  WorkspaceAction? successAction,  AppFailure? failure)  loaded,required TResult Function()  deleted,required TResult Function( AppFailure failure)  error,}) {final _that = this;
 switch (_that) {
 case WorkspaceSettingsInitial():
 return initial();case WorkspaceSettingsLoading():
 return loading();case WorkspaceSettingsLoaded():
-return loaded(_that.workspace,_that.members,_that.isSaving,_that.isInviting,_that.isRevalidating,_that.successAction,_that.errorMessage);case WorkspaceSettingsDeleted():
+return loaded(_that.workspace,_that.members,_that.isSaving,_that.isInviting,_that.isRevalidating,_that.successAction,_that.failure);case WorkspaceSettingsDeleted():
 return deleted();case WorkspaceSettingsError():
-return error(_that.message);}
+return error(_that.failure);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -174,14 +174,14 @@ return error(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( WorkspaceDto workspace,  List<MemberDto> members,  bool isSaving,  bool isInviting,  bool isRevalidating,  WorkspaceAction? successAction,  String? errorMessage)?  loaded,TResult? Function()?  deleted,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( WorkspaceDto workspace,  List<MemberDto> members,  bool isSaving,  bool isInviting,  bool isRevalidating,  WorkspaceAction? successAction,  AppFailure? failure)?  loaded,TResult? Function()?  deleted,TResult? Function( AppFailure failure)?  error,}) {final _that = this;
 switch (_that) {
 case WorkspaceSettingsInitial() when initial != null:
 return initial();case WorkspaceSettingsLoading() when loading != null:
 return loading();case WorkspaceSettingsLoaded() when loaded != null:
-return loaded(_that.workspace,_that.members,_that.isSaving,_that.isInviting,_that.isRevalidating,_that.successAction,_that.errorMessage);case WorkspaceSettingsDeleted() when deleted != null:
+return loaded(_that.workspace,_that.members,_that.isSaving,_that.isInviting,_that.isRevalidating,_that.successAction,_that.failure);case WorkspaceSettingsDeleted() when deleted != null:
 return deleted();case WorkspaceSettingsError() when error != null:
-return error(_that.message);case _:
+return error(_that.failure);case _:
   return null;
 
 }
@@ -257,7 +257,7 @@ String toString() {
 
 
 class WorkspaceSettingsLoaded implements WorkspaceSettingsState {
-  const WorkspaceSettingsLoaded({required this.workspace, required final  List<MemberDto> members, this.isSaving = false, this.isInviting = false, this.isRevalidating = false, this.successAction, this.errorMessage}): _members = members;
+  const WorkspaceSettingsLoaded({required this.workspace, required final  List<MemberDto> members, this.isSaving = false, this.isInviting = false, this.isRevalidating = false, this.successAction, this.failure}): _members = members;
   
 
  final  WorkspaceDto workspace;
@@ -272,7 +272,7 @@ class WorkspaceSettingsLoaded implements WorkspaceSettingsState {
 @JsonKey() final  bool isInviting;
 @JsonKey() final  bool isRevalidating;
  final  WorkspaceAction? successAction;
- final  String? errorMessage;
+ final  AppFailure? failure;
 
 /// Create a copy of WorkspaceSettingsState
 /// with the given fields replaced by the non-null parameter values.
@@ -284,16 +284,16 @@ $WorkspaceSettingsLoadedCopyWith<WorkspaceSettingsLoaded> get copyWith => _$Work
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkspaceSettingsLoaded&&(identical(other.workspace, workspace) || other.workspace == workspace)&&const DeepCollectionEquality().equals(other._members, _members)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.isInviting, isInviting) || other.isInviting == isInviting)&&(identical(other.isRevalidating, isRevalidating) || other.isRevalidating == isRevalidating)&&(identical(other.successAction, successAction) || other.successAction == successAction)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkspaceSettingsLoaded&&(identical(other.workspace, workspace) || other.workspace == workspace)&&const DeepCollectionEquality().equals(other._members, _members)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.isInviting, isInviting) || other.isInviting == isInviting)&&(identical(other.isRevalidating, isRevalidating) || other.isRevalidating == isRevalidating)&&(identical(other.successAction, successAction) || other.successAction == successAction)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,workspace,const DeepCollectionEquality().hash(_members),isSaving,isInviting,isRevalidating,successAction,errorMessage);
+int get hashCode => Object.hash(runtimeType,workspace,const DeepCollectionEquality().hash(_members),isSaving,isInviting,isRevalidating,successAction,failure);
 
 @override
 String toString() {
-  return 'WorkspaceSettingsState.loaded(workspace: $workspace, members: $members, isSaving: $isSaving, isInviting: $isInviting, isRevalidating: $isRevalidating, successAction: $successAction, errorMessage: $errorMessage)';
+  return 'WorkspaceSettingsState.loaded(workspace: $workspace, members: $members, isSaving: $isSaving, isInviting: $isInviting, isRevalidating: $isRevalidating, successAction: $successAction, failure: $failure)';
 }
 
 
@@ -304,7 +304,7 @@ abstract mixin class $WorkspaceSettingsLoadedCopyWith<$Res> implements $Workspac
   factory $WorkspaceSettingsLoadedCopyWith(WorkspaceSettingsLoaded value, $Res Function(WorkspaceSettingsLoaded) _then) = _$WorkspaceSettingsLoadedCopyWithImpl;
 @useResult
 $Res call({
- WorkspaceDto workspace, List<MemberDto> members, bool isSaving, bool isInviting, bool isRevalidating, WorkspaceAction? successAction, String? errorMessage
+ WorkspaceDto workspace, List<MemberDto> members, bool isSaving, bool isInviting, bool isRevalidating, WorkspaceAction? successAction, AppFailure? failure
 });
 
 
@@ -321,7 +321,7 @@ class _$WorkspaceSettingsLoadedCopyWithImpl<$Res>
 
 /// Create a copy of WorkspaceSettingsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? workspace = null,Object? members = null,Object? isSaving = null,Object? isInviting = null,Object? isRevalidating = null,Object? successAction = freezed,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? workspace = null,Object? members = null,Object? isSaving = null,Object? isInviting = null,Object? isRevalidating = null,Object? successAction = freezed,Object? failure = freezed,}) {
   return _then(WorkspaceSettingsLoaded(
 workspace: null == workspace ? _self.workspace : workspace // ignore: cast_nullable_to_non_nullable
 as WorkspaceDto,members: null == members ? _self._members : members // ignore: cast_nullable_to_non_nullable
@@ -329,8 +329,8 @@ as List<MemberDto>,isSaving: null == isSaving ? _self.isSaving : isSaving // ign
 as bool,isInviting: null == isInviting ? _self.isInviting : isInviting // ignore: cast_nullable_to_non_nullable
 as bool,isRevalidating: null == isRevalidating ? _self.isRevalidating : isRevalidating // ignore: cast_nullable_to_non_nullable
 as bool,successAction: freezed == successAction ? _self.successAction : successAction // ignore: cast_nullable_to_non_nullable
-as WorkspaceAction?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as WorkspaceAction?,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure?,
   ));
 }
 
@@ -382,10 +382,10 @@ String toString() {
 
 
 class WorkspaceSettingsError implements WorkspaceSettingsState {
-  const WorkspaceSettingsError(this.message);
+  const WorkspaceSettingsError(this.failure);
   
 
- final  String message;
+ final  AppFailure failure;
 
 /// Create a copy of WorkspaceSettingsState
 /// with the given fields replaced by the non-null parameter values.
@@ -397,16 +397,16 @@ $WorkspaceSettingsErrorCopyWith<WorkspaceSettingsError> get copyWith => _$Worksp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkspaceSettingsError&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WorkspaceSettingsError&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'WorkspaceSettingsState.error(message: $message)';
+  return 'WorkspaceSettingsState.error(failure: $failure)';
 }
 
 
@@ -417,7 +417,7 @@ abstract mixin class $WorkspaceSettingsErrorCopyWith<$Res> implements $Workspace
   factory $WorkspaceSettingsErrorCopyWith(WorkspaceSettingsError value, $Res Function(WorkspaceSettingsError) _then) = _$WorkspaceSettingsErrorCopyWithImpl;
 @useResult
 $Res call({
- String message
+ AppFailure failure
 });
 
 
@@ -434,10 +434,10 @@ class _$WorkspaceSettingsErrorCopyWithImpl<$Res>
 
 /// Create a copy of WorkspaceSettingsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(WorkspaceSettingsError(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure,
   ));
 }
 

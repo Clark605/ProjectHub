@@ -125,13 +125,13 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ForgotPasswordResponseDto response)?  success,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ForgotPasswordResponseDto response)?  success,TResult Function( AppFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ForgotPasswordInitial() when initial != null:
 return initial();case _ForgotPasswordLoading() when loading != null:
 return loading();case _ForgotPasswordSuccess() when success != null:
 return success(_that.response);case _ForgotPasswordFailure() when failure != null:
-return failure(_that.message);case _:
+return failure(_that.failure);case _:
   return orElse();
 
 }
@@ -149,13 +149,13 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ForgotPasswordResponseDto response)  success,required TResult Function( String message)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ForgotPasswordResponseDto response)  success,required TResult Function( AppFailure failure)  failure,}) {final _that = this;
 switch (_that) {
 case _ForgotPasswordInitial():
 return initial();case _ForgotPasswordLoading():
 return loading();case _ForgotPasswordSuccess():
 return success(_that.response);case _ForgotPasswordFailure():
-return failure(_that.message);}
+return failure(_that.failure);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,13 +169,13 @@ return failure(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ForgotPasswordResponseDto response)?  success,TResult? Function( String message)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ForgotPasswordResponseDto response)?  success,TResult? Function( AppFailure failure)?  failure,}) {final _that = this;
 switch (_that) {
 case _ForgotPasswordInitial() when initial != null:
 return initial();case _ForgotPasswordLoading() when loading != null:
 return loading();case _ForgotPasswordSuccess() when success != null:
 return success(_that.response);case _ForgotPasswordFailure() when failure != null:
-return failure(_that.message);case _:
+return failure(_that.failure);case _:
   return null;
 
 }
@@ -326,10 +326,10 @@ $ForgotPasswordResponseDtoCopyWith<$Res> get response {
 
 
 class _ForgotPasswordFailure implements ForgotPasswordState {
-  const _ForgotPasswordFailure(this.message);
+  const _ForgotPasswordFailure(this.failure);
   
 
- final  String message;
+ final  AppFailure failure;
 
 /// Create a copy of ForgotPasswordState
 /// with the given fields replaced by the non-null parameter values.
@@ -341,16 +341,16 @@ _$ForgotPasswordFailureCopyWith<_ForgotPasswordFailure> get copyWith => __$Forgo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ForgotPasswordFailure&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ForgotPasswordFailure&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'ForgotPasswordState.failure(message: $message)';
+  return 'ForgotPasswordState.failure(failure: $failure)';
 }
 
 
@@ -361,7 +361,7 @@ abstract mixin class _$ForgotPasswordFailureCopyWith<$Res> implements $ForgotPas
   factory _$ForgotPasswordFailureCopyWith(_ForgotPasswordFailure value, $Res Function(_ForgotPasswordFailure) _then) = __$ForgotPasswordFailureCopyWithImpl;
 @useResult
 $Res call({
- String message
+ AppFailure failure
 });
 
 
@@ -378,10 +378,10 @@ class __$ForgotPasswordFailureCopyWithImpl<$Res>
 
 /// Create a copy of ForgotPasswordState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(_ForgotPasswordFailure(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure,
   ));
 }
 

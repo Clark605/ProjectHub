@@ -104,9 +104,13 @@ class _KanbanScreenState extends State<KanbanScreen>
       child: BlocConsumer<KanbanCubit, KanbanState>(
         bloc: widget.cubit != null ? _cubit : null,
         listener: (context, state) {
-          final err = state.errorMessage;
-          if (err != null && err.isNotEmpty) {
-            KanbanScreenActions.showError(context, err, _cubit);
+          final failure = state.failure;
+          if (failure != null && state is! KanbanError) {
+            KanbanScreenActions.showError(
+              context,
+              failure.toLocalizedMessage(l10n),
+              _cubit,
+            );
           }
         },
         builder: (context, state) {

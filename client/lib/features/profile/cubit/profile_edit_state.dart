@@ -1,4 +1,5 @@
-﻿import 'package:client/features/auth/data/models/user.dart';
+import 'package:client/core/errors/app_failure.dart';
+import 'package:client/features/auth/data/models/user.dart';
 
 sealed class ProfileEditState {
   const ProfileEditState();
@@ -18,6 +19,6 @@ class ProfileEditSuccess extends ProfileEditState {
 }
 
 class ProfileEditFailure extends ProfileEditState {
-  final String message;
-  const ProfileEditFailure(this.message);
+  final AppFailure failure;
+  const ProfileEditFailure(this.failure);
 }

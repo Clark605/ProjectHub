@@ -51,7 +51,7 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
           ),
         );
       },
-      onError: (message) => emit(ProjectsListState.error(message)),
+      onFailure: (failure) => emit(ProjectsListState.error(failure)),
       logTag: 'ProjectsListCubit',
     );
   }
@@ -108,8 +108,8 @@ class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {
 
         return created;
       },
-      onError: (message) {
-        emit(ProjectsListState.error(message));
+      onFailure: (failure) {
+        emit(ProjectsListState.error(failure));
       },
       logTag: 'ProjectsListCubit',
     );

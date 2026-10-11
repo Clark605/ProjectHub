@@ -1,11 +1,16 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 
-class GlobalNetworkErrorHandler {
-  GlobalNetworkErrorHandler._();
+class GlobalNetworkErrorHandler extends Interceptor {
+  const GlobalNetworkErrorHandler();
 
   static final _errorStreamController = StreamController<String>.broadcast();
   static Stream<String> get onNetworkError => _errorStreamController.stream;
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) {
+    handle(err, handler);
+  }
 
   static void handle(DioException error, ErrorInterceptorHandler handler) {
     final isConnectionFailure = switch (error.type) {

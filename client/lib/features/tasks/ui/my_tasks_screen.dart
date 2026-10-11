@@ -121,7 +121,8 @@ class _MyTasksScreenState extends State<MyTasksScreen>
       child: BlocConsumer<MyTasksCubit, MyTasksState>(
         listener: (context, state) {
           state.maybeWhen(
-            loaded: (_, _, _, _, _, _, err) => _onError(err),
+            loaded: (_, _, _, _, _, _, failure) =>
+                _onError(failure?.localized(context)),
             orElse: () {},
           );
         },

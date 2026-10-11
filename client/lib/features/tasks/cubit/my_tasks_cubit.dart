@@ -37,7 +37,7 @@ class MyTasksCubit extends SafeActionCubit<MyTasksState> {
 
         _emitGroupedTasks(workspaceId, tasks);
       },
-      onError: (message) => emit(MyTasksState.error(message)),
+      onFailure: (failure) => emit(MyTasksState.error(failure)),
       logTag: 'MyTasksCubit',
     );
   }
@@ -81,10 +81,10 @@ class MyTasksCubit extends SafeActionCubit<MyTasksState> {
           _emitGroupedTasks(_workspaceId!, tasks);
         }
       },
-      onError: (message) {
+      onFailure: (failure) {
         final current = state;
         if (current is MyTasksLoaded) {
-          emit(current.copyWith(errorMessage: message));
+          emit(current.copyWith(failure: failure));
         }
       },
       logTag: 'MyTasksCubit',
@@ -103,10 +103,10 @@ class MyTasksCubit extends SafeActionCubit<MyTasksState> {
           _emitGroupedTasks(_workspaceId!, tasks);
         }
       },
-      onError: (message) {
+      onFailure: (failure) {
         final current = state;
         if (current is MyTasksLoaded) {
-          emit(current.copyWith(errorMessage: message));
+          emit(current.copyWith(failure: failure));
         }
       },
       logTag: 'MyTasksCubit',
@@ -129,10 +129,10 @@ class MyTasksCubit extends SafeActionCubit<MyTasksState> {
           }
         }
       },
-      onError: (message) {
+      onFailure: (failure) {
         final current = state;
         if (current is MyTasksLoaded) {
-          emit(current.copyWith(errorMessage: message));
+          emit(current.copyWith(failure: failure));
         }
       },
       logTag: 'MyTasksCubit',

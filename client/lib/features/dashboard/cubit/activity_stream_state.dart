@@ -1,3 +1,4 @@
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
 
@@ -7,7 +8,7 @@ class ActivityStreamState {
   final List<ActivityEventDto> activities;
   final List<ActivityEventDto> filteredActivities;
   final ActivityFilter filter;
-  final String? errorMessage;
+  final AppFailure? failure;
 
   const ActivityStreamState({
     this.isLoading = false,
@@ -15,7 +16,7 @@ class ActivityStreamState {
     this.activities = const [],
     this.filteredActivities = const [],
     this.filter = const ActivityFilter.empty(),
-    this.errorMessage,
+    this.failure,
   });
 
   bool get isEmpty => !isLoading && filteredActivities.isEmpty;
@@ -26,7 +27,7 @@ class ActivityStreamState {
     List<ActivityEventDto>? activities,
     List<ActivityEventDto>? filteredActivities,
     ActivityFilter? filter,
-    String? errorMessage,
+    AppFailure? failure,
     bool clearError = false,
   }) {
     return ActivityStreamState(
@@ -35,7 +36,7 @@ class ActivityStreamState {
       activities: activities ?? this.activities,
       filteredActivities: filteredActivities ?? this.filteredActivities,
       filter: filter ?? this.filter,
-      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      failure: clearError ? null : (failure ?? this.failure),
     );
   }
 }

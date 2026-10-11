@@ -52,7 +52,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
             );
           }
         },
-        onError: (_) {
+        onFailure: (_) {
           final currentState = state;
           if (currentState is WorkspaceSettingsLoaded) {
             emit(currentState.copyWith(isRevalidating: false));
@@ -82,7 +82,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
           ),
         );
       },
-      onError: (message) => emit(WorkspaceSettingsState.error(message)),
+      onFailure: (failure) => emit(WorkspaceSettingsState.error(failure)),
       logTag: 'WorkspaceSettings',
     );
   }
@@ -96,11 +96,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
     emit(
-      currentState.copyWith(
-        isSaving: true,
-        successAction: null,
-        errorMessage: null,
-      ),
+      currentState.copyWith(isSaving: true, successAction: null, failure: null),
     );
 
     final success = await safeExecute<bool>(
@@ -123,8 +119,8 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
         );
         return true;
       },
-      onError: (message) {
-        emit(currentState.copyWith(isSaving: false, errorMessage: message));
+      onFailure: (failure) {
+        emit(currentState.copyWith(isSaving: false, failure: failure));
       },
       logTag: 'WorkspaceSettings',
     );
@@ -136,7 +132,7 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
     final currentState = state;
     if (currentState is! WorkspaceSettingsLoaded) return false;
 
-    emit(currentState.copyWith(successAction: null, errorMessage: null));
+    emit(currentState.copyWith(successAction: null, failure: null));
 
     final success = await safeExecute<bool>(
       () async {
@@ -144,8 +140,8 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
         emit(const WorkspaceSettingsState.deleted());
         return true;
       },
-      onError: (message) {
-        emit(currentState.copyWith(errorMessage: message));
+      onFailure: (failure) {
+        emit(currentState.copyWith(failure: failure));
       },
       logTag: 'WorkspaceSettings',
     );
@@ -156,14 +152,14 @@ class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>
   void clearError() {
     final currentState = state;
     if (currentState is WorkspaceSettingsLoaded) {
-      emit(currentState.copyWith(errorMessage: null));
+      emit(currentState.copyWith(failure: null));
     }
   }
 
   void clearMessages() {
     final currentState = state;
     if (currentState is WorkspaceSettingsLoaded) {
-      emit(currentState.copyWith(successAction: null, errorMessage: null));
+      emit(currentState.copyWith(successAction: null, failure: null));
     }
   }
 }

@@ -11,7 +11,6 @@ part of 'project_dto.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
-
 /// @nodoc
 mixin _$ProjectDto {
 
@@ -22,8 +21,6 @@ mixin _$ProjectDto {
 @pragma('vm:prefer-inline')
 $ProjectDtoCopyWith<ProjectDto> get copyWith => _$ProjectDtoCopyWithImpl<ProjectDto>(this as ProjectDto, _$identity);
 
-  /// Serializes this ProjectDto to a JSON map.
-  Map<String, dynamic> toJson();
 
 
 @override
@@ -31,7 +28,7 @@ bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectDto&&(identical(other.id, id) || other.id == id)&&(identical(other.workspaceId, workspaceId) || other.workspaceId == workspaceId)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.status, status) || other.status == status)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&(identical(other.createdBy, createdBy) || other.createdBy == createdBy)&&(identical(other.createdByName, createdByName) || other.createdByName == createdByName)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,workspaceId,name,description,status,dueDate,createdBy,createdByName,createdAt,updatedAt);
 
@@ -215,11 +212,11 @@ return $default(_that.id,_that.workspaceId,_that.name,_that.description,_that.st
 }
 
 /// @nodoc
-@JsonSerializable()
+
 
 class _ProjectDto extends ProjectDto {
   const _ProjectDto({required this.id, required this.workspaceId, required this.name, this.description = '', this.status = 'Planning', this.dueDate, this.createdBy = '', this.createdByName = '', this.createdAt, this.updatedAt}): super._();
-  factory _ProjectDto.fromJson(Map<String, dynamic> json) => _$ProjectDtoFromJson(json);
+  
 
 @override final  int id;
 @override final  int workspaceId;
@@ -238,17 +235,14 @@ class _ProjectDto extends ProjectDto {
 @pragma('vm:prefer-inline')
 _$ProjectDtoCopyWith<_ProjectDto> get copyWith => __$ProjectDtoCopyWithImpl<_ProjectDto>(this, _$identity);
 
-@override
-Map<String, dynamic> toJson() {
-  return _$ProjectDtoToJson(this, );
-}
+
 
 @override
 bool operator ==(Object other) {
   return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProjectDto&&(identical(other.id, id) || other.id == id)&&(identical(other.workspaceId, workspaceId) || other.workspaceId == workspaceId)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.status, status) || other.status == status)&&(identical(other.dueDate, dueDate) || other.dueDate == dueDate)&&(identical(other.createdBy, createdBy) || other.createdBy == createdBy)&&(identical(other.createdByName, createdByName) || other.createdByName == createdByName)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
-@JsonKey(includeFromJson: false, includeToJson: false)
+
 @override
 int get hashCode => Object.hash(runtimeType,id,workspaceId,name,description,status,dueDate,createdBy,createdByName,createdAt,updatedAt);
 

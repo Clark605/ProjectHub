@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 
@@ -35,9 +36,9 @@ sealed class WorkspaceSettingsState with _$WorkspaceSettingsState {
     @Default(false) bool isInviting,
     @Default(false) bool isRevalidating,
     WorkspaceAction? successAction,
-    String? errorMessage,
+    AppFailure? failure,
   }) = WorkspaceSettingsLoaded;
   const factory WorkspaceSettingsState.deleted() = WorkspaceSettingsDeleted;
-  const factory WorkspaceSettingsState.error(String message) =
+  const factory WorkspaceSettingsState.error(AppFailure failure) =
       WorkspaceSettingsError;
 }

@@ -1,4 +1,5 @@
 import 'package:client/core/cubit/safe_action_cubit.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/task_filter.dart';
@@ -7,7 +8,7 @@ mixin KanbanFilterMixin on SafeActionCubit<KanbanState> {
   void emitLoaded(
     List<TaskDto> allTasks, {
     TaskFilter? filter,
-    String? errorMessage,
+    AppFailure? failure,
   });
 
   TaskFilter get currentFilter {

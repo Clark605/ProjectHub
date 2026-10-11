@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 
 part 'my_tasks_state.freezed.dart';
@@ -17,10 +18,10 @@ abstract class MyTasksState with _$MyTasksState {
     required List<TaskDto> todoTasks,
     required List<TaskDto> doneTasks,
     @Default(false) bool showDone,
-    String? errorMessage,
+    AppFailure? failure,
   }) = MyTasksLoaded;
   const factory MyTasksState.empty({required int workspaceId}) = _MyTasksEmpty;
-  const factory MyTasksState.error(String message) = _MyTasksError;
+  const factory MyTasksState.error(AppFailure failure) = _MyTasksError;
 
   int get totalActiveCount => maybeWhen(
     loaded: (_, urgent, inProg, todo, _, _, _) =>

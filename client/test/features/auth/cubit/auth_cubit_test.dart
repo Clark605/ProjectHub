@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/errors/app_exception.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/auth/cubit/login_cubit.dart';
@@ -171,7 +172,13 @@ void main() {
           cubit.login(email: 'clark@example.com', password: 'WrongPassword'),
       expect: () => [
         const LoginState.loading(),
-        const LoginState.failure('Invalid credentials'),
+        const LoginState.failure(
+          AppFailure(
+            kind: FailureKind.validation,
+            serverMessage: 'Invalid credentials',
+            isUserSafe: true,
+          ),
+        ),
       ],
     );
 
@@ -221,14 +228,21 @@ void main() {
           cubit.externalLogin(provider: 'GitHub', code: 'invalid_code'),
       expect: () => [
         const LoginState.loading(),
-        const LoginState.failure('External authentication failed.'),
+        const LoginState.failure(
+          AppFailure(
+            kind: FailureKind.validation,
+            serverMessage: 'External authentication failed.',
+            isUserSafe: true,
+          ),
+        ),
       ],
     );
 
     blocTest<LoginCubit, LoginState>(
       'reset emits initial state',
       build: () => LoginCubit(repository),
-      seed: () => const LoginState.failure('Some error'),
+      seed: () =>
+          const LoginState.failure(AppFailure(kind: FailureKind.unknown)),
       act: (cubit) => cubit.reset(),
       expect: () => [const LoginState.initial()],
     );

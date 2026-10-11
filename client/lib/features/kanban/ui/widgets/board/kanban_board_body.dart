@@ -43,8 +43,10 @@ class KanbanBoardBody extends StatelessWidget {
     return state.when(
       initial: () => const KanbanBoardSkeleton(),
       loading: () => const KanbanBoardSkeleton(),
-      error: (message) =>
-          AppErrorState(errorMessage: message, onRetry: onRetry),
+      error: (failure) => AppErrorState(
+        errorMessage: failure.toLocalizedMessage(l10n),
+        onRetry: onRetry,
+      ),
       empty: (projId, arch, err) => KanbanEmptyState(
         isArchived: arch,
         onCreateTask: onAddTask != null

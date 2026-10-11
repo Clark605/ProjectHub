@@ -35,14 +35,14 @@ class TaskCommentsList extends StatelessWidget {
               ),
             ),
           ),
-          error: (message) => Padding(
+          error: (failure) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Text(
-              l10n.failedToLoadComments(message),
+              l10n.failedToLoadComments(failure.toLocalizedMessage(l10n)),
               style: const TextStyle(color: AppColors.error),
             ),
           ),
-          loaded: (comments, isSending, errorMessage) {
+          loaded: (comments, isSending, failure) {
             final theme = Theme.of(context);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,11 +65,11 @@ class TaskCommentsList extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                if (errorMessage != null)
+                if (failure != null)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      errorMessage,
+                      failure.toLocalizedMessage(l10n),
                       style: const TextStyle(color: AppColors.error),
                     ),
                   ),

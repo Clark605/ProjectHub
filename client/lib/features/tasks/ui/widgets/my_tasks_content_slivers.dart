@@ -30,7 +30,7 @@ class MyTasksContentSlivers {
           child: Center(child: CircularProgressIndicator()),
         ),
       ],
-      error: (message) => [
+      error: (failure) => [
         SliverFillRemaining(
           child: Center(
             child: Padding(
@@ -45,7 +45,7 @@ class MyTasksContentSlivers {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    message,
+                    failure.toLocalizedMessage(l10n),
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),

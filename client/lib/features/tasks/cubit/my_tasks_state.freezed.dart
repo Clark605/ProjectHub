@@ -131,14 +131,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( int workspaceId,  List<TaskDto> urgentTasks,  List<TaskDto> inProgressTasks,  List<TaskDto> todoTasks,  List<TaskDto> doneTasks,  bool showDone,  String? errorMessage)?  loaded,TResult Function( int workspaceId)?  empty,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( int workspaceId,  List<TaskDto> urgentTasks,  List<TaskDto> inProgressTasks,  List<TaskDto> todoTasks,  List<TaskDto> doneTasks,  bool showDone,  AppFailure? failure)?  loaded,TResult Function( int workspaceId)?  empty,TResult Function( AppFailure failure)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _MyTasksInitial() when initial != null:
 return initial();case _MyTasksLoading() when loading != null:
 return loading();case MyTasksLoaded() when loaded != null:
-return loaded(_that.workspaceId,_that.urgentTasks,_that.inProgressTasks,_that.todoTasks,_that.doneTasks,_that.showDone,_that.errorMessage);case _MyTasksEmpty() when empty != null:
+return loaded(_that.workspaceId,_that.urgentTasks,_that.inProgressTasks,_that.todoTasks,_that.doneTasks,_that.showDone,_that.failure);case _MyTasksEmpty() when empty != null:
 return empty(_that.workspaceId);case _MyTasksError() when error != null:
-return error(_that.message);case _:
+return error(_that.failure);case _:
   return orElse();
 
 }
@@ -156,14 +156,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( int workspaceId,  List<TaskDto> urgentTasks,  List<TaskDto> inProgressTasks,  List<TaskDto> todoTasks,  List<TaskDto> doneTasks,  bool showDone,  String? errorMessage)  loaded,required TResult Function( int workspaceId)  empty,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( int workspaceId,  List<TaskDto> urgentTasks,  List<TaskDto> inProgressTasks,  List<TaskDto> todoTasks,  List<TaskDto> doneTasks,  bool showDone,  AppFailure? failure)  loaded,required TResult Function( int workspaceId)  empty,required TResult Function( AppFailure failure)  error,}) {final _that = this;
 switch (_that) {
 case _MyTasksInitial():
 return initial();case _MyTasksLoading():
 return loading();case MyTasksLoaded():
-return loaded(_that.workspaceId,_that.urgentTasks,_that.inProgressTasks,_that.todoTasks,_that.doneTasks,_that.showDone,_that.errorMessage);case _MyTasksEmpty():
+return loaded(_that.workspaceId,_that.urgentTasks,_that.inProgressTasks,_that.todoTasks,_that.doneTasks,_that.showDone,_that.failure);case _MyTasksEmpty():
 return empty(_that.workspaceId);case _MyTasksError():
-return error(_that.message);case _:
+return error(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -180,14 +180,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( int workspaceId,  List<TaskDto> urgentTasks,  List<TaskDto> inProgressTasks,  List<TaskDto> todoTasks,  List<TaskDto> doneTasks,  bool showDone,  String? errorMessage)?  loaded,TResult? Function( int workspaceId)?  empty,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( int workspaceId,  List<TaskDto> urgentTasks,  List<TaskDto> inProgressTasks,  List<TaskDto> todoTasks,  List<TaskDto> doneTasks,  bool showDone,  AppFailure? failure)?  loaded,TResult? Function( int workspaceId)?  empty,TResult? Function( AppFailure failure)?  error,}) {final _that = this;
 switch (_that) {
 case _MyTasksInitial() when initial != null:
 return initial();case _MyTasksLoading() when loading != null:
 return loading();case MyTasksLoaded() when loaded != null:
-return loaded(_that.workspaceId,_that.urgentTasks,_that.inProgressTasks,_that.todoTasks,_that.doneTasks,_that.showDone,_that.errorMessage);case _MyTasksEmpty() when empty != null:
+return loaded(_that.workspaceId,_that.urgentTasks,_that.inProgressTasks,_that.todoTasks,_that.doneTasks,_that.showDone,_that.failure);case _MyTasksEmpty() when empty != null:
 return empty(_that.workspaceId);case _MyTasksError() when error != null:
-return error(_that.message);case _:
+return error(_that.failure);case _:
   return null;
 
 }
@@ -263,7 +263,7 @@ String toString() {
 
 
 class MyTasksLoaded extends MyTasksState {
-  const MyTasksLoaded({required this.workspaceId, required final  List<TaskDto> urgentTasks, required final  List<TaskDto> inProgressTasks, required final  List<TaskDto> todoTasks, required final  List<TaskDto> doneTasks, this.showDone = false, this.errorMessage}): _urgentTasks = urgentTasks,_inProgressTasks = inProgressTasks,_todoTasks = todoTasks,_doneTasks = doneTasks,super._();
+  const MyTasksLoaded({required this.workspaceId, required final  List<TaskDto> urgentTasks, required final  List<TaskDto> inProgressTasks, required final  List<TaskDto> todoTasks, required final  List<TaskDto> doneTasks, this.showDone = false, this.failure}): _urgentTasks = urgentTasks,_inProgressTasks = inProgressTasks,_todoTasks = todoTasks,_doneTasks = doneTasks,super._();
   
 
  final  int workspaceId;
@@ -296,7 +296,7 @@ class MyTasksLoaded extends MyTasksState {
 }
 
 @JsonKey() final  bool showDone;
- final  String? errorMessage;
+ final  AppFailure? failure;
 
 /// Create a copy of MyTasksState
 /// with the given fields replaced by the non-null parameter values.
@@ -308,16 +308,16 @@ $MyTasksLoadedCopyWith<MyTasksLoaded> get copyWith => _$MyTasksLoadedCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MyTasksLoaded&&(identical(other.workspaceId, workspaceId) || other.workspaceId == workspaceId)&&const DeepCollectionEquality().equals(other._urgentTasks, _urgentTasks)&&const DeepCollectionEquality().equals(other._inProgressTasks, _inProgressTasks)&&const DeepCollectionEquality().equals(other._todoTasks, _todoTasks)&&const DeepCollectionEquality().equals(other._doneTasks, _doneTasks)&&(identical(other.showDone, showDone) || other.showDone == showDone)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MyTasksLoaded&&(identical(other.workspaceId, workspaceId) || other.workspaceId == workspaceId)&&const DeepCollectionEquality().equals(other._urgentTasks, _urgentTasks)&&const DeepCollectionEquality().equals(other._inProgressTasks, _inProgressTasks)&&const DeepCollectionEquality().equals(other._todoTasks, _todoTasks)&&const DeepCollectionEquality().equals(other._doneTasks, _doneTasks)&&(identical(other.showDone, showDone) || other.showDone == showDone)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,workspaceId,const DeepCollectionEquality().hash(_urgentTasks),const DeepCollectionEquality().hash(_inProgressTasks),const DeepCollectionEquality().hash(_todoTasks),const DeepCollectionEquality().hash(_doneTasks),showDone,errorMessage);
+int get hashCode => Object.hash(runtimeType,workspaceId,const DeepCollectionEquality().hash(_urgentTasks),const DeepCollectionEquality().hash(_inProgressTasks),const DeepCollectionEquality().hash(_todoTasks),const DeepCollectionEquality().hash(_doneTasks),showDone,failure);
 
 @override
 String toString() {
-  return 'MyTasksState.loaded(workspaceId: $workspaceId, urgentTasks: $urgentTasks, inProgressTasks: $inProgressTasks, todoTasks: $todoTasks, doneTasks: $doneTasks, showDone: $showDone, errorMessage: $errorMessage)';
+  return 'MyTasksState.loaded(workspaceId: $workspaceId, urgentTasks: $urgentTasks, inProgressTasks: $inProgressTasks, todoTasks: $todoTasks, doneTasks: $doneTasks, showDone: $showDone, failure: $failure)';
 }
 
 
@@ -328,7 +328,7 @@ abstract mixin class $MyTasksLoadedCopyWith<$Res> implements $MyTasksStateCopyWi
   factory $MyTasksLoadedCopyWith(MyTasksLoaded value, $Res Function(MyTasksLoaded) _then) = _$MyTasksLoadedCopyWithImpl;
 @useResult
 $Res call({
- int workspaceId, List<TaskDto> urgentTasks, List<TaskDto> inProgressTasks, List<TaskDto> todoTasks, List<TaskDto> doneTasks, bool showDone, String? errorMessage
+ int workspaceId, List<TaskDto> urgentTasks, List<TaskDto> inProgressTasks, List<TaskDto> todoTasks, List<TaskDto> doneTasks, bool showDone, AppFailure? failure
 });
 
 
@@ -345,7 +345,7 @@ class _$MyTasksLoadedCopyWithImpl<$Res>
 
 /// Create a copy of MyTasksState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? workspaceId = null,Object? urgentTasks = null,Object? inProgressTasks = null,Object? todoTasks = null,Object? doneTasks = null,Object? showDone = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? workspaceId = null,Object? urgentTasks = null,Object? inProgressTasks = null,Object? todoTasks = null,Object? doneTasks = null,Object? showDone = null,Object? failure = freezed,}) {
   return _then(MyTasksLoaded(
 workspaceId: null == workspaceId ? _self.workspaceId : workspaceId // ignore: cast_nullable_to_non_nullable
 as int,urgentTasks: null == urgentTasks ? _self._urgentTasks : urgentTasks // ignore: cast_nullable_to_non_nullable
@@ -353,8 +353,8 @@ as List<TaskDto>,inProgressTasks: null == inProgressTasks ? _self._inProgressTas
 as List<TaskDto>,todoTasks: null == todoTasks ? _self._todoTasks : todoTasks // ignore: cast_nullable_to_non_nullable
 as List<TaskDto>,doneTasks: null == doneTasks ? _self._doneTasks : doneTasks // ignore: cast_nullable_to_non_nullable
 as List<TaskDto>,showDone: null == showDone ? _self.showDone : showDone // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure?,
   ));
 }
 
@@ -431,10 +431,10 @@ as int,
 
 
 class _MyTasksError extends MyTasksState {
-  const _MyTasksError(this.message): super._();
+  const _MyTasksError(this.failure): super._();
   
 
- final  String message;
+ final  AppFailure failure;
 
 /// Create a copy of MyTasksState
 /// with the given fields replaced by the non-null parameter values.
@@ -446,16 +446,16 @@ _$MyTasksErrorCopyWith<_MyTasksError> get copyWith => __$MyTasksErrorCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MyTasksError&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MyTasksError&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'MyTasksState.error(message: $message)';
+  return 'MyTasksState.error(failure: $failure)';
 }
 
 
@@ -466,7 +466,7 @@ abstract mixin class _$MyTasksErrorCopyWith<$Res> implements $MyTasksStateCopyWi
   factory _$MyTasksErrorCopyWith(_MyTasksError value, $Res Function(_MyTasksError) _then) = __$MyTasksErrorCopyWithImpl;
 @useResult
 $Res call({
- String message
+ AppFailure failure
 });
 
 
@@ -483,10 +483,10 @@ class __$MyTasksErrorCopyWithImpl<$Res>
 
 /// Create a copy of MyTasksState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(_MyTasksError(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure,
   ));
 }
 

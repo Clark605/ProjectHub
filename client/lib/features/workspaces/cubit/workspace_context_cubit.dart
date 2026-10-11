@@ -121,16 +121,15 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
           ),
         );
       },
-      onError: (message) {
+      onFailure: (failure) {
         final hasLoaded = state.maybeWhen(
           loaded: (_, _) => true,
           orElse: () => false,
         );
         if (!hasLoaded) {
-          emit(WorkspaceContextState.error(message));
+          emit(WorkspaceContextState.error(failure));
         }
       },
-      defaultErrorMessage: 'An unexpected error occurred',
       logTag: 'WorkspaceContext',
     );
   }
@@ -175,8 +174,7 @@ class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {
           ),
         );
       },
-      onError: (message) => emit(WorkspaceContextState.error(message)),
-      defaultErrorMessage: 'Failed to create workspace',
+      onFailure: (failure) => emit(WorkspaceContextState.error(failure)),
       logTag: 'WorkspaceContext',
     );
   }

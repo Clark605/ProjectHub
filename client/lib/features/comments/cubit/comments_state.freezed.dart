@@ -128,13 +128,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<CommentDto> comments,  bool isSending,  String? errorMessage)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<CommentDto> comments,  bool isSending,  AppFailure? failure)?  loaded,TResult Function( AppFailure failure)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CommentsInitial() when initial != null:
 return initial();case _CommentsLoading() when loading != null:
 return loading();case CommentsLoaded() when loaded != null:
-return loaded(_that.comments,_that.isSending,_that.errorMessage);case _CommentsError() when error != null:
-return error(_that.message);case _:
+return loaded(_that.comments,_that.isSending,_that.failure);case _CommentsError() when error != null:
+return error(_that.failure);case _:
   return orElse();
 
 }
@@ -152,13 +152,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<CommentDto> comments,  bool isSending,  String? errorMessage)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<CommentDto> comments,  bool isSending,  AppFailure? failure)  loaded,required TResult Function( AppFailure failure)  error,}) {final _that = this;
 switch (_that) {
 case _CommentsInitial():
 return initial();case _CommentsLoading():
 return loading();case CommentsLoaded():
-return loaded(_that.comments,_that.isSending,_that.errorMessage);case _CommentsError():
-return error(_that.message);case _:
+return loaded(_that.comments,_that.isSending,_that.failure);case _CommentsError():
+return error(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -175,13 +175,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<CommentDto> comments,  bool isSending,  String? errorMessage)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<CommentDto> comments,  bool isSending,  AppFailure? failure)?  loaded,TResult? Function( AppFailure failure)?  error,}) {final _that = this;
 switch (_that) {
 case _CommentsInitial() when initial != null:
 return initial();case _CommentsLoading() when loading != null:
 return loading();case CommentsLoaded() when loaded != null:
-return loaded(_that.comments,_that.isSending,_that.errorMessage);case _CommentsError() when error != null:
-return error(_that.message);case _:
+return loaded(_that.comments,_that.isSending,_that.failure);case _CommentsError() when error != null:
+return error(_that.failure);case _:
   return null;
 
 }
@@ -257,7 +257,7 @@ String toString() {
 
 
 class CommentsLoaded implements CommentsState {
-  const CommentsLoaded({required final  List<CommentDto> comments, this.isSending = false, this.errorMessage}): _comments = comments;
+  const CommentsLoaded({required final  List<CommentDto> comments, this.isSending = false, this.failure}): _comments = comments;
   
 
  final  List<CommentDto> _comments;
@@ -268,7 +268,7 @@ class CommentsLoaded implements CommentsState {
 }
 
 @JsonKey() final  bool isSending;
- final  String? errorMessage;
+ final  AppFailure? failure;
 
 /// Create a copy of CommentsState
 /// with the given fields replaced by the non-null parameter values.
@@ -280,16 +280,16 @@ $CommentsLoadedCopyWith<CommentsLoaded> get copyWith => _$CommentsLoadedCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CommentsLoaded&&const DeepCollectionEquality().equals(other._comments, _comments)&&(identical(other.isSending, isSending) || other.isSending == isSending)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CommentsLoaded&&const DeepCollectionEquality().equals(other._comments, _comments)&&(identical(other.isSending, isSending) || other.isSending == isSending)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_comments),isSending,errorMessage);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_comments),isSending,failure);
 
 @override
 String toString() {
-  return 'CommentsState.loaded(comments: $comments, isSending: $isSending, errorMessage: $errorMessage)';
+  return 'CommentsState.loaded(comments: $comments, isSending: $isSending, failure: $failure)';
 }
 
 
@@ -300,7 +300,7 @@ abstract mixin class $CommentsLoadedCopyWith<$Res> implements $CommentsStateCopy
   factory $CommentsLoadedCopyWith(CommentsLoaded value, $Res Function(CommentsLoaded) _then) = _$CommentsLoadedCopyWithImpl;
 @useResult
 $Res call({
- List<CommentDto> comments, bool isSending, String? errorMessage
+ List<CommentDto> comments, bool isSending, AppFailure? failure
 });
 
 
@@ -317,12 +317,12 @@ class _$CommentsLoadedCopyWithImpl<$Res>
 
 /// Create a copy of CommentsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? comments = null,Object? isSending = null,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? comments = null,Object? isSending = null,Object? failure = freezed,}) {
   return _then(CommentsLoaded(
 comments: null == comments ? _self._comments : comments // ignore: cast_nullable_to_non_nullable
 as List<CommentDto>,isSending: null == isSending ? _self.isSending : isSending // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,
+as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure?,
   ));
 }
 
@@ -333,10 +333,10 @@ as String?,
 
 
 class _CommentsError implements CommentsState {
-  const _CommentsError(this.message);
+  const _CommentsError(this.failure);
   
 
- final  String message;
+ final  AppFailure failure;
 
 /// Create a copy of CommentsState
 /// with the given fields replaced by the non-null parameter values.
@@ -348,16 +348,16 @@ _$CommentsErrorCopyWith<_CommentsError> get copyWith => __$CommentsErrorCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CommentsError&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CommentsError&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'CommentsState.error(message: $message)';
+  return 'CommentsState.error(failure: $failure)';
 }
 
 
@@ -368,7 +368,7 @@ abstract mixin class _$CommentsErrorCopyWith<$Res> implements $CommentsStateCopy
   factory _$CommentsErrorCopyWith(_CommentsError value, $Res Function(_CommentsError) _then) = __$CommentsErrorCopyWithImpl;
 @useResult
 $Res call({
- String message
+ AppFailure failure
 });
 
 
@@ -385,10 +385,10 @@ class __$CommentsErrorCopyWithImpl<$Res>
 
 /// Create a copy of CommentsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(_CommentsError(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure,
   ));
 }
 

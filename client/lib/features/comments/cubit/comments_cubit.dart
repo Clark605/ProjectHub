@@ -44,7 +44,7 @@ class CommentsCubit extends SafeActionCubit<CommentsState> {
 
   void _onCommentAdded(CommentDto comment) {
     state.maybeWhen(
-      loaded: (comments, isSending, errorMessage) {
+      loaded: (comments, isSending, _) {
         if (!comments.any((c) => c.id == comment.id)) {
           emit(
             CommentsState.loaded(
@@ -60,7 +60,7 @@ class CommentsCubit extends SafeActionCubit<CommentsState> {
 
   void _onCommentDeleted(int commentId) {
     state.maybeWhen(
-      loaded: (comments, isSending, errorMessage) {
+      loaded: (comments, isSending, _) {
         emit(
           CommentsState.loaded(
             comments: comments.where((c) => c.id != commentId).toList(),
@@ -79,7 +79,7 @@ class CommentsCubit extends SafeActionCubit<CommentsState> {
         final comments = await _repository.getComments(taskId);
         emit(CommentsState.loaded(comments: comments));
       },
-      onError: (err) => emit(CommentsState.error(err)),
+      onFailure: (failure) => emit(CommentsState.error(failure)),
       logTag: 'CommentsCubit',
     );
   }
@@ -104,12 +104,12 @@ class CommentsCubit extends SafeActionCubit<CommentsState> {
         emit(CommentsState.loaded(comments: updated, isSending: false));
         return true;
       },
-      onError: (err) {
+      onFailure: (failure) {
         emit(
           CommentsState.loaded(
             comments: currentComments,
             isSending: false,
-            errorMessage: err,
+            failure: failure,
           ),
         );
       },
@@ -133,10 +133,8 @@ class CommentsCubit extends SafeActionCubit<CommentsState> {
           ),
         );
       },
-      onError: (err) {
-        emit(
-          CommentsState.loaded(comments: currentComments, errorMessage: err),
-        );
+      onFailure: (failure) {
+        emit(CommentsState.loaded(comments: currentComments, failure: failure));
       },
       logTag: 'CommentsCubit',
     );

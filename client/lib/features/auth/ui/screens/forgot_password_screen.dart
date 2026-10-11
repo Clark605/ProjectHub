@@ -62,7 +62,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           loading: () => true,
           orElse: () => false,
         );
-        final errorMessage = state.whenOrNull(failure: (msg) => msg);
+        final errorMessage = state.whenOrNull(
+          failure: (failure) => failure.toLocalizedMessage(l10n),
+        );
 
         return AbsorbPointer(
           absorbing: isLoading,

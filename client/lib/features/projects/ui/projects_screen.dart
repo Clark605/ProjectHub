@@ -95,9 +95,9 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                         const SliverToBoxAdapter(child: ProjectsSkeleton()),
                     loading: () =>
                         const SliverToBoxAdapter(child: ProjectsSkeleton()),
-                    error: (message) => SliverFillRemaining(
+                    error: (failure) => SliverFillRemaining(
                       child: AppErrorState(
-                        errorMessage: message,
+                        errorMessage: failure.toLocalizedMessage(l10n),
                         onRetry: () {
                           if (_lastWorkspaceId != null) {
                             context.read<ProjectsListCubit>().loadProjects(

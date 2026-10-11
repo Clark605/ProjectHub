@@ -1,3 +1,4 @@
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 
@@ -9,7 +10,7 @@ class DashboardState {
   final int completedTasks;
   final List<TaskDto> focusTasks;
   final List<ActivityEventDto> recentActivities;
-  final String? errorMessage;
+  final AppFailure? failure;
 
   const DashboardState({
     this.isLoading = false,
@@ -19,7 +20,7 @@ class DashboardState {
     this.completedTasks = 0,
     this.focusTasks = const [],
     this.recentActivities = const [],
-    this.errorMessage,
+    this.failure,
   });
 
   /// Alias for backwards compatibility
@@ -33,7 +34,7 @@ class DashboardState {
     int? completedTasks,
     List<TaskDto>? focusTasks,
     List<ActivityEventDto>? recentActivities,
-    String? errorMessage,
+    AppFailure? failure,
   }) {
     return DashboardState(
       isLoading: isLoading ?? this.isLoading,
@@ -43,7 +44,7 @@ class DashboardState {
       completedTasks: completedTasks ?? this.completedTasks,
       focusTasks: focusTasks ?? this.focusTasks,
       recentActivities: recentActivities ?? this.recentActivities,
-      errorMessage: errorMessage,
+      failure: failure,
     );
   }
 }

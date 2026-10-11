@@ -25,7 +25,7 @@ class RegisterCubit extends SafeActionCubit<RegisterState> {
         emit(RegisterState.success(user));
         return user;
       },
-      onError: (msg) => emit(RegisterState.failure(msg)),
+      onFailure: (failure) => emit(RegisterState.failure(failure)),
       logTag: 'RegisterCubit',
     );
   }
@@ -38,7 +38,7 @@ class RegisterCubit extends SafeActionCubit<RegisterState> {
         emit(RegisterState.success(user));
         return user;
       },
-      onError: (msg) => emit(RegisterState.failure(msg)),
+      onFailure: (failure) => emit(RegisterState.failure(failure)),
       logTag: 'RegisterCubit',
     );
   }
@@ -51,7 +51,7 @@ class RegisterCubit extends SafeActionCubit<RegisterState> {
         emit(RegisterState.success(user));
         return user;
       },
-      onError: (msg) => emit(RegisterState.failure(msg)),
+      onFailure: (failure) => emit(RegisterState.failure(failure)),
       logTag: 'RegisterCubit',
     );
   }
@@ -76,7 +76,7 @@ class RegisterCubit extends SafeActionCubit<RegisterState> {
         emit(RegisterState.success(user));
         return user;
       },
-      onError: (msg) => emit(RegisterState.failure(msg)),
+      onFailure: (failure) => emit(RegisterState.failure(failure)),
       logTag: 'RegisterCubit',
     );
   }

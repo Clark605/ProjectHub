@@ -24,7 +24,7 @@ abstract class DioModule {
 
     dio.interceptors.addAll([
       authInterceptor,
-      InterceptorsWrapper(onError: GlobalNetworkErrorHandler.handle),
+      const GlobalNetworkErrorHandler(),
       LogInterceptor(requestBody: true, responseBody: true),
     ]);
 

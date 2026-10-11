@@ -76,7 +76,7 @@ void main() {
             .having((s) => s.activities.length, 'activities count', 2)
             .having((s) => s.filteredActivities.length, 'filtered count', 2)
             .having((s) => s.filteredActivities.first.id, 'newest first', 2)
-            .having((s) => s.errorMessage, 'errorMessage', isNull),
+            .having((s) => s.failure, 'failure', isNull),
       ],
       verify: (_) {
         verify(
@@ -110,7 +110,7 @@ void main() {
         ),
         isA<ActivityStreamState>()
             .having((s) => s.isLoading, 'isLoading', isFalse)
-            .having((s) => s.errorMessage, 'errorMessage', isNotNull),
+            .having((s) => s.failure, 'failure', isNotNull),
       ],
     );
 

@@ -129,7 +129,9 @@ class _ViewState extends State<_View> {
                   return const WorkspaceSettingsSkeleton();
                 }
                 if (state is WorkspaceSettingsError) {
-                  return Center(child: Text(state.message));
+                  return Center(
+                    child: Text(state.failure.toLocalizedMessage(l10n)),
+                  );
                 }
                 if (state is! WorkspaceSettingsLoaded) {
                   return const SizedBox.shrink();
@@ -146,9 +148,10 @@ class _ViewState extends State<_View> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            if (loaded.errorMessage != null)
+                            if (loaded.failure != null)
                               AppErrorBanner(
-                                errorMessage: loaded.errorMessage!,
+                                errorMessage: loaded.failure!
+                                    .toLocalizedMessage(l10n),
                                 onDismiss: () => context
                                     .read<WorkspaceSettingsCubit>()
                                     .clearError(),

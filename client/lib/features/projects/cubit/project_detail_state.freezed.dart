@@ -131,14 +131,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ProjectDto project,  bool isSaving,  bool isDeleting,  String? errorMessage,  String? actionSuccessMessage)?  loaded,TResult Function()?  deleted,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( ProjectDto project,  bool isSaving,  bool isDeleting,  AppFailure? failure,  String? actionSuccessMessage)?  loaded,TResult Function()?  deleted,TResult Function( AppFailure failure)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProjectDetailInitial() when initial != null:
 return initial();case _ProjectDetailLoading() when loading != null:
 return loading();case ProjectDetailLoaded() when loaded != null:
-return loaded(_that.project,_that.isSaving,_that.isDeleting,_that.errorMessage,_that.actionSuccessMessage);case _ProjectDetailDeleted() when deleted != null:
+return loaded(_that.project,_that.isSaving,_that.isDeleting,_that.failure,_that.actionSuccessMessage);case _ProjectDetailDeleted() when deleted != null:
 return deleted();case _ProjectDetailError() when error != null:
-return error(_that.message);case _:
+return error(_that.failure);case _:
   return orElse();
 
 }
@@ -156,14 +156,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ProjectDto project,  bool isSaving,  bool isDeleting,  String? errorMessage,  String? actionSuccessMessage)  loaded,required TResult Function()  deleted,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( ProjectDto project,  bool isSaving,  bool isDeleting,  AppFailure? failure,  String? actionSuccessMessage)  loaded,required TResult Function()  deleted,required TResult Function( AppFailure failure)  error,}) {final _that = this;
 switch (_that) {
 case _ProjectDetailInitial():
 return initial();case _ProjectDetailLoading():
 return loading();case ProjectDetailLoaded():
-return loaded(_that.project,_that.isSaving,_that.isDeleting,_that.errorMessage,_that.actionSuccessMessage);case _ProjectDetailDeleted():
+return loaded(_that.project,_that.isSaving,_that.isDeleting,_that.failure,_that.actionSuccessMessage);case _ProjectDetailDeleted():
 return deleted();case _ProjectDetailError():
-return error(_that.message);case _:
+return error(_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -180,14 +180,14 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ProjectDto project,  bool isSaving,  bool isDeleting,  String? errorMessage,  String? actionSuccessMessage)?  loaded,TResult? Function()?  deleted,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( ProjectDto project,  bool isSaving,  bool isDeleting,  AppFailure? failure,  String? actionSuccessMessage)?  loaded,TResult? Function()?  deleted,TResult? Function( AppFailure failure)?  error,}) {final _that = this;
 switch (_that) {
 case _ProjectDetailInitial() when initial != null:
 return initial();case _ProjectDetailLoading() when loading != null:
 return loading();case ProjectDetailLoaded() when loaded != null:
-return loaded(_that.project,_that.isSaving,_that.isDeleting,_that.errorMessage,_that.actionSuccessMessage);case _ProjectDetailDeleted() when deleted != null:
+return loaded(_that.project,_that.isSaving,_that.isDeleting,_that.failure,_that.actionSuccessMessage);case _ProjectDetailDeleted() when deleted != null:
 return deleted();case _ProjectDetailError() when error != null:
-return error(_that.message);case _:
+return error(_that.failure);case _:
   return null;
 
 }
@@ -263,13 +263,13 @@ String toString() {
 
 
 class ProjectDetailLoaded implements ProjectDetailState {
-  const ProjectDetailLoaded({required this.project, this.isSaving = false, this.isDeleting = false, this.errorMessage, this.actionSuccessMessage});
+  const ProjectDetailLoaded({required this.project, this.isSaving = false, this.isDeleting = false, this.failure, this.actionSuccessMessage});
   
 
  final  ProjectDto project;
 @JsonKey() final  bool isSaving;
 @JsonKey() final  bool isDeleting;
- final  String? errorMessage;
+ final  AppFailure? failure;
  final  String? actionSuccessMessage;
 
 /// Create a copy of ProjectDetailState
@@ -282,16 +282,16 @@ $ProjectDetailLoadedCopyWith<ProjectDetailLoaded> get copyWith => _$ProjectDetai
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectDetailLoaded&&(identical(other.project, project) || other.project == project)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.isDeleting, isDeleting) || other.isDeleting == isDeleting)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.actionSuccessMessage, actionSuccessMessage) || other.actionSuccessMessage == actionSuccessMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProjectDetailLoaded&&(identical(other.project, project) || other.project == project)&&(identical(other.isSaving, isSaving) || other.isSaving == isSaving)&&(identical(other.isDeleting, isDeleting) || other.isDeleting == isDeleting)&&(identical(other.failure, failure) || other.failure == failure)&&(identical(other.actionSuccessMessage, actionSuccessMessage) || other.actionSuccessMessage == actionSuccessMessage));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,project,isSaving,isDeleting,errorMessage,actionSuccessMessage);
+int get hashCode => Object.hash(runtimeType,project,isSaving,isDeleting,failure,actionSuccessMessage);
 
 @override
 String toString() {
-  return 'ProjectDetailState.loaded(project: $project, isSaving: $isSaving, isDeleting: $isDeleting, errorMessage: $errorMessage, actionSuccessMessage: $actionSuccessMessage)';
+  return 'ProjectDetailState.loaded(project: $project, isSaving: $isSaving, isDeleting: $isDeleting, failure: $failure, actionSuccessMessage: $actionSuccessMessage)';
 }
 
 
@@ -302,7 +302,7 @@ abstract mixin class $ProjectDetailLoadedCopyWith<$Res> implements $ProjectDetai
   factory $ProjectDetailLoadedCopyWith(ProjectDetailLoaded value, $Res Function(ProjectDetailLoaded) _then) = _$ProjectDetailLoadedCopyWithImpl;
 @useResult
 $Res call({
- ProjectDto project, bool isSaving, bool isDeleting, String? errorMessage, String? actionSuccessMessage
+ ProjectDto project, bool isSaving, bool isDeleting, AppFailure? failure, String? actionSuccessMessage
 });
 
 
@@ -319,13 +319,13 @@ class _$ProjectDetailLoadedCopyWithImpl<$Res>
 
 /// Create a copy of ProjectDetailState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? project = null,Object? isSaving = null,Object? isDeleting = null,Object? errorMessage = freezed,Object? actionSuccessMessage = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? project = null,Object? isSaving = null,Object? isDeleting = null,Object? failure = freezed,Object? actionSuccessMessage = freezed,}) {
   return _then(ProjectDetailLoaded(
 project: null == project ? _self.project : project // ignore: cast_nullable_to_non_nullable
 as ProjectDto,isSaving: null == isSaving ? _self.isSaving : isSaving // ignore: cast_nullable_to_non_nullable
 as bool,isDeleting: null == isDeleting ? _self.isDeleting : isDeleting // ignore: cast_nullable_to_non_nullable
-as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
-as String?,actionSuccessMessage: freezed == actionSuccessMessage ? _self.actionSuccessMessage : actionSuccessMessage // ignore: cast_nullable_to_non_nullable
+as bool,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure?,actionSuccessMessage: freezed == actionSuccessMessage ? _self.actionSuccessMessage : actionSuccessMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -378,10 +378,10 @@ String toString() {
 
 
 class _ProjectDetailError implements ProjectDetailState {
-  const _ProjectDetailError(this.message);
+  const _ProjectDetailError(this.failure);
   
 
- final  String message;
+ final  AppFailure failure;
 
 /// Create a copy of ProjectDetailState
 /// with the given fields replaced by the non-null parameter values.
@@ -393,16 +393,16 @@ _$ProjectDetailErrorCopyWith<_ProjectDetailError> get copyWith => __$ProjectDeta
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProjectDetailError&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProjectDetailError&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'ProjectDetailState.error(message: $message)';
+  return 'ProjectDetailState.error(failure: $failure)';
 }
 
 
@@ -413,7 +413,7 @@ abstract mixin class _$ProjectDetailErrorCopyWith<$Res> implements $ProjectDetai
   factory _$ProjectDetailErrorCopyWith(_ProjectDetailError value, $Res Function(_ProjectDetailError) _then) = __$ProjectDetailErrorCopyWithImpl;
 @useResult
 $Res call({
- String message
+ AppFailure failure
 });
 
 
@@ -430,10 +430,10 @@ class __$ProjectDetailErrorCopyWithImpl<$Res>
 
 /// Create a copy of ProjectDetailState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(_ProjectDetailError(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure,
   ));
 }
 

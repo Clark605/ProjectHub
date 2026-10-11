@@ -125,13 +125,13 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( User user)?  success,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( User user)?  success,TResult Function( AppFailure failure)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RegisterInitial() when initial != null:
 return initial();case _RegisterLoading() when loading != null:
 return loading();case _RegisterSuccess() when success != null:
 return success(_that.user);case _RegisterFailure() when failure != null:
-return failure(_that.message);case _:
+return failure(_that.failure);case _:
   return orElse();
 
 }
@@ -149,13 +149,13 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( User user)  success,required TResult Function( String message)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( User user)  success,required TResult Function( AppFailure failure)  failure,}) {final _that = this;
 switch (_that) {
 case _RegisterInitial():
 return initial();case _RegisterLoading():
 return loading();case _RegisterSuccess():
 return success(_that.user);case _RegisterFailure():
-return failure(_that.message);}
+return failure(_that.failure);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -169,13 +169,13 @@ return failure(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( User user)?  success,TResult? Function( String message)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( User user)?  success,TResult? Function( AppFailure failure)?  failure,}) {final _that = this;
 switch (_that) {
 case _RegisterInitial() when initial != null:
 return initial();case _RegisterLoading() when loading != null:
 return loading();case _RegisterSuccess() when success != null:
 return success(_that.user);case _RegisterFailure() when failure != null:
-return failure(_that.message);case _:
+return failure(_that.failure);case _:
   return null;
 
 }
@@ -326,10 +326,10 @@ $UserCopyWith<$Res> get user {
 
 
 class _RegisterFailure implements RegisterState {
-  const _RegisterFailure(this.message);
+  const _RegisterFailure(this.failure);
   
 
- final  String message;
+ final  AppFailure failure;
 
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
@@ -341,16 +341,16 @@ _$RegisterFailureCopyWith<_RegisterFailure> get copyWith => __$RegisterFailureCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterFailure&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RegisterFailure&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode => Object.hash(runtimeType,failure);
 
 @override
 String toString() {
-  return 'RegisterState.failure(message: $message)';
+  return 'RegisterState.failure(failure: $failure)';
 }
 
 
@@ -361,7 +361,7 @@ abstract mixin class _$RegisterFailureCopyWith<$Res> implements $RegisterStateCo
   factory _$RegisterFailureCopyWith(_RegisterFailure value, $Res Function(_RegisterFailure) _then) = __$RegisterFailureCopyWithImpl;
 @useResult
 $Res call({
- String message
+ AppFailure failure
 });
 
 
@@ -378,10 +378,10 @@ class __$RegisterFailureCopyWithImpl<$Res>
 
 /// Create a copy of RegisterState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
   return _then(_RegisterFailure(
-null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
-as String,
+null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
+as AppFailure,
   ));
 }
 

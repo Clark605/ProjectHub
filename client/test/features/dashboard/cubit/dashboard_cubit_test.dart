@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/errors/app_exception.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client/features/dashboard/cubit/dashboard_state.dart';
 import 'package:client/features/dashboard/data/models/workspace_dashboard_dto.dart';
@@ -62,19 +63,27 @@ void main() {
       expect(cubit.state.focusTasks.first.title, 'Urgent Task');
     });
 
-    test('emits error state directly when server dashboard fails', () async {
-      when(
-        () => mockWorkspaceRepo.getWorkspaceDashboard(1),
-      ).thenThrow(Exception('Server metrics down'));
+    test(
+      'emits AppFailure state directly when server dashboard fails (no client recompute)',
+      () async {
+        when(
+          () => mockWorkspaceRepo.getWorkspaceDashboard(1),
+        ).thenThrow(Exception('Server metrics down'));
 
-      await cubit.loadDashboard(1);
+        await cubit.loadDashboard(1);
 
-      expect(cubit.state.isLoading, isFalse);
-      expect(cubit.state.errorMessage, isNotNull);
-    });
+        expect(cubit.state.isLoading, isFalse);
+        expect(
+          cubit.state.failure,
+          const AppFailure(kind: FailureKind.unknown, isUserSafe: false),
+        );
+        expect(cubit.state.activeProjects, 0);
+        expect(cubit.state.focusTasks, isEmpty);
+      },
+    );
 
     test(
-      'emits error message and isLoading: false when repository throws AppException',
+      'emits AppFailure and isLoading: false when repository throws AppException',
       () async {
         when(() => mockWorkspaceRepo.getWorkspaceDashboard(1)).thenThrow(
           const UnauthorizedException(message: 'Authentication required'),
@@ -83,7 +92,14 @@ void main() {
         await cubit.loadDashboard(1);
 
         expect(cubit.state.isLoading, isFalse);
-        expect(cubit.state.errorMessage, 'Authentication required');
+        expect(
+          cubit.state.failure,
+          const AppFailure(
+            kind: FailureKind.unauthorized,
+            serverMessage: 'Authentication required',
+            isUserSafe: true,
+          ),
+        );
       },
     );
   });

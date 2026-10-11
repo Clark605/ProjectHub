@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/core/utils/app_logger.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:client/features/tasks/data/ai_task_repository.dart';
@@ -55,12 +56,6 @@ class VoiceTaskCubit extends SafeActionCubit<VoiceTaskState> {
 
     if (!_speechInitialized) {
       _speechInitialized = await _speechToText.initialize(
-        onError: (val) {
-          AppLogger.error('STT error: ${val.errorMsg}', tag: 'VoiceTaskCubit');
-          if (state is VoiceTaskListening) {
-            emit(VoiceTaskState.error(message: val.errorMsg));
-          }
-        },
         onStatus: (val) {
           AppLogger.debug('STT status: $val', tag: 'VoiceTaskCubit');
           if (val == 'done' && state is VoiceTaskListening) {
@@ -78,7 +73,10 @@ class VoiceTaskCubit extends SafeActionCubit<VoiceTaskState> {
     if (!_speechInitialized) {
       emit(
         const VoiceTaskState.error(
-          message: 'Speech recognition is not available on this device.',
+          failure: AppFailure(
+            kind: FailureKind.speechUnavailable,
+            isUserSafe: false,
+          ),
         ),
       );
       return;
@@ -122,7 +120,11 @@ class VoiceTaskCubit extends SafeActionCubit<VoiceTaskState> {
 
   Future<void> _processTranscribedText(String text) async {
     if (_projectId == null || _workspaceId == null) {
-      emit(const VoiceTaskState.error(message: 'Project context is missing.'));
+      emit(
+        const VoiceTaskState.error(
+          failure: AppFailure(kind: FailureKind.unknown, isUserSafe: false),
+        ),
+      );
       return;
     }
 
@@ -138,8 +140,8 @@ class VoiceTaskCubit extends SafeActionCubit<VoiceTaskState> {
 
         emit(VoiceTaskState.reviewDraft(draft: draft, rawSpokenText: text));
       },
-      onError: (msg) {
-        emit(VoiceTaskState.error(message: msg));
+      onFailure: (failure) {
+        emit(VoiceTaskState.error(failure: failure));
       },
       logTag: 'VoiceTaskCubit',
     );

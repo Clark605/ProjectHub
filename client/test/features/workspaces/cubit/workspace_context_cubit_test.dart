@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/errors/app_exception.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
@@ -211,7 +212,13 @@ void main() {
       act: (cubit) => cubit.loadWorkspaces(),
       expect: () => [
         const WorkspaceContextState.loading(),
-        const WorkspaceContextState.error('Network connection failed'),
+        const WorkspaceContextState.error(
+          AppFailure(
+            kind: FailureKind.server,
+            serverMessage: 'Network connection failed',
+            isUserSafe: true,
+          ),
+        ),
       ],
     );
 

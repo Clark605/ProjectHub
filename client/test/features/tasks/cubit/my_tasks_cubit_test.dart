@@ -168,8 +168,8 @@ void main() {
       expect: () => [
         const MyTasksState.loading(),
         isA<MyTasksState>().having(
-          (s) => s.maybeWhen(error: (msg) => msg, orElse: () => ''),
-          'errorMessage',
+          (s) => s.maybeWhen(error: (f) => f.serverMessage, orElse: () => ''),
+          'failure serverMessage',
           contains('Network timeout'),
         ),
       ],
@@ -216,7 +216,7 @@ void main() {
       );
 
       blocTest<MyTasksCubit, MyTasksState>(
-        'emits errorMessage when updateTaskStatus fails',
+        'emits failure when updateTaskStatus fails',
         build: () {
           when(
             () => repo.getMyTasks(10, forceRefresh: any(named: 'forceRefresh')),
@@ -234,8 +234,8 @@ void main() {
         skip: 2,
         expect: () => [
           isA<MyTasksLoaded>().having(
-            (s) => s.errorMessage,
-            'errorMessage',
+            (s) => s.failure?.serverMessage,
+            'failure serverMessage',
             contains('Status update failed'),
           ),
         ],
@@ -290,7 +290,7 @@ void main() {
       );
 
       blocTest<MyTasksCubit, MyTasksState>(
-        'emits errorMessage when updateTask fails',
+        'emits failure when updateTask fails',
         build: () {
           when(
             () => repo.getMyTasks(10, forceRefresh: any(named: 'forceRefresh')),
@@ -308,8 +308,8 @@ void main() {
         skip: 2,
         expect: () => [
           isA<MyTasksLoaded>().having(
-            (s) => s.errorMessage,
-            'errorMessage',
+            (s) => s.failure?.serverMessage,
+            'failure serverMessage',
             contains('Task update failed'),
           ),
         ],
@@ -380,7 +380,7 @@ void main() {
       );
 
       blocTest<MyTasksCubit, MyTasksState>(
-        'emits errorMessage when deleteTask fails',
+        'emits failure when deleteTask fails',
         build: () {
           when(
             () => repo.getMyTasks(10, forceRefresh: any(named: 'forceRefresh')),
@@ -397,8 +397,8 @@ void main() {
         skip: 2,
         expect: () => [
           isA<MyTasksLoaded>().having(
-            (s) => s.errorMessage,
-            'errorMessage',
+            (s) => s.failure?.serverMessage,
+            'failure serverMessage',
             contains('Delete failed'),
           ),
         ],

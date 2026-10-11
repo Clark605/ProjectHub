@@ -22,7 +22,7 @@ class ForgotPasswordCubit extends SafeActionCubit<ForgotPasswordState> {
         emit(ForgotPasswordState.success(response));
         return response;
       },
-      onError: (msg) => emit(ForgotPasswordState.failure(msg)),
+      onFailure: (failure) => emit(ForgotPasswordState.failure(failure)),
       logTag: 'ForgotPasswordCubit',
     );
   }

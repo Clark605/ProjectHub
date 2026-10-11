@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/di/injection.dart';
+import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
@@ -265,9 +266,9 @@ void main() {
 
       expect(find.byType(AppErrorBanner), findsNothing);
 
-      when(
-        () => repo.updateWorkspace(any(), any()),
-      ).thenAnswer((_) async => throw Exception('Failed to update'));
+      when(() => repo.updateWorkspace(any(), any())).thenAnswer(
+        (_) async => throw const AppException(message: 'Failed to update'),
+      );
       await settingsCubit.updateDetails('Bad Name', 'Bad Desc', 'teal');
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 250));

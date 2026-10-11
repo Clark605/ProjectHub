@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/errors/app_exception.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
@@ -132,12 +133,12 @@ void main() {
       expect: () => [
         isA<KanbanLoaded>()
             .having((s) => s.tasks.first.status, 'status', 'InProgress')
-            .having((s) => s.errorMessage, 'error', isNull),
+            .having((s) => s.failure, 'failure', isNull),
       ],
     );
 
     blocTest<KanbanCubit, KanbanState>(
-      'moveTaskStatus rolls back state and emits errorMessage on failure',
+      'moveTaskStatus rolls back state and emits failure on error',
       build: () {
         stubTasks([moveTask]);
         when(() => taskRepo.updateTaskStatus(101, 'Done')).thenAnswer(
@@ -162,8 +163,8 @@ void main() {
         isA<KanbanLoaded>()
             .having((s) => s.tasks.first.status, 'status', 'Backlog')
             .having(
-              (s) => s.errorMessage,
-              'errorMessage',
+              (s) => s.failure?.serverMessage,
+              'failure serverMessage',
               contains('Status transition failed'),
             ),
       ],
@@ -266,7 +267,10 @@ void main() {
         final t2 = state.allTasks.firstWhere((t) => t.id == 2);
         expect(t1.status, 'Backlog');
         expect(t2.status, 'Done');
-        expect(state.errorMessage, contains('Status transition failed'));
+        expect(
+          state.failure?.serverMessage,
+          contains('Status transition failed'),
+        );
       },
     );
 
@@ -401,7 +405,7 @@ void main() {
     );
 
     test(
-      'createTask failure on KanbanEmpty rethrows and sets errorMessage in empty state',
+      'createTask failure on KanbanEmpty rethrows and sets failure in empty state',
       () async {
         stubTasks([]);
         await cubit.loadTasks(1);
@@ -419,12 +423,12 @@ void main() {
 
         expect(cubit.state, isA<KanbanEmpty>());
         final empty = cubit.state as KanbanEmpty;
-        expect(empty.errorMessage, 'Task creation failed');
+        expect(empty.failure?.serverMessage, 'Task creation failed');
       },
     );
 
     test(
-      'createTask failure on KanbanLoaded rethrows and sets errorMessage in loaded state',
+      'createTask failure on KanbanLoaded rethrows and sets failure in loaded state',
       () async {
         stubTasks([
           const TaskDto(
@@ -449,7 +453,7 @@ void main() {
 
         expect(cubit.state, isA<KanbanLoaded>());
         final loaded = cubit.state as KanbanLoaded;
-        expect(loaded.errorMessage, 'Task creation failed');
+        expect(loaded.failure?.serverMessage, 'Task creation failed');
         expect(loaded.allTasks.length, 1);
       },
     );
@@ -498,7 +502,10 @@ void main() {
         expect(loaded.allTasks.length, 1);
         expect(loaded.allTasks.first.title, 'Fallback Fail');
         expect(loaded.allTasks.first.status, 'Backlog');
-        expect(loaded.errorMessage, contains('Status transition failed'));
+        expect(
+          loaded.failure?.serverMessage,
+          contains('Status transition failed'),
+        );
       },
     );
 
@@ -512,7 +519,16 @@ void main() {
 
       await cubit.loadTasks(1);
 
-      expect(cubit.state, const KanbanState.error('Project not found'));
+      expect(
+        cubit.state,
+        const KanbanState.error(
+          AppFailure(
+            kind: FailureKind.server,
+            serverMessage: 'Project not found',
+            isUserSafe: true,
+          ),
+        ),
+      );
     });
 
     test('loadTasks populates project and workspace members (M6/M9)', () async {
@@ -628,25 +644,30 @@ void main() {
     );
 
     test(
-      'clearErrorMessage clears error on both KanbanLoaded and KanbanEmpty',
+      'clearFailure clears failure on both KanbanLoaded and KanbanEmpty',
       () async {
         stubTasks([]);
         await cubit.loadTasks(1);
-        cubit.setLoadedError('Some empty error');
-        expect(cubit.state.errorMessage, 'Some empty error');
+        const testFailure = AppFailure(
+          kind: FailureKind.unknown,
+          serverMessage: 'Some error',
+          isUserSafe: true,
+        );
+        cubit.setLoadedFailure(testFailure);
+        expect(cubit.state.failure, testFailure);
 
-        cubit.clearErrorMessage();
-        expect(cubit.state.errorMessage, isNull);
+        cubit.clearFailure();
+        expect(cubit.state.failure, isNull);
 
         stubTasks([
           const TaskDto(id: 1, projectId: 1, title: 'T1', status: 'Backlog'),
         ]);
         await cubit.loadTasks(1);
-        cubit.setLoadedError('Some loaded error');
-        expect(cubit.state.errorMessage, 'Some loaded error');
+        cubit.setLoadedFailure(testFailure);
+        expect(cubit.state.failure, testFailure);
 
-        cubit.clearErrorMessage();
-        expect(cubit.state.errorMessage, isNull);
+        cubit.clearFailure();
+        expect(cubit.state.failure, isNull);
       },
     );
   });

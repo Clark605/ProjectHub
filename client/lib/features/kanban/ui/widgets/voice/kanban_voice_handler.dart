@@ -49,8 +49,8 @@ class KanbanVoiceHandler extends StatelessWidget {
                   : null,
             );
           },
-          error: (msg) {
-            showAppErrorSnackBar(context, msg);
+          error: (failure) {
+            showAppErrorSnackBar(context, failure.toLocalizedMessage(l10n));
           },
           reviewDraft: (draft, _) {
             VoiceTaskReviewSheet.show(

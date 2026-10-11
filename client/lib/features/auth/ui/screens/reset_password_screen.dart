@@ -79,7 +79,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           loading: () => true,
           orElse: () => false,
         );
-        final errorMessage = state.whenOrNull(failure: (msg) => msg);
+        final errorMessage = state.whenOrNull(
+          failure: (failure) => failure.toLocalizedMessage(l10n),
+        );
 
         return AuthScreenScaffold(
           isLoading: isLoading,

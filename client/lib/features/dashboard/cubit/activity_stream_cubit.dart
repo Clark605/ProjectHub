@@ -59,13 +59,13 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
           ),
         );
       },
-      onError: (message) {
+      onFailure: (failure) {
         if (requestId != _requestId) return;
         emit(
           state.copyWith(
             isLoading: false,
             isRefreshing: false,
-            errorMessage: message,
+            failure: failure,
           ),
         );
       },
@@ -124,9 +124,9 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
           ),
         );
       },
-      onError: (message) {
+      onFailure: (failure) {
         if (requestId != _requestId) return;
-        emit(state.copyWith(errorMessage: message));
+        emit(state.copyWith(failure: failure));
       },
       logTag: 'ActivityStreamCubit',
     );

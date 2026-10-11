@@ -1,6 +1,7 @@
 import 'package:injectable/injectable.dart';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/utils/app_logger.dart';
 import 'package:client/features/kanban/cubit/kanban_filter_mixin.dart';
@@ -65,7 +66,7 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
   void emitLoaded(
     List<TaskDto> allTasks, {
     TaskFilter? filter,
-    String? errorMessage,
+    AppFailure? failure,
   }) {
     final activeFilter = filter ?? currentFilter;
     emit(
@@ -75,7 +76,7 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
         allTasks: allTasks,
         isArchived: _isArchived,
         filter: activeFilter,
-        errorMessage: errorMessage,
+        failure: failure,
       ),
     );
   }
@@ -91,21 +92,21 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
   }
 
   @override
-  void setLoadedError(String msg) {
+  void setLoadedFailure(AppFailure failure) {
     final current = state;
     if (current is KanbanLoaded) {
-      emit(current.copyWith(errorMessage: msg));
+      emit(current.copyWith(failure: failure));
     } else if (current is KanbanEmpty) {
-      emit(current.copyWith(errorMessage: msg));
+      emit(current.copyWith(failure: failure));
     }
   }
 
-  void clearErrorMessage() {
+  void clearFailure() {
     final current = state;
-    if (current is KanbanLoaded && current.errorMessage != null) {
-      emit(current.copyWith(errorMessage: null));
-    } else if (current is KanbanEmpty && current.errorMessage != null) {
-      emit(current.copyWith(errorMessage: null));
+    if (current is KanbanLoaded && current.failure != null) {
+      emit(current.copyWith(failure: null));
+    } else if (current is KanbanEmpty && current.failure != null) {
+      emit(current.copyWith(failure: null));
     }
   }
 
@@ -160,8 +161,7 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
           emitLoaded(tasks);
         }
       },
-      onError: (message) => emit(KanbanState.error(message)),
-      defaultErrorMessage: 'Failed to load Kanban board',
+      onFailure: (failure) => emit(KanbanState.error(failure)),
       logTag: 'KanbanCubit',
     );
   }
@@ -188,8 +188,7 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
           emitLoaded(tasks);
         }
       },
-      onError: (msg) => setLoadedError(msg),
-      defaultErrorMessage: 'Failed to refresh tasks',
+      onFailure: setLoadedFailure,
       logTag: 'KanbanCubit',
     );
   }
@@ -210,7 +209,7 @@ class KanbanCubit extends SafeActionCubit<KanbanState>
         final current = state;
         emitLoaded(
           tasks,
-          errorMessage: current is KanbanLoaded ? current.errorMessage : null,
+          failure: current is KanbanLoaded ? current.failure : null,
         );
       }
     } on Object catch (_) {

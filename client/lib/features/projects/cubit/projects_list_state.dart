@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 
 part 'projects_list_state.freezed.dart';
@@ -15,5 +16,6 @@ abstract class ProjectsListState with _$ProjectsListState {
   const factory ProjectsListState.empty({
     @Default('All') String selectedFilter,
   }) = _ProjectsListEmpty;
-  const factory ProjectsListState.error(String message) = _ProjectsListError;
+  const factory ProjectsListState.error(AppFailure failure) =
+      _ProjectsListError;
 }

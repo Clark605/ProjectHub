@@ -123,6 +123,6 @@ class KanbanScreenActions {
   static void showError(BuildContext context, String? err, KanbanCubit cubit) {
     if (err == null || err.isEmpty) return;
     showAppErrorSnackBar(context, err);
-    cubit.clearErrorMessage();
+    cubit.clearFailure();
   }
 }

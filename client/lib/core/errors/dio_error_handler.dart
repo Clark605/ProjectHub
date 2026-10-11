@@ -33,9 +33,7 @@ class DioErrorHandler {
         if (error.error is SocketException) {
           return const NetworkException();
         }
-        return AppException(
-          message: error.message ?? 'An unexpected error occurred',
-        );
+        return AppException(message: error.message ?? '');
     }
   }
 

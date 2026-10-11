@@ -6,9 +6,9 @@ import 'package:client/core/errors/app_failure.dart';
 
 class _TestState {
   final String status;
-  final String? error;
+  final AppFailure? failure;
 
-  const _TestState({required this.status, this.error});
+  const _TestState({required this.status, this.failure});
 }
 
 class _TestCubit extends SafeActionCubit<_TestState> {
@@ -19,29 +19,21 @@ class _TestCubit extends SafeActionCubit<_TestState> {
       emit(const _TestState(status: 'running'));
       emit(const _TestState(status: 'success'));
       return value * 2;
-    }, onError: (message) => emit(_TestState(status: 'error', error: message)));
+    }, onFailure: (f) => emit(_TestState(status: 'error', failure: f)));
   }
 
-  Future<int?> performAppExceptionAction(String errorMessage) async {
-    return await safeExecute<int>(
-      () async {
-        emit(const _TestState(status: 'running'));
-        throw ValidationException(message: errorMessage);
-      },
-      onError: (message) => emit(_TestState(status: 'error', error: message)),
-      defaultErrorMessage: 'Fallback message',
-    );
+  Future<int?> performAppExceptionAction(String message) async {
+    return await safeExecute<int>(() async {
+      emit(const _TestState(status: 'running'));
+      throw ValidationException(message: message);
+    }, onFailure: (f) => emit(_TestState(status: 'error', failure: f)));
   }
 
   Future<int?> performGenericExceptionAction() async {
-    return await safeExecute<int>(
-      () async {
-        emit(const _TestState(status: 'running'));
-        throw Exception('Something bad');
-      },
-      onError: (message) => emit(_TestState(status: 'error', error: message)),
-      defaultErrorMessage: 'Custom unexpected error',
-    );
+    return await safeExecute<int>(() async {
+      emit(const _TestState(status: 'running'));
+      throw Exception('Something bad');
+    }, onFailure: (f) => emit(_TestState(status: 'error', failure: f)));
   }
 }
 
@@ -59,32 +51,45 @@ void main() {
 
     test('initial state is correct', () {
       expect(cubit.state.status, 'initial');
-      expect(cubit.state.error, isNull);
+      expect(cubit.state.failure, isNull);
     });
 
     test('executes action successfully and returns value', () async {
       final result = await cubit.performSuccessAction(5);
       expect(result, 10);
       expect(cubit.state.status, 'success');
-      expect(cubit.state.error, isNull);
-    });
-
-    test('catches AppException and passes message to onError', () async {
-      final result = await cubit.performAppExceptionAction(
-        'Specific validation error',
-      );
-      expect(result, isNull);
-      expect(cubit.state.status, 'error');
-      expect(cubit.state.error, 'Specific validation error');
+      expect(cubit.state.failure, isNull);
     });
 
     test(
-      'catches generic Exception and passes defaultErrorMessage to onError',
+      'catches AppException and passes user-safe AppFailure to onFailure',
+      () async {
+        final result = await cubit.performAppExceptionAction(
+          'Specific validation error',
+        );
+        expect(result, isNull);
+        expect(cubit.state.status, 'error');
+        expect(
+          cubit.state.failure,
+          const AppFailure(
+            kind: FailureKind.validation,
+            serverMessage: 'Specific validation error',
+            isUserSafe: true,
+          ),
+        );
+      },
+    );
+
+    test(
+      'catches generic Exception and passes non-user-safe unknown AppFailure to onFailure',
       () async {
         final result = await cubit.performGenericExceptionAction();
         expect(result, isNull);
         expect(cubit.state.status, 'error');
-        expect(cubit.state.error, 'Custom unexpected error');
+        expect(
+          cubit.state.failure,
+          const AppFailure(kind: FailureKind.unknown, isUserSafe: false),
+        );
       },
     );
 
@@ -105,20 +110,21 @@ void main() {
       expect(capturedFailure, isNotNull);
       expect(capturedFailure!.kind, FailureKind.validation);
       expect(capturedFailure!.serverMessage, 'Invalid input');
+      expect(capturedFailure!.isUserSafe, isTrue);
     });
 
     test(
-      'safeExecute does not invoke onError or throw after cubit is closed',
+      'safeExecute does not invoke onFailure or throw after cubit is closed',
       () async {
-        bool onErrorCalled = false;
+        bool onFailureCalled = false;
         final future = cubit.safeExecute<int>(() async {
           await Future.delayed(const Duration(milliseconds: 10));
           throw Exception('late error');
-        }, onError: (_) => onErrorCalled = true);
+        }, onFailure: (_) => onFailureCalled = true);
         await cubit.close();
         final result = await future;
         expect(result, isNull);
-        expect(onErrorCalled, isFalse);
+        expect(onFailureCalled, isFalse);
       },
     );
   });

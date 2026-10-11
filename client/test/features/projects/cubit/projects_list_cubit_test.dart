@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/errors/app_exception.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
@@ -139,7 +140,13 @@ void main() {
       act: (cubit) => cubit.loadProjects(10),
       expect: () => [
         const ProjectsListState.loading(),
-        const ProjectsListState.error('Database down'),
+        const ProjectsListState.error(
+          AppFailure(
+            kind: FailureKind.server,
+            serverMessage: 'Database down',
+            isUserSafe: true,
+          ),
+        ),
       ],
     );
 

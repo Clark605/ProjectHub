@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/errors/app_exception.dart';
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/projects/cubit/project_detail_cubit.dart';
 import 'package:client/features/projects/cubit/project_detail_state.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
@@ -75,7 +76,13 @@ void main() {
       act: (cubit) => cubit.loadProject(50),
       expect: () => [
         const ProjectDetailState.loading(),
-        const ProjectDetailState.error('Project not found'),
+        const ProjectDetailState.error(
+          AppFailure(
+            kind: FailureKind.server,
+            serverMessage: 'Project not found',
+            isUserSafe: true,
+          ),
+        ),
       ],
     );
 

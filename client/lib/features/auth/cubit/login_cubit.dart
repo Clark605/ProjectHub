@@ -21,7 +21,7 @@ class LoginCubit extends SafeActionCubit<LoginState> {
         emit(LoginState.success(user));
         return user;
       },
-      onError: (msg) => emit(LoginState.failure(msg)),
+      onFailure: (failure) => emit(LoginState.failure(failure)),
       logTag: 'LoginCubit',
     );
   }
@@ -34,7 +34,7 @@ class LoginCubit extends SafeActionCubit<LoginState> {
         emit(LoginState.success(user));
         return user;
       },
-      onError: (msg) => emit(LoginState.failure(msg)),
+      onFailure: (failure) => emit(LoginState.failure(failure)),
       logTag: 'LoginCubit',
     );
   }
@@ -47,7 +47,7 @@ class LoginCubit extends SafeActionCubit<LoginState> {
         emit(LoginState.success(user));
         return user;
       },
-      onError: (msg) => emit(LoginState.failure(msg)),
+      onFailure: (failure) => emit(LoginState.failure(failure)),
       logTag: 'LoginCubit',
     );
   }
@@ -72,7 +72,7 @@ class LoginCubit extends SafeActionCubit<LoginState> {
         emit(LoginState.success(user));
         return user;
       },
-      onError: (msg) => emit(LoginState.failure(msg)),
+      onFailure: (failure) => emit(LoginState.failure(failure)),
       logTag: 'LoginCubit',
     );
   }
