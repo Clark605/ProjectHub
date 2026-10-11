@@ -88,39 +88,50 @@ void main() {
       expect(deco1.color, equals(deco2.color));
     });
 
-    testWidgets('uses userId as fallback seed when name is whitespace', (
-      tester,
-    ) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: Column(
-              children: [
-                AppAvatar(key: Key('avatar1'), name: '   ', userId: 'user123'),
-                AppAvatar(key: Key('avatar2'), name: '', userId: 'user123'),
-              ],
+    testWidgets(
+      'caller textStyle with only fontWeight keeps computed size and color',
+      (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: Column(
+                children: [
+                  AppAvatar(
+                    key: Key('defaultAvatar'),
+                    name: 'Diana Prince',
+                    size: 28,
+                  ),
+                  AppAvatar(
+                    key: Key('customWeightAvatar'),
+                    name: 'Diana Prince',
+                    size: 28,
+                    textStyle: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      final container1 = tester.widget<Container>(
-        find.descendant(
-          of: find.byKey(const Key('avatar1')),
-          matching: find.byType(Container),
-        ),
-      );
-      final container2 = tester.widget<Container>(
-        find.descendant(
-          of: find.byKey(const Key('avatar2')),
-          matching: find.byType(Container),
-        ),
-      );
+        final defaultText = tester.widget<Text>(
+          find.descendant(
+            of: find.byKey(const Key('defaultAvatar')),
+            matching: find.byType(Text),
+          ),
+        );
+        final customText = tester.widget<Text>(
+          find.descendant(
+            of: find.byKey(const Key('customWeightAvatar')),
+            matching: find.byType(Text),
+          ),
+        );
 
-      final deco1 = container1.decoration as BoxDecoration;
-      final deco2 = container2.decoration as BoxDecoration;
-
-      expect(deco1.color, equals(deco2.color));
-    });
+        expect(customText.style?.fontWeight, FontWeight.w600);
+        expect(customText.style?.fontSize, equals(28 * 0.4));
+        expect(customText.style?.fontSize, equals(defaultText.style?.fontSize));
+        expect(customText.style?.color, isNotNull);
+        expect(customText.style?.color, equals(defaultText.style?.color));
+      },
+    );
   });
 }

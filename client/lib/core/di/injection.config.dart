@@ -184,12 +184,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i513.VoiceTaskCubit(gh<_i437.AiTaskRepository>()),
     );
     gh.factory<_i949.DashboardCubit>(
-      () => _i949.DashboardCubit(
-        gh<_i568.ActivityRepository>(),
-        gh<_i405.ProjectRepository>(),
-        gh<_i241.TaskRepository>(),
-        gh<_i688.WorkspaceRepository>(),
-      ),
+      () => _i949.DashboardCubit(gh<_i688.WorkspaceRepository>()),
     );
     return this;
   }

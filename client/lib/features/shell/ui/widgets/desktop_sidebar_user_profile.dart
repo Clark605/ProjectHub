@@ -50,10 +50,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                     backgroundColor: theme.colorScheme.primary.withValues(
                       alpha: 0.2,
                     ),
-                    textStyle: TextStyle(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    textColor: theme.colorScheme.primary,
                   ),
                   const SizedBox(width: 10),
                   Expanded(

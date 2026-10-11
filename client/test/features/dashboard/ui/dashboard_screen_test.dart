@@ -20,9 +20,6 @@ class MockWorkspaceContextCubit extends Mock implements WorkspaceContextCubit {}
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  late MockActivityRepository mockActivityRepo;
-  late MockProjectRepository mockProjectRepo;
-  late MockTaskRepository mockTaskRepo;
   late MockWorkspaceRepository mockWorkspaceRepo;
   late MockWorkspaceContextCubit mockWorkspaceCubit;
   late DashboardCubit dashboardCubit;
@@ -35,9 +32,6 @@ void main() {
   );
 
   setUp(() {
-    mockActivityRepo = MockActivityRepository();
-    mockProjectRepo = MockProjectRepository();
-    mockTaskRepo = MockTaskRepository();
     mockWorkspaceRepo = MockWorkspaceRepository();
     mockWorkspaceCubit = MockWorkspaceContextCubit();
 
@@ -67,12 +61,7 @@ void main() {
       ),
     );
 
-    dashboardCubit = DashboardCubit(
-      mockActivityRepo,
-      mockProjectRepo,
-      mockTaskRepo,
-      mockWorkspaceRepo,
-    );
+    dashboardCubit = DashboardCubit(mockWorkspaceRepo);
   });
 
   tearDown(() {
@@ -104,13 +93,6 @@ void main() {
         when(() => mockWorkspaceRepo.getWorkspaceDashboard(31)).thenThrow(
           const UnauthorizedException(message: 'Authentication required'),
         );
-        when(() => mockProjectRepo.getProjects(31)).thenThrow(
-          const UnauthorizedException(message: 'Authentication required'),
-        );
-        when(() => mockTaskRepo.getMyTasks(31)).thenAnswer((_) async => []);
-        when(
-          () => mockActivityRepo.getWorkspaceActivities(31, limit: 20),
-        ).thenAnswer((_) async => []);
 
         await dashboardCubit.loadDashboard(31);
 
@@ -127,13 +109,6 @@ void main() {
       when(
         () => mockWorkspaceRepo.getWorkspaceDashboard(31),
       ).thenThrow(const ServerException(message: 'Connection failure'));
-      when(
-        () => mockProjectRepo.getProjects(31),
-      ).thenThrow(const ServerException(message: 'Connection failure'));
-      when(() => mockTaskRepo.getMyTasks(31)).thenAnswer((_) async => []);
-      when(
-        () => mockActivityRepo.getWorkspaceActivities(31, limit: 20),
-      ).thenAnswer((_) async => []);
 
       await dashboardCubit.loadDashboard(31);
 

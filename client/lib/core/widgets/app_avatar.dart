@@ -1,12 +1,11 @@
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
-import 'package:client/core/theme/app_colors.dart';
 
 class AppAvatar extends StatelessWidget {
   const AppAvatar({
     super.key,
     required this.name,
-    this.userId,
     this.size = 32,
     this.backgroundColor,
     this.textColor,
@@ -15,7 +14,6 @@ class AppAvatar extends StatelessWidget {
   });
 
   final String name;
-  final String? userId;
   final double size;
   final Color? backgroundColor;
   final Color? textColor;
@@ -34,11 +32,7 @@ class AppAvatar extends StatelessWidget {
         .toUpperCase();
   }
 
-  String get _normalizedSeed {
-    final trimmedName = name.trim().toLowerCase();
-    if (trimmedName.isNotEmpty) return trimmedName;
-    return (userId ?? '').trim().toLowerCase();
-  }
+  String get _normalizedSeed => name.trim().toLowerCase();
 
   Color get _baseColor {
     final seed = _normalizedSeed;
@@ -72,7 +66,10 @@ class AppAvatar extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         _initials,
-        style: textStyle ?? AppTypography.avatarStyle(size: size, color: fg),
+        style: AppTypography.avatarStyle(
+          size: size,
+          color: fg,
+        ).merge(textStyle),
       ),
     );
   }

@@ -57,9 +57,7 @@ void main() {
     final taskRepo = createMockTaskRepository();
     getIt.registerSingleton<TaskRepository>(taskRepo);
 
-    getIt.registerFactory<DashboardCubit>(
-      () => DashboardCubit(activityRepo, projectRepo, taskRepo, workspaceRepo),
-    );
+    getIt.registerFactory<DashboardCubit>(() => DashboardCubit(workspaceRepo));
     getIt.registerFactory<MyTasksCubit>(() => MyTasksCubit(taskRepo));
     getIt.registerFactory<ProfileEditCubit>(() => ProfileEditCubit(authRepo));
 

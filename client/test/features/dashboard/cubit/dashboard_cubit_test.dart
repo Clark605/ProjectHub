@@ -10,23 +10,12 @@ import 'package:client/features/tasks/data/models/task_dto.dart';
 import '../../../helpers/mock_repositories.dart';
 
 void main() {
-  late MockActivityRepository mockActivityRepo;
-  late MockProjectRepository mockProjectRepo;
-  late MockTaskRepository mockTaskRepo;
   late MockWorkspaceRepository mockWorkspaceRepo;
   late DashboardCubit cubit;
 
   setUp(() {
-    mockActivityRepo = MockActivityRepository();
-    mockProjectRepo = MockProjectRepository();
-    mockTaskRepo = MockTaskRepository();
     mockWorkspaceRepo = MockWorkspaceRepository();
-    cubit = DashboardCubit(
-      mockActivityRepo,
-      mockProjectRepo,
-      mockTaskRepo,
-      mockWorkspaceRepo,
-    );
+    cubit = DashboardCubit(mockWorkspaceRepo);
   });
 
   tearDown(() async {
@@ -71,10 +60,6 @@ void main() {
       expect(cubit.state.completedTasks, 15);
       expect(cubit.state.focusTasks.length, 1);
       expect(cubit.state.focusTasks.first.title, 'Urgent Task');
-
-      // Verifies that getMyTasks and getProjects were NOT called when server metrics succeeded
-      verifyNever(() => mockTaskRepo.getMyTasks(any()));
-      verifyNever(() => mockProjectRepo.getProjects(any()));
     });
 
     test('emits error state directly when server dashboard fails', () async {
@@ -86,8 +71,6 @@ void main() {
 
       expect(cubit.state.isLoading, isFalse);
       expect(cubit.state.errorMessage, isNotNull);
-      verifyNever(() => mockProjectRepo.getProjects(any()));
-      verifyNever(() => mockTaskRepo.getMyTasks(any()));
     });
 
     test(

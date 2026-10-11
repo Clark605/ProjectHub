@@ -152,7 +152,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
     if (name != null && name.isNotEmpty) {
       return Tooltip(
         message: l10n.assignedToUser(name),
-        child: AppAvatar(name: name, userId: assigneeId, size: 24),
+        child: AppAvatar(name: name, size: 24),
       );
     }
     return Tooltip(

@@ -33,7 +33,6 @@ class WorkspaceAvatarItem extends StatelessWidget {
       message: tooltip,
       child: AppAvatar(
         name: _name,
-        userId: userId,
         size: radius * 2,
         border: Border.all(color: theme.colorScheme.surface, width: 1.5),
       ),

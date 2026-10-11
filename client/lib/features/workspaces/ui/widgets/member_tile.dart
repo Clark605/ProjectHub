@@ -67,16 +67,12 @@ class MemberTile extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
       leading: AppAvatar(
-        userId: member.userId,
         name: member.name,
         size: 40,
         backgroundColor: isOwner
             ? primaryColor.withValues(alpha: 0.2)
             : theme.colorScheme.surfaceContainerHigh,
-        textStyle: TextStyle(
-          fontWeight: FontWeight.w700,
-          color: isOwner ? primaryColor : theme.colorScheme.onSurface,
-        ),
+        textColor: isOwner ? primaryColor : theme.colorScheme.onSurface,
       ),
       title: Text(
         member.name,

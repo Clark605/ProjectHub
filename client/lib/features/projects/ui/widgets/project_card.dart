@@ -177,7 +177,6 @@ class ProjectCard extends StatelessWidget {
                           widthFactor: 0.75,
                           child: AppAvatar(
                             name: member.name,
-                            userId: member.id,
                             size: 24,
                             border: Border.all(
                               color: theme.colorScheme.surfaceContainerLow,

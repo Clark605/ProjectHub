@@ -34,11 +34,7 @@ class TaskCommentItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppAvatar(
-            name: comment.authorName,
-            userId: comment.authorId,
-            size: 28,
-          ),
+          AppAvatar(name: comment.authorName, size: 28),
           const SizedBox(width: 10),
           Expanded(
             child: Column(

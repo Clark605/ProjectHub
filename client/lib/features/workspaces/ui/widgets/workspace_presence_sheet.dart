@@ -80,7 +80,6 @@ class WorkspacePresenceSheet extends StatelessWidget {
                     clipBehavior: Clip.none,
                     children: [
                       AppAvatar(
-                        userId: userId,
                         name: name,
                         size: 28,
                         textStyle: const TextStyle(fontWeight: FontWeight.w600),

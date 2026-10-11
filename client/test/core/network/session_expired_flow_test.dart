@@ -41,7 +41,6 @@ void main() {
   late MockWorkspaceContextCubit mockWorkspaceCubit;
   late MockAppSettingsCubit mockSettingsCubit;
   late MockAuthRepository mockAuthRepo;
-  late MockActivityRepository mockActivityRepo;
   late MockProjectRepository mockProjectRepo;
   late MockTaskRepository mockTaskRepo;
   late MockWorkspaceRepository mockWorkspaceRepo;
@@ -58,18 +57,11 @@ void main() {
     mockWorkspaceCubit = MockWorkspaceContextCubit();
     mockSettingsCubit = MockAppSettingsCubit();
     mockAuthRepo = MockAuthRepository();
-    mockActivityRepo = MockActivityRepository();
     mockProjectRepo = MockProjectRepository();
     mockTaskRepo = MockTaskRepository();
     mockWorkspaceRepo = MockWorkspaceRepository();
     mockLoginCubit = MockLoginCubit();
 
-    when(
-      () => mockActivityRepo.getWorkspaceActivities(
-        any(),
-        limit: any(named: 'limit'),
-      ),
-    ).thenAnswer((_) async => []);
     when(
       () => mockProjectRepo.getProjects(
         any(),
@@ -89,12 +81,7 @@ void main() {
       ),
     );
 
-    dashboardCubit = DashboardCubit(
-      mockActivityRepo,
-      mockProjectRepo,
-      mockTaskRepo,
-      mockWorkspaceRepo,
-    );
+    dashboardCubit = DashboardCubit(mockWorkspaceRepo);
     projectsListCubit = ProjectsListCubit(mockProjectRepo);
     myTasksCubit = MyTasksCubit(mockTaskRepo);
     profileEditCubit = ProfileEditCubit(mockAuthRepo);
