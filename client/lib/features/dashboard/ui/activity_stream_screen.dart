@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/widgets/app_async_state_wrapper.dart';
 import 'package:client/core/widgets/realtime_status_badge.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_cubit.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_state.dart';
@@ -123,10 +126,13 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
     );
   }
 
+  Future<void> _reloadActivities() =>
+      _cubit.loadActivities(widget.workspaceId, forceRefresh: true);
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return BlocBuilder<ActivityStreamCubit, ActivityStreamState>(
       bloc: _cubit,
@@ -156,9 +162,9 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
               ),
               WorkspacePresenceAvatars(workspaceId: widget.workspaceId),
-              const SizedBox(width: 8),
+              AppSpacing.gapW8,
               const RealtimeStatusBadge(),
-              const SizedBox(width: 16),
+              AppSpacing.gapW16,
             ],
           ),
           body: SafeArea(
@@ -166,11 +172,13 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
               children: [
                 _buildQuickFilterBar(theme, l10n, state.filter.category),
                 Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () => _cubit.loadActivities(
-                      widget.workspaceId,
-                      forceRefresh: true,
-                    ),
+                  child: AppAsyncStateWrapper(
+                    wrapInScrollView: false,
+                    onRefresh: _reloadActivities,
+                    onRetry: _reloadActivities,
+                    errorMessage: (!state.isLoading || state.isRefreshing)
+                        ? state.failure?.toLocalizedMessage(l10n)
+                        : null,
                     child: _buildBody(theme, l10n, state),
                   ),
                 ),
@@ -213,12 +221,12 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
 
     return Container(
       height: 48,
-      margin: const EdgeInsets.only(top: 8, bottom: 4),
+      margin: const EdgeInsets.only(top: AppSpacing.sm, bottom: AppSpacing.xs),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: AppSpacing.edgeInsetsH16,
         itemCount: categories.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        separatorBuilder: (_, _) => AppSpacing.gapW8,
         itemBuilder: (context, index) {
           final cat = categories[index];
           final isSelected = currentCategory == cat['key'];
@@ -257,44 +265,11 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (state.failure != null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.error_outline_rounded,
-                size: 48,
-                color: AppColors.error,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                state.failure!.toLocalizedMessage(l10n),
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton.icon(
-                onPressed: () => _cubit.loadActivities(
-                  widget.workspaceId,
-                  forceRefresh: true,
-                ),
-                icon: const Icon(Icons.refresh_rounded),
-                label: Text(l10n.retry),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
     // Filter zero-state: active filter applied but no activities match
     if (state.filter.hasActiveFilters && state.filteredActivities.isEmpty) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(32),
+          padding: AppSpacing.edgeInsetsAll32,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -305,14 +280,14 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                   alpha: 0.5,
                 ),
               ),
-              const SizedBox(height: 12),
+              AppSpacing.gapH12,
               Text(
                 l10n.noMatchingActivities,
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 16),
+              AppSpacing.gapH16,
               ElevatedButton.icon(
                 key: const Key('activity_stream_reset_filters_button'),
                 onPressed: _cubit.clearFilters,
@@ -329,7 +304,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
     if (state.activities.isEmpty) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(32),
+          padding: AppSpacing.edgeInsetsAll32,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -340,7 +315,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                   alpha: 0.5,
                 ),
               ),
-              const SizedBox(height: 12),
+              AppSpacing.gapH12,
               Text(
                 l10n.noRecentActivity,
                 style: theme.textTheme.titleSmall?.copyWith(
@@ -357,7 +332,10 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
       child: Container(
         constraints: const BoxConstraints(maxWidth: 800),
         child: ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.md,
+          ),
           itemCount: state.filteredActivities.length,
           separatorBuilder: (_, _) =>
               Divider(color: theme.colorScheme.outlineVariant, height: 16),

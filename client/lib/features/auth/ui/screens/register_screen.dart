@@ -14,7 +14,8 @@ import 'package:client/features/auth/ui/widgets/auth_header.dart';
 import 'package:client/features/auth/ui/widgets/auth_screen_scaffold.dart';
 import 'package:client/features/auth/ui/widgets/social_auth_buttons.dart';
 import 'package:client/features/auth/ui/widgets/terms_checkbox.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -63,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
@@ -90,14 +91,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           isLoading: isLoading,
           formKey: _formKey,
           children: [
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
             AuthHeader(
               title: l10n.createAccount,
               subtitle: l10n.createAccountSubtitle,
             ),
-            const SizedBox(height: 24),
+            AppSpacing.gapH24,
             AppErrorBanner(errorMessage: errorMessage),
-            const SizedBox(height: 12),
+            AppSpacing.gapH12,
             AppTextField(
                   label: l10n.fullName,
                   hintText: l10n.fullNamePlaceholder,
@@ -110,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 200.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 18),
+            const SizedBox(height: AppSpacing.s18),
             AppTextField(
                   label: l10n.email,
                   hintText: l10n.emailPlaceholder,
@@ -122,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 250.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 18),
+            const SizedBox(height: AppSpacing.s18),
             AppTextField(
                   label: l10n.password,
                   hintText: l10n.passwordPlaceholder,
@@ -134,7 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 300.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 18),
+            const SizedBox(height: AppSpacing.s18),
             AppTextField(
                   label: l10n.confirmPassword,
                   hintText: l10n.passwordPlaceholder,
@@ -151,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 350.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 16),
+            AppSpacing.gapH16,
             TermsCheckbox(
               value: _agreeToTerms,
               hasError: _termsError,
@@ -162,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 });
               },
             ),
-            const SizedBox(height: 24),
+            AppSpacing.gapH24,
             AppButton(
                   label: l10n.signUp,
                   variant: AppButtonVariant.primary,
@@ -172,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 450.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 24),
+            AppSpacing.gapH24,
             SocialAuthSection(
                   onGooglePressed: () => _onGoogleSignIn(context),
                   onGithubPressed: () => _onGithubSignIn(context),
@@ -180,7 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 500.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 32),
+            AppSpacing.gapH32,
             AuthFooterLink(
               promptText: l10n.alreadyHaveAccount,
               actionText: l10n.signIn,

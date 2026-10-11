@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/dashboard/ui/widgets/metric_card.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class DashboardMetricsGrid extends StatelessWidget {
   final int activeProjects;
@@ -33,7 +33,7 @@ class DashboardMetricsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return LayoutBuilder(
       builder: (context, constraints) {

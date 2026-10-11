@@ -13,7 +13,8 @@ import 'package:client/features/auth/cubit/forgot_password_state.dart';
 import 'package:client/features/auth/ui/widgets/auth_back_to_login_link.dart';
 import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/auth/ui/widgets/auth_header.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -42,7 +43,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
@@ -86,8 +87,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     constraints: const BoxConstraints(maxWidth: 420),
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 20,
+                        horizontal: AppSpacing.xxl,
+                        vertical: AppSpacing.xl,
                       ),
                       child: Form(
                         key: _formKey,
@@ -98,9 +99,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               title: l10n.forgotPasswordTitle,
                               subtitle: l10n.forgotPasswordSubtitle,
                             ),
-                            const SizedBox(height: 24),
+                            AppSpacing.gapH24,
                             AppErrorBanner(errorMessage: errorMessage),
-                            const SizedBox(height: 12),
+                            AppSpacing.gapH12,
                             AppTextField(
                                   label: l10n.email,
                                   hintText: l10n.emailPlaceholder,
@@ -115,7 +116,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 .animate()
                                 .fadeIn(duration: 400.ms, delay: 200.ms)
                                 .slideY(begin: 0.1, end: 0),
-                            const SizedBox(height: 24),
+                            AppSpacing.gapH24,
                             AppButton(
                                   label: l10n.sendResetCode,
                                   variant: AppButtonVariant.primary,
@@ -125,7 +126,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 .animate()
                                 .fadeIn(duration: 400.ms, delay: 300.ms)
                                 .slideY(begin: 0.1, end: 0),
-                            const SizedBox(height: 28),
+                            AppSpacing.gapH28,
                             Center(
                               child: TextButton(
                                 onPressed: () {
@@ -144,7 +145,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 ),
                               ),
                             ).animate().fadeIn(duration: 400.ms, delay: 350.ms),
-                            const SizedBox(height: 16),
+                            AppSpacing.gapH16,
                             const AuthBackToLoginLink(delayMs: 400),
                           ],
                         ),

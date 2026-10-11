@@ -3,7 +3,7 @@ import 'package:client/core/dialog/app_dialog.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 /// Shows a dialog requiring the user to type the entity name to confirm deletion.
 Future<bool> showAppTypeToConfirmDialog({
@@ -64,7 +64,7 @@ class _AppTypeToConfirmDialogState extends State<AppTypeToConfirmDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return AlertDialog(
       shape: const RoundedRectangleBorder(borderRadius: AppRadius.kRadiusLg),

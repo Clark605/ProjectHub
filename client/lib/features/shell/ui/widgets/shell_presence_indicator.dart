@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ShellPresenceIndicator extends StatelessWidget {
   const ShellPresenceIndicator({super.key});
@@ -11,10 +12,13 @@ class ShellPresenceIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s10,
+        vertical: AppSpacing.s5,
+      ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow,
         borderRadius: AppRadius.r20,
@@ -39,7 +43,7 @@ class ShellPresenceIndicator extends StatelessWidget {
                 end: const Offset(1.3, 1.3),
                 duration: 1200.ms,
               ),
-          const SizedBox(width: 8),
+          AppSpacing.gapW8,
           Text(
             l10n.onlineCount(3),
             style: TextStyle(
@@ -47,11 +51,11 @@ class ShellPresenceIndicator extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(width: 8),
+          AppSpacing.gapW8,
           _buildMiniAvatar('AK', AppColors.electricViolet),
-          const SizedBox(width: 4),
+          AppSpacing.gapW4,
           _buildMiniAvatar('SR', AppColors.skyBlue),
-          const SizedBox(width: 4),
+          AppSpacing.gapW4,
           _buildMiniAvatar('DM', AppColors.warning),
         ],
       ),

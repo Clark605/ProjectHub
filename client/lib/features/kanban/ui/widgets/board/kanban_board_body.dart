@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/breakpoints.dart';
 import 'package:client/core/widgets/app_error_state.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/kanban/ui/widgets/board/kanban_board_skeleton.dart';
@@ -8,7 +11,6 @@ import 'package:client/features/kanban/ui/widgets/board/kanban_desktop_board.dar
 import 'package:client/features/kanban/ui/widgets/board/kanban_empty_state.dart';
 import 'package:client/features/kanban/ui/widgets/board/kanban_mobile_board.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
 
 class KanbanBoardBody extends StatelessWidget {
   final KanbanState state;
@@ -38,7 +40,7 @@ class KanbanBoardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return state.when(
       initial: () => const KanbanBoardSkeleton(),
@@ -62,7 +64,7 @@ class KanbanBoardBody extends StatelessWidget {
         if (tasks.isEmpty && hasActiveFilter) {
           return Center(
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: AppSpacing.edgeInsetsAll24,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -71,12 +73,12 @@ class KanbanBoardBody extends StatelessWidget {
                     size: 44,
                     color: AppColors.textSecondary,
                   ),
-                  const SizedBox(height: 12),
+                  AppSpacing.gapH12,
                   Text(
                     l10n.noTasksMatchFilters,
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  const SizedBox(height: 12),
+                  AppSpacing.gapH12,
                   OutlinedButton(
                     onPressed: onClearFilters,
                     child: Text(l10n.clearFilters),
@@ -91,7 +93,7 @@ class KanbanBoardBody extends StatelessWidget {
 
         return LayoutBuilder(
           builder: (context, constraints) {
-            final isMobile = constraints.maxWidth < 768;
+            final isMobile = constraints.maxWidth < Breakpoints.mobile;
             if (isMobile) {
               return KanbanMobileBoard(
                 pageController: pageController,

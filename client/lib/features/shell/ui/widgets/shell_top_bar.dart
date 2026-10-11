@@ -5,7 +5,8 @@ import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/realtime_status_badge.dart';
 import 'package:client/features/shell/ui/widgets/shell_presence_indicator.dart';
 import 'package:client/features/shell/ui/widgets/workspace_switcher_pill.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onOpenDrawer;
@@ -43,7 +44,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
         activeWorkspaceRole!.trim().toLowerCase() == 'owner';
 
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final accentColor =
         activeWorkspaceAccent != null &&
             activeWorkspaceAccent!.trim().isNotEmpty
@@ -73,7 +74,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                   tooltip: l10n.navigationMenu,
                   onPressed: onOpenDrawer,
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
               ],
               Expanded(
                 child: Align(
@@ -87,12 +88,12 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: 8),
+              AppSpacing.gapW8,
               const RealtimeStatusBadge(),
-              const SizedBox(width: 4),
+              AppSpacing.gapW4,
               if (!isMobile) ...[
                 const ShellPresenceIndicator(),
-                const SizedBox(width: 16),
+                AppSpacing.gapW16,
               ],
               if (isOwner) ...[
                 IconButton(
@@ -108,7 +109,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                         context,
                       ).pushNamed(RouteNames.workspaces),
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
               ],
             ],
           ),

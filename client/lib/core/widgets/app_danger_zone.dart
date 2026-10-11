@@ -3,7 +3,7 @@ import 'package:client/core/dialog/dialog.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class AppDangerZone extends StatelessWidget {
   const AppDangerZone({
@@ -29,7 +29,7 @@ class AppDangerZone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Card(
       elevation: 0,
@@ -49,9 +49,9 @@ class AppDangerZone extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
             Text(description),
-            const SizedBox(height: 16),
+            AppSpacing.gapH16,
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.error,

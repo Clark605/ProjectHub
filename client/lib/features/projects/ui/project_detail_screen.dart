@@ -16,7 +16,8 @@ import 'package:client/features/projects/ui/widgets/project_detail_skeleton.dart
 import 'package:client/features/projects/ui/widgets/project_details_card.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
   final int projectId;
@@ -43,12 +44,12 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
   void _onStateListener(BuildContext context, ProjectDetailState state) {
     state.maybeWhen(
       deleted: () {
-        final l10n = AppLocalizations.of(context);
+        final l10n = context.l10n;
         showAppSuccessSnackBar(context, l10n.projectDeleted);
         Navigator.of(context).pop(true);
       },
       loaded: (project, _, _, failure, actionSuccessMessage) {
-        final l10n = AppLocalizations.of(context);
+        final l10n = context.l10n;
         final cubit = context.read<ProjectDetailCubit>();
         if (actionSuccessMessage != null) {
           _updatedProject = project;
@@ -127,8 +128,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
 
                 return SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
-                    horizontal: isDesktop ? 48 : 20,
-                    vertical: 24,
+                    horizontal: isDesktop ? AppSpacing.s48 : AppSpacing.xl,
+                    vertical: AppSpacing.xxl,
                   ),
                   child: Center(
                     child: Container(
@@ -138,10 +139,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                         children: [
                           ProjectDetailsCard(canEdit: canEdit),
                           if (canDelete) ...[
-                            const SizedBox(height: 24),
+                            AppSpacing.gapH24,
                             ProjectDangerZone(canDelete: canDelete),
                           ],
-                          const SizedBox(height: 40),
+                          AppSpacing.gapH40,
                         ],
                       ),
                     ),

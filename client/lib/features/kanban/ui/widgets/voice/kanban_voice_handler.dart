@@ -10,7 +10,7 @@ import 'package:client/features/kanban/ui/widgets/voice/voice_task_review_sheet.
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class KanbanVoiceHandler extends StatelessWidget {
   final int projectId;
@@ -30,7 +30,7 @@ class KanbanVoiceHandler extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return BlocListener<VoiceTaskCubit, VoiceTaskState>(
       listener: (context, state) {

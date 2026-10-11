@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class AuthBackToLoginLink extends StatelessWidget {
   const AuthBackToLoginLink({super.key, this.delayMs = 400});
@@ -11,7 +12,7 @@ class AuthBackToLoginLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -25,7 +26,7 @@ class AuthBackToLoginLink extends StatelessWidget {
               ? AppColors.textSecondary
               : AppColors.lightTextSecondary,
         ),
-        const SizedBox(width: 4),
+        AppSpacing.gapW4,
         TextButton(
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(

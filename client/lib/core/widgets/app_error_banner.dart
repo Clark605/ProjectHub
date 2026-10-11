@@ -1,6 +1,7 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class AppErrorBanner extends StatelessWidget {
   const AppErrorBanner({super.key, required this.errorMessage, this.onDismiss});
@@ -26,8 +27,11 @@ class AppErrorBanner extends StatelessWidget {
       child: hasError
           ? Container(
               key: ValueKey<String>(errorMessage!),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              margin: const EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: AppSpacing.md,
+              ),
+              margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
               decoration: const BoxDecoration(
                 color: AppColors.error,
                 borderRadius: AppRadius.r8,
@@ -35,7 +39,7 @@ class AppErrorBanner extends StatelessWidget {
               child: Row(
                 children: [
                   const Icon(Icons.error_outline, color: Colors.white),
-                  const SizedBox(width: 8),
+                  AppSpacing.gapW8,
                   Expanded(
                     child: Text(
                       errorMessage!,

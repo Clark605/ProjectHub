@@ -2,6 +2,7 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class OnboardingPageItem extends StatelessWidget {
   const OnboardingPageItem({
@@ -23,7 +24,10 @@ class OnboardingPageItem extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xxl,
+        vertical: AppSpacing.md,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -45,13 +49,13 @@ class OnboardingPageItem extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          AppSpacing.gapH24,
 
           // ── Category Tag Chip ──
           Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 5,
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.s5,
                 ),
                 decoration: BoxDecoration(
                   color: isDark
@@ -76,7 +80,7 @@ class OnboardingPageItem extends StatelessWidget {
                         color: AppColors.electricViolet,
                       ),
                     ),
-                    const SizedBox(width: 6),
+                    AppSpacing.gapW6,
                     Text(
                       tag,
                       style: theme.textTheme.labelSmall?.copyWith(
@@ -94,7 +98,7 @@ class OnboardingPageItem extends StatelessWidget {
               .fadeIn(duration: 350.ms, delay: 150.ms)
               .slideY(begin: 0.2, end: 0, curve: Curves.easeOutCubic),
 
-          const SizedBox(height: 12),
+          AppSpacing.gapH12,
 
           // ── Headline Title ──
           Text(
@@ -112,7 +116,7 @@ class OnboardingPageItem extends StatelessWidget {
               .fadeIn(duration: 400.ms, delay: 220.ms)
               .slideY(begin: 0.2, end: 0, curve: Curves.easeOutCubic),
 
-          const SizedBox(height: 10),
+          AppSpacing.gapH10,
 
           // ── Subtitle Description ──
           ConstrainedBox(
@@ -132,7 +136,7 @@ class OnboardingPageItem extends StatelessWidget {
               .fadeIn(duration: 400.ms, delay: 300.ms)
               .slideY(begin: 0.2, end: 0, curve: Curves.easeOutCubic),
 
-          const SizedBox(height: 12),
+          AppSpacing.gapH12,
         ],
       ),
     );

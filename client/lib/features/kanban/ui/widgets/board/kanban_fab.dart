@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/kanban/ui/widgets/voice/voice_task_fab.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanFab extends StatelessWidget {
   const KanbanFab({
@@ -21,7 +22,7 @@ class KanbanFab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isArchived) return const SizedBox.shrink();
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -32,7 +33,7 @@ class KanbanFab extends StatelessWidget {
             isListening: isListening,
             onPressed: onVoicePressed!,
           ),
-          const SizedBox(width: 12),
+          AppSpacing.gapW12,
         ],
         FloatingActionButton.extended(
           onPressed: onPressed,

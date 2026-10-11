@@ -5,6 +5,7 @@ import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/ui/widgets/project_card.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ProjectsGrid extends StatelessWidget {
   final List<ProjectDto> projects;
@@ -31,10 +32,15 @@ class ProjectsGrid extends StatelessWidget {
 
     if (!isDesktop && !isTablet) {
       return SliverPadding(
-        padding: const EdgeInsets.fromLTRB(24, 0, 24, 80),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.xxl,
+          AppSpacing.zero,
+          AppSpacing.xxl,
+          AppSpacing.s80,
+        ),
         sliver: SliverList.separated(
           itemCount: projects.length,
-          separatorBuilder: (_, _) => const SizedBox(height: 16),
+          separatorBuilder: (_, _) => AppSpacing.gapH16,
           itemBuilder: (context, index) {
             final project = projects[index];
             return ProjectCard(
@@ -49,7 +55,12 @@ class ProjectsGrid extends StatelessWidget {
     final columns = isDesktop ? 3 : 2;
 
     return SliverPadding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 80),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xxl,
+        AppSpacing.zero,
+        AppSpacing.xxl,
+        AppSpacing.s80,
+      ),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columns,

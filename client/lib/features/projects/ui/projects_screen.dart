@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/widgets/app_empty_state.dart';
-import 'package:client/core/widgets/app_error_state.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/widgets/app_async_state_wrapper.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
 import 'package:client/features/projects/ui/widgets/create_project_sheet.dart';
@@ -13,7 +13,6 @@ import 'package:client/features/projects/ui/widgets/projects_header.dart';
 import 'package:client/features/projects/ui/widgets/projects_skeleton.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
 
 class ProjectsScreen extends StatefulWidget {
   const ProjectsScreen({super.key});
@@ -44,9 +43,18 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
     CreateProjectSheet.show(context, cubit: cubit);
   }
 
+  Future<void> _reloadProjects(BuildContext context) async {
+    if (_lastWorkspaceId != null) {
+      await context.read<ProjectsListCubit>().loadProjects(
+        _lastWorkspaceId!,
+        forceRefresh: true,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return BlocListener<WorkspaceContextCubit, WorkspaceContextState>(
       listener: (context, state) {
@@ -60,78 +68,65 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
         backgroundColor: Colors.transparent,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _openCreateSheet(context),
-          backgroundColor: AppColors.electricVioletContainer,
-          foregroundColor: AppColors.pureWhite,
           icon: const Icon(Icons.add_rounded),
           label: Text(l10n.newProject),
         ),
         body: BlocBuilder<ProjectsListCubit, ProjectsListState>(
           builder: (context, state) {
-            return RefreshIndicator(
-              onRefresh: () async {
-                if (_lastWorkspaceId != null) {
-                  await context.read<ProjectsListCubit>().loadProjects(
-                    _lastWorkspaceId!,
-                    forceRefresh: true,
-                  );
-                }
-              },
-              child: CustomScrollView(
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ProjectsHeader(
-                          onCreatePressed: () => _openCreateSheet(context),
-                        ),
-                        const ProjectsFilterBar(),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
+            final isEmpty = state.maybeWhen(
+              empty: (_) => true,
+              loaded: (projects, _, _) => projects.isEmpty,
+              orElse: () => false,
+            );
+
+            return AppAsyncStateWrapper.slivers(
+              onRefresh: () => _reloadProjects(context),
+              errorMessage: state.whenOrNull(
+                error: (failure) => failure.toLocalizedMessage(l10n),
+              ),
+              isEmpty: isEmpty,
+              emptyTitle: state.maybeWhen(
+                empty: (_) => l10n.noProjectsFound,
+                loaded: (_, _, _) => l10n.noResults,
+                orElse: () => null,
+              ),
+              emptyDescription: state.maybeWhen(
+                empty: (_) => l10n.noProjectsDescription,
+                orElse: () => null,
+              ),
+              emptyIcon: state.maybeWhen(
+                empty: (_) => Icons.folder_open_rounded,
+                loaded: (_, _, _) => Icons.filter_list_off_rounded,
+                orElse: () => null,
+              ),
+              headerSlivers: [
+                SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ProjectsHeader(
+                        onCreatePressed: () => _openCreateSheet(context),
+                      ),
+                      const ProjectsFilterBar(),
+                      AppSpacing.gapH20,
+                    ],
                   ),
-                  state.when(
-                    initial: () =>
-                        const SliverToBoxAdapter(child: ProjectsSkeleton()),
-                    loading: () =>
-                        const SliverToBoxAdapter(child: ProjectsSkeleton()),
-                    error: (failure) => SliverFillRemaining(
-                      child: AppErrorState(
-                        errorMessage: failure.toLocalizedMessage(l10n),
-                        onRetry: () {
-                          if (_lastWorkspaceId != null) {
-                            context.read<ProjectsListCubit>().loadProjects(
-                              _lastWorkspaceId!,
-                              forceRefresh: true,
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                    empty: (filter) => SliverFillRemaining(
-                      child: AppEmptyState(
-                        title: l10n.noProjectsFound,
-                        description: l10n.noProjectsDescription,
-                        icon: Icons.folder_open_rounded,
-                      ),
-                    ),
-                    loaded: (projects, a, s) {
-                      if (projects.isEmpty) {
-                        return SliverFillRemaining(
-                          child: AppEmptyState(
-                            title: l10n.noResults,
-                            description: '',
-                            icon: Icons.filter_list_off_rounded,
-                          ),
-                        );
-                      }
-                      return ProjectsGrid(
-                        projects: projects,
-                        workspaceId: _lastWorkspaceId,
-                      );
-                    },
+                ),
+              ],
+              slivers: state.maybeWhen(
+                initial: () => const [
+                  SliverToBoxAdapter(child: ProjectsSkeleton()),
+                ],
+                loading: () => const [
+                  SliverToBoxAdapter(child: ProjectsSkeleton()),
+                ],
+                loaded: (projects, _, _) => [
+                  ProjectsGrid(
+                    projects: projects,
+                    workspaceId: _lastWorkspaceId,
                   ),
                 ],
+                orElse: () => const [],
               ),
             );
           },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/dialog/app_confirm_dialog.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class DeleteTaskDialog extends StatelessWidget {
   const DeleteTaskDialog({super.key, required this.taskTitle});
@@ -9,7 +9,7 @@ class DeleteTaskDialog extends StatelessWidget {
   final String taskTitle;
 
   static Future<bool?> show(BuildContext context, String taskTitle) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return showAppConfirmDialog(
       context: context,
       title: l10n.deleteTaskConfirmTitle,
@@ -22,7 +22,7 @@ class DeleteTaskDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return AppConfirmDialog(
       title: l10n.deleteTaskConfirmTitle,

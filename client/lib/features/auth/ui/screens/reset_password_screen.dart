@@ -13,7 +13,8 @@ import 'package:client/features/auth/cubit/reset_password_state.dart';
 import 'package:client/features/auth/ui/widgets/auth_back_to_login_link.dart';
 import 'package:client/features/auth/ui/widgets/auth_header.dart';
 import 'package:client/features/auth/ui/widgets/auth_screen_scaffold.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key, this.initialEmail});
@@ -58,7 +59,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
       listener: (context, state) {
@@ -91,9 +92,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               title: l10n.resetPasswordTitle,
               subtitle: l10n.resetPasswordSubtitle,
             ),
-            const SizedBox(height: 24),
+            AppSpacing.gapH24,
             AppErrorBanner(errorMessage: errorMessage),
-            const SizedBox(height: 12),
+            AppSpacing.gapH12,
             AppTextField(
                   label: l10n.email,
                   hintText: l10n.emailPlaceholder,
@@ -106,7 +107,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 200.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 18),
+            const SizedBox(height: AppSpacing.s18),
             AppTextField(
                   label: l10n.resetToken,
                   hintText: l10n.resetTokenPlaceholder,
@@ -119,7 +120,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 250.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 18),
+            const SizedBox(height: AppSpacing.s18),
             AppTextField(
                   label: l10n.newPassword,
                   hintText: l10n.passwordPlaceholder,
@@ -132,7 +133,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 300.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 18),
+            const SizedBox(height: AppSpacing.s18),
             AppTextField(
                   label: l10n.confirmNewPassword,
                   hintText: l10n.passwordPlaceholder,
@@ -150,7 +151,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 350.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 24),
+            AppSpacing.gapH24,
             AppButton(
                   label: l10n.resetPasswordButton,
                   variant: AppButtonVariant.primary,
@@ -160,7 +161,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 400.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 28),
+            AppSpacing.gapH28,
             const AuthBackToLoginLink(delayMs: 450),
           ],
         );

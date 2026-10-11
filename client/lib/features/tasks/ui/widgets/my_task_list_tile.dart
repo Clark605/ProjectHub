@@ -6,7 +6,8 @@ import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class MyTaskListTile extends StatelessWidget {
   final TaskDto task;
@@ -23,13 +24,13 @@ class MyTaskListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final isDark = theme.brightness == Brightness.dark;
     final priorityColor = task.priorityEnum.toColor();
     final isOverdue = task.isOverdue;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceContainer : AppColors.lightSurface,
         borderRadius: AppRadius.r12,
@@ -43,7 +44,10 @@ class MyTaskListTile extends StatelessWidget {
           borderRadius: AppRadius.r12,
           onTap: onTap,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.s14,
+              vertical: AppSpacing.md,
+            ),
             child: Row(
               children: [
                 // Priority Indicator
@@ -55,7 +59,7 @@ class MyTaskListTile extends StatelessWidget {
                     borderRadius: AppRadius.r2,
                   ),
                 ),
-                const SizedBox(width: 12),
+                AppSpacing.gapW12,
 
                 // Main Info: Title, Project Name, Due Date
                 Expanded(
@@ -70,7 +74,7 @@ class MyTaskListTile extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 4),
+                      AppSpacing.gapH4,
                       Row(
                         children: [
                           if (task.projectName != null &&
@@ -88,7 +92,7 @@ class MyTaskListTile extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            AppSpacing.gapW8,
                             Text(
                               '•',
                               style: TextStyle(
@@ -97,7 +101,7 @@ class MyTaskListTile extends StatelessWidget {
                                     : AppColors.lightTextSecondary,
                               ),
                             ),
-                            const SizedBox(width: 8),
+                            AppSpacing.gapW8,
                           ],
                           if (task.dueDate != null)
                             Row(
@@ -112,7 +116,7 @@ class MyTaskListTile extends StatelessWidget {
                                             ? AppColors.textSecondary
                                             : AppColors.lightTextSecondary),
                                 ),
-                                const SizedBox(width: 4),
+                                AppSpacing.gapW4,
                                 Text(
                                   DateFormatter.formatShortDate(
                                     task.dueDate!,
@@ -136,7 +140,7 @@ class MyTaskListTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
 
                 // Status Badge
                 GestureDetector(
@@ -150,8 +154,8 @@ class MyTaskListTile extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                        horizontal: AppSpacing.sm,
+                        vertical: AppSpacing.xs,
                       ),
                       decoration: BoxDecoration(
                         color: task.statusEnum.toColor().withValues(

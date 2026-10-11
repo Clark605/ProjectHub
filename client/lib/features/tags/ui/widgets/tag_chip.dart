@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TagChip extends StatelessWidget {
   const TagChip({
@@ -38,10 +39,10 @@ class TagChip extends StatelessWidget {
       borderRadius: AppRadius.kRadiusSm,
       child: Container(
         padding: EdgeInsets.only(
-          left: 8,
-          right: onDeleted != null ? 4 : 8,
-          top: 2,
-          bottom: 2,
+          left: AppSpacing.sm,
+          right: onDeleted != null ? AppSpacing.xs : AppSpacing.sm,
+          top: AppSpacing.xxs,
+          bottom: AppSpacing.xxs,
         ),
         decoration: BoxDecoration(
           color: isSelected
@@ -64,13 +65,13 @@ class TagChip extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-            const SizedBox(width: 5),
+            const SizedBox(width: AppSpacing.s5),
             Text(
               tag.name,
               style: TextStyle(fontWeight: FontWeight.w600, color: baseColor),
             ),
             if (onDeleted != null) ...[
-              const SizedBox(width: 4),
+              AppSpacing.gapW4,
               GestureDetector(
                 onTap: onDeleted,
                 child: Icon(Icons.close_rounded, size: 14, color: baseColor),

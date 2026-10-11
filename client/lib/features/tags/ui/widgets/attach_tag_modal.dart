@@ -7,7 +7,8 @@ import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/data/tag_repository.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_results.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_search_field.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class AttachTagModal extends StatefulWidget {
   const AttachTagModal({
@@ -132,7 +133,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final query = _searchController.text.trim().toLowerCase();
     final attachedIds = widget.currentTags.map((t) => t.id).toSet();
     final filtered = _availableTags
@@ -147,13 +148,18 @@ class _AttachTagModalState extends State<AttachTagModal> {
         !_availableTags.any((t) => t.name.toLowerCase() == query);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.sm,
+        AppSpacing.lg,
+        AppSpacing.xxl,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const AppSheetDragHandle(),
-          const SizedBox(height: 8),
+          AppSpacing.gapH8,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -174,16 +180,16 @@ class _AttachTagModalState extends State<AttachTagModal> {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          AppSpacing.gapH12,
           AttachTagSearchField(
             controller: _searchController,
             onChanged: (_) => setState(() {}),
           ),
           if (_error != null) ...[
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
             Text(_error!, style: const TextStyle(color: AppColors.error)),
           ],
-          const SizedBox(height: 14),
+          AppSpacing.gapH14,
           AttachTagResults(
             isLoading: _isLoading,
             canCreate: canCreate,

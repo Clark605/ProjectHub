@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TaskCommentItem extends StatelessWidget {
   const TaskCommentItem({
@@ -22,7 +23,7 @@ class TaskCommentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final canDelete = comment.authorId == currentUserId || isWorkspaceOwner;
     final timeStr = DateFormatter.formatRelativeTime(
       comment.createdAt,
@@ -30,12 +31,12 @@ class TaskCommentItem extends StatelessWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.s6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppAvatar(name: comment.authorName, size: 28),
-          const SizedBox(width: 10),
+          AppSpacing.gapW10,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +50,7 @@ class TaskCommentItem extends StatelessWidget {
                         color: theme.colorScheme.onSurface,
                       ),
                     ),
-                    const SizedBox(width: 6),
+                    AppSpacing.gapW6,
                     Text(
                       timeStr,
                       style: TextStyle(
@@ -71,7 +72,7 @@ class TaskCommentItem extends StatelessWidget {
                       ),
                   ],
                 ),
-                const SizedBox(height: 2),
+                AppSpacing.gapH2,
                 Text(
                   comment.content,
                   style: TextStyle(

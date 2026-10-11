@@ -2,7 +2,8 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/workspace_accent.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceAccentPicker extends StatelessWidget {
   final String? activeAccentId;
@@ -17,7 +18,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +30,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
               size: 18,
               color: theme.colorScheme.primary,
             ),
-            const SizedBox(width: 8),
+            AppSpacing.gapW8,
             Text(
               l10n.accentColor,
               style: theme.textTheme.titleSmall?.copyWith(
@@ -38,20 +39,20 @@ class WorkspaceAccentPicker extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 4),
+        AppSpacing.gapH4,
         Text(
           l10n.accentColorSubtitle,
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        const SizedBox(height: 12),
+        AppSpacing.gapH12,
         SizedBox(
           height: 44,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: WorkspaceAccent.values.length,
-            separatorBuilder: (_, _) => const SizedBox(width: 10),
+            separatorBuilder: (_, _) => AppSpacing.gapW10,
             itemBuilder: (context, index) {
               final accent = WorkspaceAccent.values[index];
               final isSelected = activeAccentId == accent.id;

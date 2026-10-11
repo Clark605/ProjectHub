@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class CreateTaskHeader extends StatelessWidget {
   final TaskStatus selectedStatus;
@@ -14,7 +15,7 @@ class CreateTaskHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final isDark = theme.brightness == Brightness.dark;
 
     return Column(
@@ -33,7 +34,7 @@ class CreateTaskHeader extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        AppSpacing.gapH16,
         Row(
           children: [
             Text(
@@ -44,7 +45,10 @@ class CreateTaskHeader extends StatelessWidget {
             ),
             const Spacer(),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.s10,
+                vertical: AppSpacing.xs,
+              ),
               decoration: BoxDecoration(
                 color: selectedStatus.toColor().withValues(alpha: 0.15),
                 borderRadius: AppRadius.r12,

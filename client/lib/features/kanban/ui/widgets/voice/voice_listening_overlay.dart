@@ -6,7 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class VoiceListeningOverlay extends StatelessWidget {
   final VoidCallback onCancel;
@@ -22,7 +23,7 @@ class VoiceListeningOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -34,7 +35,12 @@ class VoiceListeningOverlay extends StatelessWidget {
             : (state is VoiceTaskParsing ? state.fullText : '');
 
         return Container(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.xl,
+            AppSpacing.lg,
+            AppSpacing.xl,
+            AppSpacing.xxl,
+          ),
           decoration: BoxDecoration(
             color: isDark
                 ? AppColors.surfaceContainerHigh.withValues(alpha: 0.95)
@@ -65,7 +71,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                 Container(
                   width: 40,
                   height: 4,
-                  margin: const EdgeInsets.only(bottom: 16),
+                  margin: const EdgeInsets.only(bottom: AppSpacing.lg),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.outlineVariant,
                     borderRadius: AppRadius.r2,
@@ -75,7 +81,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                   onTap: isParsing ? null : onDone,
                   child: _buildPulseOrb(isParsing),
                 ),
-                const SizedBox(height: 16),
+                AppSpacing.gapH16,
                 Text(
                   isParsing
                       ? (l10n.voiceTaskStructuring)
@@ -85,7 +91,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                     color: theme.colorScheme.onSurface,
                   ),
                 ),
-                const SizedBox(height: 12),
+                AppSpacing.gapH12,
                 Container(
                   constraints: const BoxConstraints(
                     minHeight: 56,
@@ -93,8 +99,8 @@ class VoiceListeningOverlay extends StatelessWidget {
                   ),
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 10,
+                    horizontal: AppSpacing.s14,
+                    vertical: AppSpacing.s10,
                   ),
                   decoration: BoxDecoration(
                     color: isDark
@@ -119,7 +125,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: AppSpacing.s18),
                 if (isParsing)
                   LinearProgressIndicator(
                     color: AppColors.electricVioletContainer,
@@ -139,7 +145,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      AppSpacing.gapW8,
                       ElevatedButton.icon(
                         onPressed: onDone,
                         icon: const Icon(Icons.check_rounded, size: 18),
@@ -149,8 +155,8 @@ class VoiceListeningOverlay extends StatelessWidget {
                           foregroundColor: AppColors.pureWhite,
                           minimumSize: const Size(0, 42),
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 10,
+                            horizontal: AppSpacing.lg,
+                            vertical: AppSpacing.s10,
                           ),
                           shape: const RoundedRectangleBorder(
                             borderRadius: AppRadius.r10,

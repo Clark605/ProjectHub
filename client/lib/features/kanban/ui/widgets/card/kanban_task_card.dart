@@ -10,7 +10,8 @@ import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanTaskCard extends StatelessWidget {
   final TaskDto task;
@@ -93,11 +94,14 @@ class KanbanTaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final priorityColor = task.priorityEnum.toColor();
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xs,
+        vertical: AppSpacing.s5,
+      ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
         borderRadius: AppRadius.r12,
@@ -128,7 +132,12 @@ class KanbanTaskCard extends StatelessWidget {
                   child: ColoredBox(color: priorityColor),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 10, 10, 10),
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.lg,
+                    AppSpacing.s10,
+                    AppSpacing.s10,
+                    AppSpacing.s10,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -172,7 +181,7 @@ class KanbanTaskCard extends StatelessWidget {
                                         size: 18,
                                         color: theme.colorScheme.onSurface,
                                       ),
-                                      const SizedBox(width: 8),
+                                      AppSpacing.gapW8,
                                       Text(l10n.moveTask),
                                     ],
                                   ),
@@ -186,7 +195,7 @@ class KanbanTaskCard extends StatelessWidget {
                                         size: 18,
                                         color: AppColors.error,
                                       ),
-                                      const SizedBox(width: 8),
+                                      AppSpacing.gapW8,
                                       Text(
                                         l10n.delete,
                                         style: const TextStyle(
@@ -201,7 +210,7 @@ class KanbanTaskCard extends StatelessWidget {
                         ],
                       ),
                       if (task.tags.isNotEmpty) ...[
-                        const SizedBox(height: 6),
+                        AppSpacing.gapH6,
                         Wrap(
                           spacing: 4,
                           runSpacing: 4,
@@ -215,7 +224,7 @@ class KanbanTaskCard extends StatelessWidget {
                               .toList(),
                         ),
                       ],
-                      const SizedBox(height: 10),
+                      AppSpacing.gapH10,
                       KanbanTaskCardFooter(
                         priority: task.priorityEnum,
                         dueDate: task.dueDate,

@@ -7,6 +7,8 @@ import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanTaskCardFooter extends StatelessWidget {
   final TaskPriority? priority;
@@ -30,7 +32,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,8 +46,8 @@ class KanbanTaskCardFooter extends StatelessWidget {
               if (priority != null)
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
+                    horizontal: AppSpacing.s6,
+                    vertical: AppSpacing.xxs,
                   ),
                   decoration: BoxDecoration(
                     color: priority!.toColor().withValues(
@@ -61,7 +63,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                         size: 11,
                         color: priority!.toColor(),
                       ),
-                      const SizedBox(width: 3),
+                      const SizedBox(width: AppSpacing.s3),
                       Text(
                         priority!.localizedName(l10n),
                         style: TextStyle(
@@ -75,8 +77,8 @@ class KanbanTaskCardFooter extends StatelessWidget {
               if (dueDate != null)
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
+                    horizontal: AppSpacing.s6,
+                    vertical: AppSpacing.xxs,
                   ),
                   decoration: BoxDecoration(
                     color: isOverdue
@@ -96,7 +98,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                             ? AppColors.error
                             : theme.colorScheme.onSurfaceVariant,
                       ),
-                      const SizedBox(width: 4),
+                      AppSpacing.gapW4,
                       Text(
                         DateFormatter.formatShortDate(
                           dueDate!,
@@ -123,7 +125,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                       size: 12,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    const SizedBox(width: 3),
+                    const SizedBox(width: AppSpacing.s3),
                     Text(
                       '$commentCount',
                       style: TextStyle(
@@ -136,7 +138,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: 8),
+        AppSpacing.gapW8,
         _buildAvatar(context, theme, isDark, l10n),
       ],
     );

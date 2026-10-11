@@ -7,14 +7,15 @@ import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 
 import 'package:client/features/workspaces/ui/widgets/invite_member_sheet.dart';
 import 'package:client/features/workspaces/ui/widgets/member_tile.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceMembersCard extends StatelessWidget {
   const WorkspaceMembersCard({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return BlocBuilder<WorkspaceSettingsCubit, WorkspaceSettingsState>(
@@ -31,15 +32,15 @@ class WorkspaceMembersCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: AppSpacing.edgeInsetsAll20,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final isNarrow = constraints.maxWidth < 400;
 
                     final badge = Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
+                        horizontal: AppSpacing.sm,
+                        vertical: AppSpacing.xxs,
                       ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceContainerHigh,
@@ -75,11 +76,11 @@ class WorkspaceMembersCard extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              AppSpacing.gapW8,
                               badge,
                             ],
                           ),
-                          const SizedBox(height: 8),
+                          AppSpacing.gapH8,
                           actionButton,
                         ],
                       );
@@ -96,7 +97,7 @@ class WorkspaceMembersCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        AppSpacing.gapW8,
                         badge,
                         const Spacer(),
                         actionButton,

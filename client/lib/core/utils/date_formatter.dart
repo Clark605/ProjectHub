@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class DateFormatter {
   DateFormatter._();
@@ -65,7 +65,7 @@ class DateFormatter {
     if (dateTime == null) return fallback;
     final now = DateTime.now();
     final difference = now.difference(dateTime.toLocal());
-    final l10n = context != null ? AppLocalizations.of(context) : null;
+    final l10n = context?.l10n;
 
     if (difference.isNegative || difference.inSeconds < 45) {
       return l10n != null ? l10n.timeJustNow : 'Just now';

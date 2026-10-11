@@ -1,7 +1,8 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class VersionInfoTile extends StatelessWidget {
   const VersionInfoTile({super.key});
@@ -9,11 +10,11 @@ class VersionInfoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: AppSpacing.edgeInsetsAll20,
         child: FutureBuilder<PackageInfo>(
           future: PackageInfo.fromPlatform(),
           builder: (context, snapshot) {
@@ -37,7 +38,7 @@ class VersionInfoTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 14),
+                AppSpacing.gapW14,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +49,7 @@ class VersionInfoTile extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      AppSpacing.gapH2,
                       Text(
                         '${l10n.appVersionFormat(version, buildNumber)} • Made with ❤️ by Clark Remon',
                         maxLines: 3,

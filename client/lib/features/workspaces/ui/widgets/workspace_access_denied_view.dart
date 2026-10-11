@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceAccessDeniedView extends StatelessWidget {
   const WorkspaceAccessDeniedView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: AppSpacing.edgeInsetsAll24,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -21,13 +22,13 @@ class WorkspaceAccessDeniedView extends StatelessWidget {
               size: 48,
               color: AppColors.error,
             ),
-            const SizedBox(height: 16),
+            AppSpacing.gapH16,
             Text(
               l10n.ownerOnlyAccess,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyLarge,
             ),
-            const SizedBox(height: 24),
+            AppSpacing.gapH24,
             ElevatedButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(l10n.returnToWorkspace),

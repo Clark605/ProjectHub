@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/workspace_accent.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class ProjectDetailAppBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -15,7 +15,7 @@ class ProjectDetailAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final accentColor = wsAccent != null && wsAccent!.trim().isNotEmpty
         ? WorkspaceAccent.fromId(wsAccent!).resolvedColor(theme.brightness)
         : null;

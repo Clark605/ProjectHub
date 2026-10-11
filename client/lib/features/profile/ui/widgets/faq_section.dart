@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class FaqSection extends StatelessWidget {
   const FaqSection({super.key});
@@ -7,11 +8,11 @@ class FaqSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: AppSpacing.edgeInsetsAll20,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -22,7 +23,7 @@ class FaqSection extends StatelessWidget {
                   size: 20,
                   color: theme.colorScheme.primary,
                 ),
-                const SizedBox(width: 10),
+                AppSpacing.gapW10,
                 Text(
                   l10n.faqTitle,
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -31,14 +32,14 @@ class FaqSection extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            AppSpacing.gapH6,
             Text(
               l10n.faqSubtitle,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
               ),
             ),
-            const SizedBox(height: 12),
+            AppSpacing.gapH12,
             _FaqItem(
               question: l10n.faqWorkspacesQ,
               answer: l10n.faqWorkspacesA,
@@ -78,7 +79,7 @@ class _FaqItem extends StatelessWidget {
         ),
         children: [
           Padding(
-            padding: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.only(bottom: AppSpacing.md),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(

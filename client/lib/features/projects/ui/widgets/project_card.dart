@@ -5,7 +5,8 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ProjectCard extends StatelessWidget {
   final ProjectDto project;
@@ -29,7 +30,7 @@ class ProjectCard extends StatelessWidget {
   }
 
   String _getLocalizedStatus(BuildContext context, String status) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     switch (status.toLowerCase()) {
       case 'planning':
         return l10n.statusPlanning;
@@ -61,7 +62,7 @@ class ProjectCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: AppRadius.r16,
       child: Ink(
-        padding: const EdgeInsets.all(16),
+        padding: AppSpacing.edgeInsetsAll16,
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerLow,
           borderRadius: AppRadius.r16,
@@ -85,11 +86,11 @@ class ProjectCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
+                    horizontal: AppSpacing.s10,
+                    vertical: AppSpacing.xs,
                   ),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.15),
@@ -109,7 +110,7 @@ class ProjectCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+            AppSpacing.gapH6,
             Text(
               project.description.isNotEmpty ? project.description : '—',
               style: theme.textTheme.bodySmall?.copyWith(
@@ -118,7 +119,7 @@ class ProjectCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 12),
+            AppSpacing.gapH12,
             // Progress Bar & Task Count
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -144,7 +145,7 @@ class ProjectCard extends StatelessWidget {
                   ),
               ],
             ),
-            const SizedBox(height: 6),
+            AppSpacing.gapH6,
             ClipRRect(
               borderRadius: AppRadius.r3,
               child: LinearProgressIndicator(
@@ -161,7 +162,7 @@ class ProjectCard extends StatelessWidget {
               ),
             ),
             if (members.isNotEmpty) ...[
-              const SizedBox(height: 10),
+              AppSpacing.gapH10,
               Row(
                 children: [
                   SizedBox(
@@ -188,11 +189,11 @@ class ProjectCard extends StatelessWidget {
                     ),
                   ),
                   if (members.length > 4) ...[
-                    const SizedBox(width: 6),
+                    AppSpacing.gapW6,
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 2,
+                        horizontal: AppSpacing.s5,
+                        vertical: AppSpacing.xxs,
                       ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceContainerHighest,
@@ -210,9 +211,9 @@ class ProjectCard extends StatelessWidget {
                 ],
               ),
             ],
-            const SizedBox(height: 10),
+            AppSpacing.gapH10,
             const Divider(height: 1, thickness: 1),
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
             Row(
               children: [
                 if (project.dueDate != null) ...[
@@ -221,7 +222,7 @@ class ProjectCard extends StatelessWidget {
                     size: 13,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                  const SizedBox(width: 4),
+                  AppSpacing.gapW4,
                   Text(
                     DateFormatter.formatDate(
                       project.dueDate!,
@@ -240,7 +241,7 @@ class ProjectCard extends StatelessWidget {
                     size: 14,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                  const SizedBox(width: 4),
+                  AppSpacing.gapW4,
                   Flexible(
                     child: Text(
                       project.createdByName.isNotEmpty

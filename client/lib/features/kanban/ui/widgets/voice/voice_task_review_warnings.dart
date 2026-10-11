@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class VoiceTaskReviewWarnings extends StatelessWidget {
   final List<String> warnings;
@@ -16,8 +17,8 @@ class VoiceTaskReviewWarnings extends StatelessWidget {
     final warningColor = isDark ? AppColors.warning : AppColors.warningLight;
 
     return Container(
-      margin: const EdgeInsets.only(top: 12),
-      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(top: AppSpacing.md),
+      padding: AppSpacing.edgeInsetsAll10,
       decoration: BoxDecoration(
         color: warningColor.withValues(alpha: isDark ? 0.12 : 0.08),
         borderRadius: AppRadius.kRadiusSm,
@@ -36,7 +37,7 @@ class VoiceTaskReviewWarnings extends StatelessWidget {
                     size: 14,
                     color: warningColor,
                   ),
-                  const SizedBox(width: 6),
+                  AppSpacing.gapW6,
                   Expanded(
                     child: Text(
                       w,

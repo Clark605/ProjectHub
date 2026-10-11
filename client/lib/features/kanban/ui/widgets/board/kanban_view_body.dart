@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/widgets/ambient_glow_background.dart';
+import 'package:client/core/widgets/app_async_state_wrapper.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/kanban/ui/widgets/board/kanban_archived_banner.dart';
@@ -81,10 +82,16 @@ class KanbanViewBody extends StatelessWidget {
               onClearFilters: effectiveCubit.clearFilters,
             ),
             Expanded(
-              child: RefreshIndicator(
+              child: AppAsyncStateWrapper(
+                wrapInScrollView: false,
                 notificationPredicate: (n) => n.metrics.axis == Axis.vertical,
                 onRefresh: () =>
                     effectiveCubit.refreshTasks(forceRefresh: true),
+                onRetry: () =>
+                    effectiveCubit.loadTasks(projectId, forceRefresh: true),
+                errorMessage: state.whenOrNull(
+                  error: (failure) => failure.localized(context),
+                ),
                 child: KanbanBoardBody(
                   state: state,
                   projectId: projectId,

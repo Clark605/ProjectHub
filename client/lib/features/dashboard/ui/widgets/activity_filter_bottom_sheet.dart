@@ -4,7 +4,8 @@ import 'package:client/core/dialog/dialog.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ActivityFilterBottomSheet extends StatefulWidget {
   final ActivityFilter initialFilter;
@@ -91,7 +92,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final isDark = theme.brightness == Brightness.dark;
     final selectedBgColor = isDark
         ? AppColors.primary.withValues(alpha: 0.22)
@@ -119,13 +120,16 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
     return SafeArea(
       top: false,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.sm,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const AppSheetDragHandle(),
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
 
             // Header Row
             Row(
@@ -162,7 +166,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            AppSpacing.gapH12,
 
             // Search Input
             TextField(
@@ -181,14 +185,14 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                       )
                     : null,
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 14,
+                  horizontal: AppSpacing.lg,
+                  vertical: AppSpacing.s14,
                 ),
                 border: const OutlineInputBorder(borderRadius: AppRadius.r12),
               ),
               onChanged: (_) => setState(() {}),
             ),
-            const SizedBox(height: 16),
+            AppSpacing.gapH16,
 
             // Category Section
             Text(
@@ -197,7 +201,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -229,7 +233,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 );
               }).toList(),
             ),
-            const SizedBox(height: 16),
+            AppSpacing.gapH16,
 
             // Project Section
             if (widget.availableProjects.isNotEmpty) ...[
@@ -239,7 +243,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 8),
+              AppSpacing.gapH8,
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -303,7 +307,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   }),
                 ],
               ),
-              const SizedBox(height: 16),
+              AppSpacing.gapH16,
             ],
 
             // Sort Section
@@ -313,7 +317,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -382,7 +386,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            AppSpacing.gapH24,
 
             // Apply Button
             ConstrainedBox(
@@ -399,7 +403,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   shape: const RoundedRectangleBorder(
                     borderRadius: AppRadius.r12,
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
                 ),
                 child: Text(
                   l10n.applyFilters,
@@ -412,7 +416,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
           ],
         ),
       ),

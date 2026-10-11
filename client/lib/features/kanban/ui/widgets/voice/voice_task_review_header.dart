@@ -2,7 +2,8 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class VoiceTaskReviewHeader extends StatelessWidget {
   final VoidCallback onClose;
@@ -11,7 +12,7 @@ class VoiceTaskReviewHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final badgeColor = isDark
@@ -21,7 +22,10 @@ class VoiceTaskReviewHeader extends StatelessWidget {
     return Row(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.s10,
+            vertical: AppSpacing.xs,
+          ),
           decoration: BoxDecoration(
             color: AppColors.electricVioletContainer.withValues(
               alpha: isDark ? 0.2 : 0.12,
@@ -37,7 +41,7 @@ class VoiceTaskReviewHeader extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(Icons.auto_awesome, size: 14, color: badgeColor),
-              const SizedBox(width: 4),
+              AppSpacing.gapW4,
               Text(
                 l10n.voiceTaskAiDraftPreview,
                 style: TextStyle(

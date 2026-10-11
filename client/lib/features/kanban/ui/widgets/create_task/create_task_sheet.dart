@@ -14,7 +14,8 @@ import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class CreateTaskSheet extends StatefulWidget {
   final int projectId;
@@ -103,7 +104,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
               : (e.toString().isNotEmpty &&
                     !e.toString().startsWith('Exception:'))
               ? e.toString()
-              : AppLocalizations.of(context).somethingWentWrong;
+              : context.l10n.somethingWentWrong;
         });
       }
     }
@@ -111,11 +112,16 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.xl,
+          AppSpacing.sm,
+          AppSpacing.xl,
+          AppSpacing.lg,
+        ),
         child: Form(
           key: formKey,
           child: Column(
@@ -124,23 +130,23 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
             children: [
               CreateTaskHeader(selectedStatus: _selectedStatus),
               if (_errorMessage != null) ...[
-                const SizedBox(height: 10),
+                AppSpacing.gapH10,
                 AppErrorBanner(
                   errorMessage: _errorMessage,
                   onDismiss: () => setState(() => _errorMessage = null),
                 ),
               ],
-              const SizedBox(height: 14),
+              AppSpacing.gapH14,
               CreateTaskTextFields(
                 titleController: titleController,
                 descriptionController: descriptionController,
               ),
-              const SizedBox(height: 12),
+              AppSpacing.gapH12,
               CreateTaskPrioritySelector(
                 selectedPriority: selectedPriority,
                 onPriorityChanged: (p) => setState(() => selectedPriority = p),
               ),
-              const SizedBox(height: 12),
+              AppSpacing.gapH12,
               CreateTaskAssigneeDueDateRow(
                 members: widget.members,
                 selectedAssigneeId: selectedAssigneeId,
@@ -150,7 +156,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
                 onPickDueDate: () => pickDueDate(context),
                 onClearDueDate: clearDueDate,
               ),
-              const SizedBox(height: 12),
+              AppSpacing.gapH12,
               CreateTaskTagsSelector(
                 projectId: widget.projectId,
                 selectedTags: _selectedTags,
@@ -159,7 +165,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
                   () => _selectedTags.removeWhere((x) => x.id == t.id),
                 ),
               ),
-              const SizedBox(height: 16),
+              AppSpacing.gapH16,
               AppButton(
                 label: l10n.createTask,
                 isLoading: isSubmitting,

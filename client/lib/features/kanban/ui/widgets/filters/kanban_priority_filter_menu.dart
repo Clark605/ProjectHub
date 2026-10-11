@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanPriorityFilterMenu extends StatelessWidget {
   final String? selectedPriority;
@@ -16,7 +17,7 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final hasSelection =
         selectedPriority != null && selectedPriority!.isNotEmpty;
 
@@ -52,7 +53,7 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
             child: Row(
               children: [
                 Icon(p.toIcon(), size: 16, color: p.toColor()),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
                 Text(p.localizedName(l10n)),
               ],
             ),

@@ -5,7 +5,8 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_modal.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TaskTagsRow extends StatelessWidget {
   const TaskTagsRow({
@@ -25,7 +26,7 @@ class TaskTagsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     if (tags.isEmpty && !canEdit) {
       return const SizedBox.shrink();
     }
@@ -53,7 +54,10 @@ class TaskTagsRow extends StatelessWidget {
               onTagSelected: onTagAdded!,
             ),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.s6,
+                vertical: AppSpacing.xxs,
+              ),
               decoration: BoxDecoration(
                 borderRadius: AppRadius.r6,
                 border: Border.all(
@@ -69,7 +73,7 @@ class TaskTagsRow extends StatelessWidget {
                     size: 13,
                     color: AppColors.textSecondary,
                   ),
-                  const SizedBox(width: 2),
+                  AppSpacing.gapW2,
                   Text(
                     l10n.tagLabel,
                     style: const TextStyle(

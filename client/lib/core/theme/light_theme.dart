@@ -195,5 +195,9 @@ ThemeData buildLightTheme([Locale? locale]) {
         ).labelLarge?.copyWith(fontWeight: FontWeight.w600),
       ),
     ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: AppColors.electricVioletContainer,
+      foregroundColor: AppColors.pureWhite,
+    ),
   );
 }

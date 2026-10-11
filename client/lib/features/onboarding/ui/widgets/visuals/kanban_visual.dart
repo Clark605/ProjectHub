@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanVisual extends StatefulWidget {
   const KanbanVisual({super.key});
@@ -34,7 +35,7 @@ class _KanbanVisualState extends State<KanbanVisual>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final isDark = theme.brightness == Brightness.dark;
 
     final columnBg = isDark
@@ -68,14 +69,14 @@ class _KanbanVisualState extends State<KanbanVisual>
                     AppColors.priorityUrgent,
                     theme,
                   ),
-                  const SizedBox(width: 8),
+                  AppSpacing.gapW8,
                   _buildColumnHeader(
                     l10n.statusInProgress.toUpperCase(),
                     '3',
                     AppColors.electricViolet,
                     theme,
                   ),
-                  const SizedBox(width: 8),
+                  AppSpacing.gapW8,
                   _buildColumnHeader(
                     l10n.statusDone.toUpperCase(),
                     '8',
@@ -84,7 +85,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              AppSpacing.gapH10,
 
               // Columns Container
               Row(
@@ -93,7 +94,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                   // Col 1: TO DO
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: AppSpacing.edgeInsetsAll8,
                       decoration: BoxDecoration(
                         color: columnBg,
                         borderRadius: AppRadius.r14,
@@ -110,18 +111,18 @@ class _KanbanVisualState extends State<KanbanVisual>
                             cardBorder: cardBorder,
                             theme: theme,
                           ),
-                          const SizedBox(height: 6),
+                          AppSpacing.gapH6,
                           _buildDottedPlaceholder(cardBorder),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  AppSpacing.gapW8,
 
                   // Col 2: IN PROGRESS
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: AppSpacing.edgeInsetsAll8,
                       decoration: BoxDecoration(
                         color: columnBg,
                         borderRadius: AppRadius.r14,
@@ -142,18 +143,18 @@ class _KanbanVisualState extends State<KanbanVisual>
                             cardBorder: cardBorder,
                             theme: theme,
                           ),
-                          const SizedBox(height: 6),
+                          AppSpacing.gapH6,
                           _buildDottedPlaceholder(cardBorder),
                         ],
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  AppSpacing.gapW8,
 
                   // Col 3: DONE
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.all(8),
+                      padding: AppSpacing.edgeInsetsAll8,
                       decoration: BoxDecoration(
                         color: columnBg,
                         borderRadius: AppRadius.r14,
@@ -167,7 +168,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                             cardBorder: cardBorder,
                             theme: theme,
                           ),
-                          const SizedBox(height: 6),
+                          AppSpacing.gapH6,
                           _buildCompletedTaskCard(
                             title: 'CI/CD Pipeline',
                             cardBg: cardBg,
@@ -214,8 +215,8 @@ class _KanbanVisualState extends State<KanbanVisual>
                       child: Container(
                         width: 105,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 7,
+                          horizontal: AppSpacing.sm,
+                          vertical: AppSpacing.s7,
                         ),
                         decoration: BoxDecoration(
                           color: isDoneState
@@ -268,14 +269,14 @@ class _KanbanVisualState extends State<KanbanVisual>
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 4),
+                            AppSpacing.gapH4,
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                    vertical: 1,
+                                    horizontal: AppSpacing.xs,
+                                    vertical: AppSpacing.xxs,
                                   ),
                                   decoration: BoxDecoration(
                                     color: isDoneState
@@ -336,8 +337,8 @@ class _KanbanVisualState extends State<KanbanVisual>
               child:
                   Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 5,
+                          horizontal: AppSpacing.s10,
+                          vertical: AppSpacing.s5,
                         ),
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
@@ -360,7 +361,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                               size: 14,
                               color: AppColors.pureWhite,
                             ),
-                            const SizedBox(width: 4),
+                            AppSpacing.gapW4,
                             Text(
                               'Cycle 14 · 92% Done',
                               style: theme.textTheme.labelSmall?.copyWith(
@@ -403,7 +404,10 @@ class _KanbanVisualState extends State<KanbanVisual>
   ) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.xs,
+        ),
         decoration: const BoxDecoration(borderRadius: AppRadius.r8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -418,7 +422,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                     color: dotColor,
                   ),
                 ),
-                const SizedBox(width: 5),
+                const SizedBox(width: AppSpacing.s5),
                 Text(
                   name,
                   style: theme.textTheme.labelSmall?.copyWith(
@@ -452,7 +456,7 @@ class _KanbanVisualState extends State<KanbanVisual>
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(7),
+      padding: const EdgeInsets.all(AppSpacing.s7),
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: AppRadius.r10,
@@ -469,14 +473,14 @@ class _KanbanVisualState extends State<KanbanVisual>
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 6),
+          AppSpacing.gapH6,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 4,
-                  vertical: 1.5,
+                  horizontal: AppSpacing.xs,
+                  vertical: AppSpacing.xxs,
                 ),
                 decoration: BoxDecoration(
                   color: tagColor.withValues(alpha: 0.15),
@@ -522,7 +526,7 @@ class _KanbanVisualState extends State<KanbanVisual>
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(7),
+      padding: const EdgeInsets.all(AppSpacing.s7),
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: AppRadius.r10,

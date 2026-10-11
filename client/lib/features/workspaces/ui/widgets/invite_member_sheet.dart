@@ -5,7 +5,8 @@ import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class InviteMemberSheet extends StatefulWidget {
   const InviteMemberSheet({super.key});
@@ -35,11 +36,16 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xxl,
+        AppSpacing.sm,
+        AppSpacing.xxl,
+        AppSpacing.xxl,
+      ),
       child: BlocConsumer<WorkspaceSettingsCubit, WorkspaceSettingsState>(
         listener: (context, state) {
           if (state is WorkspaceSettingsLoaded &&
@@ -59,21 +65,21 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const AppSheetDragHandle(),
-                const SizedBox(height: 16),
+                AppSpacing.gapH16,
                 Text(
                   l10n.inviteMember,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 6),
+                AppSpacing.gapH6,
                 Text(
                   l10n.inviteMemberSubtitle,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(height: 24),
+                AppSpacing.gapH24,
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -96,7 +102,7 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 28),
+                AppSpacing.gapH28,
                 AppButton(
                   label: l10n.addMember,
                   isLoading: isInviting,

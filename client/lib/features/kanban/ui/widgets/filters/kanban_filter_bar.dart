@@ -6,7 +6,8 @@ import 'package:client/features/kanban/ui/widgets/filters/kanban_search_input_ro
 import 'package:client/features/kanban/ui/widgets/filters/kanban_tag_filter_menu.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanFilterBar extends StatefulWidget {
   final String? selectedPriority;
@@ -71,7 +72,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     final hasActiveFilter =
         (widget.selectedPriority != null &&
@@ -83,7 +84,10 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
         (widget.searchQuery != null && widget.searchQuery!.isNotEmpty);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.sm,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -99,7 +103,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                 });
               },
             ),
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
           ],
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -107,7 +111,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
               children: [
                 if (!_isSearchExpanded)
                   Padding(
-                    padding: const EdgeInsets.only(right: 8),
+                    padding: const EdgeInsets.only(right: AppSpacing.sm),
                     child: ActionChip(
                       avatar: const Icon(Icons.search_rounded, size: 16),
                       label: Text(l10n.search),
@@ -115,14 +119,14 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                     ),
                   ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.only(right: AppSpacing.sm),
                   child: KanbanPriorityFilterMenu(
                     selectedPriority: widget.selectedPriority,
                     onPrioritySelected: widget.onPrioritySelected,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.only(right: AppSpacing.sm),
                   child: KanbanAssigneeFilterMenu(
                     selectedAssignee: widget.selectedAssignee,
                     members: widget.members,
@@ -130,7 +134,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.only(right: AppSpacing.sm),
                   child: KanbanTagFilterMenu(
                     selectedTagId: widget.selectedTagId,
                     availableTags: widget.availableTags,

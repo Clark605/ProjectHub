@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({super.key});
@@ -12,7 +13,7 @@ class DashboardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     int? activeWsId;
     try {
@@ -36,7 +37,7 @@ class DashboardHeader extends StatelessWidget {
                   letterSpacing: -0.5,
                 ),
               ),
-              const SizedBox(height: 4),
+              AppSpacing.gapH4,
               Text(
                 l10n.workspaceOverviewSubtitle,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -47,7 +48,7 @@ class DashboardHeader extends StatelessWidget {
           ),
         ),
         if (activeWsId != null) ...[
-          const SizedBox(width: 12),
+          AppSpacing.gapW12,
           WorkspacePresenceAvatars(workspaceId: activeWsId),
         ],
       ],

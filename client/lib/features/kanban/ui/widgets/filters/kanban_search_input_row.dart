@@ -1,7 +1,8 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanSearchInputRow extends StatelessWidget {
   const KanbanSearchInputRow({
@@ -18,7 +19,7 @@ class KanbanSearchInputRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Row(
       children: [
@@ -49,12 +50,14 @@ class KanbanSearchInputRow extends StatelessWidget {
                       )
                     : null,
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: AppSpacing.s10,
+                ),
               ),
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        AppSpacing.gapW8,
         IconButton(
           icon: const Icon(Icons.close_rounded),
           tooltip: l10n.closeSearch,

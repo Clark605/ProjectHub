@@ -4,7 +4,8 @@ import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/ui/widgets/activity_event_spans.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ActivityTile extends StatelessWidget {
   final ActivityEventDto activity;
@@ -14,7 +15,7 @@ class ActivityTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final timeStr = DateFormatter.formatRelativeTime(
       activity.createdAt,
       context: context,
@@ -24,7 +25,7 @@ class ActivityTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         AppAvatar(name: activity.actorName, size: 28),
-        const SizedBox(width: 10),
+        AppSpacing.gapW10,
         Expanded(
           child: RichText(
             text: TextSpan(
@@ -41,7 +42,7 @@ class ActivityTile extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        AppSpacing.gapW8,
         Text(
           timeStr,
           style: theme.textTheme.labelSmall?.copyWith(

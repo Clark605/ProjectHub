@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class AuthFooterLink extends StatelessWidget {
   const AuthFooterLink({
@@ -32,7 +33,7 @@ class AuthFooterLink extends StatelessWidget {
                 : AppColors.lightTextSecondary,
           ),
         ),
-        const SizedBox(width: 6),
+        AppSpacing.gapW6,
         GestureDetector(
           onTap: onTap,
           child: Text(

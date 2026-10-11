@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/projects/data/models/project_status.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ProjectStatusDropdown extends StatelessWidget {
   const ProjectStatusDropdown({
@@ -20,14 +21,14 @@ class ProjectStatusDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final currentStatus = ProjectStatus.fromString(value);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(l10n.projectStatus, style: theme.textTheme.labelMedium),
-        const SizedBox(height: 8),
+        AppSpacing.gapH8,
         DropdownButtonFormField<ProjectStatus>(
           initialValue: currentStatus,
           decoration: InputDecoration(

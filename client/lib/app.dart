@@ -17,6 +17,7 @@ import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class ProjectHubApp extends StatefulWidget {
   final String initialRoute;
@@ -45,7 +46,7 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
               context: context,
               barrierDismissible: false,
               builder: (dialogContext) {
-                final l10n = AppLocalizations.of(dialogContext);
+                final l10n = dialogContext.l10n;
                 return AppConfirmDialog(
                   title: l10n.connectionUnavailable,
                   message: message.contains('Unable to connect to the server')
@@ -82,7 +83,7 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
               context: context,
               barrierDismissible: false,
               builder: (dialogContext) {
-                final l10n = AppLocalizations.of(dialogContext);
+                final l10n = dialogContext.l10n;
                 return AppConfirmDialog(
                   title: l10n.sessionExpiredTitle,
                   message: l10n.sessionExpiredMessage,

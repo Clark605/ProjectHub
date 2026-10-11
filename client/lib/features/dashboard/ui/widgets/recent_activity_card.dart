@@ -5,7 +5,8 @@ import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/ui/widgets/activity_tile.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class RecentActivityCard extends StatelessWidget {
   final List<ActivityEventDto> activities;
@@ -24,10 +25,10 @@ class RecentActivityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: AppSpacing.edgeInsetsAll20,
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
         borderRadius: AppRadius.r18,
@@ -57,7 +58,7 @@ class RecentActivityCard extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              AppSpacing.gapW12,
               Expanded(
                 child: Text(
                   l10n.teamStream,
@@ -89,16 +90,18 @@ class RecentActivityCard extends StatelessWidget {
                       },
                   style: TextButton.styleFrom(
                     visualDensity: VisualDensity.compact,
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.xs,
+                    ),
                   ),
                   child: Text(l10n.viewAll),
                 ),
             ],
           ),
-          const SizedBox(height: 16),
+          AppSpacing.gapH16,
           if (activities.isEmpty && !isLoading)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxl),
               child: Center(
                 child: Column(
                   children: [
@@ -109,7 +112,7 @@ class RecentActivityCard extends StatelessWidget {
                         alpha: 0.6,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    AppSpacing.gapH8,
                     Text(
                       l10n.noRecentActivity,
                       style: theme.textTheme.bodySmall?.copyWith(

@@ -9,6 +9,8 @@ import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class QuickStartDialog extends StatefulWidget {
   final VoidCallback? onSuccess;
@@ -81,14 +83,17 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      insetPadding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xl,
+        vertical: AppSpacing.xxl,
+      ),
       child: Container(
         constraints: const BoxConstraints(maxWidth: 440),
-        padding: const EdgeInsets.all(24),
+        padding: AppSpacing.edgeInsetsAll24,
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
           borderRadius: AppRadius.kRadiusXxl,
@@ -109,10 +114,10 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildHeader(theme, l10n),
-                const SizedBox(height: 24),
+                AppSpacing.gapH24,
                 if (_errorMessage != null) ...[
                   _buildErrorBanner(),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapH16,
                 ],
                 AppTextField(
                   label: l10n.workspaceName,
@@ -130,7 +135,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                AppSpacing.gapH16,
                 AppTextField(
                   label: l10n.workspaceDescription,
                   hintText: l10n.workspaceDescriptionPlaceholder,
@@ -139,7 +144,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
                   maxLines: 2,
                   textInputAction: TextInputAction.done,
                 ),
-                const SizedBox(height: 28),
+                AppSpacing.gapH28,
                 AppButton(
                   label: l10n.getStarted,
                   isLoading: _isLoading,
@@ -170,7 +175,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
             size: 26,
           ),
         ),
-        const SizedBox(height: 16),
+        AppSpacing.gapH16,
         Text(
           l10n.quickStartWelcome,
           style: theme.textTheme.titleLarge?.copyWith(
@@ -179,7 +184,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
           ),
           textAlign: TextAlign.center,
         ),
-        const SizedBox(height: 6),
+        AppSpacing.gapH6,
         Text(
           l10n.quickStartSubtitle,
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -193,7 +198,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
 
   Widget _buildErrorBanner() {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: AppSpacing.edgeInsetsAll10,
       decoration: BoxDecoration(
         color: AppColors.error.withValues(alpha: 0.15),
         borderRadius: AppRadius.r8,

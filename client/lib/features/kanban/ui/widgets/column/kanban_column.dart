@@ -12,7 +12,8 @@ import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanColumn extends StatelessWidget {
   final TaskStatus status;
@@ -73,7 +74,7 @@ class KanbanColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final statusName = status.localizedName(l10n);
     final columnAccent =
         accent ??
@@ -98,7 +99,7 @@ class KanbanColumn extends StatelessWidget {
           if (columnAccent != null)
             Container(
               height: 2.5,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
+              margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               decoration: BoxDecoration(
                 color: columnAccent.withValues(alpha: 0.8),
                 borderRadius: const BorderRadius.all(Radius.circular(1.25)),
@@ -113,12 +114,12 @@ class KanbanColumn extends StatelessWidget {
               onAddTask: isArchived ? null : () => _handleAddTask(context),
             )
           else
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
           Expanded(
             child: tasks.isEmpty
                 ? Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: AppSpacing.edgeInsetsAll16,
                       child: InkWell(
                         borderRadius: AppRadius.r12,
                         onTap: isArchived
@@ -126,8 +127,8 @@ class KanbanColumn extends StatelessWidget {
                             : () => _handleAddTask(context),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 20,
+                            horizontal: AppSpacing.lg,
+                            vertical: AppSpacing.xl,
                           ),
                           decoration: BoxDecoration(
                             borderRadius: AppRadius.r12,
@@ -147,7 +148,7 @@ class KanbanColumn extends StatelessWidget {
                                 size: 24,
                                 color: AppColors.textSecondaryColor(isDark),
                               ),
-                              const SizedBox(height: 6),
+                              AppSpacing.gapH6,
                               Text(
                                 isArchived
                                     ? l10n.noTasksInColumn
@@ -166,8 +167,8 @@ class KanbanColumn extends StatelessWidget {
                 : ListView.builder(
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 8,
+                      horizontal: AppSpacing.sm,
+                      vertical: AppSpacing.sm,
                     ),
                     itemCount: tasks.length,
                     itemBuilder: (context, index) {

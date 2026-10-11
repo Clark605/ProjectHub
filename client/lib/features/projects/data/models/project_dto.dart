@@ -95,6 +95,8 @@ abstract class ProjectDto with _$ProjectDto {
     return dto;
   }
 
+  Map<String, dynamic> toJson() => _$ProjectDtoToJson(this as _ProjectDto);
+
   ProjectStatus get statusEnum => ProjectStatus.fromString(status);
 
   ProjectTaskCounts get taskCounts =>

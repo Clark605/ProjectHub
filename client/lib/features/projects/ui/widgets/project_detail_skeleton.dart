@@ -1,6 +1,7 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ProjectDetailSkeleton extends StatelessWidget {
   const ProjectDetailSkeleton({super.key});
@@ -12,7 +13,10 @@ class ProjectDetailSkeleton extends StatelessWidget {
     return Skeletonizer(
       enabled: true,
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xl,
+          vertical: AppSpacing.xxl,
+        ),
         child: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 800),
@@ -20,7 +24,7 @@ class ProjectDetailSkeleton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: AppSpacing.edgeInsetsAll20,
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceContainer,
                     borderRadius: AppRadius.r16,
@@ -34,19 +38,19 @@ class ProjectDetailSkeleton extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Bone.text(words: 2),
-                      SizedBox(height: 16),
+                      AppSpacing.gapH16,
                       Bone(
                         width: double.infinity,
                         height: 48,
                         borderRadius: AppRadius.r12,
                       ),
-                      SizedBox(height: 16),
+                      AppSpacing.gapH16,
                       Bone(
                         width: double.infinity,
                         height: 80,
                         borderRadius: AppRadius.r12,
                       ),
-                      SizedBox(height: 16),
+                      AppSpacing.gapH16,
                       Bone(
                         width: double.infinity,
                         height: 48,

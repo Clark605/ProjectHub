@@ -9,7 +9,7 @@ import 'package:client/features/onboarding/ui/widgets/onboarding_top_bar.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/collaboration_visual.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/kanban_visual.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/workspace_visual.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final PrefsService? prefsService;
@@ -57,7 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     final List<OnboardingStep> onboardingData = [
       OnboardingStep(

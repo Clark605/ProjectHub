@@ -6,7 +6,8 @@ import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_accent_picker.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceDetailsCard extends StatefulWidget {
   const WorkspaceDetailsCard({super.key});
@@ -47,7 +48,7 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return BlocConsumer<WorkspaceSettingsCubit, WorkspaceSettingsState>(
@@ -65,7 +66,7 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
         final activeAccentId = _selectedAccent ?? state.workspace.accentColor;
 
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: AppSpacing.edgeInsetsAll20,
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerLow,
             borderRadius: AppRadius.r16,
@@ -82,7 +83,7 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 16),
+                AppSpacing.gapH16,
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
@@ -100,7 +101,7 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                AppSpacing.gapH16,
                 TextFormField(
                   controller: _descController,
                   maxLines: 3,
@@ -109,20 +110,20 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                     hintText: l10n.workspaceDescriptionPlaceholder,
                     alignLabelWithHint: true,
                     prefixIcon: const Padding(
-                      padding: EdgeInsets.only(bottom: 48),
+                      padding: EdgeInsets.only(bottom: AppSpacing.s48),
                       child: Icon(Icons.description_outlined, size: 20),
                     ),
                   ),
                 ),
                 if (isOwner) ...[
-                  const SizedBox(height: 20),
+                  AppSpacing.gapH20,
                   WorkspaceAccentPicker(
                     activeAccentId: activeAccentId,
                     onAccentSelected: (id) =>
                         setState(() => _selectedAccent = id),
                   ),
                 ],
-                const SizedBox(height: 20),
+                AppSpacing.gapH20,
                 Align(
                   alignment: Alignment.centerRight,
                   child: AppButton(

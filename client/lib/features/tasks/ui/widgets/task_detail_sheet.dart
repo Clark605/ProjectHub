@@ -13,6 +13,7 @@ import 'package:client/features/tasks/ui/widgets/task_detail_edit_form.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_header.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_read_view.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TaskDetailSheet extends StatefulWidget {
   final TaskDto task;
@@ -157,13 +158,23 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
     final tagRepo = _resolveTagRepo(context);
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 2, 20, 4),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xl,
+        AppSpacing.xxs,
+        AppSpacing.xl,
+        AppSpacing.xs,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const AppSheetDragHandle(margin: EdgeInsets.only(top: 2, bottom: 2)),
-          const SizedBox(height: 2),
+          const AppSheetDragHandle(
+            margin: EdgeInsets.only(
+              top: AppSpacing.xxs,
+              bottom: AppSpacing.xxs,
+            ),
+          ),
+          AppSpacing.gapH2,
           TaskDetailHeader(
             task: _currentTask,
             isArchived: widget.isArchived,
@@ -173,7 +184,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
             onCancelEdit: () => setState(() => _isEditMode = false),
             onDelete: _confirmDelete,
           ),
-          const SizedBox(height: 16),
+          AppSpacing.gapH16,
           if (!_isEditMode)
             TaskDetailReadView(
               task: _currentTask,

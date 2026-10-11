@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanArchivedBanner extends StatelessWidget {
   const KanbanArchivedBanner({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.s10,
+      ),
       color: AppColors.warning.withValues(alpha: 0.15),
       child: Row(
         children: [
@@ -21,7 +25,7 @@ class KanbanArchivedBanner extends StatelessWidget {
             size: 18,
             color: AppColors.warning,
           ),
-          const SizedBox(width: 10),
+          AppSpacing.gapW10,
           Expanded(
             child: Text(
               l10n.archivedProjectNotice,

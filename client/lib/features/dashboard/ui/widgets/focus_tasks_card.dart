@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/features/dashboard/ui/widgets/focus_task_tile.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class FocusTasksCard extends StatelessWidget {
   final List<TaskDto> focusTasks;
@@ -20,10 +21,10 @@ class FocusTasksCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: AppSpacing.edgeInsetsAll20,
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
         borderRadius: AppRadius.r18,
@@ -61,7 +62,7 @@ class FocusTasksCard extends StatelessWidget {
                         size: 20,
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    AppSpacing.gapW12,
                     Expanded(
                       child: Text(
                         l10n.myActiveFocus,
@@ -82,10 +83,10 @@ class FocusTasksCard extends StatelessWidget {
                 ),
             ],
           ),
-          const SizedBox(height: 16),
+          AppSpacing.gapH16,
           if (focusTasks.isEmpty && !isLoading)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxl),
               child: Center(
                 child: Column(
                   children: [
@@ -96,7 +97,7 @@ class FocusTasksCard extends StatelessWidget {
                         alpha: 0.6,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    AppSpacing.gapH8,
                     Text(
                       l10n.allCaughtUp,
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -112,7 +113,7 @@ class FocusTasksCard extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: focusTasks.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 10),
+              separatorBuilder: (context, index) => AppSpacing.gapH10,
               itemBuilder: (context, index) =>
                   FocusTaskTile(task: focusTasks[index]),
             ),

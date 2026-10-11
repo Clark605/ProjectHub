@@ -1,6 +1,7 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class AppTextField extends StatefulWidget {
   const AppTextField({
@@ -79,7 +80,7 @@ class _AppTextFieldState extends State<AppTextField> {
               letterSpacing: 0.2,
             ),
           ),
-          const SizedBox(height: 8),
+          AppSpacing.gapH8,
         ],
         TextFormField(
           controller: widget.controller,
@@ -108,8 +109,8 @@ class _AppTextFieldState extends State<AppTextField> {
                 ? baseFillColor
                 : baseFillColor.withValues(alpha: 0.5),
             contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.lg,
             ),
             prefixIcon: widget.prefixIcon != null
                 ? Icon(widget.prefixIcon, size: 20, color: textSecondaryColor)

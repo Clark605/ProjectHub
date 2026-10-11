@@ -8,7 +8,8 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/core/widgets/app_avatar.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class DesktopSidebarUserProfile extends StatelessWidget {
   const DesktopSidebarUserProfile({super.key});
@@ -30,7 +31,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -41,7 +42,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
             final user = state.whenOrNull(authenticated: (u) => u);
 
             return Padding(
-              padding: const EdgeInsets.all(12),
+              padding: AppSpacing.edgeInsetsAll12,
               child: Row(
                 children: [
                   AppAvatar(
@@ -52,7 +53,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                     ),
                     textColor: theme.colorScheme.primary,
                   ),
-                  const SizedBox(width: 10),
+                  AppSpacing.gapW10,
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

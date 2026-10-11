@@ -2,7 +2,8 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class OnboardingTopBar extends StatelessWidget {
   final VoidCallback onSkip;
@@ -16,12 +17,15 @@ class OnboardingTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xxl,
+        vertical: AppSpacing.md,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -43,7 +47,7 @@ class OnboardingTopBar extends StatelessWidget {
                   color: AppColors.electricViolet,
                 ),
               ),
-              const SizedBox(width: 10),
+              AppSpacing.gapW10,
               Text(
                 l10n.appTitle,
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -68,8 +72,8 @@ class OnboardingTopBar extends StatelessWidget {
                       ? AppColors.textSecondary
                       : AppColors.lightTextSecondary,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 8,
+                    horizontal: AppSpacing.s14,
+                    vertical: AppSpacing.sm,
                   ),
                   shape: const RoundedRectangleBorder(
                     borderRadius: AppRadius.r12,

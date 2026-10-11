@@ -9,7 +9,8 @@ import 'package:client/features/projects/cubit/project_detail_cubit.dart';
 import 'package:client/features/projects/cubit/project_detail_state.dart';
 import 'package:client/features/projects/data/models/update_project_request.dart';
 import 'package:client/features/projects/ui/widgets/project_status_dropdown.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ProjectDetailsCard extends StatefulWidget {
   final bool canEdit;
@@ -76,7 +77,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return BlocConsumer<ProjectDetailCubit, ProjectDetailState>(
@@ -88,7 +89,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
         final isSaving = state.isSaving;
 
         return Container(
-          padding: const EdgeInsets.all(20),
+          padding: AppSpacing.edgeInsetsAll20,
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerLow,
             borderRadius: AppRadius.r16,
@@ -111,8 +112,8 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                     if (!widget.canEdit)
                       Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
+                          horizontal: AppSpacing.sm,
+                          vertical: AppSpacing.xs,
                         ),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.surfaceContainer,
@@ -130,7 +131,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                       ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                AppSpacing.gapH24,
                 AppTextField(
                   label: l10n.projectName,
                   controller: _nameController,
@@ -139,7 +140,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                       ? l10n.projectNameRequired
                       : null,
                 ),
-                const SizedBox(height: 20),
+                AppSpacing.gapH20,
                 AppTextField(
                   label: l10n.projectDescription,
                   controller: _descController,
@@ -147,7 +148,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                   maxLines: 4,
                   hintText: l10n.projectDescriptionPlaceholder,
                 ),
-                const SizedBox(height: 20),
+                AppSpacing.gapH20,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -162,7 +163,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                         },
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    AppSpacing.gapW16,
                     Expanded(
                       child: IgnorePointer(
                         ignoring: !widget.canEdit || isSaving,
@@ -177,7 +178,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                   ],
                 ),
                 if (widget.canEdit) ...[
-                  const SizedBox(height: 32),
+                  AppSpacing.gapH32,
                   Align(
                     alignment: Alignment.centerRight,
                     child: AppButton(

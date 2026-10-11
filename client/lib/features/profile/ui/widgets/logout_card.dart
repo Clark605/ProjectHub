@@ -6,13 +6,14 @@ import 'package:client/core/dialog/app_confirm_dialog.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class LogoutCard extends StatelessWidget {
   const LogoutCard({super.key});
 
   void _onLogout(BuildContext context) async {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final confirmed = await showAppConfirmDialog(
       context: context,
       title: l10n.logOut,
@@ -39,11 +40,11 @@ class LogoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: AppSpacing.edgeInsetsAll20,
         child: Row(
           children: [
             Expanded(
@@ -56,7 +57,7 @@ class LogoutCard extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  AppSpacing.gapH2,
                   Text(
                     l10n.sessionSecurityDesc,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(

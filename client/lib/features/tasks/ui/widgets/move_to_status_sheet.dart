@@ -5,7 +5,8 @@ import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class MoveToStatusSheet extends StatelessWidget {
   final TaskDto task;
@@ -37,19 +38,24 @@ class MoveToStatusSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final currentStatus = task.statusEnum;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.sm,
+        AppSpacing.lg,
+        AppSpacing.xxl,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const AppSheetDragHandle(),
-          const SizedBox(height: 12),
+          AppSpacing.gapH12,
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -59,7 +65,7 @@ class MoveToStatusSheet extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                AppSpacing.gapH4,
                 Text(
                   task.title,
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -71,9 +77,9 @@ class MoveToStatusSheet extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          AppSpacing.gapH16,
           Divider(height: 1, color: theme.colorScheme.outlineVariant),
-          const SizedBox(height: 8),
+          AppSpacing.gapH8,
           ...TaskStatus.values.map((status) {
             final isCurrent = status == currentStatus;
             return Material(
@@ -83,7 +89,9 @@ class MoveToStatusSheet extends StatelessWidget {
                 onTap: isCurrent ? null : () => onStatusSelected(status),
                 child: Container(
                   height: 52,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                  ),
                   child: Row(
                     children: [
                       Container(
@@ -99,7 +107,7 @@ class MoveToStatusSheet extends StatelessWidget {
                           color: status.toColor(),
                         ),
                       ),
-                      const SizedBox(width: 14),
+                      AppSpacing.gapW14,
                       Expanded(
                         child: Text(
                           status.localizedName(l10n),
@@ -116,8 +124,8 @@ class MoveToStatusSheet extends StatelessWidget {
                       if (isCurrent)
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
+                            horizontal: AppSpacing.sm,
+                            vertical: AppSpacing.xxs,
                           ),
                           decoration: BoxDecoration(
                             color: status.toColor().withValues(alpha: 0.15),

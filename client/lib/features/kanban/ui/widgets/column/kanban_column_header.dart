@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanColumnHeader extends StatelessWidget {
   final TaskStatus status;
@@ -26,12 +27,17 @@ class KanbanColumnHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final statusColor = status.toColor();
     final statusName = status.localizedName(l10n);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(14, 12, 8, 10),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s14,
+        AppSpacing.md,
+        AppSpacing.sm,
+        AppSpacing.s10,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -45,7 +51,7 @@ class KanbanColumnHeader extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
                 Flexible(
                   child: Text(
                     statusName,
@@ -55,11 +61,11 @@ class KanbanColumnHeader extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 7,
-                    vertical: 2,
+                    horizontal: AppSpacing.s7,
+                    vertical: AppSpacing.xxs,
                   ),
                   decoration: BoxDecoration(
                     color: accent != null
@@ -85,7 +91,7 @@ class KanbanColumnHeader extends StatelessWidget {
               icon: const Icon(Icons.add_rounded, size: 20),
               tooltip: l10n.addTaskToStatus(statusName),
               constraints: const BoxConstraints(),
-              padding: const EdgeInsets.all(6),
+              padding: AppSpacing.edgeInsetsAll6,
               onPressed: onAddTask,
             ),
         ],

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class AuthHeader extends StatelessWidget {
   const AuthHeader({
@@ -19,7 +20,7 @@ class AuthHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Column(
       children: [
@@ -33,7 +34,7 @@ class AuthHeader extends StatelessWidget {
                     size: 26,
                     color: AppColors.electricViolet,
                   ),
-                  const SizedBox(width: 10),
+                  AppSpacing.gapW10,
                   Text(
                     l10n.appTitle,
                     style: theme.textTheme.titleLarge?.copyWith(
@@ -49,7 +50,7 @@ class AuthHeader extends StatelessWidget {
               .animate()
               .scale(duration: 400.ms, curve: Curves.easeOutBack)
               .fadeIn(duration: 400.ms),
-          const SizedBox(height: 28),
+          AppSpacing.gapH28,
         ],
 
         // Main Title
@@ -67,7 +68,7 @@ class AuthHeader extends StatelessWidget {
             .animate()
             .fadeIn(duration: 400.ms, delay: 100.ms)
             .slideY(begin: 0.15, end: 0, curve: Curves.easeOutCubic),
-        const SizedBox(height: 8),
+        AppSpacing.gapH8,
 
         // Subtitle
         Text(

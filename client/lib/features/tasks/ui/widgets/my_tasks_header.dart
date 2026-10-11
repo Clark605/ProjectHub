@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class MyTasksHeader extends StatelessWidget {
   const MyTasksHeader({super.key});
@@ -10,10 +11,15 @@ class MyTasksHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xl,
+        AppSpacing.xl,
+        AppSpacing.xl,
+        AppSpacing.md,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -24,7 +30,7 @@ class MyTasksHeader extends StatelessWidget {
               letterSpacing: -0.5,
             ),
           ),
-          const SizedBox(height: 4),
+          AppSpacing.gapH4,
           Text(
             l10n.myTasksSubtitle,
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -33,7 +39,7 @@ class MyTasksHeader extends StatelessWidget {
                   : AppColors.lightTextSecondary,
             ),
           ),
-          const SizedBox(height: 16),
+          AppSpacing.gapH16,
         ],
       ),
     );

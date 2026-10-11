@@ -11,7 +11,8 @@ import 'package:client/features/shell/ui/widgets/desktop_sidebar_nav_item.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_quick_links.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_user_profile.dart';
 import 'package:client/features/shell/models/shell_tab.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class Sidebar extends StatelessWidget {
   final int selectedIndex;
@@ -32,7 +33,7 @@ class Sidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final activeAccentColor =
         activeWorkspaceAccent != null &&
             activeWorkspaceAccent!.trim().isNotEmpty
@@ -54,7 +55,7 @@ class Sidebar extends StatelessWidget {
           : null;
 
       return ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
         children: [
           ...ShellTab.values.map(
             (tab) => Column(
@@ -70,7 +71,7 @@ class Sidebar extends StatelessWidget {
                   selectedAccentColor: activeAccentColor,
                   onTap: () => onItemSelected(tab.index),
                 ),
-                if (tab != ShellTab.profile) const SizedBox(height: 4),
+                if (tab != ShellTab.profile) AppSpacing.gapH4,
               ],
             ),
           ),
@@ -95,7 +96,10 @@ class Sidebar extends StatelessWidget {
         children: [
           // App Brand Header
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xl,
+              vertical: AppSpacing.xl,
+            ),
             child: Row(
               children: [
                 Container(
@@ -117,7 +121,7 @@ class Sidebar extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                AppSpacing.gapW10,
                 Text(
                   'ProjectHub',
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -132,12 +136,15 @@ class Sidebar extends StatelessWidget {
           if (activeWorkspaceName != null &&
               activeWorkspaceName!.trim().isNotEmpty) ...[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.sm,
+              ),
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.sm,
                 ),
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surfaceContainerHigh.withValues(
@@ -164,9 +171,9 @@ class Sidebar extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 4),
+            AppSpacing.gapH4,
           ] else ...[
-            const SizedBox(height: 12),
+            AppSpacing.gapH12,
           ],
 
           // Navigation Section

@@ -6,7 +6,8 @@ import 'package:client/features/kanban/ui/widgets/column/kanban_column.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanMobileBoard extends StatefulWidget {
   final PageController? pageController;
@@ -82,7 +83,7 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final accentColor = WorkspaceAccent.resolve(
       widget.wsAccent,
       theme.brightness,
@@ -91,7 +92,10 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.sm,
+          ),
           child: SingleChildScrollView(
             controller: _chipScrollController,
             scrollDirection: Axis.horizontal,
@@ -104,7 +108,7 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                 final statusName = status.localizedName(l10n);
 
                 return Padding(
-                  padding: const EdgeInsets.only(right: 8),
+                  padding: const EdgeInsets.only(right: AppSpacing.sm),
                   child: FilterChip(
                     key: _chipKeys[idx],
                     selected: isSelected,
@@ -170,7 +174,12 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
               final status = TaskStatus.values[index];
               final columnTasks = widget.tasksByStatus[status] ?? [];
               return Padding(
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  AppSpacing.xs,
+                  AppSpacing.lg,
+                  AppSpacing.lg,
+                ),
                 child: KanbanColumn(
                   status: status,
                   tasks: columnTasks,

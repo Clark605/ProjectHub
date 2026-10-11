@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:client/features/kanban/ui/widgets/column/kanban_column.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanDesktopBoard extends StatelessWidget {
   final Map<TaskStatus, List<TaskDto>> tasksByStatus;
@@ -26,7 +27,7 @@ class KanbanDesktopBoard extends StatelessWidget {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.all(16),
+      padding: AppSpacing.edgeInsetsAll16,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: TaskStatus.values.map((status) {
@@ -35,7 +36,7 @@ class KanbanDesktopBoard extends StatelessWidget {
             width: 300,
             height: columnHeight,
             child: Padding(
-              padding: const EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: AppSpacing.lg),
               child: KanbanColumn(
                 status: status,
                 tasks: columnTasks,

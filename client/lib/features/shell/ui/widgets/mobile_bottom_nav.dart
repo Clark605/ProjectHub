@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/shell/models/shell_tab.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class MobileBottomNav extends StatelessWidget {
   final int selectedIndex;
@@ -20,7 +21,7 @@ class MobileBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final activeAccent =
         activeWorkspaceAccent != null &&
             activeWorkspaceAccent!.trim().isNotEmpty
@@ -38,7 +39,10 @@ class MobileBottomNav extends StatelessWidget {
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: AppSpacing.sm,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: ShellTab.values
@@ -85,7 +89,10 @@ class _BottomNavItem extends StatelessWidget {
       onTap: onTap,
       borderRadius: AppRadius.r10,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.s6,
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -94,7 +101,7 @@ class _BottomNavItem extends StatelessWidget {
               size: 22,
               color: isSelected ? activeColor : inactiveColor,
             ),
-            const SizedBox(height: 4),
+            AppSpacing.gapH4,
             Text(
               label,
               style: TextStyle(

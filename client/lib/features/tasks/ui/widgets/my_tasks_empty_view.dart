@@ -2,7 +2,8 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class MyTasksEmptyView extends StatelessWidget {
   const MyTasksEmptyView({super.key});
@@ -11,13 +12,16 @@ class MyTasksEmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 420),
-        margin: const EdgeInsets.all(24),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        margin: AppSpacing.edgeInsetsAll24,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xxl,
+          vertical: AppSpacing.xxxl,
+        ),
         decoration: BoxDecoration(
           color:
               (isDark
@@ -46,14 +50,14 @@ class MyTasksEmptyView extends StatelessWidget {
                 size: 32,
               ),
             ),
-            const SizedBox(height: 20),
+            AppSpacing.gapH20,
             Text(
               l10n.noAssignedTasks,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
             Text(
               l10n.noAssignedTasksSubtitle,
               style: theme.textTheme.bodyMedium?.copyWith(

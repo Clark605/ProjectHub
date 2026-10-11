@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/dialog/app_bottom_sheet.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/core/widgets/status_dot.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
@@ -45,20 +47,25 @@ class WorkspacePresenceSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xl,
+        AppSpacing.sm,
+        AppSpacing.xl,
+        AppSpacing.xxl,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const AppSheetDragHandle(),
-          const SizedBox(height: 12),
+          AppSpacing.gapH12,
           Row(
             children: [
               const StatusDot(color: AppColors.success),
-              const SizedBox(width: 8),
+              AppSpacing.gapW8,
               Text(
                 l10n.onlineMembersCount(onlineUserIds.length),
                 style: theme.textTheme.titleSmall?.copyWith(
@@ -67,13 +74,13 @@ class WorkspacePresenceSheet extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          AppSpacing.gapH12,
           ...onlineUserIds.map((userId) {
             final isMe = userId == currentUserId;
             final name = _getUserName(userId, l10n);
 
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6),
+              padding: AppSpacing.edgeInsetsV6,
               child: Row(
                 children: [
                   Stack(
@@ -94,7 +101,7 @@ class WorkspacePresenceSheet extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(width: 12),
+                  AppSpacing.gapW12,
                   Expanded(
                     child: Text(
                       isMe ? l10n.youSuffix(name) : name,

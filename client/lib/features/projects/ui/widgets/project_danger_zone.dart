@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/widgets/app_danger_zone.dart';
 import 'package:client/features/projects/cubit/project_detail_cubit.dart';
 import 'package:client/features/projects/cubit/project_detail_state.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class ProjectDangerZone extends StatelessWidget {
   final bool canDelete;
@@ -15,7 +15,7 @@ class ProjectDangerZone extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!canDelete) return const SizedBox.shrink();
 
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return BlocBuilder<ProjectDetailCubit, ProjectDetailState>(
       builder: (context, state) {

@@ -13,6 +13,8 @@ import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/task_tags_row.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TaskDetailReadView extends StatelessWidget {
   final TaskDto task;
@@ -35,7 +37,7 @@ class TaskDetailReadView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final isOverdue = task.isOverdue;
 
     return Column(
@@ -48,7 +50,7 @@ class TaskDetailReadView extends StatelessWidget {
             color: theme.colorScheme.onSurface,
           ),
         ),
-        const SizedBox(height: 12),
+        AppSpacing.gapH12,
         Text(
           task.description.isNotEmpty
               ? task.description
@@ -63,7 +65,7 @@ class TaskDetailReadView extends StatelessWidget {
             height: 1.5,
           ),
         ),
-        const SizedBox(height: 12),
+        AppSpacing.gapH12,
         TaskTagsRow(
           projectId: task.projectId,
           tags: task.tags,
@@ -71,16 +73,16 @@ class TaskDetailReadView extends StatelessWidget {
           onTagAdded: onTagAdded,
           onTagRemoved: onTagRemoved,
         ),
-        const SizedBox(height: 16),
+        AppSpacing.gapH16,
         Divider(height: 1, color: theme.colorScheme.outlineVariant),
-        const SizedBox(height: 16),
+        AppSpacing.gapH16,
         _buildInfoRow(
           context,
           icon: Icons.person_outline_rounded,
           label: l10n.assignee,
           value: task.assigneeName ?? l10n.unassigned,
         ),
-        const SizedBox(height: 12),
+        AppSpacing.gapH12,
         _buildInfoRow(
           context,
           icon: Icons.calendar_today_outlined,
@@ -91,7 +93,7 @@ class TaskDetailReadView extends StatelessWidget {
           valueColor: isOverdue ? AppColors.error : null,
           trailing: isOverdue ? _buildOverdueBadge(l10n) : null,
         ),
-        const SizedBox(height: 12),
+        AppSpacing.gapH12,
         _buildInfoRow(
           context,
           icon: Icons.history_edu_rounded,
@@ -101,7 +103,7 @@ class TaskDetailReadView extends StatelessWidget {
               : l10n.unknownUser,
         ),
         if (task.createdAt != null) ...[
-          const SizedBox(height: 12),
+          AppSpacing.gapH12,
           _buildInfoRow(
             context,
             icon: Icons.access_time_rounded,
@@ -141,9 +143,9 @@ class TaskDetailReadView extends StatelessWidget {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 20),
+              AppSpacing.gapH20,
               Divider(height: 1, color: theme.colorScheme.outlineVariant),
-              const SizedBox(height: 16),
+              AppSpacing.gapH16,
               BlocProvider<CommentsCubit>(
                 create: (_) => CommentsCubit(
                   taskId: task.id,
@@ -164,7 +166,10 @@ class TaskDetailReadView extends StatelessWidget {
 
   Widget _buildOverdueBadge(AppLocalizations l10n) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s6,
+        vertical: AppSpacing.xxs,
+      ),
       decoration: BoxDecoration(
         color: AppColors.error.withValues(alpha: 0.15),
         borderRadius: AppRadius.r6,
@@ -191,7 +196,7 @@ class TaskDetailReadView extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, size: 18, color: theme.colorScheme.onSurfaceVariant),
-        const SizedBox(width: 10),
+        AppSpacing.gapW10,
         Text(
           label,
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -206,7 +211,7 @@ class TaskDetailReadView extends StatelessWidget {
             color: valueColor,
           ),
         ),
-        if (trailing != null) ...[const SizedBox(width: 8), trailing],
+        if (trailing != null) ...[AppSpacing.gapW8, trailing],
       ],
     );
   }

@@ -3,7 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TermsCheckbox extends StatelessWidget {
   const TermsCheckbox({
@@ -25,7 +26,7 @@ class TermsCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +44,7 @@ class TermsCheckbox extends StatelessWidget {
                 activeColor: AppColors.electricViolet,
               ),
             ),
-            const SizedBox(width: 10),
+            AppSpacing.gapW10,
             Expanded(
               child: RichText(
                 text: TextSpan(
@@ -81,9 +82,9 @@ class TermsCheckbox extends StatelessWidget {
           ],
         ).animate().fadeIn(duration: 400.ms, delay: 400.ms),
         if (hasError) ...[
-          const SizedBox(height: 6),
+          AppSpacing.gapH6,
           Padding(
-            padding: const EdgeInsets.only(left: 34),
+            padding: const EdgeInsets.only(left: AppSpacing.xxxl),
             child: Text(
               l10n.termsRequired,
               style: theme.textTheme.bodySmall?.copyWith(

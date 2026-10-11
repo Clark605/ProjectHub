@@ -9,7 +9,8 @@ import 'package:client/features/profile/ui/widgets/logout_card.dart';
 import 'package:client/features/profile/ui/widgets/profile_header_card.dart';
 import 'package:client/features/profile/ui/widgets/theme_mode_selector.dart';
 import 'package:client/features/profile/ui/widgets/version_info_tile.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -17,14 +18,17 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return BlocBuilder<AppAuthCubit, AppAuthState>(
       builder: (context, state) {
         final user = state.whenOrNull(authenticated: (u) => u);
 
         return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xxl,
+            vertical: AppSpacing.xl,
+          ),
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 800),
@@ -38,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
                       letterSpacing: -0.5,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  AppSpacing.gapH4,
                   Text(
                     l10n.profileSubtitle,
                     style: theme.textTheme.bodyMedium?.copyWith(
@@ -47,19 +51,19 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  AppSpacing.gapH24,
                   ProfileHeaderCard(user: user),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapH16,
                   const ThemeModeSelector(),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapH16,
                   const LanguageSelectorTile(),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapH16,
                   const FaqSection(),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapH16,
                   const VersionInfoTile(),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapH16,
                   const LogoutCard(),
-                  const SizedBox(height: 24),
+                  AppSpacing.gapH24,
                 ],
               ),
             ),

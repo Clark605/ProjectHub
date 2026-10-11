@@ -7,7 +7,8 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class MemberTile extends StatelessWidget {
   final MemberDto member;
@@ -15,7 +16,7 @@ class MemberTile extends StatelessWidget {
   const MemberTile({super.key, required this.member});
 
   Future<void> _confirmRemoval(BuildContext context) async {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final cubit = context.read<WorkspaceSettingsCubit>();
 
     final confirm = await showAppConfirmDialog(
@@ -38,7 +39,7 @@ class MemberTile extends StatelessWidget {
     BuildContext context,
     String targetRole,
   ) async {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final cubit = context.read<WorkspaceSettingsCubit>();
 
     final confirm = await showAppConfirmDialog(
@@ -59,13 +60,16 @@ class MemberTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final primaryColor = theme.colorScheme.primary;
     final isOwner = member.role.toLowerCase() == 'owner';
 
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xl,
+        vertical: AppSpacing.xs,
+      ),
       leading: AppAvatar(
         name: member.name,
         size: 40,
@@ -93,7 +97,10 @@ class MemberTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm,
+              vertical: AppSpacing.s3,
+            ),
             decoration: BoxDecoration(
               color: isOwner
                   ? primaryColor.withValues(alpha: 0.15)
@@ -115,7 +122,7 @@ class MemberTile extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 4),
+          AppSpacing.gapW4,
           PopupMenuButton<String>(
             icon: Icon(
               Icons.more_vert_rounded,
@@ -143,7 +150,7 @@ class MemberTile extends StatelessWidget {
                         size: 18,
                         color: primaryColor,
                       ),
-                      const SizedBox(width: 8),
+                      AppSpacing.gapW8,
                       Text(l10n.promoteToOwner),
                     ],
                   ),
@@ -158,7 +165,7 @@ class MemberTile extends StatelessWidget {
                         size: 18,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
-                      const SizedBox(width: 8),
+                      AppSpacing.gapW8,
                       Text(l10n.demoteToMember),
                     ],
                   ),
@@ -172,7 +179,7 @@ class MemberTile extends StatelessWidget {
                       size: 18,
                       color: AppColors.error,
                     ),
-                    const SizedBox(width: 8),
+                    AppSpacing.gapW8,
                     Text(
                       l10n.removeMember,
                       style: const TextStyle(color: AppColors.error),

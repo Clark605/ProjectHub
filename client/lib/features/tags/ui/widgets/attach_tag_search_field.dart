@@ -1,6 +1,7 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class AttachTagSearchField extends StatelessWidget {
   const AttachTagSearchField({
@@ -15,7 +16,7 @@ class AttachTagSearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final border = OutlineInputBorder(
       borderRadius: AppRadius.r10,
       borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
@@ -41,7 +42,7 @@ class AttachTagSearchField extends StatelessWidget {
         focusedBorder: border.copyWith(
           borderSide: BorderSide(color: theme.colorScheme.primary),
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(vertical: AppSpacing.s10),
       ),
     );
   }

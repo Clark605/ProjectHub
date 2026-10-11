@@ -11,10 +11,11 @@ import 'package:client/features/workspaces/ui/widgets/workspace_details_card.dar
 import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_members_card.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_settings_skeleton.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_access_denied_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceSettingsScreen extends StatelessWidget {
   final WorkspaceSettingsCubit? cubit;
@@ -55,7 +56,7 @@ class _ViewState extends State<_View> {
   }
 
   void _onState(BuildContext context, WorkspaceSettingsState state) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     if (state is WorkspaceSettingsDeleted) {
       context.showSuccessSnackBar(l10n.workspaceDeleted);
       Navigator.of(
@@ -80,7 +81,7 @@ class _ViewState extends State<_View> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final active = context.watch<WorkspaceContextCubit>().state.whenOrNull(
       loaded: (workspaces, active) => active,
@@ -93,12 +94,12 @@ class _ViewState extends State<_View> {
         actions: [
           if (active != null)
             Padding(
-              padding: const EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: AppSpacing.lg),
               child: Center(
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
+                    horizontal: AppSpacing.s10,
+                    vertical: AppSpacing.xs,
                   ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary.withValues(alpha: 0.15),
@@ -141,7 +142,7 @@ class _ViewState extends State<_View> {
                 return Skeletonizer(
                   enabled: loaded.isRevalidating,
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
+                    padding: AppSpacing.edgeInsetsAll24,
                     child: Center(
                       child: Container(
                         constraints: const BoxConstraints(maxWidth: 800),
@@ -157,9 +158,9 @@ class _ViewState extends State<_View> {
                                     .clearError(),
                               ),
                             const WorkspaceDetailsCard(),
-                            const SizedBox(height: 24),
+                            AppSpacing.gapH24,
                             const WorkspaceMembersCard(),
-                            const SizedBox(height: 24),
+                            AppSpacing.gapH24,
                             AppDangerZone(
                               title: l10n.deleteWorkspace,
                               description: l10n.deleteWorkspaceWarning,

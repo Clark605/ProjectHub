@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class AttachTagResults extends StatelessWidget {
   const AttachTagResults({
@@ -26,14 +27,14 @@ class AttachTagResults extends StatelessWidget {
     if (isLoading) {
       return const Center(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(AppSpacing.lg),
           child: CircularProgressIndicator(strokeWidth: 2),
         ),
       );
     }
 
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +54,7 @@ class AttachTagResults extends StatelessWidget {
           ),
         if (filteredTags.isEmpty && !canCreate)
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
             child: Center(
               child: Text(
                 l10n.noTagsAvailable,

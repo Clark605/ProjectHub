@@ -12,6 +12,7 @@ import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_avatar_item.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspacePresenceAvatars extends StatefulWidget {
   const WorkspacePresenceAvatars({
@@ -188,7 +189,10 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
           );
         },
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.s6,
+            vertical: AppSpacing.s3,
+          ),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHigh.withValues(
               alpha: 0.6,
@@ -205,13 +209,13 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
               Container(
                 width: 7,
                 height: 7,
-                margin: const EdgeInsets.symmetric(horizontal: 3),
+                margin: const EdgeInsets.symmetric(horizontal: AppSpacing.s3),
                 decoration: const BoxDecoration(
                   color: AppColors.success,
                   shape: BoxShape.circle,
                 ),
               ),
-              const SizedBox(width: 4),
+              AppSpacing.gapW4,
               _buildAvatarStack(theme),
             ],
           ),

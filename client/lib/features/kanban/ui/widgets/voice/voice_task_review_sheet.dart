@@ -13,7 +13,8 @@ import 'package:client/features/tasks/data/models/parsed_task_draft_dto.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class VoiceTaskReviewSheet extends StatefulWidget {
   final int projectId;
@@ -97,10 +98,15 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xl,
+        AppSpacing.sm,
+        AppSpacing.xl,
+        AppSpacing.xxl,
+      ),
       child: Form(
         key: formKey,
         child: Column(
@@ -110,17 +116,17 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
             const AppSheetDragHandle(),
             VoiceTaskReviewHeader(onClose: () => Navigator.of(context).pop()),
             VoiceTaskReviewWarnings(warnings: widget.draft.warnings),
-            const SizedBox(height: 16),
+            AppSpacing.gapH16,
             CreateTaskTextFields(
               titleController: titleController,
               descriptionController: descriptionController,
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: AppSpacing.s18),
             CreateTaskPrioritySelector(
               selectedPriority: selectedPriority,
               onPriorityChanged: (p) => setState(() => selectedPriority = p),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: AppSpacing.s18),
             CreateTaskAssigneeDueDateRow(
               members: widget.members,
               selectedAssigneeId: selectedAssigneeId,
@@ -130,7 +136,7 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
               onPickDueDate: () => pickDueDate(context),
               onClearDueDate: clearDueDate,
             ),
-            const SizedBox(height: 24),
+            AppSpacing.gapH24,
             AppButton(
               label: l10n.voiceTaskConfirmCreate,
               isLoading: isSubmitting,

@@ -1,6 +1,7 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class AppDateField extends StatelessWidget {
   const AppDateField({
@@ -55,7 +56,7 @@ class AppDateField extends StatelessWidget {
       children: [
         if (label != null) ...[
           Text(label!, style: Theme.of(context).textTheme.labelMedium),
-          const SizedBox(height: 8),
+          AppSpacing.gapH8,
         ],
         InkWell(
           onTap: () => _selectDate(context),
@@ -63,7 +64,10 @@ class AppDateField extends StatelessWidget {
           child: Container(
             width: double.infinity,
             height: 51,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.lg,
+              vertical: AppSpacing.md,
+            ),
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.border),
               borderRadius: AppRadius.r8,
@@ -76,7 +80,7 @@ class AppDateField extends StatelessWidget {
                   size: 20,
                   color: AppColors.textSecondary,
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
                 Text(
                   selectedDate != null
                       ? _formatDate(selectedDate!)

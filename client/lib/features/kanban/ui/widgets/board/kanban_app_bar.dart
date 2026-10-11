@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/core/widgets/realtime_status_badge.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String projectName;
@@ -25,7 +26,7 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final accentColor = WorkspaceAccent.resolve(wsAccent, theme.brightness);
 
     return AppBar(
@@ -70,10 +71,10 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         const Center(child: RealtimeStatusBadge()),
-        const SizedBox(width: 6),
+        AppSpacing.gapW6,
         if (workspaceId != null) ...[
           WorkspacePresenceAvatars(workspaceId: workspaceId!),
-          const SizedBox(width: 4),
+          AppSpacing.gapW4,
         ],
         IconButton(
           icon: Icon(
@@ -84,7 +85,7 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
           tooltip: l10n.projectDetails,
           onPressed: onSettings,
         ),
-        const SizedBox(width: 8),
+        AppSpacing.gapW8,
       ],
     );
   }

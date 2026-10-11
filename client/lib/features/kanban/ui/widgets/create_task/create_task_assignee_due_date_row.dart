@@ -2,7 +2,8 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class CreateTaskAssigneeDueDateRow extends StatelessWidget {
   final List<MemberDto> members;
@@ -25,7 +26,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +42,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 8),
+              AppSpacing.gapH8,
               DropdownButtonFormField<String?>(
                 initialValue: selectedAssigneeId,
                 isExpanded: true,
@@ -50,8 +51,8 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                 ),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 13,
+                    horizontal: AppSpacing.md,
+                    vertical: AppSpacing.md,
                   ),
                   isDense: true,
                   filled: true,
@@ -108,7 +109,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: 12),
+        AppSpacing.gapW12,
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,13 +121,15 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 8),
+              AppSpacing.gapH8,
               InkWell(
                 onTap: onPickDueDate,
                 borderRadius: AppRadius.r12,
                 child: Container(
                   height: 48,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceContainer,
                     borderRadius: AppRadius.r12,
@@ -139,7 +142,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                         size: 16,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
-                      const SizedBox(width: 8),
+                      AppSpacing.gapW8,
                       Expanded(
                         child: Text(
                           selectedDueDate != null

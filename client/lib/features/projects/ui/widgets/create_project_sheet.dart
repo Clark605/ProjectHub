@@ -9,7 +9,8 @@ import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class CreateProjectSheet extends StatefulWidget {
   final ProjectsListCubit? cubit;
@@ -59,7 +60,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final cubit = widget.cubit ?? context.read<ProjectsListCubit>();
 
@@ -72,7 +73,12 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
         );
 
         return SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+          padding: const EdgeInsets.fromLTRB(
+            AppSpacing.xxl,
+            AppSpacing.md,
+            AppSpacing.xxl,
+            AppSpacing.xxl,
+          ),
           child: Form(
             key: _formKey,
             child: Column(
@@ -80,24 +86,24 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const AppSheetDragHandle(),
-                const SizedBox(height: 12),
+                AppSpacing.gapH12,
                 Text(
                   l10n.newProject,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(height: 4),
+                AppSpacing.gapH4,
                 Text(
                   l10n.projectsSubtitle,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
-                const SizedBox(height: 20),
+                AppSpacing.gapH20,
                 if (errorMessage != null) ...[
                   AppErrorBanner(errorMessage: errorMessage),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapH16,
                 ],
                 AppTextField(
                   controller: _nameController,
@@ -109,7 +115,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                       ? l10n.projectNameRequired
                       : null,
                 ),
-                const SizedBox(height: 16),
+                AppSpacing.gapH16,
                 AppTextField(
                   controller: _descController,
                   label: l10n.projectDescription,
@@ -118,7 +124,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                   enabled: !isLoading,
                   maxLines: 3,
                 ),
-                const SizedBox(height: 16),
+                AppSpacing.gapH16,
                 IgnorePointer(
                   ignoring: isLoading,
                   child: AppDateField(
@@ -128,7 +134,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                         setState(() => _selectedDueDate = date),
                   ),
                 ),
-                const SizedBox(height: 24),
+                AppSpacing.gapH24,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -138,7 +144,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                           : () => Navigator.of(context).pop(),
                       child: Text(l10n.cancel),
                     ),
-                    const SizedBox(width: 12),
+                    AppSpacing.gapW12,
                     AppButton(
                       label: l10n.createProject,
                       isLoading: isLoading,

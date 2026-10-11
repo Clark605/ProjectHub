@@ -8,7 +8,8 @@ import 'package:client/features/tasks/data/models/update_task_request.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_assignee_due_fields.dart';
 import 'package:client/features/tasks/ui/widgets/task_priority_selector.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TaskDetailEditForm extends StatefulWidget {
   final TaskDto task;
@@ -85,7 +86,7 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Form(
       key: _formKey,
@@ -111,7 +112,7 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
             validator: (v) =>
                 v == null || v.trim().isEmpty ? (l10n.taskTitleRequired) : null,
           ),
-          const SizedBox(height: 10),
+          AppSpacing.gapH10,
           TextFormField(
             controller: _descController,
             minLines: 1,
@@ -131,12 +132,12 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          AppSpacing.gapH10,
           TaskPrioritySelector(
             selectedPriority: _editPriority,
             onSelected: (p) => setState(() => _editPriority = p),
           ),
-          const SizedBox(height: 10),
+          AppSpacing.gapH10,
           TaskDetailAssigneeDueFields(
             members: widget.members,
             editAssigneeId: _editAssigneeId,
@@ -146,7 +147,7 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
             onPickDueDate: _pickDueDate,
             onClearDueDate: () => setState(() => _editDueDate = null),
           ),
-          const SizedBox(height: 12),
+          AppSpacing.gapH12,
           AppButton(
             label: l10n.saveChanges,
             isLoading: _isSaving,

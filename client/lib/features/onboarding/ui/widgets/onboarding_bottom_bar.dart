@@ -1,7 +1,8 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class OnboardingBottomBar extends StatelessWidget {
   const OnboardingBottomBar({
@@ -21,13 +22,18 @@ class OnboardingBottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final isLastPage = currentPage == totalPages - 1;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(28, 12, 28, 28),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s28,
+        AppSpacing.md,
+        AppSpacing.s28,
+        AppSpacing.s28,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -40,8 +46,8 @@ class OnboardingBottomBar extends StatelessWidget {
                 behavior: HitTestBehavior.opaque,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 3,
+                    vertical: AppSpacing.sm,
+                    horizontal: AppSpacing.s3,
                   ),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 350),
@@ -121,7 +127,9 @@ class OnboardingBottomBar extends StatelessWidget {
                         onTap: onGetStarted,
                         borderRadius: AppRadius.r16,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 22),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.xl,
+                          ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -133,7 +141,7 @@ class OnboardingBottomBar extends StatelessWidget {
                                   color: AppColors.textOnPrimary,
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                              AppSpacing.gapW8,
                               const Icon(
                                 Icons.arrow_forward_rounded,
                                 size: 18,
@@ -165,7 +173,9 @@ class OnboardingBottomBar extends StatelessWidget {
                         onTap: onNext,
                         borderRadius: AppRadius.r16,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.xl,
+                          ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -178,7 +188,7 @@ class OnboardingBottomBar extends StatelessWidget {
                                       : AppColors.lightTextPrimary,
                                 ),
                               ),
-                              const SizedBox(width: 6),
+                              AppSpacing.gapW6,
                               Icon(
                                 Icons.arrow_forward_rounded,
                                 size: 17,

@@ -6,7 +6,8 @@ import 'package:client/features/comments/cubit/comments_cubit.dart';
 import 'package:client/features/comments/cubit/comments_state.dart';
 import 'package:client/features/comments/ui/widgets/task_comment_input.dart';
 import 'package:client/features/comments/ui/widgets/task_comment_item.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TaskCommentsList extends StatelessWidget {
   const TaskCommentsList({
@@ -20,14 +21,14 @@ class TaskCommentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return BlocBuilder<CommentsCubit, CommentsState>(
       builder: (context, state) {
         return state.when(
           initial: () => const SizedBox.shrink(),
           loading: () => const Center(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(AppSpacing.lg),
               child: SizedBox(
                 width: 24,
                 height: 24,
@@ -36,7 +37,7 @@ class TaskCommentsList extends StatelessWidget {
             ),
           ),
           error: (failure) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
             child: Text(
               l10n.failedToLoadComments(failure.toLocalizedMessage(l10n)),
               style: const TextStyle(color: AppColors.error),
@@ -54,7 +55,7 @@ class TaskCommentsList extends StatelessWidget {
                       size: 16,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    const SizedBox(width: 6),
+                    AppSpacing.gapW6,
                     Text(
                       l10n.commentsCount(comments.length),
                       style: theme.textTheme.titleSmall?.copyWith(
@@ -64,10 +65,10 @@ class TaskCommentsList extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                AppSpacing.gapH8,
                 if (failure != null)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 6.0),
+                    padding: const EdgeInsets.only(bottom: AppSpacing.s6),
                     child: Text(
                       failure.toLocalizedMessage(l10n),
                       style: const TextStyle(color: AppColors.error),
@@ -75,7 +76,9 @@ class TaskCommentsList extends StatelessWidget {
                   ),
                 if (comments.isEmpty)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.md,
+                    ),
                     child: Text(
                       l10n.noCommentsYet,
                       style: TextStyle(
@@ -94,7 +97,7 @@ class TaskCommentsList extends StatelessWidget {
                           .deleteComment(comment.id),
                     ),
                   ),
-                const SizedBox(height: 12),
+                AppSpacing.gapH12,
                 TaskCommentInput(
                   isSending: isSending,
                   onSend: (text) =>

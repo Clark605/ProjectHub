@@ -10,7 +10,7 @@ import 'package:client/features/kanban/ui/widgets/board/kanban_view_body.dart';
 import 'package:client/features/kanban/ui/widgets/voice/kanban_voice_handler.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class KanbanScreen extends StatefulWidget {
   final int projectId;
@@ -93,7 +93,7 @@ class _KanbanScreenState extends State<KanbanScreen>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final voiceCubit = KanbanScreenActions.getVoiceCubit(
       context,
       widget.voiceCubit,

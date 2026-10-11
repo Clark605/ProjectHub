@@ -9,7 +9,8 @@ import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_card.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceSwitcherSheet extends StatefulWidget {
   const WorkspaceSwitcherSheet({super.key});
@@ -64,13 +65,16 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         const AppSheetDragHandle(),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl,
+            vertical: AppSpacing.sm,
+          ),
           child: Row(
             children: [
               Text(
@@ -90,7 +94,10 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl,
+            vertical: AppSpacing.xs,
+          ),
           child: AppTextField(
             label: '',
             hintText: l10n.searchWorkspaces,
@@ -100,7 +107,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                 setState(() => _searchQuery = val.trim().toLowerCase()),
           ),
         ),
-        const SizedBox(height: 12),
+        AppSpacing.gapH12,
         Flexible(
           child: BlocBuilder<WorkspaceContextCubit, WorkspaceContextState>(
             builder: (context, state) {
@@ -115,7 +122,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                   if (filtered.isEmpty) {
                     return Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(32),
+                        padding: AppSpacing.edgeInsetsAll32,
                         child: Text(
                           l10n.noWorkspacesFound,
                           style: theme.textTheme.bodyMedium?.copyWith(
@@ -128,12 +135,12 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
 
                   return ListView.separated(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 4,
+                      horizontal: AppSpacing.xl,
+                      vertical: AppSpacing.xs,
                     ),
                     shrinkWrap: true,
                     itemCount: filtered.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
+                    separatorBuilder: (_, _) => AppSpacing.gapH8,
                     itemBuilder: (context, index) {
                       final workspace = filtered[index];
                       final isActive = workspace.id == activeWorkspace.id;
@@ -147,7 +154,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                 },
                 loading: () => Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(32),
+                    padding: AppSpacing.edgeInsetsAll32,
                     child: CircularProgressIndicator(
                       color: theme.colorScheme.primary,
                     ),
@@ -161,7 +168,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
 
         // Pinned Bottom Button: Create New Workspace
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: AppSpacing.edgeInsetsAll20,
           child: AppButton(
             label: l10n.createNewWorkspace,
             icon: Icons.add_rounded,

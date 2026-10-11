@@ -1,5 +1,6 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class MetricData {
   final String label;
@@ -33,7 +34,7 @@ class MetricCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: AppRadius.r14,
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: AppSpacing.edgeInsetsAll16,
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.8),
             borderRadius: AppRadius.r14,
@@ -57,7 +58,7 @@ class MetricCard extends StatelessWidget {
                     ),
                     child: Icon(data.icon, color: data.color, size: 18),
                   ),
-                  const SizedBox(width: 8),
+                  AppSpacing.gapW8,
                   Expanded(
                     child: Text(
                       data.label,
@@ -71,7 +72,7 @@ class MetricCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              AppSpacing.gapH12,
               Text(
                 data.value,
                 style: theme.textTheme.headlineMedium?.copyWith(
@@ -79,7 +80,7 @@ class MetricCard extends StatelessWidget {
                   letterSpacing: -0.5,
                 ),
               ),
-              const SizedBox(height: 4),
+              AppSpacing.gapH4,
               Text(
                 data.trend,
                 style: theme.textTheme.labelSmall?.copyWith(

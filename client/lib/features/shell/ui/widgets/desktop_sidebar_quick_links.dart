@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/project_status.dart';
 import 'package:client/features/projects/ui/extensions/project_status_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class DesktopSidebarProjectQuickLink extends StatelessWidget {
   final String title;
@@ -24,7 +25,10 @@ class DesktopSidebarProjectQuickLink extends StatelessWidget {
       onTap: onTap,
       borderRadius: AppRadius.r8,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.s7,
+        ),
         child: Row(
           children: [
             Container(
@@ -32,7 +36,7 @@ class DesktopSidebarProjectQuickLink extends StatelessWidget {
               height: 8,
               decoration: BoxDecoration(shape: BoxShape.circle, color: color),
             ),
-            const SizedBox(width: 10),
+            AppSpacing.gapW10,
             Expanded(
               child: Text(
                 title,
@@ -66,7 +70,7 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final activeProjects = projects
         .where((p) => p.statusEnum == ProjectStatus.active)
         .toList();
@@ -77,9 +81,9 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 24),
+        AppSpacing.gapH24,
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Text(
             l10n.activeProjectsSection,
             style: theme.textTheme.labelSmall?.copyWith(
@@ -89,10 +93,13 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        AppSpacing.gapH8,
         if (isLoading)
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
             child: SizedBox(
               width: 14,
               height: 14,
@@ -101,7 +108,10 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
           )
         else if (displayProjects.isEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
             child: Text(
               l10n.noProjectsYet,
               style: theme.textTheme.bodySmall?.copyWith(

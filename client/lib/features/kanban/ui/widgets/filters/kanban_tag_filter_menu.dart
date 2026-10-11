@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanTagFilterMenu extends StatelessWidget {
   final int? selectedTagId;
@@ -20,7 +21,7 @@ class KanbanTagFilterMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     if (availableTags.isEmpty) return const SizedBox.shrink();
 
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final hasSelection = selectedTagId != null;
     final selectedTag = availableTags
         .where((t) => t.id == selectedTagId)
@@ -65,7 +66,7 @@ class KanbanTagFilterMenu extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
                 Text(t.name),
               ],
             ),

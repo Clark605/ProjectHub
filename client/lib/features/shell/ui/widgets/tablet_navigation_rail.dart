@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/shell/models/shell_tab.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TabletNavigationRail extends StatelessWidget {
   final int selectedIndex;
@@ -18,7 +19,7 @@ class TabletNavigationRail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Container(
       width: 72,
@@ -30,7 +31,7 @@ class TabletNavigationRail extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const SizedBox(height: 16),
+          AppSpacing.gapH16,
           // Logo Icon
           Container(
             width: 36,
@@ -51,9 +52,9 @@ class TabletNavigationRail extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          AppSpacing.gapH24,
           Divider(color: theme.colorScheme.outlineVariant, height: 1),
-          const SizedBox(height: 16),
+          AppSpacing.gapH16,
 
           // Rail Nav Items
           ...ShellTab.values.map(
@@ -65,13 +66,13 @@ class TabletNavigationRail extends StatelessWidget {
                   isSelected: selectedIndex == tab.index,
                   onTap: () => onItemSelected(tab.index),
                 ),
-                if (tab != ShellTab.profile) const SizedBox(height: 12),
+                if (tab != ShellTab.profile) AppSpacing.gapH12,
               ],
             ),
           ),
 
           const Spacer(),
-          const SizedBox(height: 16),
+          AppSpacing.gapH16,
         ],
       ),
     );

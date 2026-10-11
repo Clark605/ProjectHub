@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class CollaborationVisual extends StatefulWidget {
   const CollaborationVisual({super.key});
@@ -70,8 +71,8 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                 alignment: Alignment.topCenter,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 8,
+                    horizontal: AppSpacing.s14,
+                    vertical: AppSpacing.sm,
                   ),
                   decoration: BoxDecoration(
                     color: isDark
@@ -100,18 +101,18 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                             end: const Offset(1.3, 1.3),
                             duration: 700.ms,
                           ),
-                      const SizedBox(width: 8),
+                      AppSpacing.gapW8,
                       Text(
                         '5 Team Members Online',
                         style: theme.textTheme.labelSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      AppSpacing.gapW10,
                       _buildMiniAvatar('AK', AppColors.electricViolet),
-                      const SizedBox(width: 4),
+                      AppSpacing.gapW4,
                       _buildMiniAvatar('SR', AppColors.skyBlue),
-                      const SizedBox(width: 4),
+                      AppSpacing.gapW4,
                       _buildMiniAvatar('DM', AppColors.priorityHigh),
                     ],
                   ),
@@ -124,10 +125,10 @@ class _CollaborationVisualState extends State<CollaborationVisual>
           // ── Central Collaborative Action Card ──
           Center(
                 child: Container(
-                  margin: const EdgeInsets.only(top: 24),
+                  margin: const EdgeInsets.only(top: AppSpacing.xxl),
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 14,
+                    horizontal: AppSpacing.lg,
+                    vertical: AppSpacing.s14,
                   ),
                   decoration: BoxDecoration(
                     color: cardBg,
@@ -155,7 +156,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(6),
+                            padding: AppSpacing.edgeInsetsAll6,
                             decoration: BoxDecoration(
                               color: AppColors.skyBlue.withValues(alpha: 0.15),
                               borderRadius: AppRadius.r8,
@@ -166,7 +167,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                               color: AppColors.skyBlue,
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          AppSpacing.gapW10,
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,9 +191,9 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      AppSpacing.gapH10,
                       Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: AppSpacing.edgeInsetsAll10,
                         decoration: BoxDecoration(
                           color: isDark
                               ? AppColors.surfaceContainer
@@ -206,7 +207,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                               size: 14,
                               color: AppColors.electricViolet,
                             ),
-                            const SizedBox(width: 8),
+                            AppSpacing.gapW8,
                             Expanded(
                               child: Text(
                                 '"PR #104 merged! All tests passed 🚀"',
@@ -282,8 +283,8 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                 right: 20,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 7,
+                    horizontal: AppSpacing.md,
+                    vertical: AppSpacing.s7,
                   ),
                   decoration: BoxDecoration(
                     color: isDark
@@ -321,7 +322,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                             end: const Offset(1.4, 1.4),
                             duration: 600.ms,
                           ),
-                      const SizedBox(width: 8),
+                      AppSpacing.gapW8,
                       Text(
                         'Instant WebSocket Sync · 0ms Latency',
                         style: theme.textTheme.labelSmall?.copyWith(
@@ -380,9 +381,12 @@ class _CollaborationVisualState extends State<CollaborationVisual>
               painter: _CursorPointerPainter(color: color),
               size: const Size(14, 14),
             ),
-            const SizedBox(width: 2),
+            AppSpacing.gapW2,
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.s6,
+                vertical: AppSpacing.s3,
+              ),
               decoration: BoxDecoration(
                 color: color,
                 borderRadius: AppRadius.r6,
@@ -406,9 +410,15 @@ class _CollaborationVisualState extends State<CollaborationVisual>
         ),
         if (isTyping)
           Padding(
-            padding: const EdgeInsets.only(left: 12, top: 3),
+            padding: const EdgeInsets.only(
+              left: AppSpacing.md,
+              top: AppSpacing.s3,
+            ),
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.s6,
+                vertical: AppSpacing.xxs,
+              ),
               decoration: BoxDecoration(
                 color: AppColors.pureWhite.withValues(alpha: 0.9),
                 borderRadius: AppRadius.r6,
@@ -423,9 +433,9 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildTypingDot(0),
-                  const SizedBox(width: 2),
+                  AppSpacing.gapW2,
                   _buildTypingDot(150),
-                  const SizedBox(width: 2),
+                  AppSpacing.gapW2,
                   _buildTypingDot(300),
                 ],
               ),

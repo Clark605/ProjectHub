@@ -2,7 +2,8 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:client/core/theme/workspace_accent.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceSwitcherPill extends StatelessWidget {
   final String? activeWorkspaceName;
@@ -22,7 +23,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final hasWorkspace =
         activeWorkspaceName != null && activeWorkspaceName!.trim().isNotEmpty;
@@ -37,7 +38,10 @@ class WorkspaceSwitcherPill extends StatelessWidget {
       onTap: isLoading ? null : onWorkspaceTap,
       borderRadius: AppRadius.r10,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.s10,
+          vertical: AppSpacing.s6,
+        ),
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.6),
           borderRadius: AppRadius.r10,
@@ -52,9 +56,9 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Bone.circle(size: 8),
-                    SizedBox(width: 8),
+                    AppSpacing.gapW8,
                     Bone(width: 80, height: 16),
-                    SizedBox(width: 6),
+                    AppSpacing.gapW6,
                     Bone(width: 14, height: 14),
                   ],
                 ),
@@ -77,7 +81,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                       size: 16,
                       color: theme.colorScheme.primary,
                     ),
-                  const SizedBox(width: 8),
+                  AppSpacing.gapW8,
                   Flexible(
                     child: Text(
                       displayName,
@@ -91,11 +95,11 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                   if (hasWorkspace &&
                       activeWorkspaceRole != null &&
                       activeWorkspaceRole!.trim().isNotEmpty) ...[
-                    const SizedBox(width: 6),
+                    AppSpacing.gapW6,
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
+                        horizontal: AppSpacing.s6,
+                        vertical: AppSpacing.xxs,
                       ),
                       decoration: BoxDecoration(
                         color: accentColor.withValues(alpha: 0.15),
@@ -110,7 +114,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                       ),
                     ),
                   ],
-                  const SizedBox(width: 4),
+                  AppSpacing.gapW4,
                   Icon(
                     hasWorkspace
                         ? Icons.keyboard_arrow_down_rounded

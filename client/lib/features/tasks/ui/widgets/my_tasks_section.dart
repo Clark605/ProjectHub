@@ -5,7 +5,8 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/widgets/my_task_list_tile.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class MyTasksSection extends StatelessWidget {
   final String emoji;
@@ -34,7 +35,7 @@ class MyTasksSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final isDark = theme.brightness == Brightness.dark;
     final accent =
         activeWorkspaceAccent != null &&
@@ -56,11 +57,14 @@ class MyTasksSection extends StatelessWidget {
           onTap: isCollapsible ? onToggleCollapse : null,
           borderRadius: AppRadius.r8,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+            padding: const EdgeInsets.symmetric(
+              vertical: AppSpacing.sm,
+              horizontal: AppSpacing.xs,
+            ),
             child: Row(
               children: [
                 Text(emoji, style: theme.textTheme.titleMedium),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
                 Text(
                   title,
                   style: theme.textTheme.titleSmall?.copyWith(
@@ -68,11 +72,11 @@ class MyTasksSection extends StatelessWidget {
                     letterSpacing: -0.2,
                   ),
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 7,
-                    vertical: 2,
+                    horizontal: AppSpacing.s7,
+                    vertical: AppSpacing.xxs,
                   ),
                   decoration: BoxDecoration(
                     color: accent != null
@@ -109,13 +113,16 @@ class MyTasksSection extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 6),
+        AppSpacing.gapH6,
 
         // Section Body
         if (!isCollapsed) ...[
           if (tasks.isEmpty)
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+              padding: const EdgeInsets.symmetric(
+                vertical: AppSpacing.sm,
+                horizontal: AppSpacing.sm,
+              ),
               child: Text(
                 l10n.noTasksInSection,
                 style: TextStyle(
@@ -135,7 +142,7 @@ class MyTasksSection extends StatelessWidget {
               ),
             ),
         ],
-        const SizedBox(height: 12),
+        AppSpacing.gapH12,
       ],
     );
   }

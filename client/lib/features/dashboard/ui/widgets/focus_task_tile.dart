@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class FocusTaskTile extends StatelessWidget {
   final TaskDto task;
@@ -13,11 +14,14 @@ class FocusTaskTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final priorityColor = task.priorityEnum.toColor();
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s14,
+        vertical: AppSpacing.md,
+      ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.7),
         borderRadius: AppRadius.r10,
@@ -36,7 +40,7 @@ class FocusTaskTile extends StatelessWidget {
               color: priorityColor,
             ),
           ),
-          const SizedBox(width: 12),
+          AppSpacing.gapW12,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +53,7 @@ class FocusTaskTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 2),
+                AppSpacing.gapH2,
                 Text(
                   task.projectName ?? 'Task #${task.id}',
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -59,9 +63,12 @@ class FocusTaskTile extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 12),
+          AppSpacing.gapW12,
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm,
+              vertical: AppSpacing.xs,
+            ),
             decoration: BoxDecoration(
               color: priorityColor.withValues(alpha: 0.15),
               borderRadius: AppRadius.r6,

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_modal.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class CreateTaskTagsSelector extends StatelessWidget {
   const CreateTaskTagsSelector({
@@ -23,7 +24,7 @@ class CreateTaskTagsSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Wrap(
       spacing: 6,
@@ -45,7 +46,10 @@ class CreateTaskTagsSelector extends StatelessWidget {
               );
             },
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.s3,
+              ),
               decoration: BoxDecoration(
                 borderRadius: AppRadius.r6,
                 border: Border.all(
@@ -61,7 +65,7 @@ class CreateTaskTagsSelector extends StatelessWidget {
                     size: 13,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                  const SizedBox(width: 4),
+                  AppSpacing.gapW4,
                   Text(
                     l10n.tagLabel,
                     style: TextStyle(

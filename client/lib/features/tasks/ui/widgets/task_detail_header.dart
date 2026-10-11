@@ -5,7 +5,8 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TaskDetailHeader extends StatelessWidget {
   final TaskDto task;
@@ -29,7 +30,7 @@ class TaskDetailHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Row(
       children: [
@@ -37,7 +38,10 @@ class TaskDetailHeader extends StatelessWidget {
           onTap: isArchived ? null : onOpenStatusMove,
           borderRadius: AppRadius.r12,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.s10,
+              vertical: AppSpacing.s5,
+            ),
             decoration: BoxDecoration(
               color: task.statusEnum.toColor().withValues(alpha: 0.15),
               borderRadius: AppRadius.r12,
@@ -53,7 +57,7 @@ class TaskDetailHeader extends StatelessWidget {
                   size: 14,
                   color: task.statusEnum.toColor(),
                 ),
-                const SizedBox(width: 6),
+                AppSpacing.gapW6,
                 Text(
                   task.statusEnum.localizedName(l10n),
                   style: TextStyle(
@@ -62,7 +66,7 @@ class TaskDetailHeader extends StatelessWidget {
                   ),
                 ),
                 if (!isArchived) ...[
-                  const SizedBox(width: 4),
+                  AppSpacing.gapW4,
                   Icon(
                     Icons.arrow_drop_down_rounded,
                     size: 16,
@@ -73,9 +77,12 @@ class TaskDetailHeader extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 8),
+        AppSpacing.gapW8,
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.sm,
+            vertical: AppSpacing.s5,
+          ),
           decoration: BoxDecoration(
             color: task.priorityEnum.toColor().withValues(alpha: 0.15),
             borderRadius: AppRadius.r12,
@@ -88,7 +95,7 @@ class TaskDetailHeader extends StatelessWidget {
                 size: 14,
                 color: task.priorityEnum.toColor(),
               ),
-              const SizedBox(width: 4),
+              AppSpacing.gapW4,
               Text(
                 task.priorityEnum.localizedName(l10n),
                 style: TextStyle(

@@ -6,7 +6,8 @@ import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/profile/cubit/profile_edit_cubit.dart';
 import 'package:client/features/profile/cubit/profile_edit_state.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ProfileHeaderCard extends StatefulWidget {
   final User? user;
@@ -57,7 +58,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final user = widget.user;
 
     return BlocConsumer<ProfileEditCubit, ProfileEditState>(
@@ -72,7 +73,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
 
         return Card(
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: AppSpacing.edgeInsetsAll24,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -105,7 +106,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    AppSpacing.gapW16,
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +117,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          AppSpacing.gapH4,
                           Text(
                             user?.email ?? '',
                             style: theme.textTheme.bodyMedium?.copyWith(
@@ -138,21 +139,21 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                   ],
                 ),
                 if (_isEditing) ...[
-                  const SizedBox(height: 20),
+                  AppSpacing.gapH20,
                   const Divider(),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapH16,
                   AppTextField(
                     controller: _nameController,
                     label: l10n.displayName,
                     hintText: l10n.yourFullNameHint,
                   ),
-                  const SizedBox(height: 14),
+                  AppSpacing.gapH14,
                   AppTextField(
                     controller: _bioController,
                     label: l10n.bio,
                     hintText: l10n.shortDescriptionHint,
                   ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: AppSpacing.s18),
                   Align(
                     alignment: Alignment.centerRight,
                     child: ConstrainedBox(

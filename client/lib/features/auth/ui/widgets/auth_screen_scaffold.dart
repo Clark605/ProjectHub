@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class AuthScreenScaffold extends StatelessWidget {
   const AuthScreenScaffold({
@@ -26,8 +27,8 @@ class AuthScreenScaffold extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 420),
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 36,
+                    horizontal: AppSpacing.xxl,
+                    vertical: AppSpacing.xxxl,
                   ),
                   child: Form(
                     key: formKey,

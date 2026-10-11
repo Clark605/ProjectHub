@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/breakpoints.dart';
 import 'package:client/core/widgets/app_async_state_wrapper.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
@@ -74,12 +75,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             errorMessage: !state.isLoading
                 ? state.failure?.localized(context)
                 : null,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.xxl,
+              vertical: AppSpacing.xl,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const DashboardHeader(),
-                const SizedBox(height: 24),
+                AppSpacing.gapH24,
                 DashboardMetricsGrid(
                   activeProjects: state.activeProjects,
                   inProgressTasks: state.inProgressTasks,
@@ -91,7 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   onTapUrgentTasks: widget.onNavigateToMyTasks,
                   onTapCompletedTasks: widget.onNavigateToMyTasks,
                 ),
-                const SizedBox(height: 28),
+                AppSpacing.gapH28,
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final isWide = constraints.maxWidth > Breakpoints.tablet;
@@ -107,7 +111,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               onNavigateToMyTasks: widget.onNavigateToMyTasks,
                             ),
                           ),
-                          const SizedBox(width: 20),
+                          AppSpacing.gapW20,
                           Expanded(
                             flex: 4,
                             child: RecentActivityCard(
@@ -126,7 +130,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           isLoading: state.isLoading,
                           onNavigateToMyTasks: widget.onNavigateToMyTasks,
                         ),
-                        const SizedBox(height: 20),
+                        AppSpacing.gapH20,
                         RecentActivityCard(
                           activities: state.recentActivities,
                           isLoading: state.isLoading,

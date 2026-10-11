@@ -1,5 +1,6 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class DesktopSidebarNavItem extends StatelessWidget {
   final IconData icon;
@@ -30,7 +31,10 @@ class DesktopSidebarNavItem extends StatelessWidget {
       onTap: onTap,
       borderRadius: AppRadius.r10,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.s10,
+        ),
         decoration: BoxDecoration(
           color: isSelected
               ? activeColor.withValues(alpha: 0.15)
@@ -49,7 +53,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
                   ? activeColor
                   : theme.colorScheme.onSurfaceVariant,
             ),
-            const SizedBox(width: 12),
+            AppSpacing.gapW12,
             Expanded(
               child: Text(
                 label,
@@ -61,7 +65,10 @@ class DesktopSidebarNavItem extends StatelessWidget {
             ),
             if (badge != null)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.s6,
+                  vertical: AppSpacing.xxs,
+                ),
                 decoration: BoxDecoration(
                   color: (badgeColor ?? activeColor).withValues(alpha: 0.15),
                   borderRadius: AppRadius.r10,

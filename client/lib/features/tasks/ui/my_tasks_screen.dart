@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:client/core/widgets/ambient_glow_background.dart';
+import 'package:client/core/widgets/app_async_state_wrapper.dart';
 import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/features/tasks/cubit/my_tasks_cubit.dart';
 import 'package:client/features/tasks/cubit/my_tasks_state.dart';
@@ -103,6 +104,12 @@ class _MyTasksScreenState extends State<MyTasksScreen>
     showAppErrorSnackBar(context, err);
   }
 
+  Future<void> _refresh(MyTasksCubit cubit) async {
+    if (_activeWorkspaceId != null) {
+      await cubit.loadMyTasks(_activeWorkspaceId!, forceRefresh: true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<WorkspaceContextCubit, WorkspaceContextState>(
@@ -140,36 +147,22 @@ class _MyTasksScreenState extends State<MyTasksScreen>
 
           return AmbientGlowBackground(
             child: SafeArea(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  if (_activeWorkspaceId != null) {
-                    await cubit.loadMyTasks(
-                      _activeWorkspaceId!,
-                      forceRefresh: true,
-                    );
-                  }
-                },
-                child: CustomScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  slivers: [
-                    const SliverToBoxAdapter(child: MyTasksHeader()),
-                    ...MyTasksContentSlivers.build(
-                      context: context,
-                      state: state,
-                      wsAccent: wsAccent,
-                      onTaskTap: _openTaskDetail,
-                      onTaskMove: _openMoveTask,
-                      onToggleCollapse: cubit.toggleDoneVisibility,
-                      onRetry: () {
-                        if (_activeWorkspaceId != null) {
-                          cubit.loadMyTasks(
-                            _activeWorkspaceId!,
-                            forceRefresh: true,
-                          );
-                        }
-                      },
-                    ),
-                  ],
+              child: AppAsyncStateWrapper.slivers(
+                onRefresh: () => _refresh(cubit),
+                errorMessage: state.whenOrNull(
+                  error: (failure) => failure.localized(context),
+                ),
+                headerSlivers: const [
+                  SliverToBoxAdapter(child: MyTasksHeader()),
+                ],
+                slivers: MyTasksContentSlivers.build(
+                  context: context,
+                  state: state,
+                  wsAccent: wsAccent,
+                  onTaskTap: _openTaskDetail,
+                  onTaskMove: _openMoveTask,
+                  onToggleCollapse: cubit.toggleDoneVisibility,
+                  onRetry: () => _refresh(cubit),
                 ),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import 'package:client/core/utils/responsive_layout.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ProjectsSkeleton extends StatelessWidget {
   const ProjectsSkeleton({super.key});
@@ -15,7 +16,7 @@ class ProjectsSkeleton extends StatelessWidget {
 
     Widget buildCard() {
       return Container(
-        padding: const EdgeInsets.all(16),
+        padding: AppSpacing.edgeInsetsAll16,
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerLow,
           borderRadius: AppRadius.r16,
@@ -29,13 +30,13 @@ class ProjectsSkeleton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(child: Bone.text(words: 3)),
-                SizedBox(width: 8),
+                AppSpacing.gapW8,
                 Bone(width: 60, height: 22, borderRadius: AppRadius.r20),
               ],
             ),
-            const SizedBox(height: 6),
+            AppSpacing.gapH6,
             const Bone.text(words: 10),
-            const SizedBox(height: 12),
+            AppSpacing.gapH12,
             // Progress Bar & Task Count
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,13 +45,13 @@ class ProjectsSkeleton extends StatelessWidget {
                 Bone(width: 28, height: 14, borderRadius: AppRadius.r3),
               ],
             ),
-            const SizedBox(height: 6),
+            AppSpacing.gapH6,
             const Bone(
               height: 5,
               width: double.infinity,
               borderRadius: AppRadius.r3,
             ),
-            const SizedBox(height: 10),
+            AppSpacing.gapH10,
             // Member avatars stack
             Row(
               children: [
@@ -70,9 +71,9 @@ class ProjectsSkeleton extends StatelessWidget {
                   ),
               ],
             ),
-            const SizedBox(height: 10),
+            AppSpacing.gapH10,
             const Divider(height: 1, thickness: 1),
-            const SizedBox(height: 8),
+            AppSpacing.gapH8,
             const Row(
               children: [
                 Bone(width: 80, height: 14, borderRadius: AppRadius.r3),
@@ -88,13 +89,18 @@ class ProjectsSkeleton extends StatelessWidget {
     return Skeletonizer(
       enabled: true,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 0, 24, 80),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.xxl,
+          AppSpacing.zero,
+          AppSpacing.xxl,
+          AppSpacing.s80,
+        ),
         child: (!isDesktop && !isTablet)
             ? ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: 4,
-                separatorBuilder: (_, _) => const SizedBox(height: 16),
+                separatorBuilder: (_, _) => AppSpacing.gapH16,
                 itemBuilder: (_, _) => buildCard(),
               )
             : GridView.builder(

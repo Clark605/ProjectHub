@@ -2,7 +2,8 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class CreateTaskTextFields extends StatelessWidget {
   final TextEditingController titleController;
@@ -18,7 +19,7 @@ class CreateTaskTextFields extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     final fillColor = isDark
         ? AppColors.surfaceContainer
@@ -55,7 +56,7 @@ class CreateTaskTextFields extends StatelessWidget {
               ? (l10n.taskTitleRequired)
               : null,
         ),
-        const SizedBox(height: 16),
+        AppSpacing.gapH16,
         TextFormField(
           controller: descriptionController,
           maxLines: 3,

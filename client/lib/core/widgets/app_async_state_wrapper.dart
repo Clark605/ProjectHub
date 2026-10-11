@@ -8,8 +8,9 @@ class AppAsyncStateWrapper extends StatelessWidget {
   const AppAsyncStateWrapper({
     super.key,
     required this.onRefresh,
-    required this.child,
+    required Widget this.child,
     this.errorMessage,
+    this.onRetry,
     this.isEmpty = false,
     this.emptyTitle,
     this.emptyDescription,
@@ -21,11 +22,36 @@ class AppAsyncStateWrapper extends StatelessWidget {
       horizontal: AppSpacing.lg,
       vertical: AppSpacing.xxl,
     ),
-  });
+    this.wrapInScrollView = true,
+    this.notificationPredicate = defaultScrollNotificationPredicate,
+  }) : slivers = null,
+       headerSlivers = const [];
+
+  const AppAsyncStateWrapper.slivers({
+    super.key,
+    required this.onRefresh,
+    required List<Widget> this.slivers,
+    this.headerSlivers = const [],
+    this.errorMessage,
+    this.onRetry,
+    this.isEmpty = false,
+    this.emptyTitle,
+    this.emptyDescription,
+    this.emptyIcon,
+    this.emptyCtaText,
+    this.onEmptyCtaPressed,
+    this.notificationPredicate = defaultScrollNotificationPredicate,
+  }) : child = null,
+       padding = null,
+       errorPadding = EdgeInsets.zero,
+       wrapInScrollView = false;
 
   final Future<void> Function() onRefresh;
-  final Widget child;
+  final Widget? child;
+  final List<Widget>? slivers;
+  final List<Widget> headerSlivers;
   final String? errorMessage;
+  final VoidCallback? onRetry;
   final bool isEmpty;
   final String? emptyTitle;
   final String? emptyDescription;
@@ -34,12 +60,47 @@ class AppAsyncStateWrapper extends StatelessWidget {
   final VoidCallback? onEmptyCtaPressed;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry errorPadding;
+  final bool wrapInScrollView;
+  final ScrollNotificationPredicate notificationPredicate;
 
   @override
   Widget build(BuildContext context) {
+    if (slivers != null) {
+      return RefreshIndicator(
+        onRefresh: onRefresh,
+        notificationPredicate: notificationPredicate,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            ...headerSlivers,
+            if (errorMessage != null)
+              SliverFillRemaining(
+                child: AppErrorState(
+                  errorMessage: errorMessage!,
+                  onRetry: onRetry ?? onRefresh,
+                ),
+              )
+            else if (isEmpty && emptyTitle != null)
+              SliverFillRemaining(
+                child: AppEmptyState(
+                  icon: emptyIcon ?? Icons.inbox_outlined,
+                  title: emptyTitle!,
+                  description: emptyDescription,
+                  ctaText: emptyCtaText,
+                  onCtaPressed: onEmptyCtaPressed,
+                ),
+              )
+            else
+              ...slivers!,
+          ],
+        ),
+      );
+    }
+
     if (errorMessage != null) {
       return RefreshIndicator(
         onRefresh: onRefresh,
+        notificationPredicate: notificationPredicate,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: errorPadding,
@@ -47,7 +108,7 @@ class AppAsyncStateWrapper extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.65,
             child: AppErrorState(
               errorMessage: errorMessage!,
-              onRetry: onRefresh,
+              onRetry: onRetry ?? onRefresh,
             ),
           ),
         ),
@@ -57,16 +118,17 @@ class AppAsyncStateWrapper extends StatelessWidget {
     if (isEmpty && emptyTitle != null) {
       return RefreshIndicator(
         onRefresh: onRefresh,
+        notificationPredicate: notificationPredicate,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: padding ?? const EdgeInsets.all(AppSpacing.lg),
+          padding: padding ?? AppSpacing.edgeInsetsAll16,
           child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.65,
             child: Center(
               child: AppEmptyState(
                 icon: emptyIcon ?? Icons.inbox_outlined,
                 title: emptyTitle!,
-                description: emptyDescription ?? '',
+                description: emptyDescription,
                 ctaText: emptyCtaText,
                 onCtaPressed: onEmptyCtaPressed,
               ),
@@ -78,11 +140,14 @@ class AppAsyncStateWrapper extends StatelessWidget {
 
     return RefreshIndicator(
       onRefresh: onRefresh,
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: padding,
-        child: child,
-      ),
+      notificationPredicate: notificationPredicate,
+      child: wrapInScrollView
+          ? SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: padding,
+              child: child,
+            )
+          : child!,
     );
   }
 }

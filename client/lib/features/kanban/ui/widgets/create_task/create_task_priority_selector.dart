@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class CreateTaskPrioritySelector extends StatelessWidget {
   final TaskPriority selectedPriority;
@@ -18,7 +19,7 @@ class CreateTaskPrioritySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +31,7 @@ class CreateTaskPrioritySelector extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        const SizedBox(height: 8),
+        AppSpacing.gapH8,
         Wrap(
           spacing: 8,
           children: TaskPriority.values.map((priority) {

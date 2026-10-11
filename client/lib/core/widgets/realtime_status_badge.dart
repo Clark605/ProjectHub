@@ -4,6 +4,7 @@ import 'package:client/core/di/injection.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class RealtimeStatusBadge extends StatelessWidget {
   const RealtimeStatusBadge({
@@ -70,8 +71,8 @@ class RealtimeStatusBadge extends StatelessWidget {
           message: tooltip,
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: showLabel ? 8 : 4,
-              vertical: 4,
+              horizontal: showLabel ? AppSpacing.sm : AppSpacing.xs,
+              vertical: AppSpacing.xs,
             ),
             decoration: BoxDecoration(
               color: dotColor.withValues(alpha: 0.12),
@@ -102,7 +103,7 @@ class RealtimeStatusBadge extends StatelessWidget {
                   ),
                 ),
                 if (showLabel) ...[
-                  const SizedBox(width: 5),
+                  const SizedBox(width: AppSpacing.s5),
                   Text(
                     label,
                     style: TextStyle(

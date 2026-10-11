@@ -1,6 +1,7 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class VisualCanvasCard extends StatelessWidget {
   const VisualCanvasCard({
@@ -106,7 +107,10 @@ class VisualCanvasCard extends StatelessWidget {
 
             // Foreground content
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.s18,
+                vertical: AppSpacing.lg,
+              ),
               child: child,
             ),
           ],

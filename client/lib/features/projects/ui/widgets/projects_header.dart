@@ -6,7 +6,8 @@ import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class ProjectsHeader extends StatelessWidget {
   const ProjectsHeader({super.key, required this.onCreatePressed});
@@ -15,7 +16,7 @@ class ProjectsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final isDesktop = ResponsiveLayout.isDesktop(context);
@@ -32,7 +33,12 @@ class ProjectsHeader extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.xxl,
+        AppSpacing.xl,
+        AppSpacing.xxl,
+        AppSpacing.zero,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -50,7 +56,7 @@ class ProjectsHeader extends StatelessWidget {
                         letterSpacing: -0.5,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    AppSpacing.gapH4,
                     Text(
                       l10n.projectsSubtitle,
                       style: theme.textTheme.bodyMedium?.copyWith(
@@ -63,11 +69,11 @@ class ProjectsHeader extends StatelessWidget {
                 ),
               ),
               if (activeWsId != null) ...[
-                const SizedBox(width: 12),
+                AppSpacing.gapW12,
                 WorkspacePresenceAvatars(workspaceId: activeWsId),
               ],
               if (isDesktop) ...[
-                const SizedBox(width: 16),
+                AppSpacing.gapW16,
                 AppButton(
                   label: l10n.createProject,
                   icon: Icons.add_rounded,
@@ -77,7 +83,7 @@ class ProjectsHeader extends StatelessWidget {
               ],
             ],
           ),
-          const SizedBox(height: 20),
+          AppSpacing.gapH20,
         ],
       ),
     );

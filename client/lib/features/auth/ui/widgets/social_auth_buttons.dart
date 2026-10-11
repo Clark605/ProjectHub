@@ -1,10 +1,11 @@
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
 
 import 'package:client/features/auth/ui/widgets/github_logo.dart';
 import 'package:client/features/auth/ui/widgets/google_logo.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class SocialAuthSection extends StatelessWidget {
   const SocialAuthSection({
@@ -20,7 +21,7 @@ class SocialAuthSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     final borderColor = isDark
         ? AppColors.pureWhite.withValues(alpha: 0.1)
@@ -35,7 +36,7 @@ class SocialAuthSection extends StatelessWidget {
           children: [
             Expanded(child: Divider(color: borderColor, thickness: 1)),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: Text(
                 l10n.orContinueWith,
                 style: theme.textTheme.labelMedium?.copyWith(
@@ -47,7 +48,7 @@ class SocialAuthSection extends StatelessWidget {
             Expanded(child: Divider(color: borderColor, thickness: 1)),
           ],
         ),
-        const SizedBox(height: 18),
+        const SizedBox(height: AppSpacing.s18),
         Row(
           children: [
             Expanded(
@@ -57,7 +58,7 @@ class SocialAuthSection extends StatelessWidget {
                 onPressed: onGooglePressed ?? () {},
               ),
             ),
-            const SizedBox(width: 12),
+            AppSpacing.gapW12,
             Expanded(
               child: _SocialButton(
                 iconWidget: GithubLogo(
@@ -128,7 +129,7 @@ class _SocialButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               iconWidget,
-              const SizedBox(width: 10),
+              AppSpacing.gapW10,
               Text(
                 label,
                 style: theme.textTheme.bodyMedium?.copyWith(

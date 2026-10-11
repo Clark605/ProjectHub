@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceCard extends StatelessWidget {
   final WorkspaceDto workspace;
@@ -20,7 +21,7 @@ class WorkspaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final role = workspace.membership?.role ?? l10n.roleMember;
     final isOwner = role.toLowerCase() == 'owner';
 
@@ -35,7 +36,10 @@ class WorkspaceCard extends StatelessWidget {
         borderRadius: AppRadius.r12,
         child: Container(
           constraints: const BoxConstraints(minHeight: 56),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.s14,
+            vertical: AppSpacing.md,
+          ),
           decoration: BoxDecoration(
             color: isActive
                 ? accentColor.withValues(alpha: 0.1)
@@ -77,7 +81,7 @@ class WorkspaceCard extends StatelessWidget {
                         ),
                       ),
               ),
-              const SizedBox(width: 12),
+              AppSpacing.gapW12,
 
               // Title & Description
               Expanded(
@@ -95,7 +99,7 @@ class WorkspaceCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     if (workspace.description.isNotEmpty) ...[
-                      const SizedBox(height: 2),
+                      AppSpacing.gapH2,
                       Text(
                         workspace.description,
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -108,11 +112,14 @@ class WorkspaceCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+              AppSpacing.gapW8,
 
               // Role Pill Badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm,
+                  vertical: AppSpacing.xs,
+                ),
                 decoration: BoxDecoration(
                   color: isOwner
                       ? theme.colorScheme.primary.withValues(alpha: 0.15)

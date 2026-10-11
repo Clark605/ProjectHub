@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 
 class KanbanAssigneeFilterMenu extends StatelessWidget {
   final String? selectedAssignee;
@@ -26,7 +27,7 @@ class KanbanAssigneeFilterMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final hasSelection =
         selectedAssignee != null && selectedAssignee!.isNotEmpty;
 

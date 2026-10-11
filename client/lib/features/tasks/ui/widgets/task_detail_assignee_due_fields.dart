@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:client/core/utils/date_formatter.dart';
 
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class TaskDetailAssigneeDueFields extends StatelessWidget {
   final List<MemberDto> members;
@@ -28,7 +29,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +41,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        const SizedBox(height: 8),
+        AppSpacing.gapH8,
         DropdownButtonFormField<String?>(
           initialValue: editAssigneeId,
           isExpanded: true,
@@ -77,7 +78,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
           ],
           onChanged: onAssigneeChanged,
         ),
-        const SizedBox(height: 16),
+        AppSpacing.gapH16,
         Text(
           l10n.dueDate,
           style: theme.textTheme.labelMedium?.copyWith(
@@ -85,13 +86,13 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        const SizedBox(height: 8),
+        AppSpacing.gapH8,
         InkWell(
           onTap: onPickDueDate,
           borderRadius: AppRadius.r12,
           child: Container(
             height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainer,
               borderRadius: AppRadius.r12,
@@ -104,7 +105,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
                   size: 16,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapW8,
                 Expanded(
                   child: Text(
                     editDueDate != null
