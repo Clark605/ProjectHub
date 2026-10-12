@@ -27,7 +27,7 @@ class ProjectDetailSkeleton extends StatelessWidget {
                   padding: AppSpacing.edgeInsetsAllXl,
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceContainer,
-                    borderRadius: AppRadius.r16,
+                    borderRadius: AppRadius.lg,
                     border: Border.all(
                       color: theme.colorScheme.outlineVariant.withValues(
                         alpha: 0.6,
@@ -42,19 +42,19 @@ class ProjectDetailSkeleton extends StatelessWidget {
                       Bone(
                         width: double.infinity,
                         height: 48,
-                        borderRadius: AppRadius.r12,
+                        borderRadius: AppRadius.md,
                       ),
                       AppSpacing.gapHLg,
                       Bone(
                         width: double.infinity,
                         height: 80,
-                        borderRadius: AppRadius.r12,
+                        borderRadius: AppRadius.md,
                       ),
                       AppSpacing.gapHLg,
                       Bone(
                         width: double.infinity,
                         height: 48,
-                        borderRadius: AppRadius.r12,
+                        borderRadius: AppRadius.md,
                       ),
                     ],
                   ),

@@ -25,7 +25,7 @@ class FocusTaskTile extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.7),
-        borderRadius: AppRadius.r10,
+        borderRadius: AppRadius.md,
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
           width: 1,

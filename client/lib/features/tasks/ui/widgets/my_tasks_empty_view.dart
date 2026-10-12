@@ -29,7 +29,7 @@ class MyTasksEmptyView extends StatelessWidget {
                       ? theme.colorScheme.surfaceContainerLow
                       : theme.colorScheme.surface)
                   .withValues(alpha: 0.8),
-          borderRadius: AppRadius.r20,
+          borderRadius: AppRadius.xl,
           border: Border.all(color: theme.colorScheme.outlineVariant),
         ),
         child: Column(

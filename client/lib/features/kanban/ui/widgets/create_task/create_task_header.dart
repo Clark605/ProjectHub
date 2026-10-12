@@ -30,7 +30,7 @@ class CreateTaskHeader extends StatelessWidget {
               color: isDark
                   ? AppColors.pureWhite.withValues(alpha: 0.24)
                   : AppColors.pureBlack.withValues(alpha: 0.26),
-              borderRadius: AppRadius.r2,
+              borderRadius: AppRadius.xs,
             ),
           ),
         ),
@@ -51,7 +51,7 @@ class CreateTaskHeader extends StatelessWidget {
               ),
               decoration: BoxDecoration(
                 color: selectedStatus.toColor().withValues(alpha: 0.15),
-                borderRadius: AppRadius.r12,
+                borderRadius: AppRadius.md,
               ),
               child: Text(
                 selectedStatus.localizedName(l10n),

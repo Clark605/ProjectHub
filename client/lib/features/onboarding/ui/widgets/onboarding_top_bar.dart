@@ -38,7 +38,7 @@ class OnboardingTopBar extends StatelessWidget {
                 height: 32,
                 decoration: BoxDecoration(
                   color: AppColors.electricViolet.withValues(alpha: 0.18),
-                  borderRadius: AppRadius.r10,
+                  borderRadius: AppRadius.md,
                   border: Border.all(
                     color: AppColors.electricViolet.withValues(alpha: 0.35),
                   ),
@@ -78,7 +78,7 @@ class OnboardingTopBar extends StatelessWidget {
                     vertical: AppSpacing.sm,
                   ),
                   shape: const RoundedRectangleBorder(
-                    borderRadius: AppRadius.r12,
+                    borderRadius: AppRadius.md,
                   ),
                 ),
                 child: Text(

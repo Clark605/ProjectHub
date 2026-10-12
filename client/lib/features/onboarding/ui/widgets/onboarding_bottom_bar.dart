@@ -57,7 +57,7 @@ class OnboardingBottomBar extends StatelessWidget {
                     height: 8,
                     width: isActive ? 30 : 8,
                     decoration: BoxDecoration(
-                      borderRadius: AppRadius.r6,
+                      borderRadius: AppRadius.sm,
                       gradient: isActive
                           ? const LinearGradient(
                               colors: [
@@ -106,7 +106,7 @@ class OnboardingBottomBar extends StatelessWidget {
                     key: const ValueKey('get_started_btn'),
                     height: 52,
                     decoration: BoxDecoration(
-                      borderRadius: AppRadius.r16,
+                      borderRadius: AppRadius.lg,
                       gradient: const LinearGradient(
                         colors: [
                           AppColors.electricViolet,
@@ -127,7 +127,7 @@ class OnboardingBottomBar extends StatelessWidget {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: onGetStarted,
-                        borderRadius: AppRadius.r16,
+                        borderRadius: AppRadius.lg,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: AppSpacing.xl,
@@ -162,7 +162,7 @@ class OnboardingBottomBar extends StatelessWidget {
                       color: isDark
                           ? AppColors.surfaceContainerHigh
                           : AppColors.lightSurfaceContainer,
-                      borderRadius: AppRadius.r16,
+                      borderRadius: AppRadius.lg,
                       border: Border.all(
                         color: isDark
                             ? AppColors.pureWhite.withValues(alpha: 0.12)
@@ -173,7 +173,7 @@ class OnboardingBottomBar extends StatelessWidget {
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: onNext,
-                        borderRadius: AppRadius.r16,
+                        borderRadius: AppRadius.lg,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: AppSpacing.xl,

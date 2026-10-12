@@ -57,7 +57,7 @@ class AppConfirmDialog extends StatelessWidget {
     final effectiveCancelLabel = cancelLabel ?? 'Cancel';
 
     return AlertDialog(
-      shape: const RoundedRectangleBorder(borderRadius: AppRadius.kRadiusLg),
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.lg),
       backgroundColor: isDark ? AppColors.surface : AppColors.lightSurface,
       title: Text(
         title,
@@ -104,9 +104,7 @@ class AppConfirmDialog extends StatelessWidget {
             foregroundColor: isDestructive
                 ? Colors.white
                 : (isDark ? AppColors.textOnPrimary : Colors.white),
-            shape: const RoundedRectangleBorder(
-              borderRadius: AppRadius.kRadiusSm,
-            ),
+            shape: const RoundedRectangleBorder(borderRadius: AppRadius.sm),
           ),
           child: Text(effectiveConfirmLabel),
         ),

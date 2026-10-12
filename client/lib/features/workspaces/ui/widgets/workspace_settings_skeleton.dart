@@ -44,7 +44,7 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
       padding: AppSpacing.edgeInsetsAllXl,
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: AppRadius.r16,
+        borderRadius: AppRadius.lg,
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
         ),
@@ -54,16 +54,16 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
         children: [
           Bone.text(words: 2),
           AppSpacing.gapHLg,
-          Bone(width: double.infinity, height: 48, borderRadius: AppRadius.r12),
+          Bone(width: double.infinity, height: 48, borderRadius: AppRadius.md),
           AppSpacing.gapHLg,
-          Bone(width: double.infinity, height: 80, borderRadius: AppRadius.r12),
+          Bone(width: double.infinity, height: 80, borderRadius: AppRadius.md),
           AppSpacing.gapHXl,
           Align(
             alignment: Alignment.centerRight,
             child: Bone.button(
               width: 120,
               height: 40,
-              borderRadius: AppRadius.r8,
+              borderRadius: AppRadius.sm,
             ),
           ),
         ],
@@ -75,7 +75,7 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: AppRadius.r16,
+        borderRadius: AppRadius.lg,
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
         ),
@@ -89,9 +89,9 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
               children: [
                 Bone.text(words: 2),
                 AppSpacing.gapWSm,
-                Bone(width: 60, height: 20, borderRadius: AppRadius.r10),
+                Bone(width: 60, height: 20, borderRadius: AppRadius.md),
                 Spacer(),
-                Bone(width: 100, height: 32, borderRadius: AppRadius.r8),
+                Bone(width: 100, height: 32, borderRadius: AppRadius.sm),
               ],
             ),
           ),
@@ -120,7 +120,7 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
                         ),
                       ),
                       AppSpacing.gapWLg,
-                      Bone(width: 50, height: 24, borderRadius: AppRadius.r6),
+                      Bone(width: 50, height: 24, borderRadius: AppRadius.sm),
                     ],
                   ),
                 ),
@@ -139,7 +139,7 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
       padding: AppSpacing.edgeInsetsAllXl,
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: AppRadius.r16,
+        borderRadius: AppRadius.lg,
         border: Border.all(color: AppColors.error.withValues(alpha: 0.4)),
       ),
       child: const Column(
@@ -154,7 +154,7 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
             child: Bone.button(
               width: 140,
               height: 38,
-              borderRadius: AppRadius.r8,
+              borderRadius: AppRadius.sm,
             ),
           ),
         ],

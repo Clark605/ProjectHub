@@ -75,7 +75,7 @@ class AppSheetDragHandle extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           color: isDark ? AppColors.borderVariant : AppColors.lightBorder,
-          borderRadius: AppRadius.circular(height / 2),
+          borderRadius: AppRadius.full,
         ),
       ),
     );

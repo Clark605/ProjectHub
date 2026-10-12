@@ -38,7 +38,7 @@ class TagChip extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: AppRadius.kRadiusSm,
+      borderRadius: AppRadius.sm,
       child: Container(
         padding: EdgeInsets.only(
           left: AppSpacing.sm,
@@ -50,7 +50,7 @@ class TagChip extends StatelessWidget {
           color: isSelected
               ? baseColor.withValues(alpha: 0.35)
               : baseColor.withValues(alpha: 0.15),
-          borderRadius: AppRadius.kRadiusSm,
+          borderRadius: AppRadius.sm,
           border: Border.all(
             color: isSelected ? baseColor : baseColor.withValues(alpha: 0.4),
             width: isSelected ? 1.5 : 1,

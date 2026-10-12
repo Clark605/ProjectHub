@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_typography.dart';
@@ -52,7 +53,7 @@ ThemeData buildLightTheme([Locale? locale]) {
       color: AppColors.lightSurface,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.md,
         side: const BorderSide(color: AppColors.lightBorder, width: 1),
       ),
     ),
@@ -68,15 +69,15 @@ ThemeData buildLightTheme([Locale? locale]) {
       filled: true,
       fillColor: AppColors.lightSurfaceContainer,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.md,
         borderSide: const BorderSide(color: AppColors.lightBorder),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.md,
         borderSide: const BorderSide(color: AppColors.lightBorder),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppRadius.md,
         borderSide: const BorderSide(color: AppColors.primary, width: 2),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -87,7 +88,7 @@ ThemeData buildLightTheme([Locale? locale]) {
         foregroundColor: AppColors.textOnPrimary,
         elevation: 0,
         minimumSize: const Size(64, 44),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.md),
         textStyle: AppTypography.getTextTheme(
           locale,
         ).labelLarge?.copyWith(fontWeight: FontWeight.w600),
@@ -119,7 +120,7 @@ ThemeData buildLightTheme([Locale? locale]) {
         }
         return const BorderSide(color: AppColors.lightBorder);
       }),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.sm),
       labelStyle: const TextStyle(
         color: AppColors.lightTextSecondary,
         fontSize: 13,
@@ -140,16 +141,12 @@ ThemeData buildLightTheme([Locale? locale]) {
     snackBarTheme: const SnackBarThemeData(
       backgroundColor: AppColors.lightSurfaceContainer,
       contentTextStyle: TextStyle(color: AppColors.lightTextPrimary),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.sm),
       behavior: SnackBarBehavior.floating,
     ),
     dialogTheme: DialogThemeData(
       backgroundColor: AppColors.lightSurface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.lg),
       titleTextStyle: AppTypography.getTextTheme(locale).titleLarge?.copyWith(
         color: AppColors.lightTextPrimary,
         fontWeight: FontWeight.w600,
@@ -160,12 +157,7 @@ ThemeData buildLightTheme([Locale? locale]) {
     ),
     bottomSheetTheme: const BottomSheetThemeData(
       backgroundColor: AppColors.lightSurface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.topXl),
     ),
     drawerTheme: const DrawerThemeData(
       backgroundColor: AppColors.lightSurface,

@@ -99,7 +99,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                       padding: AppSpacing.edgeInsetsAllSm,
                       decoration: BoxDecoration(
                         color: columnBg,
-                        borderRadius: AppRadius.r14,
+                        borderRadius: AppRadius.md,
                         border: Border.all(color: cardBorder),
                       ),
                       child: Column(
@@ -127,7 +127,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                       padding: AppSpacing.edgeInsetsAllSm,
                       decoration: BoxDecoration(
                         color: columnBg,
-                        borderRadius: AppRadius.r14,
+                        borderRadius: AppRadius.md,
                         border: Border.all(
                           color: isDark
                               ? AppColors.electricViolet.withValues(alpha: 0.25)
@@ -159,7 +159,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                       padding: AppSpacing.edgeInsetsAllSm,
                       decoration: BoxDecoration(
                         color: columnBg,
-                        borderRadius: AppRadius.r14,
+                        borderRadius: AppRadius.md,
                         border: Border.all(color: cardBorder),
                       ),
                       child: Column(
@@ -226,7 +226,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                                     ? AppColors.greenEmeraldSubtleDark
                                     : AppColors.greenEmeraldSubtleLight)
                               : cardBg,
-                          borderRadius: AppRadius.r10,
+                          borderRadius: AppRadius.md,
                           border: Border.all(
                             color: isDoneState
                                 ? AppColors.success
@@ -288,7 +288,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                                         : AppColors.electricViolet.withValues(
                                             alpha: 0.15,
                                           ),
-                                    borderRadius: AppRadius.r4,
+                                    borderRadius: AppRadius.xs,
                                   ),
                                   child: Text(
                                     isDoneState
@@ -346,7 +346,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                           gradient: const LinearGradient(
                             colors: [AppColors.skyBlueDeep, AppColors.success],
                           ),
-                          borderRadius: AppRadius.r20,
+                          borderRadius: AppRadius.xl,
                           boxShadow: [
                             BoxShadow(
                               color: AppColors.success.withValues(alpha: 0.35),
@@ -410,7 +410,7 @@ class _KanbanVisualState extends State<KanbanVisual>
           horizontal: AppSpacing.sm,
           vertical: AppSpacing.xs,
         ),
-        decoration: const BoxDecoration(borderRadius: AppRadius.r8),
+        decoration: const BoxDecoration(borderRadius: AppRadius.sm),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -461,7 +461,7 @@ class _KanbanVisualState extends State<KanbanVisual>
       padding: const EdgeInsets.all(AppSpacing.sm),
       decoration: BoxDecoration(
         color: cardBg,
-        borderRadius: AppRadius.r10,
+        borderRadius: AppRadius.md,
         border: Border.all(color: cardBorder),
       ),
       child: Column(
@@ -486,7 +486,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                 ),
                 decoration: BoxDecoration(
                   color: tagColor.withValues(alpha: 0.15),
-                  borderRadius: AppRadius.r4,
+                  borderRadius: AppRadius.xs,
                 ),
                 child: Text(
                   tag,
@@ -531,7 +531,7 @@ class _KanbanVisualState extends State<KanbanVisual>
       padding: const EdgeInsets.all(AppSpacing.sm),
       decoration: BoxDecoration(
         color: cardBg,
-        borderRadius: AppRadius.r10,
+        borderRadius: AppRadius.md,
         border: Border.all(color: cardBorder),
       ),
       child: Row(
@@ -566,7 +566,7 @@ class _KanbanVisualState extends State<KanbanVisual>
       height: 28,
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: AppRadius.r8,
+        borderRadius: AppRadius.sm,
         border: Border.all(
           color: borderColor.withValues(alpha: 0.5),
           style: BorderStyle.solid,

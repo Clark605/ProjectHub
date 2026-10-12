@@ -21,7 +21,7 @@ class ShellPresenceIndicator extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow,
-        borderRadius: AppRadius.r20,
+        borderRadius: AppRadius.xl,
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
         ),

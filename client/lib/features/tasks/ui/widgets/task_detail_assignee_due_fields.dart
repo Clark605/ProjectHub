@@ -50,11 +50,11 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
             filled: true,
             fillColor: theme.colorScheme.surfaceContainer,
             border: OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
             ),
           ),
@@ -90,13 +90,13 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
         AppSpacing.gapHSm,
         InkWell(
           onTap: onPickDueDate,
-          borderRadius: AppRadius.r12,
+          borderRadius: AppRadius.md,
           child: Container(
             height: 48,
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainer,
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               border: Border.all(color: theme.colorScheme.outlineVariant),
             ),
             child: Row(

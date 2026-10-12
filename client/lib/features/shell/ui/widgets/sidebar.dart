@@ -112,7 +112,7 @@ class Sidebar extends StatelessWidget {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    borderRadius: AppRadius.r8,
+                    borderRadius: AppRadius.sm,
                   ),
                   child: const Center(
                     child: Icon(
@@ -151,7 +151,7 @@ class Sidebar extends StatelessWidget {
                   color: theme.colorScheme.surfaceContainerHigh.withValues(
                     alpha: 0.45,
                   ),
-                  borderRadius: AppRadius.r8,
+                  borderRadius: AppRadius.sm,
                   border: BorderDirectional(
                     start: BorderSide(
                       color: WorkspaceAccent.fromId(

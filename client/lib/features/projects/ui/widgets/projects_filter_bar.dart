@@ -75,7 +75,7 @@ class ProjectsFilterBar extends StatelessWidget {
                   ),
                   backgroundColor: theme.colorScheme.surfaceContainerLow,
                   shape: RoundedRectangleBorder(
-                    borderRadius: AppRadius.r20,
+                    borderRadius: AppRadius.xl,
                     side: BorderSide(
                       color: isSelected
                           ? AppColors.electricVioletContainer

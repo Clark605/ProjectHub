@@ -76,7 +76,7 @@ class RealtimeStatusBadge extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: dotColor.withValues(alpha: 0.12),
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               border: Border.all(
                 color: dotColor.withValues(alpha: 0.3),
                 width: 1,

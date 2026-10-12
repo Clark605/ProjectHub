@@ -26,7 +26,7 @@ class WorkspaceMembersCard extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerLow,
-            borderRadius: AppRadius.r16,
+            borderRadius: AppRadius.lg,
             border: Border.all(color: theme.colorScheme.outlineVariant),
           ),
           child: Column(
@@ -45,7 +45,7 @@ class WorkspaceMembersCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceContainerHigh,
-                        borderRadius: AppRadius.r12,
+                        borderRadius: AppRadius.md,
                       ),
                       child: Text(
                         l10n.membersCount(state.members.length),

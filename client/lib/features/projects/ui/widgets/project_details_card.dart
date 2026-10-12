@@ -92,7 +92,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
           padding: AppSpacing.edgeInsetsAllXl,
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerLow,
-            borderRadius: AppRadius.r16,
+            borderRadius: AppRadius.lg,
             border: Border.all(color: theme.colorScheme.outlineVariant),
           ),
           child: Form(
@@ -117,7 +117,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                         ),
                         decoration: BoxDecoration(
                           color: theme.colorScheme.surfaceContainer,
-                          borderRadius: AppRadius.r8,
+                          borderRadius: AppRadius.sm,
                           border: Border.all(
                             color: theme.colorScheme.outlineVariant,
                           ),

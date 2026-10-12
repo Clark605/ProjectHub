@@ -46,7 +46,7 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: AppRadius.r12,
+        borderRadius: AppRadius.md,
       ),
       child: Row(
         children: [

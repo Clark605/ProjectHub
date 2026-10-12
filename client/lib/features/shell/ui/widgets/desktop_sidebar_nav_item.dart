@@ -30,7 +30,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: AppRadius.r10,
+      borderRadius: AppRadius.md,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.md,
@@ -40,7 +40,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
           color: isSelected
               ? activeColor.withValues(alpha: 0.15)
               : Colors.transparent,
-          borderRadius: AppRadius.r10,
+          borderRadius: AppRadius.md,
           border: isSelected
               ? Border.all(color: activeColor.withValues(alpha: 0.4), width: 1)
               : null,
@@ -72,7 +72,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: (badgeColor ?? activeColor).withValues(alpha: 0.15),
-                  borderRadius: AppRadius.r10,
+                  borderRadius: AppRadius.md,
                 ),
                 child: Text(
                   badge!,

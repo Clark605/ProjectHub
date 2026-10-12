@@ -74,7 +74,7 @@ class KanbanColumnHeader extends StatelessWidget {
                         : (isDark
                               ? AppColors.pureWhite.withValues(alpha: 0.12)
                               : AppColors.pureBlack.withValues(alpha: 0.12)),
-                    borderRadius: AppRadius.r10,
+                    borderRadius: AppRadius.md,
                   ),
                   child: Text(
                     '$taskCount',

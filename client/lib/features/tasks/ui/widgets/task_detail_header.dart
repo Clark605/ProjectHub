@@ -38,7 +38,7 @@ class TaskDetailHeader extends StatelessWidget {
       children: [
         InkWell(
           onTap: isArchived ? null : onOpenStatusMove,
-          borderRadius: AppRadius.r12,
+          borderRadius: AppRadius.md,
           child: Container(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.sm,
@@ -46,7 +46,7 @@ class TaskDetailHeader extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: task.statusEnum.toColor().withValues(alpha: 0.15),
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               border: Border.all(
                 color: task.statusEnum.toColor().withValues(alpha: 0.4),
               ),

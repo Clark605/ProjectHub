@@ -56,7 +56,7 @@ class MyTasksSection extends StatelessWidget {
         // Section Header
         InkWell(
           onTap: isCollapsible ? onToggleCollapse : null,
-          borderRadius: AppRadius.r8,
+          borderRadius: AppRadius.sm,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               vertical: AppSpacing.sm,
@@ -85,7 +85,7 @@ class MyTasksSection extends StatelessWidget {
                         : (isDark
                               ? AppColors.pureWhite.withValues(alpha: 0.12)
                               : AppColors.pureBlack.withValues(alpha: 0.12)),
-                    borderRadius: AppRadius.r10,
+                    borderRadius: AppRadius.md,
                   ),
                   child: Text(
                     '${tasks.length}',

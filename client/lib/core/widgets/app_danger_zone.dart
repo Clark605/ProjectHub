@@ -35,7 +35,7 @@ class AppDangerZone extends StatelessWidget {
       elevation: 0,
       shape: const RoundedRectangleBorder(
         side: BorderSide(color: AppColors.error),
-        borderRadius: AppRadius.kRadiusSm,
+        borderRadius: AppRadius.sm,
       ),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.md),

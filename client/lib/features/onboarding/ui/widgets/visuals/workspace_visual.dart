@@ -38,7 +38,7 @@ class WorkspaceVisual extends StatelessWidget {
                   color: isDark
                       ? AppColors.surfaceContainerLow.withValues(alpha: 0.8)
                       : AppColors.lightSurfaceContainer,
-                  borderRadius: AppRadius.r16,
+                  borderRadius: AppRadius.lg,
                   border: Border.all(color: cardBorder),
                 ),
                 child: Row(
@@ -48,7 +48,7 @@ class WorkspaceVisual extends StatelessWidget {
                       height: 32,
                       decoration: BoxDecoration(
                         color: AppColors.electricViolet.withValues(alpha: 0.2),
-                        borderRadius: AppRadius.r10,
+                        borderRadius: AppRadius.md,
                       ),
                       child: const Icon(
                         Icons.dashboard_customize_rounded,
@@ -87,7 +87,7 @@ class WorkspaceVisual extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.success.withValues(alpha: 0.15),
-                        borderRadius: AppRadius.r8,
+                        borderRadius: AppRadius.sm,
                         border: Border.all(
                           color: AppColors.success.withValues(alpha: 0.3),
                         ),
@@ -140,7 +140,7 @@ class WorkspaceVisual extends StatelessWidget {
                     padding: AppSpacing.edgeInsetsAllMd,
                     decoration: BoxDecoration(
                       color: cardBg,
-                      borderRadius: AppRadius.r18,
+                      borderRadius: AppRadius.lg,
                       border: Border.all(
                         color: isDark
                             ? AppColors.electricViolet.withValues(alpha: 0.25)
@@ -174,7 +174,7 @@ class WorkspaceVisual extends StatelessWidget {
                                     color: AppColors.electricViolet.withValues(
                                       alpha: 0.18,
                                     ),
-                                    borderRadius: AppRadius.r6,
+                                    borderRadius: AppRadius.sm,
                                   ),
                                   child: Text(
                                     'PROJECT 04',
@@ -195,7 +195,7 @@ class WorkspaceVisual extends StatelessWidget {
                                     color: AppColors.priorityHigh.withValues(
                                       alpha: 0.15,
                                     ),
-                                    borderRadius: AppRadius.r6,
+                                    borderRadius: AppRadius.sm,
                                   ),
                                   child: Text(
                                     l10n.priorityHigh.toUpperCase(),
@@ -227,7 +227,7 @@ class WorkspaceVisual extends StatelessWidget {
 
                         // Animated Progress Bar
                         ClipRRect(
-                          borderRadius: AppRadius.r6,
+                          borderRadius: AppRadius.sm,
                           child: Stack(
                             children: [
                               Container(
@@ -369,7 +369,7 @@ class WorkspaceVisual extends StatelessWidget {
                                   AppColors.skyBlueContainer,
                                 ],
                               ),
-                              borderRadius: AppRadius.r20,
+                              borderRadius: AppRadius.xl,
                               boxShadow: [
                                 BoxShadow(
                                   color: AppColors.electricViolet.withValues(
@@ -431,7 +431,7 @@ class WorkspaceVisual extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   color: cardBg.withValues(alpha: 0.7),
-                  borderRadius: AppRadius.r14,
+                  borderRadius: AppRadius.md,
                   border: Border.all(color: cardBorder),
                 ),
                 child: Row(

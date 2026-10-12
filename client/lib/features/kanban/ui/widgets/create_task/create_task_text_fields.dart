@@ -40,15 +40,15 @@ class CreateTaskTextFields extends StatelessWidget {
             filled: true,
             fillColor: fillColor,
             border: OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: borderColor),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: borderColor),
             ),
             focusedBorder: const OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: AppColors.primary, width: 1.5),
             ),
           ),
@@ -67,15 +67,15 @@ class CreateTaskTextFields extends StatelessWidget {
             filled: true,
             fillColor: fillColor,
             border: OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: borderColor),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: borderColor),
             ),
             focusedBorder: const OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: AppColors.primary, width: 1.5),
             ),
           ),

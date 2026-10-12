@@ -47,7 +47,7 @@ class VoiceListeningOverlay extends StatelessWidget {
             color: isDark
                 ? AppColors.surfaceContainerHigh.withValues(alpha: 0.95)
                 : theme.colorScheme.surface,
-            borderRadius: AppRadius.topXxl,
+            borderRadius: AppRadius.topXl,
             border: Border.all(
               color: isDark
                   ? AppColors.electricViolet.withValues(alpha: 0.3)
@@ -76,7 +76,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: AppSpacing.lg),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.outlineVariant,
-                    borderRadius: AppRadius.r2,
+                    borderRadius: AppRadius.xs,
                   ),
                 ),
                 GestureDetector(
@@ -108,7 +108,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                     color: isDark
                         ? AppColors.surfaceContainerLowest
                         : theme.colorScheme.surfaceContainer,
-                    borderRadius: AppRadius.r12,
+                    borderRadius: AppRadius.md,
                     border: Border.all(color: theme.colorScheme.outlineVariant),
                   ),
                   child: SingleChildScrollView(
@@ -164,7 +164,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                             vertical: AppSpacing.sm,
                           ),
                           shape: const RoundedRectangleBorder(
-                            borderRadius: AppRadius.r10,
+                            borderRadius: AppRadius.md,
                           ),
                         ),
                       ),

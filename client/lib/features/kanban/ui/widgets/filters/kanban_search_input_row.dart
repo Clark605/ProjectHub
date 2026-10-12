@@ -29,7 +29,7 @@ class KanbanSearchInputRow extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
-              borderRadius: AppRadius.r10,
+              borderRadius: AppRadius.md,
               border: Border.all(color: theme.colorScheme.outlineVariant),
             ),
             child: TextField(

@@ -86,7 +86,7 @@ class MoveToStatusSheet extends StatelessWidget {
             return Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: AppRadius.r12,
+                borderRadius: AppRadius.md,
                 onTap: isCurrent ? null : () => onStatusSelected(status),
                 child: Container(
                   height: 52,
@@ -100,7 +100,7 @@ class MoveToStatusSheet extends StatelessWidget {
                         height: 36,
                         decoration: BoxDecoration(
                           color: status.toColor().withValues(alpha: 0.15),
-                          borderRadius: AppRadius.r8,
+                          borderRadius: AppRadius.sm,
                         ),
                         child: Icon(
                           status.toIcon(),
@@ -130,7 +130,7 @@ class MoveToStatusSheet extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             color: status.toColor().withValues(alpha: 0.15),
-                            borderRadius: AppRadius.r10,
+                            borderRadius: AppRadius.md,
                           ),
                           child: Text(
                             l10n.currentStatus,

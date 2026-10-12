@@ -105,7 +105,7 @@ class KanbanTaskCard extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: AppRadius.r12,
+        borderRadius: AppRadius.md,
         border: Border.all(color: theme.colorScheme.outlineVariant, width: 1),
         boxShadow: [
           BoxShadow(
@@ -118,11 +118,11 @@ class KanbanTaskCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: AppRadius.r12,
+          borderRadius: AppRadius.md,
           onTap: () => _handleTap(context),
           onLongPress: isArchived ? null : () => _handleMove(context),
           child: ClipRRect(
-            borderRadius: AppRadius.r12,
+            borderRadius: AppRadius.md,
             child: Stack(
               children: [
                 Positioned(

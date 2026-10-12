@@ -19,7 +19,7 @@ class AttachTagSearchField extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = context.l10n;
     final border = OutlineInputBorder(
-      borderRadius: AppRadius.r10,
+      borderRadius: AppRadius.md,
       borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
     );
 

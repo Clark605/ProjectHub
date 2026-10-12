@@ -61,7 +61,7 @@ class AppDateField extends StatelessWidget {
         ],
         InkWell(
           onTap: () => _selectDate(context),
-          borderRadius: AppRadius.r8,
+          borderRadius: AppRadius.sm,
           child: Container(
             width: double.infinity,
             height: 51,
@@ -71,7 +71,7 @@ class AppDateField extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.border),
-              borderRadius: AppRadius.r8,
+              borderRadius: AppRadius.sm,
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,

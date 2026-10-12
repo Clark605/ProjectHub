@@ -27,7 +27,7 @@ class VisualCanvasCard extends StatelessWidget {
       height: height,
       constraints: const BoxConstraints(maxWidth: 440),
       decoration: BoxDecoration(
-        borderRadius: AppRadius.r28,
+        borderRadius: AppRadius.xl,
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -56,7 +56,7 @@ class VisualCanvasCard extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: AppRadius.r28,
+        borderRadius: AppRadius.xl,
         child: Stack(
           fit: StackFit.expand,
           children: [

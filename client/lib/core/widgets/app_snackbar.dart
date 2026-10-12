@@ -58,7 +58,7 @@ extension AppSnackBarExtension on BuildContext {
         content: Text(message, style: TextStyle(color: textColor)),
         backgroundColor: backgroundColor,
         behavior: SnackBarBehavior.floating,
-        shape: const RoundedRectangleBorder(borderRadius: AppRadius.kRadiusSm),
+        shape: const RoundedRectangleBorder(borderRadius: AppRadius.sm),
         action: action,
       ),
     );

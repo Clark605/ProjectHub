@@ -61,12 +61,12 @@ class ProjectCard extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      borderRadius: AppRadius.r16,
+      borderRadius: AppRadius.lg,
       child: Ink(
         padding: AppSpacing.edgeInsetsAllLg,
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerLow,
-          borderRadius: AppRadius.r16,
+          borderRadius: AppRadius.lg,
           border: Border.all(color: theme.colorScheme.outlineVariant, width: 1),
         ),
         child: Column(
@@ -95,7 +95,7 @@ class ProjectCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: statusColor.withValues(alpha: 0.15),
-                    borderRadius: AppRadius.r20,
+                    borderRadius: AppRadius.xl,
                     border: Border.all(
                       color: statusColor.withValues(alpha: 0.3),
                       width: 1,
@@ -148,7 +148,7 @@ class ProjectCard extends StatelessWidget {
             ),
             AppSpacing.gapHXs,
             ClipRRect(
-              borderRadius: AppRadius.r3,
+              borderRadius: AppRadius.xs,
               child: LinearProgressIndicator(
                 value: totalTasks > 0 ? progress : 0.0,
                 minHeight: 5,
@@ -198,7 +198,7 @@ class ProjectCard extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.surfaceContainerHighest,
-                        borderRadius: AppRadius.r10,
+                        borderRadius: AppRadius.md,
                       ),
                       child: Text(
                         '+${members.length - 4}',

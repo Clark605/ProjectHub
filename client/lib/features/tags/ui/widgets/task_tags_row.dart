@@ -47,7 +47,7 @@ class TaskTagsRow extends StatelessWidget {
         ),
         if (canEdit && tags.length < 5 && onTagAdded != null)
           InkWell(
-            borderRadius: AppRadius.r6,
+            borderRadius: AppRadius.sm,
             onTap: () => AttachTagModal.show(
               context,
               projectId: projectId,
@@ -60,7 +60,7 @@ class TaskTagsRow extends StatelessWidget {
                 vertical: AppSpacing.xxs,
               ),
               decoration: BoxDecoration(
-                borderRadius: AppRadius.r6,
+                borderRadius: AppRadius.sm,
                 border: Border.all(
                   color: AppColors.textSecondary.withValues(alpha: 0.4),
                   style: BorderStyle.solid,

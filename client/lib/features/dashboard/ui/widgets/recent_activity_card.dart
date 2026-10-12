@@ -32,7 +32,7 @@ class RecentActivityCard extends StatelessWidget {
       padding: AppSpacing.edgeInsetsAllXl,
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
-        borderRadius: AppRadius.r18,
+        borderRadius: AppRadius.lg,
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
           width: 1,
@@ -48,7 +48,7 @@ class RecentActivityCard extends StatelessWidget {
                 height: 36,
                 decoration: BoxDecoration(
                   color: AppColors.skyBlue.withValues(alpha: 0.15),
-                  borderRadius: AppRadius.r10,
+                  borderRadius: AppRadius.md,
                   border: Border.all(
                     color: AppColors.skyBlue.withValues(alpha: 0.3),
                   ),

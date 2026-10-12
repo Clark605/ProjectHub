@@ -34,7 +34,7 @@ class MyTaskListTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: AppSpacing.sm),
       decoration: BoxDecoration(
         color: isDark ? AppColors.surfaceContainer : AppColors.lightSurface,
-        borderRadius: AppRadius.r12,
+        borderRadius: AppRadius.md,
         border: Border.all(
           color: isDark ? AppColors.border : AppColors.lightBorder,
         ),
@@ -42,7 +42,7 @@ class MyTaskListTile extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: AppRadius.r12,
+          borderRadius: AppRadius.md,
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -57,7 +57,7 @@ class MyTaskListTile extends StatelessWidget {
                   height: 36,
                   decoration: BoxDecoration(
                     color: priorityColor,
-                    borderRadius: AppRadius.r2,
+                    borderRadius: AppRadius.xs,
                   ),
                 ),
                 AppSpacing.gapWMd,
@@ -162,7 +162,7 @@ class MyTaskListTile extends StatelessWidget {
                         color: task.statusEnum.toColor().withValues(
                           alpha: 0.15,
                         ),
-                        borderRadius: AppRadius.r8,
+                        borderRadius: AppRadius.sm,
                       ),
                       child: Text(
                         task.statusEnum.localizedName(l10n),

@@ -146,23 +146,23 @@ class _AppTextFieldState extends State<AppTextField> {
                   )
                 : widget.suffixIcon,
             border: OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: baseBorderColor),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: baseBorderColor),
             ),
             focusedBorder: const OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: AppColors.primary, width: 1.5),
             ),
             errorBorder: const OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: AppColors.error, width: 1.5),
             ),
             focusedErrorBorder: const OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(color: AppColors.error, width: 2),
             ),
             errorStyle: theme.textTheme.bodySmall?.copyWith(

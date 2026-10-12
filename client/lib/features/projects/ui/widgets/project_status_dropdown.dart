@@ -37,13 +37,13 @@ class ProjectStatusDropdown extends StatelessWidget {
                 ? theme.colorScheme.surfaceContainerLow
                 : theme.colorScheme.surfaceContainer,
             border: OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(
                 color: AppColors.border.withValues(alpha: 0.5),
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: AppRadius.r12,
+              borderRadius: AppRadius.md,
               borderSide: BorderSide(
                 color: AppColors.border.withValues(alpha: 0.5),
               ),

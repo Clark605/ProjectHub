@@ -41,7 +41,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
                   child: Bone(
                     width: index == 0 ? 92 : 82,
                     height: 32,
-                    borderRadius: AppRadius.r20,
+                    borderRadius: AppRadius.xl,
                   ),
                 );
               }),
@@ -73,7 +73,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
               padding: AppSpacing.edgeInsetsAllMd,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerLow,
-                borderRadius: AppRadius.r16,
+                borderRadius: AppRadius.lg,
                 border: Border.all(
                   color: Theme.of(context).colorScheme.outlineVariant,
                   width: 1,
@@ -108,7 +108,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
         AppSpacing.gapWSm,
         Flexible(child: Bone.text(words: 2)),
         AppSpacing.gapWSm,
-        Bone(width: 24, height: 18, borderRadius: AppRadius.r10),
+        Bone(width: 24, height: 18, borderRadius: AppRadius.md),
         Spacer(),
         Bone.icon(size: 18),
       ],
@@ -124,11 +124,11 @@ class KanbanBoardSkeleton extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
-        borderRadius: AppRadius.r12,
+        borderRadius: AppRadius.md,
         border: Border.all(color: theme.colorScheme.outlineVariant, width: 1),
       ),
       child: const ClipRRect(
-        borderRadius: AppRadius.r12,
+        borderRadius: AppRadius.md,
         child: Stack(
           children: [
             Positioned(
@@ -161,7 +161,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
                     ],
                   ),
                   AppSpacing.gapHSm,
-                  Bone(width: 52, height: 18, borderRadius: AppRadius.r10),
+                  Bone(width: 52, height: 18, borderRadius: AppRadius.md),
                   AppSpacing.gapHMd,
                   Row(
                     children: [
@@ -173,12 +173,12 @@ class KanbanBoardSkeleton extends StatelessWidget {
                             Bone(
                               width: 44,
                               height: 16,
-                              borderRadius: AppRadius.r6,
+                              borderRadius: AppRadius.sm,
                             ),
                             Bone(
                               width: 38,
                               height: 16,
-                              borderRadius: AppRadius.r6,
+                              borderRadius: AppRadius.sm,
                             ),
                           ],
                         ),

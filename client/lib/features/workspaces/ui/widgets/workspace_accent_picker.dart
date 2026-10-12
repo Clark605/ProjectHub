@@ -62,7 +62,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
                 message: accent.name,
                 child: InkWell(
                   onTap: () => onAccentSelected(accent.id),
-                  borderRadius: AppRadius.r22,
+                  borderRadius: AppRadius.xl,
                   child: Container(
                     width: 40,
                     height: 40,

@@ -33,12 +33,12 @@ class MetricCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: AppRadius.r14,
+        borderRadius: AppRadius.md,
         child: Container(
           padding: AppSpacing.edgeInsetsAllLg,
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainer.withValues(alpha: 0.8),
-            borderRadius: AppRadius.r14,
+            borderRadius: AppRadius.md,
             border: Border.all(
               color: theme.colorScheme.outlineVariant.withValues(alpha: 0.6),
               width: 1,
@@ -55,7 +55,7 @@ class MetricCard extends StatelessWidget {
                     height: 32,
                     decoration: BoxDecoration(
                       color: data.color.withValues(alpha: 0.15),
-                      borderRadius: AppRadius.r8,
+                      borderRadius: AppRadius.sm,
                     ),
                     child: Icon(
                       data.icon,

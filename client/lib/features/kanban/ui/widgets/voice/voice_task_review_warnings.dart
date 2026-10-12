@@ -22,7 +22,7 @@ class VoiceTaskReviewWarnings extends StatelessWidget {
       padding: AppSpacing.edgeInsetsAllSm,
       decoration: BoxDecoration(
         color: warningColor.withValues(alpha: isDark ? 0.12 : 0.08),
-        borderRadius: AppRadius.kRadiusSm,
+        borderRadius: AppRadius.sm,
         border: Border.all(
           color: warningColor.withValues(alpha: isDark ? 0.4 : 0.35),
         ),

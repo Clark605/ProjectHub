@@ -101,11 +101,11 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
               filled: true,
               fillColor: theme.colorScheme.surfaceContainer,
               border: OutlineInputBorder(
-                borderRadius: AppRadius.r12,
+                borderRadius: AppRadius.md,
                 borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: AppRadius.r12,
+                borderRadius: AppRadius.md,
                 borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
             ),
@@ -123,11 +123,11 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
               filled: true,
               fillColor: theme.colorScheme.surfaceContainer,
               border: OutlineInputBorder(
-                borderRadius: AppRadius.r12,
+                borderRadius: AppRadius.md,
                 borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: AppRadius.r12,
+                borderRadius: AppRadius.md,
                 borderSide: BorderSide(color: theme.colorScheme.outlineVariant),
               ),
             ),

@@ -86,7 +86,7 @@ class KanbanColumn extends StatelessWidget {
         color: isDark
             ? theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.5)
             : theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.7),
-        borderRadius: AppRadius.r16,
+        borderRadius: AppRadius.lg,
         border: Border.all(
           color: columnAccent != null
               ? columnAccent.withValues(alpha: isDark ? 0.35 : 0.25)
@@ -103,7 +103,7 @@ class KanbanColumn extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               decoration: BoxDecoration(
                 color: columnAccent.withValues(alpha: 0.8),
-                borderRadius: AppRadius.kRadiusXxs,
+                borderRadius: AppRadius.xs,
               ),
             ),
           if (showHeader)
@@ -122,7 +122,7 @@ class KanbanColumn extends StatelessWidget {
                     child: Padding(
                       padding: AppSpacing.edgeInsetsAllLg,
                       child: InkWell(
-                        borderRadius: AppRadius.r12,
+                        borderRadius: AppRadius.md,
                         onTap: isArchived
                             ? null
                             : () => _handleAddTask(context),
@@ -132,7 +132,7 @@ class KanbanColumn extends StatelessWidget {
                             vertical: AppSpacing.xl,
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: AppRadius.r12,
+                            borderRadius: AppRadius.md,
                             border: Border.all(
                               color: theme.colorScheme.outlineVariant
                                   .withValues(alpha: 0.5),

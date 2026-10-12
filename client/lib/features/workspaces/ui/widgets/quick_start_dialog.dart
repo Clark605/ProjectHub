@@ -97,7 +97,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
         padding: AppSpacing.edgeInsetsAllXxl,
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
-          borderRadius: AppRadius.kRadiusXxl,
+          borderRadius: AppRadius.xl,
           border: Border.all(color: theme.colorScheme.outlineVariant),
           boxShadow: [
             BoxShadow(
@@ -202,7 +202,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
       padding: AppSpacing.edgeInsetsAllSm,
       decoration: BoxDecoration(
         color: AppColors.error.withValues(alpha: 0.15),
-        borderRadius: AppRadius.r8,
+        borderRadius: AppRadius.sm,
         border: Border.all(color: AppColors.error),
       ),
       child: Text(

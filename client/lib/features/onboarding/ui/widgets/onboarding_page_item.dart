@@ -61,7 +61,7 @@ class OnboardingPageItem extends StatelessWidget {
                   color: isDark
                       ? AppColors.electricViolet.withValues(alpha: 0.12)
                       : AppColors.electricViolet.withValues(alpha: 0.15),
-                  borderRadius: AppRadius.r20,
+                  borderRadius: AppRadius.xl,
                   border: Border.all(
                     color: AppColors.electricViolet.withValues(
                       alpha: isDark ? 0.35 : 0.45,

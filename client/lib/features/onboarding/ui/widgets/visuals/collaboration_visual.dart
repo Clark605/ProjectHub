@@ -78,7 +78,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                     color: isDark
                         ? AppColors.surfaceContainerLow.withValues(alpha: 0.85)
                         : AppColors.lightSurfaceContainer,
-                    borderRadius: AppRadius.r16,
+                    borderRadius: AppRadius.lg,
                     border: Border.all(color: cardBorder),
                   ),
                   child: Row(
@@ -132,7 +132,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                   ),
                   decoration: BoxDecoration(
                     color: cardBg,
-                    borderRadius: AppRadius.r18,
+                    borderRadius: AppRadius.lg,
                     border: Border.all(
                       color: isDark
                           ? AppColors.skyBlue.withValues(alpha: 0.25)
@@ -159,7 +159,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                             padding: AppSpacing.edgeInsetsAllXs,
                             decoration: BoxDecoration(
                               color: AppColors.skyBlue.withValues(alpha: 0.15),
-                              borderRadius: AppRadius.r8,
+                              borderRadius: AppRadius.sm,
                             ),
                             child: const Icon(
                               Icons.chat_bubble_outline_rounded,
@@ -198,7 +198,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                           color: isDark
                               ? AppColors.surfaceContainer
                               : AppColors.lightSurfaceContainer,
-                          borderRadius: AppRadius.r12,
+                          borderRadius: AppRadius.md,
                         ),
                         child: Row(
                           children: [
@@ -290,7 +290,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                     color: isDark
                         ? AppColors.surfaceContainerLow.withValues(alpha: 0.9)
                         : AppColors.pureWhite,
-                    borderRadius: AppRadius.r14,
+                    borderRadius: AppRadius.md,
                     border: Border.all(
                       color: AppColors.success.withValues(alpha: 0.3),
                     ),
@@ -389,7 +389,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
               ),
               decoration: BoxDecoration(
                 color: color,
-                borderRadius: AppRadius.r6,
+                borderRadius: AppRadius.sm,
                 boxShadow: [
                   BoxShadow(
                     color: color.withValues(alpha: 0.35),
@@ -421,7 +421,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
               ),
               decoration: BoxDecoration(
                 color: AppColors.pureWhite.withValues(alpha: 0.9),
-                borderRadius: AppRadius.r6,
+                borderRadius: AppRadius.sm,
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.pureBlack.withValues(alpha: 0.12),

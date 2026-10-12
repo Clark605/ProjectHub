@@ -106,7 +106,7 @@ class MemberTile extends StatelessWidget {
               color: isOwner
                   ? primaryColor.withValues(alpha: 0.15)
                   : theme.colorScheme.surfaceContainerHigh,
-              borderRadius: AppRadius.r6,
+              borderRadius: AppRadius.sm,
               border: Border.all(
                 color: isOwner
                     ? primaryColor.withValues(alpha: 0.3)

@@ -32,4 +32,3 @@ class AppIconSize {
   /// 64px — Full-screen empty and error state hero icons.
   static const double hero = 64;
 }
-

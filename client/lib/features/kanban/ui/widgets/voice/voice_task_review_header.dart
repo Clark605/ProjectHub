@@ -31,7 +31,7 @@ class VoiceTaskReviewHeader extends StatelessWidget {
             color: AppColors.electricVioletContainer.withValues(
               alpha: isDark ? 0.2 : 0.12,
             ),
-            borderRadius: AppRadius.r16,
+            borderRadius: AppRadius.lg,
             border: Border.all(
               color: isDark
                   ? AppColors.electricVioletContainer

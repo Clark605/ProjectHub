@@ -37,7 +37,7 @@ class CreateTaskTagsSelector extends StatelessWidget {
         ),
         if (selectedTags.length < 5)
           InkWell(
-            borderRadius: AppRadius.r6,
+            borderRadius: AppRadius.sm,
             onTap: () {
               AttachTagModal.show(
                 context,
@@ -52,7 +52,7 @@ class CreateTaskTagsSelector extends StatelessWidget {
                 vertical: AppSpacing.xxs,
               ),
               decoration: BoxDecoration(
-                borderRadius: AppRadius.r6,
+                borderRadius: AppRadius.sm,
                 border: Border.all(
                   color: theme.colorScheme.outlineVariant,
                   style: BorderStyle.solid,

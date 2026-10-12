@@ -34,7 +34,7 @@ class WorkspaceCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: AppRadius.r12,
+        borderRadius: AppRadius.md,
         child: Container(
           constraints: const BoxConstraints(minHeight: 56),
           padding: const EdgeInsets.symmetric(
@@ -45,7 +45,7 @@ class WorkspaceCard extends StatelessWidget {
             color: isActive
                 ? accentColor.withValues(alpha: 0.1)
                 : theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.5),
-            borderRadius: AppRadius.r12,
+            borderRadius: AppRadius.md,
             border: Border.all(
               color: isActive
                   ? accentColor.withValues(alpha: 0.6)
@@ -129,7 +129,7 @@ class WorkspaceCard extends StatelessWidget {
                   color: isOwner
                       ? theme.colorScheme.primary.withValues(alpha: 0.15)
                       : theme.colorScheme.secondary.withValues(alpha: 0.15),
-                  borderRadius: AppRadius.r6,
+                  borderRadius: AppRadius.sm,
                   border: Border.all(
                     color: isOwner
                         ? theme.colorScheme.primary.withValues(alpha: 0.3)

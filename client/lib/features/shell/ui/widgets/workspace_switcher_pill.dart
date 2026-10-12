@@ -37,7 +37,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
 
     return InkWell(
       onTap: isLoading ? null : onWorkspaceTap,
-      borderRadius: AppRadius.r10,
+      borderRadius: AppRadius.md,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.sm,
@@ -45,7 +45,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.6),
-          borderRadius: AppRadius.r10,
+          borderRadius: AppRadius.md,
           border: Border.all(
             color: theme.colorScheme.outlineVariant.withValues(alpha: 0.8),
           ),
@@ -104,7 +104,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         color: accentColor.withValues(alpha: 0.15),
-                        borderRadius: AppRadius.r4,
+                        borderRadius: AppRadius.xs,
                       ),
                       child: Text(
                         activeWorkspaceRole!,

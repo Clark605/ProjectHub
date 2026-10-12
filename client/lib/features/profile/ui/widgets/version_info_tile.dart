@@ -29,7 +29,7 @@ class VersionInfoTile extends StatelessWidget {
                   height: 44,
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary.withValues(alpha: 0.12),
-                    borderRadius: AppRadius.r10,
+                    borderRadius: AppRadius.md,
                   ),
                   child: Center(
                     child: Icon(

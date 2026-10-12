@@ -67,7 +67,7 @@ class _AppTypeToConfirmDialogState extends State<AppTypeToConfirmDialog> {
     final l10n = context.l10n;
 
     return AlertDialog(
-      shape: const RoundedRectangleBorder(borderRadius: AppRadius.kRadiusLg),
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.lg),
       title: Text(l10n.areYouSureDelete),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -95,9 +95,7 @@ class _AppTypeToConfirmDialogState extends State<AppTypeToConfirmDialog> {
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.error,
             foregroundColor: Colors.white,
-            shape: const RoundedRectangleBorder(
-              borderRadius: AppRadius.kRadiusSm,
-            ),
+            shape: const RoundedRectangleBorder(borderRadius: AppRadius.sm),
           ),
           onPressed: _canConfirm ? widget.onConfirm : null,
           child: Text(l10n.delete),

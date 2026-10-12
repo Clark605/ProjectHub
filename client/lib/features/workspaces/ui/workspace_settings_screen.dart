@@ -103,7 +103,7 @@ class _ViewState extends State<_View> {
                   ),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary.withValues(alpha: 0.15),
-                    borderRadius: AppRadius.r8,
+                    borderRadius: AppRadius.sm,
                     border: Border.all(
                       color: theme.colorScheme.primary.withValues(alpha: 0.3),
                     ),

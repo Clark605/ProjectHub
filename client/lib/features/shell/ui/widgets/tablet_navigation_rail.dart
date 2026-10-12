@@ -43,7 +43,7 @@ class TabletNavigationRail extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: AppRadius.r10,
+              borderRadius: AppRadius.md,
             ),
             child: const Center(
               child: Icon(
@@ -100,7 +100,7 @@ class _RailItem extends StatelessWidget {
       preferBelow: false,
       child: InkWell(
         onTap: onTap,
-        borderRadius: AppRadius.r12,
+        borderRadius: AppRadius.md,
         child: Container(
           width: 48,
           height: 48,
@@ -108,7 +108,7 @@ class _RailItem extends StatelessWidget {
             color: isSelected
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.15)
                 : Colors.transparent,
-            borderRadius: AppRadius.r12,
+            borderRadius: AppRadius.md,
             border: isSelected
                 ? Border.all(
                     color: Theme.of(

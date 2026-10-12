@@ -19,7 +19,7 @@ class ProjectsSkeleton extends StatelessWidget {
         padding: AppSpacing.edgeInsetsAllLg,
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerLow,
-          borderRadius: AppRadius.r16,
+          borderRadius: AppRadius.lg,
           border: Border.all(color: theme.colorScheme.outlineVariant, width: 1),
         ),
         child: Column(
@@ -31,7 +31,7 @@ class ProjectsSkeleton extends StatelessWidget {
               children: [
                 Expanded(child: Bone.text(words: 3)),
                 AppSpacing.gapWSm,
-                Bone(width: 60, height: 22, borderRadius: AppRadius.r20),
+                Bone(width: 60, height: 22, borderRadius: AppRadius.xl),
               ],
             ),
             AppSpacing.gapHXs,
@@ -42,14 +42,14 @@ class ProjectsSkeleton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Bone.text(words: 4),
-                Bone(width: 28, height: 14, borderRadius: AppRadius.r3),
+                Bone(width: 28, height: 14, borderRadius: AppRadius.xs),
               ],
             ),
             AppSpacing.gapHXs,
             const Bone(
               height: 5,
               width: double.infinity,
-              borderRadius: AppRadius.r3,
+              borderRadius: AppRadius.xs,
             ),
             AppSpacing.gapHSm,
             // Member avatars stack
@@ -76,9 +76,9 @@ class ProjectsSkeleton extends StatelessWidget {
             AppSpacing.gapHSm,
             const Row(
               children: [
-                Bone(width: 80, height: 14, borderRadius: AppRadius.r3),
+                Bone(width: 80, height: 14, borderRadius: AppRadius.xs),
                 Spacer(),
-                Bone(width: 70, height: 14, borderRadius: AppRadius.r3),
+                Bone(width: 70, height: 14, borderRadius: AppRadius.xs),
               ],
             ),
           ],

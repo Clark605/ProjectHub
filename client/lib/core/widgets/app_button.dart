@@ -16,7 +16,7 @@ class AppButton extends StatelessWidget {
     this.isLoading = false,
     this.isExpanded = true,
     this.icon,
-    this.borderRadius = 12.0,
+    this.borderRadius = AppRadius.md,
   });
 
   final String label;
@@ -25,7 +25,7 @@ class AppButton extends StatelessWidget {
   final bool isLoading;
   final bool isExpanded;
   final IconData? icon;
-  final double borderRadius;
+  final BorderRadius borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +69,6 @@ class AppButton extends StatelessWidget {
             ],
           );
 
-    final radius = AppRadius.circular(borderRadius);
-
     final buttonStyle = switch (variant) {
       AppButtonVariant.primary => ElevatedButton.styleFrom(
         backgroundColor: AppColors.electricViolet,
@@ -79,7 +77,7 @@ class AppButton extends StatelessWidget {
         minimumSize: isExpanded
             ? const Size(double.infinity, 52)
             : const Size(0, 52),
-        shape: RoundedRectangleBorder(borderRadius: radius),
+        shape: RoundedRectangleBorder(borderRadius: borderRadius),
       ),
       AppButtonVariant.secondary => ElevatedButton.styleFrom(
         backgroundColor: isDark
@@ -93,7 +91,7 @@ class AppButton extends StatelessWidget {
             ? const Size(double.infinity, 52)
             : const Size(0, 52),
         shape: RoundedRectangleBorder(
-          borderRadius: radius,
+          borderRadius: borderRadius,
           side: BorderSide(
             color: isDark ? AppColors.border : AppColors.lightBorder,
           ),
@@ -104,7 +102,7 @@ class AppButton extends StatelessWidget {
         minimumSize: isExpanded
             ? const Size(double.infinity, 52)
             : const Size(0, 52),
-        shape: RoundedRectangleBorder(borderRadius: radius),
+        shape: RoundedRectangleBorder(borderRadius: borderRadius),
         side: const BorderSide(color: AppColors.electricViolet),
       ),
       AppButtonVariant.text => TextButton.styleFrom(

@@ -195,7 +195,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   horizontal: AppSpacing.lg,
                   vertical: AppSpacing.md,
                 ),
-                border: const OutlineInputBorder(borderRadius: AppRadius.r12),
+                border: const OutlineInputBorder(borderRadius: AppRadius.md),
               ),
               onChanged: (_) => setState(() {}),
             ),
@@ -408,7 +408,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                       ? AppColors.textOnPrimary
                       : AppColors.pureWhite,
                   shape: const RoundedRectangleBorder(
-                    borderRadius: AppRadius.r12,
+                    borderRadius: AppRadius.md,
                   ),
                   padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
                 ),

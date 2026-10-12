@@ -70,7 +70,7 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
           padding: AppSpacing.edgeInsetsAllXl,
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerLow,
-            borderRadius: AppRadius.r16,
+            borderRadius: AppRadius.lg,
             border: Border.all(color: theme.colorScheme.outlineVariant),
           ),
           child: Form(

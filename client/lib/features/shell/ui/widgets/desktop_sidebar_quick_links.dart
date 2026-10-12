@@ -23,7 +23,7 @@ class DesktopSidebarProjectQuickLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: AppRadius.r8,
+      borderRadius: AppRadius.sm,
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.md,

@@ -37,7 +37,7 @@ class AppBadge extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: resolvedBackground,
-        borderRadius: AppRadius.r6,
+        borderRadius: AppRadius.sm,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -61,4 +61,3 @@ class AppBadge extends StatelessWidget {
     );
   }
 }
-

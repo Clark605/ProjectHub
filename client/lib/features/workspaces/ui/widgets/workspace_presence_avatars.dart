@@ -179,7 +179,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
     return Tooltip(
       message: '${_onlineUserIds.length} online member(s)',
       child: InkWell(
-        borderRadius: AppRadius.r20,
+        borderRadius: AppRadius.xl,
         onTap: () {
           WorkspacePresenceSheet.show(
             context,
@@ -197,7 +197,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
             color: theme.colorScheme.surfaceContainerHigh.withValues(
               alpha: 0.6,
             ),
-            borderRadius: AppRadius.r20,
+            borderRadius: AppRadius.xl,
             border: Border.all(
               color: AppColors.success.withValues(alpha: 0.35),
               width: 1,
