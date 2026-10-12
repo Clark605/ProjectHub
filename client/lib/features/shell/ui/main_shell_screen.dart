@@ -21,7 +21,7 @@ class MainShellScreen extends StatefulWidget {
 
 class _MainShellScreenState extends State<MainShellScreen> {
   late int _selectedIndex;
-  int? _lastWorkspaceId;
+  bool _isQuickStartOpen = false;
 
   @override
   void initState() {
@@ -30,14 +30,19 @@ class _MainShellScreenState extends State<MainShellScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final wsCubit = context.read<WorkspaceContextCubit>();
+      wsCubit.state.whenOrNull(empty: () => _showQuickStartDialog(context));
       wsCubit.loadWorkspaces();
-      final activeWs = wsCubit.state.whenOrNull(loaded: (_, active) => active);
-      if (activeWs != null) {
-        _lastWorkspaceId = activeWs.id;
-        context.read<ProjectsListCubit>().loadProjects(activeWs.id);
-      }
-      wsCubit.state.whenOrNull(empty: () => QuickStartDialog.show(context));
     });
+  }
+
+  Future<void> _showQuickStartDialog(BuildContext context) async {
+    if (_isQuickStartOpen || !mounted) return;
+    _isQuickStartOpen = true;
+    try {
+      await QuickStartDialog.show(context);
+    } finally {
+      _isQuickStartOpen = false;
+    }
   }
 
   void _onSelectTab(int index) {
@@ -60,7 +65,7 @@ class _MainShellScreenState extends State<MainShellScreen> {
     if (hasWorkspaces) {
       WorkspaceSwitcherSheet.show(context);
     } else {
-      QuickStartDialog.show(context);
+      _showQuickStartDialog(context);
     }
   }
 
@@ -81,15 +86,20 @@ class _MainShellScreenState extends State<MainShellScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<WorkspaceContextCubit, WorkspaceContextState>(
+      listenWhen: (previous, current) {
+        final prevId = previous.whenOrNull(loaded: (_, a) => a.id);
+        final currId = current.whenOrNull(loaded: (_, a) => a.id);
+        final isEmpty = current.maybeWhen(
+          empty: () => true,
+          orElse: () => false,
+        );
+        return prevId != currId || isEmpty;
+      },
       listener: (context, state) {
         state.whenOrNull(
-          empty: () => QuickStartDialog.show(context),
-          loaded: (_, active) {
-            if (active.id != _lastWorkspaceId) {
-              _lastWorkspaceId = active.id;
-              context.read<ProjectsListCubit>().loadProjects(active.id);
-            }
-          },
+          empty: () => _showQuickStartDialog(context),
+          loaded: (_, active) =>
+              context.read<ProjectsListCubit>().loadProjects(active.id),
         );
       },
       builder: (context, workspaceState) {

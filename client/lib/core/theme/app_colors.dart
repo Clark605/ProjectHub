@@ -93,6 +93,13 @@ class AppColors {
   static Color subtleBorder(bool isDark) =>
       isDark ? pureWhite.withValues(alpha: 0.1) : lightBorder;
 
+  /// Tinted background fill for compact status, priority, and due-date badges.
+  static Color badgeBackground(
+    Color color,
+    bool isDark, {
+    bool emphasis = false,
+  }) => color.withValues(alpha: emphasis ? 0.15 : (isDark ? 0.2 : 0.12));
+
   // ── Deterministic Avatar Palette ──
   static const List<Color> avatarPalette = [
     Color(0xFF6366F1), // Indigo

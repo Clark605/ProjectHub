@@ -1,15 +1,18 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/di/injection.dart';
+import 'package:client/core/network/signalr_service.dart';
+import 'package:client/core/routes/route_providers.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/ui/dashboard_screen.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/features/profile/cubit/profile_edit_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/data/project_repository.dart';
@@ -20,11 +23,31 @@ import 'package:client/features/tasks/cubit/my_tasks_cubit.dart';
 import 'package:client/features/tasks/data/task_repository.dart';
 import 'package:client/features/tasks/ui/my_tasks_screen.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
+import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
-import 'package:client/core/network/signalr_service.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 
 import '../../../helpers/mock_repositories.dart';
+
+class _SpyProjectsListCubit extends ProjectsListCubit {
+  final List<int> loadedWorkspaceIds = [];
+
+  _SpyProjectsListCubit(super.projectRepository);
+
+  @override
+  Future<void> loadProjects(
+    int workspaceId, {
+    bool forceRefresh = false,
+    String? filter,
+  }) async {
+    loadedWorkspaceIds.add(workspaceId);
+    await super.loadProjects(
+      workspaceId,
+      forceRefresh: forceRefresh,
+      filter: filter,
+    );
+  }
+}
 
 void main() {
   setUp(() async {
@@ -180,6 +203,105 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
 
       expect(find.byType(QuickStartDialog), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'QuickStartDialog cannot show twice when WorkspaceContextCubit is already empty and re-emits empty',
+    (WidgetTester tester) async {
+      final sp = await SharedPreferences.getInstance();
+      final prefs = PrefsService(sp);
+      final emptyRepo = createMockWorkspaceRepository(workspaces: []);
+      final emptyContextCubit = WorkspaceContextCubit(emptyRepo, prefs);
+      await emptyContextCubit.loadWorkspaces();
+
+      getIt.unregister<WorkspaceContextCubit>();
+      getIt.registerSingleton<WorkspaceContextCubit>(emptyContextCubit);
+
+      await tester.pumpWidget(buildTestApp());
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // Trigger another loadWorkspaces while QuickStartDialog is already open
+      await emptyContextCubit.loadWorkspaces();
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(QuickStartDialog), findsOneWidget);
+
+      // Popping once must dismiss the only dialog on the stack
+      final nav = tester.state<NavigatorState>(find.byType(Navigator).last);
+      nav.pop();
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 200));
+
+      expect(find.byType(QuickStartDialog), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'buildShellRoute performs initial loadProjects in provider create and reloads via listenWhen on workspace switch',
+    (WidgetTester tester) async {
+      const ws1 = WorkspaceDto(
+        id: 1,
+        name: 'Workspace One',
+        membership: WorkspaceMembershipDto(role: 'Owner'),
+      );
+      const ws2 = WorkspaceDto(
+        id: 2,
+        name: 'Workspace Two',
+        membership: WorkspaceMembershipDto(role: 'Member'),
+      );
+
+      SharedPreferences.setMockInitialValues({});
+      final sp = await SharedPreferences.getInstance();
+      final prefs = PrefsService(sp);
+      await prefs.setActiveWorkspaceId(ws1.id);
+      await prefs.setCachedActiveWorkspaceRaw(jsonEncode(ws1.toJson()));
+
+      final workspaceRepo = createMockWorkspaceRepository(
+        workspaces: const [ws1, ws2],
+        activeWorkspace: ws1,
+      );
+
+      final workspaceCubit = WorkspaceContextCubit(workspaceRepo, prefs);
+      final projectRepo = createMockProjectRepository();
+      final spyProjectsCubit = _SpyProjectsListCubit(projectRepo);
+
+      getIt.unregister<WorkspaceContextCubit>();
+      getIt.registerSingleton<WorkspaceContextCubit>(workspaceCubit);
+      getIt.unregister<ProjectsListCubit>();
+      getIt.registerFactory<ProjectsListCubit>(() => spyProjectsCubit);
+
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<AppSettingsCubit>.value(
+              value: getIt<AppSettingsCubit>(),
+            ),
+            BlocProvider<AppAuthCubit>.value(value: getIt<AppAuthCubit>()),
+            BlocProvider<WorkspaceContextCubit>.value(value: workspaceCubit),
+          ],
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: buildShellRoute(),
+          ),
+        ),
+      );
+
+      // Provider create immediately triggered initial loadProjects(1)
+      expect(spyProjectsCubit.loadedWorkspaceIds, contains(1));
+      await tester.pump(const Duration(milliseconds: 100));
+
+      final countBeforeSwitch = spyProjectsCubit.loadedWorkspaceIds.length;
+
+      // Switching to workspace 2 reloads via MainShellScreen listenWhen
+      await workspaceCubit.selectWorkspace(ws2);
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(
+        spyProjectsCubit.loadedWorkspaceIds.sublist(countBeforeSwitch),
+        contains(2),
+      );
     },
   );
 }

@@ -93,7 +93,16 @@ Widget buildResetPasswordRoute(String? email) => BlocProvider(
 );
 
 Widget buildShellRoute({int initialIndex = 0}) => BlocProvider(
-  create: (_) => getIt<ProjectsListCubit>(),
+  create: (context) {
+    final cubit = getIt<ProjectsListCubit>();
+    final activeId = context.read<WorkspaceContextCubit>().state.whenOrNull(
+      loaded: (_, a) => a.id,
+    );
+    if (activeId != null) {
+      cubit.loadProjects(activeId);
+    }
+    return cubit;
+  },
   child: MainShellScreen(initialIndex: initialIndex),
 );
 
