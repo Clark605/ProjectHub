@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class OnboardingTopBar extends StatelessWidget {
   final VoidCallback onSkip;
@@ -62,7 +63,7 @@ class OnboardingTopBar extends StatelessWidget {
           ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1, end: 0),
           AnimatedOpacity(
             opacity: isLastPage ? 0.0 : 1.0,
-            duration: const Duration(milliseconds: 250),
+            duration: AppDurations.normal,
             child: IgnorePointer(
               ignoring: isLastPage,
               child: TextButton(

@@ -108,11 +108,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
         AppSpacing.gapWSm,
         Flexible(child: Bone.text(words: 2)),
         AppSpacing.gapWSm,
-        Bone(
-          width: 24,
-          height: 18,
-          borderRadius: BorderRadius.all(Radius.circular(9)),
-        ),
+        Bone(width: 24, height: 18, borderRadius: AppRadius.r10),
         Spacer(),
         Bone.icon(size: 18),
       ],
@@ -171,8 +167,8 @@ class KanbanBoardSkeleton extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Wrap(
-                          spacing: 6,
-                          runSpacing: 4,
+                          spacing: AppSpacing.xs,
+                          runSpacing: AppSpacing.xs,
                           children: [
                             Bone(
                               width: 44,

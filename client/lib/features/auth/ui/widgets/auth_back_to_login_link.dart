@@ -4,6 +4,7 @@ import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class AuthBackToLoginLink extends StatelessWidget {
   const AuthBackToLoginLink({super.key, this.delayMs = 400});
@@ -46,9 +47,6 @@ class AuthBackToLoginLink extends StatelessWidget {
           ),
         ),
       ],
-    ).animate().fadeIn(
-      duration: 400.ms,
-      delay: Duration(milliseconds: delayMs),
-    );
+    ).animate().fadeIn(duration: 400.ms, delay: AppDurations.ms(delayMs));
   }
 }

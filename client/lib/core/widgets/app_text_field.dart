@@ -2,6 +2,7 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class AppTextField extends StatefulWidget {
   const AppTextField({
@@ -118,7 +119,7 @@ class _AppTextFieldState extends State<AppTextField> {
             suffixIcon: widget.isPassword
                 ? IconButton(
                     icon: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
+                      duration: AppDurations.normal,
                       transitionBuilder: (child, anim) =>
                           ScaleTransition(scale: anim, child: child),
                       child: Icon(

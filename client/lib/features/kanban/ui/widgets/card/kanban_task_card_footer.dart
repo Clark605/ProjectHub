@@ -40,8 +40,8 @@ class KanbanTaskCardFooter extends StatelessWidget {
       children: [
         Expanded(
           child: Wrap(
-            spacing: 6,
-            runSpacing: 4,
+            spacing: AppSpacing.xs,
+            runSpacing: AppSpacing.xs,
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               if (priority != null)

@@ -203,8 +203,8 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
             ),
             AppSpacing.gapHSm,
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
               children: categories.map((cat) {
                 final isSelected = _selectedCategory == cat['key'];
                 return ChoiceChip(
@@ -245,8 +245,8 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
               ),
               AppSpacing.gapHSm,
               Wrap(
-                spacing: 8,
-                runSpacing: 8,
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
                 children: [
                   ChoiceChip(
                     label: Text(l10n.allActivities),
@@ -319,8 +319,8 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
             ),
             AppSpacing.gapHSm,
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
               children: [
                 ChoiceChip(
                   label: Text(l10n.newestFirst),

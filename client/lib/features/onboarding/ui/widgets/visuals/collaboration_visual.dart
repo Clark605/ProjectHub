@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class CollaborationVisual extends StatefulWidget {
   const CollaborationVisual({super.key});
@@ -458,7 +459,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
         .scale(
           begin: const Offset(0.5, 0.5),
           end: const Offset(1.2, 1.2),
-          delay: Duration(milliseconds: delayMs),
+          delay: AppDurations.ms(delayMs),
           duration: 400.ms,
         );
   }

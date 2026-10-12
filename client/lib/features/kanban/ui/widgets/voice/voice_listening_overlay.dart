@@ -8,6 +8,7 @@ import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class VoiceListeningOverlay extends StatelessWidget {
   final VoidCallback onCancel;
@@ -45,7 +46,7 @@ class VoiceListeningOverlay extends StatelessWidget {
             color: isDark
                 ? AppColors.surfaceContainerHigh.withValues(alpha: 0.95)
                 : theme.colorScheme.surface,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+            borderRadius: AppRadius.topXxl,
             border: Border.all(
               color: isDark
                   ? AppColors.electricViolet.withValues(alpha: 0.3)
@@ -213,7 +214,7 @@ class VoiceListeningOverlay extends StatelessWidget {
         .scale(
           begin: const Offset(0.92, 0.92),
           end: const Offset(1.12, 1.12),
-          duration: const Duration(milliseconds: 700),
+          duration: AppDurations.pulse,
           curve: Curves.easeInOut,
         );
   }

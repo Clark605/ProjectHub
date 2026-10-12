@@ -33,7 +33,7 @@ class TaskPrioritySelector extends StatelessWidget {
         ),
         AppSpacing.gapHSm,
         Wrap(
-          spacing: 8,
+          spacing: AppSpacing.sm,
           children: TaskPriority.values.map((priority) {
             final isSelected = priority == selectedPriority;
             return ChoiceChip(

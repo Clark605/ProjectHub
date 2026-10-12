@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class OnboardingBottomBar extends StatelessWidget {
   const OnboardingBottomBar({
@@ -50,7 +51,7 @@ class OnboardingBottomBar extends StatelessWidget {
                     horizontal: AppSpacing.xxs,
                   ),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 350),
+                    duration: AppDurations.medium,
                     curve: Curves.easeOutCubic,
                     height: 8,
                     width: isActive ? 30 : 8,
@@ -89,7 +90,7 @@ class OnboardingBottomBar extends StatelessWidget {
 
           // ── Action CTA Button ──
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
+            duration: AppDurations.medium,
             transitionBuilder: (child, animation) {
               return FadeTransition(
                 opacity: animation,

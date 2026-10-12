@@ -4,6 +4,7 @@ import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_state.dart';
 import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 @injectable
 class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
@@ -83,7 +84,7 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
     _debounceTimer?.cancel();
     if (debounce) {
       // 2. Debounce backend query by 300ms to avoid network thrashing during live input
-      _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+      _debounceTimer = Timer(AppDurations.medium, () {
         _fetchFilteredActivities(newFilter);
       });
     } else {

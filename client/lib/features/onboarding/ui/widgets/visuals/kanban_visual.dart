@@ -5,6 +5,7 @@ import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class KanbanVisual extends StatefulWidget {
   const KanbanVisual({super.key});
@@ -22,7 +23,7 @@ class _KanbanVisualState extends State<KanbanVisual>
     super.initState();
     _cardFlyController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3200),
+      duration: AppDurations.ambientLoop,
     )..repeat();
   }
 

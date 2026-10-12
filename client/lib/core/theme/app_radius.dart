@@ -65,4 +65,8 @@ class AppRadius {
   static const BorderRadius topXxl = BorderRadius.vertical(top: xxl);
   static const BorderRadius bottomMd = BorderRadius.vertical(bottom: md);
   static const BorderRadius bottomLg = BorderRadius.vertical(bottom: lg);
+
+  /// Dynamic uniform border radius from a numeric radius value.
+  static BorderRadius circular(double radius) =>
+      BorderRadius.all(Radius.circular(radius));
 }

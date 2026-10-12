@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class VoiceTaskFab extends StatelessWidget {
   final bool isArchived;
@@ -64,7 +65,7 @@ class VoiceTaskFab extends StatelessWidget {
           .scale(
             begin: const Offset(1.0, 1.0),
             end: const Offset(1.12, 1.12),
-            duration: const Duration(milliseconds: 600),
+            duration: AppDurations.pulse,
             curve: Curves.easeInOut,
           );
     }

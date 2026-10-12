@@ -32,8 +32,8 @@ class TaskTagsRow extends StatelessWidget {
     }
 
     return Wrap(
-      spacing: 6,
-      runSpacing: 6,
+      spacing: AppSpacing.xs,
+      runSpacing: AppSpacing.xs,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         ...tags.map(

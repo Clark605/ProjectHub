@@ -2,6 +2,7 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class AppErrorBanner extends StatelessWidget {
   const AppErrorBanner({super.key, required this.errorMessage, this.onDismiss});
@@ -14,7 +15,7 @@ class AppErrorBanner extends StatelessWidget {
     final hasError = errorMessage != null && errorMessage!.isNotEmpty;
 
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
+      duration: AppDurations.medium,
       transitionBuilder: (child, animation) {
         return SlideTransition(
           position: Tween<Offset>(

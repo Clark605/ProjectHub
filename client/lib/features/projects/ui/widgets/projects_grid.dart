@@ -64,8 +64,8 @@ class ProjectsGrid extends StatelessWidget {
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columns,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
+          crossAxisSpacing: AppSpacing.lg,
+          mainAxisSpacing: AppSpacing.lg,
           mainAxisExtent: 240,
         ),
         delegate: SliverChildBuilderDelegate((context, index) {

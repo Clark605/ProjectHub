@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_radius.dart';
 
 /// Shows a standardized bottom sheet with unified styling, 20px top radius,
 /// drag handle, responsive maximum width, and keyboard viewInsets handling.
@@ -27,7 +28,7 @@ Future<T?> showAppBottomSheet<T>({
     elevation: 0,
     barrierColor: Colors.black54,
     shape: RoundedRectangleBorder(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      borderRadius: AppRadius.topXl,
       side: BorderSide(
         color: isDark ? AppColors.borderVariant : AppColors.lightBorder,
         width: 1,
@@ -74,7 +75,7 @@ class AppSheetDragHandle extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           color: isDark ? AppColors.borderVariant : AppColors.lightBorder,
-          borderRadius: BorderRadius.all(Radius.circular(height / 2)),
+          borderRadius: AppRadius.circular(height / 2),
         ),
       ),
     );

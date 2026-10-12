@@ -38,6 +38,9 @@ jobs:
         working-directory: client
         run: flutter analyze
 
+      - name: Install ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+
       - name: Verify design tokens
         working-directory: client
         run: bash tool/check_design_tokens.sh

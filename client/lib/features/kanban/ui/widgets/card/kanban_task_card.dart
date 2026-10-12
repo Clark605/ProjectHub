@@ -212,8 +212,8 @@ class KanbanTaskCard extends StatelessWidget {
                       if (task.tags.isNotEmpty) ...[
                         AppSpacing.gapHXs,
                         Wrap(
-                          spacing: 4,
-                          runSpacing: 4,
+                          spacing: AppSpacing.xs,
+                          runSpacing: AppSpacing.xs,
                           children: task.tags
                               .map(
                                 (t) => TagChip(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/dashboard/ui/widgets/metric_card.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 
 class DashboardMetricsGrid extends StatelessWidget {
   final int activeProjects;
@@ -87,8 +88,8 @@ class DashboardMetricsGrid extends StatelessWidget {
         ];
 
         return Wrap(
-          spacing: 16,
-          runSpacing: 16,
+          spacing: AppSpacing.lg,
+          runSpacing: AppSpacing.lg,
           children: metrics.map((entry) {
             final cardWidth = crossAxisCount == 1
                 ? constraints.maxWidth

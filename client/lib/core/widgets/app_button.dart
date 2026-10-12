@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_radius.dart';
 
 enum AppButtonVariant { primary, secondary, outline, text }
 
@@ -64,7 +65,7 @@ class AppButton extends StatelessWidget {
             ],
           );
 
-    final radius = BorderRadius.all(Radius.circular(borderRadius));
+    final radius = AppRadius.circular(borderRadius);
 
     final buttonStyle = switch (variant) {
       AppButtonVariant.primary => ElevatedButton.styleFrom(

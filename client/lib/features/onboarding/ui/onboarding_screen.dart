@@ -10,6 +10,7 @@ import 'package:client/features/onboarding/ui/widgets/visuals/collaboration_visu
 import 'package:client/features/onboarding/ui/widgets/visuals/kanban_visual.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/workspace_visual.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final PrefsService? prefsService;
@@ -42,7 +43,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _onNext() {
     _pageController.nextPage(
-      duration: const Duration(milliseconds: 380),
+      duration: AppDurations.medium,
       curve: Curves.easeInOutCubic,
     );
   }
@@ -50,7 +51,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _onDotTap(int index) {
     _pageController.animateToPage(
       index,
-      duration: const Duration(milliseconds: 380),
+      duration: AppDurations.medium,
       curve: Curves.easeInOutCubic,
     );
   }

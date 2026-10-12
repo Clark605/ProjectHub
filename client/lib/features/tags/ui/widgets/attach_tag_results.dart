@@ -64,8 +64,8 @@ class AttachTagResults extends StatelessWidget {
           )
         else
           Wrap(
-            spacing: 8,
-            runSpacing: 8,
+            spacing: AppSpacing.sm,
+            runSpacing: AppSpacing.sm,
             children: filteredTags
                 .map((tag) => TagChip(tag: tag, onTap: () => onSelectTag(tag)))
                 .toList(),

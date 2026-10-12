@@ -8,6 +8,7 @@ import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_durations.dart';
 
 class KanbanMobileBoard extends StatefulWidget {
   final PageController? pageController;
@@ -72,7 +73,7 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
     if (context != null) {
       Scrollable.ensureVisible(
         context,
-        duration: const Duration(milliseconds: 300),
+        duration: AppDurations.medium,
         curve: Curves.easeInOut,
         alignment: 0.5,
       );
@@ -147,7 +148,7 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                       _isAnimatingPage = true;
                       await _pageController.animateToPage(
                         idx,
-                        duration: const Duration(milliseconds: 300),
+                        duration: AppDurations.medium,
                         curve: Curves.easeInOut,
                       );
                       _isAnimatingPage = false;

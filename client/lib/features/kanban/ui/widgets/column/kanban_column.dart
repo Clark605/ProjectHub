@@ -102,7 +102,7 @@ class KanbanColumn extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               decoration: BoxDecoration(
                 color: columnAccent.withValues(alpha: 0.8),
-                borderRadius: const BorderRadius.all(Radius.circular(1.25)),
+                borderRadius: AppRadius.kRadiusXxs,
               ),
             ),
           if (showHeader)
