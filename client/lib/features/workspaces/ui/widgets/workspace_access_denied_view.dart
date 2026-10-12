@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/extensions/context_extensions.dart';
@@ -19,7 +20,7 @@ class WorkspaceAccessDeniedView extends StatelessWidget {
           children: [
             const Icon(
               Icons.lock_outline_rounded,
-              size: 48,
+              size: AppIconSize.display,
               color: AppColors.error,
             ),
             AppSpacing.gapHLg,

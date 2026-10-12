@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -103,7 +104,7 @@ class MoveToStatusSheet extends StatelessWidget {
                         ),
                         child: Icon(
                           status.toIcon(),
-                          size: 20,
+                          size: AppIconSize.lg,
                           color: status.toColor(),
                         ),
                       ),
@@ -142,7 +143,7 @@ class MoveToStatusSheet extends StatelessWidget {
                       else
                         Icon(
                           Icons.arrow_forward_ios_rounded,
-                          size: 14,
+                          size: AppIconSize.xs,
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
                     ],

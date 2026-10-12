@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -263,7 +264,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                                   isDoneState
                                       ? Icons.check_circle_rounded
                                       : Icons.swap_horiz_rounded,
-                                  size: 12,
+                                  size: AppIconSize.xxs,
                                   color: isDoneState
                                       ? AppColors.success
                                       : AppColors.electricViolet,
@@ -359,7 +360,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                           children: [
                             const Icon(
                               Icons.trending_up_rounded,
-                              size: 14,
+                              size: AppIconSize.xs,
                               color: AppColors.pureWhite,
                             ),
                             AppSpacing.gapWXs,
@@ -552,7 +553,7 @@ class _KanbanVisualState extends State<KanbanVisual>
           ),
           const Icon(
             Icons.check_circle_rounded,
-            size: 13,
+            size: AppIconSize.xxs,
             color: AppColors.success,
           ),
         ],
@@ -574,7 +575,7 @@ class _KanbanVisualState extends State<KanbanVisual>
       child: const Center(
         child: Icon(
           Icons.add_rounded,
-          size: 14,
+          size: AppIconSize.xs,
           color: AppColors.textSecondary,
         ),
       ),

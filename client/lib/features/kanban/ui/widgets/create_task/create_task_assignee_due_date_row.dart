@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/utils/date_formatter.dart';
@@ -139,7 +140,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.calendar_today_outlined,
-                        size: 16,
+                        size: AppIconSize.sm,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                       AppSpacing.gapWSm,
@@ -162,7 +163,10 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                       if (selectedDueDate != null)
                         GestureDetector(
                           onTap: onClearDueDate,
-                          child: const Icon(Icons.close_rounded, size: 16),
+                          child: const Icon(
+                            Icons.close_rounded,
+                            size: AppIconSize.sm,
+                          ),
                         ),
                     ],
                   ),

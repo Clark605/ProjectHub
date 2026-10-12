@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
@@ -34,7 +35,7 @@ class VoiceTaskReviewWarnings extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.info_outline_rounded,
-                    size: 14,
+                    size: AppIconSize.xs,
                     color: warningColor,
                   ),
                   AppSpacing.gapWXs,

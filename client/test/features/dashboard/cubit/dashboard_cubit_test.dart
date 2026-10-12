@@ -102,5 +102,23 @@ void main() {
         );
       },
     );
+
+    test(
+      'DashboardState.copyWith preserves failure when omitted and clears with clearFailure or null',
+      () {
+        const failure = AppFailure(kind: FailureKind.server, isUserSafe: false);
+        const initial = DashboardState(activeProjects: 2, failure: failure);
+
+        final preserved = initial.copyWith(activeProjects: 3);
+        expect(preserved.activeProjects, 3);
+        expect(preserved.failure, failure);
+
+        final clearedViaFlag = preserved.copyWith(clearFailure: true);
+        expect(clearedViaFlag.failure, isNull);
+
+        final clearedViaSentinel = preserved.copyWith(failure: null);
+        expect(clearedViaSentinel.failure, isNull);
+      },
+    );
   });
 }

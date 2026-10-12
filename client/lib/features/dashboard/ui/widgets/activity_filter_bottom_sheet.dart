@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/dialog/dialog.dart';
@@ -173,10 +174,16 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: l10n.searchActivitiesHint,
-                prefixIcon: const Icon(Icons.search_rounded, size: 20),
+                prefixIcon: const Icon(
+                  Icons.search_rounded,
+                  size: AppIconSize.lg,
+                ),
                 suffixIcon: _searchController.text.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear_rounded, size: 20),
+                        icon: const Icon(
+                          Icons.clear_rounded,
+                          size: AppIconSize.lg,
+                        ),
                         onPressed: () {
                           setState(() {
                             _searchController.clear();

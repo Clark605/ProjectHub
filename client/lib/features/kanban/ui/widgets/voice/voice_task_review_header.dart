@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,7 @@ class VoiceTaskReviewHeader extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.auto_awesome, size: 14, color: badgeColor),
+              Icon(Icons.auto_awesome, size: AppIconSize.xs, color: badgeColor),
               AppSpacing.gapWXs,
               Text(
                 l10n.voiceTaskAiDraftPreview,

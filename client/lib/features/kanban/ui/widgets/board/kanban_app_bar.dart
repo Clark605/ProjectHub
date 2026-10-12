@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/workspace_accent.dart';
@@ -80,7 +81,7 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(
             Icons.settings_outlined,
             color: theme.colorScheme.onSurfaceVariant,
-            size: 20,
+            size: AppIconSize.lg,
           ),
           tooltip: l10n.projectDetails,
           onPressed: onSettings,

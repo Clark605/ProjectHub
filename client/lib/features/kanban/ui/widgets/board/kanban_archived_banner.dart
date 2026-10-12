@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -22,7 +23,7 @@ class KanbanArchivedBanner extends StatelessWidget {
         children: [
           const Icon(
             Icons.archive_outlined,
-            size: 18,
+            size: AppIconSize.md,
             color: AppColors.warning,
           ),
           AppSpacing.gapWSm,

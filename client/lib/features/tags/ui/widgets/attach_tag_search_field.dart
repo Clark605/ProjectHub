@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/extensions/context_extensions.dart';
@@ -32,7 +33,7 @@ class AttachTagSearchField extends StatelessWidget {
         hintStyle: TextStyle(color: theme.colorScheme.onSurfaceVariant),
         prefixIcon: Icon(
           Icons.search,
-          size: 18,
+          size: AppIconSize.md,
           color: theme.colorScheme.onSurfaceVariant,
         ),
         filled: true,

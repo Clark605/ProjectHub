@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -149,7 +150,10 @@ class VoiceListeningOverlay extends StatelessWidget {
                       AppSpacing.gapWSm,
                       ElevatedButton.icon(
                         onPressed: onDone,
-                        icon: const Icon(Icons.check_rounded, size: 18),
+                        icon: const Icon(
+                          Icons.check_rounded,
+                          size: AppIconSize.md,
+                        ),
                         label: Text(l10n.voiceTaskDone),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.electricVioletContainer,
@@ -203,7 +207,7 @@ class VoiceListeningOverlay extends StatelessWidget {
       child: Icon(
         isParsing ? Icons.auto_awesome : Icons.mic_rounded,
         color: AppColors.pureWhite,
-        size: 32,
+        size: AppIconSize.xxl,
       ),
     );
 

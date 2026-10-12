@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +49,7 @@ class TabletNavigationRail extends StatelessWidget {
               child: Icon(
                 Icons.hub_rounded,
                 color: AppColors.onElectricViolet,
-                size: 20,
+                size: AppIconSize.lg,
               ),
             ),
           ),
@@ -119,7 +120,7 @@ class _RailItem extends StatelessWidget {
           ),
           child: Icon(
             icon,
-            size: 22,
+            size: AppIconSize.xl,
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.onSurfaceVariant,

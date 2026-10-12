@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
@@ -78,7 +79,11 @@ class TagChip extends StatelessWidget {
               AppSpacing.gapWXs,
               GestureDetector(
                 onTap: onDeleted,
-                child: Icon(Icons.close_rounded, size: 14, color: baseColor),
+                child: Icon(
+                  Icons.close_rounded,
+                  size: AppIconSize.xs,
+                  color: baseColor,
+                ),
               ),
             ],
           ],

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/cubit/app_settings_cubit.dart';
@@ -25,7 +26,7 @@ class ThemeModeSelector extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.palette_outlined,
-                      size: 20,
+                      size: AppIconSize.lg,
                       color: theme.colorScheme.primary,
                     ),
                     AppSpacing.gapWSm,

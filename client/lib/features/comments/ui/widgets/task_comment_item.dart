@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/utils/date_formatter.dart';
@@ -62,7 +63,7 @@ class TaskCommentItem extends StatelessWidget {
                       IconButton(
                         icon: Icon(
                           Icons.delete_outline,
-                          size: 16,
+                          size: AppIconSize.sm,
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
                         padding: EdgeInsets.zero,

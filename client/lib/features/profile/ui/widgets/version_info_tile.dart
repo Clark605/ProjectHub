@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -34,7 +35,7 @@ class VersionInfoTile extends StatelessWidget {
                     child: Icon(
                       Icons.info_outline_rounded,
                       color: theme.colorScheme.primary,
-                      size: 22,
+                      size: AppIconSize.xl,
                     ),
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -126,7 +127,7 @@ class MemberTile extends StatelessWidget {
           PopupMenuButton<String>(
             icon: Icon(
               Icons.more_vert_rounded,
-              size: 20,
+              size: AppIconSize.lg,
               color: theme.colorScheme.onSurfaceVariant,
             ),
             tooltip: l10n.edit,
@@ -147,7 +148,7 @@ class MemberTile extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.arrow_upward_rounded,
-                        size: 18,
+                        size: AppIconSize.md,
                         color: primaryColor,
                       ),
                       AppSpacing.gapWSm,
@@ -162,7 +163,7 @@ class MemberTile extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.arrow_downward_rounded,
-                        size: 18,
+                        size: AppIconSize.md,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                       AppSpacing.gapWSm,
@@ -176,7 +177,7 @@ class MemberTile extends StatelessWidget {
                   children: [
                     const Icon(
                       Icons.person_remove_outlined,
-                      size: 18,
+                      size: AppIconSize.md,
                       color: AppColors.error,
                     ),
                     AppSpacing.gapWSm,

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -145,7 +146,7 @@ class OnboardingBottomBar extends StatelessWidget {
                               AppSpacing.gapWSm,
                               const Icon(
                                 Icons.arrow_forward_rounded,
-                                size: 18,
+                                size: AppIconSize.md,
                                 color: AppColors.textOnPrimary,
                               ),
                             ],
@@ -192,7 +193,7 @@ class OnboardingBottomBar extends StatelessWidget {
                               AppSpacing.gapWXs,
                               Icon(
                                 Icons.arrow_forward_rounded,
-                                size: 17,
+                                size: AppIconSize.sm,
                                 color: isDark
                                     ? AppColors.electricViolet
                                     : AppColors.lightTextPrimary,

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,7 +53,7 @@ class TaskCommentsList extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.chat_bubble_outline_rounded,
-                      size: 16,
+                      size: AppIconSize.sm,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
                     AppSpacing.gapWXs,

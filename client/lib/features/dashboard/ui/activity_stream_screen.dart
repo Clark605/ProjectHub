@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -275,7 +276,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
             children: [
               Icon(
                 Icons.filter_alt_off_rounded,
-                size: 48,
+                size: AppIconSize.display,
                 color: theme.colorScheme.onSurfaceVariant.withValues(
                   alpha: 0.5,
                 ),
@@ -310,7 +311,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
             children: [
               Icon(
                 Icons.notifications_none_rounded,
-                size: 48,
+                size: AppIconSize.display,
                 color: theme.colorScheme.onSurfaceVariant.withValues(
                   alpha: 0.5,
                 ),

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -109,7 +110,7 @@ class MyTaskListTile extends StatelessWidget {
                               children: [
                                 Icon(
                                   Icons.calendar_today_outlined,
-                                  size: 12,
+                                  size: AppIconSize.xxs,
                                   color: isOverdue
                                       ? AppColors.error
                                       : (isDark

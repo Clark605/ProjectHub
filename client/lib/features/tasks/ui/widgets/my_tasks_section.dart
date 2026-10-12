@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -104,7 +105,7 @@ class MyTasksSection extends StatelessWidget {
                     isCollapsed
                         ? Icons.keyboard_arrow_down_rounded
                         : Icons.keyboard_arrow_up_rounded,
-                    size: 20,
+                    size: AppIconSize.lg,
                     color: isDark
                         ? AppColors.textSecondary
                         : AppColors.lightTextSecondary,

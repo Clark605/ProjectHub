@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -55,7 +56,7 @@ class RecentActivityCard extends StatelessWidget {
                 child: const Icon(
                   Icons.history_rounded,
                   color: AppColors.skyBlue,
-                  size: 20,
+                  size: AppIconSize.lg,
                 ),
               ),
               AppSpacing.gapWMd,
@@ -107,7 +108,7 @@ class RecentActivityCard extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.notifications_none_rounded,
-                      size: 32,
+                      size: AppIconSize.xxl,
                       color: theme.colorScheme.onSurfaceVariant.withValues(
                         alpha: 0.6,
                       ),

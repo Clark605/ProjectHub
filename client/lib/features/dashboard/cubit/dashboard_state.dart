@@ -3,6 +3,8 @@ import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 
 class DashboardState {
+  static const Object _unset = Object();
+
   final bool isLoading;
   final int activeProjects;
   final int inProgressTasks;
@@ -23,9 +25,6 @@ class DashboardState {
     this.failure,
   });
 
-  /// Alias for backwards compatibility
-  int get urgentBlockers => urgentTasks;
-
   DashboardState copyWith({
     bool? isLoading,
     int? activeProjects,
@@ -34,7 +33,8 @@ class DashboardState {
     int? completedTasks,
     List<TaskDto>? focusTasks,
     List<ActivityEventDto>? recentActivities,
-    AppFailure? failure,
+    Object? failure = _unset,
+    bool clearFailure = false,
   }) {
     return DashboardState(
       isLoading: isLoading ?? this.isLoading,
@@ -44,7 +44,11 @@ class DashboardState {
       completedTasks: completedTasks ?? this.completedTasks,
       focusTasks: focusTasks ?? this.focusTasks,
       recentActivities: recentActivities ?? this.recentActivities,
-      failure: failure,
+      failure: clearFailure
+          ? null
+          : (identical(failure, _unset)
+                ? this.failure
+                : failure as AppFailure?),
     );
   }
 }

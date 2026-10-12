@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/extensions/context_extensions.dart';
@@ -20,7 +21,11 @@ class AppErrorState extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: AppColors.error),
+            const Icon(
+              Icons.error_outline,
+              size: AppIconSize.hero,
+              color: AppColors.error,
+            ),
             AppSpacing.gapHLg,
             Text(
               l10n.somethingWentWrong,

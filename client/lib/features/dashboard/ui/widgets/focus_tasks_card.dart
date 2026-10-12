@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_radius.dart';
@@ -59,7 +60,7 @@ class FocusTasksCard extends StatelessWidget {
                       child: Icon(
                         Icons.bolt_rounded,
                         color: theme.colorScheme.primary,
-                        size: 20,
+                        size: AppIconSize.lg,
                       ),
                     ),
                     AppSpacing.gapWMd,
@@ -92,7 +93,7 @@ class FocusTasksCard extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.task_alt_rounded,
-                      size: 32,
+                      size: AppIconSize.xxl,
                       color: theme.colorScheme.onSurfaceVariant.withValues(
                         alpha: 0.6,
                       ),

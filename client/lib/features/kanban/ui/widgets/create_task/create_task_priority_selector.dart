@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +41,7 @@ class CreateTaskPrioritySelector extends StatelessWidget {
               selected: isSelected,
               avatar: Icon(
                 priority.toIcon(),
-                size: 16,
+                size: AppIconSize.sm,
                 color: isSelected ? AppColors.pureWhite : priority.toColor(),
               ),
               label: Text(priority.localizedName(l10n)),

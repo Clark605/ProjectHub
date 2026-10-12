@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -86,7 +87,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
               ),
               const Spacer(),
               IconButton(
-                icon: const Icon(Icons.close_rounded, size: 20),
+                icon: const Icon(Icons.close_rounded, size: AppIconSize.lg),
                 color: theme.colorScheme.onSurfaceVariant,
                 onPressed: () => Navigator.of(context).pop(),
               ),

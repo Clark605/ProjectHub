@@ -23,12 +23,8 @@ class SocialAuthSection extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final l10n = context.l10n;
 
-    final borderColor = isDark
-        ? AppColors.pureWhite.withValues(alpha: 0.1)
-        : AppColors.lightBorder;
-    final textSecondary = isDark
-        ? AppColors.textSecondary
-        : AppColors.lightTextSecondary;
+    final borderColor = AppColors.subtleBorder(isDark);
+    final textSecondary = AppColors.textSecondaryColor(isDark);
 
     return Column(
       children: [

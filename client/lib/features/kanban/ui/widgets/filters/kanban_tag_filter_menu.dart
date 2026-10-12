@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/tags/data/models/tag_dto.dart';
@@ -33,7 +34,7 @@ class KanbanTagFilterMenu extends StatelessWidget {
       child: Chip(
         avatar: Icon(
           Icons.local_offer_outlined,
-          size: 16,
+          size: AppIconSize.sm,
           color: selectedTag != null
               ? TagChip.parseHexColor(selectedTag.color)
               : null,
@@ -47,7 +48,7 @@ class KanbanTagFilterMenu extends StatelessWidget {
           ),
         ),
         deleteIcon: hasSelection
-            ? const Icon(Icons.close_rounded, size: 14)
+            ? const Icon(Icons.close_rounded, size: AppIconSize.xs)
             : null,
         onDeleted: hasSelection ? () => onTagSelected(null) : null,
       ),

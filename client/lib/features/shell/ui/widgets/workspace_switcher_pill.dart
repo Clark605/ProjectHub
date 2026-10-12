@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -78,7 +79,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                   else
                     Icon(
                       Icons.add_rounded,
-                      size: 16,
+                      size: AppIconSize.sm,
                       color: theme.colorScheme.primary,
                     ),
                   AppSpacing.gapWSm,

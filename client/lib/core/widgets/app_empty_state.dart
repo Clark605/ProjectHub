@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_spacing.dart';
@@ -30,7 +31,7 @@ class AppEmptyState extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 64,
+              size: AppIconSize.hero,
               color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
             ),
             AppSpacing.gapHLg,

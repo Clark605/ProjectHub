@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -145,7 +146,7 @@ class KanbanColumn extends StatelessWidget {
                                 isArchived
                                     ? Icons.inbox_outlined
                                     : Icons.add_circle_outline_rounded,
-                                size: 24,
+                                size: AppIconSize.xl,
                                 color: AppColors.textSecondaryColor(isDark),
                               ),
                               AppSpacing.gapHXs,

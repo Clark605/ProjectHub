@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_spacing.dart';
@@ -56,7 +57,11 @@ class MetricCard extends StatelessWidget {
                       color: data.color.withValues(alpha: 0.15),
                       borderRadius: AppRadius.r8,
                     ),
-                    child: Icon(data.icon, color: data.color, size: 18),
+                    child: Icon(
+                      data.icon,
+                      color: data.color,
+                      size: AppIconSize.md,
+                    ),
                   ),
                   AppSpacing.gapWSm,
                   Expanded(

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -88,7 +89,7 @@ class KanbanColumnHeader extends StatelessWidget {
           ),
           if (!isArchived && onAddTask != null)
             IconButton(
-              icon: const Icon(Icons.add_rounded, size: 20),
+              icon: const Icon(Icons.add_rounded, size: AppIconSize.lg),
               tooltip: l10n.addTaskToStatus(statusName),
               constraints: const BoxConstraints(),
               padding: AppSpacing.edgeInsetsAllXs,

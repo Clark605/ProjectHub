@@ -20,17 +20,14 @@ class DashboardMetricsGrid extends StatelessWidget {
     super.key,
     this.activeProjects = 0,
     this.inProgressTasks = 0,
-    int urgentTasks = 0,
-    int? urgentBlockers,
+    this.urgentTasks = 0,
     this.completedTasks = 0,
     this.isLoading = false,
     this.onTapActiveProjects,
     this.onTapInProgressTasks,
     this.onTapUrgentTasks,
     this.onTapCompletedTasks,
-  }) : urgentTasks = urgentBlockers ?? urgentTasks;
-
-  int get urgentBlockers => urgentTasks;
+  });
 
   @override
   Widget build(BuildContext context) {

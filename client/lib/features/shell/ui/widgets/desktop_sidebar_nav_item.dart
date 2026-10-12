@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_spacing.dart';
@@ -48,7 +49,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 20,
+              size: AppIconSize.lg,
               color: isSelected
                   ? activeColor
                   : theme.colorScheme.onSurfaceVariant,

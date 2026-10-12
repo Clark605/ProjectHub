@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/extensions/context_extensions.dart';
@@ -71,7 +72,7 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
             )
           else
             IconButton(
-              icon: const Icon(Icons.send_rounded, size: 18),
+              icon: const Icon(Icons.send_rounded, size: AppIconSize.md),
               color: theme.colorScheme.primary,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),

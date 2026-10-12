@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,7 +90,10 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                   decoration: InputDecoration(
                     labelText: l10n.workspaceName,
                     hintText: l10n.workspaceNamePlaceholder,
-                    prefixIcon: const Icon(Icons.business_rounded, size: 20),
+                    prefixIcon: const Icon(
+                      Icons.business_rounded,
+                      size: AppIconSize.lg,
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
@@ -111,7 +115,10 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                     alignLabelWithHint: true,
                     prefixIcon: const Padding(
                       padding: EdgeInsets.only(bottom: AppSpacing.xxxl),
-                      child: Icon(Icons.description_outlined, size: 20),
+                      child: Icon(
+                        Icons.description_outlined,
+                        size: AppIconSize.lg,
+                      ),
                     ),
                   ),
                 ),

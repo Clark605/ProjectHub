@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/kanban/ui/widgets/filters/kanban_assignee_filter_menu.dart';
@@ -113,7 +114,10 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                   Padding(
                     padding: const EdgeInsets.only(right: AppSpacing.sm),
                     child: ActionChip(
-                      avatar: const Icon(Icons.search_rounded, size: 16),
+                      avatar: const Icon(
+                        Icons.search_rounded,
+                        size: AppIconSize.sm,
+                      ),
                       label: Text(l10n.search),
                       onPressed: () => setState(() => _isSearchExpanded = true),
                     ),
@@ -143,7 +147,10 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                 ),
                 if (hasActiveFilter)
                   ActionChip(
-                    avatar: const Icon(Icons.filter_alt_off_rounded, size: 16),
+                    avatar: const Icon(
+                      Icons.filter_alt_off_rounded,
+                      size: AppIconSize.sm,
+                    ),
                     label: Text(l10n.clearFilters),
                     onPressed: () {
                       _searchController.clear();

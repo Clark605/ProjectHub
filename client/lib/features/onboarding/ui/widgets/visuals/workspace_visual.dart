@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -18,9 +19,7 @@ class WorkspaceVisual extends StatelessWidget {
     final cardBg = isDark
         ? AppColors.surfaceContainerHigh.withValues(alpha: 0.9)
         : AppColors.pureWhite;
-    final cardBorder = isDark
-        ? AppColors.pureWhite.withValues(alpha: 0.1)
-        : AppColors.lightBorder;
+    final cardBorder = AppColors.subtleBorder(isDark);
 
     return VisualCanvasCard(
       primaryGlow: AppColors.electricViolet,
@@ -53,7 +52,7 @@ class WorkspaceVisual extends StatelessWidget {
                       ),
                       child: const Icon(
                         Icons.dashboard_customize_rounded,
-                        size: 18,
+                        size: AppIconSize.md,
                         color: AppColors.electricViolet,
                       ),
                     ),
@@ -326,7 +325,7 @@ class WorkspaceVisual extends StatelessWidget {
                               children: [
                                 Icon(
                                   Icons.check_circle_outline_rounded,
-                                  size: 14,
+                                  size: AppIconSize.xs,
                                   color: isDark
                                       ? AppColors.textSecondary
                                       : AppColors.lightTextSecondary,
@@ -386,7 +385,7 @@ class WorkspaceVisual extends StatelessWidget {
                               children: [
                                 const Icon(
                                   Icons.bolt_rounded,
-                                  size: 14,
+                                  size: AppIconSize.xs,
                                   color: AppColors.pureWhite,
                                 ),
                                 AppSpacing.gapWXs,
@@ -439,7 +438,7 @@ class WorkspaceVisual extends StatelessWidget {
                   children: [
                     const Icon(
                       Icons.dns_rounded,
-                      size: 16,
+                      size: AppIconSize.sm,
                       color: AppColors.skyBlue,
                     ),
                     AppSpacing.gapWSm,

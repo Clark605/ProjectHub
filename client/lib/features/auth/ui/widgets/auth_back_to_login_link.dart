@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/routes/route_names.dart';
@@ -22,7 +23,7 @@ class AuthBackToLoginLink extends StatelessWidget {
       children: [
         Icon(
           Icons.arrow_back_rounded,
-          size: 16,
+          size: AppIconSize.sm,
           color: isDark
               ? AppColors.textSecondary
               : AppColors.lightTextSecondary,

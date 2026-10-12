@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/tasks/data/models/task_priority.dart';
@@ -27,7 +28,7 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
       child: Chip(
         avatar: Icon(
           Icons.flag_outlined,
-          size: 16,
+          size: AppIconSize.sm,
           color: hasSelection
               ? TaskPriority.fromString(selectedPriority).toColor()
               : null,
@@ -41,7 +42,7 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
           ),
         ),
         deleteIcon: hasSelection
-            ? const Icon(Icons.close_rounded, size: 14)
+            ? const Icon(Icons.close_rounded, size: AppIconSize.xs)
             : null,
         onDeleted: hasSelection ? () => onPrioritySelected(null) : null,
       ),
@@ -52,7 +53,7 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
             value: p.toServerString(),
             child: Row(
               children: [
-                Icon(p.toIcon(), size: 16, color: p.toColor()),
+                Icon(p.toIcon(), size: AppIconSize.sm, color: p.toColor()),
                 AppSpacing.gapWSm,
                 Text(p.localizedName(l10n)),
               ],

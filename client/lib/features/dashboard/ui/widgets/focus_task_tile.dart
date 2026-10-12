@@ -1,10 +1,11 @@
-import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/widgets/app_badge.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
 
 class FocusTaskTile extends StatelessWidget {
   final TaskDto task;
@@ -64,22 +65,10 @@ class FocusTaskTile extends StatelessWidget {
             ),
           ),
           AppSpacing.gapWMd,
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.sm,
-              vertical: AppSpacing.xs,
-            ),
-            decoration: BoxDecoration(
-              color: priorityColor.withValues(alpha: 0.15),
-              borderRadius: AppRadius.r6,
-            ),
-            child: Text(
-              task.priorityEnum.localizedName(l10n),
-              style: TextStyle(
-                color: priorityColor,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
+          AppBadge(
+            icon: task.priorityEnum.toIcon(),
+            label: task.priorityEnum.localizedName(l10n),
+            color: priorityColor,
           ),
         ],
       ),

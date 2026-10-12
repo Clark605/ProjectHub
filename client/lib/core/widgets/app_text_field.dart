@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -114,7 +115,11 @@ class _AppTextFieldState extends State<AppTextField> {
               vertical: AppSpacing.lg,
             ),
             prefixIcon: widget.prefixIcon != null
-                ? Icon(widget.prefixIcon, size: 20, color: textSecondaryColor)
+                ? Icon(
+                    widget.prefixIcon,
+                    size: AppIconSize.lg,
+                    color: textSecondaryColor,
+                  )
                 : null,
             suffixIcon: widget.isPassword
                 ? IconButton(
@@ -127,7 +132,7 @@ class _AppTextFieldState extends State<AppTextField> {
                             ? Icons.visibility_off_outlined
                             : Icons.visibility_outlined,
                         key: ValueKey<bool>(_obscureText),
-                        size: 20,
+                        size: AppIconSize.lg,
                         color: textSecondaryColor,
                       ),
                     ),

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -53,7 +54,7 @@ class VoiceTaskFab extends StatelessWidget {
           child: Icon(
             isListening ? Icons.stop_rounded : Icons.mic_rounded,
             color: AppColors.pureWhite,
-            size: 24,
+            size: AppIconSize.xl,
           ),
         ),
       ),

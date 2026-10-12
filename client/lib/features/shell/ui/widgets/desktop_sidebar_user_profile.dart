@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -81,7 +82,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                   IconButton(
                     icon: const Icon(
                       Icons.logout_rounded,
-                      size: 18,
+                      size: AppIconSize.md,
                       color: AppColors.priorityHigh,
                     ),
                     tooltip: l10n.logOut,

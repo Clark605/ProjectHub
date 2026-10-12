@@ -79,6 +79,20 @@ class AppColors {
   static Color textSecondaryColor(bool isDark) =>
       isDark ? textSecondary : lightTextSecondary;
 
+  /// Subtle neutral surface fill for metadata pills and neutral chips.
+  static Color subtleSurface(bool isDark) => isDark
+      ? pureWhite.withValues(alpha: 0.1)
+      : pureBlack.withValues(alpha: 0.05);
+
+  /// Slightly stronger subtle neutral surface fill (e.g. unassigned avatars).
+  static Color subtleSurfaceStrong(bool isDark) => isDark
+      ? pureWhite.withValues(alpha: 0.1)
+      : pureBlack.withValues(alpha: 0.06);
+
+  /// Subtle card/button border color based on brightness.
+  static Color subtleBorder(bool isDark) =>
+      isDark ? pureWhite.withValues(alpha: 0.1) : lightBorder;
+
   // ── Deterministic Avatar Palette ──
   static const List<Color> avatarPalette = [
     Color(0xFF6366F1), // Indigo

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -219,7 +220,7 @@ class ProjectCard extends StatelessWidget {
                 if (project.dueDate != null) ...[
                   Icon(
                     Icons.calendar_today_outlined,
-                    size: 13,
+                    size: AppIconSize.xxs,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                   AppSpacing.gapWXs,
@@ -238,7 +239,7 @@ class ProjectCard extends StatelessWidget {
                     project.createdBy.isNotEmpty) ...[
                   Icon(
                     Icons.person_outline_rounded,
-                    size: 14,
+                    size: AppIconSize.xs,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                   AppSpacing.gapWXs,

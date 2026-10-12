@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
@@ -41,9 +42,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
     final cardBg = isDark
         ? AppColors.surfaceContainerHigh.withValues(alpha: 0.9)
         : AppColors.pureWhite;
-    final cardBorder = isDark
-        ? AppColors.pureWhite.withValues(alpha: 0.1)
-        : AppColors.lightBorder;
+    final cardBorder = AppColors.subtleBorder(isDark);
 
     return VisualCanvasCard(
       primaryGlow: AppColors.electricViolet,
@@ -164,7 +163,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                             ),
                             child: const Icon(
                               Icons.chat_bubble_outline_rounded,
-                              size: 16,
+                              size: AppIconSize.sm,
                               color: AppColors.skyBlue,
                             ),
                           ),
@@ -205,7 +204,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                           children: [
                             const Icon(
                               Icons.auto_awesome_rounded,
-                              size: 14,
+                              size: AppIconSize.xs,
                               color: AppColors.electricViolet,
                             ),
                             AppSpacing.gapWSm,

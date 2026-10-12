@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -69,7 +70,11 @@ class WorkspaceCard extends StatelessWidget {
                   ),
                 ),
                 child: isActive
-                    ? Icon(Icons.check_rounded, size: 16, color: onAccent)
+                    ? Icon(
+                        Icons.check_rounded,
+                        size: AppIconSize.sm,
+                        color: onAccent,
+                      )
                     : Center(
                         child: Container(
                           width: 8,

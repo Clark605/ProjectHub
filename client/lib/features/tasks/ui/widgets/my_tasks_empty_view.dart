@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +48,7 @@ class MyTasksEmptyView extends StatelessWidget {
               child: const Icon(
                 Icons.task_alt_rounded,
                 color: AppColors.skyBlue,
-                size: 32,
+                size: AppIconSize.xxl,
               ),
             ),
             AppSpacing.gapHXl,

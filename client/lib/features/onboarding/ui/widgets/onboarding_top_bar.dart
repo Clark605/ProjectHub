@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -44,7 +45,7 @@ class OnboardingTopBar extends StatelessWidget {
                 ),
                 child: const Icon(
                   Icons.hub_rounded,
-                  size: 18,
+                  size: AppIconSize.md,
                   color: AppColors.electricViolet,
                 ),
               ),

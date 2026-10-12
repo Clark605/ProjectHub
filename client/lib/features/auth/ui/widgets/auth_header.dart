@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -31,7 +32,7 @@ class AuthHeader extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.hub_rounded,
-                    size: 26,
+                    size: AppIconSize.xl,
                     color: AppColors.electricViolet,
                   ),
                   AppSpacing.gapWSm,

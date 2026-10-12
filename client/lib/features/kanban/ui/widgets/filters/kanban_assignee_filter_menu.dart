@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/features/workspaces/data/models/member_dto.dart';
@@ -35,7 +36,7 @@ class KanbanAssigneeFilterMenu extends StatelessWidget {
       tooltip: l10n.filterByAssignee,
       onSelected: (val) => onAssigneeSelected(val == 'all' ? null : val),
       child: Chip(
-        avatar: const Icon(Icons.person_outline_rounded, size: 16),
+        avatar: const Icon(Icons.person_outline_rounded, size: AppIconSize.sm),
         label: Text(
           _resolveAssigneeLabel(selectedAssignee, l10n),
           style: TextStyle(
@@ -43,7 +44,7 @@ class KanbanAssigneeFilterMenu extends StatelessWidget {
           ),
         ),
         deleteIcon: hasSelection
-            ? const Icon(Icons.close_rounded, size: 14)
+            ? const Icon(Icons.close_rounded, size: AppIconSize.xs)
             : null,
         onDeleted: hasSelection ? () => onAssigneeSelected(null) : null,
       ),

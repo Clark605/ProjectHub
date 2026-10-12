@@ -1,3 +1,4 @@
+import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,6 +30,7 @@ import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/ui/my_tasks_screen.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_cubit.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
 
@@ -37,7 +39,17 @@ import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
 Widget buildShellTabContent(int index, {ValueChanged<int>? onSelectTab}) =>
     switch (index) {
       0 => BlocProvider(
-        create: (_) => getIt<DashboardCubit>(),
+        create: (context) {
+          final cubit = getIt<DashboardCubit>();
+          final activeId = context
+              .read<WorkspaceContextCubit>()
+              .state
+              .whenOrNull(loaded: (_, a) => a.id);
+          if (activeId != null) {
+            cubit.loadDashboard(activeId);
+          }
+          return cubit;
+        },
         child: DashboardScreen(
           onNavigateToProjects: () => onSelectTab?.call(1),
           onNavigateToMyTasks: () => onSelectTab?.call(2),

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +63,7 @@ class CreateTaskTagsSelector extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.add,
-                    size: 13,
+                    size: AppIconSize.xxs,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                   AppSpacing.gapWXs,

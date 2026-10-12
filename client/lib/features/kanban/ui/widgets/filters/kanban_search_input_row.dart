@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -39,10 +40,16 @@ class KanbanSearchInputRow extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: l10n.taskTitlePlaceholder,
                 hintStyle: TextStyle(color: theme.colorScheme.onSurfaceVariant),
-                prefixIcon: const Icon(Icons.search_rounded, size: 18),
+                prefixIcon: const Icon(
+                  Icons.search_rounded,
+                  size: AppIconSize.md,
+                ),
                 suffixIcon: controller.text.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.close_rounded, size: 16),
+                        icon: const Icon(
+                          Icons.close_rounded,
+                          size: AppIconSize.sm,
+                        ),
                         onPressed: () {
                           controller.clear();
                           onChanged('');

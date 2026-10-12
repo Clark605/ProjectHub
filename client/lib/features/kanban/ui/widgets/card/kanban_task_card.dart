@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -159,7 +160,7 @@ class KanbanTaskCard extends StatelessWidget {
                             PopupMenuButton<String>(
                               icon: Icon(
                                 Icons.more_vert_rounded,
-                                size: 20,
+                                size: AppIconSize.lg,
                                 color: theme.colorScheme.onSurfaceVariant,
                               ),
                               padding: EdgeInsets.zero,
@@ -178,7 +179,7 @@ class KanbanTaskCard extends StatelessWidget {
                                     children: [
                                       Icon(
                                         Icons.drive_file_move_outlined,
-                                        size: 18,
+                                        size: AppIconSize.md,
                                         color: theme.colorScheme.onSurface,
                                       ),
                                       AppSpacing.gapWSm,
@@ -192,7 +193,7 @@ class KanbanTaskCard extends StatelessWidget {
                                     children: [
                                       const Icon(
                                         Icons.delete_outline_rounded,
-                                        size: 18,
+                                        size: AppIconSize.md,
                                         color: AppColors.error,
                                       ),
                                       AppSpacing.gapWSm,

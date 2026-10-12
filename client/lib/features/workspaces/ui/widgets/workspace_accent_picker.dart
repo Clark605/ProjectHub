@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
           children: [
             Icon(
               Icons.palette_outlined,
-              size: 18,
+              size: AppIconSize.md,
               color: theme.colorScheme.primary,
             ),
             AppSpacing.gapWSm,
@@ -79,7 +80,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
                         ? Icon(
                             Icons.check_rounded,
                             color: accent.resolvedOnAccent(theme.brightness),
-                            size: 20,
+                            size: AppIconSize.lg,
                           )
                         : null,
                   ),

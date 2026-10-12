@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,7 +58,10 @@ class WorkspaceMembersCard extends StatelessWidget {
 
                     final actionButton = TextButton.icon(
                       onPressed: () => InviteMemberSheet.show(context),
-                      icon: const Icon(Icons.person_add_outlined, size: 18),
+                      icon: const Icon(
+                        Icons.person_add_outlined,
+                        size: AppIconSize.md,
+                      ),
                       label: Text(l10n.addMember),
                     );
 

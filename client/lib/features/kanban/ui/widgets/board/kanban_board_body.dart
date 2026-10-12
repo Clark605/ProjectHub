@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/extensions/context_extensions.dart';
@@ -70,7 +71,7 @@ class KanbanBoardBody extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.filter_list_off_rounded,
-                    size: 44,
+                    size: AppIconSize.display,
                     color: AppColors.textSecondary,
                   ),
                   AppSpacing.gapHMd,

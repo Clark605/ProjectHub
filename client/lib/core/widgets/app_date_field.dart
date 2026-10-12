@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -77,7 +78,7 @@ class AppDateField extends StatelessWidget {
               children: [
                 const Icon(
                   Icons.calendar_today,
-                  size: 20,
+                  size: AppIconSize.lg,
                   color: AppColors.textSecondary,
                 ),
                 AppSpacing.gapWSm,

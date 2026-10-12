@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -70,7 +71,7 @@ class TaskTagsRow extends StatelessWidget {
                 children: [
                   const Icon(
                     Icons.add_rounded,
-                    size: 13,
+                    size: AppIconSize.xxs,
                     color: AppColors.textSecondary,
                   ),
                   AppSpacing.gapWXxs,

@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -117,7 +118,7 @@ class Sidebar extends StatelessWidget {
                     child: Icon(
                       Icons.hub_rounded,
                       color: AppColors.onElectricViolet,
-                      size: 20,
+                      size: AppIconSize.lg,
                     ),
                   ),
                 ),

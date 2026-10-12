@@ -14,7 +14,7 @@ import 'package:client/features/dashboard/ui/widgets/recent_activity_card.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends StatelessWidget {
   final VoidCallback? onNavigateToProjects;
   final VoidCallback? onNavigateToMyTasks;
 
@@ -24,28 +24,7 @@ class DashboardScreen extends StatefulWidget {
     this.onNavigateToMyTasks,
   });
 
-  @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
-}
-
-class _DashboardScreenState extends State<DashboardScreen> {
-  int? _lastLoadedWorkspaceId;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      final wsState = context.read<WorkspaceContextCubit>().state;
-      final active = wsState.whenOrNull(loaded: (_, a) => a);
-      if (active != null) {
-        _lastLoadedWorkspaceId = active.id;
-        context.read<DashboardCubit>().loadDashboard(active.id);
-      }
-    });
-  }
-
-  Future<void> _refresh(int? workspaceId) async {
+  Future<void> _refresh(BuildContext context, int? workspaceId) async {
     if (workspaceId != null) {
       await context.read<DashboardCubit>().loadDashboard(workspaceId);
     }
@@ -54,17 +33,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<WorkspaceContextCubit, WorkspaceContextState>(
+      listenWhen: (previous, current) =>
+          previous.whenOrNull(loaded: (_, a) => a.id) !=
+          current.whenOrNull(loaded: (_, a) => a.id),
       listener: (context, wsState) {
-        wsState.mapOrNull(
-          loaded: (s) {
-            if (_lastLoadedWorkspaceId != s.activeWorkspace.id) {
-              _lastLoadedWorkspaceId = s.activeWorkspace.id;
-              context.read<DashboardCubit>().loadDashboard(
-                s.activeWorkspace.id,
-              );
-            }
-          },
-        );
+        final activeId = wsState.whenOrNull(loaded: (_, a) => a.id);
+        if (activeId != null) {
+          context.read<DashboardCubit>().loadDashboard(activeId);
+        }
       },
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
@@ -72,7 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           final activeWorkspaceId = wsState.whenOrNull(loaded: (_, a) => a.id);
 
           return AppAsyncStateWrapper(
-            onRefresh: () => _refresh(activeWorkspaceId),
+            onRefresh: () => _refresh(context, activeWorkspaceId),
             errorMessage: !state.isLoading
                 ? state.failure?.localized(context)
                 : null,
@@ -91,10 +67,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   urgentTasks: state.urgentTasks,
                   completedTasks: state.completedTasks,
                   isLoading: state.isLoading,
-                  onTapActiveProjects: widget.onNavigateToProjects,
-                  onTapInProgressTasks: widget.onNavigateToMyTasks,
-                  onTapUrgentTasks: widget.onNavigateToMyTasks,
-                  onTapCompletedTasks: widget.onNavigateToMyTasks,
+                  onTapActiveProjects: onNavigateToProjects,
+                  onTapInProgressTasks: onNavigateToMyTasks,
+                  onTapUrgentTasks: onNavigateToMyTasks,
+                  onTapCompletedTasks: onNavigateToMyTasks,
                 ),
                 AppSpacing.gapHXxl,
                 LayoutBuilder(
@@ -109,7 +85,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             child: FocusTasksCard(
                               focusTasks: state.focusTasks,
                               isLoading: state.isLoading,
-                              onNavigateToMyTasks: widget.onNavigateToMyTasks,
+                              onNavigateToMyTasks: onNavigateToMyTasks,
                             ),
                           ),
                           AppSpacing.gapWXl,
@@ -129,7 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         FocusTasksCard(
                           focusTasks: state.focusTasks,
                           isLoading: state.isLoading,
-                          onNavigateToMyTasks: widget.onNavigateToMyTasks,
+                          onNavigateToMyTasks: onNavigateToMyTasks,
                         ),
                         AppSpacing.gapHXl,
                         RecentActivityCard(

@@ -136,5 +136,36 @@ void main() {
         () => mockWorkspaceRepo.getWorkspaceDashboard(31),
       ).called(greaterThanOrEqualTo(2));
     });
+
+    testWidgets(
+      'reloads dashboard once when active workspace id changes and ignores same workspace id emissions',
+      (tester) async {
+        const secondWorkspace = WorkspaceDto(
+          id: 42,
+          name: 'second workspace',
+          description: 'Second WS',
+          membership: WorkspaceMembershipDto(role: 'Owner'),
+        );
+
+        when(() => mockWorkspaceCubit.stream).thenAnswer(
+          (_) => Stream.fromIterable(const [
+            WorkspaceContextState.loaded(
+              workspaces: [testWorkspace, secondWorkspace],
+              activeWorkspace: testWorkspace,
+            ),
+            WorkspaceContextState.loaded(
+              workspaces: [testWorkspace, secondWorkspace],
+              activeWorkspace: secondWorkspace,
+            ),
+          ]),
+        );
+
+        await tester.pumpWidget(createWidgetUnderTest());
+        await tester.pumpAndSettle();
+
+        verifyNever(() => mockWorkspaceRepo.getWorkspaceDashboard(31));
+        verify(() => mockWorkspaceRepo.getWorkspaceDashboard(42)).called(1);
+      },
+    );
   });
 }

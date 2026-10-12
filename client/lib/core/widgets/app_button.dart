@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/core/theme/app_colors.dart';
@@ -46,7 +47,10 @@ class AppButton extends StatelessWidget {
             mainAxisSize: isExpanded ? MainAxisSize.max : MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (icon != null) ...[Icon(icon, size: 20), AppSpacing.gapWSm],
+              if (icon != null) ...[
+                Icon(icon, size: AppIconSize.lg),
+                AppSpacing.gapWSm,
+              ],
               Flexible(
                 child: Text(
                   label,

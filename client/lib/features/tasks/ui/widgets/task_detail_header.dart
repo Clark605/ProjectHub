@@ -1,12 +1,14 @@
-import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/widgets/app_badge.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
 
 class TaskDetailHeader extends StatelessWidget {
   final TaskDto task;
@@ -54,7 +56,7 @@ class TaskDetailHeader extends StatelessWidget {
               children: [
                 Icon(
                   task.statusEnum.toIcon(),
-                  size: 14,
+                  size: AppIconSize.xs,
                   color: task.statusEnum.toColor(),
                 ),
                 AppSpacing.gapWXs,
@@ -69,7 +71,7 @@ class TaskDetailHeader extends StatelessWidget {
                   AppSpacing.gapWXs,
                   Icon(
                     Icons.arrow_drop_down_rounded,
-                    size: 16,
+                    size: AppIconSize.sm,
                     color: task.statusEnum.toColor(),
                   ),
                 ],
@@ -78,39 +80,16 @@ class TaskDetailHeader extends StatelessWidget {
           ),
         ),
         AppSpacing.gapWSm,
-        Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.sm,
-            vertical: AppSpacing.xs,
-          ),
-          decoration: BoxDecoration(
-            color: task.priorityEnum.toColor().withValues(alpha: 0.15),
-            borderRadius: AppRadius.r12,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                task.priorityEnum.toIcon(),
-                size: 14,
-                color: task.priorityEnum.toColor(),
-              ),
-              AppSpacing.gapWXs,
-              Text(
-                task.priorityEnum.localizedName(l10n),
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: task.priorityEnum.toColor(),
-                ),
-              ),
-            ],
-          ),
+        AppBadge(
+          icon: task.priorityEnum.toIcon(),
+          label: task.priorityEnum.localizedName(l10n),
+          color: task.priorityEnum.toColor(),
         ),
         const Spacer(),
         if (!isEditMode) ...[
           if (!isArchived)
             IconButton(
-              icon: const Icon(Icons.edit_outlined, size: 20),
+              icon: const Icon(Icons.edit_outlined, size: AppIconSize.lg),
               tooltip: l10n.editTask,
               onPressed: onStartEdit,
             ),
@@ -118,7 +97,7 @@ class TaskDetailHeader extends StatelessWidget {
             IconButton(
               icon: const Icon(
                 Icons.delete_outline_rounded,
-                size: 20,
+                size: AppIconSize.lg,
                 color: AppColors.error,
               ),
               tooltip: l10n.deleteTaskConfirmTitle,

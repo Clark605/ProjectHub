@@ -1,3 +1,4 @@
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -172,7 +173,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
           child: Icon(
             Icons.hub_rounded,
             color: theme.colorScheme.primary,
-            size: 26,
+            size: AppIconSize.xl,
           ),
         ),
         AppSpacing.gapHLg,
