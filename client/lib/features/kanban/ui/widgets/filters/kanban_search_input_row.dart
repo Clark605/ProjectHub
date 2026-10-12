@@ -51,13 +51,13 @@ class KanbanSearchInputRow extends StatelessWidget {
                     : null,
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(
-                  vertical: AppSpacing.s10,
+                  vertical: AppSpacing.sm,
                 ),
               ),
             ),
           ),
         ),
-        AppSpacing.gapW8,
+        AppSpacing.gapWSm,
         IconButton(
           icon: const Icon(Icons.close_rounded),
           tooltip: l10n.closeSearch,

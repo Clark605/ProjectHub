@@ -19,7 +19,7 @@ class FocusTaskTile extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s14,
+        horizontal: AppSpacing.md,
         vertical: AppSpacing.md,
       ),
       decoration: BoxDecoration(
@@ -40,7 +40,7 @@ class FocusTaskTile extends StatelessWidget {
               color: priorityColor,
             ),
           ),
-          AppSpacing.gapW12,
+          AppSpacing.gapWMd,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +53,7 @@ class FocusTaskTile extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                AppSpacing.gapH2,
+                AppSpacing.gapHXxs,
                 Text(
                   task.projectName ?? 'Task #${task.id}',
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -63,7 +63,7 @@ class FocusTaskTile extends StatelessWidget {
               ],
             ),
           ),
-          AppSpacing.gapW12,
+          AppSpacing.gapWMd,
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.sm,

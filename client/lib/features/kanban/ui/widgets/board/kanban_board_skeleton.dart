@@ -47,12 +47,12 @@ class KanbanBoardSkeleton extends StatelessWidget {
               }),
             ),
           ),
-          AppSpacing.gapH12,
+          AppSpacing.gapHMd,
           Expanded(
             child: ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               itemCount: 4,
-              separatorBuilder: (_, _) => AppSpacing.gapH8,
+              separatorBuilder: (_, _) => AppSpacing.gapHSm,
               itemBuilder: (_, _) => _buildTaskCardSkeleton(context),
             ),
           ),
@@ -63,14 +63,14 @@ class KanbanBoardSkeleton extends StatelessWidget {
 
   Widget _buildDesktopSkeleton(BuildContext context) {
     return Padding(
-      padding: AppSpacing.edgeInsetsAll16,
+      padding: AppSpacing.edgeInsetsAllLg,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: List.generate(4, (index) {
           return Expanded(
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: AppSpacing.s6),
-              padding: AppSpacing.edgeInsetsAll12,
+              margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+              padding: AppSpacing.edgeInsetsAllMd,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerLow,
                 borderRadius: AppRadius.r16,
@@ -83,12 +83,12 @@ class KanbanBoardSkeleton extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildColumnHeaderSkeleton(context),
-                  AppSpacing.gapH12,
+                  AppSpacing.gapHMd,
                   Expanded(
                     child: ListView.separated(
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: 3,
-                      separatorBuilder: (_, _) => AppSpacing.gapH8,
+                      separatorBuilder: (_, _) => AppSpacing.gapHSm,
                       itemBuilder: (_, _) => _buildTaskCardSkeleton(context),
                     ),
                   ),
@@ -105,9 +105,9 @@ class KanbanBoardSkeleton extends StatelessWidget {
     return const Row(
       children: [
         Bone.circle(size: 10),
-        AppSpacing.gapW8,
+        AppSpacing.gapWSm,
         Flexible(child: Bone.text(words: 2)),
-        AppSpacing.gapW8,
+        AppSpacing.gapWSm,
         Bone(
           width: 24,
           height: 18,
@@ -149,9 +149,9 @@ class KanbanBoardSkeleton extends StatelessWidget {
             Padding(
               padding: EdgeInsets.fromLTRB(
                 AppSpacing.lg,
-                AppSpacing.s10,
-                AppSpacing.s10,
-                AppSpacing.s10,
+                AppSpacing.sm,
+                AppSpacing.sm,
+                AppSpacing.sm,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,13 +160,13 @@ class KanbanBoardSkeleton extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(child: Bone.text(words: 3)),
-                      AppSpacing.gapW8,
+                      AppSpacing.gapWSm,
                       Bone.icon(size: 18),
                     ],
                   ),
-                  AppSpacing.gapH8,
+                  AppSpacing.gapHSm,
                   Bone(width: 52, height: 18, borderRadius: AppRadius.r10),
-                  AppSpacing.gapH12,
+                  AppSpacing.gapHMd,
                   Row(
                     children: [
                       Expanded(
@@ -187,7 +187,7 @@ class KanbanBoardSkeleton extends StatelessWidget {
                           ],
                         ),
                       ),
-                      AppSpacing.gapW6,
+                      AppSpacing.gapWXs,
                       Bone.circle(size: 22),
                     ],
                   ),

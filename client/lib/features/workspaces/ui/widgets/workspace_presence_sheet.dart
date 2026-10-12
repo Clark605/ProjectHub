@@ -61,11 +61,11 @@ class WorkspacePresenceSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const AppSheetDragHandle(),
-          AppSpacing.gapH12,
+          AppSpacing.gapHMd,
           Row(
             children: [
               const StatusDot(color: AppColors.success),
-              AppSpacing.gapW8,
+              AppSpacing.gapWSm,
               Text(
                 l10n.onlineMembersCount(onlineUserIds.length),
                 style: theme.textTheme.titleSmall?.copyWith(
@@ -74,13 +74,13 @@ class WorkspacePresenceSheet extends StatelessWidget {
               ),
             ],
           ),
-          AppSpacing.gapH12,
+          AppSpacing.gapHMd,
           ...onlineUserIds.map((userId) {
             final isMe = userId == currentUserId;
             final name = _getUserName(userId, l10n);
 
             return Padding(
-              padding: AppSpacing.edgeInsetsV6,
+              padding: AppSpacing.edgeInsetsVXs,
               child: Row(
                 children: [
                   Stack(
@@ -101,7 +101,7 @@ class WorkspacePresenceSheet extends StatelessWidget {
                       ),
                     ],
                   ),
-                  AppSpacing.gapW12,
+                  AppSpacing.gapWMd,
                   Expanded(
                     child: Text(
                       isMe ? l10n.youSuffix(name) : name,

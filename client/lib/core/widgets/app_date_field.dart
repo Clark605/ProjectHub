@@ -56,7 +56,7 @@ class AppDateField extends StatelessWidget {
       children: [
         if (label != null) ...[
           Text(label!, style: Theme.of(context).textTheme.labelMedium),
-          AppSpacing.gapH8,
+          AppSpacing.gapHSm,
         ],
         InkWell(
           onTap: () => _selectDate(context),
@@ -80,7 +80,7 @@ class AppDateField extends StatelessWidget {
                   size: 20,
                   color: AppColors.textSecondary,
                 ),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Text(
                   selectedDate != null
                       ? _formatDate(selectedDate!)

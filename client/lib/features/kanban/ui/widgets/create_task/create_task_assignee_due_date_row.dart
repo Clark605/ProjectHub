@@ -42,7 +42,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              AppSpacing.gapH8,
+              AppSpacing.gapHSm,
               DropdownButtonFormField<String?>(
                 initialValue: selectedAssigneeId,
                 isExpanded: true,
@@ -109,7 +109,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
             ],
           ),
         ),
-        AppSpacing.gapW12,
+        AppSpacing.gapWMd,
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +121,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              AppSpacing.gapH8,
+              AppSpacing.gapHSm,
               InkWell(
                 onTap: onPickDueDate,
                 borderRadius: AppRadius.r12,
@@ -142,7 +142,7 @@ class CreateTaskAssigneeDueDateRow extends StatelessWidget {
                         size: 16,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
-                      AppSpacing.gapW8,
+                      AppSpacing.gapWSm,
                       Expanded(
                         child: Text(
                           selectedDueDate != null

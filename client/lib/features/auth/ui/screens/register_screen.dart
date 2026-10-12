@@ -91,14 +91,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
           isLoading: isLoading,
           formKey: _formKey,
           children: [
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
             AuthHeader(
               title: l10n.createAccount,
               subtitle: l10n.createAccountSubtitle,
             ),
-            AppSpacing.gapH24,
+            AppSpacing.gapHXxl,
             AppErrorBanner(errorMessage: errorMessage),
-            AppSpacing.gapH12,
+            AppSpacing.gapHMd,
             AppTextField(
                   label: l10n.fullName,
                   hintText: l10n.fullNamePlaceholder,
@@ -111,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 200.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: AppSpacing.s18),
+            const SizedBox(height: AppSpacing.lg),
             AppTextField(
                   label: l10n.email,
                   hintText: l10n.emailPlaceholder,
@@ -123,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 250.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: AppSpacing.s18),
+            const SizedBox(height: AppSpacing.lg),
             AppTextField(
                   label: l10n.password,
                   hintText: l10n.passwordPlaceholder,
@@ -135,7 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 300.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: AppSpacing.s18),
+            const SizedBox(height: AppSpacing.lg),
             AppTextField(
                   label: l10n.confirmPassword,
                   hintText: l10n.passwordPlaceholder,
@@ -152,7 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 350.ms)
                 .slideY(begin: 0.1, end: 0),
-            AppSpacing.gapH16,
+            AppSpacing.gapHLg,
             TermsCheckbox(
               value: _agreeToTerms,
               hasError: _termsError,
@@ -163,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 });
               },
             ),
-            AppSpacing.gapH24,
+            AppSpacing.gapHXxl,
             AppButton(
                   label: l10n.signUp,
                   variant: AppButtonVariant.primary,
@@ -173,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 450.ms)
                 .slideY(begin: 0.1, end: 0),
-            AppSpacing.gapH24,
+            AppSpacing.gapHXxl,
             SocialAuthSection(
                   onGooglePressed: () => _onGoogleSignIn(context),
                   onGithubPressed: () => _onGithubSignIn(context),
@@ -181,7 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 500.ms)
                 .slideY(begin: 0.1, end: 0),
-            AppSpacing.gapH32,
+            AppSpacing.gapHXxxl,
             AuthFooterLink(
               promptText: l10n.alreadyHaveAccount,
               actionText: l10n.signIn,

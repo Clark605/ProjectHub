@@ -56,7 +56,7 @@ class ProjectsHeader extends StatelessWidget {
                         letterSpacing: -0.5,
                       ),
                     ),
-                    AppSpacing.gapH4,
+                    AppSpacing.gapHXs,
                     Text(
                       l10n.projectsSubtitle,
                       style: theme.textTheme.bodyMedium?.copyWith(
@@ -69,11 +69,11 @@ class ProjectsHeader extends StatelessWidget {
                 ),
               ),
               if (activeWsId != null) ...[
-                AppSpacing.gapW12,
+                AppSpacing.gapWMd,
                 WorkspacePresenceAvatars(workspaceId: activeWsId),
               ],
               if (isDesktop) ...[
-                AppSpacing.gapW16,
+                AppSpacing.gapWLg,
                 AppButton(
                   label: l10n.createProject,
                   icon: Icons.add_rounded,
@@ -83,7 +83,7 @@ class ProjectsHeader extends StatelessWidget {
               ],
             ],
           ),
-          AppSpacing.gapH20,
+          AppSpacing.gapHXl,
         ],
       ),
     );

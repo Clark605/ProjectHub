@@ -83,14 +83,14 @@ class _LoginScreenState extends State<LoginScreen> {
           isLoading: isLoading,
           formKey: _formKey,
           children: [
-            AppSpacing.gapH12,
+            AppSpacing.gapHMd,
             AuthHeader(
               title: l10n.welcomeBack,
               subtitle: l10n.welcomeBackSubtitle,
             ),
-            AppSpacing.gapH24,
+            AppSpacing.gapHXxl,
             AppErrorBanner(errorMessage: errorMessage),
-            AppSpacing.gapH12,
+            AppSpacing.gapHMd,
             AppTextField(
                   label: l10n.email,
                   hintText: l10n.emailPlaceholder,
@@ -102,7 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 200.ms)
                 .slideY(begin: 0.1, end: 0),
-            const SizedBox(height: AppSpacing.s18),
+            const SizedBox(height: AppSpacing.lg),
             AppTextField(
                   label: l10n.password,
                   hintText: l10n.passwordPlaceholder,
@@ -115,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 250.ms)
                 .slideY(begin: 0.1, end: 0),
-            AppSpacing.gapH14,
+            AppSpacing.gapHMd,
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ).animate().fadeIn(duration: 400.ms, delay: 300.ms),
-            AppSpacing.gapH24,
+            AppSpacing.gapHXxl,
             AppButton(
                   label: l10n.signIn,
                   variant: AppButtonVariant.primary,
@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 350.ms)
                 .slideY(begin: 0.1, end: 0),
-            AppSpacing.gapH24,
+            AppSpacing.gapHXxl,
             SocialAuthSection(
                   onGooglePressed: () => _onGoogleSignIn(context),
                   onGithubPressed: () => _onGithubSignIn(context),
@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 .animate()
                 .fadeIn(duration: 400.ms, delay: 400.ms)
                 .slideY(begin: 0.1, end: 0),
-            AppSpacing.gapH32,
+            AppSpacing.gapHXxxl,
             AuthFooterLink(
               promptText: l10n.dontHaveAccount,
               actionText: l10n.signUp,

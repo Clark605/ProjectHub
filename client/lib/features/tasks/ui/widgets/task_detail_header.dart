@@ -39,8 +39,8 @@ class TaskDetailHeader extends StatelessWidget {
           borderRadius: AppRadius.r12,
           child: Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.s10,
-              vertical: AppSpacing.s5,
+              horizontal: AppSpacing.sm,
+              vertical: AppSpacing.xs,
             ),
             decoration: BoxDecoration(
               color: task.statusEnum.toColor().withValues(alpha: 0.15),
@@ -57,7 +57,7 @@ class TaskDetailHeader extends StatelessWidget {
                   size: 14,
                   color: task.statusEnum.toColor(),
                 ),
-                AppSpacing.gapW6,
+                AppSpacing.gapWXs,
                 Text(
                   task.statusEnum.localizedName(l10n),
                   style: TextStyle(
@@ -66,7 +66,7 @@ class TaskDetailHeader extends StatelessWidget {
                   ),
                 ),
                 if (!isArchived) ...[
-                  AppSpacing.gapW4,
+                  AppSpacing.gapWXs,
                   Icon(
                     Icons.arrow_drop_down_rounded,
                     size: 16,
@@ -77,11 +77,11 @@ class TaskDetailHeader extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.gapW8,
+        AppSpacing.gapWSm,
         Container(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.sm,
-            vertical: AppSpacing.s5,
+            vertical: AppSpacing.xs,
           ),
           decoration: BoxDecoration(
             color: task.priorityEnum.toColor().withValues(alpha: 0.15),
@@ -95,7 +95,7 @@ class TaskDetailHeader extends StatelessWidget {
                 size: 14,
                 color: task.priorityEnum.toColor(),
               ),
-              AppSpacing.gapW4,
+              AppSpacing.gapWXs,
               Text(
                 task.priorityEnum.localizedName(l10n),
                 style: TextStyle(

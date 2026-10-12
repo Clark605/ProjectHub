@@ -17,7 +17,7 @@ class MyTasksEmptyView extends StatelessWidget {
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 420),
-        margin: AppSpacing.edgeInsetsAll24,
+        margin: AppSpacing.edgeInsetsAllXxl,
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.xxl,
           vertical: AppSpacing.xxxl,
@@ -50,14 +50,14 @@ class MyTasksEmptyView extends StatelessWidget {
                 size: 32,
               ),
             ),
-            AppSpacing.gapH20,
+            AppSpacing.gapHXl,
             Text(
               l10n.noAssignedTasks,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
             Text(
               l10n.noAssignedTasksSubtitle,
               style: theme.textTheme.bodyMedium?.copyWith(

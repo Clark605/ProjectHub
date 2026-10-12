@@ -24,7 +24,7 @@ class AppEmptyState extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: AppSpacing.edgeInsetsAll24,
+        padding: AppSpacing.edgeInsetsAllXxl,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -33,7 +33,7 @@ class AppEmptyState extends StatelessWidget {
               size: 64,
               color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
             ),
-            AppSpacing.gapH16,
+            AppSpacing.gapHLg,
             Text(
               title,
               style: theme.textTheme.titleLarge?.copyWith(
@@ -43,7 +43,7 @@ class AppEmptyState extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             if (description != null && description!.isNotEmpty) ...[
-              AppSpacing.gapH8,
+              AppSpacing.gapHSm,
               Text(
                 description!,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -53,7 +53,7 @@ class AppEmptyState extends StatelessWidget {
               ),
             ],
             if (ctaText != null && onCtaPressed != null) ...[
-              AppSpacing.gapH24,
+              AppSpacing.gapHXxl,
               ElevatedButton(onPressed: onCtaPressed, child: Text(ctaText!)),
             ],
           ],

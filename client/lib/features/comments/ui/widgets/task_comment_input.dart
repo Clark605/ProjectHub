@@ -62,7 +62,7 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
               onSubmitted: (_) => _submit(),
             ),
           ),
-          AppSpacing.gapW8,
+          AppSpacing.gapWSm,
           if (widget.isSending)
             const SizedBox(
               width: 20,

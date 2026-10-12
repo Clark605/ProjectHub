@@ -42,7 +42,7 @@ class AttachTagSearchField extends StatelessWidget {
         focusedBorder: border.copyWith(
           borderSide: BorderSide(color: theme.colorScheme.primary),
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: AppSpacing.s10),
+        contentPadding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
       ),
     );
   }

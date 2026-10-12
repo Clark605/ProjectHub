@@ -114,12 +114,12 @@ class KanbanColumn extends StatelessWidget {
               onAddTask: isArchived ? null : () => _handleAddTask(context),
             )
           else
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
           Expanded(
             child: tasks.isEmpty
                 ? Center(
                     child: Padding(
-                      padding: AppSpacing.edgeInsetsAll16,
+                      padding: AppSpacing.edgeInsetsAllLg,
                       child: InkWell(
                         borderRadius: AppRadius.r12,
                         onTap: isArchived
@@ -148,7 +148,7 @@ class KanbanColumn extends StatelessWidget {
                                 size: 24,
                                 color: AppColors.textSecondaryColor(isDark),
                               ),
-                              AppSpacing.gapH6,
+                              AppSpacing.gapHXs,
                               Text(
                                 isArchived
                                     ? l10n.noTasksInColumn

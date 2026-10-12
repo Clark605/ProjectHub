@@ -44,7 +44,7 @@ class LogoutCard extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: AppSpacing.edgeInsetsAll20,
+        padding: AppSpacing.edgeInsetsAllXl,
         child: Row(
           children: [
             Expanded(
@@ -57,7 +57,7 @@ class LogoutCard extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  AppSpacing.gapH2,
+                  AppSpacing.gapHXxs,
                   Text(
                     l10n.sessionSecurityDesc,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(

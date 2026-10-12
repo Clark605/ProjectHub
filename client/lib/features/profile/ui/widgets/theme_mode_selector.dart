@@ -17,7 +17,7 @@ class ThemeModeSelector extends StatelessWidget {
       builder: (context, state) {
         return Card(
           child: Padding(
-            padding: AppSpacing.edgeInsetsAll20,
+            padding: AppSpacing.edgeInsetsAllXl,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -28,7 +28,7 @@ class ThemeModeSelector extends StatelessWidget {
                       size: 20,
                       color: theme.colorScheme.primary,
                     ),
-                    AppSpacing.gapW10,
+                    AppSpacing.gapWSm,
                     Text(
                       l10n.appearance,
                       style: theme.textTheme.titleMedium?.copyWith(
@@ -37,14 +37,14 @@ class ThemeModeSelector extends StatelessWidget {
                     ),
                   ],
                 ),
-                AppSpacing.gapH6,
+                AppSpacing.gapHXs,
                 Text(
                   l10n.appearanceSubtitle,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                   ),
                 ),
-                AppSpacing.gapH16,
+                AppSpacing.gapHLg,
                 SegmentedButton<ThemeMode>(
                   segments: [
                     ButtonSegment<ThemeMode>(

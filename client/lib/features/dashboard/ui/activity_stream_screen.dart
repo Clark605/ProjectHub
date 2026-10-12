@@ -162,9 +162,9 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                 constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
               ),
               WorkspacePresenceAvatars(workspaceId: widget.workspaceId),
-              AppSpacing.gapW8,
+              AppSpacing.gapWSm,
               const RealtimeStatusBadge(),
-              AppSpacing.gapW16,
+              AppSpacing.gapWLg,
             ],
           ),
           body: SafeArea(
@@ -224,9 +224,9 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
       margin: const EdgeInsets.only(top: AppSpacing.sm, bottom: AppSpacing.xs),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: AppSpacing.edgeInsetsH16,
+        padding: AppSpacing.edgeInsetsHLg,
         itemCount: categories.length,
-        separatorBuilder: (_, _) => AppSpacing.gapW8,
+        separatorBuilder: (_, _) => AppSpacing.gapWSm,
         itemBuilder: (context, index) {
           final cat = categories[index];
           final isSelected = currentCategory == cat['key'];
@@ -269,7 +269,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
     if (state.filter.hasActiveFilters && state.filteredActivities.isEmpty) {
       return Center(
         child: Padding(
-          padding: AppSpacing.edgeInsetsAll32,
+          padding: AppSpacing.edgeInsetsAllXxxl,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -280,14 +280,14 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                   alpha: 0.5,
                 ),
               ),
-              AppSpacing.gapH12,
+              AppSpacing.gapHMd,
               Text(
                 l10n.noMatchingActivities,
                 style: theme.textTheme.titleSmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              AppSpacing.gapH16,
+              AppSpacing.gapHLg,
               ElevatedButton.icon(
                 key: const Key('activity_stream_reset_filters_button'),
                 onPressed: _cubit.clearFilters,
@@ -304,7 +304,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
     if (state.activities.isEmpty) {
       return Center(
         child: Padding(
-          padding: AppSpacing.edgeInsetsAll32,
+          padding: AppSpacing.edgeInsetsAllXxxl,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -315,7 +315,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
                   alpha: 0.5,
                 ),
               ),
-              AppSpacing.gapH12,
+              AppSpacing.gapHMd,
               Text(
                 l10n.noRecentActivity,
                 style: theme.textTheme.titleSmall?.copyWith(

@@ -112,7 +112,7 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
             validator: (v) =>
                 v == null || v.trim().isEmpty ? (l10n.taskTitleRequired) : null,
           ),
-          AppSpacing.gapH10,
+          AppSpacing.gapHSm,
           TextFormField(
             controller: _descController,
             minLines: 1,
@@ -132,12 +132,12 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
               ),
             ),
           ),
-          AppSpacing.gapH10,
+          AppSpacing.gapHSm,
           TaskPrioritySelector(
             selectedPriority: _editPriority,
             onSelected: (p) => setState(() => _editPriority = p),
           ),
-          AppSpacing.gapH10,
+          AppSpacing.gapHSm,
           TaskDetailAssigneeDueFields(
             members: widget.members,
             editAssigneeId: _editAssigneeId,
@@ -147,7 +147,7 @@ class _TaskDetailEditFormState extends State<TaskDetailEditForm> {
             onPickDueDate: _pickDueDate,
             onClearDueDate: () => setState(() => _editDueDate = null),
           ),
-          AppSpacing.gapH12,
+          AppSpacing.gapHMd,
           AppButton(
             label: l10n.saveChanges,
             isLoading: _isSaving,

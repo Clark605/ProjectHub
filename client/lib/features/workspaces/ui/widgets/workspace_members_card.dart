@@ -32,7 +32,7 @@ class WorkspaceMembersCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: AppSpacing.edgeInsetsAll20,
+                padding: AppSpacing.edgeInsetsAllXl,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final isNarrow = constraints.maxWidth < 400;
@@ -76,11 +76,11 @@ class WorkspaceMembersCard extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),
-                              AppSpacing.gapW8,
+                              AppSpacing.gapWSm,
                               badge,
                             ],
                           ),
-                          AppSpacing.gapH8,
+                          AppSpacing.gapHSm,
                           actionButton,
                         ],
                       );
@@ -97,7 +97,7 @@ class WorkspaceMembersCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        AppSpacing.gapW8,
+                        AppSpacing.gapWSm,
                         badge,
                         const Spacer(),
                         actionButton,

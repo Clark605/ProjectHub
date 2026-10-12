@@ -21,7 +21,7 @@ class AppErrorState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.error_outline, size: 64, color: AppColors.error),
-            AppSpacing.gapH16,
+            AppSpacing.gapHLg,
             Text(
               l10n.somethingWentWrong,
               style: theme.textTheme.titleLarge?.copyWith(
@@ -30,7 +30,7 @@ class AppErrorState extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
             Text(
               errorMessage,
               style: theme.textTheme.bodyMedium?.copyWith(
@@ -39,7 +39,7 @@ class AppErrorState extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             if (onRetry != null) ...[
-              AppSpacing.gapH24,
+              AppSpacing.gapHXxl,
               ElevatedButton.icon(
                 onPressed: onRetry,
                 icon: const Icon(Icons.refresh),

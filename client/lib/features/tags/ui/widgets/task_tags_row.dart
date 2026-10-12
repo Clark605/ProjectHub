@@ -55,7 +55,7 @@ class TaskTagsRow extends StatelessWidget {
             ),
             child: Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.s6,
+                horizontal: AppSpacing.xs,
                 vertical: AppSpacing.xxs,
               ),
               decoration: BoxDecoration(
@@ -73,7 +73,7 @@ class TaskTagsRow extends StatelessWidget {
                     size: 13,
                     color: AppColors.textSecondary,
                   ),
-                  AppSpacing.gapW2,
+                  AppSpacing.gapWXxs,
                   Text(
                     l10n.tagLabel,
                     style: const TextStyle(

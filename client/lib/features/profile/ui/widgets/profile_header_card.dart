@@ -73,7 +73,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
 
         return Card(
           child: Padding(
-            padding: AppSpacing.edgeInsetsAll24,
+            padding: AppSpacing.edgeInsetsAllXxl,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -106,7 +106,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                         ),
                       ),
                     ),
-                    AppSpacing.gapW16,
+                    AppSpacing.gapWLg,
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +117,7 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          AppSpacing.gapH4,
+                          AppSpacing.gapHXs,
                           Text(
                             user?.email ?? '',
                             style: theme.textTheme.bodyMedium?.copyWith(
@@ -139,21 +139,21 @@ class _ProfileHeaderCardState extends State<ProfileHeaderCard> {
                   ],
                 ),
                 if (_isEditing) ...[
-                  AppSpacing.gapH20,
+                  AppSpacing.gapHXl,
                   const Divider(),
-                  AppSpacing.gapH16,
+                  AppSpacing.gapHLg,
                   AppTextField(
                     controller: _nameController,
                     label: l10n.displayName,
                     hintText: l10n.yourFullNameHint,
                   ),
-                  AppSpacing.gapH14,
+                  AppSpacing.gapHMd,
                   AppTextField(
                     controller: _bioController,
                     label: l10n.bio,
                     hintText: l10n.shortDescriptionHint,
                   ),
-                  const SizedBox(height: AppSpacing.s18),
+                  const SizedBox(height: AppSpacing.lg),
                   Align(
                     alignment: Alignment.centerRight,
                     child: ConstrainedBox(

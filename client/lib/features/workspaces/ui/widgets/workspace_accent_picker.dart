@@ -30,7 +30,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
               size: 18,
               color: theme.colorScheme.primary,
             ),
-            AppSpacing.gapW8,
+            AppSpacing.gapWSm,
             Text(
               l10n.accentColor,
               style: theme.textTheme.titleSmall?.copyWith(
@@ -39,20 +39,20 @@ class WorkspaceAccentPicker extends StatelessWidget {
             ),
           ],
         ),
-        AppSpacing.gapH4,
+        AppSpacing.gapHXs,
         Text(
           l10n.accentColorSubtitle,
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        AppSpacing.gapH12,
+        AppSpacing.gapHMd,
         SizedBox(
           height: 44,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: WorkspaceAccent.values.length,
-            separatorBuilder: (_, _) => AppSpacing.gapW10,
+            separatorBuilder: (_, _) => AppSpacing.gapWSm,
             itemBuilder: (context, index) {
               final accent = WorkspaceAccent.values[index];
               final isSelected = activeAccentId == accent.id;

@@ -41,7 +41,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        AppSpacing.gapH8,
+        AppSpacing.gapHSm,
         DropdownButtonFormField<String?>(
           initialValue: editAssigneeId,
           isExpanded: true,
@@ -78,7 +78,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
           ],
           onChanged: onAssigneeChanged,
         ),
-        AppSpacing.gapH16,
+        AppSpacing.gapHLg,
         Text(
           l10n.dueDate,
           style: theme.textTheme.labelMedium?.copyWith(
@@ -86,7 +86,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        AppSpacing.gapH8,
+        AppSpacing.gapHSm,
         InkWell(
           onTap: onPickDueDate,
           borderRadius: AppRadius.r12,
@@ -105,7 +105,7 @@ class TaskDetailAssigneeDueFields extends StatelessWidget {
                   size: 16,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Expanded(
                   child: Text(
                     editDueDate != null

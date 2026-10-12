@@ -45,7 +45,7 @@ class MyTaskListTile extends StatelessWidget {
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.s14,
+              horizontal: AppSpacing.md,
               vertical: AppSpacing.md,
             ),
             child: Row(
@@ -59,7 +59,7 @@ class MyTaskListTile extends StatelessWidget {
                     borderRadius: AppRadius.r2,
                   ),
                 ),
-                AppSpacing.gapW12,
+                AppSpacing.gapWMd,
 
                 // Main Info: Title, Project Name, Due Date
                 Expanded(
@@ -74,7 +74,7 @@ class MyTaskListTile extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      AppSpacing.gapH4,
+                      AppSpacing.gapHXs,
                       Row(
                         children: [
                           if (task.projectName != null &&
@@ -92,7 +92,7 @@ class MyTaskListTile extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            AppSpacing.gapW8,
+                            AppSpacing.gapWSm,
                             Text(
                               '•',
                               style: TextStyle(
@@ -101,7 +101,7 @@ class MyTaskListTile extends StatelessWidget {
                                     : AppColors.lightTextSecondary,
                               ),
                             ),
-                            AppSpacing.gapW8,
+                            AppSpacing.gapWSm,
                           ],
                           if (task.dueDate != null)
                             Row(
@@ -116,7 +116,7 @@ class MyTaskListTile extends StatelessWidget {
                                             ? AppColors.textSecondary
                                             : AppColors.lightTextSecondary),
                                 ),
-                                AppSpacing.gapW4,
+                                AppSpacing.gapWXs,
                                 Text(
                                   DateFormatter.formatShortDate(
                                     task.dueDate!,
@@ -140,7 +140,7 @@ class MyTaskListTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
 
                 // Status Badge
                 GestureDetector(

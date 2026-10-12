@@ -50,7 +50,7 @@ class TaskDetailReadView extends StatelessWidget {
             color: theme.colorScheme.onSurface,
           ),
         ),
-        AppSpacing.gapH12,
+        AppSpacing.gapHMd,
         Text(
           task.description.isNotEmpty
               ? task.description
@@ -65,7 +65,7 @@ class TaskDetailReadView extends StatelessWidget {
             height: 1.5,
           ),
         ),
-        AppSpacing.gapH12,
+        AppSpacing.gapHMd,
         TaskTagsRow(
           projectId: task.projectId,
           tags: task.tags,
@@ -73,16 +73,16 @@ class TaskDetailReadView extends StatelessWidget {
           onTagAdded: onTagAdded,
           onTagRemoved: onTagRemoved,
         ),
-        AppSpacing.gapH16,
+        AppSpacing.gapHLg,
         Divider(height: 1, color: theme.colorScheme.outlineVariant),
-        AppSpacing.gapH16,
+        AppSpacing.gapHLg,
         _buildInfoRow(
           context,
           icon: Icons.person_outline_rounded,
           label: l10n.assignee,
           value: task.assigneeName ?? l10n.unassigned,
         ),
-        AppSpacing.gapH12,
+        AppSpacing.gapHMd,
         _buildInfoRow(
           context,
           icon: Icons.calendar_today_outlined,
@@ -93,7 +93,7 @@ class TaskDetailReadView extends StatelessWidget {
           valueColor: isOverdue ? AppColors.error : null,
           trailing: isOverdue ? _buildOverdueBadge(l10n) : null,
         ),
-        AppSpacing.gapH12,
+        AppSpacing.gapHMd,
         _buildInfoRow(
           context,
           icon: Icons.history_edu_rounded,
@@ -103,7 +103,7 @@ class TaskDetailReadView extends StatelessWidget {
               : l10n.unknownUser,
         ),
         if (task.createdAt != null) ...[
-          AppSpacing.gapH12,
+          AppSpacing.gapHMd,
           _buildInfoRow(
             context,
             icon: Icons.access_time_rounded,
@@ -143,9 +143,9 @@ class TaskDetailReadView extends StatelessWidget {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              AppSpacing.gapH20,
+              AppSpacing.gapHXl,
               Divider(height: 1, color: theme.colorScheme.outlineVariant),
-              AppSpacing.gapH16,
+              AppSpacing.gapHLg,
               BlocProvider<CommentsCubit>(
                 create: (_) => CommentsCubit(
                   taskId: task.id,
@@ -167,7 +167,7 @@ class TaskDetailReadView extends StatelessWidget {
   Widget _buildOverdueBadge(AppLocalizations l10n) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s6,
+        horizontal: AppSpacing.xs,
         vertical: AppSpacing.xxs,
       ),
       decoration: BoxDecoration(
@@ -196,7 +196,7 @@ class TaskDetailReadView extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, size: 18, color: theme.colorScheme.onSurfaceVariant),
-        AppSpacing.gapW10,
+        AppSpacing.gapWSm,
         Text(
           label,
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -211,7 +211,7 @@ class TaskDetailReadView extends StatelessWidget {
             color: valueColor,
           ),
         ),
-        if (trailing != null) ...[AppSpacing.gapW8, trailing],
+        if (trailing != null) ...[AppSpacing.gapWSm, trailing],
       ],
     );
   }

@@ -121,7 +121,7 @@ class AppAsyncStateWrapper extends StatelessWidget {
         notificationPredicate: notificationPredicate,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: padding ?? AppSpacing.edgeInsetsAll16,
+          padding: padding ?? AppSpacing.edgeInsetsAllLg,
           child: SizedBox(
             height: MediaQuery.of(context).size.height * 0.65,
             child: Center(

@@ -64,7 +64,7 @@ class KanbanBoardBody extends StatelessWidget {
         if (tasks.isEmpty && hasActiveFilter) {
           return Center(
             child: Padding(
-              padding: AppSpacing.edgeInsetsAll24,
+              padding: AppSpacing.edgeInsetsAllXxl,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -73,12 +73,12 @@ class KanbanBoardBody extends StatelessWidget {
                     size: 44,
                     color: AppColors.textSecondary,
                   ),
-                  AppSpacing.gapH12,
+                  AppSpacing.gapHMd,
                   Text(
                     l10n.noTasksMatchFilters,
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-                  AppSpacing.gapH12,
+                  AppSpacing.gapHMd,
                   OutlinedButton(
                     onPressed: onClearFilters,
                     child: Text(l10n.clearFilters),

@@ -24,7 +24,7 @@ class ProjectDetailSkeleton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  padding: AppSpacing.edgeInsetsAll20,
+                  padding: AppSpacing.edgeInsetsAllXl,
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceContainer,
                     borderRadius: AppRadius.r16,
@@ -38,19 +38,19 @@ class ProjectDetailSkeleton extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Bone.text(words: 2),
-                      AppSpacing.gapH16,
+                      AppSpacing.gapHLg,
                       Bone(
                         width: double.infinity,
                         height: 48,
                         borderRadius: AppRadius.r12,
                       ),
-                      AppSpacing.gapH16,
+                      AppSpacing.gapHLg,
                       Bone(
                         width: double.infinity,
                         height: 80,
                         borderRadius: AppRadius.r12,
                       ),
-                      AppSpacing.gapH16,
+                      AppSpacing.gapHLg,
                       Bone(
                         width: double.infinity,
                         height: 48,

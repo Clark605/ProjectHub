@@ -31,7 +31,7 @@ class TaskPrioritySelector extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        AppSpacing.gapH8,
+        AppSpacing.gapHSm,
         Wrap(
           spacing: 8,
           children: TaskPriority.values.map((priority) {

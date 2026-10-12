@@ -52,7 +52,7 @@ class MyTasksContentSlivers {
 
         return [
           SliverPadding(
-            padding: AppSpacing.edgeInsetsH20,
+            padding: AppSpacing.edgeInsetsHXl,
             sliver: SliverList(
               delegate: SliverChildListDelegate([
                 if (urgent.isNotEmpty)
@@ -93,7 +93,7 @@ class MyTasksContentSlivers {
                   onTaskTap: onTaskTap,
                   onTaskStatusTap: onTaskMove,
                 ),
-                AppSpacing.gapH32,
+                AppSpacing.gapHXxxl,
               ]),
             ),
           ),

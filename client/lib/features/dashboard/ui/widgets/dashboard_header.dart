@@ -37,7 +37,7 @@ class DashboardHeader extends StatelessWidget {
                   letterSpacing: -0.5,
                 ),
               ),
-              AppSpacing.gapH4,
+              AppSpacing.gapHXs,
               Text(
                 l10n.workspaceOverviewSubtitle,
                 style: theme.textTheme.bodyMedium?.copyWith(
@@ -48,7 +48,7 @@ class DashboardHeader extends StatelessWidget {
           ),
         ),
         if (activeWsId != null) ...[
-          AppSpacing.gapW12,
+          AppSpacing.gapWMd,
           WorkspacePresenceAvatars(workspaceId: activeWsId),
         ],
       ],

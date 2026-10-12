@@ -27,7 +27,7 @@ class KanbanDesktopBoard extends StatelessWidget {
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: AppSpacing.edgeInsetsAll16,
+      padding: AppSpacing.edgeInsetsAllLg,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: TaskStatus.values.map((status) {

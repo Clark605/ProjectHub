@@ -100,7 +100,7 @@ class KanbanTaskCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: AppSpacing.xs,
-        vertical: AppSpacing.s5,
+        vertical: AppSpacing.xs,
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
@@ -134,9 +134,9 @@ class KanbanTaskCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
                     AppSpacing.lg,
-                    AppSpacing.s10,
-                    AppSpacing.s10,
-                    AppSpacing.s10,
+                    AppSpacing.sm,
+                    AppSpacing.sm,
+                    AppSpacing.sm,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +181,7 @@ class KanbanTaskCard extends StatelessWidget {
                                         size: 18,
                                         color: theme.colorScheme.onSurface,
                                       ),
-                                      AppSpacing.gapW8,
+                                      AppSpacing.gapWSm,
                                       Text(l10n.moveTask),
                                     ],
                                   ),
@@ -195,7 +195,7 @@ class KanbanTaskCard extends StatelessWidget {
                                         size: 18,
                                         color: AppColors.error,
                                       ),
-                                      AppSpacing.gapW8,
+                                      AppSpacing.gapWSm,
                                       Text(
                                         l10n.delete,
                                         style: const TextStyle(
@@ -210,7 +210,7 @@ class KanbanTaskCard extends StatelessWidget {
                         ],
                       ),
                       if (task.tags.isNotEmpty) ...[
-                        AppSpacing.gapH6,
+                        AppSpacing.gapHXs,
                         Wrap(
                           spacing: 4,
                           runSpacing: 4,
@@ -224,7 +224,7 @@ class KanbanTaskCard extends StatelessWidget {
                               .toList(),
                         ),
                       ],
-                      AppSpacing.gapH10,
+                      AppSpacing.gapHSm,
                       KanbanTaskCardFooter(
                         priority: task.priorityEnum,
                         dueDate: task.dueDate,

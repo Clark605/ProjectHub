@@ -103,7 +103,7 @@ class _KanbanFilterBarState extends State<KanbanFilterBar> {
                 });
               },
             ),
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
           ],
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,

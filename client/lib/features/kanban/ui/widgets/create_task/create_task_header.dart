@@ -34,7 +34,7 @@ class CreateTaskHeader extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.gapH16,
+        AppSpacing.gapHLg,
         Row(
           children: [
             Text(
@@ -46,7 +46,7 @@ class CreateTaskHeader extends StatelessWidget {
             const Spacer(),
             Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.s10,
+                horizontal: AppSpacing.sm,
                 vertical: AppSpacing.xs,
               ),
               decoration: BoxDecoration(

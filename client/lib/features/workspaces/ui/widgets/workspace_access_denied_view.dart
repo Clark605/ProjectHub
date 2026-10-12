@@ -13,7 +13,7 @@ class WorkspaceAccessDeniedView extends StatelessWidget {
 
     return Center(
       child: Padding(
-        padding: AppSpacing.edgeInsetsAll24,
+        padding: AppSpacing.edgeInsetsAllXxl,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -22,13 +22,13 @@ class WorkspaceAccessDeniedView extends StatelessWidget {
               size: 48,
               color: AppColors.error,
             ),
-            AppSpacing.gapH16,
+            AppSpacing.gapHLg,
             Text(
               l10n.ownerOnlyAccess,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyLarge,
             ),
-            AppSpacing.gapH24,
+            AppSpacing.gapHXxl,
             ElevatedButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(l10n.returnToWorkspace),

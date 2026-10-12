@@ -23,7 +23,7 @@ class VoiceTaskReviewHeader extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.s10,
+            horizontal: AppSpacing.sm,
             vertical: AppSpacing.xs,
           ),
           decoration: BoxDecoration(
@@ -41,7 +41,7 @@ class VoiceTaskReviewHeader extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(Icons.auto_awesome, size: 14, color: badgeColor),
-              AppSpacing.gapW4,
+              AppSpacing.gapWXs,
               Text(
                 l10n.voiceTaskAiDraftPreview,
                 style: TextStyle(

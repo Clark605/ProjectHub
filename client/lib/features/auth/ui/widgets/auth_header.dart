@@ -34,7 +34,7 @@ class AuthHeader extends StatelessWidget {
                     size: 26,
                     color: AppColors.electricViolet,
                   ),
-                  AppSpacing.gapW10,
+                  AppSpacing.gapWSm,
                   Text(
                     l10n.appTitle,
                     style: theme.textTheme.titleLarge?.copyWith(
@@ -50,7 +50,7 @@ class AuthHeader extends StatelessWidget {
               .animate()
               .scale(duration: 400.ms, curve: Curves.easeOutBack)
               .fadeIn(duration: 400.ms),
-          AppSpacing.gapH28,
+          AppSpacing.gapHXxl,
         ],
 
         // Main Title
@@ -68,7 +68,7 @@ class AuthHeader extends StatelessWidget {
             .animate()
             .fadeIn(duration: 400.ms, delay: 100.ms)
             .slideY(begin: 0.15, end: 0, curve: Curves.easeOutCubic),
-        AppSpacing.gapH8,
+        AppSpacing.gapHSm,
 
         // Subtitle
         Text(

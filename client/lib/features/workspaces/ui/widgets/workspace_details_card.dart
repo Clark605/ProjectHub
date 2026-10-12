@@ -66,7 +66,7 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
         final activeAccentId = _selectedAccent ?? state.workspace.accentColor;
 
         return Container(
-          padding: AppSpacing.edgeInsetsAll20,
+          padding: AppSpacing.edgeInsetsAllXl,
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerLow,
             borderRadius: AppRadius.r16,
@@ -83,7 +83,7 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                AppSpacing.gapH16,
+                AppSpacing.gapHLg,
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
@@ -101,7 +101,7 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                     return null;
                   },
                 ),
-                AppSpacing.gapH16,
+                AppSpacing.gapHLg,
                 TextFormField(
                   controller: _descController,
                   maxLines: 3,
@@ -110,20 +110,20 @@ class _WorkspaceDetailsCardState extends State<WorkspaceDetailsCard> {
                     hintText: l10n.workspaceDescriptionPlaceholder,
                     alignLabelWithHint: true,
                     prefixIcon: const Padding(
-                      padding: EdgeInsets.only(bottom: AppSpacing.s48),
+                      padding: EdgeInsets.only(bottom: AppSpacing.xxxl),
                       child: Icon(Icons.description_outlined, size: 20),
                     ),
                   ),
                 ),
                 if (isOwner) ...[
-                  AppSpacing.gapH20,
+                  AppSpacing.gapHXl,
                   WorkspaceAccentPicker(
                     activeAccentId: activeAccentId,
                     onAccentSelected: (id) =>
                         setState(() => _selectedAccent = id),
                   ),
                 ],
-                AppSpacing.gapH20,
+                AppSpacing.gapHXl,
                 Align(
                   alignment: Alignment.centerRight,
                   child: AppButton(

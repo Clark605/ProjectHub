@@ -14,7 +14,7 @@ class VersionInfoTile extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: AppSpacing.edgeInsetsAll20,
+        padding: AppSpacing.edgeInsetsAllXl,
         child: FutureBuilder<PackageInfo>(
           future: PackageInfo.fromPlatform(),
           builder: (context, snapshot) {
@@ -38,7 +38,7 @@ class VersionInfoTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                AppSpacing.gapW14,
+                AppSpacing.gapWMd,
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +49,7 @@ class VersionInfoTile extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      AppSpacing.gapH2,
+                      AppSpacing.gapHXxs,
                       Text(
                         '${l10n.appVersionFormat(version, buildNumber)} • Made with ❤️ by Clark Remon',
                         maxLines: 3,

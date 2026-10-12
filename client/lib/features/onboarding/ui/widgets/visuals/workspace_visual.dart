@@ -32,8 +32,8 @@ class WorkspaceVisual extends StatelessWidget {
           // ── Top Workspace Switcher Bar ──
           Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.s14,
-                  vertical: AppSpacing.s10,
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.sm,
                 ),
                 decoration: BoxDecoration(
                   color: isDark
@@ -57,7 +57,7 @@ class WorkspaceVisual extends StatelessWidget {
                         color: AppColors.electricViolet,
                       ),
                     ),
-                    AppSpacing.gapW10,
+                    AppSpacing.gapWSm,
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,7 +113,7 @@ class WorkspaceVisual extends StatelessWidget {
                                 end: const Offset(1.3, 1.3),
                                 duration: 800.ms,
                               ),
-                          const SizedBox(width: AppSpacing.s5),
+                          const SizedBox(width: AppSpacing.xs),
                           Text(
                             'LIVE',
                             style: theme.textTheme.labelSmall?.copyWith(
@@ -131,14 +131,14 @@ class WorkspaceVisual extends StatelessWidget {
               .fadeIn(duration: 400.ms)
               .slideY(begin: -0.2, end: 0, curve: Curves.easeOutCubic),
 
-          AppSpacing.gapH12,
+          AppSpacing.gapHMd,
 
           // ── Main Floating Project Card ──
           Stack(
             clipBehavior: Clip.none,
             children: [
               Container(
-                    padding: AppSpacing.edgeInsetsAll14,
+                    padding: AppSpacing.edgeInsetsAllMd,
                     decoration: BoxDecoration(
                       color: cardBg,
                       borderRadius: AppRadius.r18,
@@ -169,7 +169,7 @@ class WorkspaceVisual extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: AppSpacing.sm,
-                                    vertical: AppSpacing.s3,
+                                    vertical: AppSpacing.xxs,
                                   ),
                                   decoration: BoxDecoration(
                                     color: AppColors.electricViolet.withValues(
@@ -186,10 +186,10 @@ class WorkspaceVisual extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                AppSpacing.gapW8,
+                                AppSpacing.gapWSm,
                                 Container(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: AppSpacing.s6,
+                                    horizontal: AppSpacing.xs,
                                     vertical: AppSpacing.xxs,
                                   ),
                                   decoration: BoxDecoration(
@@ -217,14 +217,14 @@ class WorkspaceVisual extends StatelessWidget {
                             ),
                           ],
                         ),
-                        AppSpacing.gapH8,
+                        AppSpacing.gapHSm,
                         Text(
                           'Design System & UI Components',
                           style: theme.textTheme.titleSmall?.copyWith(
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        AppSpacing.gapH8,
+                        AppSpacing.gapHSm,
 
                         // Animated Progress Bar
                         ClipRRect(
@@ -264,7 +264,7 @@ class WorkspaceVisual extends StatelessWidget {
                             ],
                           ),
                         ),
-                        AppSpacing.gapH10,
+                        AppSpacing.gapHSm,
 
                         // Avatar stack + task count
                         Row(
@@ -331,7 +331,7 @@ class WorkspaceVisual extends StatelessWidget {
                                       ? AppColors.textSecondary
                                       : AppColors.lightTextSecondary,
                                 ),
-                                AppSpacing.gapW4,
+                                AppSpacing.gapWXs,
                                 Text(
                                   '18 / 24 Done',
                                   style: theme.textTheme.labelSmall?.copyWith(
@@ -360,8 +360,8 @@ class WorkspaceVisual extends StatelessWidget {
                   child:
                       Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: AppSpacing.s10,
-                              vertical: AppSpacing.s5,
+                              horizontal: AppSpacing.sm,
+                              vertical: AppSpacing.xs,
                             ),
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
@@ -389,7 +389,7 @@ class WorkspaceVisual extends StatelessWidget {
                                   size: 14,
                                   color: AppColors.pureWhite,
                                 ),
-                                AppSpacing.gapW4,
+                                AppSpacing.gapWXs,
                                 Text(
                                   '+42% Velocity',
                                   style: theme.textTheme.labelSmall?.copyWith(
@@ -422,7 +422,7 @@ class WorkspaceVisual extends StatelessWidget {
             ],
           ),
 
-          AppSpacing.gapH10,
+          AppSpacing.gapHSm,
 
           // ── Bottom Secondary Task Pill ──
           Container(
@@ -442,7 +442,7 @@ class WorkspaceVisual extends StatelessWidget {
                       size: 16,
                       color: AppColors.skyBlue,
                     ),
-                    AppSpacing.gapW8,
+                    AppSpacing.gapWSm,
                     Expanded(
                       child: Text(
                         'API Core Engine v2',

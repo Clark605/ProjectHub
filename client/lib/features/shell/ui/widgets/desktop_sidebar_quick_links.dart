@@ -27,7 +27,7 @@ class DesktopSidebarProjectQuickLink extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.md,
-          vertical: AppSpacing.s7,
+          vertical: AppSpacing.sm,
         ),
         child: Row(
           children: [
@@ -36,7 +36,7 @@ class DesktopSidebarProjectQuickLink extends StatelessWidget {
               height: 8,
               decoration: BoxDecoration(shape: BoxShape.circle, color: color),
             ),
-            AppSpacing.gapW10,
+            AppSpacing.gapWSm,
             Expanded(
               child: Text(
                 title,
@@ -81,7 +81,7 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppSpacing.gapH24,
+        AppSpacing.gapHXxl,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Text(
@@ -93,7 +93,7 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.gapH8,
+        AppSpacing.gapHSm,
         if (isLoading)
           const Padding(
             padding: EdgeInsets.symmetric(

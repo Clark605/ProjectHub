@@ -116,17 +116,17 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
             const AppSheetDragHandle(),
             VoiceTaskReviewHeader(onClose: () => Navigator.of(context).pop()),
             VoiceTaskReviewWarnings(warnings: widget.draft.warnings),
-            AppSpacing.gapH16,
+            AppSpacing.gapHLg,
             CreateTaskTextFields(
               titleController: titleController,
               descriptionController: descriptionController,
             ),
-            const SizedBox(height: AppSpacing.s18),
+            const SizedBox(height: AppSpacing.lg),
             CreateTaskPrioritySelector(
               selectedPriority: selectedPriority,
               onPriorityChanged: (p) => setState(() => selectedPriority = p),
             ),
-            const SizedBox(height: AppSpacing.s18),
+            const SizedBox(height: AppSpacing.lg),
             CreateTaskAssigneeDueDateRow(
               members: widget.members,
               selectedAssigneeId: selectedAssigneeId,
@@ -136,7 +136,7 @@ class _VoiceTaskReviewSheetState extends State<VoiceTaskReviewSheet>
               onPickDueDate: () => pickDueDate(context),
               onClearDueDate: clearDueDate,
             ),
-            AppSpacing.gapH24,
+            AppSpacing.gapHXxl,
             AppButton(
               label: l10n.voiceTaskConfirmCreate,
               isLoading: isSubmitting,

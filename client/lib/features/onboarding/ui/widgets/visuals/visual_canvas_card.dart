@@ -108,7 +108,7 @@ class VisualCanvasCard extends StatelessWidget {
             // Foreground content
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.s18,
+                horizontal: AppSpacing.lg,
                 vertical: AppSpacing.lg,
               ),
               child: child,

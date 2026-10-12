@@ -71,10 +71,10 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         const Center(child: RealtimeStatusBadge()),
-        AppSpacing.gapW6,
+        AppSpacing.gapWXs,
         if (workspaceId != null) ...[
           WorkspacePresenceAvatars(workspaceId: workspaceId!),
-          AppSpacing.gapW4,
+          AppSpacing.gapWXs,
         ],
         IconButton(
           icon: Icon(
@@ -85,7 +85,7 @@ class KanbanAppBar extends StatelessWidget implements PreferredSizeWidget {
           tooltip: l10n.projectDetails,
           onPressed: onSettings,
         ),
-        AppSpacing.gapW8,
+        AppSpacing.gapWSm,
       ],
     );
   }

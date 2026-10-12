@@ -91,7 +91,7 @@ class _BottomNavItem extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.md,
-          vertical: AppSpacing.s6,
+          vertical: AppSpacing.xs,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -101,7 +101,7 @@ class _BottomNavItem extends StatelessWidget {
               size: 22,
               color: isSelected ? activeColor : inactiveColor,
             ),
-            AppSpacing.gapH4,
+            AppSpacing.gapHXs,
             Text(
               label,
               style: TextStyle(

@@ -47,7 +47,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
               if (priority != null)
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.s6,
+                    horizontal: AppSpacing.xs,
                     vertical: AppSpacing.xxs,
                   ),
                   decoration: BoxDecoration(
@@ -64,7 +64,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                         size: 11,
                         color: priority!.toColor(),
                       ),
-                      const SizedBox(width: AppSpacing.s3),
+                      const SizedBox(width: AppSpacing.xxs),
                       Flexible(
                         child: Text(
                           priority!.localizedName(l10n),
@@ -80,7 +80,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
               if (dueDate != null)
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.s6,
+                    horizontal: AppSpacing.xs,
                     vertical: AppSpacing.xxs,
                   ),
                   decoration: BoxDecoration(
@@ -101,7 +101,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                             ? AppColors.error
                             : theme.colorScheme.onSurfaceVariant,
                       ),
-                      AppSpacing.gapW4,
+                      AppSpacing.gapWXs,
                       Flexible(
                         child: Text(
                           DateFormatter.formatShortDate(
@@ -131,7 +131,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                       size: 12,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    const SizedBox(width: AppSpacing.s3),
+                    const SizedBox(width: AppSpacing.xxs),
                     Text(
                       '$commentCount',
                       style: theme.textTheme.caption.copyWith(
@@ -143,7 +143,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
             ],
           ),
         ),
-        AppSpacing.gapW8,
+        AppSpacing.gapWSm,
         _buildAvatar(context, theme, isDark, l10n),
       ],
     );

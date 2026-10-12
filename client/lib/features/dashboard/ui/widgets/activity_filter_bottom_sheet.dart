@@ -129,7 +129,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const AppSheetDragHandle(),
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
 
             // Header Row
             Row(
@@ -166,7 +166,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 ),
               ],
             ),
-            AppSpacing.gapH12,
+            AppSpacing.gapHMd,
 
             // Search Input
             TextField(
@@ -186,13 +186,13 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                     : null,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg,
-                  vertical: AppSpacing.s14,
+                  vertical: AppSpacing.md,
                 ),
                 border: const OutlineInputBorder(borderRadius: AppRadius.r12),
               ),
               onChanged: (_) => setState(() {}),
             ),
-            AppSpacing.gapH16,
+            AppSpacing.gapHLg,
 
             // Category Section
             Text(
@@ -201,7 +201,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -233,7 +233,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 );
               }).toList(),
             ),
-            AppSpacing.gapH16,
+            AppSpacing.gapHLg,
 
             // Project Section
             if (widget.availableProjects.isNotEmpty) ...[
@@ -243,7 +243,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              AppSpacing.gapH8,
+              AppSpacing.gapHSm,
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -307,7 +307,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   }),
                 ],
               ),
-              AppSpacing.gapH16,
+              AppSpacing.gapHLg,
             ],
 
             // Sort Section
@@ -317,7 +317,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -386,7 +386,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 ),
               ],
             ),
-            AppSpacing.gapH24,
+            AppSpacing.gapHXxl,
 
             // Apply Button
             ConstrainedBox(
@@ -403,7 +403,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                   shape: const RoundedRectangleBorder(
                     borderRadius: AppRadius.r12,
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.s14),
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
                 ),
                 child: Text(
                   l10n.applyFilters,
@@ -416,7 +416,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 ),
               ),
             ),
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
           ],
         ),
       ),

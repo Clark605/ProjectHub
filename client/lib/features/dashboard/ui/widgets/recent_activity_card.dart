@@ -28,7 +28,7 @@ class RecentActivityCard extends StatelessWidget {
     final l10n = context.l10n;
 
     return Container(
-      padding: AppSpacing.edgeInsetsAll20,
+      padding: AppSpacing.edgeInsetsAllXl,
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
         borderRadius: AppRadius.r18,
@@ -58,7 +58,7 @@ class RecentActivityCard extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              AppSpacing.gapW12,
+              AppSpacing.gapWMd,
               Expanded(
                 child: Text(
                   l10n.teamStream,
@@ -98,7 +98,7 @@ class RecentActivityCard extends StatelessWidget {
                 ),
             ],
           ),
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
           if (activities.isEmpty && !isLoading)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxl),
@@ -112,7 +112,7 @@ class RecentActivityCard extends StatelessWidget {
                         alpha: 0.6,
                       ),
                     ),
-                    AppSpacing.gapH8,
+                    AppSpacing.gapHSm,
                     Text(
                       l10n.noRecentActivity,
                       style: theme.textTheme.bodySmall?.copyWith(

@@ -37,7 +37,7 @@ class WorkspaceCard extends StatelessWidget {
         child: Container(
           constraints: const BoxConstraints(minHeight: 56),
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.s14,
+            horizontal: AppSpacing.md,
             vertical: AppSpacing.md,
           ),
           decoration: BoxDecoration(
@@ -81,7 +81,7 @@ class WorkspaceCard extends StatelessWidget {
                         ),
                       ),
               ),
-              AppSpacing.gapW12,
+              AppSpacing.gapWMd,
 
               // Title & Description
               Expanded(
@@ -99,7 +99,7 @@ class WorkspaceCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     if (workspace.description.isNotEmpty) ...[
-                      AppSpacing.gapH2,
+                      AppSpacing.gapHXxs,
                       Text(
                         workspace.description,
                         style: theme.textTheme.bodySmall?.copyWith(
@@ -112,7 +112,7 @@ class WorkspaceCard extends StatelessWidget {
                   ],
                 ),
               ),
-              AppSpacing.gapW8,
+              AppSpacing.gapWSm,
 
               // Role Pill Badge
               Container(

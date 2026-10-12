@@ -31,12 +31,12 @@ class TaskCommentItem extends StatelessWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.s6),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppAvatar(name: comment.authorName, size: 28),
-          AppSpacing.gapW10,
+          AppSpacing.gapWSm,
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +50,7 @@ class TaskCommentItem extends StatelessWidget {
                         color: theme.colorScheme.onSurface,
                       ),
                     ),
-                    AppSpacing.gapW6,
+                    AppSpacing.gapWXs,
                     Text(
                       timeStr,
                       style: TextStyle(
@@ -72,7 +72,7 @@ class TaskCommentItem extends StatelessWidget {
                       ),
                   ],
                 ),
-                AppSpacing.gapH2,
+                AppSpacing.gapHXxs,
                 Text(
                   comment.content,
                   style: TextStyle(

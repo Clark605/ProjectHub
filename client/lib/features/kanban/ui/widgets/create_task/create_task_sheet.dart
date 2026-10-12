@@ -130,23 +130,23 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
             children: [
               CreateTaskHeader(selectedStatus: _selectedStatus),
               if (_errorMessage != null) ...[
-                AppSpacing.gapH10,
+                AppSpacing.gapHSm,
                 AppErrorBanner(
                   errorMessage: _errorMessage,
                   onDismiss: () => setState(() => _errorMessage = null),
                 ),
               ],
-              AppSpacing.gapH14,
+              AppSpacing.gapHMd,
               CreateTaskTextFields(
                 titleController: titleController,
                 descriptionController: descriptionController,
               ),
-              AppSpacing.gapH12,
+              AppSpacing.gapHMd,
               CreateTaskPrioritySelector(
                 selectedPriority: selectedPriority,
                 onPriorityChanged: (p) => setState(() => selectedPriority = p),
               ),
-              AppSpacing.gapH12,
+              AppSpacing.gapHMd,
               CreateTaskAssigneeDueDateRow(
                 members: widget.members,
                 selectedAssigneeId: selectedAssigneeId,
@@ -156,7 +156,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
                 onPickDueDate: () => pickDueDate(context),
                 onClearDueDate: clearDueDate,
               ),
-              AppSpacing.gapH12,
+              AppSpacing.gapHMd,
               CreateTaskTagsSelector(
                 projectId: widget.projectId,
                 selectedTags: _selectedTags,
@@ -165,7 +165,7 @@ class _CreateTaskSheetState extends State<CreateTaskSheet>
                   () => _selectedTags.removeWhere((x) => x.id == t.id),
                 ),
               ),
-              AppSpacing.gapH16,
+              AppSpacing.gapHLg,
               AppButton(
                 label: l10n.createTask,
                 isLoading: isSubmitting,

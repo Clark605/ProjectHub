@@ -39,8 +39,8 @@ class WorkspaceSwitcherPill extends StatelessWidget {
       borderRadius: AppRadius.r10,
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.s10,
-          vertical: AppSpacing.s6,
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.xs,
         ),
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerHigh.withValues(alpha: 0.6),
@@ -56,9 +56,9 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Bone.circle(size: 8),
-                    AppSpacing.gapW8,
+                    AppSpacing.gapWSm,
                     Bone(width: 80, height: 16),
-                    AppSpacing.gapW6,
+                    AppSpacing.gapWXs,
                     Bone(width: 14, height: 14),
                   ],
                 ),
@@ -81,7 +81,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                       size: 16,
                       color: theme.colorScheme.primary,
                     ),
-                  AppSpacing.gapW8,
+                  AppSpacing.gapWSm,
                   Flexible(
                     child: Text(
                       displayName,
@@ -95,10 +95,10 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                   if (hasWorkspace &&
                       activeWorkspaceRole != null &&
                       activeWorkspaceRole!.trim().isNotEmpty) ...[
-                    AppSpacing.gapW6,
+                    AppSpacing.gapWXs,
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.s6,
+                        horizontal: AppSpacing.xs,
                         vertical: AppSpacing.xxs,
                       ),
                       decoration: BoxDecoration(
@@ -114,7 +114,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                       ),
                     ),
                   ],
-                  AppSpacing.gapW4,
+                  AppSpacing.gapWXs,
                   Icon(
                     hasWorkspace
                         ? Icons.keyboard_arrow_down_rounded

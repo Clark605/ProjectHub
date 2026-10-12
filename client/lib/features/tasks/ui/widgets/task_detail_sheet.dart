@@ -174,7 +174,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
               bottom: AppSpacing.xxs,
             ),
           ),
-          AppSpacing.gapH2,
+          AppSpacing.gapHXxs,
           TaskDetailHeader(
             task: _currentTask,
             isArchived: widget.isArchived,
@@ -184,7 +184,7 @@ class _TaskDetailSheetState extends State<TaskDetailSheet> {
             onCancelEdit: () => setState(() => _isEditMode = false),
             onDelete: _confirmDelete,
           ),
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
           if (!_isEditMode)
             TaskDetailReadView(
               task: _currentTask,

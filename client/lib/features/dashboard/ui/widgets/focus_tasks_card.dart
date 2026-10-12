@@ -24,7 +24,7 @@ class FocusTasksCard extends StatelessWidget {
     final l10n = context.l10n;
 
     return Container(
-      padding: AppSpacing.edgeInsetsAll20,
+      padding: AppSpacing.edgeInsetsAllXl,
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.8),
         borderRadius: AppRadius.r18,
@@ -62,7 +62,7 @@ class FocusTasksCard extends StatelessWidget {
                         size: 20,
                       ),
                     ),
-                    AppSpacing.gapW12,
+                    AppSpacing.gapWMd,
                     Expanded(
                       child: Text(
                         l10n.myActiveFocus,
@@ -83,7 +83,7 @@ class FocusTasksCard extends StatelessWidget {
                 ),
             ],
           ),
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
           if (focusTasks.isEmpty && !isLoading)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.xxl),
@@ -97,7 +97,7 @@ class FocusTasksCard extends StatelessWidget {
                         alpha: 0.6,
                       ),
                     ),
-                    AppSpacing.gapH8,
+                    AppSpacing.gapHSm,
                     Text(
                       l10n.allCaughtUp,
                       style: theme.textTheme.bodySmall?.copyWith(
@@ -113,7 +113,7 @@ class FocusTasksCard extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: focusTasks.length,
-              separatorBuilder: (context, index) => AppSpacing.gapH10,
+              separatorBuilder: (context, index) => AppSpacing.gapHSm,
               itemBuilder: (context, index) =>
                   FocusTaskTile(task: focusTasks[index]),
             ),

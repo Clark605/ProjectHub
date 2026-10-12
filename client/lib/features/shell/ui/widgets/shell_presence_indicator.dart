@@ -16,8 +16,8 @@ class ShellPresenceIndicator extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s10,
-        vertical: AppSpacing.s5,
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.xs,
       ),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerLow,
@@ -43,7 +43,7 @@ class ShellPresenceIndicator extends StatelessWidget {
                 end: const Offset(1.3, 1.3),
                 duration: 1200.ms,
               ),
-          AppSpacing.gapW8,
+          AppSpacing.gapWSm,
           Text(
             l10n.onlineCount(3),
             style: TextStyle(
@@ -51,11 +51,11 @@ class ShellPresenceIndicator extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          AppSpacing.gapW8,
+          AppSpacing.gapWSm,
           _buildMiniAvatar('AK', AppColors.electricViolet),
-          AppSpacing.gapW4,
+          AppSpacing.gapWXs,
           _buildMiniAvatar('SR', AppColors.skyBlue),
-          AppSpacing.gapW4,
+          AppSpacing.gapWXs,
           _buildMiniAvatar('DM', AppColors.warning),
         ],
       ),

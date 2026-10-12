@@ -81,7 +81,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                   onTap: isParsing ? null : onDone,
                   child: _buildPulseOrb(isParsing),
                 ),
-                AppSpacing.gapH16,
+                AppSpacing.gapHLg,
                 Text(
                   isParsing
                       ? (l10n.voiceTaskStructuring)
@@ -91,7 +91,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                     color: theme.colorScheme.onSurface,
                   ),
                 ),
-                AppSpacing.gapH12,
+                AppSpacing.gapHMd,
                 Container(
                   constraints: const BoxConstraints(
                     minHeight: 56,
@@ -99,8 +99,8 @@ class VoiceListeningOverlay extends StatelessWidget {
                   ),
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.s14,
-                    vertical: AppSpacing.s10,
+                    horizontal: AppSpacing.md,
+                    vertical: AppSpacing.sm,
                   ),
                   decoration: BoxDecoration(
                     color: isDark
@@ -125,7 +125,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: AppSpacing.s18),
+                const SizedBox(height: AppSpacing.lg),
                 if (isParsing)
                   LinearProgressIndicator(
                     color: AppColors.electricVioletContainer,
@@ -145,7 +145,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                           ),
                         ),
                       ),
-                      AppSpacing.gapW8,
+                      AppSpacing.gapWSm,
                       ElevatedButton.icon(
                         onPressed: onDone,
                         icon: const Icon(Icons.check_rounded, size: 18),
@@ -156,7 +156,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                           minimumSize: const Size(0, 42),
                           padding: const EdgeInsets.symmetric(
                             horizontal: AppSpacing.lg,
-                            vertical: AppSpacing.s10,
+                            vertical: AppSpacing.sm,
                           ),
                           shape: const RoundedRectangleBorder(
                             borderRadius: AppRadius.r10,

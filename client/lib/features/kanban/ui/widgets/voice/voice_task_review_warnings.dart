@@ -18,7 +18,7 @@ class VoiceTaskReviewWarnings extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(top: AppSpacing.md),
-      padding: AppSpacing.edgeInsetsAll10,
+      padding: AppSpacing.edgeInsetsAllSm,
       decoration: BoxDecoration(
         color: warningColor.withValues(alpha: isDark ? 0.12 : 0.08),
         borderRadius: AppRadius.kRadiusSm,
@@ -37,7 +37,7 @@ class VoiceTaskReviewWarnings extends StatelessWidget {
                     size: 14,
                     color: warningColor,
                   ),
-                  AppSpacing.gapW6,
+                  AppSpacing.gapWXs,
                   Expanded(
                     child: Text(
                       w,

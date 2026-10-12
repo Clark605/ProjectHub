@@ -39,7 +39,7 @@ class AppErrorBanner extends StatelessWidget {
               child: Row(
                 children: [
                   const Icon(Icons.error_outline, color: AppColors.pureWhite),
-                  AppSpacing.gapW8,
+                  AppSpacing.gapWSm,
                   Expanded(
                     child: Text(
                       errorMessage!,

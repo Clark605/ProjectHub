@@ -65,21 +65,21 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const AppSheetDragHandle(),
-                AppSpacing.gapH16,
+                AppSpacing.gapHLg,
                 Text(
                   l10n.inviteMember,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                AppSpacing.gapH6,
+                AppSpacing.gapHXs,
                 Text(
                   l10n.inviteMemberSubtitle,
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
-                AppSpacing.gapH24,
+                AppSpacing.gapHXxl,
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -102,7 +102,7 @@ class _InviteMemberSheetState extends State<InviteMemberSheet> {
                     return null;
                   },
                 ),
-                AppSpacing.gapH28,
+                AppSpacing.gapHXxl,
                 AppButton(
                   label: l10n.addMember,
                   isLoading: isInviting,

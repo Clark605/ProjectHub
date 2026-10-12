@@ -33,7 +33,7 @@ class AuthFooterLink extends StatelessWidget {
                 : AppColors.lightTextSecondary,
           ),
         ),
-        AppSpacing.gapW6,
+        AppSpacing.gapWXs,
         GestureDetector(
           onTap: onTap,
           child: Text(

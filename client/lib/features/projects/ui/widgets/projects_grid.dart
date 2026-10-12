@@ -36,11 +36,11 @@ class ProjectsGrid extends StatelessWidget {
           AppSpacing.xxl,
           AppSpacing.zero,
           AppSpacing.xxl,
-          AppSpacing.s80,
+          AppSpacing.fabClearance,
         ),
         sliver: SliverList.separated(
           itemCount: projects.length,
-          separatorBuilder: (_, _) => AppSpacing.gapH16,
+          separatorBuilder: (_, _) => AppSpacing.gapHLg,
           itemBuilder: (context, index) {
             final project = projects[index];
             return ProjectCard(
@@ -59,7 +59,7 @@ class ProjectsGrid extends StatelessWidget {
         AppSpacing.xxl,
         AppSpacing.zero,
         AppSpacing.xxl,
-        AppSpacing.s80,
+        AppSpacing.fabClearance,
       ),
       sliver: SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

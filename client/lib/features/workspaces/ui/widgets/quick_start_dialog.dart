@@ -93,7 +93,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
       ),
       child: Container(
         constraints: const BoxConstraints(maxWidth: 440),
-        padding: AppSpacing.edgeInsetsAll24,
+        padding: AppSpacing.edgeInsetsAllXxl,
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
           borderRadius: AppRadius.kRadiusXxl,
@@ -114,10 +114,10 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildHeader(theme, l10n),
-                AppSpacing.gapH24,
+                AppSpacing.gapHXxl,
                 if (_errorMessage != null) ...[
                   _buildErrorBanner(),
-                  AppSpacing.gapH16,
+                  AppSpacing.gapHLg,
                 ],
                 AppTextField(
                   label: l10n.workspaceName,
@@ -135,7 +135,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
                     return null;
                   },
                 ),
-                AppSpacing.gapH16,
+                AppSpacing.gapHLg,
                 AppTextField(
                   label: l10n.workspaceDescription,
                   hintText: l10n.workspaceDescriptionPlaceholder,
@@ -144,7 +144,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
                   maxLines: 2,
                   textInputAction: TextInputAction.done,
                 ),
-                AppSpacing.gapH28,
+                AppSpacing.gapHXxl,
                 AppButton(
                   label: l10n.getStarted,
                   isLoading: _isLoading,
@@ -175,7 +175,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
             size: 26,
           ),
         ),
-        AppSpacing.gapH16,
+        AppSpacing.gapHLg,
         Text(
           l10n.quickStartWelcome,
           style: theme.textTheme.titleLarge?.copyWith(
@@ -184,7 +184,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
           ),
           textAlign: TextAlign.center,
         ),
-        AppSpacing.gapH6,
+        AppSpacing.gapHXs,
         Text(
           l10n.quickStartSubtitle,
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -198,7 +198,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
 
   Widget _buildErrorBanner() {
     return Container(
-      padding: AppSpacing.edgeInsetsAll10,
+      padding: AppSpacing.edgeInsetsAllSm,
       decoration: BoxDecoration(
         color: AppColors.error.withValues(alpha: 0.15),
         borderRadius: AppRadius.r8,

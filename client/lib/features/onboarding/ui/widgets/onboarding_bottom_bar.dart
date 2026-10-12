@@ -29,10 +29,10 @@ class OnboardingBottomBar extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s28,
+        AppSpacing.xxl,
         AppSpacing.md,
-        AppSpacing.s28,
-        AppSpacing.s28,
+        AppSpacing.xxl,
+        AppSpacing.xxl,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,7 +47,7 @@ class OnboardingBottomBar extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: AppSpacing.sm,
-                    horizontal: AppSpacing.s3,
+                    horizontal: AppSpacing.xxs,
                   ),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 350),
@@ -141,7 +141,7 @@ class OnboardingBottomBar extends StatelessWidget {
                                   color: AppColors.textOnPrimary,
                                 ),
                               ),
-                              AppSpacing.gapW8,
+                              AppSpacing.gapWSm,
                               const Icon(
                                 Icons.arrow_forward_rounded,
                                 size: 18,
@@ -188,7 +188,7 @@ class OnboardingBottomBar extends StatelessWidget {
                                       : AppColors.lightTextPrimary,
                                 ),
                               ),
-                              AppSpacing.gapW6,
+                              AppSpacing.gapWXs,
                               Icon(
                                 Icons.arrow_forward_rounded,
                                 size: 17,

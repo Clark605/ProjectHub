@@ -103,7 +103,7 @@ class RealtimeStatusBadge extends StatelessWidget {
                   ),
                 ),
                 if (showLabel) ...[
-                  const SizedBox(width: AppSpacing.s5),
+                  const SizedBox(width: AppSpacing.xs),
                   Text(
                     label,
                     style: TextStyle(

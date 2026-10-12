@@ -28,7 +28,7 @@ class ProjectStatusDropdown extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(l10n.projectStatus, style: theme.textTheme.labelMedium),
-        AppSpacing.gapH8,
+        AppSpacing.gapHSm,
         DropdownButtonFormField<ProjectStatus>(
           initialValue: currentStatus,
           decoration: InputDecoration(

@@ -31,7 +31,7 @@ class TabletNavigationRail extends StatelessWidget {
       ),
       child: Column(
         children: [
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
           // Logo Icon
           Container(
             width: 36,
@@ -52,9 +52,9 @@ class TabletNavigationRail extends StatelessWidget {
               ),
             ),
           ),
-          AppSpacing.gapH24,
+          AppSpacing.gapHXxl,
           Divider(color: theme.colorScheme.outlineVariant, height: 1),
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
 
           // Rail Nav Items
           ...ShellTab.values.map(
@@ -66,13 +66,13 @@ class TabletNavigationRail extends StatelessWidget {
                   isSelected: selectedIndex == tab.index,
                   onTap: () => onItemSelected(tab.index),
                 ),
-                if (tab != ShellTab.profile) AppSpacing.gapH12,
+                if (tab != ShellTab.profile) AppSpacing.gapHMd,
               ],
             ),
           ),
 
           const Spacer(),
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
         ],
       ),
     );

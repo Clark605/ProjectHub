@@ -128,7 +128,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
 
                 return SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
-                    horizontal: isDesktop ? AppSpacing.s48 : AppSpacing.xl,
+                    horizontal: isDesktop ? AppSpacing.xxxl : AppSpacing.xl,
                     vertical: AppSpacing.xxl,
                   ),
                   child: Center(
@@ -139,10 +139,10 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                         children: [
                           ProjectDetailsCard(canEdit: canEdit),
                           if (canDelete) ...[
-                            AppSpacing.gapH24,
+                            AppSpacing.gapHXxl,
                             ProjectDangerZone(canDelete: canDelete),
                           ],
-                          AppSpacing.gapH40,
+                          AppSpacing.gapHXxxl,
                         ],
                       ),
                     ),

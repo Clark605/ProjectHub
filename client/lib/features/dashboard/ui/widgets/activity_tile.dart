@@ -25,7 +25,7 @@ class ActivityTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         AppAvatar(name: activity.actorName, size: 28),
-        AppSpacing.gapW10,
+        AppSpacing.gapWSm,
         Expanded(
           child: RichText(
             text: TextSpan(
@@ -42,7 +42,7 @@ class ActivityTile extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.gapW8,
+        AppSpacing.gapWSm,
         Text(
           timeStr,
           style: theme.textTheme.labelSmall?.copyWith(

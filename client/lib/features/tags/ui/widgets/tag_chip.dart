@@ -66,7 +66,7 @@ class TagChip extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-            const SizedBox(width: AppSpacing.s5),
+            const SizedBox(width: AppSpacing.xs),
             Text(
               tag.name,
               style: Theme.of(context).textTheme.caption.copyWith(
@@ -75,7 +75,7 @@ class TagChip extends StatelessWidget {
               ),
             ),
             if (onDeleted != null) ...[
-              AppSpacing.gapW4,
+              AppSpacing.gapWXs,
               GestureDetector(
                 onTap: onDeleted,
                 child: Icon(Icons.close_rounded, size: 14, color: baseColor),

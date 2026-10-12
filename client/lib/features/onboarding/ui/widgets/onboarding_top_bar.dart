@@ -47,7 +47,7 @@ class OnboardingTopBar extends StatelessWidget {
                   color: AppColors.electricViolet,
                 ),
               ),
-              AppSpacing.gapW10,
+              AppSpacing.gapWSm,
               Text(
                 l10n.appTitle,
                 style: theme.textTheme.titleMedium?.copyWith(
@@ -72,7 +72,7 @@ class OnboardingTopBar extends StatelessWidget {
                       ? AppColors.textSecondary
                       : AppColors.lightTextSecondary,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.s14,
+                    horizontal: AppSpacing.md,
                     vertical: AppSpacing.sm,
                   ),
                   shape: const RoundedRectangleBorder(

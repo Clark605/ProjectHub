@@ -45,7 +45,7 @@ class AppButton extends StatelessWidget {
             mainAxisSize: isExpanded ? MainAxisSize.max : MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (icon != null) ...[Icon(icon, size: 20), AppSpacing.gapW8],
+              if (icon != null) ...[Icon(icon, size: 20), AppSpacing.gapWSm],
               Flexible(
                 child: Text(
                   label,

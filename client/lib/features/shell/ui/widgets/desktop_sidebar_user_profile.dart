@@ -42,7 +42,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
             final user = state.whenOrNull(authenticated: (u) => u);
 
             return Padding(
-              padding: AppSpacing.edgeInsetsAll12,
+              padding: AppSpacing.edgeInsetsAllMd,
               child: Row(
                 children: [
                   AppAvatar(
@@ -53,7 +53,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                     ),
                     textColor: theme.colorScheme.primary,
                   ),
-                  AppSpacing.gapW10,
+                  AppSpacing.gapWSm,
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

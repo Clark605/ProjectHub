@@ -71,7 +71,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                 alignment: Alignment.topCenter,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.s14,
+                    horizontal: AppSpacing.md,
                     vertical: AppSpacing.sm,
                   ),
                   decoration: BoxDecoration(
@@ -101,18 +101,18 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                             end: const Offset(1.3, 1.3),
                             duration: 700.ms,
                           ),
-                      AppSpacing.gapW8,
+                      AppSpacing.gapWSm,
                       Text(
                         '5 Team Members Online',
                         style: theme.textTheme.labelSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      AppSpacing.gapW10,
+                      AppSpacing.gapWSm,
                       _buildMiniAvatar('AK', AppColors.electricViolet),
-                      AppSpacing.gapW4,
+                      AppSpacing.gapWXs,
                       _buildMiniAvatar('SR', AppColors.skyBlue),
-                      AppSpacing.gapW4,
+                      AppSpacing.gapWXs,
                       _buildMiniAvatar('DM', AppColors.priorityHigh),
                     ],
                   ),
@@ -128,7 +128,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                   margin: const EdgeInsets.only(top: AppSpacing.xxl),
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.lg,
-                    vertical: AppSpacing.s14,
+                    vertical: AppSpacing.md,
                   ),
                   decoration: BoxDecoration(
                     color: cardBg,
@@ -156,7 +156,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                       Row(
                         children: [
                           Container(
-                            padding: AppSpacing.edgeInsetsAll6,
+                            padding: AppSpacing.edgeInsetsAllXs,
                             decoration: BoxDecoration(
                               color: AppColors.skyBlue.withValues(alpha: 0.15),
                               borderRadius: AppRadius.r8,
@@ -167,7 +167,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                               color: AppColors.skyBlue,
                             ),
                           ),
-                          AppSpacing.gapW10,
+                          AppSpacing.gapWSm,
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,9 +191,9 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                           ),
                         ],
                       ),
-                      AppSpacing.gapH10,
+                      AppSpacing.gapHSm,
                       Container(
-                        padding: AppSpacing.edgeInsetsAll10,
+                        padding: AppSpacing.edgeInsetsAllSm,
                         decoration: BoxDecoration(
                           color: isDark
                               ? AppColors.surfaceContainer
@@ -207,7 +207,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                               size: 14,
                               color: AppColors.electricViolet,
                             ),
-                            AppSpacing.gapW8,
+                            AppSpacing.gapWSm,
                             Expanded(
                               child: Text(
                                 '"PR #104 merged! All tests passed 🚀"',
@@ -284,7 +284,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.md,
-                    vertical: AppSpacing.s7,
+                    vertical: AppSpacing.sm,
                   ),
                   decoration: BoxDecoration(
                     color: isDark
@@ -322,7 +322,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                             end: const Offset(1.4, 1.4),
                             duration: 600.ms,
                           ),
-                      AppSpacing.gapW8,
+                      AppSpacing.gapWSm,
                       Text(
                         'Instant WebSocket Sync · 0ms Latency',
                         style: theme.textTheme.labelSmall?.copyWith(
@@ -381,11 +381,11 @@ class _CollaborationVisualState extends State<CollaborationVisual>
               painter: _CursorPointerPainter(color: color),
               size: const Size(14, 14),
             ),
-            AppSpacing.gapW2,
+            AppSpacing.gapWXxs,
             Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.s6,
-                vertical: AppSpacing.s3,
+                horizontal: AppSpacing.xs,
+                vertical: AppSpacing.xxs,
               ),
               decoration: BoxDecoration(
                 color: color,
@@ -412,11 +412,11 @@ class _CollaborationVisualState extends State<CollaborationVisual>
           Padding(
             padding: const EdgeInsets.only(
               left: AppSpacing.md,
-              top: AppSpacing.s3,
+              top: AppSpacing.xxs,
             ),
             child: Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.s6,
+                horizontal: AppSpacing.xs,
                 vertical: AppSpacing.xxs,
               ),
               decoration: BoxDecoration(
@@ -433,9 +433,9 @@ class _CollaborationVisualState extends State<CollaborationVisual>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildTypingDot(0),
-                  AppSpacing.gapW2,
+                  AppSpacing.gapWXxs,
                   _buildTypingDot(150),
-                  AppSpacing.gapW2,
+                  AppSpacing.gapWXxs,
                   _buildTypingDot(300),
                 ],
               ),

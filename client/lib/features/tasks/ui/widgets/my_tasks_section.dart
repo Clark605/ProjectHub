@@ -64,7 +64,7 @@ class MyTasksSection extends StatelessWidget {
             child: Row(
               children: [
                 Text(emoji, style: theme.textTheme.titleMedium),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Text(
                   title,
                   style: theme.textTheme.titleSmall?.copyWith(
@@ -72,10 +72,10 @@ class MyTasksSection extends StatelessWidget {
                     letterSpacing: -0.2,
                   ),
                 ),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.s7,
+                    horizontal: AppSpacing.sm,
                     vertical: AppSpacing.xxs,
                   ),
                   decoration: BoxDecoration(
@@ -113,7 +113,7 @@ class MyTasksSection extends StatelessWidget {
             ),
           ),
         ),
-        AppSpacing.gapH6,
+        AppSpacing.gapHXs,
 
         // Section Body
         if (!isCollapsed) ...[
@@ -142,7 +142,7 @@ class MyTasksSection extends StatelessWidget {
               ),
             ),
         ],
-        AppSpacing.gapH12,
+        AppSpacing.gapHMd,
       ],
     );
   }

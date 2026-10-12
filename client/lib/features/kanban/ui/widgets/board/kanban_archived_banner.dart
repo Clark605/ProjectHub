@@ -15,7 +15,7 @@ class KanbanArchivedBanner extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
-        vertical: AppSpacing.s10,
+        vertical: AppSpacing.sm,
       ),
       color: AppColors.warning.withValues(alpha: 0.15),
       child: Row(
@@ -25,7 +25,7 @@ class KanbanArchivedBanner extends StatelessWidget {
             size: 18,
             color: AppColors.warning,
           ),
-          AppSpacing.gapW10,
+          AppSpacing.gapWSm,
           Expanded(
             child: Text(
               l10n.archivedProjectNotice,

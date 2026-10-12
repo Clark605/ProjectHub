@@ -53,7 +53,7 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
             child: Row(
               children: [
                 Icon(p.toIcon(), size: 16, color: p.toColor()),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Text(p.localizedName(l10n)),
               ],
             ),

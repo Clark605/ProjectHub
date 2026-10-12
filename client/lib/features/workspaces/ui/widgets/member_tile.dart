@@ -99,7 +99,7 @@ class MemberTile extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.sm,
-              vertical: AppSpacing.s3,
+              vertical: AppSpacing.xxs,
             ),
             decoration: BoxDecoration(
               color: isOwner
@@ -122,7 +122,7 @@ class MemberTile extends StatelessWidget {
               ),
             ),
           ),
-          AppSpacing.gapW4,
+          AppSpacing.gapWXs,
           PopupMenuButton<String>(
             icon: Icon(
               Icons.more_vert_rounded,
@@ -150,7 +150,7 @@ class MemberTile extends StatelessWidget {
                         size: 18,
                         color: primaryColor,
                       ),
-                      AppSpacing.gapW8,
+                      AppSpacing.gapWSm,
                       Text(l10n.promoteToOwner),
                     ],
                   ),
@@ -165,7 +165,7 @@ class MemberTile extends StatelessWidget {
                         size: 18,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
-                      AppSpacing.gapW8,
+                      AppSpacing.gapWSm,
                       Text(l10n.demoteToMember),
                     ],
                   ),
@@ -179,7 +179,7 @@ class MemberTile extends StatelessWidget {
                       size: 18,
                       color: AppColors.error,
                     ),
-                    AppSpacing.gapW8,
+                    AppSpacing.gapWSm,
                     Text(
                       l10n.removeMember,
                       style: const TextStyle(color: AppColors.error),

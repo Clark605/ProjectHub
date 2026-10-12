@@ -48,7 +48,7 @@ class SocialAuthSection extends StatelessWidget {
             Expanded(child: Divider(color: borderColor, thickness: 1)),
           ],
         ),
-        const SizedBox(height: AppSpacing.s18),
+        const SizedBox(height: AppSpacing.lg),
         Row(
           children: [
             Expanded(
@@ -58,7 +58,7 @@ class SocialAuthSection extends StatelessWidget {
                 onPressed: onGooglePressed ?? () {},
               ),
             ),
-            AppSpacing.gapW12,
+            AppSpacing.gapWMd,
             Expanded(
               child: _SocialButton(
                 iconWidget: GithubLogo(
@@ -129,7 +129,7 @@ class _SocialButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               iconWidget,
-              AppSpacing.gapW10,
+              AppSpacing.gapWSm,
               Text(
                 label,
                 style: theme.textTheme.bodyMedium?.copyWith(

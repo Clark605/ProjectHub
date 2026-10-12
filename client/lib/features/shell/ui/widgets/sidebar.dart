@@ -71,7 +71,7 @@ class Sidebar extends StatelessWidget {
                   selectedAccentColor: activeAccentColor,
                   onTap: () => onItemSelected(tab.index),
                 ),
-                if (tab != ShellTab.profile) AppSpacing.gapH4,
+                if (tab != ShellTab.profile) AppSpacing.gapHXs,
               ],
             ),
           ),
@@ -121,7 +121,7 @@ class Sidebar extends StatelessWidget {
                     ),
                   ),
                 ),
-                AppSpacing.gapW10,
+                AppSpacing.gapWSm,
                 Text(
                   'ProjectHub',
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -171,9 +171,9 @@ class Sidebar extends StatelessWidget {
                 ),
               ),
             ),
-            AppSpacing.gapH4,
+            AppSpacing.gapHXs,
           ] else ...[
-            AppSpacing.gapH12,
+            AppSpacing.gapHMd,
           ],
 
           // Navigation Section

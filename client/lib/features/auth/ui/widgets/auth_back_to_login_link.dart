@@ -26,7 +26,7 @@ class AuthBackToLoginLink extends StatelessWidget {
               ? AppColors.textSecondary
               : AppColors.lightTextSecondary,
         ),
-        AppSpacing.gapW4,
+        AppSpacing.gapWXs,
         TextButton(
           onPressed: () {
             Navigator.pushNamedAndRemoveUntil(

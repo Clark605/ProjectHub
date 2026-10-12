@@ -86,24 +86,24 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const AppSheetDragHandle(),
-                AppSpacing.gapH12,
+                AppSpacing.gapHMd,
                 Text(
                   l10n.newProject,
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                AppSpacing.gapH4,
+                AppSpacing.gapHXs,
                 Text(
                   l10n.projectsSubtitle,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
-                AppSpacing.gapH20,
+                AppSpacing.gapHXl,
                 if (errorMessage != null) ...[
                   AppErrorBanner(errorMessage: errorMessage),
-                  AppSpacing.gapH16,
+                  AppSpacing.gapHLg,
                 ],
                 AppTextField(
                   controller: _nameController,
@@ -115,7 +115,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                       ? l10n.projectNameRequired
                       : null,
                 ),
-                AppSpacing.gapH16,
+                AppSpacing.gapHLg,
                 AppTextField(
                   controller: _descController,
                   label: l10n.projectDescription,
@@ -124,7 +124,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                   enabled: !isLoading,
                   maxLines: 3,
                 ),
-                AppSpacing.gapH16,
+                AppSpacing.gapHLg,
                 IgnorePointer(
                   ignoring: isLoading,
                   child: AppDateField(
@@ -134,7 +134,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                         setState(() => _selectedDueDate = date),
                   ),
                 ),
-                AppSpacing.gapH24,
+                AppSpacing.gapHXxl,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -144,7 +144,7 @@ class _CreateProjectSheetState extends State<CreateProjectSheet> {
                           : () => Navigator.of(context).pop(),
                       child: Text(l10n.cancel),
                     ),
-                    AppSpacing.gapW12,
+                    AppSpacing.gapWMd,
                     AppButton(
                       label: l10n.createProject,
                       isLoading: isLoading,

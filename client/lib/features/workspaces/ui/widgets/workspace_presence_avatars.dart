@@ -190,8 +190,8 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
         },
         child: Container(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.s6,
-            vertical: AppSpacing.s3,
+            horizontal: AppSpacing.xs,
+            vertical: AppSpacing.xxs,
           ),
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHigh.withValues(
@@ -209,13 +209,13 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
               Container(
                 width: 7,
                 height: 7,
-                margin: const EdgeInsets.symmetric(horizontal: AppSpacing.s3),
+                margin: const EdgeInsets.symmetric(horizontal: AppSpacing.xxs),
                 decoration: const BoxDecoration(
                   color: AppColors.success,
                   shape: BoxShape.circle,
                 ),
               ),
-              AppSpacing.gapW4,
+              AppSpacing.gapWXs,
               _buildAvatarStack(theme),
             ],
           ),

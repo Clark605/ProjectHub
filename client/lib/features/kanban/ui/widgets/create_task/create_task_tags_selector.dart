@@ -48,7 +48,7 @@ class CreateTaskTagsSelector extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.sm,
-                vertical: AppSpacing.s3,
+                vertical: AppSpacing.xxs,
               ),
               decoration: BoxDecoration(
                 borderRadius: AppRadius.r6,
@@ -65,7 +65,7 @@ class CreateTaskTagsSelector extends StatelessWidget {
                     size: 13,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                  AppSpacing.gapW4,
+                  AppSpacing.gapWXs,
                   Text(
                     l10n.tagLabel,
                     style: TextStyle(

@@ -80,7 +80,7 @@ class _AppTextFieldState extends State<AppTextField> {
               letterSpacing: 0.2,
             ),
           ),
-          AppSpacing.gapH8,
+          AppSpacing.gapHSm,
         ],
         TextFormField(
           controller: widget.controller,

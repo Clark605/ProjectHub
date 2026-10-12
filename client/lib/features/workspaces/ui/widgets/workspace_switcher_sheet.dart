@@ -107,7 +107,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                 setState(() => _searchQuery = val.trim().toLowerCase()),
           ),
         ),
-        AppSpacing.gapH12,
+        AppSpacing.gapHMd,
         Flexible(
           child: BlocBuilder<WorkspaceContextCubit, WorkspaceContextState>(
             builder: (context, state) {
@@ -122,7 +122,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                   if (filtered.isEmpty) {
                     return Center(
                       child: Padding(
-                        padding: AppSpacing.edgeInsetsAll32,
+                        padding: AppSpacing.edgeInsetsAllXxxl,
                         child: Text(
                           l10n.noWorkspacesFound,
                           style: theme.textTheme.bodyMedium?.copyWith(
@@ -140,7 +140,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                     ),
                     shrinkWrap: true,
                     itemCount: filtered.length,
-                    separatorBuilder: (_, _) => AppSpacing.gapH8,
+                    separatorBuilder: (_, _) => AppSpacing.gapHSm,
                     itemBuilder: (context, index) {
                       final workspace = filtered[index];
                       final isActive = workspace.id == activeWorkspace.id;
@@ -154,7 +154,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
                 },
                 loading: () => Center(
                   child: Padding(
-                    padding: AppSpacing.edgeInsetsAll32,
+                    padding: AppSpacing.edgeInsetsAllXxxl,
                     child: CircularProgressIndicator(
                       color: theme.colorScheme.primary,
                     ),
@@ -168,7 +168,7 @@ class _WorkspaceSwitcherSheetState extends State<WorkspaceSwitcherSheet> {
 
         // Pinned Bottom Button: Create New Workspace
         Padding(
-          padding: AppSpacing.edgeInsetsAll20,
+          padding: AppSpacing.edgeInsetsAllXl,
           child: AppButton(
             label: l10n.createNewWorkspace,
             icon: Icons.add_rounded,

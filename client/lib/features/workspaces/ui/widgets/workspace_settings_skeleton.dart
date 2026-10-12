@@ -26,11 +26,11 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 _buildDetailsCardSkeleton(theme),
-                AppSpacing.gapH24,
+                AppSpacing.gapHXxl,
                 _buildMembersCardSkeleton(theme),
-                AppSpacing.gapH24,
+                AppSpacing.gapHXxl,
                 _buildDangerZoneSkeleton(theme),
-                AppSpacing.gapH40,
+                AppSpacing.gapHXxxl,
               ],
             ),
           ),
@@ -41,7 +41,7 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
 
   Widget _buildDetailsCardSkeleton(ThemeData theme) {
     return Container(
-      padding: AppSpacing.edgeInsetsAll20,
+      padding: AppSpacing.edgeInsetsAllXl,
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
         borderRadius: AppRadius.r16,
@@ -53,11 +53,11 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Bone.text(words: 2),
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
           Bone(width: double.infinity, height: 48, borderRadius: AppRadius.r12),
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
           Bone(width: double.infinity, height: 80, borderRadius: AppRadius.r12),
-          AppSpacing.gapH20,
+          AppSpacing.gapHXl,
           Align(
             alignment: Alignment.centerRight,
             child: Bone.button(
@@ -84,11 +84,11 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Padding(
-            padding: AppSpacing.edgeInsetsAll20,
+            padding: AppSpacing.edgeInsetsAllXl,
             child: Row(
               children: [
                 Bone.text(words: 2),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Bone(width: 60, height: 20, borderRadius: AppRadius.r10),
                 Spacer(),
                 Bone(width: 100, height: 32, borderRadius: AppRadius.r8),
@@ -108,18 +108,18 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
                   child: Row(
                     children: [
                       Bone.circle(size: 40),
-                      AppSpacing.gapW16,
+                      AppSpacing.gapWLg,
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Bone.text(words: 2),
-                            AppSpacing.gapH4,
+                            AppSpacing.gapHXs,
                             Bone.text(words: 3),
                           ],
                         ),
                       ),
-                      AppSpacing.gapW16,
+                      AppSpacing.gapWLg,
                       Bone(width: 50, height: 24, borderRadius: AppRadius.r6),
                     ],
                   ),
@@ -136,7 +136,7 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
 
   Widget _buildDangerZoneSkeleton(ThemeData theme) {
     return Container(
-      padding: AppSpacing.edgeInsetsAll20,
+      padding: AppSpacing.edgeInsetsAllXl,
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainer,
         borderRadius: AppRadius.r16,
@@ -146,9 +146,9 @@ class WorkspaceSettingsSkeleton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Bone.text(words: 2),
-          AppSpacing.gapH8,
+          AppSpacing.gapHSm,
           Bone.text(words: 10),
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
           Align(
             alignment: Alignment.centerRight,
             child: Bone.button(

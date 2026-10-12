@@ -108,7 +108,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
                         onCreatePressed: () => _openCreateSheet(context),
                       ),
                       const ProjectsFilterBar(),
-                      AppSpacing.gapH20,
+                      AppSpacing.gapHXl,
                     ],
                   ),
                 ),

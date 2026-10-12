@@ -30,7 +30,7 @@ class MyTasksHeader extends StatelessWidget {
               letterSpacing: -0.5,
             ),
           ),
-          AppSpacing.gapH4,
+          AppSpacing.gapHXs,
           Text(
             l10n.myTasksSubtitle,
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -39,7 +39,7 @@ class MyTasksHeader extends StatelessWidget {
                   : AppColors.lightTextSecondary,
             ),
           ),
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
         ],
       ),
     );

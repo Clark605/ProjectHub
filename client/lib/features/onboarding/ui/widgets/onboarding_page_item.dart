@@ -49,13 +49,13 @@ class OnboardingPageItem extends StatelessWidget {
             ),
           ),
 
-          AppSpacing.gapH24,
+          AppSpacing.gapHXxl,
 
           // ── Category Tag Chip ──
           Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.md,
-                  vertical: AppSpacing.s5,
+                  vertical: AppSpacing.xs,
                 ),
                 decoration: BoxDecoration(
                   color: isDark
@@ -80,7 +80,7 @@ class OnboardingPageItem extends StatelessWidget {
                         color: AppColors.electricViolet,
                       ),
                     ),
-                    AppSpacing.gapW6,
+                    AppSpacing.gapWXs,
                     Text(
                       tag,
                       style: theme.textTheme.labelSmall?.copyWith(
@@ -98,7 +98,7 @@ class OnboardingPageItem extends StatelessWidget {
               .fadeIn(duration: 350.ms, delay: 150.ms)
               .slideY(begin: 0.2, end: 0, curve: Curves.easeOutCubic),
 
-          AppSpacing.gapH12,
+          AppSpacing.gapHMd,
 
           // ── Headline Title ──
           Text(
@@ -116,7 +116,7 @@ class OnboardingPageItem extends StatelessWidget {
               .fadeIn(duration: 400.ms, delay: 220.ms)
               .slideY(begin: 0.2, end: 0, curve: Curves.easeOutCubic),
 
-          AppSpacing.gapH10,
+          AppSpacing.gapHSm,
 
           // ── Subtitle Description ──
           ConstrainedBox(
@@ -136,7 +136,7 @@ class OnboardingPageItem extends StatelessWidget {
               .fadeIn(duration: 400.ms, delay: 300.ms)
               .slideY(begin: 0.2, end: 0, curve: Curves.easeOutCubic),
 
-          AppSpacing.gapH12,
+          AppSpacing.gapHMd,
         ],
       ),
     );

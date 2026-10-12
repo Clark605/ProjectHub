@@ -16,7 +16,7 @@ class ProjectsSkeleton extends StatelessWidget {
 
     Widget buildCard() {
       return Container(
-        padding: AppSpacing.edgeInsetsAll16,
+        padding: AppSpacing.edgeInsetsAllLg,
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerLow,
           borderRadius: AppRadius.r16,
@@ -30,13 +30,13 @@ class ProjectsSkeleton extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(child: Bone.text(words: 3)),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Bone(width: 60, height: 22, borderRadius: AppRadius.r20),
               ],
             ),
-            AppSpacing.gapH6,
+            AppSpacing.gapHXs,
             const Bone.text(words: 10),
-            AppSpacing.gapH12,
+            AppSpacing.gapHMd,
             // Progress Bar & Task Count
             const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -45,13 +45,13 @@ class ProjectsSkeleton extends StatelessWidget {
                 Bone(width: 28, height: 14, borderRadius: AppRadius.r3),
               ],
             ),
-            AppSpacing.gapH6,
+            AppSpacing.gapHXs,
             const Bone(
               height: 5,
               width: double.infinity,
               borderRadius: AppRadius.r3,
             ),
-            AppSpacing.gapH10,
+            AppSpacing.gapHSm,
             // Member avatars stack
             Row(
               children: [
@@ -71,9 +71,9 @@ class ProjectsSkeleton extends StatelessWidget {
                   ),
               ],
             ),
-            AppSpacing.gapH10,
+            AppSpacing.gapHSm,
             const Divider(height: 1, thickness: 1),
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
             const Row(
               children: [
                 Bone(width: 80, height: 14, borderRadius: AppRadius.r3),
@@ -93,14 +93,14 @@ class ProjectsSkeleton extends StatelessWidget {
           AppSpacing.xxl,
           AppSpacing.zero,
           AppSpacing.xxl,
-          AppSpacing.s80,
+          AppSpacing.fabClearance,
         ),
         child: (!isDesktop && !isTablet)
             ? ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: 4,
-                separatorBuilder: (_, _) => AppSpacing.gapH16,
+                separatorBuilder: (_, _) => AppSpacing.gapHLg,
                 itemBuilder: (_, _) => buildCard(),
               )
             : GridView.builder(

@@ -89,7 +89,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
         final isSaving = state.isSaving;
 
         return Container(
-          padding: AppSpacing.edgeInsetsAll20,
+          padding: AppSpacing.edgeInsetsAllXl,
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerLow,
             borderRadius: AppRadius.r16,
@@ -131,7 +131,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                       ),
                   ],
                 ),
-                AppSpacing.gapH24,
+                AppSpacing.gapHXxl,
                 AppTextField(
                   label: l10n.projectName,
                   controller: _nameController,
@@ -140,7 +140,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                       ? l10n.projectNameRequired
                       : null,
                 ),
-                AppSpacing.gapH20,
+                AppSpacing.gapHXl,
                 AppTextField(
                   label: l10n.projectDescription,
                   controller: _descController,
@@ -148,7 +148,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                   maxLines: 4,
                   hintText: l10n.projectDescriptionPlaceholder,
                 ),
-                AppSpacing.gapH20,
+                AppSpacing.gapHXl,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -163,7 +163,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                         },
                       ),
                     ),
-                    AppSpacing.gapW16,
+                    AppSpacing.gapWLg,
                     Expanded(
                       child: IgnorePointer(
                         ignoring: !widget.canEdit || isSaving,
@@ -178,7 +178,7 @@ class _ProjectDetailsCardState extends State<ProjectDetailsCard> {
                   ],
                 ),
                 if (widget.canEdit) ...[
-                  AppSpacing.gapH32,
+                  AppSpacing.gapHXxxl,
                   Align(
                     alignment: Alignment.centerRight,
                     child: AppButton(

@@ -44,7 +44,7 @@ class TermsCheckbox extends StatelessWidget {
                 activeColor: AppColors.electricViolet,
               ),
             ),
-            AppSpacing.gapW10,
+            AppSpacing.gapWSm,
             Expanded(
               child: RichText(
                 text: TextSpan(
@@ -82,7 +82,7 @@ class TermsCheckbox extends StatelessWidget {
           ],
         ).animate().fadeIn(duration: 400.ms, delay: 400.ms),
         if (hasError) ...[
-          AppSpacing.gapH6,
+          AppSpacing.gapHXs,
           Padding(
             padding: const EdgeInsets.only(left: AppSpacing.xxxl),
             child: Text(

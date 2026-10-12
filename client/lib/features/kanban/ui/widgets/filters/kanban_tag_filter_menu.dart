@@ -66,7 +66,7 @@ class KanbanTagFilterMenu extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                 ),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Text(t.name),
               ],
             ),

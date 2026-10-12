@@ -159,7 +159,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const AppSheetDragHandle(),
-          AppSpacing.gapH8,
+          AppSpacing.gapHSm,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -180,16 +180,16 @@ class _AttachTagModalState extends State<AttachTagModal> {
               ),
             ],
           ),
-          AppSpacing.gapH12,
+          AppSpacing.gapHMd,
           AttachTagSearchField(
             controller: _searchController,
             onChanged: (_) => setState(() {}),
           ),
           if (_error != null) ...[
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
             Text(_error!, style: const TextStyle(color: AppColors.error)),
           ],
-          AppSpacing.gapH14,
+          AppSpacing.gapHMd,
           AttachTagResults(
             isLoading: _isLoading,
             canCreate: canCreate,

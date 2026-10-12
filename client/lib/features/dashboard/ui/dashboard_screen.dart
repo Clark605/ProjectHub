@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const DashboardHeader(),
-                AppSpacing.gapH24,
+                AppSpacing.gapHXxl,
                 DashboardMetricsGrid(
                   activeProjects: state.activeProjects,
                   inProgressTasks: state.inProgressTasks,
@@ -95,7 +95,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   onTapUrgentTasks: widget.onNavigateToMyTasks,
                   onTapCompletedTasks: widget.onNavigateToMyTasks,
                 ),
-                AppSpacing.gapH28,
+                AppSpacing.gapHXxl,
                 LayoutBuilder(
                   builder: (context, constraints) {
                     final isWide = constraints.maxWidth > Breakpoints.tablet;
@@ -111,7 +111,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               onNavigateToMyTasks: widget.onNavigateToMyTasks,
                             ),
                           ),
-                          AppSpacing.gapW20,
+                          AppSpacing.gapWXl,
                           Expanded(
                             flex: 4,
                             child: RecentActivityCard(
@@ -130,7 +130,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           isLoading: state.isLoading,
                           onNavigateToMyTasks: widget.onNavigateToMyTasks,
                         ),
-                        AppSpacing.gapH20,
+                        AppSpacing.gapHXl,
                         RecentActivityCard(
                           activities: state.recentActivities,
                           isLoading: state.isLoading,

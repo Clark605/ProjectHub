@@ -33,7 +33,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.md,
-          vertical: AppSpacing.s10,
+          vertical: AppSpacing.sm,
         ),
         decoration: BoxDecoration(
           color: isSelected
@@ -53,7 +53,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
                   ? activeColor
                   : theme.colorScheme.onSurfaceVariant,
             ),
-            AppSpacing.gapW12,
+            AppSpacing.gapWMd,
             Expanded(
               child: Text(
                 label,
@@ -66,7 +66,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
             if (badge != null)
               Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.s6,
+                  horizontal: AppSpacing.xs,
                   vertical: AppSpacing.xxs,
                 ),
                 decoration: BoxDecoration(

@@ -56,7 +56,7 @@ class CreateTaskTextFields extends StatelessWidget {
               ? (l10n.taskTitleRequired)
               : null,
         ),
-        AppSpacing.gapH16,
+        AppSpacing.gapHLg,
         TextFormField(
           controller: descriptionController,
           maxLines: 3,

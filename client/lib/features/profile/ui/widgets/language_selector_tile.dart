@@ -19,7 +19,7 @@ class LanguageSelectorTile extends StatelessWidget {
 
         return Card(
           child: Padding(
-            padding: AppSpacing.edgeInsetsAll20,
+            padding: AppSpacing.edgeInsetsAllXl,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -30,7 +30,7 @@ class LanguageSelectorTile extends StatelessWidget {
                       size: 20,
                       color: theme.colorScheme.primary,
                     ),
-                    AppSpacing.gapW10,
+                    AppSpacing.gapWSm,
                     Text(
                       l10n.language,
                       style: theme.textTheme.titleMedium?.copyWith(
@@ -39,14 +39,14 @@ class LanguageSelectorTile extends StatelessWidget {
                     ),
                   ],
                 ),
-                AppSpacing.gapH6,
+                AppSpacing.gapHXs,
                 Text(
                   l10n.languageSubtitle,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
                   ),
                 ),
-                AppSpacing.gapH16,
+                AppSpacing.gapHLg,
                 SegmentedButton<String>(
                   segments: const [
                     ButtonSegment<String>(value: 'en', label: Text('English')),

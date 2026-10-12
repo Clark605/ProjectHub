@@ -33,7 +33,7 @@ class KanbanFab extends StatelessWidget {
             isListening: isListening,
             onPressed: onVoicePressed!,
           ),
-          AppSpacing.gapW12,
+          AppSpacing.gapWMd,
         ],
         FloatingActionButton.extended(
           onPressed: onPressed,

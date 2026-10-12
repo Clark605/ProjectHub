@@ -99,9 +99,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               title: l10n.forgotPasswordTitle,
                               subtitle: l10n.forgotPasswordSubtitle,
                             ),
-                            AppSpacing.gapH24,
+                            AppSpacing.gapHXxl,
                             AppErrorBanner(errorMessage: errorMessage),
-                            AppSpacing.gapH12,
+                            AppSpacing.gapHMd,
                             AppTextField(
                                   label: l10n.email,
                                   hintText: l10n.emailPlaceholder,
@@ -116,7 +116,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 .animate()
                                 .fadeIn(duration: 400.ms, delay: 200.ms)
                                 .slideY(begin: 0.1, end: 0),
-                            AppSpacing.gapH24,
+                            AppSpacing.gapHXxl,
                             AppButton(
                                   label: l10n.sendResetCode,
                                   variant: AppButtonVariant.primary,
@@ -126,7 +126,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 .animate()
                                 .fadeIn(duration: 400.ms, delay: 300.ms)
                                 .slideY(begin: 0.1, end: 0),
-                            AppSpacing.gapH28,
+                            AppSpacing.gapHXxl,
                             Center(
                               child: TextButton(
                                 onPressed: () {
@@ -145,7 +145,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 ),
                               ),
                             ).animate().fadeIn(duration: 400.ms, delay: 350.ms),
-                            AppSpacing.gapH16,
+                            AppSpacing.gapHLg,
                             const AuthBackToLoginLink(delayMs: 400),
                           ],
                         ),

@@ -33,10 +33,10 @@ class KanbanColumnHeader extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacing.s14,
+        AppSpacing.md,
         AppSpacing.md,
         AppSpacing.sm,
-        AppSpacing.s10,
+        AppSpacing.sm,
       ),
       child: Row(
         children: [
@@ -51,7 +51,7 @@ class KanbanColumnHeader extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                 ),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Flexible(
                   child: Text(
                     statusName,
@@ -61,10 +61,10 @@ class KanbanColumnHeader extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.s7,
+                    horizontal: AppSpacing.sm,
                     vertical: AppSpacing.xxs,
                   ),
                   decoration: BoxDecoration(
@@ -91,7 +91,7 @@ class KanbanColumnHeader extends StatelessWidget {
               icon: const Icon(Icons.add_rounded, size: 20),
               tooltip: l10n.addTaskToStatus(statusName),
               constraints: const BoxConstraints(),
-              padding: AppSpacing.edgeInsetsAll6,
+              padding: AppSpacing.edgeInsetsAllXs,
               onPressed: onAddTask,
             ),
         ],

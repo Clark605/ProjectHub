@@ -55,7 +55,7 @@ class TaskCommentsList extends StatelessWidget {
                       size: 16,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
-                    AppSpacing.gapW6,
+                    AppSpacing.gapWXs,
                     Text(
                       l10n.commentsCount(comments.length),
                       style: theme.textTheme.titleSmall?.copyWith(
@@ -65,10 +65,10 @@ class TaskCommentsList extends StatelessWidget {
                     ),
                   ],
                 ),
-                AppSpacing.gapH8,
+                AppSpacing.gapHSm,
                 if (failure != null)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: AppSpacing.s6),
+                    padding: const EdgeInsets.only(bottom: AppSpacing.xs),
                     child: Text(
                       failure.toLocalizedMessage(l10n),
                       style: const TextStyle(color: AppColors.error),
@@ -97,7 +97,7 @@ class TaskCommentsList extends StatelessWidget {
                           .deleteComment(comment.id),
                     ),
                   ),
-                AppSpacing.gapH12,
+                AppSpacing.gapHMd,
                 TaskCommentInput(
                   isSending: isSending,
                   onSend: (text) =>

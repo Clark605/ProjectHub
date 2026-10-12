@@ -62,7 +62,7 @@ class ProjectCard extends StatelessWidget {
       onTap: onTap,
       borderRadius: AppRadius.r16,
       child: Ink(
-        padding: AppSpacing.edgeInsetsAll16,
+        padding: AppSpacing.edgeInsetsAllLg,
         decoration: BoxDecoration(
           color: theme.colorScheme.surfaceContainerLow,
           borderRadius: AppRadius.r16,
@@ -86,10 +86,10 @@ class ProjectCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
                 Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.s10,
+                    horizontal: AppSpacing.sm,
                     vertical: AppSpacing.xs,
                   ),
                   decoration: BoxDecoration(
@@ -110,7 +110,7 @@ class ProjectCard extends StatelessWidget {
                 ),
               ],
             ),
-            AppSpacing.gapH6,
+            AppSpacing.gapHXs,
             Text(
               project.description.isNotEmpty ? project.description : '—',
               style: theme.textTheme.bodySmall?.copyWith(
@@ -119,7 +119,7 @@ class ProjectCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
-            AppSpacing.gapH12,
+            AppSpacing.gapHMd,
             // Progress Bar & Task Count
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -145,7 +145,7 @@ class ProjectCard extends StatelessWidget {
                   ),
               ],
             ),
-            AppSpacing.gapH6,
+            AppSpacing.gapHXs,
             ClipRRect(
               borderRadius: AppRadius.r3,
               child: LinearProgressIndicator(
@@ -162,7 +162,7 @@ class ProjectCard extends StatelessWidget {
               ),
             ),
             if (members.isNotEmpty) ...[
-              AppSpacing.gapH10,
+              AppSpacing.gapHSm,
               Row(
                 children: [
                   SizedBox(
@@ -189,10 +189,10 @@ class ProjectCard extends StatelessWidget {
                     ),
                   ),
                   if (members.length > 4) ...[
-                    AppSpacing.gapW6,
+                    AppSpacing.gapWXs,
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.s5,
+                        horizontal: AppSpacing.xs,
                         vertical: AppSpacing.xxs,
                       ),
                       decoration: BoxDecoration(
@@ -211,9 +211,9 @@ class ProjectCard extends StatelessWidget {
                 ],
               ),
             ],
-            AppSpacing.gapH10,
+            AppSpacing.gapHSm,
             const Divider(height: 1, thickness: 1),
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
             Row(
               children: [
                 if (project.dueDate != null) ...[
@@ -222,7 +222,7 @@ class ProjectCard extends StatelessWidget {
                     size: 13,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                  AppSpacing.gapW4,
+                  AppSpacing.gapWXs,
                   Text(
                     DateFormatter.formatDate(
                       project.dueDate!,
@@ -241,7 +241,7 @@ class ProjectCard extends StatelessWidget {
                     size: 14,
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                  AppSpacing.gapW4,
+                  AppSpacing.gapWXs,
                   Flexible(
                     child: Text(
                       project.createdByName.isNotEmpty

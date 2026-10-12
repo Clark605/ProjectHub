@@ -49,9 +49,9 @@ class AppDangerZone extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            AppSpacing.gapH8,
+            AppSpacing.gapHSm,
             Text(description),
-            AppSpacing.gapH16,
+            AppSpacing.gapHLg,
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.error,

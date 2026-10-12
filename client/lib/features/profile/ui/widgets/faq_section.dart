@@ -12,7 +12,7 @@ class FaqSection extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: AppSpacing.edgeInsetsAll20,
+        padding: AppSpacing.edgeInsetsAllXl,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -23,7 +23,7 @@ class FaqSection extends StatelessWidget {
                   size: 20,
                   color: theme.colorScheme.primary,
                 ),
-                AppSpacing.gapW10,
+                AppSpacing.gapWSm,
                 Text(
                   l10n.faqTitle,
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -32,14 +32,14 @@ class FaqSection extends StatelessWidget {
                 ),
               ],
             ),
-            AppSpacing.gapH6,
+            AppSpacing.gapHXs,
             Text(
               l10n.faqSubtitle,
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.65),
               ),
             ),
-            AppSpacing.gapH12,
+            AppSpacing.gapHMd,
             _FaqItem(
               question: l10n.faqWorkspacesQ,
               answer: l10n.faqWorkspacesA,

@@ -53,7 +53,7 @@ class MoveToStatusSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const AppSheetDragHandle(),
-          AppSpacing.gapH12,
+          AppSpacing.gapHMd,
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
             child: Column(
@@ -65,7 +65,7 @@ class MoveToStatusSheet extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                AppSpacing.gapH4,
+                AppSpacing.gapHXs,
                 Text(
                   task.title,
                   style: theme.textTheme.bodySmall?.copyWith(
@@ -77,9 +77,9 @@ class MoveToStatusSheet extends StatelessWidget {
               ],
             ),
           ),
-          AppSpacing.gapH16,
+          AppSpacing.gapHLg,
           Divider(height: 1, color: theme.colorScheme.outlineVariant),
-          AppSpacing.gapH8,
+          AppSpacing.gapHSm,
           ...TaskStatus.values.map((status) {
             final isCurrent = status == currentStatus;
             return Material(
@@ -107,7 +107,7 @@ class MoveToStatusSheet extends StatelessWidget {
                           color: status.toColor(),
                         ),
                       ),
-                      AppSpacing.gapW14,
+                      AppSpacing.gapWMd,
                       Expanded(
                         child: Text(
                           status.localizedName(l10n),

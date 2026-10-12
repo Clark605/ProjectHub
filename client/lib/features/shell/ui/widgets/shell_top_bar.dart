@@ -74,7 +74,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                   tooltip: l10n.navigationMenu,
                   onPressed: onOpenDrawer,
                 ),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
               ],
               Expanded(
                 child: Align(
@@ -88,12 +88,12 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ),
-              AppSpacing.gapW8,
+              AppSpacing.gapWSm,
               const RealtimeStatusBadge(),
-              AppSpacing.gapW4,
+              AppSpacing.gapWXs,
               if (!isMobile) ...[
                 const ShellPresenceIndicator(),
-                AppSpacing.gapW16,
+                AppSpacing.gapWLg,
               ],
               if (isOwner) ...[
                 IconButton(
@@ -109,7 +109,7 @@ class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
                         context,
                       ).pushNamed(RouteNames.workspaces),
                 ),
-                AppSpacing.gapW8,
+                AppSpacing.gapWSm,
               ],
             ],
           ),

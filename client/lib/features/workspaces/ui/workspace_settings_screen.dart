@@ -98,7 +98,7 @@ class _ViewState extends State<_View> {
               child: Center(
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.s10,
+                    horizontal: AppSpacing.sm,
                     vertical: AppSpacing.xs,
                   ),
                   decoration: BoxDecoration(
@@ -142,7 +142,7 @@ class _ViewState extends State<_View> {
                 return Skeletonizer(
                   enabled: loaded.isRevalidating,
                   child: SingleChildScrollView(
-                    padding: AppSpacing.edgeInsetsAll24,
+                    padding: AppSpacing.edgeInsetsAllXxl,
                     child: Center(
                       child: Container(
                         constraints: const BoxConstraints(maxWidth: 800),
@@ -158,9 +158,9 @@ class _ViewState extends State<_View> {
                                     .clearError(),
                               ),
                             const WorkspaceDetailsCard(),
-                            AppSpacing.gapH24,
+                            AppSpacing.gapHXxl,
                             const WorkspaceMembersCard(),
-                            AppSpacing.gapH24,
+                            AppSpacing.gapHXxl,
                             AppDangerZone(
                               title: l10n.deleteWorkspace,
                               description: l10n.deleteWorkspaceWarning,
