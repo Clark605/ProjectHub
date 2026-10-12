@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-export PATH="$PATH:/mnt/c/Users/Clark/.gemini/antigravity/bin"
-
 echo "================================================="
 echo "  ProjectHub Client Design Tokens Verification   "
 echo "================================================="
@@ -48,9 +46,11 @@ run_check() {
   fi
 }
 
-# 1. BorderRadius.circular( and Radius.circular( outside core/theme
+# 1. BorderRadius.circular(, Radius.circular(, legacy AppRadius.(r<num>|circular(), and (CircleAvatar|radius): <num> outside core/theme
 run_check "BorderRadius.circular outside core/theme" "BorderRadius\.circular\(" "theme_only"
 run_check "Radius.circular outside core/theme" "\bRadius\.circular\(" "theme_only"
+run_check "AppRadius.(r[0-9]+|circular() outside core/theme" "AppRadius\.(r[0-9]+|circular\()" "theme_only"
+run_check "(CircleAvatar|radius): numeric literals outside core/theme" "(CircleAvatar|radius):\s*[0-9]" "theme_only"
 
 # 2. fontSize: outside core/theme
 run_check "fontSize: outside core/theme" "fontSize:" "theme_only"
@@ -73,9 +73,9 @@ run_check "spacing/runSpacing/mainAxisSpacing/crossAxisSpacing numeric literals"
 # 8. Duration(milliseconds: outside core/theme and core/dialog
 run_check "Duration(milliseconds: outside core/theme and core/dialog" "Duration\(milliseconds:" "default"
 
-# 9. Icon size numeric literals outside core/theme and core/dialog
-run_check "Icon size numeric literals outside core/theme and core/dialog" "Icon\([^)]*size:\s*[0-9]" "default"
-run_check "Icon(.*size: numeric literals outside core/theme and core/dialog" "Icon\(.*size:\s*[0-9]" "default"
+# 9. Icon size and iconSize numeric literals outside core/theme and core/dialog
+run_check "Icon size numeric literals outside core/theme and core/dialog" "Icon\((?:[^()]|\([^()]*\))*?size:\s*[0-9]" "default"
+run_check "iconSize numeric literals outside core/theme and core/dialog" "iconSize:\s*[0-9]" "default"
 
 # 10. AppLocalizations.of( outside core/l10n
 run_check "AppLocalizations.of( outside core/l10n" "AppLocalizations\.of\(" "l10n"

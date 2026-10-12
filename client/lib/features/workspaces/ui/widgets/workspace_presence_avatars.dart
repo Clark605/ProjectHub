@@ -142,7 +142,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
                   .where((m) => m.userId == visibleIds[i])
                   .firstOrNull,
               isMe: visibleIds[i] == _currentUserId,
-              radius: 12,
+              radius: AppRadius.mdValue,
             ),
           ),
         if (overflowCount > 0)
