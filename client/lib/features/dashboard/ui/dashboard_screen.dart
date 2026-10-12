@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/breakpoints.dart';
 import 'package:client/core/widgets/app_async_state_wrapper.dart';

@@ -1205,4 +1205,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completedTasksSubtitle => 'Finished tasks';
+
+  @override
+  String get forbiddenErrorMessage =>
+      'You do not have permission to perform this action.';
+
+  @override
+  String get notFoundErrorMessage =>
+      'The requested resource could not be found.';
+
+  @override
+  String get validationErrorMessage => 'Please check your input and try again.';
+
+  @override
+  String get serverErrorMessage =>
+      'Something went wrong on our end. Please try again later.';
 }

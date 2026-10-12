@@ -1,7 +1,4 @@
-import 'package:flutter/widgets.dart';
 import 'package:client/core/errors/app_exception.dart';
-import 'package:client/core/l10n/l10n_extension.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
 
 enum FailureKind {
   network,
@@ -26,88 +23,36 @@ class AppFailure {
     this.isUserSafe = true,
   });
 
-  String get message =>
-      (isUserSafe && serverMessage != null && serverMessage!.trim().isNotEmpty)
-      ? serverMessage!
-      : kind.name;
+  static const Map<Type, FailureKind> _exceptionKinds = {
+    NetworkException: FailureKind.network,
+    UnauthorizedException: FailureKind.unauthorized,
+    ForbiddenException: FailureKind.forbidden,
+    NotFoundException: FailureKind.notFound,
+    ValidationException: FailureKind.validation,
+    ServerException: FailureKind.server,
+    AppException: FailureKind.server,
+  };
+
+  static const Set<FailureKind> _userSafeKinds = {
+    FailureKind.unauthorized,
+    FailureKind.forbidden,
+    FailureKind.notFound,
+    FailureKind.validation,
+  };
 
   factory AppFailure.fromException(Object error) {
-    if (error is NetworkException) {
-      final msg = error.message.trim().isNotEmpty ? error.message : null;
-      return AppFailure(
-        kind: FailureKind.network,
-        serverMessage: msg,
-        isUserSafe: msg != null,
-      );
+    if (error is! AppException) {
+      return const AppFailure(kind: FailureKind.unknown, isUserSafe: false);
     }
-    if (error is UnauthorizedException) {
-      final msg = error.message.trim().isNotEmpty ? error.message : null;
-      return AppFailure(
-        kind: FailureKind.unauthorized,
-        serverMessage: msg,
-        isUserSafe: msg != null,
-      );
-    }
-    if (error is ForbiddenException) {
-      final msg = error.message.trim().isNotEmpty ? error.message : null;
-      return AppFailure(
-        kind: FailureKind.forbidden,
-        serverMessage: msg,
-        isUserSafe: msg != null,
-      );
-    }
-    if (error is NotFoundException) {
-      final msg = error.message.trim().isNotEmpty ? error.message : null;
-      return AppFailure(
-        kind: FailureKind.notFound,
-        serverMessage: msg,
-        isUserSafe: msg != null,
-      );
-    }
-    if (error is ValidationException) {
-      final msg = error.message.trim().isNotEmpty ? error.message : null;
-      return AppFailure(
-        kind: FailureKind.validation,
-        serverMessage: msg,
-        isUserSafe: msg != null,
-      );
-    }
-    if (error is ServerException) {
-      final msg = error.message.trim().isNotEmpty ? error.message : null;
-      return AppFailure(
-        kind: FailureKind.server,
-        serverMessage: msg,
-        isUserSafe: msg != null,
-      );
-    }
-    if (error is AppException) {
-      final msg = error.message.trim().isNotEmpty ? error.message : null;
-      return AppFailure(
-        kind: FailureKind.server,
-        serverMessage: msg,
-        isUserSafe: msg != null,
-      );
-    }
-    return const AppFailure(kind: FailureKind.unknown, isUserSafe: false);
+    final kind = _exceptionKinds[error.runtimeType] ?? FailureKind.server;
+    final trimmed = error.message.trim();
+    final msg = trimmed.isNotEmpty ? error.message : null;
+    return AppFailure(
+      kind: kind,
+      serverMessage: msg,
+      isUserSafe: msg != null && _userSafeKinds.contains(kind),
+    );
   }
-
-  /// Maps the failure into a localized user-facing message string.
-  String toLocalizedMessage(AppLocalizations l10n) {
-    if (isUserSafe &&
-        serverMessage != null &&
-        serverMessage!.trim().isNotEmpty) {
-      return serverMessage!;
-    }
-    return switch (kind) {
-      FailureKind.network => l10n.connectionErrorMessage,
-      FailureKind.unauthorized => l10n.sessionExpiredMessage,
-      FailureKind.speechUnavailable => l10n.voiceTaskSpeechUnavailable,
-      _ => l10n.error,
-    };
-  }
-
-  /// Maps the failure into a localized user-facing message using [context].
-  String localized(BuildContext context) => toLocalizedMessage(context.l10n);
 
   @override
   bool operator ==(Object other) =>

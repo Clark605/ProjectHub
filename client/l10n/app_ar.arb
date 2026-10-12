@@ -384,5 +384,9 @@
   "inProgressSubtitle": "قيد التنفيذ في مساحة العمل",
   "ongoingProjectsSubtitle": "مشاريع جارية",
   "urgentQueueSubtitle": "قائمة المهام العاجلة",
-  "completedTasksSubtitle": "مهام مكتملة"
+  "completedTasksSubtitle": "مهام مكتملة",
+  "forbiddenErrorMessage": "ليس لديك صلاحية لتنفيذ هذا الإجراء.",
+  "notFoundErrorMessage": "لم يتم العثور على المورد المطلوب.",
+  "validationErrorMessage": "يرجى التحقق من المدخلات والمحاولة مرة أخرى.",
+  "serverErrorMessage": "حدث خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً."
 }

@@ -1201,4 +1201,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get completedTasksSubtitle => 'مهام مكتملة';
+
+  @override
+  String get forbiddenErrorMessage => 'ليس لديك صلاحية لتنفيذ هذا الإجراء.';
+
+  @override
+  String get notFoundErrorMessage => 'لم يتم العثور على المورد المطلوب.';
+
+  @override
+  String get validationErrorMessage =>
+      'يرجى التحقق من المدخلات والمحاولة مرة أخرى.';
+
+  @override
+  String get serverErrorMessage =>
+      'حدث خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً.';
 }

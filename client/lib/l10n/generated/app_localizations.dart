@@ -2275,6 +2275,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Finished tasks'**
   String get completedTasksSubtitle;
+
+  /// Default error message when a 403 Forbidden failure has no server message
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have permission to perform this action.'**
+  String get forbiddenErrorMessage;
+
+  /// Default error message when a 404 Not Found failure has no server message
+  ///
+  /// In en, this message translates to:
+  /// **'The requested resource could not be found.'**
+  String get notFoundErrorMessage;
+
+  /// Default error message when a validation failure has no server message
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your input and try again.'**
+  String get validationErrorMessage;
+
+  /// Default error message for 5xx server failures
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong on our end. Please try again later.'**
+  String get serverErrorMessage;
 }
 
 class _AppLocalizationsDelegate

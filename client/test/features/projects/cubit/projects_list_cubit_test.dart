@@ -144,7 +144,7 @@ void main() {
           AppFailure(
             kind: FailureKind.server,
             serverMessage: 'Database down',
-            isUserSafe: true,
+            isUserSafe: false,
           ),
         ),
       ],

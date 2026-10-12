@@ -18,6 +18,7 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
   /// Executes [action] within a standardized try/catch block.
   ///
   /// - Catches [AppException] and generic exceptions, mapping them to [AppFailure].
+  /// - Logs every failure using [logTag] (defaulting to `runtimeType.toString()`).
   /// - Passes typed failure to [onFailure].
   /// - Returns the computed value of type [R], or `null` on failure.
   Future<R?> safeExecute<R>(
@@ -29,32 +30,35 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
       final result = await action();
       if (isClosed) return null;
       return result;
-    } on AppException catch (e, st) {
-      if (isClosed) return null;
-      if (logTag != null) {
-        AppLogger.warning(
-          'AppException caught in $logTag: ${e.message}',
-          tag: logTag,
-          error: e,
-          stackTrace: st,
-        );
-      }
-      final failure = AppFailure.fromException(e);
-      onFailure?.call(failure);
-      return null;
     } on Object catch (e, st) {
-      if (isClosed) return null;
-      if (logTag != null) {
-        AppLogger.error(
-          'Unexpected error caught in $logTag: $e',
-          tag: logTag,
-          error: e,
-          stackTrace: st,
-        );
-      }
-      final failure = AppFailure.fromException(e);
-      onFailure?.call(failure);
-      return null;
+      return _handleFailure(e, st, onFailure: onFailure, logTag: logTag);
     }
+  }
+
+  R? _handleFailure<R>(
+    Object error,
+    StackTrace stackTrace, {
+    void Function(AppFailure failure)? onFailure,
+    String? logTag,
+  }) {
+    if (isClosed) return null;
+    final tag = logTag ?? runtimeType.toString();
+    if (error is AppException) {
+      AppLogger.warning(
+        'AppException caught in $tag: ${error.message}',
+        tag: tag,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    } else {
+      AppLogger.error(
+        'Unexpected error caught in $tag: $error',
+        tag: tag,
+        error: error,
+        stackTrace: stackTrace,
+      );
+    }
+    onFailure?.call(AppFailure.fromException(error));
+    return null;
   }
 }

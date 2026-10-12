@@ -80,7 +80,7 @@ void main() {
           AppFailure(
             kind: FailureKind.server,
             serverMessage: 'Project not found',
-            isUserSafe: true,
+            isUserSafe: false,
           ),
         ),
       ],

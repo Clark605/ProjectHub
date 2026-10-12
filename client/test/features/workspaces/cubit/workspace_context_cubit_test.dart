@@ -216,7 +216,7 @@ void main() {
           AppFailure(
             kind: FailureKind.server,
             serverMessage: 'Network connection failed',
-            isUserSafe: true,
+            isUserSafe: false,
           ),
         ),
       ],

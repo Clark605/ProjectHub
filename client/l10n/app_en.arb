@@ -838,5 +838,21 @@
   "completedTasksSubtitle": "Finished tasks",
   "@completedTasksSubtitle": {
     "description": "Subtitle on dashboard completed tasks metric card"
+  },
+  "forbiddenErrorMessage": "You do not have permission to perform this action.",
+  "@forbiddenErrorMessage": {
+    "description": "Default error message when a 403 Forbidden failure has no server message"
+  },
+  "notFoundErrorMessage": "The requested resource could not be found.",
+  "@notFoundErrorMessage": {
+    "description": "Default error message when a 404 Not Found failure has no server message"
+  },
+  "validationErrorMessage": "Please check your input and try again.",
+  "@validationErrorMessage": {
+    "description": "Default error message when a validation failure has no server message"
+  },
+  "serverErrorMessage": "Something went wrong on our end. Please try again later.",
+  "@serverErrorMessage": {
+    "description": "Default error message for 5xx server failures"
   }
 }
