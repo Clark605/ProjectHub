@@ -3,8 +3,6 @@ import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 
 class DashboardState {
-  static const Object _unset = Object();
-
   final bool isLoading;
   final int activeProjects;
   final int inProgressTasks;
@@ -33,7 +31,7 @@ class DashboardState {
     int? completedTasks,
     List<TaskDto>? focusTasks,
     List<ActivityEventDto>? recentActivities,
-    Object? failure = _unset,
+    AppFailure? failure,
     bool clearFailure = false,
   }) {
     return DashboardState(
@@ -44,11 +42,7 @@ class DashboardState {
       completedTasks: completedTasks ?? this.completedTasks,
       focusTasks: focusTasks ?? this.focusTasks,
       recentActivities: recentActivities ?? this.recentActivities,
-      failure: clearFailure
-          ? null
-          : (identical(failure, _unset)
-                ? this.failure
-                : failure as AppFailure?),
+      failure: clearFailure ? null : (failure ?? this.failure),
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
+import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_cubit.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_state.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
@@ -192,6 +193,21 @@ void main() {
             .having((s) => s.filter.category, 'category', 'All')
             .having((s) => s.filteredActivities.length, 'filtered length', 2),
       ],
+    );
+
+    test(
+      'ActivityStreamState.copyWith keeps failure when omitted and clears it when clearFailure is true',
+      () {
+        const failure = AppFailure(kind: FailureKind.server, isUserSafe: false);
+        const initial = ActivityStreamState(isLoading: false, failure: failure);
+
+        final preserved = initial.copyWith(isRefreshing: true);
+        expect(preserved.isRefreshing, isTrue);
+        expect(preserved.failure, failure);
+
+        final cleared = preserved.copyWith(clearFailure: true);
+        expect(cleared.failure, isNull);
+      },
     );
   });
 }

@@ -1,15 +1,6 @@
 import 'package:client/core/errors/app_exception.dart';
 
-enum FailureKind {
-  network,
-  unauthorized,
-  forbidden,
-  notFound,
-  validation,
-  server,
-  speechUnavailable,
-  unknown,
-}
+export 'package:client/core/errors/app_exception.dart' show FailureKind;
 
 /// Represents a typed failure emitted from asynchronous operations.
 class AppFailure {
@@ -23,16 +14,6 @@ class AppFailure {
     this.isUserSafe = true,
   });
 
-  static const Map<Type, FailureKind> _exceptionKinds = {
-    NetworkException: FailureKind.network,
-    UnauthorizedException: FailureKind.unauthorized,
-    ForbiddenException: FailureKind.forbidden,
-    NotFoundException: FailureKind.notFound,
-    ValidationException: FailureKind.validation,
-    ServerException: FailureKind.server,
-    AppException: FailureKind.server,
-  };
-
   static const Set<FailureKind> _userSafeKinds = {
     FailureKind.unauthorized,
     FailureKind.forbidden,
@@ -44,7 +25,7 @@ class AppFailure {
     if (error is! AppException) {
       return const AppFailure(kind: FailureKind.unknown, isUserSafe: false);
     }
-    final kind = _exceptionKinds[error.runtimeType] ?? FailureKind.server;
+    final kind = error.kind;
     final trimmed = error.message.trim();
     final msg = trimmed.isNotEmpty ? error.message : null;
     return AppFailure(

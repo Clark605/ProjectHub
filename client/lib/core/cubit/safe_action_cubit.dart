@@ -41,7 +41,6 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
     void Function(AppFailure failure)? onFailure,
     String? logTag,
   }) {
-    if (isClosed) return null;
     final tag = logTag ?? runtimeType.toString();
     if (error is AppException) {
       AppLogger.warning(
@@ -58,6 +57,7 @@ abstract class SafeActionCubit<T> extends Cubit<T> {
         stackTrace: stackTrace,
       );
     }
+    if (isClosed) return null;
     onFailure?.call(AppFailure.fromException(error));
     return null;
   }

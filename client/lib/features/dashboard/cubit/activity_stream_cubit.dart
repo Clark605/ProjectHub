@@ -31,10 +31,14 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
     final targetFilter = filter ?? state.filter;
 
     if (forceRefresh) {
-      emit(state.copyWith(isRefreshing: true, clearError: true));
+      emit(state.copyWith(isRefreshing: true, clearFailure: true));
     } else {
       emit(
-        state.copyWith(isLoading: true, filter: targetFilter, clearError: true),
+        state.copyWith(
+          isLoading: true,
+          filter: targetFilter,
+          clearFailure: true,
+        ),
       );
     }
 
@@ -56,7 +60,7 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
             activities: items,
             filteredActivities: filtered,
             filter: targetFilter,
-            clearError: true,
+            clearFailure: true,
           ),
         );
       },
@@ -121,7 +125,7 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
           state.copyWith(
             activities: items,
             filteredActivities: filtered,
-            clearError: true,
+            clearFailure: true,
           ),
         );
       },

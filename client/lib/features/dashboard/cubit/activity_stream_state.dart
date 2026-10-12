@@ -28,7 +28,7 @@ class ActivityStreamState {
     List<ActivityEventDto>? filteredActivities,
     ActivityFilter? filter,
     AppFailure? failure,
-    bool clearError = false,
+    bool clearFailure = false,
   }) {
     return ActivityStreamState(
       isLoading: isLoading ?? this.isLoading,
@@ -36,7 +36,7 @@ class ActivityStreamState {
       activities: activities ?? this.activities,
       filteredActivities: filteredActivities ?? this.filteredActivities,
       filter: filter ?? this.filter,
-      failure: clearError ? null : (failure ?? this.failure),
+      failure: clearFailure ? null : (failure ?? this.failure),
     );
   }
 }

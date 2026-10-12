@@ -104,7 +104,7 @@ void main() {
     );
 
     test(
-      'DashboardState.copyWith preserves failure when omitted and clears with clearFailure or null',
+      'DashboardState.copyWith keeps failure when omitted and clears it when clearFailure is true',
       () {
         const failure = AppFailure(kind: FailureKind.server, isUserSafe: false);
         const initial = DashboardState(activeProjects: 2, failure: failure);
@@ -113,11 +113,8 @@ void main() {
         expect(preserved.activeProjects, 3);
         expect(preserved.failure, failure);
 
-        final clearedViaFlag = preserved.copyWith(clearFailure: true);
-        expect(clearedViaFlag.failure, isNull);
-
-        final clearedViaSentinel = preserved.copyWith(failure: null);
-        expect(clearedViaSentinel.failure, isNull);
+        final cleared = preserved.copyWith(clearFailure: true);
+        expect(cleared.failure, isNull);
       },
     );
   });

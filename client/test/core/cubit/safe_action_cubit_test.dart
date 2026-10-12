@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
@@ -40,10 +41,14 @@ class _TestCubit extends SafeActionCubit<_TestState> {
   }
 }
 
+class _CustomNotFoundException extends NotFoundException {
+  const _CustomNotFoundException({super.message = 'Custom resource missing'});
+}
+
 void main() {
   group('AppFailure.fromException & AppFailureL10n', () {
     test(
-      'maps exception types to FailureKind and enforces isUserSafe only for 4xx/validation',
+      'maps exception types (including subclasses) to FailureKind and enforces isUserSafe only for 4xx/validation',
       () {
         final cases = <(Object, AppFailure)>[
           (
@@ -75,6 +80,14 @@ void main() {
             const AppFailure(
               kind: FailureKind.notFound,
               serverMessage: 'Task 42 not found',
+              isUserSafe: true,
+            ),
+          ),
+          (
+            const _CustomNotFoundException(),
+            const AppFailure(
+              kind: FailureKind.notFound,
+              serverMessage: 'Custom resource missing',
               isUserSafe: true,
             ),
           ),
@@ -291,17 +304,25 @@ void main() {
     });
 
     test(
-      'safeExecute does not invoke onFailure or throw after cubit is closed',
+      'safeExecute logs failure even after cubit is closed but skips onFailure',
       () async {
+        final originalDebugPrint = debugPrint;
+        final logs = <String>[];
+        debugPrint = (String? message, {int? wrapWidth}) {
+          if (message != null) logs.add(message);
+        };
+        addTearDown(() => debugPrint = originalDebugPrint);
+
         bool onFailureCalled = false;
         final future = cubit.safeExecute<int>(() async {
           await Future.delayed(const Duration(milliseconds: 10));
-          throw Exception('late error');
+          throw Exception('late error after close');
         }, onFailure: (_) => onFailureCalled = true);
         await cubit.close();
         final result = await future;
         expect(result, isNull);
         expect(onFailureCalled, isFalse);
+        expect(logs.any((l) => l.contains('late error after close')), isTrue);
       },
     );
   });
