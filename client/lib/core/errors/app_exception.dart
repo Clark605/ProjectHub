@@ -4,6 +4,7 @@ enum FailureKind {
   forbidden,
   notFound,
   validation,
+  conflict,
   server,
   speechUnavailable,
   unknown,
@@ -87,6 +88,18 @@ class ValidationException extends AppException {
 
   @override
   FailureKind get kind => FailureKind.validation;
+}
+
+class ConflictException extends AppException {
+  const ConflictException({
+    super.message = 'A conflict occurred',
+    super.serverMessage,
+    super.details,
+    super.statusCode = 409,
+  });
+
+  @override
+  FailureKind get kind => FailureKind.conflict;
 }
 
 class NetworkException extends AppException {

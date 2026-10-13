@@ -19,6 +19,7 @@ class AppFailure {
     FailureKind.forbidden,
     FailureKind.notFound,
     FailureKind.validation,
+    FailureKind.conflict,
   };
 
   factory AppFailure.fromException(Object error) {

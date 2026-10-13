@@ -1,8 +1,7 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
-
 import 'package:client/core/errors/app_exception.dart';
+import 'package:dio/dio.dart';
 
 class DioErrorHandler {
   DioErrorHandler._();
@@ -48,12 +47,11 @@ class DioErrorHandler {
       message = data.trim();
     } else if (data is Map<String, dynamic>) {
       message =
-          data['Message'] as String? ??
-          data['title'] as String? ??
-          data['Detail'] as String?;
-      details = data['Details'] as String?;
+          (data['Message'] ?? data['message']) as String? ??
+          (data['Detail'] ?? data['detail']) as String?;
+      details = (data['Details'] ?? data['details']) as String?;
 
-      final errors = data['errors'];
+      final errors = data['errors'] ?? data['Errors'];
       if (errors is Map<String, dynamic>) {
         final firstList = errors.values.firstOrNull;
         if (firstList is List && firstList.isNotEmpty) {
@@ -98,6 +96,12 @@ class DioErrorHandler {
         );
       case 404:
         return NotFoundException(
+          message: finalMessage,
+          serverMessage: serverMessage,
+          details: details,
+        );
+      case 409:
+        return ConflictException(
           message: finalMessage,
           serverMessage: serverMessage,
           details: details,
