@@ -68,14 +68,11 @@ class ProjectsFilterBar extends StatelessWidget {
                   },
                   selectedColor: AppColors.electricVioletContainer,
                   labelStyle: theme.textTheme.labelMedium?.copyWith(
-                    color: isSelected
-                        ? AppColors.pureWhite
-                        : theme.colorScheme.onSurfaceVariant,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   ),
                   backgroundColor: theme.colorScheme.surfaceContainerLow,
                   shape: RoundedRectangleBorder(
-                    borderRadius: AppRadius.xl,
+                    borderRadius: AppRadius.md,
                     side: BorderSide(
                       color: isSelected
                           ? AppColors.electricVioletContainer

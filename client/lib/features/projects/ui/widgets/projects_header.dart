@@ -53,7 +53,6 @@ class ProjectsHeader extends StatelessWidget {
                       l10n.projectsTitle,
                       style: theme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.w700,
-                        letterSpacing: -0.5,
                       ),
                     ),
                     AppSpacing.gapHXs,

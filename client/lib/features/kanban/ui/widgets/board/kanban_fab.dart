@@ -1,5 +1,4 @@
 import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/kanban/ui/widgets/voice/voice_task_fab.dart';
 import 'package:flutter/material.dart';
@@ -36,15 +35,8 @@ class KanbanFab extends StatelessWidget {
         ],
         FloatingActionButton.extended(
           onPressed: onPressed,
-          backgroundColor: AppColors.electricViolet,
-          foregroundColor: AppColors.textOnPrimary,
           icon: const Icon(Icons.add_rounded),
-          label: Text(
-            l10n.newTask,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              fontWeight: FontWeight.w600,
-            ),
-          ),
+          label: Text(l10n.newTask),
         ),
       ],
     );
