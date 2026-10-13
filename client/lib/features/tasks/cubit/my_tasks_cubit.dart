@@ -1,5 +1,3 @@
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/features/tasks/cubit/my_tasks_state.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
@@ -7,6 +5,7 @@ import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/data/models/update_task_request.dart';
 import 'package:client/features/tasks/data/task_repository.dart';
+import 'package:injectable/injectable.dart';
 
 @injectable
 class MyTasksCubit extends SafeActionCubit<MyTasksState> {

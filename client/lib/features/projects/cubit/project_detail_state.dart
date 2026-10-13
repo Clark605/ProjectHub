@@ -1,6 +1,6 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'project_detail_state.freezed.dart';
 

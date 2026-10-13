@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
+import 'package:flutter/material.dart';
 
 enum ActivitySortOrder { newestFirst, oldestFirst }
 

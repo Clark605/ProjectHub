@@ -1,8 +1,6 @@
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/breakpoints.dart';
 import 'package:client/core/widgets/app_error_state.dart';
@@ -12,6 +10,7 @@ import 'package:client/features/kanban/ui/widgets/board/kanban_desktop_board.dar
 import 'package:client/features/kanban/ui/widgets/board/kanban_empty_state.dart';
 import 'package:client/features/kanban/ui/widgets/board/kanban_mobile_board.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:flutter/material.dart';
 
 class KanbanBoardBody extends StatelessWidget {
   final KanbanState state;
@@ -41,6 +40,7 @@ class KanbanBoardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l10n = context.l10n;
 
     return state.when(
@@ -77,7 +77,9 @@ class KanbanBoardBody extends StatelessWidget {
                   AppSpacing.gapHMd,
                   Text(
                     l10n.noTasksMatchFilters,
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   AppSpacing.gapHMd,
                   OutlinedButton(

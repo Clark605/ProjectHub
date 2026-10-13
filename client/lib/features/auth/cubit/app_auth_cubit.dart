@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/user.dart';
+import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class AppAuthCubit extends SafeActionCubit<AppAuthState> {

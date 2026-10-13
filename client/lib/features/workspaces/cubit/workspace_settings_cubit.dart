@@ -1,10 +1,9 @@
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/cubit/safe_action_cubit.dart';
-import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_members_mixin.dart';
+import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
 import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
+import 'package:injectable/injectable.dart';
 
 @injectable
 class WorkspaceSettingsCubit extends SafeActionCubit<WorkspaceSettingsState>

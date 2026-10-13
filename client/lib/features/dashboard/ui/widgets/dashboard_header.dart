@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({super.key});

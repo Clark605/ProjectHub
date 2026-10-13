@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/storage/secure_storage_service.dart';
@@ -16,6 +15,7 @@ import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/task_repository.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 

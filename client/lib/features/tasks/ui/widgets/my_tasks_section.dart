@@ -1,13 +1,12 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/widgets/my_task_list_tile.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class MyTasksSection extends StatelessWidget {
   final String emoji;
@@ -89,7 +88,7 @@ class MyTasksSection extends StatelessWidget {
                   ),
                   child: Text(
                     '${tasks.length}',
-                    style: TextStyle(
+                    style: theme.textTheme.labelSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color:
                           accent ??
@@ -126,7 +125,7 @@ class MyTasksSection extends StatelessWidget {
               ),
               child: Text(
                 l10n.noTasksInSection,
-                style: TextStyle(
+                style: theme.textTheme.bodySmall?.copyWith(
                   color: isDark
                       ? AppColors.textSecondary
                       : AppColors.lightTextSecondary,

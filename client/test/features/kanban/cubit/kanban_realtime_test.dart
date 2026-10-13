@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/network/signalr_events.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
@@ -9,6 +7,8 @@ import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mock_repositories.dart';
 

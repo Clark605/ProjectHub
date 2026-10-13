@@ -1215,4 +1215,8 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get serverErrorMessage =>
       'حدث خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً.';
+
+  @override
+  String get conflictErrorMessage =>
+      'حدث تعارض مع الحالة الحالية للمورد. يرجى التحديث والمحاولة مرة أخرى.';
 }

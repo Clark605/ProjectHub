@@ -1,15 +1,14 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_durations.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
+import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
-import 'package:client/features/tasks/cubit/voice_task_state.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
-import 'package:client/core/theme/app_durations.dart';
 
 class VoiceListeningOverlay extends StatelessWidget {
   final VoidCallback onCancel;
@@ -88,7 +87,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                   isParsing
                       ? (l10n.voiceTaskStructuring)
                       : (l10n.voiceTaskListening),
-                  style: TextStyle(
+                  style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: theme.colorScheme.onSurface,
                   ),
@@ -116,7 +115,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                       recognizedText.isEmpty
                           ? (l10n.voiceTaskPlaceholder)
                           : recognizedText,
-                      style: TextStyle(
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         color: recognizedText.isEmpty
                             ? theme.colorScheme.onSurfaceVariant
                             : theme.colorScheme.onSurface,
@@ -141,7 +140,7 @@ class VoiceListeningOverlay extends StatelessWidget {
                         onPressed: onCancel,
                         child: Text(
                           l10n.voiceTaskCancel,
-                          style: TextStyle(
+                          style: theme.textTheme.labelLarge?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w500,
                           ),

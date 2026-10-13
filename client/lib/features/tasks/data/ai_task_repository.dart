@@ -1,7 +1,6 @@
-import 'package:injectable/injectable.dart';
-
 import 'package:client/features/tasks/data/ai_task_remote_data_source.dart';
 import 'package:client/features/tasks/data/models/parsed_task_draft_dto.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class AiTaskRepository {
   Future<ParsedTaskDraftDto> parseTaskFromText({

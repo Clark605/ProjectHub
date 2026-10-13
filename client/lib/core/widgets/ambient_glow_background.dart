@@ -1,8 +1,9 @@
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
+
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/widgets/ambient_glow_state.dart';
 import 'package:client/core/widgets/ambient_glow_painter.dart';
+import 'package:client/core/widgets/ambient_glow_state.dart';
+import 'package:flutter/material.dart';
 
 class AmbientGlowBackground extends StatefulWidget {
   const AmbientGlowBackground({

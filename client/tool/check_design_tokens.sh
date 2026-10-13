@@ -25,7 +25,7 @@ run_check() {
       matches=$(rg -n -U "$pattern" lib/ --glob '!**/core/theme/**' || true)
       ;;
     l10n)
-      matches=$(rg -n -U "$pattern" lib/ --glob '!**/core/l10n/**' --glob '!**/l10n/**' || true)
+      matches=$(rg -n -U "$pattern" lib/ --glob '!**/core/extensions/**' --glob '!**/core/l10n/**' --glob '!**/l10n/**' || true)
       ;;
     *)
       matches=$(rg -n -U "$pattern" lib/ --glob '!**/core/theme/**' --glob '!**/core/dialog/**' || true)
@@ -84,6 +84,7 @@ run_check "AppLocalizations.of( outside core/l10n" "AppLocalizations\.of\(" "l10
 
 # 11. Raw dialogs/sheets/snackbars outside core/theme and core/dialog
 run_check "showDialog( outside core/dialog" "showDialog\(" "default"
+run_check "DialogRoute< outside core/dialog" "DialogRoute<" "default"
 run_check "showModalBottomSheet( outside core/dialog" "showModalBottomSheet\(" "default"
 run_check "AlertDialog( outside core/dialog" "AlertDialog\(" "default"
 run_check "ScaffoldMessenger outside core/dialog" "ScaffoldMessenger" "default"

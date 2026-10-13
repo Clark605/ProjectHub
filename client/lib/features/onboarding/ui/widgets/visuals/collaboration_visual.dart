@@ -1,11 +1,13 @@
+import 'dart:math' as math;
+
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_durations.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_typography.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -355,7 +357,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
       child: Center(
         child: Text(
           initials,
-          style: const TextStyle(
+          style: Theme.of(context).textTheme.micro.copyWith(
             fontWeight: FontWeight.w800,
             color: AppColors.pureWhite,
           ),
@@ -401,7 +403,7 @@ class _CollaborationVisualState extends State<CollaborationVisual>
               ),
               child: Text(
                 name,
-                style: const TextStyle(
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: AppColors.onElectricVioletContainer,
                   fontWeight: FontWeight.w800,
                 ),

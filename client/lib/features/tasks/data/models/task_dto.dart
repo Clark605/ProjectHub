@@ -1,8 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'task_dto.freezed.dart';
 part 'task_dto.g.dart';

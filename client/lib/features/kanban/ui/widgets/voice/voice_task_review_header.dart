@@ -1,10 +1,9 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class VoiceTaskReviewHeader extends StatelessWidget {
   final VoidCallback onClose;
@@ -45,7 +44,7 @@ class VoiceTaskReviewHeader extends StatelessWidget {
               AppSpacing.gapWXs,
               Text(
                 l10n.voiceTaskAiDraftPreview,
-                style: TextStyle(
+                style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: badgeColor,
                 ),

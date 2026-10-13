@@ -1,9 +1,8 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/data/task_filter.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'kanban_state.freezed.dart';
 

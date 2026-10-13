@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:injectable/injectable.dart';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/storage/prefs_service.dart';
@@ -8,6 +7,7 @@ import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
+import 'package:injectable/injectable.dart';
 
 @lazySingleton
 class WorkspaceContextCubit extends SafeActionCubit<WorkspaceContextState> {

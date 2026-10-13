@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:client/core/widgets/app_async_state_wrapper.dart';
 import 'package:client/core/widgets/app_empty_state.dart';
 import 'package:client/core/widgets/app_error_state.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   Widget buildTestApp(Widget child) {

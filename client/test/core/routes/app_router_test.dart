@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:client/core/routes/app_router.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/features/projects/cubit/project_detail_cubit.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/ui/project_detail_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 class _MockBuildContext extends Mock implements BuildContext {}
 

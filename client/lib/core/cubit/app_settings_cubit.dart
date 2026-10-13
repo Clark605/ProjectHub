@@ -1,8 +1,8 @@
+import 'package:client/core/cubit/app_settings_state.dart';
+import 'package:client/core/storage/prefs_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:client/core/storage/prefs_service.dart';
-import 'package:client/core/cubit/app_settings_state.dart';
 
 @lazySingleton
 class AppSettingsCubit extends Cubit<AppSettingsState> {

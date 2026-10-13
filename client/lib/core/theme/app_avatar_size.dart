@@ -8,9 +8,6 @@ class AppAvatarSize {
   /// 24px — Small avatar used in task cards, compact lists, and dense footers.
   static const double sm = 24.0;
 
-  /// 28px — Compact avatar used in presence sheets, comments, and activity tiles.
-  static const double compact = 28.0;
-
   /// 32px — Standard medium avatar used in user profiles and navigation bars.
   static const double md = 32.0;
 

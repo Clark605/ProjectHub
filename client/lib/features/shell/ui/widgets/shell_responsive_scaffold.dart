@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:client/features/shell/ui/widgets/mobile_bottom_nav.dart';
 import 'package:client/features/shell/ui/widgets/shell_top_bar.dart';
 import 'package:client/features/shell/ui/widgets/sidebar.dart';
 import 'package:client/features/shell/ui/widgets/tablet_navigation_rail.dart';
+import 'package:flutter/material.dart';
 
 class ShellResponsiveScaffold extends StatefulWidget {
   final int selectedIndex;

@@ -1,6 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:client/features/projects/data/models/project_status.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'project_dto.freezed.dart';
 part 'project_dto.g.dart';

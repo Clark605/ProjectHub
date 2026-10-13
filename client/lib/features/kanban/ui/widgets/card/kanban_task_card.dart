@@ -1,9 +1,8 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/ui/widgets/board/kanban_screen_actions.dart';
 import 'package:client/features/kanban/ui/widgets/card/kanban_task_card_footer.dart';
@@ -11,8 +10,8 @@ import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class KanbanTaskCard extends StatelessWidget {
   final TaskDto task;
@@ -199,7 +198,7 @@ class KanbanTaskCard extends StatelessWidget {
                                       AppSpacing.gapWSm,
                                       Text(
                                         l10n.delete,
-                                        style: const TextStyle(
+                                        style: theme.textTheme.bodyMedium?.copyWith(
                                           color: AppColors.error,
                                         ),
                                       ),

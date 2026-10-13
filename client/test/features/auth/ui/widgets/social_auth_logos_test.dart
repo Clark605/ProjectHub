@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:client/features/auth/ui/widgets/google_logo.dart';
 import 'package:client/features/auth/ui/widgets/github_logo.dart';
+import 'package:client/features/auth/ui/widgets/google_logo.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Social Auth Logos', () {

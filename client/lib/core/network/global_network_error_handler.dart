@@ -1,11 +1,13 @@
 import 'dart:async';
+
+import 'package:client/core/errors/app_failure.dart';
 import 'package:dio/dio.dart';
 
 class GlobalNetworkErrorHandler extends Interceptor {
   const GlobalNetworkErrorHandler();
 
-  static final _errorStreamController = StreamController<String>.broadcast();
-  static Stream<String> get onNetworkError => _errorStreamController.stream;
+  static final _errorStreamController = StreamController<AppFailure>.broadcast();
+  static Stream<AppFailure> get onNetworkError => _errorStreamController.stream;
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
@@ -23,7 +25,7 @@ class GlobalNetworkErrorHandler extends Interceptor {
 
     if (isConnectionFailure) {
       _errorStreamController.add(
-        'Unable to connect to the server. Please check that it is running.',
+        const AppFailure(kind: FailureKind.network),
       );
     }
 

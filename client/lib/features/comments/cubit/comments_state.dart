@@ -1,7 +1,6 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'comments_state.freezed.dart';
 

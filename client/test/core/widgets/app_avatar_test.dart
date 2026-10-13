@@ -1,9 +1,14 @@
+import 'package:client/core/theme/app_avatar_size.dart';
+import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/core/theme/light_theme.dart';
+import 'package:client/core/widgets/app_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:client/core/theme/app_avatar_size.dart';
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:client/core/widgets/app_avatar.dart';
+Widget _buildTestApp(Widget child) => MaterialApp(
+  theme: buildLightTheme(),
+  home: Scaffold(body: child),
+);
 
 void main() {
   group('AppAvatar', () {
@@ -11,9 +16,7 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: AppAvatar(name: 'Clark')),
-        ),
+        _buildTestApp(const AppAvatar(name: 'Clark')),
       );
 
       expect(find.text('C'), findsOneWidget);
@@ -23,9 +26,7 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: AppAvatar(name: 'Clark Kent')),
-        ),
+        _buildTestApp(const AppAvatar(name: 'Clark Kent')),
       );
 
       expect(find.text('CK'), findsOneWidget);
@@ -35,9 +36,7 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: AppAvatar(name: '   ')),
-        ),
+        _buildTestApp(const AppAvatar(name: '   ')),
       );
 
       expect(find.text('?'), findsOneWidget);
@@ -47,9 +46,7 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(body: AppAvatar(name: '')),
-        ),
+        _buildTestApp(const AppAvatar(name: '')),
       );
 
       expect(find.text('?'), findsOneWidget);
@@ -59,14 +56,12 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: Column(
-              children: [
-                AppAvatar(key: Key('avatar1'), name: 'Alice Bob'),
-                AppAvatar(key: Key('avatar2'), name: 'Alice Bob'),
-              ],
-            ),
+        _buildTestApp(
+          const Column(
+            children: [
+              AppAvatar(key: Key('avatar1'), name: 'Alice Bob'),
+              AppAvatar(key: Key('avatar2'), name: 'Alice Bob'),
+            ],
           ),
         ),
       );
@@ -94,23 +89,21 @@ void main() {
       'caller textStyle with only fontWeight keeps computed size and color',
       (tester) async {
         await tester.pumpWidget(
-          const MaterialApp(
-            home: Scaffold(
-              body: Column(
-                children: [
-                  AppAvatar(
-                    key: Key('defaultAvatar'),
-                    name: 'Diana Prince',
-                    size: 28,
-                  ),
-                  AppAvatar(
-                    key: Key('customWeightAvatar'),
-                    name: 'Diana Prince',
-                    size: 28,
-                    textStyle: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                ],
-              ),
+          _buildTestApp(
+            const Column(
+              children: [
+                AppAvatar(
+                  key: Key('defaultAvatar'),
+                  name: 'Diana Prince',
+                  size: AppAvatarSize.md,
+                ),
+                AppAvatar(
+                  key: Key('customWeightAvatar'),
+                  name: 'Diana Prince',
+                  size: AppAvatarSize.md,
+                  textStyle: TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ],
             ),
           ),
         );
@@ -129,7 +122,7 @@ void main() {
         );
 
         expect(customText.style?.fontWeight, FontWeight.w600);
-        expect(customText.style?.fontSize, equals(28 * 0.4));
+        expect(customText.style?.fontSize, equals(AppAvatarSize.md * 0.4));
         expect(customText.style?.fontSize, equals(defaultText.style?.fontSize));
         expect(customText.style?.color, isNotNull);
         expect(customText.style?.color, equals(defaultText.style?.color));
@@ -140,17 +133,15 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: Column(
-              children: [
-                AppAvatar.unassigned(key: Key('defaultUnassigned')),
-                AppAvatar.unassigned(
-                  key: Key('largeUnassigned'),
-                  size: AppAvatarSize.lg,
-                ),
-              ],
-            ),
+        _buildTestApp(
+          const Column(
+            children: [
+              AppAvatar.unassigned(key: Key('defaultUnassigned')),
+              AppAvatar.unassigned(
+                key: Key('largeUnassigned'),
+                size: AppAvatarSize.lg,
+              ),
+            ],
           ),
         ),
       );

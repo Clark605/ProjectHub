@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/profile/ui/widgets/faq_section.dart';
@@ -9,8 +8,8 @@ import 'package:client/features/profile/ui/widgets/logout_card.dart';
 import 'package:client/features/profile/ui/widgets/profile_header_card.dart';
 import 'package:client/features/profile/ui/widgets/theme_mode_selector.dart';
 import 'package:client/features/profile/ui/widgets/version_info_tile.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

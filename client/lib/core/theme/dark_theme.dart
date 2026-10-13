@@ -10,7 +10,7 @@ ThemeData buildDarkTheme([Locale? locale]) {
 
   return ThemeData(
     useMaterial3: true,
-    extensions: const [AppColorsExtension.dark],
+    extensions: [AppColorsExtension.dark],
     brightness: Brightness.dark,
     fontFamily: fontFamily,
     fontFamilyFallback: fontFallback,

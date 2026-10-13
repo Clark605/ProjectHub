@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/routes/route_providers.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
+import 'package:flutter/material.dart';
 
 class AppRouter {
   AppRouter._();

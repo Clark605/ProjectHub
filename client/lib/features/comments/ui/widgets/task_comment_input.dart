@@ -1,8 +1,8 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class TaskCommentInput extends StatefulWidget {
   const TaskCommentInput({
@@ -55,10 +55,14 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
               controller: _controller,
               minLines: 1,
               maxLines: 3,
-              style: TextStyle(color: theme.colorScheme.onSurface),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
               decoration: InputDecoration(
                 hintText: l10n.writeAComment,
-                hintStyle: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
               ),
               onSubmitted: (_) => _submit(),
             ),

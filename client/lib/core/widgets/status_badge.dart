@@ -1,7 +1,7 @@
-import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class StatusBadge extends StatelessWidget {
   const StatusBadge({
@@ -27,7 +27,10 @@ class StatusBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(color: color, fontWeight: FontWeight.w600),
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+          color: color,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }

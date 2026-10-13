@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 enum ShellTab {
   dashboard(Icons.dashboard_outlined, Icons.dashboard_rounded, 'Dashboard'),

@@ -10,7 +10,7 @@ ThemeData buildLightTheme([Locale? locale]) {
 
   return ThemeData(
     useMaterial3: true,
-    extensions: const [AppColorsExtension.light],
+    extensions: [AppColorsExtension.light],
     brightness: Brightness.light,
     fontFamily: fontFamily,
     fontFamilyFallback: fontFallback,

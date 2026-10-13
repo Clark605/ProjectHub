@@ -1,10 +1,9 @@
-import 'package:dio/dio.dart';
-
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/dio_error_handler.dart';
 import 'package:client/core/utils/app_logger.dart';
 import 'package:client/features/workspaces/data/models/add_member_request.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:dio/dio.dart';
 
 /// Mixin providing workspace members management and caching.
 mixin WorkspaceMembersMixin {

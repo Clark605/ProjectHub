@@ -1,12 +1,13 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_durations.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/app_typography.dart';
+import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
-import 'package:client/core/theme/app_durations.dart';
 
 class KanbanVisual extends StatefulWidget {
   const KanbanVisual({super.key});
@@ -294,7 +295,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                                     isDoneState
                                         ? (l10n.statusDone.toUpperCase())
                                         : 'SYNC',
-                                    style: TextStyle(
+                                    style: theme.textTheme.labelSmall?.copyWith(
                                       color: isDoneState
                                           ? AppColors.success
                                           : AppColors.electricViolet,
@@ -309,10 +310,10 @@ class _KanbanVisualState extends State<KanbanVisual>
                                     shape: BoxShape.circle,
                                     color: AppColors.skyBlue,
                                   ),
-                                  child: const Center(
+                                  child: Center(
                                     child: Text(
                                       'JD',
-                                      style: TextStyle(
+                                      style: theme.textTheme.labelSmall?.copyWith(
                                         fontWeight: FontWeight.w800,
                                         color: AppColors.lightTextPrimary,
                                       ),
@@ -490,7 +491,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                 ),
                 child: Text(
                   tag,
-                  style: TextStyle(
+                  style: theme.textTheme.labelSmall?.copyWith(
                     color: tagColor,
                     fontWeight: FontWeight.w800,
                   ),
@@ -506,7 +507,7 @@ class _KanbanVisualState extends State<KanbanVisual>
                 child: Center(
                   child: Text(
                     avatarInitials,
-                    style: const TextStyle(
+                    style: theme.textTheme.micro.copyWith(
                       fontWeight: FontWeight.w800,
                       color: AppColors.pureWhite,
                     ),

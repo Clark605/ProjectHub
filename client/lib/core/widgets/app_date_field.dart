@@ -1,8 +1,8 @@
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class AppDateField extends StatelessWidget {
   const AppDateField({
@@ -51,12 +51,13 @@ class AppDateField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         if (label != null) ...[
-          Text(label!, style: Theme.of(context).textTheme.labelMedium),
+          Text(label!, style: theme.textTheme.labelMedium),
           AppSpacing.gapHSm,
         ],
         InkWell(
@@ -86,7 +87,7 @@ class AppDateField extends StatelessWidget {
                   selectedDate != null
                       ? _formatDate(selectedDate!)
                       : placeholder,
-                  style: TextStyle(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     color: selectedDate != null
                         ? AppColors.textPrimary
                         : AppColors.textSecondary,

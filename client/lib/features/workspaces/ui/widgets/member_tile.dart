@@ -1,16 +1,15 @@
+import 'package:client/core/dialog/app_confirm_dialog.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:client/core/dialog/app_confirm_dialog.dart';
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_avatar_size.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MemberTile extends StatelessWidget {
   final MemberDto member;
@@ -82,7 +81,7 @@ class MemberTile extends StatelessWidget {
       ),
       title: Text(
         member.name,
-        style: TextStyle(
+        style: theme.textTheme.bodyMedium?.copyWith(
           fontWeight: FontWeight.w600,
           color: theme.colorScheme.onSurface,
         ),
@@ -91,7 +90,9 @@ class MemberTile extends StatelessWidget {
       ),
       subtitle: Text(
         member.email,
-        style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+        style: theme.textTheme.bodySmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -116,7 +117,7 @@ class MemberTile extends StatelessWidget {
             ),
             child: Text(
               isOwner ? l10n.roleOwner : l10n.roleMember,
-              style: TextStyle(
+              style: theme.textTheme.labelSmall?.copyWith(
                 fontWeight: FontWeight.w700,
                 color: isOwner
                     ? primaryColor
@@ -184,7 +185,9 @@ class MemberTile extends StatelessWidget {
                     AppSpacing.gapWSm,
                     Text(
                       l10n.removeMember,
-                      style: const TextStyle(color: AppColors.error),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.error,
+                      ),
                     ),
                   ],
                 ),

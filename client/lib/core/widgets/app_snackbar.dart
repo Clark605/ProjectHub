@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:flutter/material.dart';
 
 /// Standardized SnackBar functions across the application.
 void showAppSnackBar(
@@ -55,7 +55,10 @@ extension AppSnackBarExtension on BuildContext {
     messenger.hideCurrentSnackBar();
     messenger.showSnackBar(
       SnackBar(
-        content: Text(message, style: TextStyle(color: textColor)),
+        content: Text(
+          message,
+          style: Theme.of(this).textTheme.bodyMedium?.copyWith(color: textColor),
+        ),
         backgroundColor: backgroundColor,
         behavior: SnackBarBehavior.floating,
         shape: const RoundedRectangleBorder(borderRadius: AppRadius.sm),

@@ -1,9 +1,7 @@
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-
-import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:flutter/material.dart';
 
 class KanbanAssigneeFilterMenu extends StatelessWidget {
   final String? selectedAssignee;
@@ -39,7 +37,7 @@ class KanbanAssigneeFilterMenu extends StatelessWidget {
         avatar: const Icon(Icons.person_outline_rounded, size: AppIconSize.sm),
         label: Text(
           _resolveAssigneeLabel(selectedAssignee, l10n),
-          style: TextStyle(
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
           ),
         ),

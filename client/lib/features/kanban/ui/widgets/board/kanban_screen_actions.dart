@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
@@ -14,6 +11,8 @@ import 'package:client/features/tasks/ui/widgets/task_detail_sheet.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Helper actions for modal sheets and navigation in KanbanScreen.
 class KanbanScreenActions {

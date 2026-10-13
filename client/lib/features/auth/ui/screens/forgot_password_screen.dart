@@ -1,20 +1,19 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/utils/validators.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:client/core/widgets/app_button.dart';
+import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/auth/cubit/forgot_password_cubit.dart';
 import 'package:client/features/auth/cubit/forgot_password_state.dart';
 import 'package:client/features/auth/ui/widgets/auth_back_to_login_link.dart';
-import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/auth/ui/widgets/auth_header.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});

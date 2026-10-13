@@ -1,8 +1,8 @@
+import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_durations.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/theme/app_spacing.dart';
-import 'package:client/core/theme/app_durations.dart';
 
 class AuthFooterLink extends StatelessWidget {
   const AuthFooterLink({

@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:client/features/dashboard/data/models/workspace_dashboard_dto.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('WorkspaceDashboardDto', () {

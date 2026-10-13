@@ -1,8 +1,8 @@
-import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/app_durations.dart';
+import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class AppErrorBanner extends StatelessWidget {
   const AppErrorBanner({super.key, required this.errorMessage, this.onDismiss});
@@ -12,6 +12,7 @@ class AppErrorBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final hasError = errorMessage != null && errorMessage!.isNotEmpty;
 
     return AnimatedSwitcher(
@@ -44,7 +45,9 @@ class AppErrorBanner extends StatelessWidget {
                   Expanded(
                     child: Text(
                       errorMessage!,
-                      style: const TextStyle(color: AppColors.pureWhite),
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: AppColors.pureWhite,
+                      ),
                     ),
                   ),
                   if (onDismiss != null)

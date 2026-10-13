@@ -1,6 +1,6 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'forgot_password_state.freezed.dart';
 

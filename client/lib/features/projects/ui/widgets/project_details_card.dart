@@ -1,16 +1,15 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_button.dart';
-import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/core/widgets/app_date_field.dart';
+import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/projects/cubit/project_detail_cubit.dart';
 import 'package:client/features/projects/cubit/project_detail_state.dart';
 import 'package:client/features/projects/data/models/update_project_request.dart';
 import 'package:client/features/projects/ui/widgets/project_status_dropdown.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProjectDetailsCard extends StatefulWidget {
   final bool canEdit;

@@ -1,11 +1,10 @@
 import 'dart:async';
 
+import 'package:client/core/constants/api_constants.dart';
+import 'package:client/core/storage/secure_storage_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
-
-import 'package:client/core/constants/api_constants.dart';
-import 'package:client/core/storage/secure_storage_service.dart';
 
 @lazySingleton
 class AuthInterceptor extends Interceptor {

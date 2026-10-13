@@ -1,8 +1,7 @@
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/dialog/dialog.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
@@ -10,8 +9,8 @@ import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_card.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WorkspaceSwitcherSheet extends StatefulWidget {
   const WorkspaceSwitcherSheet({super.key});

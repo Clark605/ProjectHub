@@ -1,8 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/di/injection.dart';
@@ -26,6 +22,10 @@ import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../helpers/mock_repositories.dart';
 

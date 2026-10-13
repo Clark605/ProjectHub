@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/theme/light_theme.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/ui/kanban_screen.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mock_repositories.dart';
 
@@ -35,6 +35,7 @@ void main() {
         );
 
     return MaterialApp(
+      theme: buildLightTheme(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routes: {
@@ -116,6 +117,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: KanbanScreen(
@@ -160,6 +162,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: KanbanScreen(
@@ -211,6 +214,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: KanbanScreen(
@@ -252,6 +256,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           routes: {
@@ -320,6 +325,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           routes: {

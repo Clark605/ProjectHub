@@ -1,19 +1,19 @@
-import 'package:client/core/theme/app_radius.dart';
 import 'dart:async';
-import 'package:client/features/auth/cubit/app_auth_state.dart';
-import 'package:flutter/material.dart';
 
-import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/core/network/signalr_events.dart';
 import 'package:client/core/network/signalr_service.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/features/auth/cubit/app_auth_cubit.dart';
+import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_avatar_item.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_sheet.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:client/core/theme/app_avatar_size.dart';
-import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspacePresenceAvatars extends StatefulWidget {
   const WorkspacePresenceAvatars({
@@ -158,7 +158,7 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
             child: Center(
               child: Text(
                 '+$overflowCount',
-                style: TextStyle(
+                style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w700,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

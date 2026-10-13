@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/dialog/app_confirm_dialog.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:flutter/material.dart';
 
 class DeleteTaskDialog extends StatelessWidget {
   const DeleteTaskDialog({super.key, required this.taskTitle});

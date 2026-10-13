@@ -1,10 +1,10 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
 
 class TermsCheckbox extends StatelessWidget {
   const TermsCheckbox({
@@ -58,7 +58,7 @@ class TermsCheckbox extends StatelessWidget {
                     TextSpan(text: l10n.termsAndPrivacyPrefix),
                     TextSpan(
                       text: l10n.termsOfService,
-                      style: const TextStyle(
+                      style: theme.textTheme.bodySmall?.copyWith(
                         color: AppColors.skyBlue,
                         fontWeight: FontWeight.w600,
                       ),
@@ -68,7 +68,7 @@ class TermsCheckbox extends StatelessWidget {
                     TextSpan(text: l10n.and),
                     TextSpan(
                       text: l10n.privacyPolicy,
-                      style: const TextStyle(
+                      style: theme.textTheme.bodySmall?.copyWith(
                         color: AppColors.skyBlue,
                         fontWeight: FontWeight.w600,
                       ),

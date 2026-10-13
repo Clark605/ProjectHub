@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/breakpoints.dart';
@@ -13,6 +10,9 @@ import 'package:client/features/dashboard/ui/widgets/focus_tasks_card.dart';
 import 'package:client/features/dashboard/ui/widgets/recent_activity_card.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
+import 'package:client/features/workspaces/ui/widgets/active_workspace_listener.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardScreen extends StatelessWidget {
   final VoidCallback? onNavigateToProjects;
@@ -32,20 +32,16 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<WorkspaceContextCubit, WorkspaceContextState>(
-      listenWhen: (previous, current) =>
-          previous.whenOrNull(loaded: (_, a) => a.id) !=
-          current.whenOrNull(loaded: (_, a) => a.id),
-      listener: (context, wsState) {
-        final activeId = wsState.whenOrNull(loaded: (_, a) => a.id);
+    return ActiveWorkspaceListener(
+      onWorkspaceChanged: (context, activeId) {
         if (activeId != null) {
           context.read<DashboardCubit>().loadDashboard(activeId);
         }
       },
       child: BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
-          final wsState = context.watch<WorkspaceContextCubit>().state;
-          final activeWorkspaceId = wsState.whenOrNull(loaded: (_, a) => a.id);
+          final activeWorkspaceId =
+              context.watch<WorkspaceContextCubit>().state.activeWorkspaceId;
 
           return AppAsyncStateWrapper(
             onRefresh: () => _refresh(context, activeWorkspaceId),

@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 extension TaskStatusUI on TaskStatus {
   String localizedName(AppLocalizations l10n) {

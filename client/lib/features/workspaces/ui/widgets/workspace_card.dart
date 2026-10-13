@@ -1,11 +1,10 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class WorkspaceCard extends StatelessWidget {
   final WorkspaceDto workspace;
@@ -139,7 +138,7 @@ class WorkspaceCard extends StatelessWidget {
                 ),
                 child: Text(
                   isOwner ? l10n.roleOwner : l10n.roleMember,
-                  style: TextStyle(
+                  style: theme.textTheme.labelSmall?.copyWith(
                     color: isOwner
                         ? theme.colorScheme.primary
                         : theme.colorScheme.secondary,

@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/features/kanban/ui/widgets/voice/voice_task_fab.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/features/kanban/ui/widgets/voice/voice_task_fab.dart';
+import 'package:flutter/material.dart';
 
 class KanbanFab extends StatelessWidget {
   const KanbanFab({
@@ -42,7 +41,9 @@ class KanbanFab extends StatelessWidget {
           icon: const Icon(Icons.add_rounded),
           label: Text(
             l10n.newTask,
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ],

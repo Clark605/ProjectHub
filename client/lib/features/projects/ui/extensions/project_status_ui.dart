@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/projects/data/models/project_status.dart';
+import 'package:flutter/material.dart';
 
 extension ProjectStatusUI on ProjectStatus {
   Color toColor([BuildContext? context]) {

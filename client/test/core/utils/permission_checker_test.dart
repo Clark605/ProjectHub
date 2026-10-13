@@ -1,6 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:client/core/utils/permission_checker.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('PermissionChecker Project Permissions', () {

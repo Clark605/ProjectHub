@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:client/core/widgets/app_async_state_wrapper.dart';
@@ -13,6 +10,8 @@ import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/data/task_filter.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class KanbanViewBody extends StatelessWidget {
   final KanbanState state;

@@ -1,13 +1,13 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
-import 'package:injectable/injectable.dart';
-import 'package:signalr_netcore/signalr_client.dart';
 
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/network/signalr_events.dart';
 import 'package:client/core/storage/secure_storage_service.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
+import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
+import 'package:signalr_netcore/signalr_client.dart';
 
 enum RealtimeStatus { connected, reconnecting, disconnected }
 

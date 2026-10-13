@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/theme/app_colors.dart';
+import 'package:flutter/material.dart';
 
 /// Semantic colors ThemeExtension providing adaptive colors without manual `isDark` branching.
 @immutable
@@ -10,6 +9,9 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   final Color subtleBorder;
   final Color textSecondary;
   final double badgeAlpha;
+  final double badgeEmphasisAlpha;
+  final double avatarAlpha;
+  final bool avatarUsesTextPrimary;
 
   const AppColorsExtension({
     required this.subtleSurface,
@@ -17,29 +19,48 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.subtleBorder,
     required this.textSecondary,
     required this.badgeAlpha,
+    required this.badgeEmphasisAlpha,
+    required this.avatarAlpha,
+    required this.avatarUsesTextPrimary,
   });
 
   /// Light theme color role instance.
-  static const AppColorsExtension light = AppColorsExtension(
-    subtleSurface: Color(0x0D000000), // pureBlack with 0.05 alpha
-    subtleSurfaceStrong: Color(0x0F000000), // pureBlack with 0.06 alpha
+  static final AppColorsExtension light = AppColorsExtension(
+    subtleSurface: AppColors.pureBlack.withValues(alpha: 0.05),
+    subtleSurfaceStrong: AppColors.pureBlack.withValues(alpha: 0.06),
     subtleBorder: AppColors.lightBorder,
     textSecondary: AppColors.lightTextSecondary,
     badgeAlpha: 0.12,
+    badgeEmphasisAlpha: 0.15,
+    avatarAlpha: 0.18,
+    avatarUsesTextPrimary: false,
   );
 
   /// Dark theme color role instance.
-  static const AppColorsExtension dark = AppColorsExtension(
-    subtleSurface: Color(0x1AFFFFFF), // pureWhite with 0.1 alpha
-    subtleSurfaceStrong: Color(0x1AFFFFFF), // pureWhite with 0.1 alpha
-    subtleBorder: Color(0x1AFFFFFF), // pureWhite with 0.1 alpha
+  static final AppColorsExtension dark = AppColorsExtension(
+    subtleSurface: AppColors.pureWhite.withValues(alpha: 0.06),
+    subtleSurfaceStrong: AppColors.pureWhite.withValues(alpha: 0.10),
+    subtleBorder: AppColors.border,
     textSecondary: AppColors.textSecondary,
-    badgeAlpha: 0.2,
+    badgeAlpha: 0.20,
+    badgeEmphasisAlpha: 0.28,
+    avatarAlpha: 0.28,
+    avatarUsesTextPrimary: true,
   );
 
   /// Resolves the tinted background fill for status, priority, and due-date badges.
   Color badgeBackground(Color color, {bool emphasis = false}) {
-    return color.withValues(alpha: emphasis ? 0.15 : badgeAlpha);
+    return color.withValues(alpha: emphasis ? badgeEmphasisAlpha : badgeAlpha);
+  }
+
+  /// Resolves the background fill for initials and avatar circles.
+  Color avatarBackground(Color base) {
+    return base.withValues(alpha: avatarAlpha);
+  }
+
+  /// Resolves the text color for avatar initials.
+  Color avatarTextColor(Color base) {
+    return avatarUsesTextPrimary ? AppColors.textPrimary : base;
   }
 
   @override
@@ -49,6 +70,9 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? subtleBorder,
     Color? textSecondary,
     double? badgeAlpha,
+    double? badgeEmphasisAlpha,
+    double? avatarAlpha,
+    bool? avatarUsesTextPrimary,
   }) {
     return AppColorsExtension(
       subtleSurface: subtleSurface ?? this.subtleSurface,
@@ -56,6 +80,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       subtleBorder: subtleBorder ?? this.subtleBorder,
       textSecondary: textSecondary ?? this.textSecondary,
       badgeAlpha: badgeAlpha ?? this.badgeAlpha,
+      badgeEmphasisAlpha: badgeEmphasisAlpha ?? this.badgeEmphasisAlpha,
+      avatarAlpha: avatarAlpha ?? this.avatarAlpha,
+      avatarUsesTextPrimary:
+          avatarUsesTextPrimary ?? this.avatarUsesTextPrimary,
     );
   }
 
@@ -73,6 +101,11 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       textSecondary:
           Color.lerp(textSecondary, other.textSecondary, t) ?? textSecondary,
       badgeAlpha: badgeAlpha + (other.badgeAlpha - badgeAlpha) * t,
+      badgeEmphasisAlpha:
+          badgeEmphasisAlpha + (other.badgeEmphasisAlpha - badgeEmphasisAlpha) * t,
+      avatarAlpha: avatarAlpha + (other.avatarAlpha - avatarAlpha) * t,
+      avatarUsesTextPrimary:
+          t < 0.5 ? avatarUsesTextPrimary : other.avatarUsesTextPrimary,
     );
   }
 
@@ -85,7 +118,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
           subtleSurfaceStrong == other.subtleSurfaceStrong &&
           subtleBorder == other.subtleBorder &&
           textSecondary == other.textSecondary &&
-          badgeAlpha == other.badgeAlpha;
+          badgeAlpha == other.badgeAlpha &&
+          badgeEmphasisAlpha == other.badgeEmphasisAlpha &&
+          avatarAlpha == other.avatarAlpha &&
+          avatarUsesTextPrimary == other.avatarUsesTextPrimary;
 
   @override
   int get hashCode => Object.hash(
@@ -94,5 +130,8 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     subtleBorder,
     textSecondary,
     badgeAlpha,
+    badgeEmphasisAlpha,
+    avatarAlpha,
+    avatarUsesTextPrimary,
   );
 }

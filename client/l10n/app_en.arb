@@ -854,5 +854,9 @@
   "serverErrorMessage": "Something went wrong on our end. Please try again later.",
   "@serverErrorMessage": {
     "description": "Default error message for 5xx server failures"
+  },
+  "conflictErrorMessage": "A conflict occurred with the current state of the resource. Please refresh and try again.",
+  "@conflictErrorMessage": {
+    "description": "Default error message when a 409 Conflict failure has no server message"
   }
 }

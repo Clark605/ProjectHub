@@ -1,12 +1,12 @@
 import 'dart:async';
-import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:client/core/network/signalr_events.dart';
 import 'package:client/features/comments/cubit/comments_cubit.dart';
 import 'package:client/features/comments/cubit/comments_state.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mock_repositories.dart';
 

@@ -1,12 +1,11 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/features/tasks/cubit/my_tasks_cubit.dart';
 import 'package:client/features/tasks/cubit/my_tasks_state.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/update_task_request.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mock_repositories.dart';
 

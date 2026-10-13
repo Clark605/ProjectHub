@@ -1,9 +1,8 @@
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/features/auth/cubit/register_state.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
+import 'package:injectable/injectable.dart';
 
 @injectable
 class RegisterCubit extends SafeActionCubit<RegisterState> {

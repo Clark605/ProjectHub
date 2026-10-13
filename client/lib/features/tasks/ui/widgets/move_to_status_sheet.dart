@@ -1,13 +1,12 @@
+import 'package:client/core/dialog/app_bottom_sheet.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
-import 'package:client/core/dialog/app_bottom_sheet.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class MoveToStatusSheet extends StatelessWidget {
   final TaskDto task;
@@ -134,7 +133,7 @@ class MoveToStatusSheet extends StatelessWidget {
                           ),
                           child: Text(
                             l10n.currentStatus,
-                            style: TextStyle(
+                            style: theme.textTheme.labelSmall?.copyWith(
                               fontWeight: FontWeight.w600,
                               color: status.toColor(),
                             ),

@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/dark_theme.dart';
 import 'package:client/core/theme/light_theme.dart';
 import 'package:client/core/widgets/app_badge.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('AppBadge', () {
@@ -14,8 +13,9 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          theme: buildLightTheme(),
+          home: const Scaffold(
             body: AppBadge(
               icon: Icons.flag_rounded,
               label: 'Urgent',
@@ -39,8 +39,9 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
+        MaterialApp(
+          theme: buildLightTheme(),
+          home: const Scaffold(
             body: AppBadge(
               label: 'Overdue',
               color: AppColors.error,
@@ -122,7 +123,10 @@ void main() {
             (isDark ? AppColorsExtension.dark : AppColorsExtension.light)
                 .badgeBackground(AppColors.error, emphasis: true),
           );
-          expect(decoration.color, AppColors.error.withValues(alpha: 0.15));
+          expect(
+            decoration.color,
+            AppColors.error.withValues(alpha: isDark ? 0.28 : 0.15),
+          );
         }
       },
     );

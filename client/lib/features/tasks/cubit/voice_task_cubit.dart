@@ -1,14 +1,13 @@
 import 'dart:async';
 
-import 'package:injectable/injectable.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
-
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/core/utils/app_logger.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:client/features/tasks/data/ai_task_repository.dart';
+import 'package:injectable/injectable.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 @injectable
 class VoiceTaskCubit extends SafeActionCubit<VoiceTaskState> {

@@ -1,9 +1,10 @@
 import 'dart:math';
+
+import 'package:client/core/utils/app_logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_web_auth_2/flutter_web_auth_2.dart';
 import 'package:injectable/injectable.dart';
-import 'package:client/core/utils/app_logger.dart';
 
 @lazySingleton
 class GithubAuthService {

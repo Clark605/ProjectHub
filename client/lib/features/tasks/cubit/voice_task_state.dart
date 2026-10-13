@@ -1,7 +1,6 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/tasks/data/models/parsed_task_draft_dto.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'voice_task_state.freezed.dart';
 

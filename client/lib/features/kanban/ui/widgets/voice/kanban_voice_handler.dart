@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
-
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
@@ -10,7 +7,9 @@ import 'package:client/features/kanban/ui/widgets/voice/voice_task_review_sheet.
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/cubit/voice_task_state.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/core/extensions/context_extensions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class KanbanVoiceHandler extends StatelessWidget {
   final int projectId;

@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 extension TaskPriorityUI on TaskPriority {
   String localizedName(AppLocalizations l10n) {

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:flutter/material.dart';
 
 /// Reusable geometric status indicator dot (presence, status badge).
 class StatusDot extends StatelessWidget {

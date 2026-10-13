@@ -1,21 +1,21 @@
-import 'package:client/core/theme/app_radius.dart';
-import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/widgets/app_danger_zone.dart';
+import 'package:client/core/widgets/app_error_banner.dart';
+import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
-import 'package:client/core/widgets/app_danger_zone.dart';
+import 'package:client/features/workspaces/ui/widgets/workspace_access_denied_view.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_details_card.dart';
-import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_members_card.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_settings_skeleton.dart';
-import 'package:client/core/widgets/app_snackbar.dart';
-import 'package:client/features/workspaces/ui/widgets/workspace_access_denied_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceSettingsScreen extends StatelessWidget {
   final WorkspaceSettingsCubit? cubit;
@@ -110,7 +110,7 @@ class _ViewState extends State<_View> {
                   ),
                   child: Text(
                     active.name,
-                    style: TextStyle(
+                    style: theme.textTheme.labelSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: theme.colorScheme.primary,
                     ),

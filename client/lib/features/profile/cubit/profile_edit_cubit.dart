@@ -1,8 +1,7 @@
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/profile/cubit/profile_edit_state.dart';
+import 'package:injectable/injectable.dart';
 
 @injectable
 class ProfileEditCubit extends SafeActionCubit<ProfileEditState> {

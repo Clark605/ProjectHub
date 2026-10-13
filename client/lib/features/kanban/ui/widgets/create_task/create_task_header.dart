@@ -1,11 +1,10 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class CreateTaskHeader extends StatelessWidget {
   final TaskStatus selectedStatus;
@@ -55,7 +54,7 @@ class CreateTaskHeader extends StatelessWidget {
               ),
               child: Text(
                 selectedStatus.localizedName(l10n),
-                style: TextStyle(
+                style: theme.textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: selectedStatus.toColor(),
                 ),

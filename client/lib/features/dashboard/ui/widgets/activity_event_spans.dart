@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 String _formatStatusName(String? status, AppLocalizations l10n) {
   if (status == null || status.isEmpty) return '';
@@ -37,8 +36,11 @@ List<InlineSpan> buildActivityEventSpans(
   ThemeData theme,
   AppLocalizations l10n,
 ) {
-  final mutedStyle = TextStyle(color: theme.colorScheme.onSurfaceVariant);
-  final highlightStyle = TextStyle(
+  final baseStyle = theme.textTheme.bodyMedium ?? const TextStyle();
+  final mutedStyle = baseStyle.copyWith(
+    color: theme.colorScheme.onSurfaceVariant,
+  );
+  final highlightStyle = baseStyle.copyWith(
     color: theme.colorScheme.onSurface,
     fontWeight: FontWeight.w600,
   );

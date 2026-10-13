@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/dialog/app_confirm_dialog.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LogoutCard extends StatelessWidget {
   const LogoutCard({super.key});

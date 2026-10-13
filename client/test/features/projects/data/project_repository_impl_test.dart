@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/update_project_request.dart';
 import 'package:client/features/projects/data/project_repository_impl.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 class MockHttpClientAdapter extends Mock implements HttpClientAdapter {}
 

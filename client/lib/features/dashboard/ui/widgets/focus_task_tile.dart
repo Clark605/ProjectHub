@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_badge.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
+import 'package:flutter/material.dart';
 
 class FocusTaskTile extends StatelessWidget {
   final TaskDto task;

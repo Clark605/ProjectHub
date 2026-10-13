@@ -1,6 +1,6 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:client/core/extensions/context_extensions.dart';
 
 class DateFormatter {
   DateFormatter._();

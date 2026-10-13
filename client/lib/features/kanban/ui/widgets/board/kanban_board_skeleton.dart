@@ -1,7 +1,7 @@
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:client/core/theme/app_spacing.dart';
 
 class KanbanBoardSkeleton extends StatelessWidget {
   const KanbanBoardSkeleton({super.key});

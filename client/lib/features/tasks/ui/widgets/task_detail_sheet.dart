@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/dialog/app_bottom_sheet.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/tags/data/tag_repository.dart';
@@ -13,7 +11,8 @@ import 'package:client/features/tasks/ui/widgets/task_detail_edit_form.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_header.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_read_view.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TaskDetailSheet extends StatefulWidget {
   final TaskDto task;

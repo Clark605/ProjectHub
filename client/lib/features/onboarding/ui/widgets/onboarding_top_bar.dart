@@ -1,11 +1,11 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_durations.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
-import 'package:client/core/theme/app_durations.dart';
 
 class OnboardingTopBar extends StatelessWidget {
   final VoidCallback onSkip;
@@ -83,7 +83,7 @@ class OnboardingTopBar extends StatelessWidget {
                 ),
                 child: Text(
                   l10n.skip,
-                  style: const TextStyle(fontWeight: FontWeight.w700),
+                  style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
             ),

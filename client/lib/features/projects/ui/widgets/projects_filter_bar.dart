@@ -1,11 +1,11 @@
-import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProjectsFilterBar extends StatelessWidget {
   const ProjectsFilterBar({super.key});
@@ -67,7 +67,7 @@ class ProjectsFilterBar extends StatelessWidget {
                     }
                   },
                   selectedColor: AppColors.electricVioletContainer,
-                  labelStyle: TextStyle(
+                  labelStyle: theme.textTheme.labelMedium?.copyWith(
                     color: isSelected
                         ? AppColors.pureWhite
                         : theme.colorScheme.onSurfaceVariant,

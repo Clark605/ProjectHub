@@ -1,9 +1,8 @@
-import 'package:injectable/injectable.dart';
-
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/data/tag_remote_data_source.dart';
 import 'package:client/features/tags/data/tag_repository.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
+import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: TagRepository)
 class TagRepositoryImpl implements TagRepository {

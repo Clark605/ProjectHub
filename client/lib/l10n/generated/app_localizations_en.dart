@@ -1220,4 +1220,8 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get serverErrorMessage =>
       'Something went wrong on our end. Please try again later.';
+
+  @override
+  String get conflictErrorMessage =>
+      'A conflict occurred with the current state of the resource. Please refresh and try again.';
 }

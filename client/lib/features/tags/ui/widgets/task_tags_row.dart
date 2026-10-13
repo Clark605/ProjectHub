@@ -1,13 +1,12 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_modal.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class TaskTagsRow extends StatelessWidget {
   const TaskTagsRow({
@@ -77,7 +76,7 @@ class TaskTagsRow extends StatelessWidget {
                   AppSpacing.gapWXxs,
                   Text(
                     l10n.tagLabel,
-                    style: const TextStyle(
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
                       color: AppColors.textSecondary,
                       fontWeight: FontWeight.w500,
                     ),

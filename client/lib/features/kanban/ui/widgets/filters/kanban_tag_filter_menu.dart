@@ -1,10 +1,9 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/tag_chip.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class KanbanTagFilterMenu extends StatelessWidget {
   final int? selectedTagId;
@@ -43,7 +42,7 @@ class KanbanTagFilterMenu extends StatelessWidget {
           selectedTag != null
               ? (l10n.tagPrefix(selectedTag.name))
               : (l10n.tagsMenuLabel),
-          style: TextStyle(
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
           ),
         ),

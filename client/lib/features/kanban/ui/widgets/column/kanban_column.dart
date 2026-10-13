@@ -1,8 +1,7 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/ui/widgets/board/kanban_screen_actions.dart';
@@ -12,8 +11,8 @@ import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class KanbanColumn extends StatelessWidget {
   final TaskStatus status;
@@ -154,7 +153,7 @@ class KanbanColumn extends StatelessWidget {
                                     ? l10n.noTasksInColumn
                                     : l10n.addTaskToStatus(statusName),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: theme.textTheme.bodySmall?.copyWith(
                                   color: context.appColors.textSecondary,
                                 ),
                               ),

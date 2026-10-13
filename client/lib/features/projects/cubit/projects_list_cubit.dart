@@ -1,10 +1,9 @@
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
 import 'package:client/features/projects/data/models/create_project_request.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/project_repository.dart';
+import 'package:injectable/injectable.dart';
 
 @injectable
 class ProjectsListCubit extends SafeActionCubit<ProjectsListState> {

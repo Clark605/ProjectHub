@@ -1,12 +1,11 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/project_status.dart';
 import 'package:client/features/projects/ui/extensions/project_status_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class DesktopSidebarProjectQuickLink extends StatelessWidget {
   final String title;
@@ -41,7 +40,7 @@ class DesktopSidebarProjectQuickLink extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontWeight: FontWeight.w500,
                 ),

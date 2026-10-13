@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/utils/validators.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_error_banner.dart';
@@ -13,8 +11,9 @@ import 'package:client/features/auth/cubit/reset_password_state.dart';
 import 'package:client/features/auth/ui/widgets/auth_back_to_login_link.dart';
 import 'package:client/features/auth/ui/widgets/auth_header.dart';
 import 'package:client/features/auth/ui/widgets/auth_screen_scaffold.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key, this.initialEmail});

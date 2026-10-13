@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/utils/permission_checker.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/app_error_state.dart';
@@ -9,15 +8,15 @@ import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/features/projects/cubit/project_detail_cubit.dart';
 import 'package:client/features/projects/cubit/project_detail_state.dart';
+import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/ui/widgets/project_danger_zone.dart';
 import 'package:client/features/projects/ui/widgets/project_detail_app_bar.dart';
-import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/ui/widgets/project_detail_skeleton.dart';
 import 'package:client/features/projects/ui/widgets/project_details_card.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
   final int projectId;

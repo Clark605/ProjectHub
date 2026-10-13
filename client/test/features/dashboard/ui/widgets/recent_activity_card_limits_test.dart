@@ -1,9 +1,10 @@
-import 'package:client/l10n/generated/app_localizations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+import 'package:client/core/theme/light_theme.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/ui/widgets/activity_tile.dart';
 import 'package:client/features/dashboard/ui/widgets/recent_activity_card.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   List<ActivityEventDto> generateActivities(int count) {
@@ -30,6 +31,7 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            theme: buildLightTheme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
@@ -56,6 +58,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
@@ -83,6 +86,7 @@ void main() {
 
         await tester.pumpWidget(
           MaterialApp(
+            theme: buildLightTheme(),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(

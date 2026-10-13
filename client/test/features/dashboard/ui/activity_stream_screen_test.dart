@@ -1,12 +1,12 @@
-import 'package:client/l10n/generated/app_localizations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
+import 'package:client/core/theme/light_theme.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
 import 'package:client/features/dashboard/ui/activity_stream_screen.dart';
 import 'package:client/features/dashboard/ui/widgets/activity_tile.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mock_repositories.dart';
 
@@ -58,6 +58,7 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        theme: buildLightTheme(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: ActivityStreamScreen(
@@ -82,6 +83,7 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        theme: buildLightTheme(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: ActivityStreamScreen(
@@ -126,6 +128,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: ActivityStreamScreen(
@@ -173,6 +176,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: ActivityStreamScreen(
@@ -224,6 +228,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: ActivityStreamScreen(
@@ -283,6 +288,7 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        theme: buildLightTheme(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: ActivityStreamScreen(

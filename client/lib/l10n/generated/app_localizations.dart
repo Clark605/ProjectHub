@@ -2299,6 +2299,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong on our end. Please try again later.'**
   String get serverErrorMessage;
+
+  /// Default error message when a 409 Conflict failure has no server message
+  ///
+  /// In en, this message translates to:
+  /// **'A conflict occurred with the current state of the resource. Please refresh and try again.'**
+  String get conflictErrorMessage;
 }
 
 class _AppLocalizationsDelegate

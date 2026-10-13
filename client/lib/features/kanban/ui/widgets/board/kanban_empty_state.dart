@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
-
-import 'package:client/core/widgets/app_empty_state.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/widgets/app_empty_state.dart';
+import 'package:flutter/material.dart';
 
 class KanbanEmptyState extends StatelessWidget {
   final bool isArchived;

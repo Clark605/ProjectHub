@@ -1,7 +1,7 @@
+import 'package:client/core/utils/app_logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
-import 'package:client/core/utils/app_logger.dart';
 
 @lazySingleton
 class GoogleAuthService {

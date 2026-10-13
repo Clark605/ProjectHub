@@ -1,7 +1,6 @@
+import 'package:client/core/network/signalr_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-
-import 'package:client/core/network/signalr_service.dart';
 
 import '../../helpers/mock_repositories.dart';
 

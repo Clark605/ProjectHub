@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/ui/widgets/project_card.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProjectsGrid extends StatelessWidget {
   final List<ProjectDto> projects;

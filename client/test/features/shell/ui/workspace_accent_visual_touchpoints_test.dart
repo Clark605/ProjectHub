@@ -1,6 +1,3 @@
-import 'package:client/l10n/generated/app_localizations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:client/core/theme/app_theme.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/kanban/ui/widgets/column/kanban_column.dart';
@@ -9,6 +6,9 @@ import 'package:client/features/shell/ui/widgets/mobile_bottom_nav.dart';
 import 'package:client/features/shell/ui/widgets/shell_top_bar.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/widgets/my_tasks_section.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Workspace Accent Visual Touchpoints', () {

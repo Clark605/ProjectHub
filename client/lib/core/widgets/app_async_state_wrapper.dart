@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_empty_state.dart';
 import 'package:client/core/widgets/app_error_state.dart';
+import 'package:flutter/material.dart';
 
 /// Standard wrapper handling pull-to-refresh, full-screen errors, empty states, and content.
 class AppAsyncStateWrapper extends StatelessWidget {

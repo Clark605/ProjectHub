@@ -1,17 +1,16 @@
-import 'package:client/core/theme/app_icon_size.dart';
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
-import 'package:client/core/widgets/app_avatar.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_avatar_size.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DesktopSidebarUserProfile extends StatelessWidget {
   const DesktopSidebarUserProfile({super.key});

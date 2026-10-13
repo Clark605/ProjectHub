@@ -1,17 +1,15 @@
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/dialog/dialog.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/data/models/create_workspace_request.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class QuickStartDialog extends StatefulWidget {
   final VoidCallback? onSuccess;
@@ -207,7 +205,7 @@ class _QuickStartDialogState extends State<QuickStartDialog> {
       ),
       child: Text(
         _errorMessage!,
-        style: const TextStyle(color: AppColors.error),
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.error),
         textAlign: TextAlign.center,
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class DesktopSidebarNavItem extends StatelessWidget {
   final IconData icon;
@@ -58,7 +58,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: TextStyle(
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: isSelected ? activeColor : theme.colorScheme.onSurface,
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                 ),
@@ -76,7 +76,7 @@ class DesktopSidebarNavItem extends StatelessWidget {
                 ),
                 child: Text(
                   badge!,
-                  style: TextStyle(
+                  style: theme.textTheme.labelSmall?.copyWith(
                     color: badgeColor ?? activeColor,
                     fontWeight: FontWeight.bold,
                   ),

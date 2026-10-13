@@ -1,10 +1,9 @@
-import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/dio_error_handler.dart';
 import 'package:client/core/utils/app_logger.dart';
 import 'package:client/features/tasks/data/models/parsed_task_draft_dto.dart';
+import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class AiTaskRemoteDataSource {
   Future<ParsedTaskDraftDto> parseTaskFromText({

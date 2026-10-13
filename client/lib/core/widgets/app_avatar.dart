@@ -1,7 +1,6 @@
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 
@@ -34,14 +33,7 @@ class AppAvatar extends StatelessWidget {
   final BoxBorder? border;
   final bool _isUnassigned;
 
-  double get _unassignedIconSize {
-    if (size <= AppAvatarSize.xs) return AppIconSize.xxs;
-    if (size <= AppAvatarSize.sm) return AppIconSize.xxs;
-    if (size <= AppAvatarSize.compact) return AppIconSize.xs;
-    if (size <= AppAvatarSize.md) return AppIconSize.sm;
-    if (size <= AppAvatarSize.lg) return AppIconSize.lg;
-    return AppIconSize.xl;
-  }
+  double get _unassignedIconSize => size * 0.5;
 
   String get _initials {
     final trimmed = name.trim();
@@ -69,8 +61,6 @@ class AppAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
     if (_isUnassigned) {
       final bg = backgroundColor ?? context.appColors.subtleSurfaceStrong;
       final fg = textColor ?? context.appColors.textSecondary;
@@ -93,12 +83,10 @@ class AppAvatar extends StatelessWidget {
     }
 
     final base = _baseColor;
-    final bg =
-        backgroundColor ??
-        (isDark ? base.withValues(alpha: 0.28) : base.withValues(alpha: 0.18));
+    final bg = backgroundColor ?? context.appColors.avatarBackground(base);
     final fg =
         textColor ??
-        (textStyle?.color ?? (isDark ? AppColors.textPrimary : base));
+        (textStyle?.color ?? context.appColors.avatarTextColor(base));
 
     return Container(
       width: size,

@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/kanban/ui/widgets/column/kanban_column.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class KanbanDesktopBoard extends StatelessWidget {
   final Map<TaskStatus, List<TaskDto>> tasksByStatus;

@@ -1,9 +1,9 @@
-import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/utils/app_logger.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
+import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 
 abstract class ActivityRepository {
   Future<List<ActivityEventDto>> getWorkspaceActivities(

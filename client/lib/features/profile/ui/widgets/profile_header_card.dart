@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_snackbar.dart';
 import 'package:client/core/widgets/app_text_field.dart';
 import 'package:client/features/auth/data/models/user.dart';
 import 'package:client/features/profile/cubit/profile_edit_cubit.dart';
 import 'package:client/features/profile/cubit/profile_edit_state.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileHeaderCard extends StatefulWidget {
   final User? user;

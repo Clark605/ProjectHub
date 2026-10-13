@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/core/widgets/app_error_banner.dart';
@@ -8,6 +5,8 @@ import 'package:client/features/kanban/ui/widgets/create_task/create_task_sheet.
 import 'package:client/features/tasks/data/models/create_task_request.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();

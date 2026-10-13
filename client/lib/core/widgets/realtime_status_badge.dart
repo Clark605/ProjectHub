@@ -1,10 +1,10 @@
-import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/network/signalr_service.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RealtimeStatusBadge extends StatelessWidget {
   const RealtimeStatusBadge({
@@ -43,7 +43,8 @@ class RealtimeStatusBadge extends StatelessWidget {
       initialData: signalR.currentStatus,
       builder: (context, snapshot) {
         final status = snapshot.data ?? RealtimeStatus.disconnected;
-        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final theme = Theme.of(context);
+        final isDark = theme.brightness == Brightness.dark;
 
         final Color dotColor;
         final String tooltip;
@@ -106,7 +107,7 @@ class RealtimeStatusBadge extends StatelessWidget {
                   const SizedBox(width: AppSpacing.xs),
                   Text(
                     label,
-                    style: TextStyle(
+                    style: theme.textTheme.labelSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: dotColor,
                     ),

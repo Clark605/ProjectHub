@@ -1,9 +1,8 @@
+import 'package:client/features/dashboard/data/models/activity_filter.dart';
+import 'package:client/features/dashboard/ui/widgets/activity_filter_bottom_sheet.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:client/features/dashboard/data/models/activity_filter.dart';
-import 'package:client/features/dashboard/ui/widgets/activity_filter_bottom_sheet.dart';
 
 void main() {
   group('ActivityFilterBottomSheet Widget Tests', () {

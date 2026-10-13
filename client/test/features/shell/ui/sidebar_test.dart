@@ -1,9 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
@@ -14,6 +8,11 @@ import 'package:client/features/shell/ui/widgets/desktop_sidebar_nav_item.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_quick_links.dart';
 import 'package:client/features/shell/ui/widgets/sidebar.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../helpers/mock_repositories.dart';
 

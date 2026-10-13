@@ -1,14 +1,13 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class MyTaskListTile extends StatelessWidget {
   final TaskDto task;
@@ -96,7 +95,7 @@ class MyTaskListTile extends StatelessWidget {
                             AppSpacing.gapWSm,
                             Text(
                               '•',
-                              style: TextStyle(
+                              style: theme.textTheme.bodySmall?.copyWith(
                                 color: isDark
                                     ? AppColors.textSecondary
                                     : AppColors.lightTextSecondary,
@@ -123,7 +122,7 @@ class MyTaskListTile extends StatelessWidget {
                                     task.dueDate!,
                                     context: context,
                                   ),
-                                  style: TextStyle(
+                                  style: theme.textTheme.bodySmall?.copyWith(
                                     fontWeight: isOverdue
                                         ? FontWeight.w700
                                         : FontWeight.w500,
@@ -166,7 +165,7 @@ class MyTaskListTile extends StatelessWidget {
                       ),
                       child: Text(
                         task.statusEnum.localizedName(l10n),
-                        style: TextStyle(
+                        style: theme.textTheme.labelSmall?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: task.statusEnum.toColor(),
                         ),

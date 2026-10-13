@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_test/flutter_test.dart';
-
+import 'package:client/core/theme/light_theme.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/ui/widgets/card/kanban_task_card.dart';
 import 'package:client/features/kanban/ui/widgets/card/kanban_task_card_footer.dart';
@@ -10,6 +7,10 @@ import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
+
 import '../../../../helpers/mock_repositories.dart';
 
 void main() {
@@ -39,6 +40,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
@@ -83,10 +85,11 @@ void main() {
     'KanbanTaskCard safely no-ops without callbacks when BlocProvider is omitted',
     (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(body: KanbanTaskCard(task: sampleTask)),
+          home: const Scaffold(body: KanbanTaskCard(task: sampleTask)),
         ),
       );
 
@@ -130,6 +133,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: BlocProvider.value(
@@ -158,6 +162,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           locale: const Locale('ar'),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
@@ -196,10 +201,11 @@ void main() {
     'KanbanTaskCardFooter renders unassigned avatar when assigneeName is null',
     (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
+          home: const Scaffold(
             body: KanbanTaskCardFooter(isOverdue: false, assigneeName: null),
           ),
         ),
@@ -221,10 +227,11 @@ void main() {
     'KanbanTaskCardFooter renders assigned avatar when assigneeName is present',
     (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          home: Scaffold(
+          home: const Scaffold(
             body: KanbanTaskCardFooter(
               isOverdue: false,
               assigneeName: 'Clark Kent',

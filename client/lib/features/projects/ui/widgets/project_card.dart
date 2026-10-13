@@ -1,14 +1,13 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_avatar_size.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class ProjectCard extends StatelessWidget {
   final ProjectDto project;
@@ -203,7 +202,7 @@ class ProjectCard extends StatelessWidget {
                       ),
                       child: Text(
                         '+${members.length - 4}',
-                        style: TextStyle(
+                        style: theme.textTheme.labelSmall?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: theme.colorScheme.onSurfaceVariant,
                         ),

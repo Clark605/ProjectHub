@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/dio_error_handler.dart';
 import 'package:client/core/utils/app_logger.dart';
@@ -12,6 +9,8 @@ import 'package:client/features/workspaces/data/models/update_workspace_request.
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
 import 'package:client/features/workspaces/data/workspace_members_mixin.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
+import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: WorkspaceRepository)
 class WorkspaceRepositoryImpl

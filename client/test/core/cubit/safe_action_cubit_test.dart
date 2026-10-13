@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/core/l10n/l10n_extension.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:client/l10n/generated/app_localizations_ar.dart';
 import 'package:client/l10n/generated/app_localizations_en.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class _TestState {
   final String status;

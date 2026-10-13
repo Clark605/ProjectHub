@@ -1,13 +1,14 @@
+import 'package:client/core/theme/light_theme.dart';
+import 'package:client/features/kanban/ui/widgets/column/kanban_column_header.dart';
+import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:client/features/kanban/ui/widgets/column/kanban_column_header.dart';
-import 'package:client/features/tasks/data/models/task_status.dart';
-
 void main() {
   Widget buildHeader(TaskStatus status, {int taskCount = 0}) {
     return MaterialApp(
+      theme: buildLightTheme(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(

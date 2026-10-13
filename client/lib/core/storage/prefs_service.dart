@@ -1,8 +1,7 @@
+import 'package:client/core/constants/storage_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:client/core/constants/storage_keys.dart';
 
 @lazySingleton
 class PrefsService {

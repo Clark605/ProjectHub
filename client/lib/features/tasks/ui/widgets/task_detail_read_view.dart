@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/network/signalr_service.dart';
@@ -15,7 +12,8 @@ import 'package:client/features/comments/ui/widgets/task_comments_list.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/ui/widgets/task_tags_row.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TaskDetailReadView extends StatelessWidget {
   final TaskDto task;

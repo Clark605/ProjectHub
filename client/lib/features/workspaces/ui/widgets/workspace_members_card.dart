@@ -1,15 +1,13 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
-
 import 'package:client/features/workspaces/ui/widgets/invite_member_sheet.dart';
 import 'package:client/features/workspaces/ui/widgets/member_tile.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WorkspaceMembersCard extends StatelessWidget {
   const WorkspaceMembersCard({super.key});
@@ -49,7 +47,7 @@ class WorkspaceMembersCard extends StatelessWidget {
                       ),
                       child: Text(
                         l10n.membersCount(state.members.length),
-                        style: TextStyle(
+                        style: theme.textTheme.labelSmall?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: theme.colorScheme.onSurfaceVariant,
                         ),

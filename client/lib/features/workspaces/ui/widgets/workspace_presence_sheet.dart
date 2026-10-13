@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_avatar_size.dart';
@@ -8,7 +6,7 @@ import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/core/widgets/status_dot.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 class WorkspacePresenceSheet extends StatelessWidget {
   const WorkspacePresenceSheet({
@@ -89,8 +87,10 @@ class WorkspacePresenceSheet extends StatelessWidget {
                     children: [
                       AppAvatar(
                         name: name,
-                        size: AppAvatarSize.compact,
-                        textStyle: const TextStyle(fontWeight: FontWeight.w600),
+                        size: AppAvatarSize.sm,
+                        textStyle: theme.textTheme.labelMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       Positioned(
                         right: -1,

@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/cubit/kanban_state.dart';
 import 'package:client/features/kanban/ui/widgets/board/kanban_app_bar.dart';
@@ -10,7 +8,8 @@ import 'package:client/features/kanban/ui/widgets/board/kanban_view_body.dart';
 import 'package:client/features/kanban/ui/widgets/voice/kanban_voice_handler.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
-import 'package:client/core/extensions/context_extensions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class KanbanScreen extends StatefulWidget {
   final int projectId;

@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
+import 'package:flutter/material.dart';
 
 class WorkspaceAvatarItem extends StatelessWidget {
   final String userId;

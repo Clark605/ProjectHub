@@ -1,13 +1,13 @@
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/core/utils/responsive_layout.dart';
 import 'package:client/core/widgets/realtime_status_badge.dart';
 import 'package:client/features/shell/ui/widgets/shell_presence_indicator.dart';
 import 'package:client/features/shell/ui/widgets/workspace_switcher_pill.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class ShellTopBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onOpenDrawer;

@@ -1,8 +1,8 @@
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class VoiceTaskReviewWarnings extends StatelessWidget {
   final List<String> warnings;
@@ -42,7 +42,7 @@ class VoiceTaskReviewWarnings extends StatelessWidget {
                   Expanded(
                     child: Text(
                       w,
-                      style: TextStyle(
+                      style: theme.textTheme.bodySmall?.copyWith(
                         fontWeight: FontWeight.w500,
                         color: warningColor,
                       ),

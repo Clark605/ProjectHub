@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_error_state.dart';
@@ -7,6 +5,7 @@ import 'package:client/features/tasks/cubit/my_tasks_state.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/ui/widgets/my_tasks_empty_view.dart';
 import 'package:client/features/tasks/ui/widgets/my_tasks_section.dart';
+import 'package:flutter/material.dart';
 
 class MyTasksContentSlivers {
   static List<Widget> build({

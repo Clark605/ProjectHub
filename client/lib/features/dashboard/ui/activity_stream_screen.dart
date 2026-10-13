@@ -1,9 +1,6 @@
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_async_state_wrapper.dart';
 import 'package:client/core/widgets/realtime_status_badge.dart';
@@ -15,7 +12,8 @@ import 'package:client/features/dashboard/ui/widgets/activity_tile.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/project_repository.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ActivityStreamScreen extends StatefulWidget {
   final int workspaceId;
@@ -241,7 +239,7 @@ class _ActivityStreamScreenState extends State<ActivityStreamScreen> {
               color: isSelected ? selectedBorderColor : unselectedBorderColor,
               width: isSelected ? 1.5 : 1.0,
             ),
-            labelStyle: TextStyle(
+            labelStyle: theme.textTheme.labelMedium?.copyWith(
               color: isSelected ? selectedTextColor : unselectedTextColor,
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             ),

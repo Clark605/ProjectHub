@@ -1,7 +1,7 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/core/utils/app_logger.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Base Cubit that provides standardized error handling via [safeExecute].
 /// Catches [AppException] and generic [Exception]/[Error] objects, routing

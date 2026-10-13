@@ -1,9 +1,8 @@
-import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/network/auth_interceptor.dart';
 import 'package:client/core/network/global_network_error_handler.dart';
+import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 
 @module
 abstract class DioModule {

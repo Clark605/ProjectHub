@@ -1,8 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-
 import 'package:client/app.dart';
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/di/injection.dart';
@@ -11,6 +8,8 @@ import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/core/utils/app_logger.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
   final startupTimer = AppLogger.startTimer(

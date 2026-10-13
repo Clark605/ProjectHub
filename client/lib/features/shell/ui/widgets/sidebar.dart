@@ -1,19 +1,18 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
 import 'package:client/features/projects/cubit/projects_list_state.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
+import 'package:client/features/shell/models/shell_tab.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_nav_item.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_quick_links.dart';
 import 'package:client/features/shell/ui/widgets/desktop_sidebar_user_profile.dart';
-import 'package:client/features/shell/models/shell_tab.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Sidebar extends StatelessWidget {
   final int selectedIndex;

@@ -1,8 +1,7 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'workspace_settings_state.freezed.dart';
 

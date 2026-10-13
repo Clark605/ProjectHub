@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_colors.dart';
@@ -11,7 +9,7 @@ import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/core/widgets/app_badge.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
-import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 class KanbanTaskCardFooter extends StatelessWidget {
   final TaskPriority? priority;

@@ -1,6 +1,3 @@
-import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/dio_error_handler.dart';
 import 'package:client/core/utils/app_logger.dart';
@@ -8,6 +5,8 @@ import 'package:client/features/projects/data/models/create_project_request.dart
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/update_project_request.dart';
 import 'package:client/features/projects/data/project_repository.dart';
+import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: ProjectRepository)
 class ProjectRepositoryImpl implements ProjectRepository {

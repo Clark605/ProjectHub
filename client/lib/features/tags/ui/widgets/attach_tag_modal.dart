@@ -1,15 +1,14 @@
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/dialog/app_bottom_sheet.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/tags/data/tag_repository.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_results.dart';
 import 'package:client/features/tags/ui/widgets/attach_tag_search_field.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AttachTagModal extends StatefulWidget {
   const AttachTagModal({
@@ -166,7 +165,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
             children: [
               Text(
                 l10n.attachTagMax,
-                style: TextStyle(
+                style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.onSurface,
                 ),
@@ -188,7 +187,7 @@ class _AttachTagModalState extends State<AttachTagModal> {
           ),
           if (_error != null) ...[
             AppSpacing.gapHSm,
-            Text(_error!, style: const TextStyle(color: AppColors.error)),
+            Text(_error!, style: theme.textTheme.bodySmall?.copyWith(color: AppColors.error)),
           ],
           AppSpacing.gapHMd,
           AttachTagResults(

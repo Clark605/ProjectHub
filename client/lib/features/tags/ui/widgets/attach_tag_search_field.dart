@@ -1,8 +1,8 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class AttachTagSearchField extends StatelessWidget {
   const AttachTagSearchField({
@@ -27,10 +27,14 @@ class AttachTagSearchField extends StatelessWidget {
       controller: controller,
       autofocus: true,
       onChanged: onChanged,
-      style: TextStyle(color: theme.colorScheme.onSurface),
+      style: theme.textTheme.bodyMedium?.copyWith(
+        color: theme.colorScheme.onSurface,
+      ),
       decoration: InputDecoration(
         hintText: l10n.searchOrCreateTag,
-        hintStyle: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+        hintStyle: theme.textTheme.bodyMedium?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
         prefixIcon: Icon(
           Icons.search,
           size: AppIconSize.md,

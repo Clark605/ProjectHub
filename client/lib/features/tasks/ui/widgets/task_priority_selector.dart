@@ -1,11 +1,10 @@
-import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
-import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class TaskPrioritySelector extends StatelessWidget {
   final TaskPriority selectedPriority;
@@ -46,7 +45,7 @@ class TaskPrioritySelector extends StatelessWidget {
               ),
               label: Text(priority.localizedName(l10n)),
               selectedColor: priority.toColor(),
-              labelStyle: TextStyle(
+              labelStyle: theme.textTheme.labelMedium?.copyWith(
                 color: isSelected ? AppColors.pureWhite : null,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),

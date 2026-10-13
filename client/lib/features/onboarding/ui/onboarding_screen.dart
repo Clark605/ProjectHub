@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/storage/prefs_service.dart';
+import 'package:client/core/theme/app_durations.dart';
 import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:client/features/onboarding/models/onboarding_step.dart';
 import 'package:client/features/onboarding/ui/widgets/onboarding_bottom_bar.dart';
@@ -9,8 +10,7 @@ import 'package:client/features/onboarding/ui/widgets/onboarding_top_bar.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/collaboration_visual.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/kanban_visual.dart';
 import 'package:client/features/onboarding/ui/widgets/visuals/workspace_visual.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_durations.dart';
+import 'package:flutter/material.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final PrefsService? prefsService;

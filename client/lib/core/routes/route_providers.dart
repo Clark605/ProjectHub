@@ -1,8 +1,5 @@
-import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/di/injection.dart';
+import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/features/auth/cubit/forgot_password_cubit.dart';
 import 'package:client/features/auth/cubit/login_cubit.dart';
 import 'package:client/features/auth/cubit/register_cubit.dart';
@@ -11,6 +8,7 @@ import 'package:client/features/auth/ui/screens/forgot_password_screen.dart';
 import 'package:client/features/auth/ui/screens/login_screen.dart';
 import 'package:client/features/auth/ui/screens/register_screen.dart';
 import 'package:client/features/auth/ui/screens/reset_password_screen.dart';
+import 'package:client/features/dashboard/cubit/activity_stream_cubit.dart';
 import 'package:client/features/dashboard/cubit/dashboard_cubit.dart';
 import 'package:client/features/dashboard/ui/activity_stream_screen.dart';
 import 'package:client/features/dashboard/ui/dashboard_screen.dart';
@@ -28,14 +26,16 @@ import 'package:client/features/shell/ui/main_shell_screen.dart';
 import 'package:client/features/tasks/cubit/my_tasks_cubit.dart';
 import 'package:client/features/tasks/cubit/voice_task_cubit.dart';
 import 'package:client/features/tasks/ui/my_tasks_screen.dart';
-import 'package:client/core/storage/prefs_service.dart';
-import 'package:client/features/dashboard/cubit/activity_stream_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
+import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 /// Builds tab content for the main navigation shell.
-/// Each tab receives its own scoped Cubit via an isolated [BlocProvider].
+/// Most tabs receive their own scoped Cubit via an isolated [BlocProvider],
+/// while [ProjectsScreen] uses [ProjectsListCubit] provided at the shell route level.
 Widget buildShellTabContent(int index, {ValueChanged<int>? onSelectTab}) =>
     switch (index) {
       0 => BlocProvider(
@@ -44,7 +44,7 @@ Widget buildShellTabContent(int index, {ValueChanged<int>? onSelectTab}) =>
           final activeId = context
               .read<WorkspaceContextCubit>()
               .state
-              .whenOrNull(loaded: (_, a) => a.id);
+              .activeWorkspaceId;
           if (activeId != null) {
             cubit.loadDashboard(activeId);
           }
@@ -64,7 +64,7 @@ Widget buildShellTabContent(int index, {ValueChanged<int>? onSelectTab}) =>
         create: (_) => getIt<ProfileEditCubit>(),
         child: const ProfileScreen(),
       ),
-      _ => const SizedBox.shrink(),
+      _ => throw ArgumentError.value(index, 'index', 'Invalid shell tab index'),
     };
 
 /// Route builders with route-level [BlocProvider] encapsulation.
@@ -95,9 +95,8 @@ Widget buildResetPasswordRoute(String? email) => BlocProvider(
 Widget buildShellRoute({int initialIndex = 0}) => BlocProvider(
   create: (context) {
     final cubit = getIt<ProjectsListCubit>();
-    final activeId = context.read<WorkspaceContextCubit>().state.whenOrNull(
-      loaded: (_, a) => a.id,
-    );
+    final activeId =
+        context.read<WorkspaceContextCubit>().state.activeWorkspaceId;
     if (activeId != null) {
       cubit.loadProjects(activeId);
     }

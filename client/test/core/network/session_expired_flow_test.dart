@@ -1,12 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-
 import 'package:client/app.dart';
-import 'package:client/core/dialog/app_confirm_dialog.dart';
 import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/cubit/app_settings_state.dart';
 import 'package:client/core/di/injection.dart';
+import 'package:client/core/dialog/app_confirm_dialog.dart';
 import 'package:client/core/network/auth_interceptor.dart';
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
@@ -23,6 +19,9 @@ import 'package:client/features/tasks/cubit/my_tasks_cubit.dart';
 import 'package:client/features/tasks/data/task_repository.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../helpers/mock_repositories.dart';
 

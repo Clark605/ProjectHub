@@ -1,10 +1,9 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
 
 class ShellPresenceIndicator extends StatelessWidget {
   const ShellPresenceIndicator({super.key});
@@ -46,23 +45,23 @@ class ShellPresenceIndicator extends StatelessWidget {
           AppSpacing.gapWSm,
           Text(
             l10n.onlineCount(3),
-            style: TextStyle(
+            style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w600,
             ),
           ),
           AppSpacing.gapWSm,
-          _buildMiniAvatar('AK', AppColors.electricViolet),
+          _buildMiniAvatar('AK', AppColors.electricViolet, theme),
           AppSpacing.gapWXs,
-          _buildMiniAvatar('SR', AppColors.skyBlue),
+          _buildMiniAvatar('SR', AppColors.skyBlue, theme),
           AppSpacing.gapWXs,
-          _buildMiniAvatar('DM', AppColors.warning),
+          _buildMiniAvatar('DM', AppColors.warning, theme),
         ],
       ),
     );
   }
 
-  Widget _buildMiniAvatar(String text, Color color) {
+  Widget _buildMiniAvatar(String text, Color color, ThemeData theme) {
     return Container(
       width: 20,
       height: 20,
@@ -74,7 +73,10 @@ class ShellPresenceIndicator extends StatelessWidget {
       child: Center(
         child: Text(
           text,
-          style: TextStyle(color: color, fontWeight: FontWeight.bold),
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: color,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

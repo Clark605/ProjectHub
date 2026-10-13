@@ -1,10 +1,9 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
 import 'package:client/features/tasks/ui/extensions/task_priority_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class KanbanPriorityFilterMenu extends StatelessWidget {
   final String? selectedPriority;
@@ -37,7 +36,7 @@ class KanbanPriorityFilterMenu extends StatelessWidget {
           hasSelection
               ? '${l10n.taskPriority}: $selectedPriority'
               : (l10n.taskPriority),
-          style: TextStyle(
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
             fontWeight: hasSelection ? FontWeight.w600 : FontWeight.normal,
           ),
         ),

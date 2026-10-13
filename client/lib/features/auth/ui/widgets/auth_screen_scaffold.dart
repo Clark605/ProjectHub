@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:client/core/widgets/ambient_glow_background.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/widgets/ambient_glow_background.dart';
+import 'package:flutter/material.dart';
 
 class AuthScreenScaffold extends StatelessWidget {
   const AuthScreenScaffold({

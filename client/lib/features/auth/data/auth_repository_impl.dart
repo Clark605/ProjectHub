@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/constants/api_constants.dart';
 import 'package:client/core/errors/dio_error_handler.dart';
 import 'package:client/core/services/github_auth_service.dart';
@@ -15,6 +12,8 @@ import 'package:client/features/auth/data/auth_repository.dart';
 import 'package:client/features/auth/data/auth_social_mixin.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
 import 'package:client/features/auth/data/models/user.dart';
+import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl with AuthSocialMixin implements AuthRepository {

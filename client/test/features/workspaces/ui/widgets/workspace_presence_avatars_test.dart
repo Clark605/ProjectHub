@@ -1,13 +1,14 @@
-import 'package:client/l10n/generated/app_localizations.dart';
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
 import 'package:client/core/network/signalr_events.dart';
+import 'package:client/core/theme/light_theme.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_avatar_item.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_avatars.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_sheet.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../../helpers/mock_repositories.dart';
 
@@ -33,6 +34,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
@@ -53,6 +55,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
@@ -81,6 +84,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         MaterialApp(
+          theme: buildLightTheme(),
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(
@@ -111,6 +115,7 @@ void main() {
   ) async {
     await tester.pumpWidget(
       MaterialApp(
+        theme: buildLightTheme(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(

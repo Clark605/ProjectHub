@@ -1,9 +1,8 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
-import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class KanbanSearchInputRow extends StatelessWidget {
   const KanbanSearchInputRow({
@@ -39,7 +38,9 @@ class KanbanSearchInputRow extends StatelessWidget {
               style: theme.textTheme.bodyMedium,
               decoration: InputDecoration(
                 hintText: l10n.taskTitlePlaceholder,
-                hintStyle: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                hintStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
                 prefixIcon: const Icon(
                   Icons.search_rounded,
                   size: AppIconSize.md,

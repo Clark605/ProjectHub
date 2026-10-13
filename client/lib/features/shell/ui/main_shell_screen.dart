@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:client/core/routes/route_names.dart';
 import 'package:client/core/routes/route_providers.dart';
 import 'package:client/features/projects/cubit/projects_list_cubit.dart';
@@ -9,6 +6,8 @@ import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_state.dart';
 import 'package:client/features/workspaces/ui/widgets/quick_start_dialog.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_switcher_sheet.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainShellScreen extends StatefulWidget {
   final int initialIndex;
@@ -86,8 +85,8 @@ class _MainShellScreenState extends State<MainShellScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<WorkspaceContextCubit, WorkspaceContextState>(
       listenWhen: (previous, current) {
-        final prevId = previous.whenOrNull(loaded: (_, a) => a.id);
-        final currId = current.whenOrNull(loaded: (_, a) => a.id);
+        final prevId = previous.activeWorkspaceId;
+        final currId = current.activeWorkspaceId;
         final isEmpty = current.maybeWhen(
           empty: () => true,
           orElse: () => false,

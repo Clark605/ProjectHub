@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:client/features/tags/data/models/tag_dto.dart';
-import 'package:client/features/tags/ui/widgets/tag_chip.dart';
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/features/tags/data/models/tag_dto.dart';
+import 'package:client/features/tags/ui/widgets/tag_chip.dart';
+import 'package:flutter/material.dart';
 
 class AttachTagResults extends StatelessWidget {
   const AttachTagResults({
@@ -48,7 +48,9 @@ class AttachTagResults extends StatelessWidget {
             ),
             title: Text(
               l10n.createTagQuery(query),
-              style: TextStyle(color: theme.colorScheme.primary),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.primary,
+              ),
             ),
             onTap: () => onCreateTag(query),
           ),
@@ -58,7 +60,9 @@ class AttachTagResults extends StatelessWidget {
             child: Center(
               child: Text(
                 l10n.noTagsAvailable,
-                style: TextStyle(color: theme.colorScheme.onSurfaceVariant),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
           )

@@ -1,5 +1,3 @@
-import 'package:injectable/injectable.dart';
-
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/core/network/signalr_service.dart';
@@ -16,6 +14,7 @@ import 'package:client/features/tasks/data/task_filter.dart';
 import 'package:client/features/tasks/data/task_repository.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
+import 'package:injectable/injectable.dart';
 
 @injectable
 class KanbanCubit extends SafeActionCubit<KanbanState>

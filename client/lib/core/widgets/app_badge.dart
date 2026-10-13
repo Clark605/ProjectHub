@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/app_typography.dart';
+import 'package:flutter/material.dart';
 
 /// Standardized compact badge for task priorities, due dates, and inline tags.
 class AppBadge extends StatelessWidget {

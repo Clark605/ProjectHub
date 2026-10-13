@@ -1,14 +1,13 @@
-import 'package:flutter/material.dart';
-
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_durations.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/kanban/ui/widgets/column/kanban_column.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_status.dart';
 import 'package:client/features/tasks/ui/extensions/task_status_ui.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
-import 'package:client/core/theme/app_durations.dart';
+import 'package:flutter/material.dart';
 
 class KanbanMobileBoard extends StatefulWidget {
   final PageController? pageController;
@@ -129,7 +128,7 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                       ),
                     ),
                     label: Text('$statusName ($count)'),
-                    labelStyle: TextStyle(
+                    labelStyle: theme.textTheme.labelMedium?.copyWith(
                       fontWeight: isSelected
                           ? FontWeight.w700
                           : FontWeight.w500,

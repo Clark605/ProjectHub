@@ -12,9 +12,12 @@ Future<bool> showAppConfirmDialog({
   String? cancelLabel,
   bool isDestructive = false,
   bool showCancelButton = true,
+  bool barrierDismissible = true,
+  VoidCallback? onConfirm,
 }) async {
   final result = await showAppDialog<bool>(
     context: context,
+    barrierDismissible: barrierDismissible,
     builder: (ctx) => AppConfirmDialog(
       title: title,
       message: message,
@@ -22,6 +25,7 @@ Future<bool> showAppConfirmDialog({
       cancelLabel: cancelLabel,
       isDestructive: isDestructive,
       showCancelButton: showCancelButton,
+      onConfirm: onConfirm,
     ),
   );
   return result ?? false;
@@ -82,7 +86,7 @@ class AppConfirmDialog extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(false),
             child: Text(
               effectiveCancelLabel,
-              style: TextStyle(
+              style: theme.textTheme.labelLarge?.copyWith(
                 color: isDark
                     ? AppColors.textSecondary
                     : AppColors.lightTextSecondary,

@@ -1,10 +1,10 @@
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:client/core/cubit/app_settings_cubit.dart';
 import 'package:client/core/cubit/app_settings_state.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LanguageSelectorTile extends StatelessWidget {
   const LanguageSelectorTile({super.key});

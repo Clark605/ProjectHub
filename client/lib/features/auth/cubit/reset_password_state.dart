@@ -1,5 +1,5 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:client/core/errors/app_failure.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'reset_password_state.freezed.dart';
 

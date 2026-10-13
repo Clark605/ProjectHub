@@ -1,12 +1,12 @@
+import 'package:client/core/dialog/dialog.dart';
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-import 'package:client/core/dialog/dialog.dart';
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class ActivityFilterBottomSheet extends StatefulWidget {
   final ActivityFilter initialFilter;
@@ -225,7 +225,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                         : unselectedBorderColor,
                     width: isSelected ? 1.5 : 1.0,
                   ),
-                  labelStyle: TextStyle(
+                  labelStyle: theme.textTheme.labelMedium?.copyWith(
                     color: isSelected ? selectedTextColor : unselectedTextColor,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   ),
@@ -266,7 +266,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                           : unselectedBorderColor,
                       width: _selectedProjectId == null ? 1.5 : 1.0,
                     ),
-                    labelStyle: TextStyle(
+                    labelStyle: theme.textTheme.labelMedium?.copyWith(
                       color: _selectedProjectId == null
                           ? selectedTextColor
                           : unselectedTextColor,
@@ -296,7 +296,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                             : unselectedBorderColor,
                         width: isSelected ? 1.5 : 1.0,
                       ),
-                      labelStyle: TextStyle(
+                      labelStyle: theme.textTheme.labelMedium?.copyWith(
                         color: isSelected
                             ? selectedTextColor
                             : unselectedTextColor,
@@ -342,7 +342,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                         ? 1.5
                         : 1.0,
                   ),
-                  labelStyle: TextStyle(
+                  labelStyle: theme.textTheme.labelMedium?.copyWith(
                     color: _selectedSortOrder == ActivitySortOrder.newestFirst
                         ? selectedTextColor
                         : unselectedTextColor,
@@ -373,7 +373,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                         ? 1.5
                         : 1.0,
                   ),
-                  labelStyle: TextStyle(
+                  labelStyle: theme.textTheme.labelMedium?.copyWith(
                     color: _selectedSortOrder == ActivitySortOrder.oldestFirst
                         ? selectedTextColor
                         : unselectedTextColor,
@@ -414,7 +414,7 @@ class _ActivityFilterBottomSheetState extends State<ActivityFilterBottomSheet> {
                 ),
                 child: Text(
                   l10n.applyFilters,
-                  style: TextStyle(
+                  style: theme.textTheme.labelLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: isDark
                         ? AppColors.textOnPrimary

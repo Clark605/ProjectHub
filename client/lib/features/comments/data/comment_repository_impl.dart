@@ -1,8 +1,7 @@
-import 'package:injectable/injectable.dart';
-
 import 'package:client/features/comments/data/comment_remote_data_source.dart';
 import 'package:client/features/comments/data/comment_repository.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
+import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: CommentRepository)
 class CommentRepositoryImpl implements CommentRepository {

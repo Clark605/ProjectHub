@@ -1,14 +1,13 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/kanban/ui/widgets/filters/kanban_assignee_filter_menu.dart';
 import 'package:client/features/kanban/ui/widgets/filters/kanban_priority_filter_menu.dart';
 import 'package:client/features/kanban/ui/widgets/filters/kanban_search_input_row.dart';
 import 'package:client/features/kanban/ui/widgets/filters/kanban_tag_filter_menu.dart';
 import 'package:client/features/tags/data/models/tag_dto.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class KanbanFilterBar extends StatefulWidget {
   final String? selectedPriority;

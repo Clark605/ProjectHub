@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'package:injectable/injectable.dart';
+
 import 'package:client/core/cubit/safe_action_cubit.dart';
+import 'package:client/core/theme/app_durations.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_state.dart';
 import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
-import 'package:client/core/theme/app_durations.dart';
+import 'package:injectable/injectable.dart';
 
 @injectable
 class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {

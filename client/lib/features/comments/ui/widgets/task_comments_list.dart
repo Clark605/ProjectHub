@@ -1,14 +1,13 @@
-import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/comments/cubit/comments_cubit.dart';
 import 'package:client/features/comments/cubit/comments_state.dart';
 import 'package:client/features/comments/ui/widgets/task_comment_input.dart';
 import 'package:client/features/comments/ui/widgets/task_comment_item.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TaskCommentsList extends StatelessWidget {
   const TaskCommentsList({
@@ -22,6 +21,7 @@ class TaskCommentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final l10n = context.l10n;
     return BlocBuilder<CommentsCubit, CommentsState>(
       builder: (context, state) {
@@ -41,11 +41,10 @@ class TaskCommentsList extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
             child: Text(
               l10n.failedToLoadComments(failure.toLocalizedMessage(l10n)),
-              style: const TextStyle(color: AppColors.error),
+              style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.error),
             ),
           ),
           loaded: (comments, isSending, failure) {
-            final theme = Theme.of(context);
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -72,7 +71,7 @@ class TaskCommentsList extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: AppSpacing.xs),
                     child: Text(
                       failure.toLocalizedMessage(l10n),
-                      style: const TextStyle(color: AppColors.error),
+                      style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.error),
                     ),
                   ),
                 if (comments.isEmpty)
@@ -82,7 +81,7 @@ class TaskCommentsList extends StatelessWidget {
                     ),
                     child: Text(
                       l10n.noCommentsYet,
-                      style: TextStyle(
+                      style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),

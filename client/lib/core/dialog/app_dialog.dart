@@ -18,3 +18,20 @@ Future<T?> showAppDialog<T>({
     builder: builder,
   );
 }
+
+/// Pushes a [DialogRoute] using the navigator for custom transitions or modal routing.
+Future<T?> pushAppDialogRoute<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  bool barrierDismissible = true,
+  RouteSettings? routeSettings,
+}) {
+  return Navigator.of(context).push<T>(
+    DialogRoute<T>(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: builder,
+      settings: routeSettings,
+    ),
+  );
+}

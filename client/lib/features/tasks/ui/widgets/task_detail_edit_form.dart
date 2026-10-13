@@ -1,6 +1,6 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_button.dart';
 import 'package:client/features/tasks/data/models/task_dto.dart';
 import 'package:client/features/tasks/data/models/task_priority.dart';
@@ -8,8 +8,7 @@ import 'package:client/features/tasks/data/models/update_task_request.dart';
 import 'package:client/features/tasks/ui/widgets/task_detail_assignee_due_fields.dart';
 import 'package:client/features/tasks/ui/widgets/task_priority_selector.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class TaskDetailEditForm extends StatefulWidget {
   final TaskDto task;

@@ -1,11 +1,11 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/features/onboarding/ui/widgets/visuals/visual_canvas_card.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceVisual extends StatelessWidget {
   const WorkspaceVisual({super.key});
@@ -275,18 +275,21 @@ class WorkspaceVisual extends StatelessWidget {
                               child: Stack(
                                 children: [
                                   _buildAvatar(
+                                    theme,
                                     0,
                                     'AK',
                                     AppColors.electricViolet,
                                     AppColors.pureWhite,
                                   ),
                                   _buildAvatar(
+                                    theme,
                                     16,
                                     'SL',
                                     AppColors.skyBlue,
                                     AppColors.lightTextPrimary,
                                   ),
                                   _buildAvatar(
+                                    theme,
                                     32,
                                     'MD',
                                     AppColors.priorityHigh,
@@ -468,7 +471,13 @@ class WorkspaceVisual extends StatelessWidget {
     );
   }
 
-  Widget _buildAvatar(double left, String initials, Color bg, Color textColor) {
+  Widget _buildAvatar(
+    ThemeData theme,
+    double left,
+    String initials,
+    Color bg,
+    Color textColor,
+  ) {
     return Positioned(
       left: left,
       child: Container(
@@ -485,7 +494,10 @@ class WorkspaceVisual extends StatelessWidget {
         child: Center(
           child: Text(
             initials,
-            style: TextStyle(fontWeight: FontWeight.w800, color: textColor),
+            style: theme.textTheme.labelSmall?.copyWith(
+              fontWeight: FontWeight.w800,
+              color: textColor,
+            ),
           ),
         ),
       ),

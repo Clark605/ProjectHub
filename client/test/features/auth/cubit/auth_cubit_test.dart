@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'package:bloc_test/bloc_test.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
+import 'package:bloc_test/bloc_test.dart';
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/auth/cubit/app_auth_cubit.dart';
@@ -11,6 +9,8 @@ import 'package:client/features/auth/cubit/login_cubit.dart';
 import 'package:client/features/auth/cubit/login_state.dart';
 import 'package:client/features/auth/data/models/auth_dtos.dart';
 import 'package:client/features/auth/data/models/user.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../helpers/mock_repositories.dart';
 

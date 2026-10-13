@@ -1,7 +1,7 @@
-import 'package:injectable/injectable.dart';
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/features/dashboard/cubit/dashboard_state.dart';
 import 'package:client/features/workspaces/data/workspace_repository.dart';
+import 'package:injectable/injectable.dart';
 
 @injectable
 class DashboardCubit extends SafeActionCubit<DashboardState> {

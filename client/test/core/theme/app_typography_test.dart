@@ -1,7 +1,7 @@
+import 'package:client/core/theme/app_theme.dart';
+import 'package:client/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:client/core/theme/app_typography.dart';
-import 'package:client/core/theme/app_theme.dart';
 
 void main() {
   group('AppTypography Locale Resolution', () {

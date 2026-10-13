@@ -1,10 +1,10 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/core/theme/workspace_accent.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:client/core/theme/workspace_accent.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceSwitcherPill extends StatelessWidget {
   final String? activeWorkspaceName;
@@ -108,7 +108,7 @@ class WorkspaceSwitcherPill extends StatelessWidget {
                       ),
                       child: Text(
                         activeWorkspaceRole!,
-                        style: TextStyle(
+                        style: theme.textTheme.labelSmall?.copyWith(
                           color: accentColor,
                           fontWeight: FontWeight.bold,
                         ),

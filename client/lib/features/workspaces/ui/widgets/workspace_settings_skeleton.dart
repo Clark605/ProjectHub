@@ -1,9 +1,8 @@
+import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_radius.dart';
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspaceSettingsSkeleton extends StatelessWidget {
   const WorkspaceSettingsSkeleton({super.key});

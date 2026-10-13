@@ -1,12 +1,11 @@
+import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_icon_size.dart';
-import 'package:flutter/material.dart';
-
+import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
-import 'package:client/core/extensions/context_extensions.dart';
-import 'package:client/core/theme/app_avatar_size.dart';
-import 'package:client/core/theme/app_spacing.dart';
+import 'package:flutter/material.dart';
 
 class TaskCommentItem extends StatelessWidget {
   const TaskCommentItem({
@@ -37,7 +36,7 @@ class TaskCommentItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppAvatar(name: comment.authorName, size: AppAvatarSize.compact),
+          AppAvatar(name: comment.authorName, size: AppAvatarSize.sm),
           AppSpacing.gapWSm,
           Expanded(
             child: Column(
@@ -47,7 +46,7 @@ class TaskCommentItem extends StatelessWidget {
                   children: [
                     Text(
                       comment.authorName,
-                      style: TextStyle(
+                      style: theme.textTheme.labelMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: theme.colorScheme.onSurface,
                       ),
@@ -55,7 +54,7 @@ class TaskCommentItem extends StatelessWidget {
                     AppSpacing.gapWXs,
                     Text(
                       timeStr,
-                      style: TextStyle(
+                      style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
@@ -77,7 +76,7 @@ class TaskCommentItem extends StatelessWidget {
                 AppSpacing.gapHXxs,
                 Text(
                   comment.content,
-                  style: TextStyle(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface,
                     height: 1.35,
                   ),

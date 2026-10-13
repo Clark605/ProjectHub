@@ -1,7 +1,7 @@
+import 'package:client/features/profile/ui/widgets/version_info_tile.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:client/features/profile/ui/widgets/version_info_tile.dart';
 
 void main() {
   testWidgets('VersionInfoTile renders author attribution text', (

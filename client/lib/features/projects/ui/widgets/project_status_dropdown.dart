@@ -1,10 +1,9 @@
-import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
-
-import 'package:client/core/theme/app_colors.dart';
-import 'package:client/features/projects/data/models/project_status.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
+import 'package:client/features/projects/data/models/project_status.dart';
+import 'package:flutter/material.dart';
 
 class ProjectStatusDropdown extends StatelessWidget {
   const ProjectStatusDropdown({

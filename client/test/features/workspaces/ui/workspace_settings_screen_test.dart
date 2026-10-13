@@ -1,13 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:client/core/di/injection.dart';
 import 'package:client/core/errors/app_exception.dart';
-import 'package:client/core/storage/prefs_service.dart';
 import 'package:client/core/routes/route_names.dart';
+import 'package:client/core/storage/prefs_service.dart';
+import 'package:client/core/widgets/app_danger_zone.dart';
+import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/workspaces/cubit/workspace_context_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_state.dart';
@@ -15,13 +11,16 @@ import 'package:client/features/workspaces/data/models/add_member_request.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/features/workspaces/data/models/update_workspace_request.dart';
 import 'package:client/features/workspaces/data/models/workspace_dto.dart';
-import 'package:client/core/widgets/app_danger_zone.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_details_card.dart';
-import 'package:client/core/widgets/app_error_banner.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_members_card.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_settings_skeleton.dart';
 import 'package:client/features/workspaces/ui/workspace_settings_screen.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../helpers/mock_repositories.dart';
 
