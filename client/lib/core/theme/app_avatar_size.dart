@@ -20,3 +20,4 @@ class AppAvatarSize {
   /// 56px — Extra large avatar used in detail screens and profiles.
   static const double xl = 56.0;
 }
+
