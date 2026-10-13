@@ -29,6 +29,18 @@ import 'package:client/l10n/generated/app_localizations.dart';
 
 import '../../../helpers/mock_repositories.dart';
 
+class _SpyWorkspaceContextCubit extends WorkspaceContextCubit {
+  int loadWorkspacesCallCount = 0;
+
+  _SpyWorkspaceContextCubit(super.repository, super.prefs);
+
+  @override
+  Future<void> loadWorkspaces() async {
+    loadWorkspacesCallCount++;
+    await super.loadWorkspaces();
+  }
+}
+
 class _SpyProjectsListCubit extends ProjectsListCubit {
   final List<int> loadedWorkspaceIds = [];
 
@@ -97,8 +109,9 @@ void main() {
       providers: [
         BlocProvider<AppSettingsCubit>.value(value: getIt<AppSettingsCubit>()),
         BlocProvider<AppAuthCubit>.value(value: getIt<AppAuthCubit>()),
-        BlocProvider<WorkspaceContextCubit>.value(
-          value: getIt<WorkspaceContextCubit>(),
+        BlocProvider<WorkspaceContextCubit>(
+          lazy: false,
+          create: (_) => getIt<WorkspaceContextCubit>()..loadWorkspaces(),
         ),
         BlocProvider<ProjectsListCubit>.value(
           value: getIt<ProjectsListCubit>(),
@@ -302,6 +315,60 @@ void main() {
         spyProjectsCubit.loadedWorkspaceIds.sublist(countBeforeSwitch),
         contains(2),
       );
+    },
+  );
+
+  testWidgets(
+    'MainShellScreen renders without triggering loadWorkspaces itself',
+    (WidgetTester tester) async {
+      final sp = await SharedPreferences.getInstance();
+      final prefs = PrefsService(sp);
+      final repo = createMockWorkspaceRepository();
+      final spyCubit = _SpyWorkspaceContextCubit(repo, prefs);
+
+      await tester.pumpWidget(
+        MultiBlocProvider(
+          providers: [
+            BlocProvider<AppSettingsCubit>.value(
+              value: getIt<AppSettingsCubit>(),
+            ),
+            BlocProvider<AppAuthCubit>.value(value: getIt<AppAuthCubit>()),
+            BlocProvider<WorkspaceContextCubit>.value(value: spyCubit),
+            BlocProvider<ProjectsListCubit>.value(
+              value: getIt<ProjectsListCubit>(),
+            ),
+          ],
+          child: const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: MainShellScreen(),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(spyCubit.loadWorkspacesCallCount, equals(0));
+    },
+  );
+
+  testWidgets(
+    'WorkspaceContextCubit loads workspaces once when provided via create',
+    (WidgetTester tester) async {
+      final sp = await SharedPreferences.getInstance();
+      final prefs = PrefsService(sp);
+      final repo = createMockWorkspaceRepository();
+      final spyCubit = _SpyWorkspaceContextCubit(repo, prefs);
+
+      await tester.pumpWidget(
+        BlocProvider<WorkspaceContextCubit>(
+          lazy: false,
+          create: (_) => spyCubit..loadWorkspaces(),
+          child: const SizedBox(),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(spyCubit.loadWorkspacesCallCount, equals(1));
     },
   );
 }

@@ -89,10 +89,10 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
 
   @override
   int get hashCode => Object.hash(
-        subtleSurface,
-        subtleSurfaceStrong,
-        subtleBorder,
-        textSecondary,
-        badgeAlpha,
-      );
+    subtleSurface,
+    subtleSurfaceStrong,
+    subtleBorder,
+    textSecondary,
+    badgeAlpha,
+  );
 }

@@ -122,8 +122,9 @@ class _ProjectHubAppState extends State<ProjectHubApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AppAuthCubit>.value(value: getIt<AppAuthCubit>()),
-        BlocProvider<WorkspaceContextCubit>.value(
-          value: getIt<WorkspaceContextCubit>(),
+        BlocProvider<WorkspaceContextCubit>(
+          lazy: false,
+          create: (_) => getIt<WorkspaceContextCubit>()..loadWorkspaces(),
         ),
         BlocProvider<AppSettingsCubit>.value(value: getIt<AppSettingsCubit>()),
       ],

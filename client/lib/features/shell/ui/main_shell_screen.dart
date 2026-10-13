@@ -31,7 +31,6 @@ class _MainShellScreenState extends State<MainShellScreen> {
       if (!mounted) return;
       final wsCubit = context.read<WorkspaceContextCubit>();
       wsCubit.state.whenOrNull(empty: () => _showQuickStartDialog(context));
-      wsCubit.loadWorkspaces();
     });
   }
 
