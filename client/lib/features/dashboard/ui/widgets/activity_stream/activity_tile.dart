@@ -4,7 +4,7 @@ import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
-import 'package:client/features/dashboard/ui/widgets/activity_event_spans.dart';
+import 'package:client/features/dashboard/ui/widgets/activity_stream/activity_event_spans.dart';
 import 'package:flutter/material.dart';
 
 class ActivityTile extends StatelessWidget {

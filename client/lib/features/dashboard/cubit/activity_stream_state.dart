@@ -1,12 +1,14 @@
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
+import 'package:client/features/projects/data/models/project_dto.dart';
 
 class ActivityStreamState {
   final bool isLoading;
   final bool isRefreshing;
   final List<ActivityEventDto> activities;
   final List<ActivityEventDto> filteredActivities;
+  final List<ProjectDto> availableProjects;
   final ActivityFilter filter;
   final AppFailure? failure;
 
@@ -15,6 +17,7 @@ class ActivityStreamState {
     this.isRefreshing = false,
     this.activities = const [],
     this.filteredActivities = const [],
+    this.availableProjects = const [],
     this.filter = const ActivityFilter.empty(),
     this.failure,
   });
@@ -26,6 +29,7 @@ class ActivityStreamState {
     bool? isRefreshing,
     List<ActivityEventDto>? activities,
     List<ActivityEventDto>? filteredActivities,
+    List<ProjectDto>? availableProjects,
     ActivityFilter? filter,
     AppFailure? failure,
     bool clearFailure = false,
@@ -35,6 +39,7 @@ class ActivityStreamState {
       isRefreshing: isRefreshing ?? this.isRefreshing,
       activities: activities ?? this.activities,
       filteredActivities: filteredActivities ?? this.filteredActivities,
+      availableProjects: availableProjects ?? this.availableProjects,
       filter: filter ?? this.filter,
       failure: clearFailure ? null : (failure ?? this.failure),
     );

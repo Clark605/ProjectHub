@@ -1,7 +1,7 @@
 import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_spacing.dart';
-import 'package:client/features/dashboard/ui/widgets/metric_card.dart';
+import 'package:client/features/dashboard/ui/widgets/dashboard/metric_card.dart';
 import 'package:flutter/material.dart';
 
 class DashboardMetricsGrid extends StatelessWidget {

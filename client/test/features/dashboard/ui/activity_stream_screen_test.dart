@@ -1,8 +1,9 @@
 import 'package:client/core/theme/light_theme.dart';
+import 'package:client/features/dashboard/cubit/activity_stream_cubit.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
 import 'package:client/features/dashboard/ui/activity_stream_screen.dart';
-import 'package:client/features/dashboard/ui/widgets/activity_tile.dart';
+import 'package:client/features/dashboard/ui/widgets/activity_stream/activity_tile.dart';
 import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -56,6 +57,8 @@ void main() {
       }),
     ];
 
+    final cubit = ActivityStreamCubit(mockRepo);
+
     await tester.pumpWidget(
       MaterialApp(
         theme: buildLightTheme(),
@@ -63,7 +66,7 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         home: ActivityStreamScreen(
           workspaceId: 10,
-          activityRepository: mockRepo,
+          cubit: cubit,
         ),
       ),
     );
@@ -74,12 +77,15 @@ void main() {
     final allPlainText = richTexts.map((r) => r.text.toPlainText()).join(' | ');
     expect(allPlainText, contains('Alex'));
     expect(allPlainText, contains('Sam'));
+
+    await cubit.close();
   });
 
   testWidgets('ActivityStreamScreen renders empty state when no activities', (
     tester,
   ) async {
     activities = [];
+    final cubit = ActivityStreamCubit(mockRepo);
 
     await tester.pumpWidget(
       MaterialApp(
@@ -88,7 +94,7 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         home: ActivityStreamScreen(
           workspaceId: 10,
-          activityRepository: mockRepo,
+          cubit: cubit,
         ),
       ),
     );
@@ -96,6 +102,8 @@ void main() {
 
     expect(find.byType(ActivityTile), findsNothing);
     expect(find.text('No recent activity yet'), findsOneWidget);
+
+    await cubit.close();
   });
 
   testWidgets(
@@ -126,6 +134,8 @@ void main() {
         ];
       });
 
+      final cubit = ActivityStreamCubit(mockRepo);
+
       await tester.pumpWidget(
         MaterialApp(
           theme: buildLightTheme(),
@@ -133,7 +143,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           home: ActivityStreamScreen(
             workspaceId: 10,
-            activityRepository: mockRepo,
+            cubit: cubit,
           ),
         ),
       );
@@ -147,6 +157,8 @@ void main() {
 
       expect(callCount, 2);
       expect(find.byType(ActivityTile), findsOneWidget);
+
+      await cubit.close();
     },
   );
 
@@ -174,6 +186,8 @@ void main() {
         }),
       ];
 
+      final cubit = ActivityStreamCubit(mockRepo);
+
       await tester.pumpWidget(
         MaterialApp(
           theme: buildLightTheme(),
@@ -181,7 +195,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           home: ActivityStreamScreen(
             workspaceId: 10,
-            activityRepository: mockRepo,
+            cubit: cubit,
           ),
         ),
       );
@@ -208,6 +222,8 @@ void main() {
       text = richTexts.map((r) => r.text.toPlainText()).join(' | ');
       expect(text, contains('Sam'));
       expect(text, isNot(contains('Alex')));
+
+      await cubit.close();
     },
   );
 
@@ -226,6 +242,8 @@ void main() {
         }),
       ];
 
+      final cubit = ActivityStreamCubit(mockRepo);
+
       await tester.pumpWidget(
         MaterialApp(
           theme: buildLightTheme(),
@@ -233,7 +251,7 @@ void main() {
           supportedLocales: AppLocalizations.supportedLocales,
           home: ActivityStreamScreen(
             workspaceId: 10,
-            activityRepository: mockRepo,
+            cubit: cubit,
           ),
         ),
       );
@@ -259,6 +277,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byType(ActivityTile), findsOneWidget);
+
+      await cubit.close();
     },
   );
 
@@ -286,6 +306,8 @@ void main() {
       }),
     ];
 
+    final cubit = ActivityStreamCubit(mockRepo);
+
     await tester.pumpWidget(
       MaterialApp(
         theme: buildLightTheme(),
@@ -293,7 +315,7 @@ void main() {
         supportedLocales: AppLocalizations.supportedLocales,
         home: ActivityStreamScreen(
           workspaceId: 10,
-          activityRepository: mockRepo,
+          cubit: cubit,
         ),
       ),
     );
@@ -318,5 +340,7 @@ void main() {
     final text = richTexts.map((r) => r.text.toPlainText()).join(' | ');
     expect(text, contains('Alice'));
     expect(text, isNot(contains('Bob')));
+
+    await cubit.close();
   });
 }

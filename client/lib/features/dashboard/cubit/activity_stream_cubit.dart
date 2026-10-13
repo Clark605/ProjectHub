@@ -5,17 +5,22 @@ import 'package:client/core/theme/app_durations.dart';
 import 'package:client/features/dashboard/cubit/activity_stream_state.dart';
 import 'package:client/features/dashboard/data/activity_repository.dart';
 import 'package:client/features/dashboard/data/models/activity_filter.dart';
+import 'package:client/features/projects/data/models/project_dto.dart';
+import 'package:client/features/projects/data/project_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
 class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
   final ActivityRepository _repository;
+  final ProjectRepository? _projectRepository;
   int? _workspaceId;
   Timer? _debounceTimer;
   int _requestId = 0;
 
-  ActivityStreamCubit(this._repository)
-    : super(const ActivityStreamState(isLoading: true));
+  ActivityStreamCubit(
+    this._repository, [
+    this._projectRepository,
+  ]) : super(const ActivityStreamState(isLoading: true));
 
   int? get workspaceId => _workspaceId;
   ActivityFilter get currentFilter => state.filter;
@@ -51,6 +56,15 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
           filter: targetFilter,
         );
 
+        List<ProjectDto> projects = state.availableProjects;
+        if (_projectRepository != null && state.availableProjects.isEmpty) {
+          try {
+            projects = await _projectRepository.getProjects(workspaceId);
+          } on Object catch (_) {
+            // Non-critical project list safely falls back to empty
+          }
+        }
+
         if (requestId != _requestId) return;
 
         final filtered = targetFilter.apply(items);
@@ -60,6 +74,7 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
             isRefreshing: false,
             activities: items,
             filteredActivities: filtered,
+            availableProjects: projects,
             filter: targetFilter,
             clearFailure: true,
           ),
@@ -77,6 +92,10 @@ class ActivityStreamCubit extends SafeActionCubit<ActivityStreamState> {
       },
       logTag: 'ActivityStreamCubit',
     );
+  }
+
+  void setAvailableProjects(List<ProjectDto> projects) {
+    emit(state.copyWith(availableProjects: projects));
   }
 
   void updateFilter(ActivityFilter newFilter, {bool debounce = false}) {

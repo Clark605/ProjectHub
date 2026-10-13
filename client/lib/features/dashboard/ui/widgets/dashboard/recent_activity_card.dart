@@ -5,7 +5,7 @@ import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
-import 'package:client/features/dashboard/ui/widgets/activity_tile.dart';
+import 'package:client/features/dashboard/ui/widgets/activity_stream/activity_tile.dart';
 import 'package:flutter/material.dart';
 
 class RecentActivityCard extends StatelessWidget {
