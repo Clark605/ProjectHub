@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
+import 'package:client/core/theme/dark_theme.dart';
+import 'package:client/core/theme/light_theme.dart';
 import 'package:client/core/widgets/app_badge.dart';
 
 void main() {
@@ -54,12 +57,12 @@ void main() {
     });
 
     testWidgets(
-      'uses AppColors.badgeBackground in light and dark themes for standard and emphasis states',
+      'uses context.appColors.badgeBackground in light and dark themes for standard and emphasis states',
       (tester) async {
         // Light theme, standard
         await tester.pumpWidget(
           MaterialApp(
-            theme: ThemeData.light(),
+            theme: buildLightTheme(),
             home: const Scaffold(
               body: AppBadge(label: 'High', color: AppColors.priorityHigh),
             ),
@@ -70,7 +73,7 @@ void main() {
         var decoration = container.decoration as BoxDecoration;
         expect(
           decoration.color,
-          AppColors.badgeBackground(AppColors.priorityHigh, false),
+          AppColorsExtension.light.badgeBackground(AppColors.priorityHigh),
         );
         expect(
           decoration.color,
@@ -80,7 +83,7 @@ void main() {
         // Dark theme, standard
         await tester.pumpWidget(
           MaterialApp(
-            theme: ThemeData.dark(),
+            theme: buildDarkTheme(),
             home: const Scaffold(
               body: AppBadge(label: 'High', color: AppColors.priorityHigh),
             ),
@@ -92,7 +95,7 @@ void main() {
         decoration = container.decoration as BoxDecoration;
         expect(
           decoration.color,
-          AppColors.badgeBackground(AppColors.priorityHigh, true),
+          AppColorsExtension.dark.badgeBackground(AppColors.priorityHigh),
         );
         expect(decoration.color, AppColors.priorityHigh.withValues(alpha: 0.2));
 
@@ -100,7 +103,7 @@ void main() {
         for (final isDark in [false, true]) {
           await tester.pumpWidget(
             MaterialApp(
-              theme: isDark ? ThemeData.dark() : ThemeData.light(),
+              theme: isDark ? buildDarkTheme() : buildLightTheme(),
               home: const Scaffold(
                 body: AppBadge(
                   label: 'Overdue',
@@ -116,7 +119,8 @@ void main() {
           decoration = container.decoration as BoxDecoration;
           expect(
             decoration.color,
-            AppColors.badgeBackground(AppColors.error, isDark, emphasis: true),
+            (isDark ? AppColorsExtension.dark : AppColorsExtension.light)
+                .badgeBackground(AppColors.error, emphasis: true),
           );
           expect(decoration.color, AppColors.error.withValues(alpha: 0.15));
         }

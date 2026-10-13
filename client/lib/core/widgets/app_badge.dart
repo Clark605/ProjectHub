@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
@@ -26,10 +26,9 @@ class AppBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final resolvedBackground =
         backgroundColor ??
-        AppColors.badgeBackground(color, isDark, emphasis: isEmphasis);
+        context.appColors.badgeBackground(color, emphasis: isEmphasis);
 
     return Container(
       padding: const EdgeInsets.symmetric(

@@ -80,7 +80,7 @@ class KanbanColumnHeader extends StatelessWidget {
                     '$taskCount',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      color: accent ?? AppColors.textSecondaryColor(isDark),
+                      color: accent ?? context.appColors.textSecondary,
                     ),
                   ),
                 ),

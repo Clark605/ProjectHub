@@ -32,7 +32,6 @@ class KanbanTaskCardFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
     final l10n = context.l10n;
 
     return Row(
@@ -62,7 +61,7 @@ class KanbanTaskCardFooter extends StatelessWidget {
                       : theme.colorScheme.onSurfaceVariant,
                   backgroundColor: isOverdue
                       ? null
-                      : AppColors.subtleSurface(isDark),
+                      : context.appColors.subtleSurface,
                   isEmphasis: isOverdue,
                 ),
               if (commentCount > 0)
@@ -87,17 +86,12 @@ class KanbanTaskCardFooter extends StatelessWidget {
           ),
         ),
         AppSpacing.gapWSm,
-        _buildAvatar(context, theme, isDark, l10n),
+        _buildAvatar(context, l10n),
       ],
     );
   }
 
-  Widget _buildAvatar(
-    BuildContext context,
-    ThemeData theme,
-    bool isDark,
-    AppLocalizations l10n,
-  ) {
+  Widget _buildAvatar(BuildContext context, AppLocalizations l10n) {
     final name = assigneeName?.trim();
     if (name != null && name.isNotEmpty) {
       return Tooltip(

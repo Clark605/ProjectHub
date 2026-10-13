@@ -88,6 +88,9 @@ run_check "showModalBottomSheet( outside core/dialog" "showModalBottomSheet\(" "
 run_check "AlertDialog( outside core/dialog" "AlertDialog\(" "default"
 run_check "ScaffoldMessenger outside core/dialog" "ScaffoldMessenger" "default"
 
+# 12. Legacy AppColors static helpers outside core/theme
+run_check "Legacy AppColors static helpers outside core/theme" "AppColors\.(subtleSurface|subtleSurfaceStrong|subtleBorder|textSecondaryColor|badgeBackground)\(" "theme_only"
+
 echo "================================================="
 if [ $FAIL -ne 0 ]; then
   echo "❌ Design token audit FAILED."

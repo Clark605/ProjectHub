@@ -138,7 +138,7 @@ class _KanbanMobileBoardState extends State<KanbanMobileBoard> {
                                 (isDark
                                     ? AppColors.pureWhite
                                     : AppColors.pureBlack))
-                          : AppColors.textSecondaryColor(isDark),
+                          : context.appColors.textSecondary,
                     ),
                     onSelected: (_) async {
                       if (_currentColumnIndex == idx) return;

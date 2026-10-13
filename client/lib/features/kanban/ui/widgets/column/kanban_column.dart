@@ -3,7 +3,6 @@ import 'package:client/core/theme/app_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/workspace_accent.dart';
 import 'package:client/features/kanban/cubit/kanban_cubit.dart';
 import 'package:client/features/kanban/ui/widgets/board/kanban_screen_actions.dart';
@@ -147,7 +146,7 @@ class KanbanColumn extends StatelessWidget {
                                     ? Icons.inbox_outlined
                                     : Icons.add_circle_outline_rounded,
                                 size: AppIconSize.xl,
-                                color: AppColors.textSecondaryColor(isDark),
+                                color: context.appColors.textSecondary,
                               ),
                               AppSpacing.gapHXs,
                               Text(
@@ -156,7 +155,7 @@ class KanbanColumn extends StatelessWidget {
                                     : l10n.addTaskToStatus(statusName),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: AppColors.textSecondaryColor(isDark),
+                                  color: context.appColors.textSecondary,
                                 ),
                               ),
                             ],

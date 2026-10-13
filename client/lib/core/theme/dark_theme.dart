@@ -1,7 +1,8 @@
-import 'package:client/core/theme/app_radius.dart';
-import 'package:flutter/material.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_colors_extension.dart';
+import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_typography.dart';
+import 'package:flutter/material.dart';
 
 ThemeData buildDarkTheme([Locale? locale]) {
   final fontFamily = AppTypography.fontFamilyFor(locale);
@@ -9,6 +10,7 @@ ThemeData buildDarkTheme([Locale? locale]) {
 
   return ThemeData(
     useMaterial3: true,
+    extensions: const [AppColorsExtension.dark],
     brightness: Brightness.dark,
     fontFamily: fontFamily,
     fontFamilyFallback: fontFallback,
@@ -49,12 +51,12 @@ ThemeData buildDarkTheme([Locale? locale]) {
       error: AppColors.error,
       onError: AppColors.onError,
     ),
-    cardTheme: CardThemeData(
+    cardTheme: const CardThemeData(
       color: AppColors.surfaceContainer,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: AppRadius.md,
-        side: const BorderSide(color: AppColors.border, width: 1),
+        side: BorderSide(color: AppColors.border, width: 1),
       ),
     ),
     appBarTheme: const AppBarTheme(
@@ -65,22 +67,22 @@ ThemeData buildDarkTheme([Locale? locale]) {
       scrolledUnderElevation: 0,
       centerTitle: false,
     ),
-    inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: const InputDecorationTheme(
       filled: true,
       fillColor: AppColors.surfaceContainer,
       border: OutlineInputBorder(
         borderRadius: AppRadius.md,
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: AppRadius.md,
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: AppColors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: AppRadius.md,
-        borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        borderSide: BorderSide(color: AppColors.primary, width: 2),
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -88,7 +90,7 @@ ThemeData buildDarkTheme([Locale? locale]) {
         foregroundColor: AppColors.textOnPrimary,
         elevation: 0,
         minimumSize: const Size(64, 44),
-        shape: RoundedRectangleBorder(borderRadius: AppRadius.md),
+        shape: const RoundedRectangleBorder(borderRadius: AppRadius.md),
         textStyle: AppTypography.getTextTheme(
           locale,
         ).labelLarge?.copyWith(fontWeight: FontWeight.w600),
@@ -111,7 +113,7 @@ ThemeData buildDarkTheme([Locale? locale]) {
         }
         return const BorderSide(color: AppColors.border);
       }),
-      shape: RoundedRectangleBorder(borderRadius: AppRadius.sm),
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.sm),
       labelStyle: const TextStyle(
         color: AppColors.textSecondary,
         fontSize: 13,

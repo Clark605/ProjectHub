@@ -19,7 +19,7 @@ class WorkspaceVisual extends StatelessWidget {
     final cardBg = isDark
         ? AppColors.surfaceContainerHigh.withValues(alpha: 0.9)
         : AppColors.pureWhite;
-    final cardBorder = AppColors.subtleBorder(isDark);
+    final cardBorder = context.appColors.subtleBorder;
 
     return VisualCanvasCard(
       primaryGlow: AppColors.electricViolet,

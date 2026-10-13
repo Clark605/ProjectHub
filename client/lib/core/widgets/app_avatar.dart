@@ -1,3 +1,4 @@
+import 'package:client/core/extensions/context_extensions.dart';
 import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
@@ -71,8 +72,8 @@ class AppAvatar extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (_isUnassigned) {
-      final bg = backgroundColor ?? AppColors.subtleSurfaceStrong(isDark);
-      final fg = textColor ?? AppColors.textSecondaryColor(isDark);
+      final bg = backgroundColor ?? context.appColors.subtleSurfaceStrong;
+      final fg = textColor ?? context.appColors.textSecondary;
 
       return Container(
         width: size,

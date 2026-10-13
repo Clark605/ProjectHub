@@ -75,31 +75,6 @@ class AppColors {
   static const Color lightTextPrimary = Color(0xFF0F172A);
   static const Color lightTextSecondary = Color(0xFF475569);
 
-  /// Resolves the secondary text color based on brightness.
-  static Color textSecondaryColor(bool isDark) =>
-      isDark ? textSecondary : lightTextSecondary;
-
-  /// Subtle neutral surface fill for metadata pills and neutral chips.
-  static Color subtleSurface(bool isDark) => isDark
-      ? pureWhite.withValues(alpha: 0.1)
-      : pureBlack.withValues(alpha: 0.05);
-
-  /// Slightly stronger subtle neutral surface fill (e.g. unassigned avatars).
-  static Color subtleSurfaceStrong(bool isDark) => isDark
-      ? pureWhite.withValues(alpha: 0.1)
-      : pureBlack.withValues(alpha: 0.06);
-
-  /// Subtle card/button border color based on brightness.
-  static Color subtleBorder(bool isDark) =>
-      isDark ? pureWhite.withValues(alpha: 0.1) : lightBorder;
-
-  /// Tinted background fill for compact status, priority, and due-date badges.
-  static Color badgeBackground(
-    Color color,
-    bool isDark, {
-    bool emphasis = false,
-  }) => color.withValues(alpha: emphasis ? 0.15 : (isDark ? 0.2 : 0.12));
-
   // ── Deterministic Avatar Palette ──
   static const List<Color> avatarPalette = [
     Color(0xFF6366F1), // Indigo
