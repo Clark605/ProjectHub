@@ -12,6 +12,7 @@ import 'package:client/features/workspaces/data/workspace_repository.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_avatar_item.dart';
 import 'package:client/features/workspaces/ui/widgets/workspace_presence_sheet.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_spacing.dart';
 
 class WorkspacePresenceAvatars extends StatefulWidget {
@@ -142,13 +143,13 @@ class _WorkspacePresenceAvatarsState extends State<WorkspacePresenceAvatars> {
                   .where((m) => m.userId == visibleIds[i])
                   .firstOrNull,
               isMe: visibleIds[i] == _currentUserId,
-              radius: AppRadius.mdValue,
+              size: AppAvatarSize.sm,
             ),
           ),
         if (overflowCount > 0)
           Container(
-            width: 24,
-            height: 24,
+            width: AppAvatarSize.sm,
+            height: AppAvatarSize.sm,
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainerHighest,
               shape: BoxShape.circle,

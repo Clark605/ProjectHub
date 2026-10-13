@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_icon_size.dart';
-import 'package:client/core/theme/app_radius.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/theme/app_typography.dart';
 import 'package:client/core/utils/date_formatter.dart';
@@ -18,7 +18,6 @@ class KanbanTaskCardFooter extends StatelessWidget {
   final DateTime? dueDate;
   final bool isOverdue;
   final String? assigneeName;
-  final String? assigneeId;
   final int commentCount;
 
   const KanbanTaskCardFooter({
@@ -27,7 +26,6 @@ class KanbanTaskCardFooter extends StatelessWidget {
     this.dueDate,
     required this.isOverdue,
     this.assigneeName,
-    this.assigneeId,
     this.commentCount = 0,
   });
 
@@ -104,20 +102,12 @@ class KanbanTaskCardFooter extends StatelessWidget {
     if (name != null && name.isNotEmpty) {
       return Tooltip(
         message: l10n.assignedToUser(name),
-        child: AppAvatar(name: name, size: 24),
+        child: AppAvatar(name: name, size: AppAvatarSize.sm),
       );
     }
     return Tooltip(
       message: l10n.unassigned,
-      child: CircleAvatar(
-        radius: AppRadius.mdValue,
-        backgroundColor: AppColors.subtleSurfaceStrong(isDark),
-        child: Icon(
-          Icons.person_outline_rounded,
-          size: AppIconSize.xxs,
-          color: AppColors.textSecondaryColor(isDark),
-        ),
-      ),
+      child: const AppAvatar.unassigned(size: AppAvatarSize.sm),
     );
   }
 }

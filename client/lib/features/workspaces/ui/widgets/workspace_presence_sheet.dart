@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:client/core/dialog/app_bottom_sheet.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_colors.dart';
 import 'package:client/core/theme/app_spacing.dart';
 import 'package:client/core/widgets/app_avatar.dart';
@@ -88,7 +89,7 @@ class WorkspacePresenceSheet extends StatelessWidget {
                     children: [
                       AppAvatar(
                         name: name,
-                        size: 28,
+                        size: AppAvatarSize.compact,
                         textStyle: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       Positioned(

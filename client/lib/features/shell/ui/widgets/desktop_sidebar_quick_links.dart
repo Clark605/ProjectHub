@@ -101,7 +101,7 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
               horizontal: AppSpacing.md,
               vertical: AppSpacing.sm,
             ),
-            child: const SizedBox(
+            child: SizedBox(
               width: AppIconSize.xs,
               height: AppIconSize.xs,
               child: CircularProgressIndicator(strokeWidth: 2),

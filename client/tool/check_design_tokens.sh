@@ -51,6 +51,8 @@ run_check "BorderRadius.circular outside core/theme" "BorderRadius\.circular\(" 
 run_check "Radius.circular outside core/theme" "\bRadius\.circular\(" "theme_only"
 run_check "AppRadius.(r[0-9]+|circular() outside core/theme" "AppRadius\.(r[0-9]+|circular\()" "theme_only"
 run_check "(CircleAvatar|radius): numeric literals outside core/theme" "(CircleAvatar|radius):\s*[0-9]" "theme_only"
+run_check "radius: AppRadius. outside core/theme" "radius:\s*AppRadius\." "theme_only"
+run_check "AppAvatar size numeric literals outside core/theme" "AppAvatar\([^)]*size:\s*[0-9]" "theme_only"
 
 # 2. fontSize: outside core/theme
 run_check "fontSize: outside core/theme" "fontSize:" "theme_only"

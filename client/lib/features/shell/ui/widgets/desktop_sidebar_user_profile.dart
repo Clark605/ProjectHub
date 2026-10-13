@@ -10,6 +10,7 @@ import 'package:client/features/auth/cubit/app_auth_cubit.dart';
 import 'package:client/features/auth/cubit/app_auth_state.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_spacing.dart';
 
 class DesktopSidebarUserProfile extends StatelessWidget {
@@ -48,7 +49,7 @@ class DesktopSidebarUserProfile extends StatelessWidget {
                 children: [
                   AppAvatar(
                     name: user?.name ?? 'U',
-                    size: 32,
+                    size: AppAvatarSize.md,
                     backgroundColor: theme.colorScheme.primary.withValues(
                       alpha: 0.2,
                     ),

@@ -176,7 +176,6 @@ void main() {
                   dueDate: DateTime(2026, 10, 15),
                   isOverdue: true,
                   assigneeName: 'أحمد محمد',
-                  assigneeId: 'u-1',
                   commentCount: 12,
                 ),
               ),
@@ -190,6 +189,59 @@ void main() {
       expect(tester.takeException(), isNull);
       expect(find.text('عاجلة'), findsOneWidget);
       expect(find.text('12'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'KanbanTaskCardFooter renders unassigned avatar when assigneeName is null',
+    (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: KanbanTaskCardFooter(isOverdue: false, assigneeName: null),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.byIcon(Icons.person_outline_rounded), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is Tooltip && w.message == 'Unassigned',
+        ),
+        findsOneWidget,
+      );
+    },
+  );
+
+  testWidgets(
+    'KanbanTaskCardFooter renders assigned avatar when assigneeName is present',
+    (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(
+            body: KanbanTaskCardFooter(
+              isOverdue: false,
+              assigneeName: 'Clark Kent',
+            ),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('CK'), findsOneWidget);
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is Tooltip && (w.message?.contains('Clark Kent') ?? false),
+        ),
+        findsOneWidget,
+      );
     },
   );
 }

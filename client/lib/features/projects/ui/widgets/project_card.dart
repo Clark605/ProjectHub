@@ -7,6 +7,7 @@ import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_spacing.dart';
 
 class ProjectCard extends StatelessWidget {
@@ -179,7 +180,7 @@ class ProjectCard extends StatelessWidget {
                           widthFactor: 0.75,
                           child: AppAvatar(
                             name: member.name,
-                            size: 24,
+                            size: AppAvatarSize.sm,
                             border: Border.all(
                               color: theme.colorScheme.surfaceContainerLow,
                               width: 1.5,

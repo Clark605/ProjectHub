@@ -5,6 +5,7 @@ import 'package:client/core/utils/date_formatter.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/comments/data/models/comment_dto.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_spacing.dart';
 
 class TaskCommentItem extends StatelessWidget {
@@ -36,7 +37,7 @@ class TaskCommentItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppAvatar(name: comment.authorName, size: 28),
+          AppAvatar(name: comment.authorName, size: AppAvatarSize.compact),
           AppSpacing.gapWSm,
           Expanded(
             child: Column(

@@ -231,7 +231,6 @@ class KanbanTaskCard extends StatelessWidget {
                         dueDate: task.dueDate,
                         isOverdue: task.isOverdue,
                         assigneeName: task.assigneeName,
-                        assigneeId: task.assigneeId,
                         commentCount: task.commentCount,
                       ),
                     ],

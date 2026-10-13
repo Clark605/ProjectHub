@@ -5,6 +5,7 @@ import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/dashboard/data/models/activity_event_dto.dart';
 import 'package:client/features/dashboard/ui/widgets/activity_event_spans.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_spacing.dart';
 
 class ActivityTile extends StatelessWidget {
@@ -24,7 +25,7 @@ class ActivityTile extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        AppAvatar(name: activity.actorName, size: 28),
+        AppAvatar(name: activity.actorName, size: AppAvatarSize.compact),
         AppSpacing.gapWSm,
         Expanded(
           child: RichText(

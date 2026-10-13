@@ -269,7 +269,7 @@ class WorkspaceVisual extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const SizedBox(
+                            SizedBox(
                               height: AppSpacing.xxl,
                               width: AppSpacing.fabClearance,
                               child: Stack(

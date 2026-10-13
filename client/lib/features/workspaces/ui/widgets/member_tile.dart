@@ -9,6 +9,7 @@ import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/workspaces/cubit/workspace_settings_cubit.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_spacing.dart';
 
 class MemberTile extends StatelessWidget {
@@ -73,7 +74,7 @@ class MemberTile extends StatelessWidget {
       ),
       leading: AppAvatar(
         name: member.name,
-        size: 40,
+        size: AppAvatarSize.lg,
         backgroundColor: isOwner
             ? primaryColor.withValues(alpha: 0.2)
             : theme.colorScheme.surfaceContainerHigh,

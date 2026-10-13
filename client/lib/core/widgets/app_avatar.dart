@@ -1,4 +1,6 @@
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/theme/app_colors.dart';
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 
@@ -6,12 +8,22 @@ class AppAvatar extends StatelessWidget {
   const AppAvatar({
     super.key,
     required this.name,
-    this.size = 32,
+    this.size = AppAvatarSize.md,
     this.backgroundColor,
     this.textColor,
     this.textStyle,
     this.border,
-  });
+  }) : _isUnassigned = false;
+
+  const AppAvatar.unassigned({
+    super.key,
+    this.size = AppAvatarSize.sm,
+    this.backgroundColor,
+    this.textColor,
+    this.border,
+  }) : name = '',
+       textStyle = null,
+       _isUnassigned = true;
 
   final String name;
   final double size;
@@ -19,6 +31,16 @@ class AppAvatar extends StatelessWidget {
   final Color? textColor;
   final TextStyle? textStyle;
   final BoxBorder? border;
+  final bool _isUnassigned;
+
+  double get _unassignedIconSize {
+    if (size <= AppAvatarSize.xs) return AppIconSize.xxs;
+    if (size <= AppAvatarSize.sm) return AppIconSize.xxs;
+    if (size <= AppAvatarSize.compact) return AppIconSize.xs;
+    if (size <= AppAvatarSize.md) return AppIconSize.sm;
+    if (size <= AppAvatarSize.lg) return AppIconSize.lg;
+    return AppIconSize.xl;
+  }
 
   String get _initials {
     final trimmed = name.trim();
@@ -47,6 +69,28 @@ class AppAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    if (_isUnassigned) {
+      final bg = backgroundColor ?? AppColors.subtleSurfaceStrong(isDark);
+      final fg = textColor ?? AppColors.textSecondaryColor(isDark);
+
+      return Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
+          color: bg,
+          shape: BoxShape.circle,
+          border: border,
+        ),
+        alignment: Alignment.center,
+        child: Icon(
+          Icons.person_outline_rounded,
+          size: _unassignedIconSize,
+          color: fg,
+        ),
+      );
+    }
+
     final base = _baseColor;
     final bg =
         backgroundColor ??

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:client/core/theme/app_avatar_size.dart';
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 
 void main() {
@@ -133,5 +135,53 @@ void main() {
         expect(customText.style?.color, equals(defaultText.style?.color));
       },
     );
+
+    testWidgets('AppAvatar.unassigned renders person icon and obeys size', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: Column(
+              children: [
+                AppAvatar.unassigned(key: Key('defaultUnassigned')),
+                AppAvatar.unassigned(
+                  key: Key('largeUnassigned'),
+                  size: AppAvatarSize.lg,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      expect(find.byIcon(Icons.person_outline_rounded), findsNWidgets(2));
+
+      final defaultContainer = tester.widget<Container>(
+        find.descendant(
+          of: find.byKey(const Key('defaultUnassigned')),
+          matching: find.byType(Container),
+        ),
+      );
+      expect(defaultContainer.constraints?.maxWidth, AppAvatarSize.sm);
+      expect(defaultContainer.constraints?.maxHeight, AppAvatarSize.sm);
+
+      final largeContainer = tester.widget<Container>(
+        find.descendant(
+          of: find.byKey(const Key('largeUnassigned')),
+          matching: find.byType(Container),
+        ),
+      );
+      expect(largeContainer.constraints?.maxWidth, AppAvatarSize.lg);
+      expect(largeContainer.constraints?.maxHeight, AppAvatarSize.lg);
+
+      final largeIcon = tester.widget<Icon>(
+        find.descendant(
+          of: find.byKey(const Key('largeUnassigned')),
+          matching: find.byType(Icon),
+        ),
+      );
+      expect(largeIcon.size, AppIconSize.lg);
+    });
   });
 }

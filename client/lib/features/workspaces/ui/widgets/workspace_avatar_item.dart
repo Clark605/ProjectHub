@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:client/core/theme/app_avatar_size.dart';
 import 'package:client/core/widgets/app_avatar.dart';
 import 'package:client/features/workspaces/data/models/member_dto.dart';
 
@@ -7,14 +8,14 @@ class WorkspaceAvatarItem extends StatelessWidget {
   final String userId;
   final MemberDto? member;
   final bool isMe;
-  final double radius;
+  final double size;
 
   const WorkspaceAvatarItem({
     super.key,
     required this.userId,
     this.member,
     this.isMe = false,
-    this.radius = 12,
+    this.size = AppAvatarSize.sm,
   });
 
   String get _name {
@@ -33,7 +34,7 @@ class WorkspaceAvatarItem extends StatelessWidget {
       message: tooltip,
       child: AppAvatar(
         name: _name,
-        size: radius * 2,
+        size: size,
         border: Border.all(color: theme.colorScheme.surface, width: 1.5),
       ),
     );
