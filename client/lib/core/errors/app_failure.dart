@@ -26,12 +26,12 @@ class AppFailure {
       return const AppFailure(kind: FailureKind.unknown, isUserSafe: false);
     }
     final kind = error.kind;
-    final trimmed = error.message.trim();
-    final msg = trimmed.isNotEmpty ? error.message : null;
+    final serverMsg = error.serverMessage?.trim();
+    final hasServerMsg = serverMsg != null && serverMsg.isNotEmpty;
     return AppFailure(
       kind: kind,
-      serverMessage: msg,
-      isUserSafe: msg != null && _userSafeKinds.contains(kind),
+      serverMessage: hasServerMsg ? serverMsg : null,
+      isUserSafe: hasServerMsg && _userSafeKinds.contains(kind),
     );
   }
 

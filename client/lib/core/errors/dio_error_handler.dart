@@ -72,22 +72,40 @@ class DioErrorHandler {
       _ => 'Server error (${statusCode ?? 'unknown'})',
     };
 
-    final finalMessage = (message != null && message.isNotEmpty)
-        ? message
-        : defaultMessage;
+    final serverMessage = (message != null && message.trim().isNotEmpty)
+        ? message.trim()
+        : null;
+    final finalMessage = serverMessage ?? defaultMessage;
 
     switch (statusCode) {
       case 400:
-        return ValidationException(message: finalMessage, details: details);
+        return ValidationException(
+          message: finalMessage,
+          serverMessage: serverMessage,
+          details: details,
+        );
       case 401:
-        return UnauthorizedException(message: finalMessage, details: details);
+        return UnauthorizedException(
+          message: finalMessage,
+          serverMessage: serverMessage,
+          details: details,
+        );
       case 403:
-        return ForbiddenException(message: finalMessage, details: details);
+        return ForbiddenException(
+          message: finalMessage,
+          serverMessage: serverMessage,
+          details: details,
+        );
       case 404:
-        return NotFoundException(message: finalMessage, details: details);
+        return NotFoundException(
+          message: finalMessage,
+          serverMessage: serverMessage,
+          details: details,
+        );
       default:
         return ServerException(
           message: finalMessage,
+          serverMessage: serverMessage,
           details: details,
           statusCode: statusCode,
         );

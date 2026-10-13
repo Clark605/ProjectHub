@@ -1,10 +1,11 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:client/core/cubit/safe_action_cubit.dart';
 import 'package:client/core/errors/app_exception.dart';
 import 'package:client/core/errors/app_failure.dart';
 import 'package:client/core/l10n/l10n_extension.dart';
+import 'package:client/l10n/generated/app_localizations.dart';
 import 'package:client/l10n/generated/app_localizations_ar.dart';
 import 'package:client/l10n/generated/app_localizations_en.dart';
 
@@ -29,7 +30,7 @@ class _TestCubit extends SafeActionCubit<_TestState> {
   Future<int?> performAppExceptionAction(String message) async {
     return await safeExecute<int>(() async {
       emit(const _TestState(status: 'running'));
-      throw ValidationException(message: message);
+      throw ValidationException(message: message, serverMessage: message);
     }, onFailure: (f) => emit(_TestState(status: 'error', failure: f)));
   }
 
@@ -42,25 +43,39 @@ class _TestCubit extends SafeActionCubit<_TestState> {
 }
 
 class _CustomNotFoundException extends NotFoundException {
-  const _CustomNotFoundException({super.message = 'Custom resource missing'});
+  const _CustomNotFoundException() : super(message: 'Custom resource missing');
 }
 
 void main() {
   group('AppFailure.fromException & AppFailureL10n', () {
     test(
-      'maps exception types (including subclasses) to FailureKind and enforces isUserSafe only for 4xx/validation',
+      'maps exception types (including subclasses) to FailureKind and enforces isUserSafe only for 4xx/validation with serverMessage',
       () {
         final cases = <(Object, AppFailure)>[
           (
             const NetworkException(message: 'Socket closed'),
             const AppFailure(
               kind: FailureKind.network,
-              serverMessage: 'Socket closed',
+              serverMessage: null,
               isUserSafe: false,
             ),
           ),
           (
-            const UnauthorizedException(message: 'Invalid token'),
+            const NetworkException(
+              message: 'Socket closed',
+              serverMessage: 'DNS failed',
+            ),
+            const AppFailure(
+              kind: FailureKind.network,
+              serverMessage: 'DNS failed',
+              isUserSafe: false,
+            ),
+          ),
+          (
+            const UnauthorizedException(
+              message: 'Invalid token',
+              serverMessage: 'Invalid token',
+            ),
             const AppFailure(
               kind: FailureKind.unauthorized,
               serverMessage: 'Invalid token',
@@ -68,7 +83,18 @@ void main() {
             ),
           ),
           (
-            const ForbiddenException(message: 'Owner role required'),
+            const UnauthorizedException(),
+            const AppFailure(
+              kind: FailureKind.unauthorized,
+              serverMessage: null,
+              isUserSafe: false,
+            ),
+          ),
+          (
+            const ForbiddenException(
+              message: 'Owner role required',
+              serverMessage: 'Owner role required',
+            ),
             const AppFailure(
               kind: FailureKind.forbidden,
               serverMessage: 'Owner role required',
@@ -76,7 +102,18 @@ void main() {
             ),
           ),
           (
-            const NotFoundException(message: 'Task 42 not found'),
+            const ForbiddenException(),
+            const AppFailure(
+              kind: FailureKind.forbidden,
+              serverMessage: null,
+              isUserSafe: false,
+            ),
+          ),
+          (
+            const NotFoundException(
+              message: 'Task 42 not found',
+              serverMessage: 'Task 42 not found',
+            ),
             const AppFailure(
               kind: FailureKind.notFound,
               serverMessage: 'Task 42 not found',
@@ -84,15 +121,26 @@ void main() {
             ),
           ),
           (
-            const _CustomNotFoundException(),
+            const NotFoundException(),
             const AppFailure(
               kind: FailureKind.notFound,
-              serverMessage: 'Custom resource missing',
-              isUserSafe: true,
+              serverMessage: null,
+              isUserSafe: false,
             ),
           ),
           (
-            const ValidationException(message: 'Title is required'),
+            const _CustomNotFoundException(),
+            const AppFailure(
+              kind: FailureKind.notFound,
+              serverMessage: null,
+              isUserSafe: false,
+            ),
+          ),
+          (
+            const ValidationException(
+              message: 'Title is required',
+              serverMessage: 'Title is required',
+            ),
             const AppFailure(
               kind: FailureKind.validation,
               serverMessage: 'Title is required',
@@ -100,7 +148,7 @@ void main() {
             ),
           ),
           (
-            const ValidationException(message: '   '),
+            const ValidationException(message: 'Title is required'),
             const AppFailure(
               kind: FailureKind.validation,
               serverMessage: null,
@@ -108,7 +156,18 @@ void main() {
             ),
           ),
           (
-            const ServerException(message: 'NullReferenceException at line 9'),
+            const ValidationException(message: '   ', serverMessage: '   '),
+            const AppFailure(
+              kind: FailureKind.validation,
+              serverMessage: null,
+              isUserSafe: false,
+            ),
+          ),
+          (
+            const ServerException(
+              message: 'NullReferenceException at line 9',
+              serverMessage: 'NullReferenceException at line 9',
+            ),
             const AppFailure(
               kind: FailureKind.server,
               serverMessage: 'NullReferenceException at line 9',
@@ -116,7 +175,18 @@ void main() {
             ),
           ),
           (
-            const AppException(message: 'Internal error'),
+            const ServerException(message: 'NullReferenceException at line 9'),
+            const AppFailure(
+              kind: FailureKind.server,
+              serverMessage: null,
+              isUserSafe: false,
+            ),
+          ),
+          (
+            const AppException(
+              message: 'Internal error',
+              serverMessage: 'Internal error',
+            ),
             const AppFailure(
               kind: FailureKind.server,
               serverMessage: 'Internal error',
@@ -226,6 +296,81 @@ void main() {
         }
       },
     );
+
+    testWidgets(
+      'each default-constructed exception maps to localized string in en and ar via context',
+      (tester) async {
+        final exceptions = <AppException>[
+          const UnauthorizedException(),
+          const ForbiddenException(),
+          const NotFoundException(),
+          const NetworkException(),
+          const ValidationException(message: 'Validation failed'),
+          const ServerException(message: 'Server failed'),
+        ];
+
+        for (final locale in [const Locale('en'), const Locale('ar')]) {
+          late BuildContext capturedContext;
+          await tester.pumpWidget(
+            MaterialApp(
+              locale: locale,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: Builder(
+                builder: (context) {
+                  capturedContext = context;
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+
+          final l10n = capturedContext.l10n;
+          for (final ex in exceptions) {
+            final failure = AppFailure.fromException(ex);
+            final localized = failure.localized(capturedContext);
+            expect(
+              localized,
+              failure.toLocalizedMessage(l10n),
+              reason: 'Mismatch for ${ex.runtimeType} in $locale',
+            );
+
+            // In Arabic, English default messages should never leak
+            if (locale == const Locale('ar')) {
+              expect(localized, isNot(contains('Unauthorized')));
+              expect(localized, isNot(contains('Forbidden')));
+              expect(localized, isNot(contains('Not found')));
+              expect(localized, isNot(contains('No internet connection')));
+              expect(localized, isNot(contains('Validation failed')));
+              expect(localized, isNot(contains('Server failed')));
+            }
+          }
+
+          // ValidationException with a server message shows that message
+          const validationWithMsg = ValidationException(
+            message: 'Internal log msg',
+            serverMessage: 'Email already exists',
+          );
+          expect(
+            AppFailure.fromException(
+              validationWithMsg,
+            ).localized(capturedContext),
+            'Email already exists',
+          );
+
+          // ServerException with a message still shows the localized generic
+          const serverWithMsg = ServerException(
+            message: 'Internal log msg',
+            serverMessage: 'Database connection failed',
+          );
+          expect(
+            AppFailure.fromException(serverWithMsg).localized(capturedContext),
+            l10n.serverErrorMessage,
+          );
+        }
+      },
+    );
   });
 
   group('SafeActionCubit', () {
@@ -294,7 +439,10 @@ void main() {
     test('passes typed AppFailure to onFailure callback', () async {
       AppFailure? capturedFailure;
       await cubit.safeExecute<int>(
-        () async => throw const ValidationException(message: 'Invalid input'),
+        () async => throw const ValidationException(
+          message: 'Invalid input',
+          serverMessage: 'Invalid input',
+        ),
         onFailure: (failure) => capturedFailure = failure,
       );
       expect(capturedFailure, isNotNull);

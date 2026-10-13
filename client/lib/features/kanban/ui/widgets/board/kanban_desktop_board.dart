@@ -21,6 +21,8 @@ class KanbanDesktopBoard extends StatelessWidget {
     this.onAddTask,
   });
 
+  static const double _columnWidth = 300.0;
+
   @override
   Widget build(BuildContext context) {
     final columnHeight = (availableHeight - 32).clamp(300.0, double.infinity);
@@ -33,7 +35,7 @@ class KanbanDesktopBoard extends StatelessWidget {
         children: TaskStatus.values.map((status) {
           final columnTasks = tasksByStatus[status] ?? [];
           return SizedBox(
-            width: 300,
+            width: _columnWidth,
             height: columnHeight,
             child: Padding(
               padding: const EdgeInsets.only(right: AppSpacing.lg),

@@ -31,8 +31,8 @@ class TaskCommentsList extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.all(AppSpacing.lg),
               child: SizedBox(
-                width: 24,
-                height: 24,
+                width: AppSpacing.xxl,
+                height: AppSpacing.xxl,
                 child: CircularProgressIndicator(strokeWidth: 2),
               ),
             ),

@@ -167,7 +167,7 @@ class ProjectCard extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(
-                    height: 24,
+                    height: AppSpacing.xxl,
                     child: ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,

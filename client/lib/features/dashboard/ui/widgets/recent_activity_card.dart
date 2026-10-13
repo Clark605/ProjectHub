@@ -72,8 +72,8 @@ class RecentActivityCard extends StatelessWidget {
               ),
               if (isLoading)
                 const SizedBox(
-                  width: 16,
-                  height: 16,
+                  width: AppSpacing.lg,
+                  height: AppSpacing.lg,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               else if (onViewAll != null || workspaceId != null)

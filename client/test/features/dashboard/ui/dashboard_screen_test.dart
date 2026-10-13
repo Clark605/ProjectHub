@@ -91,7 +91,10 @@ void main() {
       'displays AppErrorState when loading fails (eliminating silent error)',
       (tester) async {
         when(() => mockWorkspaceRepo.getWorkspaceDashboard(31)).thenThrow(
-          const UnauthorizedException(message: 'Authentication required'),
+          const UnauthorizedException(
+            message: 'Authentication required',
+            serverMessage: 'Authentication required',
+          ),
         );
 
         await dashboardCubit.loadDashboard(31);

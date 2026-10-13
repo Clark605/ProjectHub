@@ -34,9 +34,9 @@ class TermsCheckbox extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 24,
-              width: 24,
+            const SizedBox(
+              height: AppSpacing.xxl,
+              width: AppSpacing.xxl,
               child: Checkbox(
                 value: value,
                 onChanged: onChanged,

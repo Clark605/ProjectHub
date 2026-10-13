@@ -163,8 +163,10 @@ void main() {
       'login failure emits [loading, failure]',
       build: () {
         when(() => repository.login(any())).thenAnswer(
-          (_) async =>
-              throw const ValidationException(message: 'Invalid credentials'),
+          (_) async => throw const ValidationException(
+            message: 'Invalid credentials',
+            serverMessage: 'Invalid credentials',
+          ),
         );
         return LoginCubit(repository);
       },
@@ -220,6 +222,7 @@ void main() {
         ).thenAnswer(
           (_) async => throw const ValidationException(
             message: 'External authentication failed.',
+            serverMessage: 'External authentication failed.',
           ),
         );
         return LoginCubit(repository);

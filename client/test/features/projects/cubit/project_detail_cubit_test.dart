@@ -68,8 +68,10 @@ void main() {
             forceRefresh: any(named: 'forceRefresh'),
           ),
         ).thenAnswer(
-          (_) async =>
-              throw const ServerException(message: 'Project not found'),
+          (_) async => throw const ServerException(
+            message: 'Project not found',
+            serverMessage: 'Project not found',
+          ),
         );
         return ProjectDetailCubit(repository);
       },

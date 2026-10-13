@@ -160,7 +160,10 @@ void main() {
         when(
           () => repo.getMyTasks(10, forceRefresh: any(named: 'forceRefresh')),
         ).thenAnswer(
-          (_) async => throw const AppException(message: 'Network timeout'),
+          (_) async => throw const AppException(
+            message: 'Network timeout',
+            serverMessage: 'Network timeout',
+          ),
         );
         return MyTasksCubit(repo);
       },
@@ -222,8 +225,10 @@ void main() {
             () => repo.getMyTasks(10, forceRefresh: any(named: 'forceRefresh')),
           ).thenAnswer((_) async => [initialTask]);
           when(() => repo.updateTaskStatus(1, 'Done')).thenAnswer(
-            (_) async =>
-                throw const AppException(message: 'Status update failed'),
+            (_) async => throw const AppException(
+              message: 'Status update failed',
+              serverMessage: 'Status update failed',
+            ),
           );
           return MyTasksCubit(repo);
         },
@@ -296,8 +301,10 @@ void main() {
             () => repo.getMyTasks(10, forceRefresh: any(named: 'forceRefresh')),
           ).thenAnswer((_) async => [initialTask]);
           when(() => repo.updateTask(1, any())).thenAnswer(
-            (_) async =>
-                throw const AppException(message: 'Task update failed'),
+            (_) async => throw const AppException(
+              message: 'Task update failed',
+              serverMessage: 'Task update failed',
+            ),
           );
           return MyTasksCubit(repo);
         },
@@ -386,7 +393,10 @@ void main() {
             () => repo.getMyTasks(10, forceRefresh: any(named: 'forceRefresh')),
           ).thenAnswer((_) async => [task1]);
           when(() => repo.deleteTask(1)).thenAnswer(
-            (_) async => throw const AppException(message: 'Delete failed'),
+            (_) async => throw const AppException(
+              message: 'Delete failed',
+              serverMessage: 'Delete failed',
+            ),
           );
           return MyTasksCubit(repo);
         },

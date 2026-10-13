@@ -5,6 +5,7 @@ import 'package:client/features/projects/data/models/project_dto.dart';
 import 'package:client/features/projects/data/models/project_status.dart';
 import 'package:client/features/projects/ui/extensions/project_status_ui.dart';
 import 'package:client/core/extensions/context_extensions.dart';
+import 'package:client/core/theme/app_icon_size.dart';
 import 'package:client/core/theme/app_spacing.dart';
 
 class DesktopSidebarProjectQuickLink extends StatelessWidget {
@@ -100,9 +101,9 @@ class DesktopSidebarQuickLinks extends StatelessWidget {
               horizontal: AppSpacing.md,
               vertical: AppSpacing.sm,
             ),
-            child: SizedBox(
-              width: 14,
-              height: 14,
+            child: const SizedBox(
+              width: AppIconSize.xs,
+              height: AppIconSize.xs,
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
           )

@@ -86,7 +86,10 @@ void main() {
       'emits AppFailure and isLoading: false when repository throws AppException',
       () async {
         when(() => mockWorkspaceRepo.getWorkspaceDashboard(1)).thenThrow(
-          const UnauthorizedException(message: 'Authentication required'),
+          const UnauthorizedException(
+            message: 'Authentication required',
+            serverMessage: 'Authentication required',
+          ),
         );
 
         await cubit.loadDashboard(1);

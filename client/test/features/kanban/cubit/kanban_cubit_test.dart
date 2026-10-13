@@ -142,8 +142,10 @@ void main() {
       build: () {
         stubTasks([moveTask]);
         when(() => taskRepo.updateTaskStatus(101, 'Done')).thenAnswer(
-          (_) async =>
-              throw const AppException(message: 'Status transition failed'),
+          (_) async => throw const AppException(
+            message: 'Status transition failed',
+            serverMessage: 'Status transition failed',
+          ),
         );
         return createCubit();
       },
@@ -257,7 +259,10 @@ void main() {
 
         // Fail move1
         move1Completer.completeError(
-          const AppException(message: 'Status transition failed'),
+          const AppException(
+            message: 'Status transition failed',
+            serverMessage: 'Status transition failed',
+          ),
         );
         await move1;
 
@@ -412,8 +417,10 @@ void main() {
         expect(cubit.state, isA<KanbanEmpty>());
 
         when(() => taskRepo.createTask(1, any())).thenAnswer(
-          (_) async =>
-              throw const AppException(message: 'Task creation failed'),
+          (_) async => throw const AppException(
+            message: 'Task creation failed',
+            serverMessage: 'Task creation failed',
+          ),
         );
 
         await expectLater(
@@ -442,8 +449,10 @@ void main() {
         expect(cubit.state, isA<KanbanLoaded>());
 
         when(() => taskRepo.createTask(1, any())).thenAnswer(
-          (_) async =>
-              throw const AppException(message: 'Task creation failed'),
+          (_) async => throw const AppException(
+            message: 'Task creation failed',
+            serverMessage: 'Task creation failed',
+          ),
         );
 
         await expectLater(
@@ -483,8 +492,10 @@ void main() {
         );
         // Status update fails
         when(() => taskRepo.updateTaskStatus(55, 'InProgress')).thenAnswer(
-          (_) async =>
-              throw const AppException(message: 'Status transition failed'),
+          (_) async => throw const AppException(
+            message: 'Status transition failed',
+            serverMessage: 'Status transition failed',
+          ),
         );
 
         await expectLater(
@@ -514,7 +525,10 @@ void main() {
         () =>
             projectRepo.getProject(1, forceRefresh: any(named: 'forceRefresh')),
       ).thenAnswer(
-        (_) async => throw const AppException(message: 'Project not found'),
+        (_) async => throw const AppException(
+          message: 'Project not found',
+          serverMessage: 'Project not found',
+        ),
       );
 
       await cubit.loadTasks(1);

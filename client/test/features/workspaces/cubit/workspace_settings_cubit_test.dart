@@ -242,8 +242,10 @@ void main() {
       'updateMemberRole sets failure when repo fails',
       build: () {
         when(() => repository.updateMemberRole(1, 'u2', 'Owner')).thenAnswer(
-          (_) async =>
-              throw const ServerException(message: 'Role update failed'),
+          (_) async => throw const ServerException(
+            message: 'Role update failed',
+            serverMessage: 'Role update failed',
+          ),
         );
         return WorkspaceSettingsCubit(repository);
       },

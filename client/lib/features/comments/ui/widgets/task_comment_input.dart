@@ -66,8 +66,8 @@ class _TaskCommentInputState extends State<TaskCommentInput> {
           AppSpacing.gapWSm,
           if (widget.isSending)
             const SizedBox(
-              width: 20,
-              height: 20,
+              width: AppSpacing.xl,
+              height: AppSpacing.xl,
               child: CircularProgressIndicator(strokeWidth: 2),
             )
           else

@@ -16,6 +16,8 @@ class WorkspaceAccentPicker extends StatelessWidget {
     required this.onAccentSelected,
   });
 
+  static const double _pickerHeight = 44.0;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -49,7 +51,7 @@ class WorkspaceAccentPicker extends StatelessWidget {
         ),
         AppSpacing.gapHMd,
         SizedBox(
-          height: 44,
+          height: _pickerHeight,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: WorkspaceAccent.values.length,

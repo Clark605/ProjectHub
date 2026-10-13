@@ -204,8 +204,10 @@ void main() {
       'emits error state when repository throws exception',
       build: () {
         when(() => repository.getWorkspaces()).thenAnswer(
-          (_) async =>
-              throw const ServerException(message: 'Network connection failed'),
+          (_) async => throw const ServerException(
+            message: 'Network connection failed',
+            serverMessage: 'Network connection failed',
+          ),
         );
         return WorkspaceContextCubit(repository, prefs);
       },

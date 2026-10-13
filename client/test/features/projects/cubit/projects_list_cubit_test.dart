@@ -133,7 +133,10 @@ void main() {
             forceRefresh: any(named: 'forceRefresh'),
           ),
         ).thenAnswer(
-          (_) async => throw const ServerException(message: 'Database down'),
+          (_) async => throw const ServerException(
+            message: 'Database down',
+            serverMessage: 'Database down',
+          ),
         );
         return ProjectsListCubit(repository);
       },

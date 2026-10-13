@@ -34,8 +34,8 @@ class AppButton extends StatelessWidget {
 
     final child = isLoading
         ? SizedBox(
-            height: 20,
-            width: 20,
+            height: AppSpacing.xl,
+            width: AppSpacing.xl,
             child: CircularProgressIndicator(
               strokeWidth: 2,
               color: variant == AppButtonVariant.primary
